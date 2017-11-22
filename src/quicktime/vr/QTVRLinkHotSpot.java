@@ -1,0 +1,206 @@
+
+package quicktime.vr;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import quicktime.QTException;
+import quicktime.QTRuntimeException;
+import quicktime.qd.QDPoint;
+import quicktime.util.EndianDescriptor;
+import quicktime.util.EndianFlipSpec;
+
+
+public final class QTVRLinkHotSpot extends QTVRAtom {
+    private static final int kNativeSize = 72;
+
+    static final long serialVersionUID = 2642915607141217566L;
+
+    private static EndianDescriptor ed;
+
+    public QTVRLinkHotSpot() {
+        super(kNativeSize);
+    }
+
+    public QTVRLinkHotSpot(byte[] paramArrayOfByte) throws QTException {
+        super(paramArrayOfByte, kNativeSize);
+    }
+
+    protected int getNativeSize() {
+        return 72;
+    }
+
+    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+        this.bytes = new byte[kNativeSize];
+        QTVRLinkHotSpot localQTVRLinkHotSpot = new QTVRLinkHotSpot();
+        paramObjectInputStream.read(localQTVRLinkHotSpot.getBytes());
+        System.arraycopy(localQTVRLinkHotSpot.getBytes(), 0, getBytes(), 0, this.bytes.length);
+    }
+
+    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
+        QTVRLinkHotSpot localQTVRLinkHotSpot = (QTVRLinkHotSpot) clone();
+        paramObjectOutputStream.write(localQTVRLinkHotSpot.getBytes());
+    }
+
+    public Object clone() {
+        try {
+            return new QTVRLinkHotSpot(this.bytes);
+        } catch (QTException localQTException) {
+            throw new QTRuntimeException(localQTException);
+        }
+    }
+
+    protected static EndianDescriptor makeED() {
+        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
+
+        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
+        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
+
+        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 17);
+        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
+        return localEndianDescriptor;
+    }
+
+    public static EndianDescriptor getEndianDescriptor() {
+        if (ed == null)
+            ed = makeED();
+        return ed;
+    }
+
+    public int getToNodeID() {
+        return getIntAt(4);
+    }
+
+    public void setToNodeID(int paramInt) {
+        setIntAt(4, paramInt);
+    }
+
+    public int getFromValidFlags() {
+        return getIntAt(8);
+    }
+
+    public void setFromValidFlags(int paramInt) {
+        setIntAt(8, paramInt);
+    }
+
+    public float getFromPan() {
+        return getFloatAt(12);
+    }
+
+    public void setFromPan(float paramFloat) {
+        setFloatAt(12, paramFloat);
+    }
+
+    public float getFromTilt() {
+        return getFloatAt(16);
+    }
+
+    public void setFromTilt(float paramFloat) {
+        setFloatAt(16, paramFloat);
+    }
+
+    public float getFromFOV() {
+        return getFloatAt(20);
+    }
+
+    public void setFromFOV(float paramFloat) {
+        setFloatAt(20, paramFloat);
+    }
+
+    public QDPoint getFromViewCenter() {
+        return new QDPoint(getFloatAt(24), getFloatAt(28));
+    }
+
+    public void setFromViewCenter(QDPoint paramQDPoint) {
+        setFloatAt(24, paramQDPoint.getXF());
+        setFloatAt(28, paramQDPoint.getYF());
+    }
+
+    public int getToValidFlags() {
+        return getIntAt(32);
+    }
+
+    public void setToValidFlags(int paramInt) {
+        setIntAt(32, paramInt);
+    }
+
+    public float getToPan() {
+        return getFloatAt(36);
+    }
+
+    public void setToPan(float paramFloat) {
+        setFloatAt(36, paramFloat);
+    }
+
+    public float getToTilt() {
+        return getFloatAt(40);
+    }
+
+    public void setToTilt(float paramFloat) {
+        setFloatAt(40, paramFloat);
+    }
+
+    public float getToFOV() {
+        return getFloatAt(44);
+    }
+
+    public void setToFOV(float paramFloat) {
+        setFloatAt(44, paramFloat);
+    }
+
+    public QDPoint getToViewCenter() {
+        return new QDPoint(getFloatAt(48), getFloatAt(52));
+    }
+
+    public void setToViewCenter(QDPoint paramQDPoint) {
+        setFloatAt(48, paramQDPoint.getXF());
+        setFloatAt(52, paramQDPoint.getYF());
+    }
+
+    public float getDistance() {
+        return getFloatAt(56);
+    }
+
+    public void setDistance(float paramFloat) {
+        setFloatAt(56, paramFloat);
+    }
+
+    public int getFlags() {
+        return getIntAt(60);
+    }
+
+    public void setFlags(int paramInt) {
+        setIntAt(60, paramInt);
+    }
+
+    public void setReserved1(int paramInt) {
+        setIntAt(64, paramInt);
+    }
+
+    public int getReserved1() {
+        return getIntAt(64);
+    }
+
+    public void setReserved2(int paramInt) {
+        setIntAt(68, paramInt);
+    }
+
+    public int getReserved2() {
+        return getIntAt(68);
+    }
+
+    public String toString() {
+        return getClass().getName() + "[toNodeID=" + getToNodeID() + ",fromValidFlags=" + getFromValidFlags() + ",fromPan="
+               + getFromPan() + ",fromTilt" + getFromTilt() + ",fromFOV" + getFromFOV() + ",fromViewCenter"
+               + getFromViewCenter() + ",toValidFlags" + getToValidFlags() + ",toPan" + getToPan() + ",toTilt" + getToTilt()
+               + ",toFOV" + getToFOV() + ",toViewCenter" + getToViewCenter() + ",distance" + getDistance() + ",flags"
+               + getFlags() + "]";
+    }
+}
+
+/* Location:
+ * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
+ * QTVRLinkHotSpot.class
+ * Java compiler version: 2 (46.0)
+ * JD-Core Version: 0.7.1 */

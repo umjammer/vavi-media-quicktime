@@ -1,0 +1,32 @@
+
+package quicktime.sound;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import quicktime.QTObject;
+import quicktime.jdirect.QTNative;
+import quicktime.jdirect.QuickTimeLib;
+
+
+public final class Sound implements QuickTimeLib {
+    private static Object linkage;
+
+    static {
+        new Object() {
+            void establish() {
+                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        return QTNative.linkNativeMethods(Sound.class);
+                    }
+                });
+            }
+        }.establish();
+    }
+
+    public static final void play(SndHandle paramSndHandle) throws SoundException {
+        SoundException.checkError(SndPlay(0, QTObject.ID(paramSndHandle), (byte) 0));
+    }
+
+    private static native short SndPlay(int paramInt1, int paramInt2, byte paramByte);
+}

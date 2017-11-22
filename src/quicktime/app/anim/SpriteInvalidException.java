@@ -1,0 +1,30 @@
+
+package quicktime.app.anim;
+
+import quicktime.QTRuntimeException;
+import quicktime.QTSession;
+
+
+/**
+ * @deprecated
+ */
+public class SpriteInvalidException extends QTRuntimeException {
+    static {
+        if ((QTSession.isCurrentOS(4)) && (QTSession.getJavaVersion() >= 65540)) {
+            throw new QTRuntimeException("Unsupported on Mac OS X and Java 1.4 and higher.");
+        }
+    }
+
+    /**
+     * @deprecated
+     */
+    public SpriteInvalidException(String paramString) {
+        super(paramString);
+    }
+}
+
+/* Location:
+ * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/anim/
+ * SpriteInvalidException.class
+ * Java compiler version: 2 (46.0)
+ * JD-Core Version: 0.7.1 */

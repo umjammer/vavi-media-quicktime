@@ -1,0 +1,142 @@
+
+package quicktime.qd3d.camera;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import quicktime.QTRuntimeException;
+import quicktime.QTSession;
+import quicktime.jdirect.PrimitivesLib;
+import quicktime.jdirect.QTNative;
+import quicktime.qd3d.math.Point3D;
+import quicktime.qd3d.math.Vector3D;
+import quicktime.util.EndianDescriptor;
+import quicktime.util.EndianOrder;
+import quicktime.util.QTByteObject;
+
+
+public final class CameraPlacement extends QTByteObject implements PrimitivesLib {
+    private static Object linkage;
+
+    public static final int kNativeSize = 36;
+
+    private static final long serialVersionUID = -2481353228250322010L;
+
+    static {
+        if (QTSession.isCurrentOS(4)) {
+            throw new QTRuntimeException("Unsupported OS");
+        }
+
+        class PrivelegedAction {
+            void establish() {
+                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        return QTNative.linkNativeMethods(CameraPlacement.class);
+                    }
+                });
+            }
+        }
+        new PrivelegedAction().establish();
+    }
+
+    public static final EndianDescriptor getEndianDescriptor() {
+        return EndianDescriptor.flipAll32;
+    }
+
+    public CameraPlacement() {
+        super(36);
+    }
+
+    public CameraPlacement(Point3D paramPoint3D1, Point3D paramPoint3D2, Vector3D paramVector3D) {
+        this();
+
+        setCameraLocation(paramPoint3D1);
+        setPointOfInterest(paramPoint3D2);
+        setUpVector(paramVector3D);
+    }
+
+    private CameraPlacement(byte[] paramArrayOfByte) {
+        super(paramArrayOfByte);
+    }
+
+    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+        this.bytes = new byte[36];
+
+        byte[] arrayOfByte = new byte[36];
+        paramObjectInputStream.read(arrayOfByte);
+
+        for (int i = 0; i < 36; i += 4) {
+            int j = getIntFromArray(arrayOfByte, i);
+            int k = EndianOrder.flipBigEndianToNative32(j);
+            setIntInArray(getBytes(), i, k);
+        }
+    }
+
+    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
+        byte[] arrayOfByte = getBytes();
+
+        for (int i = 0; i < 36; i += 4) {
+            int j = getIntFromArray(getBytes(), i);
+            int k = EndianOrder.flipNativeToBigEndian32(j);
+            setIntInArray(arrayOfByte, i, k);
+        }
+
+        paramObjectOutputStream.write(arrayOfByte);
+    }
+
+    public Point3D getCameraLocation() {
+        Point3D localPoint3D = new Point3D();
+        System.arraycopy(getBytes(), 0, localPoint3D.getBytes(), 0, localPoint3D.getBytes().length);
+        return localPoint3D;
+    }
+
+    public Point3D getPointOfInterest() {
+        Point3D localPoint3D = new Point3D();
+        System.arraycopy(getBytes(), 12, localPoint3D.getBytes(), 0, localPoint3D.getBytes().length);
+        return localPoint3D;
+    }
+
+    public Vector3D getUpVector() {
+        return new Vector3D(getFloatAt(24), getFloatAt(28), getFloatAt(32));
+    }
+
+    public void setCameraLocation(Point3D paramPoint3D) {
+        setFloatAt(0, paramPoint3D.getX());
+        setFloatAt(4, paramPoint3D.getY());
+        setFloatAt(8, paramPoint3D.getZ());
+    }
+
+    public void setPointOfInterest(Point3D paramPoint3D) {
+        setFloatAt(12, paramPoint3D.getX());
+        setFloatAt(16, paramPoint3D.getY());
+        setFloatAt(20, paramPoint3D.getZ());
+    }
+
+    public void setUpVector(Vector3D paramVector3D) {
+        setFloatAt(24, paramVector3D.getX());
+        setFloatAt(28, paramVector3D.getY());
+        setFloatAt(32, paramVector3D.getZ());
+    }
+
+    public Object clone() {
+        return new CameraPlacement(this.bytes);
+    }
+
+    public String toString() {
+        return super.toString() + "[location=" + getCameraLocation() + ",interest=" + getPointOfInterest() + ",upVector="
+               + getUpVector() + "]";
+    }
+
+    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+
+    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+}
+
+/* Location:
+ * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/
+ * camera/CameraPlacement.class
+ * Java compiler version: 2 (46.0)
+ * JD-Core Version: 0.7.1 */

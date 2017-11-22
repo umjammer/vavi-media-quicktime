@@ -1,0 +1,135 @@
+
+package quicktime.sound;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import quicktime.QTException;
+import quicktime.QTObject;
+import quicktime.jdirect.PrimitivesLib;
+import quicktime.jdirect.QTNative;
+import quicktime.util.QTPointerRef;
+import quicktime.util.QTUtils;
+
+
+public final class SndCommand extends QTPointerRef implements PrimitivesLib {
+    private static Object linkage;
+
+    public static final int kNativeSize = 8;
+
+    private ExtScheduledSoundHeader keepBuffer;
+
+    static {
+        new Object() {
+            void establish() {
+                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        return QTNative.linkNativeMethods(SndCommand.class);
+                    }
+                });
+            }
+        }.establish();
+    }
+
+    public SndCommand(int paramInt) throws QTException {
+        super(8, true);
+        setCmd(paramInt);
+    }
+
+    public SndCommand(int paramInt1, int paramInt2, int paramInt3) throws QTException {
+        super(8, true);
+        setCmd(paramInt1);
+        setParam1(paramInt2);
+        setParam2(paramInt3);
+    }
+
+    public void setCmd(int paramInt) {
+        setShortAt(0, (short) paramInt);
+    }
+
+    public int getCmd() {
+        return QTUtils.UShort2Int(getShortAt(0));
+    }
+
+    public void setParam1(int paramInt) {
+        setShortAt(2, (short) paramInt);
+    }
+
+    public int getParam1() {
+        return getShortAt(2);
+    }
+
+    public void setParam2(int paramInt) {
+        setIntAt(4, paramInt);
+    }
+
+    public int getParam2() {
+        return getIntAt(4);
+    }
+
+    public void setBuffer(ExtScheduledSoundHeader paramExtScheduledSoundHeader) {
+        int i = getCmd();
+        if ((i == 81) || (i == 80) || (i == 52)) {
+            setIntAt(4, QTObject.ID(paramExtScheduledSoundHeader));
+            this.keepBuffer = paramExtScheduledSoundHeader;
+        }
+    }
+
+    public ExtScheduledSoundHeader getBuffer() {
+        int i = getCmd();
+        if ((i == 81) || (i == 80) || (i == 52)) {
+            return this.keepBuffer;
+        }
+        return null;
+    }
+
+    public void setVolumes(float paramFloat1, float paramFloat2) {
+        int i = getCmd();
+        if (i != 46) {
+            return;
+        }
+        int j = QTUtils.X2ShortFix(paramFloat2) << 16;
+        int k = QTUtils.X2ShortFix(paramFloat1);
+        setIntAt(4, j | k);
+    }
+
+    public float getRightVolume() {
+        int i = getCmd();
+        int j = getParam2();
+        if (i == 47) {
+            int k = getIntFromPointer(j, 0);
+            return QTUtils.ShortFix2X((short) (k >>> 16));
+        }
+        if (i == 46) {
+            return QTUtils.ShortFix2X((short) (j >>> 16));
+        }
+        return 0.0F;
+    }
+
+    public float getLeftVolume() {
+        int i = getCmd();
+        int j = getParam2();
+        if (i == 47) {
+            int k = getIntFromPointer(j, 0);
+            return QTUtils.ShortFix2X((short) k);
+        }
+        if (i == 46) {
+            return QTUtils.ShortFix2X((short) j);
+        }
+        return 0.0F;
+    }
+
+    public String toString() {
+        return getClass().getName() + "[cmd=" + getCmd() + ",param1=" + getParam1() + ",param2=" + getParam2() + "]";
+    }
+
+    private static native short getShortFromPointer(int paramInt1, int paramInt2);
+
+    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+}
+
+/* Location:
+ * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
+ * SndCommand.class
+ * Java compiler version: 2 (46.0)
+ * JD-Core Version: 0.7.1 */

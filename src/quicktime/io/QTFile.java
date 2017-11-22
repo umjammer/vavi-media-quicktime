@@ -1,0 +1,821 @@
+
+package quicktime.io;
+
+import java.awt.FileDialog;
+import java.io.File;
+import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import com.apple.mrj.macos.toolbox.FSSpec;
+
+import quicktime.QTException;
+import quicktime.QTObject;
+import quicktime.QTRuntimeException;
+import quicktime.QTSession;
+import quicktime.jdirect.QTNative;
+import quicktime.jdirect.QuickTimeLib;
+import quicktime.std.StdQTException;
+import quicktime.std.image.GraphicsExporter;
+import quicktime.std.image.GraphicsImporter;
+import quicktime.std.image.GraphicsImporterInfo;
+import quicktime.std.movies.MovieProgress;
+import quicktime.std.movies.media.DataRef;
+import quicktime.std.music.SynthesizerConnections;
+import quicktime.std.qtcomponents.MovieImporter;
+import quicktime.std.sg.SequenceGrabber;
+import quicktime.util.EndianOrder;
+import quicktime.util.QTByteObject;
+import quicktime.util.QTUtils;
+import quicktime.util.UtilException;
+
+
+public final class QTFile extends File implements QuickTimeLib {
+    private static Object linkage;
+
+    static {
+        class PrivelegedAction {
+            void establish() {
+                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        return QTNative.linkNativeMethods(QTFile.class);
+                    }
+                });
+            }
+        }
+        new PrivelegedAction().establish();
+    }
+
+    private static boolean debug = false;
+
+    public static final int[] kStandardQTFileTypes = {
+        1299148630, 1903454566
+    };
+
+    public static final int kReadPermission = 256;
+    public static final int kWritePermission = 512;
+    public static final int kDeletePermission = 1024;
+
+    private transient byte[] fileSpec;
+
+    public static QTFile fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws QTException {
+        byte[] arrayOfByte = makeFSSpec();
+        int i = GraphicsImportGetDataFile(QTObject.ID(paramGraphicsImporter), arrayOfByte);
+        StdQTException.checkError(i);
+        return new QTFile(arrayOfByte);
+    }
+
+    public static GraphicsImporterInfo fromGraphicsImporter(GraphicsImporter paramGraphicsImporter,
+                                                            QTFile paramQTFile,
+                                                            String paramString) throws QTException {
+        int[] arrayOfInt = new int[1];
+        byte[] arrayOfByte = makeFSSpec();
+        short[] arrayOfShort = new short[1];
+        int i = GraphicsImportDoExportImageFileDialog(QTObject.ID(paramGraphicsImporter),
+                                                      paramQTFile != null ? paramQTFile.getFSSpec(true, 512) : null,
+                                                      paramString != null ? QTUtils.String2PString(paramString, 255) : null,
+                                                      0,
+                                                      arrayOfInt,
+                                                      arrayOfByte,
+                                                      arrayOfShort);
+
+        StdQTException.checkError(i);
+        return new GraphicsImporterInfo(arrayOfInt[0], new QTFile(arrayOfByte), arrayOfShort[0]);
+    }
+
+    public static QTFile fromGraphicsExporterInput(GraphicsExporter paramGraphicsExporter) throws QTException {
+        byte[] arrayOfByte = makeFSSpec();
+        int i = GraphicsExportGetInputFile(QTObject.ID(paramGraphicsExporter), arrayOfByte);
+        StdQTException.checkError(i);
+        return new QTFile(arrayOfByte);
+    }
+
+    public static QTFile fromGraphicsExporterOutput(GraphicsExporter paramGraphicsExporter) throws QTException {
+        byte[] arrayOfByte = makeFSSpec();
+        int i = GraphicsExportGetOutputFile(QTObject.ID(paramGraphicsExporter), arrayOfByte);
+        StdQTException.checkError(i);
+        return new QTFile(arrayOfByte);
+    }
+
+    public static QTFile fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws QTException {
+        byte[] arrayOfByte = makeFSSpec();
+        int[] arrayOfInt = {
+            0
+        };
+        int i = SGGetDataOutput(QTObject.ID(paramSequenceGrabber), arrayOfByte, arrayOfInt);
+        StdQTException.checkError(i);
+        return new QTFile(arrayOfByte);
+    }
+
+    public static QTFile fromSynthesizerConnections(SynthesizerConnections paramSynthesizerConnections) throws QTException {
+        int i = getIntFromArray(paramSynthesizerConnections.getBytes(), 24);
+        if (i == 0)
+            return null;
+        byte[] arrayOfByte = makeFSSpec();
+        copyPointerToArray(i, 0, arrayOfByte, 0, arrayOfByte.length);
+        return new QTFile(arrayOfByte);
+    }
+
+    public static void checkSecurity(String paramString, int paramInt) {
+        SecurityManager localSecurityManager = System.getSecurityManager();
+        if (localSecurityManager != null) {
+            int i = 0;
+            if ((paramInt & 0x100) != 0) {
+                localSecurityManager.checkRead(paramString);
+                i = 1;
+            }
+            if ((paramInt & 0x200) != 0) {
+                localSecurityManager.checkWrite(paramString);
+                i = 1;
+            }
+            if ((paramInt & 0x400) != 0) {
+                localSecurityManager.checkDelete(paramString);
+                i = 1;
+            }
+            if (i == 0) {
+                throw new SecurityException(paramString + ",Unknown permission request:0x" + Integer.toHexString(paramInt));
+            }
+        }
+    }
+
+    public static QTFile resolveAlias(AliasHandle paramAliasHandle) throws QTException {
+        byte[] arrayOfByte1 = makeFSSpec();
+        byte[] arrayOfByte2 = {
+            0
+        };
+        int i = ResolveAlias(null, QTObject.ID(paramAliasHandle), arrayOfByte1, arrayOfByte2);
+        QTIOException.checkError(i, QTUtils.PString2String(arrayOfByte1, 6));
+        QTFile localQTFile = new QTFile(arrayOfByte1);
+        if (System.getSecurityManager() != null) {
+            try {
+                checkSecurity(localQTFile.getCanonicalPath(), 256);
+            } catch (IOException localIOException) {
+                throw new QTIOException(localIOException.getMessage());
+            }
+        }
+
+        return localQTFile;
+    }
+
+    private static int getNumTypes(int[] paramArrayOfInt) {
+        if (paramArrayOfInt == null)
+            return -1;
+        int i = paramArrayOfInt.length;
+        if (i == 0)
+            return -1;
+        if (i > 4)
+            return 4;
+        return i;
+    }
+
+    public static QTFile standardGetFilePreview(int[] paramArrayOfInt) throws QTException {
+        byte[] arrayOfByte1;
+
+        if (QTSession.isCurrentOS(4)) {
+            FileDialog localFileDialog = new FileDialog(new java.awt.Frame(), "Open File...");
+
+            localFileDialog.show();
+            if (localFileDialog.getFile() == null)
+                throw new QTIOException(-128, "");
+            arrayOfByte1 = path2Spec(localFileDialog.getDirectory() + localFileDialog.getFile(), true);
+
+            return new QTFile(localFileDialog.getDirectory() + localFileDialog.getFile(), arrayOfByte1);
+        }
+
+        synchronized (QTNative.globalsLock) {
+            byte[] arrayOfByte2 = makeStdFileReply();
+
+            StandardGetFilePreview(0, (short) getNumTypes(paramArrayOfInt), paramArrayOfInt, arrayOfByte2);
+            if (arrayOfByte2[0] == 0)
+                throw new QTIOException(-128, "");
+            arrayOfByte1 = makeFSSpec();
+            System.arraycopy(arrayOfByte2, 6, arrayOfByte1, 0, arrayOfByte1.length);
+        }
+        return new QTFile(arrayOfByte1);
+    }
+
+    public QTFile(String paramString) {
+        super(paramString);
+    }
+
+    public QTFile(File paramFile) {
+        this(paramFile.getPath());
+    }
+
+    private QTFile(byte[] paramArrayOfByte) throws QTIOException {
+        this(spec2Path(paramArrayOfByte), paramArrayOfByte);
+    }
+
+    private QTFile(String paramString, byte[] paramArrayOfByte) {
+        super(paramString);
+        this.fileSpec = paramArrayOfByte;
+    }
+
+    public final byte[] getFSSpec(boolean paramBoolean, int paramInt) throws QTIOException {
+        if (this.fileSpec == null) {
+            try {
+                this.fileSpec = path2Spec(getCanonicalPath(), paramBoolean);
+            } catch (IOException localIOException1) {
+                throw new QTIOException(localIOException1.getMessage());
+            }
+        }
+        try {
+            checkSecurity(getCanonicalPath(), paramInt);
+        } catch (IOException localIOException2) {
+            throw new QTIOException(localIOException2.getMessage());
+        }
+        byte[] arrayOfByte = new byte[this.fileSpec.length];
+        System.arraycopy(this.fileSpec, 0, arrayOfByte, 0, arrayOfByte.length);
+        return arrayOfByte;
+    }
+
+    public void convertToMovieFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
+        convertToMovieFile(paramQTFile, paramInt1, paramInt2, null, null);
+    }
+
+    public void convertToMovieFile(QTFile paramQTFile,
+                                   int paramInt1,
+                                   int paramInt2,
+                                   MovieImporter paramMovieImporter) throws QTException {
+        convertToMovieFile(paramQTFile, paramInt1, paramInt2, paramMovieImporter, null);
+    }
+
+    public void convertToMovieFile(QTFile paramQTFile,
+                                   int paramInt1,
+                                   int paramInt2,
+                                   MovieImporter paramMovieImporter,
+                                   MovieProgress paramMovieProgress) throws QTException {
+        byte[] arrayOfByte1 = getFSSpec(true, 256);
+        byte[] arrayOfByte2 = paramQTFile.getFSSpec(false, 512);
+
+        if ((paramInt2 & 0x80000000) != 0) {
+            try {
+                checkSecurity(paramQTFile.getCanonicalPath(), 1024);
+            } catch (IOException localIOException) {
+                throw new QTIOException(localIOException.getMessage());
+            }
+        }
+
+        IODispatcher localIODispatcher = null;
+        int i = -1;
+        if (paramMovieProgress != null) {
+            localIODispatcher = new IODispatcher(paramMovieProgress);
+            i = localIODispatcher.ID();
+        }
+        int j = ConvertFileToMovieFile(arrayOfByte1,
+                                       arrayOfByte2,
+                                       paramInt1,
+                                       (short) -1,
+                                       null,
+                                       paramInt2,
+                                       QTObject.ID(paramMovieImporter),
+                                       i,
+                                       0);
+
+        if (localIODispatcher != null)
+            localIODispatcher.cleanupMethodClosure();
+        QTIOException.checkError(j, getPath() + "," + paramQTFile.getPath());
+    }
+
+    public void createMovieFile(int paramInt1, int paramInt2) throws QTIOException {
+        if ((paramInt2 & 0x80000000) != 0) {
+            try {
+                checkSecurity(getCanonicalPath(), 1024);
+            } catch (IOException localIOException) {
+                throw new QTIOException(localIOException.getMessage());
+            }
+        }
+
+        int i = CreateMovieFile(getFSSpec(false, 512), paramInt1, (short) -1, paramInt2 | 0x20000000 | 0x40000000, null, null);
+
+        QTIOException.checkError(i, getPath());
+    }
+
+    public void createShortcutMovieFile(int paramInt1, int paramInt2, int paramInt3, DataRef paramDataRef) throws QTException {
+        if (QTSession.getQTMajorVersion() < 4) {
+            throw new QTException(-50);
+        }
+        if ((paramInt3 & 0x80000000) != 0) {
+            try {
+                checkSecurity(getCanonicalPath(), 1024);
+            } catch (IOException localIOException) {
+                throw new QTIOException(localIOException.getMessage());
+            }
+        }
+
+        int i = CreateShortcutMovieFile(getFSSpec(false, 512),
+                                        paramInt1,
+                                        (short) paramInt2,
+                                        paramInt3,
+                                        QTObject.ID(paramDataRef),
+                                        paramDataRef.getType());
+
+        QTIOException.checkError(i, getPath());
+    }
+
+    public AliasHandle newAlias(boolean paramBoolean) throws QTException {
+        return AliasHandle.fromQTFile(this, paramBoolean);
+    }
+
+    public AliasHandle relativeAlias(QTFile paramQTFile, boolean paramBoolean) throws QTException {
+        return AliasHandle.fromTargetQTFile(paramQTFile, this, paramBoolean);
+    }
+
+    public QTFile resolveAlias(boolean paramBoolean) throws QTIOException {
+        byte b = (byte) (paramBoolean ? 1 : 0);
+        byte[] arrayOfByte1 = {
+            0
+        };
+        byte[] arrayOfByte2 = {
+            0
+        };
+
+        byte[] arrayOfByte3 = getFSSpec(true, 256);
+        int i = ResolveAliasFile(arrayOfByte3, b, arrayOfByte1, arrayOfByte2);
+
+        QTIOException.checkError(i, QTUtils.PString2String(arrayOfByte3, 6));
+
+        return new QTFile(arrayOfByte3);
+    }
+
+    public boolean delete() {
+        boolean bool = false;
+        try {
+            byte[] arrayOfByte = getFSSpec(true, 1024);
+            int i = DeleteMovieFile(arrayOfByte);
+            QTIOException.checkError(i, getCanonicalPath());
+            bool = true;
+        } catch (IOException localIOException) {
+            throw new SecurityException(localIOException.getMessage());
+        } catch (QTException localQTException) {
+            return super.delete();
+        }
+        return bool;
+    }
+
+    private static final byte[] makeStdFileReply() {
+        return new byte[QTSession.isCurrentOS(1) ? 'X' : 280];
+    }
+
+    private static final byte[] makeFSSpec() {
+        return new byte[QTSession.isCurrentOS(1) ? 'F' : 262];
+    }
+
+    private static byte[] path2Spec(String paramString, boolean paramBoolean) throws QTIOException {
+        if (QTSession.isCurrentOS(4)) {
+            if (QTSession.getJavaVersion() >= 65540) {
+                Object localObject1 = new byte[255];
+                byte[] arrayOfByte1 = new byte[255];
+
+                try {
+                    byte[] arrayOfByte3 = new byte[80];
+                    byte[] arrayOfByte5 = new byte[80];
+
+                    File localFile = new File(paramString);
+                    Object localObject3;
+                    Object localObject2;
+                    int i;
+                    Object localObject4;
+                    if (localFile.exists()) {
+
+                        localObject3 = new int[1];
+                        int[] arrayOfInt = new int[1];
+                        byte[] arrayOfByte6;
+                        if ((QTSession.isCurrentOS(4)) && (EndianOrder.isNativeLittleEndian())) {
+                            localObject2 = localFile.getAbsolutePath().getBytes("UTF-16LE");
+                            arrayOfByte6 = new byte[((byte[]) localObject2).length];
+                            System.arraycopy(localObject2, 0, arrayOfByte6, 0, ((byte[]) localObject2).length);
+                        } else {
+                            localObject2 = localFile.getAbsolutePath().getBytes("UTF-16");
+                            arrayOfByte6 = new byte[((byte[]) localObject2).length - 2];
+                            System.arraycopy(localObject2, 2, arrayOfByte6, 0, ((byte[]) localObject2).length - 2);
+                        }
+
+                        i = QTNewDataReferenceFromFullPathUnicode(arrayOfByte6,
+                                                                  localFile.getAbsolutePath().length(),
+                                                                  -1,
+                                                                  0,
+                                                                  (int[]) localObject3,
+                                                                  arrayOfInt);
+                        if (debug)
+                            System.err.println(localFile.getAbsolutePath() + " " + i + " outDataRefType[0] " + arrayOfInt[0]);
+                        if (arrayOfInt[0] == 1634494835) {
+                            localObject4 = makeFSSpec();
+                            byte[] arrayOfByte7 = {
+                                0
+                            };
+                            int i1 = ResolveAlias(null, ((byte[]) localObject3)[0], (byte[]) localObject1, arrayOfByte7);
+
+                        }
+
+                    } else {
+
+                        i = FSPathMakeRef(QTUtils.String2CString(localFile.getParent()), arrayOfByte5, null);
+                        if (i == 0) {
+                            int j = FSGetCatalogInfo(arrayOfByte5, 0, 0, 0, arrayOfByte1, 0);
+
+                            localObject2 = new File(paramString).getAbsolutePath();
+                            int k = ((String) localObject2).lastIndexOf(File.separator);
+                            localObject3 = ((String) localObject2).substring(0, k);
+                            int m = ((String) localObject3).lastIndexOf(File.separator);
+
+                            localObject4 = ':' + ((String) localObject2).substring(m + 1, k) + ':'
+                                           + ((String) localObject2).substring(k + 1, ((String) localObject2).length());
+
+                            if (debug) {
+                                System.err.println(j + " partialPath = " + (String) localObject4);
+                            }
+                            int n = FSMakeFSSpec(getShortFromArray(arrayOfByte1, 0),
+                                                 getIntFromArray(arrayOfByte1, 2),
+                                                 QTUtils.String2PString((String) localObject4,
+                                                                        ((String) localObject4).length()),
+                                                 (byte[]) localObject1);
+
+                        }
+
+                    }
+
+                } catch (Throwable localThrowable2) {
+
+                    localThrowable2.printStackTrace();
+                    throw new QTIOException(localThrowable2.getMessage());
+                }
+
+                return (byte[]) localObject1;
+            }
+            FSSpec fsSpec;
+            try {
+                fsSpec = new FSSpec(new File(paramString));
+            } catch (Throwable localThrowable1) {
+                throw new QTIOException(localThrowable1.getMessage());
+            }
+            return fsSpec.getBytes();
+        }
+
+        Object localObject1 = pathName2QT(paramString);
+        byte[] arrayOfByte2 = QTUtils.String2PString((String) localObject1, 255);
+
+        byte[] arrayOfByte4 = makeFSSpec(arrayOfByte2, paramBoolean);
+        try {
+            QTUtils.checkFreeMemory();
+        } catch (UtilException localUtilException) {
+            throw new QTIOException(-108, paramString);
+        }
+        return arrayOfByte4;
+    }
+
+    private static String spec2Path(byte[] paramArrayOfByte) throws QTIOException {
+        String str;
+        if (QTSession.isCurrentOS(1)) {
+            try {
+                QTUtils.checkFreeMemory();
+            } catch (UtilException localUtilException) {
+                throw new QTIOException(-108, "");
+            }
+            str = MacFSSpec_getFullName(paramArrayOfByte);
+        } else {
+            str = QTUtils.PString2String(paramArrayOfByte, 6);
+        }
+        return str;
+    }
+
+    private static final byte[] makeFSSpec(byte[] paramArrayOfByte, boolean paramBoolean) throws QTIOException {
+        byte[] arrayOfByte = makeFSSpec();
+        int i = FSMakeFSSpec((short) 0, 0, paramArrayOfByte, arrayOfByte);
+        if (i != 0) {
+            if (i == -43) {
+                if (paramBoolean) {
+                    QTIOException.checkError(i, QTUtils.PString2String(paramArrayOfByte, 0));
+                }
+
+            } else {
+                QTIOException.checkError(i, QTUtils.PString2String(paramArrayOfByte, 0));
+            }
+        }
+        return arrayOfByte;
+    }
+
+    private static String pathName2QT(String paramString) throws QTIOException {
+        if (paramString.charAt(0) == '/') {
+            paramString = paramString.substring(1);
+        }
+        if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
+            paramString = MacFSSpec_pathName2QT(paramString);
+            paramString = cleanUpPathName(paramString);
+            paramString = MacFSSpec_checkAndResolveAlias(paramString);
+        } else if (QTSession.isCurrentOS(2)) {
+            paramString = paramString.replace('/', File.separatorChar);
+        }
+
+        return paramString;
+    }
+
+    private static final String cleanUpPathName(String paramString) {
+        int i = paramString.length();
+        StringBuffer localStringBuffer = new StringBuffer();
+
+        for (int j = 0; j < i; j++) {
+            if (paramString.charAt(j) == '%') {
+                String str = paramString.substring(j + 1, j + 3);
+                localStringBuffer.append((char) Integer.parseInt(str, 16));
+                j += 2;
+            } else {
+                localStringBuffer.append(paramString.charAt(j));
+            }
+        }
+        return new String(localStringBuffer);
+    }
+
+    private static String MacFSSpec_pathName2QT(String paramString) {
+        if ((paramString.charAt(0) == ':') || (paramString.charAt(0) == '/')) {
+            paramString = paramString.substring(1);
+        }
+        return paramString.replace('/', ':');
+    }
+
+    private static String MacFSSpec_checkAndResolveAlias(String paramString) throws QTIOException {
+        try {
+            QTUtils.checkFreeMemory();
+        } catch (QTException localQTException) {
+            throw new QTIOException(-108, paramString);
+        }
+        byte[] arrayOfByte1 = new byte[paramString.length() + 1];
+        byte[] arrayOfByte2 = paramString.getBytes();
+
+        int i;
+        if (QTSession.isCurrentOS(1)) {
+            i = arrayOfByte2.length;
+        } else {
+            i = paramString.length();
+        }
+        System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 1, arrayOfByte2.length);
+        arrayOfByte1[0] = ((byte) i);
+        byte[] arrayOfByte3 = new byte[70];
+
+        if (FSMakeFSSpec((short) 0, 0, arrayOfByte1, arrayOfByte3) == -120) {
+            String str1 = paramString.substring(0, paramString.lastIndexOf(':'));
+            arrayOfByte2 = paramString.getBytes();
+            System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 1, i);
+
+            if (QTSession.isCurrentOS(1)) {
+                arrayOfByte1[0] = ((byte) str1.getBytes().length);
+            } else
+                arrayOfByte1[0] = ((byte) str1.length());
+            FSMakeFSSpec((short) 0, 0, arrayOfByte1, arrayOfByte3);
+
+            int[] arrayOfInt = {
+                0
+            };
+            byte[] arrayOfByte4 = {
+                0
+            };
+            byte[] arrayOfByte5 = {
+                0
+            };
+            int j = ResolveAliasFile(arrayOfByte3, (byte) 1, arrayOfByte4, arrayOfByte5);
+            if ((j == 0) || (j == -43)) {
+                if (arrayOfByte5[0] != 0) {
+                    String str2 = "";
+
+                    str2 = MacFSSpec_getFullName(arrayOfByte3);
+                    str2 = MacFSSpec_pathName2QT(str2);
+
+                    str2 = str2 + paramString.substring(paramString.lastIndexOf(':'));
+                    return str2;
+                }
+            } else
+                throw new QTIOException(j, paramString);
+        }
+        return paramString;
+    }
+
+    private static class CInfoPBRec extends QTByteObject implements quicktime.jdirect.PrimitivesLib {
+        static {
+            if (!QTSession.isCurrentOS(1)) {
+                throw new QTRuntimeException("Class Not Required");
+            }
+        }
+
+        CInfoPBRec() {
+            super(108);
+        }
+
+        short getVRefNum() {
+            return getShortAt(22);
+        }
+
+        String getName() throws QTIOException {
+            return getPString(getIntAt(18));
+        }
+
+        int getFileDirID() {
+            return getIntAt(48);
+        }
+
+        int getDirParID() {
+            return getIntAt(100);
+        }
+
+        void setVRefNum(short paramShort) {
+            setShortAt(22, paramShort);
+        }
+
+        void setNamePtr(String paramString) throws QTIOException {
+            if (paramString.length() > 255)
+                throw new QTIOException(-50, paramString);
+            int i = QTFile.NewPtrClear(256);
+            if (i == 0) {
+                throw new QTIOException(-108, paramString);
+            }
+            byte[] arrayOfByte = paramString.getBytes();
+            int j;
+            if (QTSession.isCurrentOS(1)) {
+                j = arrayOfByte.length;
+            } else
+                j = paramString.length();
+            setByteInPointer(i, 0, (byte) j);
+
+            copyArrayToPointer(arrayOfByte, 0, i, 1, j);
+            setByteInPointer(i, 0, (byte) j);
+            setIntAt(18, i);
+        }
+
+        void setFileDirID(int paramInt) {
+            setIntAt(48, paramInt);
+        }
+
+        void setFileDirIndex(short paramShort) {
+            setShortAt(28, paramShort);
+        }
+
+        protected final void finalize() throws Throwable {
+            if (getIntAt(18) != 0)
+                QTFile.DisposePtr(getIntAt(18));
+            super.finalize();
+        }
+
+        private String getPString(int paramInt) {
+            int i = getByteFromPointer(paramInt, 0);
+            byte[] arrayOfByte = new byte[i];
+            copyPointerToArray(paramInt, 1, arrayOfByte, 0, i);
+            return new String(arrayOfByte);
+        }
+
+        private static native void copyArrayToPointer(byte[] paramArrayOfByte,
+                                                      int paramInt1,
+                                                      int paramInt2,
+                                                      int paramInt3,
+                                                      int paramInt4);
+
+        private static native void copyPointerToArray(int paramInt1,
+                                                      int paramInt2,
+                                                      byte[] paramArrayOfByte,
+                                                      int paramInt3,
+                                                      int paramInt4);
+
+        private static native void setByteInPointer(int paramInt1, int paramInt2, byte paramByte);
+
+        private static native byte getByteFromPointer(int paramInt1, int paramInt2);
+    }
+
+    private static String MacFSSpec_getFullName(byte[] paramArrayOfByte) throws QTIOException {
+        CInfoPBRec localCInfoPBRec = new CInfoPBRec();
+        localCInfoPBRec.setVRefNum(getShortFromArray(paramArrayOfByte, 0));
+        localCInfoPBRec.setNamePtr(getPStringAt(paramArrayOfByte, 6));
+        localCInfoPBRec.setFileDirIndex((short) -1);
+        localCInfoPBRec.setFileDirID(getIntFromArray(paramArrayOfByte, 2));
+
+        Object localObject = new String(getPStringAt(paramArrayOfByte, 6));
+        int i = getIntFromArray(paramArrayOfByte, 2);
+
+        for (;;) {
+            String str = "";
+            localCInfoPBRec.setFileDirID(i);
+            int j = PBGetCatInfoSync(localCInfoPBRec.getBytes());
+            QTIOException.checkError(j, (String) localObject);
+            if (localCInfoPBRec.getFileDirID() == 2) {
+                str = localCInfoPBRec.getName();
+                str = str + File.separator;
+                str = str + (String) localObject;
+                localObject = str;
+                str = File.separator;
+                str = str + (String) localObject;
+                localObject = str;
+                break;
+            }
+            i = localCInfoPBRec.getDirParID();
+            str = localCInfoPBRec.getName();
+            str = str + File.separator;
+            str = str + (String) localObject;
+            localObject = str;
+        }
+        return (String) localObject;
+    }
+
+    private static String getPStringAt(byte[] paramArrayOfByte, int paramInt) {
+        int i = paramArrayOfByte[(paramInt++)];
+        byte[] arrayOfByte = new byte[i];
+        System.arraycopy(paramArrayOfByte, paramInt, arrayOfByte, 0, i);
+        return new String(arrayOfByte);
+    }
+
+    private static native short QTNewDataReferenceFromFullPathUnicode(byte[] paramArrayOfByte,
+                                                                      int paramInt1,
+                                                                      int paramInt2,
+                                                                      int paramInt3,
+                                                                      int[] paramArrayOfInt1,
+                                                                      int[] paramArrayOfInt2);
+
+    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+
+    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+
+    private static native void copyPointerToArray(int paramInt1,
+                                                  int paramInt2,
+                                                  byte[] paramArrayOfByte,
+                                                  int paramInt3,
+                                                  int paramInt4);
+
+    private static native int NewPtrClear(int paramInt);
+
+    private static native void DisposePtr(int paramInt);
+
+    private static native short FSMakeFSSpec(short paramShort,
+                                             int paramInt,
+                                             byte[] paramArrayOfByte1,
+                                             byte[] paramArrayOfByte2);
+
+    private static native short PBGetCatInfoSync(byte[] paramArrayOfByte);
+
+    private static native short ResolveAlias(byte[] paramArrayOfByte1,
+                                             int paramInt,
+                                             byte[] paramArrayOfByte2,
+                                             byte[] paramArrayOfByte3);
+
+    private static native short ResolveAliasFile(byte[] paramArrayOfByte1,
+                                                 byte paramByte,
+                                                 byte[] paramArrayOfByte2,
+                                                 byte[] paramArrayOfByte3);
+
+    private static native short FSPathMakeRef(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+
+    private static native int FSGetCatalogInfo(byte[] paramArrayOfByte1,
+                                               int paramInt1,
+                                               int paramInt2,
+                                               int paramInt3,
+                                               byte[] paramArrayOfByte2,
+                                               int paramInt4);
+
+    private static native short FSMakeFSRefUnicode(byte[] paramArrayOfByte1,
+                                                   int paramInt1,
+                                                   byte[] paramArrayOfByte2,
+                                                   int paramInt2,
+                                                   byte[] paramArrayOfByte3);
+
+    private static native int GraphicsImportGetDataFile(int paramInt, byte[] paramArrayOfByte);
+
+    private static native int GraphicsExportGetInputFile(int paramInt, byte[] paramArrayOfByte);
+
+    private static native int GraphicsExportGetOutputFile(int paramInt, byte[] paramArrayOfByte);
+
+    private static native int GraphicsImportDoExportImageFileDialog(int paramInt1,
+                                                                    byte[] paramArrayOfByte1,
+                                                                    byte[] paramArrayOfByte2,
+                                                                    int paramInt2,
+                                                                    int[] paramArrayOfInt,
+                                                                    byte[] paramArrayOfByte3,
+                                                                    short[] paramArrayOfShort);
+
+    private static native int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+
+    private static native short ConvertFileToMovieFile(byte[] paramArrayOfByte1,
+                                                       byte[] paramArrayOfByte2,
+                                                       int paramInt1,
+                                                       short paramShort,
+                                                       short[] paramArrayOfShort,
+                                                       int paramInt2,
+                                                       int paramInt3,
+                                                       int paramInt4,
+                                                       int paramInt5);
+
+    private static native void StandardGetFilePreview(int paramInt,
+                                                      short paramShort,
+                                                      int[] paramArrayOfInt,
+                                                      byte[] paramArrayOfByte);
+
+    private static native short DeleteMovieFile(byte[] paramArrayOfByte);
+
+    private static native short CreateMovieFile(byte[] paramArrayOfByte,
+                                                int paramInt1,
+                                                short paramShort,
+                                                int paramInt2,
+                                                short[] paramArrayOfShort,
+                                                int[] paramArrayOfInt);
+
+    private static native short CreateShortcutMovieFile(byte[] paramArrayOfByte,
+                                                        int paramInt1,
+                                                        short paramShort,
+                                                        int paramInt2,
+                                                        int paramInt3,
+                                                        int paramInt4);
+}

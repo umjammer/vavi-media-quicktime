@@ -1,0 +1,300 @@
+
+package quicktime.util;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import quicktime.QTException;
+import quicktime.QTObject;
+import quicktime.jdirect.QTNative;
+import quicktime.jdirect.QuickTimeLib;
+import quicktime.std.StdQTException;
+import quicktime.std.image.GraphicsExporter;
+import quicktime.std.image.GraphicsImporter;
+import quicktime.std.image.ImageDescription;
+import quicktime.std.movies.Track;
+import quicktime.std.movies.media.SoundDescription;
+import quicktime.std.qtcomponents.ImageCompressionDialog;
+import quicktime.std.qtcomponents.TimeCodeDescription;
+import quicktime.std.qtcomponents.TimeCodeInfo;
+import quicktime.std.qtcomponents.TimeCodeTime;
+import quicktime.std.qtcomponents.TimeCoder;
+
+
+public class QTHandle extends QTHandleRef implements QuickTimeLib {
+    private static Object linkage;
+
+    static {
+        new Object() {
+            void establish() {
+                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                    public Object run() {
+                        return QTNative.linkNativeMethods(QTHandle.class);
+                    }
+                });
+            }
+        }.establish();
+    }
+
+    public static QTHandle fromGraphicsExporterText(GraphicsExporter paramGraphicsExporter) throws QTException {
+        int[] arrayOfInt = {
+            0
+        };
+        int i = GraphicsExportGetSettingsAsText(QTObject.ID(paramGraphicsExporter), arrayOfInt);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromGraphicsExporterInput(GraphicsExporter paramGraphicsExporter) throws QTException {
+        int[] arrayOfInt = new int[1];
+        int i = GraphicsExportGetInputHandle(QTObject.ID(paramGraphicsExporter), arrayOfInt);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromGraphicsExporterOutput(GraphicsExporter paramGraphicsExporter) throws QTException {
+        int[] arrayOfInt = new int[1];
+        int i = GraphicsExportGetOutputHandle(QTObject.ID(paramGraphicsExporter), arrayOfInt);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromSoundDescription(SoundDescription paramSoundDescription, int paramInt) throws QTException {
+        int[] arrayOfInt = new int[1];
+        int i = GetSoundDescriptionExtension(QTObject.ID(paramSoundDescription), arrayOfInt, paramInt);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromImageDescription(ImageDescription paramImageDescription,
+                                                int paramInt1,
+                                                int paramInt2) throws StdQTException {
+        int[] arrayOfInt = new int[1];
+        StdQTException
+                .checkError(GetImageDescriptionExtension(QTObject.ID(paramImageDescription), arrayOfInt, paramInt1, paramInt2));
+
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromGraphicsImporterData(GraphicsImporter paramGraphicsImporter) throws QTException {
+        int[] arrayOfInt = new int[1];
+        int i = GraphicsImportGetDataHandle(QTObject.ID(paramGraphicsImporter), arrayOfInt);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromGraphicsImporterAlias(GraphicsImporter paramGraphicsImporter) throws QTException {
+        int[] arrayOfInt1 = new int[1];
+        int[] arrayOfInt2 = new int[1];
+
+        int i = GraphicsImportGetAliasedDataReference(QTObject.ID(paramGraphicsImporter), arrayOfInt1, arrayOfInt2);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt1[0], null, false);
+    }
+
+    public static TimeCodeInfo fromTimeCoderTime(TimeCoder paramTimeCoder, int paramInt) throws QTException {
+        int[] arrayOfInt1 = new int[1];
+        TimeCodeTime localTimeCodeTime = new TimeCodeTime();
+        int[] arrayOfInt2 = new int[1];
+        TimeCodeInfo localTimeCodeInfo = new TimeCodeInfo();
+        int i = TCGetTimeCodeAtTime(QTObject.ID(paramTimeCoder),
+                                    paramInt,
+                                    arrayOfInt1,
+                                    localTimeCodeInfo.definition.getBytes(),
+                                    localTimeCodeTime.getBytes(),
+                                    arrayOfInt2);
+
+        StdQTException.checkError(i);
+
+        if (arrayOfInt2[0] != 0) {
+            localTimeCodeInfo.userData = new QTHandle(arrayOfInt2[0], null, false);
+        } else {
+            localTimeCodeInfo.userData = null;
+        }
+        localTimeCodeInfo.counter = localTimeCodeTime.toCounter();
+        localTimeCodeInfo.time = localTimeCodeTime;
+        localTimeCodeInfo.frameNumber = arrayOfInt1[0];
+
+        return localTimeCodeInfo;
+    }
+
+    public static TimeCodeInfo fromTimeCoderCurrent(TimeCoder paramTimeCoder) throws QTException {
+        int[] arrayOfInt1 = new int[1];
+        TimeCodeTime localTimeCodeTime = new TimeCodeTime();
+        int i = 0;
+        int[] arrayOfInt2 = new int[1];
+        TimeCodeInfo localTimeCodeInfo = new TimeCodeInfo();
+        int j = TCGetCurrentTimeCode(QTObject.ID(paramTimeCoder),
+                                     arrayOfInt1,
+                                     localTimeCodeInfo.definition.getBytes(),
+                                     localTimeCodeTime.getBytes(),
+                                     arrayOfInt2);
+
+        StdQTException.checkError(j);
+
+        if (arrayOfInt2[0] != 0) {
+            localTimeCodeInfo.userData = new QTHandle(arrayOfInt2[0], null, false);
+        } else {
+            localTimeCodeInfo.userData = null;
+        }
+        localTimeCodeInfo.counter = localTimeCodeTime.toCounter();
+        localTimeCodeInfo.time = localTimeCodeTime;
+        localTimeCodeInfo.frameNumber = arrayOfInt1[0];
+
+        return localTimeCodeInfo;
+    }
+
+    public static QTHandle fromTimeCoderSource(TimeCoder paramTimeCoder,
+                                               TimeCodeDescription paramTimeCodeDescription) throws QTException {
+        int[] arrayOfInt = new int[1];
+        StdQTException
+                .checkError(TCGetSourceRef(QTObject.ID(paramTimeCoder), QTObject.ID(paramTimeCodeDescription), arrayOfInt));
+
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromTrack(Track paramTrack) throws QTException {
+        int[] arrayOfInt = new int[1];
+        int i = GetTrackSoundLocalizationSettings(QTObject.ID(paramTrack), arrayOfInt);
+        StdQTException.checkError(i);
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public static QTHandle fromEncodedImage(EncodedImage paramEncodedImage) throws QTException {
+        if ((paramEncodedImage instanceof ByteEncodedImage))
+            return new QTHandle(((ByteEncodedImage) paramEncodedImage).getBytes());
+        if ((paramEncodedImage instanceof IntEncodedImage)) {
+            QTHandle localQTHandle = new QTHandle(paramEncodedImage.getSize(), false);
+            int[] arrayOfInt = ((IntEncodedImage) paramEncodedImage).getInts();
+            localQTHandle.copyFromArray(0, arrayOfInt, 0, arrayOfInt.length);
+            return localQTHandle;
+        }
+        if ((paramEncodedImage instanceof RawEncodedImage)) {
+            return new QTHandle((RawEncodedImage) paramEncodedImage, 0, paramEncodedImage.getSize());
+        }
+        return null;
+    }
+
+    public static void reserveMemory(int paramInt) throws UtilException {
+        ReserveMem(paramInt);
+        UtilException.checkError(MemError());
+    }
+
+    public QTHandle() throws QTException {
+        this(4, true);
+    }
+
+    public QTHandle(int paramInt, boolean paramBoolean) throws QTException {
+        super(paramInt, paramBoolean);
+    }
+
+    public QTHandle(byte[] paramArrayOfByte) throws QTException {
+        super(paramArrayOfByte.length, false);
+        setBytesAt(0, paramArrayOfByte.length, paramArrayOfByte, 0);
+    }
+
+    public QTHandle(QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2) throws QTException {
+        this(copyPtr(paramQTPointerRef, paramInt1, paramInt2), null, false);
+    }
+
+    public QTHandle(QTHandleRef paramQTHandleRef1, QTHandleRef paramQTHandleRef2) throws QTException {
+        this(paramQTHandleRef1.makeAndCopyHandle(), null, false);
+        concatenate(paramQTHandleRef2);
+    }
+
+    protected QTHandle(int paramInt, Object paramObject, boolean paramBoolean) {
+        super(paramInt, paramObject, paramBoolean);
+    }
+
+    private static int copyPtr(QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2) throws UtilException {
+        paramInt2 = paramInt2 + paramInt1 > paramQTPointerRef.getSize() ? paramQTPointerRef.getSize() - paramInt1 : paramInt2;
+        int[] arrayOfInt = {
+            0
+        };
+        arrayOfInt[0] = NewHandleClear(4);
+        UtilException.checkError(PtrToHand(QTObject.ID(paramQTPointerRef) + paramInt1, arrayOfInt, paramInt2));
+        return arrayOfInt[0];
+    }
+
+    public void setSize(int paramInt) throws UtilException {
+        SetHandleSize(_ID(), paramInt);
+        UtilException.checkError(MemError());
+    }
+
+    public void concatenate(QTHandleRef paramQTHandleRef) throws UtilException {
+        paramQTHandleRef.doLock();
+        int i = HandAndHand(QTObject.ID(paramQTHandleRef), _ID());
+        if (!paramQTHandleRef.isLocked())
+            paramQTHandleRef.unlock();
+        UtilException.checkError(i);
+    }
+
+    public static QTHandle fromImageCompressionDialog(ImageCompressionDialog paramImageCompressionDialog) throws StdQTException {
+        int[] arrayOfInt = {
+            0
+        };
+        StdQTException.checkError(SCGetInfo(QTObject.ID(paramImageCompressionDialog), 1667523939, arrayOfInt));
+
+        return new QTHandle(arrayOfInt[0], null, false);
+    }
+
+    public Object clone() {
+        return new QTHandle(makeAndCopyHandle(), null, false);
+    }
+
+    private static native short GetSoundDescriptionExtension(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+
+    private static native short GetImageDescriptionExtension(int paramInt1,
+                                                             int[] paramArrayOfInt,
+                                                             int paramInt2,
+                                                             int paramInt3);
+
+    private static native int GraphicsImportGetDataHandle(int paramInt, int[] paramArrayOfInt);
+
+    private static native int GraphicsImportGetAliasedDataReference(int paramInt,
+                                                                    int[] paramArrayOfInt1,
+                                                                    int[] paramArrayOfInt2);
+
+    private static native int TCGetTimeCodeAtTime(int paramInt1,
+                                                  int paramInt2,
+                                                  int[] paramArrayOfInt1,
+                                                  byte[] paramArrayOfByte1,
+                                                  byte[] paramArrayOfByte2,
+                                                  int[] paramArrayOfInt2);
+
+    private static native int TCGetCurrentTimeCode(int paramInt,
+                                                   int[] paramArrayOfInt1,
+                                                   byte[] paramArrayOfByte1,
+                                                   byte[] paramArrayOfByte2,
+                                                   int[] paramArrayOfInt2);
+
+    private static native int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+
+    private static native short GetTrackSoundLocalizationSettings(int paramInt, int[] paramArrayOfInt);
+
+    private static native void ReserveMem(int paramInt);
+
+    private static native short MemError();
+
+    private static native int NewHandleClear(int paramInt);
+
+    private static native short PtrToHand(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+
+    private static native void SetHandleSize(int paramInt1, int paramInt2);
+
+    private static native short HandAndHand(int paramInt1, int paramInt2);
+
+    private static native int GraphicsExportGetInputHandle(int paramInt, int[] paramArrayOfInt);
+
+    private static native int GraphicsExportGetOutputHandle(int paramInt, int[] paramArrayOfInt);
+
+    private static native int GraphicsExportGetSettingsAsText(int paramInt, int[] paramArrayOfInt);
+
+    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+}
+
+/* Location:
+ * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
+ * QTHandle.class
+ * Java compiler version: 2 (46.0)
+ * JD-Core Version: 0.7.1 */
