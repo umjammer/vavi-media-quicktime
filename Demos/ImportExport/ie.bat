@@ -1,0 +1,1 @@
+java -classpath %CLASSPATH%;ImportExport.zip ImportExport
