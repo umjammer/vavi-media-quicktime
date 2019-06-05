@@ -7,7 +7,7 @@
  *	Written by : QTJ Engineering
  *  Modified by: Scott Kuechle
  *
- *	Copyright:	© 1996-2000 by Apple Computer, Inc., all rights reserved.
+ *	Copyright:	Â© 1996-2000 by Apple Computer, Inc., all rights reserved.
  *
  *	Change History (most recent first):
  *
@@ -15,6 +15,8 @@
  *	   <2>	 	12/8/00	srk		modified for use with MovieTextFinder class
  *	   <1>      1999	???		first file
  */
+
+package MovieTextFinder;
 
 import java.awt.Component;
 import java.awt.Container;

@@ -2,8 +2,10 @@
  * QuickTime for Java SDK Sample Code
  *
  * Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
  */
+
+package PlayTune;
 
 import java.awt.Button;
 import java.awt.FileDialog;
@@ -141,58 +143,59 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
 
     static final int
     // why 600 -> that is the scale of the media when we add it to the movie
-            kNoteDuration = 240, // ¥ in 600ths of a second
-            kRestDuration = 300, // ¥ in 600ths -- tempo will be 120 bpm
+            kNoteDuration = 240, // â€¢ in 600ths of a second
+            kRestDuration = 300, // â€¢ in 600ths -- tempo will be 120 bpm
 
             // 21 music events plus 1 for end of sequence marker
-            our_sequence_length = (22 * 4), // ¥ bytes
+            our_sequence_length = (22 * 4), // â€¢ bytes
             // why 9? - the tune we have has 9 rest's in it - the "rest" event
             // essentially
             // sets up the grid and the duration
-            our_sequence_duration = (9 * kRestDuration); // ¥ 600ths
+            our_sequence_duration = (9 * kRestDuration); // â€¢ 600ths
 
     // create a tune
     static MusicData testSequenceCreation() throws QTException {
 
         MusicData tune = new MusicData(our_sequence_length);
 
-        tune.setMusicEvent(0, MusicData.stuffNoteEvent(1, 60, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(0, MusicData.stuffNoteEvent(1, 60, 100, kNoteDuration)); // â€¢
                                                                                     // piano
                                                                                     // C
         tune.setMusicEvent(1, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(2, MusicData.stuffNoteEvent(2, 60, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(2, MusicData.stuffNoteEvent(2, 60, 100, kNoteDuration)); // â€¢
                                                                                     // violin
                                                                                     // C
         tune.setMusicEvent(3, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(4, MusicData.stuffNoteEvent(1, 63, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(4, MusicData.stuffNoteEvent(1, 63, 100, kNoteDuration)); // â€¢
                                                                                     // piano
         tune.setMusicEvent(5, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(6, MusicData.stuffNoteEvent(2, 64, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(6, MusicData.stuffNoteEvent(2, 64, 100, kNoteDuration)); // â€¢
+
                                                                                     // violin
         tune.setMusicEvent(7, MusicData.stuffRestEvent(kRestDuration));
-        // ¥ Make the 5th and 6th notes much softer, just for fun.
-        tune.setMusicEvent(8, MusicData.stuffNoteEvent(1, 67, 60, kNoteDuration)); // ¥
+        // â€¢ Make the 5th and 6th notes much softer, just for fun.
+        tune.setMusicEvent(8, MusicData.stuffNoteEvent(1, 67, 60, kNoteDuration)); // â€¢
                                                                                     // piano
         tune.setMusicEvent(9, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(10, MusicData.stuffNoteEvent(2, 66, 60, kNoteDuration)); // ¥
+        tune.setMusicEvent(10, MusicData.stuffNoteEvent(2, 66, 60, kNoteDuration)); // â€¢
                                                                                     // violin
         tune.setMusicEvent(11, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(12, MusicData.stuffNoteEvent(1, 72, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(12, MusicData.stuffNoteEvent(1, 72, 100, kNoteDuration)); // â€¢
                                                                                         // piano
         tune.setMusicEvent(13, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(14, MusicData.stuffNoteEvent(2, 73, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(14, MusicData.stuffNoteEvent(2, 73, 100, kNoteDuration)); // â€¢
                                                                                         // violin
         tune.setMusicEvent(15, MusicData.stuffRestEvent(kRestDuration));
-        tune.setMusicEvent(16, MusicData.stuffNoteEvent(1, 60, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(16, MusicData.stuffNoteEvent(1, 60, 100, kNoteDuration)); // â€¢
                                                                                         // piano
-        tune.setMusicEvent(17, MusicData.stuffNoteEvent(1, 67, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(17, MusicData.stuffNoteEvent(1, 67, 100, kNoteDuration)); // â€¢
                                                                                         // piano
-        tune.setMusicEvent(18, MusicData.stuffNoteEvent(2, 63, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(18, MusicData.stuffNoteEvent(2, 63, 100, kNoteDuration)); // â€¢
                                                                                         // violin
-        tune.setMusicEvent(19, MusicData.stuffNoteEvent(2, 72, 100, kNoteDuration)); // ¥
+        tune.setMusicEvent(19, MusicData.stuffNoteEvent(2, 72, 100, kNoteDuration)); // â€¢
                                                                                         // violin
         tune.setMusicEvent(20, MusicData.stuffRestEvent(kRestDuration));
-        // ¥ end-of-sequence marker already in MusicData object
+        // â€¢ end-of-sequence marker already in MusicData object
         // tune.setMusicEvent (21, MusicData.stuffMarkerEvent (0, 0));
 
         return tune;
@@ -386,13 +389,13 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
         // sample description atom
         SndInfo info = SndInfo.parseAIFFHeader(OpenFile.asRead(f));
         SoundComponentData mySndInfo = info.sndData;
-        
+
         // assume the AIFF sound data is uncompressed as
         // atomic instruments ONLY accept uncompressed sound
         // so this call and it's consequent usage is not required
 //      CompressionInfo myCompInfo = CompressionInfo.get(SoundConstants.notCompressed, mySndInfo.getFormat(), mySndInfo.getNumChannels(), mySndInfo.getSampleSize());
 //      System.out.println(myCompInfo);
-         
+
         System.out.println(mySndInfo);
 
         // create an atom container with atoms that describe the custom

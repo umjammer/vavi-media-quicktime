@@ -2,9 +2,11 @@
  * QuickTime for Java SDK Sample Code
 
    Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
 
  */
+package JavaDrawing;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;

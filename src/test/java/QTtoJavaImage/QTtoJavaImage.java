@@ -1,9 +1,11 @@
 /*
  * quicktime.app: Sample Code for Initial Seeding
  *
- * © 1996, 97 Copyright, Apple Computer
+ * Â© 1996, 97 Copyright, Apple Computer
  * All rights reserved
  */
+
+package QTtoJavaImage;
 
 import java.awt.Dimension;
 import java.awt.Frame;

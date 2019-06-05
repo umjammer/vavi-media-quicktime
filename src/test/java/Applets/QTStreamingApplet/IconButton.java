@@ -1,7 +1,8 @@
+package Applets.QTStreamingApplet;
 /*
  * quicktime.app: Sample Code for Initial Seeding
  *
- * © 1996, 97 Copyright, Apple Computer
+ * Â© 1996, 97 Copyright, Apple Computer
  * All rights reserved
  */
 

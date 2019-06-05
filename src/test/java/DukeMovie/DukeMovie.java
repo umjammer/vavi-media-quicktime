@@ -2,8 +2,10 @@
  * QuickTime for Java SDK Sample Code
  *
  * Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
  */
+
+package DukeMovie;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,9 +17,9 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-import duke.ControlPanel;
-import duke.MovieScreen;
-import duke.TumbleItem;
+import DukeMovie.duke.ControlPanel;
+import DukeMovie.duke.MovieScreen;
+import DukeMovie.duke.TumbleItem;
 import quicktime.QTException;
 import quicktime.QTSession;
 import quicktime.app.view.QTFactory;

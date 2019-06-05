@@ -1,10 +1,12 @@
 /*
  * quicktime.app: Sample Code for Initial Seeding
  *
- * © 1996, 97 Copyright, Apple Computer
+ * Â© 1996, 97 Copyright, Apple Computer
  * All rights reserved
  */
  
+package Applets.QTStreamingApplet;
+
 import java.awt.Image;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;

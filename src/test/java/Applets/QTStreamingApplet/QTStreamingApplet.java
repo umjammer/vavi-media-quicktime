@@ -2,8 +2,10 @@
  * QuickTime for Java SDK Sample Code
  *
  * Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
  */
+
+package Applets.QTStreamingApplet;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;

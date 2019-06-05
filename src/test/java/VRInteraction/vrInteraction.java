@@ -8,7 +8,7 @@
  
  In consideration of your agreement to abide by the following terms, and
  subject to these terms, Apple grants you a personal, non-exclusive
- license, under AppleÕs copyrights in this original Apple software (the
+ license, under Appleâ€™s copyrights in this original Apple software (the
  "Apple Software"), to use, reproduce, modify and redistribute the Apple
  Software, with or without modifications, in source and/or binary forms;
  provided that if you redistribute the Apple Software in its entirety and
@@ -42,6 +42,9 @@
  * Usage subject to restrictions in SDK License Agreement
  * Copyright 2001 Apple Computer, Inc.
  */
+
+package VRInteraction;
+
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;

@@ -2,10 +2,12 @@
  * QuickTime for Java SDK Sample Code
 
    Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
 
 	Special Thanks to Darren Gibbs <darreng@cinebase.com> for the TimeCodeMedia code
  */
+
+package TimeCode;
 
 import java.awt.Component;
 import java.awt.Frame;

@@ -2,10 +2,12 @@
  * QuickTime for Java SDK Sample Code
  *
  * Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
  */
 
-import ip.ControlPanel;
+package ImageProducing;
+
+import ImageProducing.ip.ControlPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

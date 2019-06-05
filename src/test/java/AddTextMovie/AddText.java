@@ -2,9 +2,11 @@
  * QuickTime for Java SDK Sample Code
 
    Usage subject to restrictions in SDK License Agreement
- * Copyright: © 2000-2002 Apple Computer, Inc.
+ * Copyright: Â© 2000-2002 Apple Computer, Inc.
 
  */
+package AddTextMovie;
+
 import java.awt.Frame;
 
 import quicktime.QTSession;

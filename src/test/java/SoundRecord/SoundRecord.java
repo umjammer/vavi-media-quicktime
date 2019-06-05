@@ -2,9 +2,11 @@
  * QuickTime for Java SDK Sample Code
 
    Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-1999 Apple Computer, Inc.
+ * Copyright: Â© 1996-1999 Apple Computer, Inc.
 
  */
+package SoundRecord;
+
 import java.awt.Button;
 import java.awt.FileDialog;
 import java.awt.Frame;

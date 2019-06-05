@@ -1,3 +1,4 @@
+package SoundMeter;
 import quicktime.QTException;
 import quicktime.app.time.Ticklish;
 import quicktime.std.movies.media.AudioMediaHandler;

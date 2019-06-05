@@ -2,9 +2,11 @@
  * QuickTime for Java SDK Sample Code
  *
  * Usage subject to restrictions in SDK License Agreement
- * Copyright: © 1996-2001 Apple Computer, Inc.
+ * Copyright: Â© 1996-2001 Apple Computer, Inc.
  */
  
+package PlaySound;
+
 import java.awt.Button;
 import java.awt.FlowLayout;
 import java.awt.Frame;
