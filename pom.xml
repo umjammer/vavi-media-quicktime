@@ -5,14 +5,23 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>vavi</groupId>
-  <artifactId>vavi-apps-henkankun</artifactId>
-  <name>Vavi Sound Sandbox API</name>
+
+  <groupId>com.apple</groupId>
+  <artifactId>quicktime4java</artifactId>
+  <version>6.1.0</version>
+
+  <name>Quick Time for Java</name>
   <organization>
-    <name></name>
+    <name>Apple Inc.</name>
   </organization>
-  <version>0.0.1</version>
-  <url>https://github.com/umjammer/vavi-apps-henkankun</url>
+  <url>https://bitbucket.org/umjammer/quicktime4java</url>
+  <scm>
+    <url>https://bitbucket.org/umjammer/quicktime4java</url>
+  </scm>
+  <issueManagement>
+    <url>https://bitbucket.org/umjammer/quicktime4java</url>
+  </issueManagement>
+
   <build>
     <plugins>
       <plugin>
@@ -21,10 +30,12 @@
           <source>8</source>
           <target>8</target>
           <encoding>UTF-8</encoding>
+          <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
   <repositories>
     <repository>
       <id>central</id>
@@ -32,6 +43,7 @@
       <url>http://jcenter.bintray.com</url>
     </repository>
   </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.rococoa</groupId>
@@ -44,11 +56,19 @@
       <version>0.5</version>
       <optional>false</optional>
     </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.3.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-  <scm>
-    <url>https://github.com/umjammer/vavi-apps-henkankun</url>
-  </scm>
-  <issueManagement>
-    <url>https://github.com/umjammer/vavi-apps-henkankun/issues</url>
-  </issueManagement>
+
 </project>
