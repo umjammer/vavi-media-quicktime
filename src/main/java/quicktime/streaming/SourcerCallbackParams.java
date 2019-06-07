@@ -1,11 +1,17 @@
-
 package quicktime.streaming;
 
 import quicktime.QTException;
 import quicktime.util.QTPointer;
 
-
+/**
+ * This class provides a representation the native QTSSourcerCallbackProcParams structure
+ * that provides callback registration services for the Sourcer
+ */
 public final class SourcerCallbackParams extends QTPointer {
+
+    /**
+     * This is the size of this class
+     */
     public static final int kNativeSize = 16;
 
     private StreamDispatcher notifyUPP;
@@ -18,10 +24,19 @@ public final class SourcerCallbackParams extends QTPointer {
         super(paramArrayOfByte);
     }
 
+    /**
+     * Constructs an SourcerCallbackParams object based on the native SourcerCallbackParams structure
+     * @param proc the notify proc to be registered with the sourcer
+     */
     public SourcerCallbackParams(int paramInt, StreamNotifyProc paramStreamNotifyProc) throws QTException {
         this(1, paramInt, paramStreamNotifyProc);
     }
 
+    /**
+     * Constructs an SourcerCallbackParams object based on the native SourcerCallbackParams structure
+     * @param vers version of the callback params structure
+     * @param proc the notify proc to be registered with the sourcer
+     */
     public SourcerCallbackParams(int paramInt1, int paramInt2, StreamNotifyProc paramStreamNotifyProc) throws QTException {
         super(16, true);
         setVersion(paramInt1);
@@ -29,22 +44,42 @@ public final class SourcerCallbackParams extends QTPointer {
         setProc(paramStreamNotifyProc);
     }
 
+    /**
+     * Sets the version of the sourcer callback params object
+     * @param vers version
+     */
     public void setVersion(int paramInt) {
         setIntAt(0, paramInt);
     }
 
+    /**
+     * Gets the version of the sourcer callback params object
+     * @return version
+     */
     public int getVersion() {
         return getIntAt(0);
     }
 
+    /**
+     * Sets the flags of the sourcer callback object
+     * @param flags sourcer callback flags
+     */
     public void setFlags(int paramInt) {
         setIntAt(4, paramInt);
     }
 
+    /**
+     * Gets the flags
+     */
     public int getFlags() {
         return getIntAt(4);
     }
 
+    /**
+     * Sets the callback procedure for the Sourcer object. If the
+     * proc is null, the current callback proc will be removed
+     * @param proc StreamNotify Proc
+     */
     public void setProc(StreamNotifyProc paramStreamNotifyProc) {
         if (paramStreamNotifyProc == null) {
             setIntAt(8, 0);
@@ -58,11 +93,14 @@ public final class SourcerCallbackParams extends QTPointer {
         }
     }
 
+    /**
+     * Returns a string representation of this object.
+     * @return a String
+     */
     public String toString() {
         return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",proc" + this.notifyUPP + "]";
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
  * /SourcerCallbackParams.class

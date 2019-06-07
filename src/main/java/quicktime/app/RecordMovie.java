@@ -1,4 +1,3 @@
-
 package quicktime.app;
 
 import quicktime.QTException;
@@ -18,11 +17,66 @@ import quicktime.std.movies.media.VideoMedia;
 import quicktime.util.QTHandle;
 import quicktime.util.RawEncodedImage;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * This class is used to record a movie from a source QDGraphics.
+ * It provides a profiling mode so that the an estimate of the compression
+ * time for each frame captured. The use of this class can enable a movie
+ * to be recorded where the record rate is unrelated to the capture rate.
+ * That is, a recorded rate of 10 frames a second can be specified and each
+ * frame that is captured will have a duration of 1/10 of a second regardless
+ * of how long the compression process takes or how often the frameReady method
+ * is called.
+ *
+ * Typically this class is used as a utility service by some other class that
+ * wants to provide recording capabilities. When a RecordMovie object is
+ * set in the target class, the target class notifies the RecordMovie object
+ * that it now has a source QDGraphics. Whenever appropriate, the target class then
+ * notifies the RecordMovie object that a frame is ready to be captured from the
+ * QDGraphics object and the RecordMovie object either captures that frame or
+ * profiles the compression based on its current mode of operation. When the
+ * frameReady method has been called the specified number of frames when recording
+ * it returns false to indicate that it is no longer interested and the target class
+ * can discard the RecordMovie object and ceases notification of frame readiness. In its turn
+ * the RecordMovie disavows any knowledge of the QDGraphics object it was compressing
+ * until the next time it receives notification that it has been added to a source.
+ *
+ * Once a movie has completed recording the RecordMovie object will spawn a thread and
+ * call the RecordMovieCallback's finish method with the movie that has just been recorded.
+ * The recorded movie will have a video track added with all of the data captured and the application
+ * can at this point do whatever is appropriate with the movie - save it, play it back, etc.
+ * Each record operation will add a new video track with the specified compression and visual
+ * media characteristics.
+ *
+ * An example usage of the RecordMovie class:
+ *
+ * RecordMovie rm = new RecordMovie (myMovie, myRecordCallback);
+ * rm.setCompressionSettings (...);
+ * myRecordThis.setRecordMovie (rm);
+ *
+ * An example definition of a Class that uses the RecordMovie object to capture its QDGraphics:
+ *
+ * class RecordThis {
+ * QDGraphics g;
+ * RecordMovie rm;
+ *
+ * public void setRecordMovie (RecordMovie rm) throws QTException {
+ * rm.addedToSource (g);
+ * this.rm = rm;
+ * }
+ * // some call in this object that is responsible for drawing
+ * void blitImage () {
+ * //do blit to g
+ * //....
+ * if (rm != null && rm.frameReady() == false) //capture current state of g
+ * rm = null;                              //no longer interested drop reference to rm
+ * }
+ * }
+ *
+ * @see quicktime.app.display.Compositor
  */
 public class RecordMovie {
+
     private QTHandle imageHandle;
 
     private RawEncodedImage compressedImage;
@@ -54,21 +108,46 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Creates a default RecordMovie object. No movie or callback object are specified
+     * so in this state the object can only be used for profiling. If a recording is desired
+     * the application must specify the movie with the setMovie method. In order for profiling
+     * to be enabled the application must also set the compression settings, describing the
+     * type of compression to be applied.
      */
     public RecordMovie() throws QTException {
         this(null, null, null);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Record the output of each composited image to a frame. When the movie is finished
+     * recording the RecordMovieCallback's finish method is called with the resulting movie.
+     * In this case the compositor will continue to draw to the destination graphics and any
+     * changes as a result of user interaction will be recorded. By default the entire
+     * bounds of the target QDGraphics will be captured.
+     * @param theMovie the movie to which a video track will be added
+     * @param cBack when recording is finished the cBack.finish method is called with the resultant movie. If this
+     *  value is null then no notification is given to the application when recording is completed.
      */
     public RecordMovie(Movie paramMovie, RecordMovieCallback paramRecordMovieCallback) throws QTException {
         this(paramMovie, paramRecordMovieCallback, null);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Record the output of each composited image to a frame. When the movie is finished
+     * recording the RecordMovieCallback's finish method is called with the resulting movie.
+     * In this case the compositor will continue to draw to the destination graphics and any
+     * changes as a result of user interaction will be recorded.
+     * @param theMovie the movie to which a video track will be added
+     * @param cBack when recording is finished the cBack.finish method is called with the resultant movie. If this
+     *  value is null then no notification is given to the application when recording is completed.
+     * @param rectBounds if only some part of the QDGraphics is to be captured you can specify the rectangle
+     *  here. A value of null means that the entire QDGraphics bounds will be captured
      */
     public RecordMovie(Movie paramMovie, RecordMovieCallback paramRecordMovieCallback, QDRect paramQDRect) throws QTException {
         this.gwRect = paramQDRect;
@@ -96,7 +175,15 @@ public class RecordMovie {
     private CodecComponent codec;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Sets the movie that a video track will be added to in any consequent record operation
+     * and the callback object that will be called when the movie is finished recording.
+     * If no callback is specified the application receives no notification when recording
+     * is completed.
+     * @param theMovie to record
+     * @param cBack the call back object
+     * @param {@link quicktime.QTException}
      */
     public void setMovie(Movie paramMovie, RecordMovieCallback paramRecordMovieCallback) throws QTException {
         if (this.recording)
@@ -105,6 +192,7 @@ public class RecordMovie {
         this.cb = paramRecordMovieCallback;
         if (this.cb != null) {
             this.cbThread = new Thread(new Runnable() {
+
                 public void run() {
                     if (RecordMovie.this.cb != null) {
                         RecordMovie.this.cb.finish(RecordMovie.this.mov);
@@ -115,14 +203,20 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Establishes the type of compression that will be applied to the source QDGraphics
+     * when the recording or preflighting is done.
+     * @param scale the time scale of the video track that is added
+     * @param spatialQuality the spatial compression quality that is to be applied when compressing each frame
+     * @param temporalQuality the temporal compression quality that is to be applied when compressing each frame
+     * @param keyFrameRate the key frame rate that is used if temporal compression is used.
+     *  A value of zero lets QuickTime decide on the keyFrameRate. This is disregarded if no temporal compression is specified
+     * @param codecType the codec identifier that is used to specify which compressor is used to compress the images
+     * @param codec qualifies which type of codec of codecType is used, ex. bestSpeed, bestQuality, etc.
+     * @param {@link quicktime.QTException}
      */
-    public void setCompressionSettings(int paramInt1,
-                                       int paramInt2,
-                                       int paramInt3,
-                                       int paramInt4,
-                                       int paramInt5,
-                                       CodecComponent paramCodecComponent) throws QTException {
+    public void setCompressionSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, CodecComponent paramCodecComponent) throws QTException {
         this.scale = paramInt1;
         this.spatialQuality = paramInt2;
         this.temporalQuality = paramInt3;
@@ -132,7 +226,23 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method is called by the target object that control the drawing and capturing of the image
+     * drawn in the QDGraphics. When a RecordMovie object is set to a target, the target calls this method
+     * with the QDGraphics object which is the source image. If an application is setting a record movie
+     * object to a target it is the target's responsibility to notify the RecordMovie object that it has a
+     * target graphics. Thus in general the application does not need to call this method specifically.
+     * If you are using this object to record drawing in a QDGraphics object then this method should be
+     * called and it then becomes the responsibility of the caller to notify the RecordMovie object
+     * when a frame is ready for capturing by calling the frameReady method.
+     * The applicatioin should ensure that the RecordMovie object has been set up with compression
+     * parameters (if in preflight mode) and also a target movie if in record mode before being
+     * set to a target ie. the target object can assume this requirement when it calls the addedToSource
+     * method. If in an inappropriate state this method will throw a QTAppException detailing the exceptional state.
+     * @param g the graphics object which is the source of the compression and capture operations of the RecordMovie class
+     * @param {@link quicktime.QTException}
+     * @see {@link quicktime.app.RecordMovie#frameReady()}
      */
     public void addedToSource(QDGraphics paramQDGraphics) throws QTException {
         if (this.recording) {
@@ -147,29 +257,12 @@ public class RecordMovie {
         if (this.gwRect == null)
             this.gwRect = paramQDGraphics.getPortRect();
         this.gw = paramQDGraphics;
-
         if ((this.vidTrack == null) && (!this.inPreflightMode)) {
             addNewTrack();
         }
-        this.seq = new CSequence(this.gw,
-                                 this.gwRect,
-                                 this.gw.getPixMap().getPixelSize(),
-                                 this.codecType,
-                                 this.codec,
-                                 this.spatialQuality,
-                                 this.temporalQuality,
-                                 this.keyFrameRate,
-                                 null,
-                                 0);
-
+        this.seq = new CSequence(this.gw, this.gwRect, this.gw.getPixMap().getPixelSize(), this.codecType, this.codec, this.spatialQuality, this.temporalQuality, this.keyFrameRate, null, 0);
         this.recDesc = this.seq.getDescription();
-        int i = QTImage.getMaxCompressionSize(this.gw,
-                                              this.gwRect,
-                                              this.gw.getPixMap().getPixelSize(),
-                                              this.spatialQuality,
-                                              this.codecType,
-                                              this.codec);
-
+        int i = QTImage.getMaxCompressionSize(this.gw, this.gwRect, this.gw.getPixMap().getPixelSize(), this.spatialQuality, this.codecType, this.codec);
         this.imageHandle = new QTHandle(i, true);
         this.imageHandle.lock();
         this.compressedImage = RawEncodedImage.fromQTHandle(this.imageHandle);
@@ -180,7 +273,12 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This call will do a preflight of the record and you will be able to asses the impact of compressing a
+     * single pass of the QDGraphics target. Preflighting will be stopped when recording is started.
+     * @param flag if true preflighting is enabled, if false preflighting is disabled.
+     * @param {@link quicktime.QTException}
      */
     public synchronized void setPreflighting(boolean paramBoolean) throws QTException {
         if (this.recording)
@@ -189,14 +287,22 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Returns true if the RecordMovie object is preflighting a compression operation.
+     * @return boolean
      */
     public boolean isPreflighting() {
         return this.inPreflightMode;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Places a RecordMovie object in record mode. A movie must already have been specified
+     * for this method to succeed.
+     * @param numRecordFrames the number of frames the record activity should record
+     * @param {@link quicktime.QTException}
      */
     public synchronized void recordMode(int paramInt) throws QTException {
         if (this.mov == null)
@@ -207,7 +313,9 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Aborts recording before it has completed. Any captured images will be lost.
      */
     public void abortRecording() throws QTException {
         if (this.recording) {
@@ -218,7 +326,13 @@ public class RecordMovie {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * The source of the record operation calls this method whether the RecordMovie object
+     * is preflighting or recording whenever it is appropriate for the RecordMovie object
+     * to capture the current state of the QDGraphics.
+     * @return true if interested in another frame, false will end the record or preflight operation
+     * @return {@link quicktime.QTException}
      */
     public boolean frameReady() throws QTException {
         synchronized (QTNative.globalsLock) {
@@ -226,21 +340,12 @@ public class RecordMovie {
                 CompressedFrameInfo localCompressedFrameInfo;
                 if (this.inPreflightMode) {
                     localCompressedFrameInfo = this.seq.compressFrame(this.gw, this.gwRect, 4, this.compressedImage);
-
                     return true;
                 }
                 if ((this.recording) && (this.currentRecordFrame++ <= this.recordFrames)) {
                     localCompressedFrameInfo = this.seq.compressFrame(this.gw, this.gwRect, 4, this.compressedImage);
-
                     int i = localCompressedFrameInfo.getSimilarity() == 0 ? 1 : 0;
-                    this.vidMedia.addSample(this.imageHandle,
-                                            0,
-                                            localCompressedFrameInfo.getDataSize(),
-                                            600 / this.scale,
-                                            this.recDesc,
-                                            1,
-                                            i != 0 ? 0 : 1);
-
+                    this.vidMedia.addSample(this.imageHandle, 0, localCompressedFrameInfo.getDataSize(), 600 / this.scale, this.recDesc, 1, i != 0 ? 0 : 1);
                     if (this.currentRecordFrame > this.recordFrames) {
                         cleanupMovie();
                         this.recording = false;
@@ -251,7 +356,6 @@ public class RecordMovie {
                 }
             }
         }
-
         cleanup();
         return false;
     }
@@ -279,7 +383,6 @@ public class RecordMovie {
         this.vidMedia = new VideoMedia(this.vidTrack, 600);
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/
  * RecordMovie.class

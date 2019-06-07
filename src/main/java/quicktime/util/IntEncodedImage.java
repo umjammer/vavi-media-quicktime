@@ -1,14 +1,15 @@
-
 package quicktime.util;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 
-
+/**
+ * IntEncodedImage keep the encoded image data as an array of ints.
+ */
 public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
+
     static Object linkage;
 
     private int[] ints;
@@ -17,8 +18,10 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
 
     static {
         class PrivelegedAction {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(IntEncodedImage.class);
                     }
@@ -36,6 +39,9 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         return new IntEncodedImage(paramArrayOfInt, paramInt);
     }
 
+    /**
+     * Creates a IntEncodedImage from raw data. It will copy the data
+     */
     public IntEncodedImage(RawEncodedImage paramRawEncodedImage) {
         int i = paramRawEncodedImage.getSize();
         if (i % 4 != 0)
@@ -45,10 +51,16 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         this.rowBytes = paramRawEncodedImage.getRowBytes();
     }
 
+    /**
+     * Creates a new IntEncodedImage of specified number of ints.
+     */
     public IntEncodedImage(int paramInt) {
         this(paramInt, -1);
     }
 
+    /**
+     * Creates a new IntEncodedImage of specified number of ints.
+     */
     public IntEncodedImage(int paramInt1, int paramInt2) {
         this.ints = new int[paramInt1];
         paramInt2 = paramInt2;
@@ -67,32 +79,55 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         return this.ints;
     }
 
+    /**
+     * Returns the size in bytes of the EncodedImage data
+     */
     public int getSize() {
         return this.ints.length * 4;
     }
 
+    /**
+     * Returns the byte at the specified offset.
+     * The offset is specified in bytes into the encoded image object.
+     */
     public byte getByte(int paramInt) {
         if ((paramInt > getSize()) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
         return getByteFromArray(this.ints, paramInt);
     }
 
+    /**
+     * Returns the short at the specified offset.
+     * The offset is specified in bytes into the encoded image object.
+     */
     public short getShort(int paramInt) {
         if ((paramInt > getSize() - 1) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
         return getShortFromArray(this.ints, paramInt);
     }
 
+    /**
+     * Returns the int at the specified offset.
+     * The offset is specified in bytes into the encoded image object.
+     */
     public int getInt(int paramInt) {
         if ((paramInt > getSize() - 3) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
         return getIntFromArray(this.ints, paramInt);
     }
 
+    /**
+     * Returns either kRowBytesUnknown or the number of bytes per row
+     * that the encoded image data is comprised of. This number will
+     * at least be as big as width*pixelSize, and maybe larger.
+     */
     public int getRowBytes() {
         return this.rowBytes;
     }
 
+    /**
+     * Returns true if the two objects have the same value.
+     */
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
@@ -100,20 +135,25 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
             int[] arrayOfInt = ((IntEncodedImage) paramObject).ints;
             if (arrayOfInt.length != this.ints.length)
                 return false;
-            for (int i = 0; i < this.ints.length; i++)
-                if (this.ints[i] != arrayOfInt[i])
-                    return false;
+            for (int i = 0; i < this.ints.length; i++) if (this.ints[i] != arrayOfInt[i])
+                return false;
             return true;
         }
         return false;
     }
 
+    /**
+     * Returns a copy of the current object
+     */
     public Object clone() {
         int[] arrayOfInt = new int[this.ints.length];
         System.arraycopy(this.ints, 0, arrayOfInt, 0, this.ints.length);
         return new IntEncodedImage(arrayOfInt, this.rowBytes);
     }
 
+    /**
+     * Returns a string representation of this object
+     */
     public String toString() {
         return getClass().getName();
     }
@@ -124,7 +164,6 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
 
     private static native int getIntFromArray(int[] paramArrayOfInt, int paramInt);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
  * IntEncodedImage.class

@@ -1,15 +1,17 @@
-
 package quicktime.app.actions;
 
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.app.time.Ticklish;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * The TickleNode is used by the TicklList to contain its
+ * Ticklish members.
+ * @see {@link quicktime.app.actions.TickleList}
  */
 public class TickleNode {
+
     TickleNode next;
 
     Ticklish action;
@@ -21,7 +23,10 @@ public class TickleNode {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Create a TickleNode for the supplied Ticklish
+     * @param action the Ticklish member
      */
     protected TickleNode(Ticklish paramTicklish) {
         this.action = paramTicklish;
@@ -30,41 +35,56 @@ public class TickleNode {
     boolean active = true;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Return the Ticklish that is held by this node
+     * @return the TIcklish
      */
     public Ticklish getTicklish() {
         return this.action;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Set the Ticklish that is held by this node
      */
     public void setTicklish(Ticklish paramTicklish) {
         this.action = paramTicklish;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Allows the application to determine if this node of a TickleList is
+     * currently active and thus its ticklish will be tickled by the list.
+     * @return a boolean
      */
     public boolean isActive() {
         return this.active;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Allows the application to activate or deactivate a TickleNode that is
+     * currently a member of a list.
+     * @param flag a boolean
      */
     public void setActive(boolean paramBoolean) {
         this.active = paramBoolean;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Return a String representation of this object
+     * @return a String
      */
     public String toString() {
         return getClass().getName() + "[action=" + this.action + ",active=" + this.active + ",next=" + this.next + "]";
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/
  * actions/TickleNode.class

@@ -1,9 +1,7 @@
-
 package quicktime.util;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -19,14 +17,32 @@ import quicktime.std.qtcomponents.CompressionDialog;
 import quicktime.std.qtcomponents.SCInfo;
 import quicktime.std.qtcomponents.SCSequence;
 
-
+/**
+ * A QTHandleRef is a "smart" handle in that it can be either a Reference to a handle
+ * which is not disposable, or it can be a real "independent" handle which is
+ * automatically disposed on finalization. This class is used as a generic base class for handle based objects. See QTHandle
+ * for a user-level handle object.
+ *
+ * The default setting is for the Handle to be disposable - subclasses must use the
+ * QTHandleRef(int, Object) constructor to create a non-disposable reference
+ * For non-disposable handles there are two situations to look out for:
+ * (1) Upon finalization the handle should NOT be disposed - it belongs to a parent struct
+ * (2) The parent object from which the handle is obtained should not be allowed to
+ * go away whilst the reference object is alive.
+ * In both situations we must maintain a reference to the parent or owner object.
+ * When defining a clone operation subclasses should define it as:
+ * public Object clone() { return new QTHandleSubclass (makeAndCopyHandle (), null); }
+ */
 public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib, InterfaceLib {
+
     private static Object linkage;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QTHandleRef.class);
                     }
@@ -35,41 +51,31 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }.establish();
     }
 
-    public static SCInfo fromSCSequence(SCSequence paramSCSequence,
-                                        QDGraphics paramQDGraphics,
-                                        QDRect paramQDRect) throws QTException {
+    /**
+     * Compresses a frame that is sourced by a PixMap from the supplied QDGraphics, returning
+     * the compressed data.
+     * QuickTime::SCCompressSequenceFrame()
+     * @param src the PixMap's source QDGraphics.
+     * @param srcRect you can specify to compress just a part of the pix map by specifying
+     *  a rectangle - or pass in null to compress the entire pix map.
+     * @return an image data object.
+     * @return {@link quicktime.QTException}
+     */
+    public static SCInfo fromSCSequence(SCSequence paramSCSequence, QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
         if (paramQDGraphics == null) {
             throw new StdQTException(-50);
         }
-        int[] arrayOfInt1 = {
-            0
-        };
-        int[] arrayOfInt2 = {
-            0
-        };
-        short[] arrayOfShort = {
-            0
-        };
-        int[] arrayOfInt3 = {
-            0
-        };
-        int[] arrayOfInt4 = {
-            0
-        };
-
+        int[] arrayOfInt1 = { 0 };
+        int[] arrayOfInt2 = { 0 };
+        short[] arrayOfShort = { 0 };
+        int[] arrayOfInt3 = { 0 };
+        int[] arrayOfInt4 = { 0 };
         int i = 0;
-
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(arrayOfInt3, arrayOfInt4);
             SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = SCCompressSequenceFrame(QTObject.ID(paramSCSequence.getDialog()),
-                                        QTObject.ID(paramQDGraphics.getPixMap()),
-                                        paramQDRect != null ? paramQDRect.getRect() : null,
-                                        arrayOfInt1,
-                                        arrayOfInt2,
-                                        arrayOfShort);
-
+            i = SCCompressSequenceFrame(QTObject.ID(paramSCSequence.getDialog()), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect != null ? paramQDRect.getRect() : null, arrayOfInt1, arrayOfInt2, arrayOfShort);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(arrayOfInt3[0], arrayOfInt4[0]);
             }
@@ -78,16 +84,17 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
             throw new StdQTException(-128);
         }
         StdQTException.checkError(i);
-
         return new SCInfo(new QTHandleRef(arrayOfInt1[0], paramSCSequence, false), arrayOfInt2[0], arrayOfShort[0]);
     }
 
+    /**
+     * Retrieves all of the settings for a dialog.
+     * QuickTime::SCRequestImageSettings()
+     * @see {@link quicktime.std.qtcomponents.CompressionDialog#getInfoState()}
+     */
     public static QTHandleRef fromCompressionDialogState(CompressionDialog paramCompressionDialog) throws QTException {
-        int[] arrayOfInt = {
-            0
-        };
+        int[] arrayOfInt = { 0 };
         StdQTException.checkError(SCGetInfo(QTObject.ID(paramCompressionDialog), 1936946273, arrayOfInt));
-
         return new QTHandleRef(arrayOfInt[0], null, false);
     }
 
@@ -116,6 +123,11 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     private transient boolean locked = false;
 
+    /**
+     * This method returns the size (number of bytes) of the handle
+     * QuickTime::GetHandleSize
+     * @return the size of the handle
+     */
     public int getSize() {
         return GetHandleSize(_ID());
     }
@@ -246,14 +258,23 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * checks this handles purgedness
+     */
     public boolean inMemory() {
         return getIntFromPointer(_ID(), 0) != 0;
     }
 
+    /**
+     * Returns true if the handle is locked otherwise false.
+     */
     public final boolean isLocked() {
         return this.locked;
     }
 
+    /**
+     * Locks the relocatable block.
+     */
     public final void lock() {
         this.locked = true;
         doLock();
@@ -263,16 +284,28 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         HLock(_ID());
     }
 
+    /**
+     * Unlocks the relocatable block.
+     */
     public final void unlock() {
         this.locked = false;
         doUnlock();
     }
 
+    /**
+     * Moves the relocatable block to the top of the heap and locks it.
+     * QuickTime::HLockHi
+     */
     public void lockHigh() {
         HLockHi(_ID());
         this.locked = true;
     }
 
+    /**
+     * Move the handle to high memory. Typically you call this before locking a small
+     * handle that is going to be locked for a short period of time.
+     * QuickTime::MoveHHi
+     */
     public final void moveHigh() {
         MoveHHi(_ID());
     }
@@ -281,6 +314,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         HUnlock(_ID());
     }
 
+    /**
+     * A String representation of the class.
+     */
     public String toString() {
         return getClass().getName() + "[size=" + getSize() + "]";
     }
@@ -303,7 +339,6 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
             throw new QTRuntimeException(localUtilException);
         }
         HLock(i);
-
         BlockMove(lockAndDeref(0) + paramInt1, getIntFromPointer(i, 0) + 0, paramInt2);
         if (!this.locked)
             unlock();
@@ -318,11 +353,24 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * Locks the handle and returns a pointer object. You must keep the handle locked for
+     * the lifetime of the returned pointer.
+     * @return an object representing the pointer.
+     */
     public QTPointerRef toQTPointer() {
         lock();
         return new QTPointerRef(lockAndDeref(0), getSize(), this);
     }
 
+    /**
+     * Locks the handle and returns a pointer object. The handle should remain locked
+     * for the lifetime of the returned pointer. It will return a pointer that is
+     * offset within the handle that has a valid access to size bytes from the offset
+     * @param offset the number of bytes to offset within the handle
+     * @param size the number of bytes the pointer has valid access to.
+     * @return an object representing the pointer.
+     */
     public QTPointerRef toQTPointer(int paramInt1, int paramInt2) {
         paramInt2 = paramInt2 + paramInt1 > getSize() ? getSize() - paramInt1 : paramInt2;
         lock();
@@ -379,8 +427,7 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     protected int strlen(int paramInt) {
         int i = 0;
-        while (getByteAt(paramInt++) != 0)
-            i++;
+        while (getByteAt(paramInt++) != 0) i++;
         return i;
     }
 
@@ -391,7 +438,6 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
         byte[] arrayOfByte = new byte[i];
         getBytesAt(paramInt, i, arrayOfByte, 0);
-
         return new String(arrayOfByte);
     }
 
@@ -415,7 +461,6 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
             getBytesAt(paramInt, i, arrayOfByte, 0);
             return new String(arrayOfByte);
         }
-
         return "";
     }
 
@@ -425,17 +470,11 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
             throw new UtilException(-50);
         }
         setByteAt(paramInt1++, (byte) paramInt2);
-
         byte[] arrayOfByte = paramString.getBytes();
         setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
     }
 
-    private static native int SCCompressSequenceFrame(int paramInt1,
-                                                      int paramInt2,
-                                                      byte[] paramArrayOfByte,
-                                                      int[] paramArrayOfInt1,
-                                                      int[] paramArrayOfInt2,
-                                                      short[] paramArrayOfShort);
+    private static native int SCCompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort);
 
     private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
 
@@ -461,89 +500,33 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  byte[] paramArrayOfByte,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  short[] paramArrayOfShort,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, short[] paramArrayOfShort, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  char[] paramArrayOfChar,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, char[] paramArrayOfChar, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  int[] paramArrayOfInt,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  float[] paramArrayOfFloat,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  long[] paramArrayOfLong,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  double[] paramArrayOfDouble,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, double[] paramArrayOfDouble, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(byte[] paramArrayOfByte,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(short[] paramArrayOfShort,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(short[] paramArrayOfShort, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(char[] paramArrayOfChar,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(char[] paramArrayOfChar, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(int[] paramArrayOfInt,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(float[] paramArrayOfFloat,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(float[] paramArrayOfFloat, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(long[] paramArrayOfLong,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(long[] paramArrayOfLong, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(double[] paramArrayOfDouble,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(double[] paramArrayOfDouble, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
     private static native int getIntFromPointer(int paramInt1, int paramInt2);
 
@@ -571,7 +554,6 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     private static native void setDoubleInHandle(int paramInt1, int paramInt2, double paramDouble);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
  * QTHandleRef.class

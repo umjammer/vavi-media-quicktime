@@ -1,9 +1,7 @@
-
 package quicktime.qd;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -14,14 +12,21 @@ import quicktime.std.StdQTException;
 import quicktime.util.QTHandleRef;
 import quicktime.util.UtilException;
 
-
+/**
+ * The Polygon represents an arbitary area or set of areas on the drawing coordinate plane.
+ * Methods are implemented for a corresponding QuickDraw structure used by QuickTime.
+ * refer to Polygon in QuickDraw
+ */
 public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneable {
+
     private static Object linkage;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(Polygon.class);
                     }
@@ -30,13 +35,9 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         }.establish();
     }
 
-    private static final int[] savedPort = {
-        0
-    };
+    private static final int[] savedPort = { 0 };
 
-    private static final int[] savedDevice = {
-        0
-    };
+    private static final int[] savedDevice = { 0 };
 
     private static int allocate(QDGraphics paramQDGraphics) throws QTException {
         if (paramQDGraphics == null) {
@@ -56,6 +57,10 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         return i;
     }
 
+    /**
+     * Allocates a new empty Polygon.
+     * QuickDraw::OpenPoly
+     */
     public Polygon(QDGraphics paramQDGraphics) throws QTException {
         super(allocate(paramQDGraphics), null, false);
         if (QTObject.ID(this) == 0)
@@ -72,6 +77,10 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     private transient QDGraphics gw = null;
 
+    /**
+     * Completes the collection of lines that define the polygon.
+     * QuickDraw::ClosePoly
+     */
     public void close() throws QDException {
         if (this.gw != null) {
             synchronized (QTNative.globalsLock) {
@@ -86,24 +95,46 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         this.gw = null;
     }
 
+    /**
+     * Returns size of the Polygon.
+     * @return the size of the handle
+     */
     public int getSize() {
         return getShortAt(0);
     }
 
+    /**
+     * Returns a copy of the bounding rectangle of the Polygon.
+     * @return a rect
+     */
     public QDRect getPolyBBox() {
         byte[] arrayOfByte = new byte[8];
         getBytesAt(2, 8, arrayOfByte, 0);
         return QDRect.fromArray(arrayOfByte, 8);
     }
 
+    /**
+     * Returns a copy of the bounding rectangle of the Polygon.
+     * @return a rect
+     */
     public QDRect getBounds() {
         return getPolyBBox();
     }
 
+    /**
+     * Copies the mathematical structure of the implicit Polygon into a newly created Polygon.
+     * @return A new Polygon copy.
+     * @return {@link quicktime.QTException}
+     */
     public Polygon copy() throws QTException {
         return new Polygon(makeAndCopyHandle());
     }
 
+    /**
+     * Copies the mathematical structure of the implicit Polygon into a newly created Polygon.
+     * QuickDraw::Copy
+     * @return A new Polygon copy.
+     */
     public Object clone() {
         try {
             return copy();
@@ -112,10 +143,27 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         }
     }
 
+    /**
+     * Print information about this object.
+     * @return a string representing this Polygon object
+     */
     public String toString() {
         return super.toString() + "[polyBBox=" + getPolyBBox() + "]";
     }
 
+    /**
+     * offset moves the Polygon by adding
+     * the value you specify in the dh parameter to the horizontal coordinates of its points,
+     * and by adding the value you specify in the dv parameter to the vertical coordinates of
+     * all points of its boundary. If the values of dh and dv are positive, the movement
+     * is to the right and down; if either is negative, the corresponding movement is in the opposite
+     * direction. The Polygon retains its size and shape. This doesnÕt affect the screen unless
+     * you subsequently redraw the polygon.
+     * QuickDraw::OffsetPoly()
+     * @param dh The horizontal distance to move the polygon.
+     * @param dv The vertical distance to move the polygon.
+     * @param {@link quicktime.qd.QDException}
+     */
     public void offset(int paramInt1, int paramInt2) throws QDException {
         OffsetPoly(_ID(), (short) paramInt1, (short) paramInt2);
     }

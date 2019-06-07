@@ -1,4 +1,3 @@
-
 package quicktime.app.actions;
 
 import quicktime.QTException;
@@ -8,11 +7,15 @@ import quicktime.app.display.QTDisplaySpace;
 import quicktime.app.display.QTDrawable;
 import quicktime.app.image.Transformable;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * This class provides the capability of moving and bouncing a Transformable
+ * object around within the space provided by the QTDrawable space that is
+ * the space within which the transformable object is displayed, by the amount specified
+ * by the deltaMatrix object.
  */
 public class BounceAction extends MatrixAction {
+
     static {
         if ((QTSession.isCurrentOS(4)) && (QTSession.getJavaVersion() >= 65540)) {
             throw new QTRuntimeException("Unsupported on Mac OS X and Java 1.4 and higher.");
@@ -20,18 +23,17 @@ public class BounceAction extends MatrixAction {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Constructs a BounceAction object.
+     * @param scale the amount with which a second is divided into at a rate of one
+     * @param period the number of scale ticks that elapse between invocations of the action.
+     * @param space the space within which the object will be bounced and moved
+     * @param t the target of the bounce action - the object that is moved
+     * @param deltaX the amount by which the object is moved in the X dimension
+     * @param deltaY the amount by which the object is moved in the Y dimension
      */
-    public BounceAction(int paramInt1,
-            int paramInt2,
-            QTDrawable paramQTDrawable,
-            Transformable paramTransformable,
-            float paramFloat1,
-            float paramFloat2) throws QTException {
-        super(paramInt1,
-              paramInt2,
-              (QTDisplaySpace) paramQTDrawable,
-              paramTransformable,
-              new TranslateMatrix(paramFloat1, paramFloat2));
+    public BounceAction(int paramInt1, int paramInt2, QTDrawable paramQTDrawable, Transformable paramTransformable, float paramFloat1, float paramFloat2) throws QTException {
+        super(paramInt1, paramInt2, (QTDisplaySpace) paramQTDrawable, paramTransformable, new TranslateMatrix(paramFloat1, paramFloat2));
     }
 }

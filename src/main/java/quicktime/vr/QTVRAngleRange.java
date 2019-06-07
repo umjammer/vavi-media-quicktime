@@ -1,23 +1,24 @@
-
 package quicktime.vr;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.QTByteObject;
 
-
 public final class QTVRAngleRange extends QTByteObject implements Cloneable {
+
     private static final int kNativeSize = 8;
 
     private static EndianDescriptor ed;
 
     static final long serialVersionUID = 2448417950352800908L;
 
+    /**
+     * Creates a QTVRAngleRange object containing no data
+     */
     public QTVRAngleRange() {
         super(kNativeSize);
     }
@@ -55,27 +56,42 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
         }
     }
 
+    /**
+     * returns the minimumAngle
+     */
     public float getMinimumAngle() {
         return getFloatAt(0);
     }
 
+    /**
+     * set the minimumAngle
+     */
     public void setMinimumAngle(float paramFloat) {
         setFloatAt(0, paramFloat);
     }
 
+    /**
+     * returns the maximumAngle
+     */
     public float getMaximumAngle() {
         return getFloatAt(4);
     }
 
+    /**
+     * set the maximumAngle
+     */
     public void setMaximumAngle(float paramFloat) {
         setFloatAt(4, paramFloat);
     }
 
+    /**
+     * Returns a string representation of this object.
+     * @return a String
+     */
     public String toString() {
         return getClass().getName() + "[minimumAngle=" + getMinimumAngle() + ",maximumAngle=" + getMaximumAngle() + "]";
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
  * QTVRAngleRange.class

@@ -1,7 +1,12 @@
-
 package quicktime.std;
 
+/**
+ * This class represents all of the constants in the QuickTime interface.
+ * ALL constants except for constants that start with an acronym, such as MPEG, ...
+ * start with a small letter (not a capital one)
+ */
 public abstract interface StdQTConstants {
+
     public static final int codecCanScale = 1;
 
     public static final int codecCanMask = 2;
@@ -598,16 +603,34 @@ public abstract interface StdQTConstants {
 
     public static final int tctNegFlag = 128;
 
+    /**
+     * negative bit is in minutes
+     */
     public static final int movieExportWidth = 2003072104;
 
+    /**
+     * negative bit is in minutes
+     */
     public static final int movieExportHeight = 1751476084;
 
+    /**
+     * negative bit is in minutes
+     */
     public static final int movieExportDuration = 1685418593;
 
+    /**
+     * negative bit is in minutes
+     */
     public static final int movieExportVideoFilter = 1768320116;
 
+    /**
+     * File Preview Components
+     */
     public static final int pnotComponentWantsEvents = 1;
 
+    /**
+     * File Preview Components
+     */
     public static final int pnotComponentNeedsNoCache = 2;
 
     public static final int showFilePreviewComponentType = 1886285684;
@@ -664,16 +687,34 @@ public abstract interface StdQTConstants {
 
     public static final int kSpriteWorldPreflight = 2;
 
+    /**
+     * idle out-flags
+     */
     public static final int kSpriteWorldDidDraw = 1;
 
+    /**
+     * idle out-flags
+     */
     public static final int kSpriteWorldNeedsToDraw = 2;
 
+    /**
+     * sprite world flags
+     */
     public static final int kScaleSpritesToScaleWorld = 2;
 
+    /**
+     * sprite world flags
+     */
     public static final int kSpriteWorldHighQuality = 4;
 
+    /**
+     * sprite world flags
+     */
     public static final int kSpriteWorldDontAutoInvalidate = 8;
 
+    /**
+     * sprite world flags
+     */
     public static final int kSpriteWorldInvisible = 16;
 
     public static final int spriteHitTestBounds = 1;
@@ -686,10 +727,25 @@ public abstract interface StdQTConstants {
 
     public static final int spriteHitTestLocInDisplayCoordinates = 16;
 
+    /**
+     * callback equates--values for the parameter param1 of
+     * the callMeWhen method that indicate when the
+     * callback method should be called
+     */
     public static final int qtcbNeedsRateChanges = 1;
 
+    /**
+     * callback equates--values for the parameter param1 of
+     * the callMeWhen method that indicate when the
+     * callback method should be called
+     */
     public static final int qtcbNeedsTimeChanges = 2;
 
+    /**
+     * callback equates--values for the parameter param1 of
+     * the callMeWhen method that indicate when the
+     * callback method should be called
+     */
     public static final int qtcbNeedsStartStopChanges = 4;
 
     public static final int clockComponentType = 1668050795;
@@ -708,38 +764,83 @@ public abstract interface StdQTConstants {
 
     public static final int kClockCanHandleIntermittentSound = 4;
 
+    /**
+     * Time base flags
+     */
     public static final int loopTimeBase = 1;
 
+    /**
+     * Time base flags
+     */
     public static final int palindromeLoopTimeBase = 2;
 
+    /**
+     * Time base flags
+     */
     public static final int maintainTimeBaseZero = 4;
 
+    /**
+     * ExtremesCallback
+     */
     public static final int triggerAtStart = 1;
 
+    /**
+     * ExtremesCallback
+     */
     public static final int triggerAtStop = 2;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateLT = 4;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateGT = 8;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateEqual = 16;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateLTE = 20;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateGTE = 24;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateNotEqual = 28;
 
+    /**
+     * RateCallback
+     */
     public static final int triggerRateChange = 0;
 
     public static final int timeBaseBeforeStartTime = 1;
 
     public static final int timeBaseAfterStopTime = 2;
 
+    /**
+     * TimeCallback
+     */
     public static final int triggerTimeFwd = 1;
 
+    /**
+     * TimeCallback
+     */
     public static final int triggerTimeBwd = 2;
 
+    /**
+     * TimeCallback
+     */
     public static final int triggerTimeEither = 3;
 
     public static final int kAnyType = 0;
@@ -822,54 +923,129 @@ public abstract interface StdQTConstants {
 
     public static final int kMicrosoftVideo1CodecType = 1836283491;
 
+    /**
+     * One Source Effects
+     */
     public static final int kBlurImageFilterType = 1651275122;
 
+    /**
+     * One Source Effects
+     */
     public static final int kSharpenImageFilterType = 1936224880;
 
+    /**
+     * One Source Effects
+     */
     public static final int kEdgeDetectImageFilterType = 1701078885;
 
+    /**
+     * One Source Effects
+     */
     public static final int kEmbossImageFilterType = 1701667443;
 
+    /**
+     * One Source Effects
+     */
     public static final int kConvolveImageFilterType = 1734700651;
 
+    /**
+     * One Source Effects
+     */
     public static final int kAlphaGainImageFilterType = 1734437230;
 
+    /**
+     * One Source Effects
+     */
     public static final int kRGBColorBalanceImageFilterType = 1919378018;
 
+    /**
+     * One Source Effects
+     */
     public static final int kHSLColorBalanceImageFilterType = 1752394850;
 
+    /**
+     * One Source Effects
+     */
     public static final int kColorSyncImageFilterType = 1937337955;
 
+    /**
+     * One Source Effects
+     */
     public static final int kFilmNoiseImageFilterType = 1718447731;
 
+    /**
+     * One Source Effects
+     */
     public static final int kSolarizeImageFilterType = 1936682098;
 
+    /**
+     * One Source Effects
+     */
     public static final int kColorTintImageFilterType = 1953066612;
 
+    /**
+     * Two source effects
+     */
     public static final int kAlphaCompositorTransitionType = 1651273316;
 
+    /**
+     * Two source effects
+     */
     public static final int kCrossFadeTransitionType = 1685286006;
 
+    /**
+     * Two source effects
+     */
     public static final int kChromaKeyTransitionType = 1667982713;
 
+    /**
+     * Two source effects
+     */
     public static final int kImplodeTransitionType = 1836084335;
 
+    /**
+     * Two source effects
+     */
     public static final int kExplodeTransitionType = 2020633711;
 
+    /**
+     * Two source effects
+     */
     public static final int kGradientTransitionType = 1835103348;
 
+    /**
+     * Two source effects
+     */
     public static final int kPushTransitionType = 1886745448;
 
+    /**
+     * Two source effects
+     */
     public static final int kSlideTransitionType = 1936484708;
 
+    /**
+     * Two source effects
+     */
     public static final int kWipeTransitionType = 1936552052;
 
+    /**
+     * Two source effects
+     */
     public static final int kIrisTransitionType = 1936551986;
 
+    /**
+     * Two source effects
+     */
     public static final int kRadialTransitionType = 1936551987;
 
+    /**
+     * Two source effects
+     */
     public static final int kMatrixTransitionType = 1936551988;
 
+    /**
+     * Two source effects
+     */
     public static final int kRandomWipeTransitionType = 409;
 
     public static final int kCurvePathAtom = 1885434984;
@@ -982,8 +1158,14 @@ public abstract interface StdQTConstants {
 
     public static final int codecInfoSequenceSensitive = 8192;
 
+    /**
+     * the type for "Components" which compress images.
+     */
     public static final int compressorComponentType = 1768776559;
 
+    /**
+     * the type for "Components" which decompress images.
+     */
     public static final int decompressorComponentType = 1768776803;
 
     public static final int defaultDither = 0;
@@ -1040,58 +1222,139 @@ public abstract interface StdQTConstants {
 
     public static final int effectIsRealtime = 0;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectPercentage = 1885564532;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectWipe = 2003847492;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectSoftBorder = 1936680564;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectBorderWidth = 2003395700;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectBorderColor = 1650682994;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectHorizontalRepeat = 1752134249;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectVerticalRepeat = 1986359924;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectBlendMode = 1649241956;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectPreMultiplyColor = 1835232370;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectStraightAlpha = 1;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectPreMultiplyAlpha = 2;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectReverseAlpha = 3;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectGainValue = 1734437230;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectOffsetValue = 1868981875;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectTopAlphaPin = 1885957716;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectBottomAlphaPin = 1885957698;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectFromDirection = 1718775661;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectDirectionTop = 0;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectDirectionLeft = 1;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectDirectionBottom = 2;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectDirectionRight = 3;
 
+    /**
+     * These constants are paremeteres that control the operation of the effects.
+     */
     public static final int kEffectSlideAngle = 1634625388;
 
+    /**
+     * These constants are used in the building of the effects atom container.
+     */
     public static final int kEffectWhatAtom = 2003329396;
 
+    /**
+     * These constants are used in the building of the effects atom container.
+     */
     public static final int kEffectSrcAtom = 1936876320;
 
+    /**
+     * These constants are used in the building of the effects atom container.
+     */
     public static final int kEffectNameAtom = 1851878757;
 
+    /**
+     * These constants are used in the building of the effects atom container.
+     */
     public static final int kEffectTypeAtom = 1954115685;
 
+    /**
+     * These constants are used in the building of the effects atom container.
+     */
     public static final int kEffectManufacturerAtom = 1835101813;
 
     public static final int pdActionConfirmDialog = 1;
@@ -1118,6 +1381,9 @@ public abstract interface StdQTConstants {
 
     public static final int pdActionModelessCallback = 12;
 
+    /**
+     * THe constants that are used for different vendors
+     */
     public static final int kVendorApple = 1634758764;
 
     public static final int graphicsExporterComponentType = 1735550328;
@@ -1168,22 +1434,49 @@ public abstract interface StdQTConstants {
 
     public static final int kQTPNGInterlaceAdam7 = 1;
 
+    /**
+     * values for the Graphics Import component type and sub type.
+     */
     public static final int graphicsImporterComponentType = 1735551344;
 
+    /**
+     * Flags that are returned by the doesDrawAllPixels call
+     */
     public static final int graphicsImporterDrawsAllPixels = 0;
 
+    /**
+     * Flags that are returned by the doesDrawAllPixels call
+     */
     public static final int graphicsImporterDoesntDrawAllPixels = 1;
 
+    /**
+     * Flags that are returned by the doesDrawAllPixels call
+     */
     public static final int graphicsImporterDontKnowIfDrawAllPixels = 2;
 
+    /**
+     * Access Keys
+     */
     public static final int kAccessKeyAtomType = 1633905529;
 
+    /**
+     * Access Keys
+     */
     public static final int kAccessKeySystemFlag = 1;
 
+    /**
+     * track reference types
+     */
     public static final int kTrackReferenceChapterList = 1667785072;
 
+    /**
+     * track reference types
+     */
     public static final int kTrackReferenceTimeCode = 1953325924;
 
+    /**
+     * track reference types
+     */
     public static final int kTrackReferenceModifier = 1936945763;
 
     public static final int codecLosslessQuality = 1024;
@@ -1220,52 +1513,121 @@ public abstract interface StdQTConstants {
 
     public static final int codecProgressClose = 2;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagUseImageBuffer = 1;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagUseScreenBuffer = 2;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagUpdatePrevious = 4;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagNoScreenUpdate = 8;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagWasCompressed = 16;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagDontOffscreen = 32;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagUpdatePreviousComp = 64;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagForceKeyFrame = 128;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagOnlyScreenUpdate = 256;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagLiveGrab = 512;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagDontUseNewImageBuffer = 1024;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagInterlaceUpdate = 2048;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagCatchUpDiff = 4096;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagSupportDisable = 8192;
 
+    /**
+     * input sequence flags
+     */
     public static final int codecFlagReenable = 16384;
 
+    /**
+     * output sequence flags
+     */
     public static final int codecFlagOutUpdateOnDataSourceChange = 1024;
 
+    /**
+     * output sequence flags
+     */
     public static final int codecFlagSequenceSensitive = 2048;
 
+    /**
+     * output sequence flags
+     */
     public static final int codecFlagOutUpdateOnTimeChange = 4096;
 
+    /**
+     * output sequence flags
+     */
     public static final int codecFlagImageBufferNotSourceImage = 8192;
 
+    /**
+     * output sequence flags
+     */
     public static final int codecFlagUsedNewImageBuffer = 16384;
 
+    /**
+     * output sequence flags
+     */
     public static final int codecFlagUsedImageBuffer = 32768;
 
     public static final int codecMinimumDataSize = 32768;
 
+    /**
+     * Used to control some behaviour when creating a QTFile object.
+     */
     public static final int kDeleteCurFile = Integer.MIN_VALUE;
 
+    /**
+     * Use this constant when you want the movie toolbox to display the default progress function.
+     */
     public static final int defaultProgressFuntion = -1;
 
     public static final int kMimeInfoMimeTypeTag = 1835625829;
@@ -1380,8 +1742,14 @@ public abstract interface StdQTConstants {
 
     public static final int kMovieVersion = 0;
 
+    /**
+     * version number of the format here described
+     */
     public static final int kVersionCheckMin = 0;
 
+    /**
+     * version number of the format here described
+     */
     public static final int kVersionCheckMask = 1;
 
     public static final int kDataRate144ModemRate = 1400;
@@ -1396,126 +1764,309 @@ public abstract interface StdQTConstants {
 
     public static final int kDataRateInfiniteRate = Integer.MAX_VALUE;
 
+    /**
+     * Track Structures
+     */
     public static final int trackEnable = 1;
 
+    /**
+     * Track Structures
+     */
     public static final int trackInMovie = 2;
 
+    /**
+     * Track Structures
+     */
     public static final int trackInPreview = 4;
 
+    /**
+     * Track Structures
+     */
     public static final int trackInPoster = 8;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieFileType = 1299148630;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieScrapType = 1836019574;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieResourceType = 1836019574;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieForwardPointerResourceType = 1718579813;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieBackwardPointerResourceType = 1650549611;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieResourceAtomType = 1836019574;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieDataAtomType = 1835295092;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieAID = 1836019574;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieHeaderAID = 1836476516;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int clipAID = 1668049264;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int rgnClipAID = 1668441966;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int matteAID = 1835103348;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int matteCompAID = 1802330484;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int trackAID = 1953653099;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int userDataAID = 1969517665;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int trackHeaderAID = 1953196132;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int editsAID = 1701082227;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int editListAID = 1701606260;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int mediaAID = 1835297121;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int mediaHeaderAID = 1835296868;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int mediaInfoAID = 1835626086;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int videoMediaInfoHeaderAID = 1986881636;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int soundMediaInfoHeaderAID = 1936549988;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int genericMediaInfoHeaderAID = 1735223396;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int genericMediaInfoAID = 1735223662;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int dataInfoAID = 1684631142;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int dataRefAID = 1685218662;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sampleTableAID = 1937007212;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTSampleDescAID = 1937011556;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTTimeToSampAID = 1937011827;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTSyncSampleAID = 1937011571;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTSampleToChunkAID = 1937011555;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTShadowSyncAID = 1937011560;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int handlerAID = 1751411826;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTSampleSizeAID = 1937011578;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTChunkOffsetAID = 1937007471;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTChunkOffset64AID = 1668232756;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int sTSampleIDAID = 1937008996;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int dataRefContainerAID = 1685218915;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int trackReferenceAID = 1953654118;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int colorTableAID = 1668571490;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int loadSettingsAID = 1819238756;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int propertyAtomAID = 1668244581;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int inputMapAID = 1768776048;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieBufferHintsAID = 1835165288;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int movieDataRefAliasAID = 1835299425;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int soundLocalizationAID = 1936486243;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int compressedMovieAID = 1668116342;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int compressedMovieDataAID = 1668118116;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int dataCompressionAtomAID = 1684238189;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieRecordAID = 1919775329;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieDescriptorAID = 1919771745;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieDataRefAID = 1919185510;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieVersionCheckAID = 1919776355;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieDataRateAID = 1919771762;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieComponentCheckAID = 1919771492;
 
+    /**
+     * some system defined format IDs
+     */
     public static final int referenceMovieQualityAID = 1919775093;
 
     public static final int kDataRefIsSelfContained = 1;
@@ -1596,6 +2147,9 @@ public abstract interface StdQTConstants {
 
     public static final int movieFileSpecValid = 8;
 
+    /**
+     * magic res ID for flattened movies
+     */
     public static final int movieInDataForkResID = -1;
 
     public static final int flattenAddMovieToDataFork = 1;
@@ -1660,8 +2214,14 @@ public abstract interface StdQTConstants {
 
     public static final int hintsAllowDynamicResize = 524288;
 
+    /**
+     * Used when setting movie drawing complete proc
+     */
     public static final int movieDrawingCallWhenChanged = 0;
 
+    /**
+     * Used when setting movie drawing complete proc
+     */
     public static final int movieDrawingCallAlways = 1;
 
     public static final int movieTrackMediaType = 1;
@@ -2548,10 +3108,19 @@ public abstract interface StdQTConstants {
 
     public static final int kGeneralEventPartMix = 12;
 
+    /**
+     * Marker Event Defined Types		// marker is 60 ee vv vv in hex, where e = event type, and v = value
+     */
     public static final int kMarkerEventEnd = 0;
 
+    /**
+     * Marker Event Defined Types		// marker is 60 ee vv vv in hex, where e = event type, and v = value
+     */
     public static final int kMarkerEventBeat = 1;
 
+    /**
+     * Marker Event Defined Types		// marker is 60 ee vv vv in hex, where e = event type, and v = value
+     */
     public static final int kMarkerEventTempo = 2;
 
     public static final int kMIDINoteOn = 144;
@@ -2932,34 +3501,79 @@ public abstract interface StdQTConstants {
 
     public static final int kSynthesizerSoundLocalization = 65536;
 
+    /**
+     * TunePlayer component type
+     */
     public static final int kTunePlayerComponentType = 1953853029;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTuneStartNow = 1;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTuneDontClipNotes = 2;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTuneExcludeEdgeNotes = 4;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTuneQuickStart = 8;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTuneLoopUntil = 16;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTunePlayDifference = 32;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTunePlayConcurrent = 64;
 
+    /**
+     * Values for when to start.
+     */
     public static final int kTuneStartNewMaster = 16384;
 
+    /**
+     * Values for stopping.
+     */
     public static final int kTuneStopFade = 1;
 
+    /**
+     * Values for stopping.
+     */
     public static final int kTuneStopSustain = 2;
 
+    /**
+     * Values for stopping.
+     */
     public static final int kTuneStopInstant = 4;
 
+    /**
+     * Values for stopping.
+     */
     public static final int kTuneStopReleaseChannels = 8;
 
+    /**
+     * flags for part mix.
+     */
     public static final int kTuneMixMute = 1;
 
+    /**
+     * flags for part mix.
+     */
     public static final int kTuneMixSolo = 2;
 
     public static final int kRestEventType = 0;
@@ -3008,110 +3622,269 @@ public abstract interface StdQTConstants {
 
     public static final int kGeneralEventLen = 2;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kEventLengthFieldPos = 30;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kEventLengthFieldWidth = 2;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kEventTypeFieldPos = 29;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kEventTypeFieldWidth = 3;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXEventTypeFieldPos = 28;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXEventTypeFieldWidth = 4;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kEventPartFieldPos = 24;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kEventPartFieldWidth = 5;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXEventPartFieldPos = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXEventPartFieldWidth = 12;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kRestEventDurationFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kRestEventDurationFieldWidth = 24;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kRestEventDurationMax = 16777215;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventPitchFieldPos = 18;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventPitchFieldWidth = 6;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventPitchOffset = 32;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventVolumeFieldPos = 11;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventVolumeFieldWidth = 7;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventVolumeOffset = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventDurationFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventDurationFieldWidth = 11;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kNoteEventDurationMax = 2047;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventPitchFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventPitchFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventDurationFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventDurationFieldWidth = 22;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventDurationMax = 4194303;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventVolumeFieldPos = 22;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXNoteEventVolumeFieldWidth = 7;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kControlEventControllerFieldPos = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kControlEventControllerFieldWidth = 8;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kControlEventValueFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kControlEventValueFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXControlEventControllerFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXControlEventControllerFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXControlEventValueFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kXControlEventValueFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kKnobEventValueHighFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kKnobEventValueHighFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kKnobEventKnobFieldPos = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kKnobEventKnobFieldWidth = 14;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kKnobEventValueLowFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kKnobEventValueLowFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kMarkerEventSubtypeFieldPos = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kMarkerEventSubtypeFieldWidth = 8;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kMarkerEventValueFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kMarkerEventValueFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kGeneralEventSubtypeFieldPos = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kGeneralEventSubtypeFieldWidth = 14;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kGeneralEventLengthFieldPos = 0;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kGeneralEventLengthFieldWidth = 16;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kCurrentlyNativeEndian = 1;
 
+    /**
+     * Universal Event Defines
+     */
     public static final int kCurrentlyNotNativeEndian = 2;
 
     public static final int movieExportType = 1936746868;
@@ -3366,138 +4139,339 @@ public abstract interface StdQTConstants {
 
     public static final int vdigInterfaceRev = 2;
 
+    /**
+     * Input Format Standards
+     */
     public static final int ntscIn = 0;
 
+    /**
+     * Input Format Standards
+     */
     public static final int currentIn = 0;
 
+    /**
+     * Input Format Standards
+     */
     public static final int palIn = 1;
 
+    /**
+     * Input Format Standards
+     */
     public static final int secamIn = 2;
 
+    /**
+     * Input Format Standards
+     */
     public static final int ntscReallyIn = 3;
 
+    /**
+     * Input Formats
+     */
     public static final int compositeIn = 0;
 
+    /**
+     * Input Formats
+     */
     public static final int sVideoIn = 1;
 
+    /**
+     * Input Formats
+     */
     public static final int rgbComponentIn = 2;
 
+    /**
+     * Input Formats
+     */
     public static final int rgbComponentSyncIn = 3;
 
+    /**
+     * Input Formats
+     */
     public static final int yuvComponentIn = 4;
 
+    /**
+     * Input Formats
+     */
     public static final int yuvComponentSyncIn = 5;
 
+    /**
+     * Input Formats
+     */
     public static final int tvTunerIn = 6;
 
+    /**
+     * Input Formats
+     */
     public static final int sdiIn = 7;
 
+    /**
+     * Video Digitizer PlayThru States
+     */
     public static final int vdPlayThruOff = 0;
 
+    /**
+     * Video Digitizer PlayThru States
+     */
     public static final int vdPlayThruOn = 1;
 
+    /**
+     * Input Color Space Modes
+     */
     public static final int vdDigitizerBW = 0;
 
+    /**
+     * Input Color Space Modes
+     */
     public static final int vdDigitizerRGB = 1;
 
+    /**
+     * Phase Lock Loop Modes
+     */
     public static final int vdBroadcastMode = 0;
 
+    /**
+     * Phase Lock Loop Modes
+     */
     public static final int vdVTRMode = 1;
 
+    /**
+     * Field Select Options
+     */
     public static final int vdUseAnyField = 0;
 
+    /**
+     * Field Select Options
+     */
     public static final int vdUseOddField = 1;
 
+    /**
+     * Field Select Options
+     */
     public static final int vdUseEvenField = 2;
 
+    /**
+     * vdig types
+     */
     public static final int vdTypeBasic = 0;
 
+    /**
+     * vdig types
+     */
     public static final int vdTypeAlpha = 1;
 
+    /**
+     * vdig types
+     */
     public static final int vdTypeMask = 2;
 
+    /**
+     * vdig types
+     */
     public static final int vdTypeKey = 3;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesNTSC = 1;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesPAL = 2;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesSECAM = 4;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesGenLock = 128;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesComposite = 256;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesSVideo = 512;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesComponent = 1024;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInVTR_Broadcast = 2048;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesColor = 4096;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInDoesBW = 8192;
 
+    /**
+     * Digitizer Input Capability/Current Flags
+     */
     public static final int digiInSignalLock = Integer.MIN_VALUE;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoes1 = 1;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoes2 = 2;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoes4 = 4;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoes8 = 8;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoes16 = 16;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoes32 = 32;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesDither = 64;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesStretch = 128;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesShrink = 256;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesMask = 512;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesDouble = 2048;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesQuad = 4096;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesQuarter = 8192;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesSixteenth = 16384;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesRotate = 32768;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesHorizFlip = 65536;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesVertFlip = 131072;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesSkew = 262144;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesBlend = 524288;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesWarp = 1048576;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesHW_DMA = 2097152;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesHWPlayThru = 4194304;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesILUT = 8388608;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesKeyColor = 16777216;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesAsyncGrabs = 33554432;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesUnreadableScreenBits = 67108864;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesCompress = 134217728;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesCompressOnly = 268435456;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesPlayThruDuringCompress = 536870912;
 
+    /**
+     * Digitizer Output Capability/Current Flags
+     */
     public static final int digiOutDoesCompressPartiallyVisible = 1073741824;
 
     public static final int dmaDepth1 = 1;
@@ -3582,24 +4556,54 @@ public abstract interface StdQTConstants {
 
     public static final int sgcVideoDigitizerType = 1986292071;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVODisplayModeItem = 1902407017;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVODimensions = 1684630894;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVOResolution = 1919251308;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVORefreshRate = 1919247986;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVOPixelType = 1885960300;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVOName = 1851878757;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVODecompressors = 1684366191;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVODecompressorType = 1684370553;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVODecompressorContinuous = 1668247156;
 
+    /**
+     * Display mode atom types
+     */
     public static final int kQTVODecompressorComponent = 1668116596;
 
     public static final int canMovieImportHandles = 1;
@@ -3684,7 +4688,6 @@ public abstract interface StdQTConstants {
 
     public static final int scNewGWorld = 23;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
  * StdQTConstants.class

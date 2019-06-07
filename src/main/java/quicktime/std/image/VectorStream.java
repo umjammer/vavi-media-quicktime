@@ -1,9 +1,7 @@
-
 package quicktime.std.image;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
@@ -16,16 +14,26 @@ import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTHandle;
 
-
+/**
+ * This class represents a vector data stream for QuickTime Vector component. It
+ * holds a stream of Atoms which constructs the vector to be drawn. This class
+ * is used to add the data atoms which are either the paths or the attributes
+ * of the path. A ZeroAtom at the end of the stream marks the end of datastream.
+ * It should be noted that all the addAtom calls which need the data to be Endian flipped
+ * is done internally by the class, unless explicitly mentioned.
+ */
 public class VectorStream extends AtomContainer implements quicktime.jdirect.QuickTimeLib, quicktime.jdirect.PrimitivesLib {
+
     private static Object linkage;
 
     private Curve c;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(VectorStream.class);
                     }
@@ -35,24 +43,37 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
     }
 
     private static int allocate(Curve paramCurve) throws QTException {
-        int[] arrayOfInt = {
-            0
-        };
+        int[] arrayOfInt = { 0 };
         int i = CurveCreateVectorStream(QTObject.ID(paramCurve), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
 
+    /**
+     * Used to create an empty vector data stream.
+     * QuickTime::CurveCreateVectorStream
+     * @param c the curve component
+     */
     public VectorStream(Curve paramCurve) throws QTException {
         super(allocate(paramCurve), null, false);
         this.c = paramCurve;
     }
 
+    /**
+     * Used  to add a path to a vector data stream.
+     * QuickTime::CurveAddPathAtomToVectorStream
+     * @param pathData Contains a handle to the data for the path.
+     * @param {@link quicktime.QTException}
+     */
     public void addPathAtom(QTHandle paramQTHandle) throws QTException {
         int i = CurveAddPathAtomToVectorStream(QTObject.ID(this.c), QTObject.ID(paramQTHandle), _ID());
         StdQTException.checkError(i);
     }
 
+    /**
+     * Used  to add a kCurveEndAtom to a vector data stream. This atom marks the end of the vector data stream.
+     * QuickTime::CurveAddZeroAtomToVectorStream
+     */
     public void addZeroAtom() throws StdQTException {
         int i = CurveAddZeroAtomToVectorStream(QTObject.ID(this.c), _ID());
         StdQTException.checkError(i);
@@ -63,19 +84,27 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
         StdQTException.checkError(i);
     }
 
+    /**
+     * Used  to add an atom of type kCurveGradientRecordAtom to a vector data stream.
+     * QuickTime::CurveAddAtomToVectorStream
+     */
     public void addAtom(QDColor paramQDColor) throws QTException {
         EndianDescriptor localEndianDescriptor = QDColor.getEndianDescriptorARGBColor();
         EndianOrder.flipNativeToBigEndian(paramQDColor, 0, localEndianDescriptor);
         byte[] arrayOfByte = paramQDColor.getARGBColor();
-
         int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1634887522, arrayOfByte.length, arrayOfByte, _ID());
         StdQTException.checkError(i);
     }
 
+    /**
+     * Used  to add an atom to a vector data stream.
+     * QuickTime::CurveAddAtomToVectorStream
+     * @param atomType Specifies the type of atom to add to the vector data stream.
+     * @param atomData the data for the atom.
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void addAtom(int paramInt1, int paramInt2) throws StdQTException {
-        int[] arrayOfInt = {
-            EndianOrder.flipNativeToBigEndian32(paramInt2)
-        };
+        int[] arrayOfInt = { EndianOrder.flipNativeToBigEndian32(paramInt2) };
         int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), paramInt1, 4, arrayOfInt, _ID());
         StdQTException.checkError(i);
     }
@@ -85,7 +114,6 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
         arrayOfInt[0] = 1;
         arrayOfInt[1] = paramArrayOfQDPoint.length;
         arrayOfInt[2] = (paramBoolean ? 1 : 0);
-
         for (int i = 0; i < paramArrayOfQDPoint.length; i++) {
             byte[] arrayOfByte = paramArrayOfQDPoint[i].getGXPoint();
             int j = getIntFromArray(arrayOfByte, 0);
@@ -93,7 +121,6 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
             arrayOfInt[(3 + 2 * i)] = j;
             arrayOfInt[(4 + 2 * i)] = k;
         }
-
         for (int i = 0; i < arrayOfInt.length; i++) {
             arrayOfInt[i] = EndianOrder.flipNativeToBigEndian32(arrayOfInt[i]);
         }
@@ -103,25 +130,37 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
 
     public void addAtom(QDColor[] paramArrayOfQDColor) throws QTException {
         byte[] arrayOfByte1 = new byte[paramArrayOfQDColor.length * 12];
-
         for (int i = 0; i < paramArrayOfQDColor.length; i++) {
             QDColor localQDColor = paramArrayOfQDColor[i];
             EndianDescriptor localEndianDescriptor = QDColor.getEndianDescriptorGradientColor();
             byte[] arrayOfByte2 = localQDColor.getGradientColor();
-
             EndianOrder.flipNativeToBigEndian(arrayOfByte2, 0, localEndianDescriptor);
             System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 12 * i, arrayOfByte2.length);
         }
-
         int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1735549284, arrayOfByte1.length, arrayOfByte1, _ID());
         StdQTException.checkError(i);
     }
 
+    /**
+     * Used  to remove and atom of given type ex. kCurveGradientRecordAtom can be disabled
+     * by making this call so that all atoms added after this atom do not have
+     * Gradient.
+     * QuickTime::CurveAddAtomToVectorStream
+     * @param atomType contains the type of atom to be removed .
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void removeAtom(int paramInt) throws StdQTException {
         int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), paramInt, 0, 0, _ID());
         StdQTException.checkError(i);
     }
 
+    /**
+     * This method is used to find the first atom of a specified type within a vector data stream and get its data.
+     * QuickTime::CurveGetAtomDataFromVectorStream
+     * @param atomType Specifies the type of atom to find.
+     * @return the atom's data.
+     * @return {@link quicktime.QTException}
+     */
     public AtomData getAtomData(int paramInt) throws QTException {
         return AtomData.fromVectorStream(this.c, this, paramInt);
     }
@@ -132,29 +171,16 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
 
     private static native int CurveCreateVectorStream(int paramInt, int[] paramArrayOfInt);
 
-    private static native int CurveAddAtomToVectorStream(int paramInt1,
-                                                         int paramInt2,
-                                                         int paramInt3,
-                                                         int paramInt4,
-                                                         int paramInt5);
+    private static native int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
 
-    private static native int CurveAddAtomToVectorStream(int paramInt1,
-                                                         int paramInt2,
-                                                         int paramInt3,
-                                                         int[] paramArrayOfInt,
-                                                         int paramInt4);
+    private static native int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4);
 
-    private static native int CurveAddAtomToVectorStream(int paramInt1,
-                                                         int paramInt2,
-                                                         int paramInt3,
-                                                         byte[] paramArrayOfByte,
-                                                         int paramInt4);
+    private static native int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, int paramInt4);
 
     private static native int CurveAddPathAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3);
 
     private static native int CurveAddZeroAtomToVectorStream(int paramInt1, int paramInt2);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
  * /VectorStream.class

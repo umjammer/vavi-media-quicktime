@@ -1,7 +1,12 @@
-
 package quicktime.streaming;
 
+/**
+ * This class represents all of the new constants in the QuickTime interface for version 5.
+ * ALL constants except for constants that start with an acronym, such as MPEG, ...
+ * start with a small letter (not a capital one)
+ */
 public final class QTSConstants {
+
     static final int kQTSInfiniteDuration = Integer.MAX_VALUE;
 
     static final int kQTSUnknownDuration = 0;
@@ -382,7 +387,6 @@ public final class QTSConstants {
 
     public static final int kQTSSourcerIdleSelect = 1302;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
  * /QTSConstants.class

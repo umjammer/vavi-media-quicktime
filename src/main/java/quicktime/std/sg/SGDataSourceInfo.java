@@ -1,7 +1,10 @@
-
 package quicktime.std.sg;
 
+/**
+ * The SGDataSourceInfo class contains information on an SGChannel Data Source.
+ */
 public class SGDataSourceInfo {
+
     public String mName;
 
     public int mScriptTag;
@@ -11,7 +14,6 @@ public class SGDataSourceInfo {
         this.mScriptTag = paramInt;
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/sg/
  * SGDataSourceInfo.class

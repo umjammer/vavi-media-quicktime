@@ -1,23 +1,35 @@
-
 package quicktime.util;
 
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 
-
+/**
+ * Provides a representation of the native data structure as a byte array.
+ * The class implements the Serializable interface and can thus be serialized.
+ * However the byte[] member is marked as transient because typically a QTByteObject
+ * is used to contain objects that have fields, such as shorts, ints, that are larger
+ * than bytes. Moving these objects from big to little to big endian run-time architectures
+ * can cause problems if the endian issues of these members are not taken care of by
+ * the particular class of the object that is being serialized. Thus, any subclass of QTByteObject
+ * that is to be serialized defines custome read and write object methods that will
+ * ensure that the serialized data that is written out is in big endian format, and if required
+ * will be flipped back to native format when read in.
+ */
 public class QTByteObject implements PrimitivesLib, Serializable {
+
     private static Object linkage;
 
     protected transient byte[] bytes;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QTByteObject.class);
                     }
@@ -55,10 +67,17 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         return this.bytes;
     }
 
+    /**
+     * Returns the size of the represented native object.
+     * @return size
+     */
     public int getSize() {
         return this.bytes.length;
     }
 
+    /**
+     * Returns true if the two objects have the same value.
+     */
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
@@ -66,14 +85,16 @@ public class QTByteObject implements PrimitivesLib, Serializable {
             byte[] arrayOfByte = ((QTByteObject) paramObject).bytes;
             if (arrayOfByte.length != this.bytes.length)
                 return false;
-            for (int i = 0; i < this.bytes.length; i++)
-                if (this.bytes[i] != arrayOfByte[i])
-                    return false;
+            for (int i = 0; i < this.bytes.length; i++) if (this.bytes[i] != arrayOfByte[i])
+                return false;
             return true;
         }
         return false;
     }
 
+    /**
+     * Returns a string representation of this object
+     */
     public String toString() {
         return getClass().getName();
     }
@@ -128,8 +149,7 @@ public class QTByteObject implements PrimitivesLib, Serializable {
 
     protected int strlen(int paramInt) {
         int i = 0;
-        while (getByteAt(paramInt++) != 0)
-            i++;
+        while (getByteAt(paramInt++) != 0) i++;
         return i;
     }
 
@@ -140,7 +160,6 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         }
         byte[] arrayOfByte = new byte[i];
         getBytesAt(paramInt, i, arrayOfByte, 0);
-
         return new String(arrayOfByte);
     }
 
@@ -161,7 +180,6 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         }
         byte[] arrayOfByte = new byte[i];
         getBytesAt(paramInt, i, arrayOfByte, 0);
-
         return new String(arrayOfByte);
     }
 
@@ -171,7 +189,6 @@ public class QTByteObject implements PrimitivesLib, Serializable {
             throw new UtilException(-50);
         }
         setByteAt(paramInt1++, (byte) paramInt2);
-
         byte[] arrayOfByte = paramString.getBytes();
         setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
     }

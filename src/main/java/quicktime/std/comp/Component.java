@@ -1,23 +1,27 @@
-
 package quicktime.std.comp;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 
-
+/**
+ * Representation of an open ComponentInstance.
+ * Sub classes define specific ComponentInstance types.
+ */
 public class Component extends ComponentIdentifier implements QuickTimeLib {
+
     private static Object linkage;
 
     static {
         class PrivelegedAction {
+
             void establish() {
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(Component.class);
                     }
@@ -27,6 +31,11 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         new PrivelegedAction().establish();
     }
 
+    /**
+     * Given a component identifier it opens the specified component.
+     * QuickTime::OpenAComponent
+     * @param comp the component identifier to open
+     */
     public Component(ComponentIdentifier paramComponentIdentifier) throws StdQTException {
         this(allocate(QTObject.ID(paramComponentIdentifier)), null);
     }
@@ -35,6 +44,15 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         this(allocate(paramComponentIdentifier, paramInt), null);
     }
 
+    /**
+     * Opens the specified component.
+     * QuickTime::OpenADefaultComponent
+     * @param type the component type
+     * @param subType the component sub type
+     * {@link quicktime.std.StdQTException}
+     * - Possible component allocation error.
+     * {@link quicktime.QTException}
+     */
     public Component(int paramInt1, int paramInt2) throws QTException {
         this(allocate(paramInt1, paramInt2), null);
     }
@@ -65,6 +83,11 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
+    /**
+     * Determines the current number of open connections managed by the Component.
+     * QuickTime::CountComponentInstances
+     * @return The number of component instances of the specified Component.
+     */
     public final int count() {
         return CountComponentInstances(_ID());
     }

@@ -1,9 +1,7 @@
-
 package quicktime.std.comp;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
@@ -12,16 +10,21 @@ import quicktime.std.StdQTException;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTUtils;
 
-
+/**
+ * Representation of the ComponentIdentifier.
+ */
 public class ComponentIdentifier extends QTObject implements QuickTimeLib {
+
     private static Object linkage;
 
     private ComponentDescription cacheInfo;
 
     static {
         class PrivelegedAction {
+
             void establish() {
                 AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(ComponentIdentifier.class);
                     }
@@ -31,12 +34,28 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         new PrivelegedAction().establish();
     }
 
+    /**
+     * Determine the next Component as specified. Will return null if it cannot find a
+     * component that matches the specifications.
+     * QuickTime::FindNextComponent
+     * @param desc describes the search parameters.
+     * @return a component identifier or zero if none found.
+     * @return {@link quicktime.QTException}
+     */
     public static final ComponentIdentifier find(ComponentDescription paramComponentDescription) throws QTException {
         return find(null, paramComponentDescription);
     }
 
-    public static final ComponentIdentifier find(ComponentIdentifier paramComponentIdentifier,
-                                                 ComponentDescription paramComponentDescription) throws QTException {
+    /**
+     * Determine the next Component as specified. Will return null if it cannot find a
+     * component that matches the specifications.
+     * QuickTime::FindNextComponent
+     * @param comp a previously found component
+     * @param desc describes the search parameters.
+     * @return a component identifier or zero if none found.
+     * @return {@link quicktime.QTException}
+     */
+    public static final ComponentIdentifier find(ComponentIdentifier paramComponentIdentifier, ComponentDescription paramComponentDescription) throws QTException {
         int i = 0;
         if (paramComponentIdentifier == null)
             i = FindNextComponent(0, paramComponentDescription.getBytes());
@@ -54,18 +73,22 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         super(paramInt, paramObject);
     }
 
+    /**
+     * Returns all of the registration information for a component.
+     * QuickTime::GetComponentInfo
+     * @return information about the specified component.
+     * @return {@link quicktime.std.StdQTException}
+     */
     public final ComponentDescription getInfo() throws StdQTException {
         if (this.cacheInfo == null) {
             this.cacheInfo = new ComponentDescription();
             int i = NewEmptyHandle();
             int j = NewEmptyHandle();
             StdQTException.checkError(GetComponentInfo(_ID(), this.cacheInfo.getBytes(), i, j, 0));
-
             if (GetHandleSize(i) > 0) {
                 this.cacheInfo.name = getPStringFrom(i);
             }
             DisposeHandle(i);
-
             if (GetHandleSize(j) > 0) {
                 this.cacheInfo.info = getPStringFrom(j);
             }
@@ -79,19 +102,19 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         int j = 1;
         if (i > 0) {
             byte[] arrayOfByte = new byte[i];
-            for (int k = 1; k <= arrayOfByte.length; k++)
-                arrayOfByte[(k - 1)] = getByteFromHandle(paramInt, k);
+            for (int k = 1; k <= arrayOfByte.length; k++) arrayOfByte[(k - 1)] = getByteFromHandle(paramInt, k);
             return new String(arrayOfByte);
         }
-
         return null;
     }
 
+    /**
+     * Prints the Component Info.
+     */
     public String toString() {
         String str = super.toString();
         try {
-            str = str + "[type=" + QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getType())) + ",subType="
-                  + QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getSubType())) + "]";
+            str = str + "[type=" + QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getType())) + ",subType=" + QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getSubType())) + "]";
         } catch (QTException localQTException) {
         }
         return str;
@@ -99,11 +122,7 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
 
     private static native int FindNextComponent(int paramInt, byte[] paramArrayOfByte);
 
-    private static native short GetComponentInfo(int paramInt1,
-                                                 byte[] paramArrayOfByte,
-                                                 int paramInt2,
-                                                 int paramInt3,
-                                                 int paramInt4);
+    private static native short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4);
 
     private static native int GetHandleSize(int paramInt);
 
@@ -115,7 +134,6 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
 
     private static native byte getByteFromHandle(int paramInt1, int paramInt2);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/comp/
  * ComponentIdentifier.class

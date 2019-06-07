@@ -1,24 +1,28 @@
-
 package quicktime.app.event;
 
 import java.util.EventListener;
-
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * The QTEventCaster is used to broadcast QTEvents to registered listeners.
+ * There are two characteristics of the broadcaster that are worthy of note:
+ * Broadcasters check whether the event is consumed before each invocation of
+ * a listeners methods. Broadcasters also check to see if a given listener
+ * is interested in an event based on the modifier filter (if defined by the listener)
+ * before the event is passed onto the listener.
  */
-public class QTEventCaster implements
-                           EventListener,
-                           QTActionListener,
-                           MouseButtonListener,
-                           MouseMoveListener,
-                           MouseEnterExitListener,
-                           MouseTargetListener {
+public class QTEventCaster implements EventListener, QTActionListener, MouseButtonListener, MouseMoveListener, MouseEnterExitListener, MouseTargetListener {
+
+    /**
+     * Deprecated.
+     */
     protected final EventListener a;
 
+    /**
+     * Deprecated.
+     */
     protected final EventListener b;
 
     static {
@@ -28,7 +32,10 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * @param a listener-a
+     * @param b listener-b
      */
     protected QTEventCaster(EventListener paramEventListener1, EventListener paramEventListener2) {
         this.a = paramEventListener1;
@@ -36,23 +43,31 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Adds action-listener-a with action-listener-b and
+     * returns the resulting multicast listener.
      */
-    public static MouseButtonListener add(MouseButtonListener paramMouseButtonListener1,
-                                          MouseButtonListener paramMouseButtonListener2) {
+    public static MouseButtonListener add(MouseButtonListener paramMouseButtonListener1, MouseButtonListener paramMouseButtonListener2) {
         return (MouseButtonListener) addListener(paramMouseButtonListener1, paramMouseButtonListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Removes the old action-listener from action-listener-l and
+     * returns the resulting multicast listener.
+     * @param l action-listener-l
+     * @param oldl the action-listener being removed
      */
-    public static MouseButtonListener remove(MouseButtonListener paramMouseButtonListener1,
-                                             MouseButtonListener paramMouseButtonListener2) {
+    public static MouseButtonListener remove(MouseButtonListener paramMouseButtonListener1, MouseButtonListener paramMouseButtonListener2) {
         return (MouseButtonListener) removeListener(paramMouseButtonListener1, paramMouseButtonListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been clicked.
      */
     public void mouseClicked(QTMouseEvent paramQTMouseEvent) {
         MouseButtonListener localMouseButtonListener = (MouseButtonListener) this.a;
@@ -67,7 +82,9 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouse button has been pressed.
      */
     public void mousePressed(QTMouseEvent paramQTMouseEvent) {
         MouseButtonListener localMouseButtonListener = (MouseButtonListener) this.a;
@@ -80,12 +97,20 @@ public class QTEventCaster implements
             localMouseButtonListener.mousePressed(paramQTMouseEvent);
     }
 
+    /**
+     * Deprecated.
+     * @param mods the state of the modifier keys.
+     * @return true if a particular listener is interested in receiving the mouse event(s)
+     *  it is interested in with the given modifier state, or false if otherwise.
+     */
     public boolean matchModifierFilter(int paramInt) {
         return true;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouse button has been released.
      */
     public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
         MouseButtonListener localMouseButtonListener = (MouseButtonListener) this.a;
@@ -98,20 +123,33 @@ public class QTEventCaster implements
             localMouseButtonListener.mouseReleased(paramQTMouseEvent);
     }
 
+    /**
+     * Deprecated.
+     */
     public static MouseMoveListener add(MouseMoveListener paramMouseMoveListener1, MouseMoveListener paramMouseMoveListener2) {
         return (MouseMoveListener) addListener(paramMouseMoveListener1, paramMouseMoveListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Removes the old action-listener from action-listener-l and
+     * returns the resulting multicast listener.
+     * @param l action-listener-l
+     * @param oldl the action-listener being removed
      */
-    public static MouseMoveListener remove(MouseMoveListener paramMouseMoveListener1,
-                                           MouseMoveListener paramMouseMoveListener2) {
+    public static MouseMoveListener remove(MouseMoveListener paramMouseMoveListener1, MouseMoveListener paramMouseMoveListener2) {
         return (MouseMoveListener) removeListener(paramMouseMoveListener1, paramMouseMoveListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouse button is pressed on a component and then
+     * dragged.  Mouse drag events will continue to be delivered to
+     * the component where the first originated until the mouse button is
+     * released (regardless of whether the mouse position is within the
+     * bounds of the component).
      */
     public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
         MouseMoveListener localMouseMoveListener = (MouseMoveListener) this.a;
@@ -126,7 +164,10 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse button has been moved on a component
+     * (with no buttons no down).
      */
     public void mouseMoved(QTMouseEvent paramQTMouseEvent) {
         MouseMoveListener localMouseMoveListener = (MouseMoveListener) this.a;
@@ -139,21 +180,29 @@ public class QTEventCaster implements
             localMouseMoveListener.mouseMoved(paramQTMouseEvent);
     }
 
-    public static MouseEnterExitListener add(MouseEnterExitListener paramMouseEnterExitListener1,
-                                             MouseEnterExitListener paramMouseEnterExitListener2) {
+    /**
+     * Deprecated.
+     */
+    public static MouseEnterExitListener add(MouseEnterExitListener paramMouseEnterExitListener1, MouseEnterExitListener paramMouseEnterExitListener2) {
         return (MouseEnterExitListener) addListener(paramMouseEnterExitListener1, paramMouseEnterExitListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Removes the old action-listener from action-listener-l and
+     * returns the resulting multicast listener.
+     * @param l action-listener-l
+     * @param oldl the action-listener being removed
      */
-    public static MouseEnterExitListener remove(MouseEnterExitListener paramMouseEnterExitListener1,
-                                                MouseEnterExitListener paramMouseEnterExitListener2) {
+    public static MouseEnterExitListener remove(MouseEnterExitListener paramMouseEnterExitListener1, MouseEnterExitListener paramMouseEnterExitListener2) {
         return (MouseEnterExitListener) removeListener(paramMouseEnterExitListener1, paramMouseEnterExitListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse enters a component.
      */
     public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
         MouseEnterExitListener localMouseEnterExitListener = (MouseEnterExitListener) this.a;
@@ -168,7 +217,9 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse exits a component.
      */
     public void mouseExited(QTMouseEvent paramQTMouseEvent) {
         MouseEnterExitListener localMouseEnterExitListener = (MouseEnterExitListener) this.a;
@@ -181,18 +232,25 @@ public class QTEventCaster implements
             localMouseEnterExitListener.mouseExited(paramQTMouseEvent);
     }
 
-    public static MouseTargetListener add(MouseTargetListener paramMouseTargetListener1,
-                                          MouseTargetListener paramMouseTargetListener2) {
+    /**
+     * Deprecated.
+     */
+    public static MouseTargetListener add(MouseTargetListener paramMouseTargetListener1, MouseTargetListener paramMouseTargetListener2) {
         return (MouseTargetListener) addListener(paramMouseTargetListener1, paramMouseTargetListener2);
     }
 
-    public static MouseTargetListener remove(MouseTargetListener paramMouseTargetListener1,
-                                             MouseTargetListener paramMouseTargetListener2) {
+    /**
+     * Deprecated.
+     */
+    public static MouseTargetListener remove(MouseTargetListener paramMouseTargetListener1, MouseTargetListener paramMouseTargetListener2) {
         return (MouseTargetListener) removeListener(paramMouseTargetListener1, paramMouseTargetListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event enters a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
+     * @param e the QTMouseEvent that triggered this event
      */
     public void mouseTargetEntered(QTMouseEvent paramQTMouseEvent) {
         MouseTargetListener localMouseTargetListener = (MouseTargetListener) this.a;
@@ -207,7 +265,10 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event exits a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
+     * @param e the QTMouseEvent that triggered this event
      */
     public void mouseTargetExited(QTMouseEvent paramQTMouseEvent) {
         MouseTargetListener localMouseTargetListener = (MouseTargetListener) this.a;
@@ -222,21 +283,33 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Adds action-listener-a with action-listener-b and
+     * returns the resulting multicast listener.
      */
     public static QTActionListener add(QTActionListener paramQTActionListener1, QTActionListener paramQTActionListener2) {
         return (QTActionListener) addListener(paramQTActionListener1, paramQTActionListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Removes the old action-listener from action-listener-l and
+     * returns the resulting multicast listener.
+     * @param l action-listener-l
+     * @param oldl the action-listener being removed
      */
     public static QTActionListener remove(QTActionListener paramQTActionListener1, QTActionListener paramQTActionListener2) {
         return (QTActionListener) removeListener(paramQTActionListener1, paramQTActionListener2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Broadcasts the event to any interested QTActionListeners.
+     * If the event is consumed it will not be broadcast to any further
+     * listeners.
      */
     public void actionPerformed(QTActionEvent paramQTActionEvent) {
         ((QTActionListener) this.a).actionPerformed(paramQTActionEvent);
@@ -246,7 +319,16 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Returns the resulting multicast listener from adding listener-a
+     * and listener-b together.
+     * If listener-a is null, it returns listener-b;
+     * If listener-b is null, it returns listener-a
+     * If neither are null, then it creates and returns
+     * a new AWTEventMulticaster instance which chains a with b.
+     * @param a event listener-a
+     * @param b event listener-b
      */
     protected static EventListener addListener(EventListener paramEventListener1, EventListener paramEventListener2) {
         if (paramEventListener1 == null)
@@ -257,7 +339,17 @@ public class QTEventCaster implements
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Returns the resulting multicast listener after removing the
+     * old listener from listener-l.
+     * If listener-l equals the old listener OR listener-l is null,
+     * returns null.
+     * Else if listener-l is an instance of AWTEventMulticaster,
+     * then it removes the old listener from it.
+     * Else, returns listener l.
+     * @param l the listener being removed from
+     * @param oldl the listener being removed
      */
     protected static EventListener removeListener(EventListener paramEventListener1, EventListener paramEventListener2) {
         if ((paramEventListener1 == paramEventListener2) || (paramEventListener1 == null))
@@ -281,7 +373,6 @@ public class QTEventCaster implements
         return addListener(localEventListener1, localEventListener2);
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
  * /QTEventCaster.class

@@ -1,12 +1,10 @@
-
 package quicktime.jdirect;
 
 import com.apple.mrj.jdirect.MethodClosureUPP;
-
 import quicktime.QTSession;
 
-
 public class MethodClosure {
+
     protected int closure;
 
     private Object macProc;
@@ -15,7 +13,6 @@ public class MethodClosure {
         if (paramObject == this) {
             throw new RuntimeException("MethodClosure cannot have this as the callback object");
         }
-
         if (QTSession.isCurrentOS(2)) {
             this.closure = NewMethodClosure(paramObject, paramString1, paramString2);
         } else if (QTSession.isCurrentOS(1)) {

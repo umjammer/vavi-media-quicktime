@@ -1,4 +1,3 @@
-
 package quicktime.qd.text;
 
 import java.io.IOException;
@@ -6,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.QDColor;
@@ -16,10 +14,17 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 
-
+/**
+ * This class maps the ScrpSTElement record of the TextToolbox.
+ * ScrpSTElement are used as part of the TextDescription
+ */
 public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
+
     static Object linkage;
 
+    /**
+     * This is the size (the number of bytes) that are required for this class
+     */
     public static final int kNativeSize = 20;
 
     private static EndianDescriptor ed;
@@ -28,8 +33,10 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     static {
         class PrivelegedAction {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(ScrpSTElement.class);
                     }
@@ -41,28 +48,30 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     protected static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 4, 1);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-
         EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 2, 3);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-
         EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(12, 2, 1);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-
         EndianFlipSpec localEndianFlipSpec4 = new EndianFlipSpec(14, 2, 3);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec4);
-
         return localEndianDescriptor;
     }
 
+    /**
+     * Returns the EndianDescriptor for this class.
+     * @return an EndianDescriptor
+     */
     public static EndianDescriptor getEndianDescriptor() {
         if (ed == null)
             ed = makeED();
         return ed;
     }
 
+    /**
+     * This constructor makes a new ScrpSTElement object.
+     */
     public ScrpSTElement() {
         super(20);
     }
@@ -73,10 +82,8 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[20];
-
         byte[] arrayOfByte = new byte[20];
         paramObjectInputStream.read(arrayOfByte);
-
         setIntInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 0)));
         setShortInArray(this.bytes, 4, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, 4)));
         setShortInArray(this.bytes, 6, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, 6)));
@@ -89,7 +96,6 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[20];
-
         setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
         setShortInArray(arrayOfByte, 4, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 4)));
         setShortInArray(arrayOfByte, 6, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 6)));
@@ -98,10 +104,12 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         setShortInArray(arrayOfByte, 14, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 14)));
         setShortInArray(arrayOfByte, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 16)));
         setShortInArray(arrayOfByte, 18, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 18)));
-
         paramObjectOutputStream.write(arrayOfByte);
     }
 
+    /**
+     * Implementation of Cloneable Interface.
+     */
     public Object clone() {
         return new ScrpSTElement(getBytes());
     }
@@ -171,10 +179,11 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         return getIntAt(0);
     }
 
+    /**
+     * Return a string representation of this object
+     */
     public String toString() {
-        return getClass().getName() + "[" + ",startChar=" + getStartChar() + ",getHeight=" + getHeight() + ",getAscent="
-               + getAscent() + ",getFont=" + getFont() + ",getFace=" + getFace() + ",getSize=" + getSize() + ",getColor="
-               + getColor() + "]";
+        return getClass().getName() + "[" + ",startChar=" + getStartChar() + ",getHeight=" + getHeight() + ",getAscent=" + getAscent() + ",getFont=" + getFont() + ",getFace=" + getFace() + ",getSize=" + getSize() + ",getColor=" + getColor() + "]";
     }
 
     private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
@@ -185,7 +194,6 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     private static native void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/text/
  * ScrpSTElement.class

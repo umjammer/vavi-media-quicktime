@@ -1,26 +1,26 @@
-
 package quicktime.qd;
 
 import java.awt.Point;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTSession;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.QTUtils;
 
-
 public final class QDPoint implements PrimitivesLib, Cloneable {
+
     private static Object linkage;
 
     private static final int kNativeSize = 8;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QDPoint.class);
                     }
@@ -29,23 +29,54 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         }.establish();
     }
 
+    /**
+     * Returns the EndianDescriptor for FixedPoint point.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorFixedPoint() {
         return EndianDescriptor.flipAll32;
     }
 
+    /**
+     * Returns the EndianDescriptor for TQ3Point2D point.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorTQ3Point2D() {
         return EndianDescriptor.flipAll32;
     }
 
+    /**
+     * Returns the EndianDescriptor for TQ3Point2D point.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorQTVRFloatPoint() {
         return EndianDescriptor.flipAll32;
     }
 
     private static boolean doEndianSwap = (!QTSession.isCurrentOS(1)) && (!QTSession.isCurrentOS(4));
 
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 2 formats the byte array is encoded in.
+     */
     public static final int kIsFixedPoint = 8;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 2 formats the byte array is encoded in.
+     */
     public static final int kIsGXPoint = 8;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 2 formats the byte array is encoded in.
+     */
     public static final int kIsQ3Point2D = -8;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 2 formats the byte array is encoded in.
+     */
     public static final int kIsQTVRFloatPoint = -16;
 
     private short x;
@@ -73,18 +104,30 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         throw new IllegalArgumentException("Unknown point bytes format");
     }
 
+    /**
+     * Create a QDPoint at specified location
+     * @param x x location
+     * @param y y location
+     */
     public QDPoint(int paramInt1, int paramInt2) {
         setX(paramInt1);
         setY(paramInt2);
     }
 
+    /**
+     * Create a QDPoint at specified location
+     * @param x x location
+     * @param y y location
+     */
     public QDPoint(float paramFloat1, float paramFloat2) {
         setX(paramFloat1);
         setY(paramFloat2);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>As of QTJava v 4.0</I>
+     * Create a QDPoint at specified location
      */
     public QDPoint(Point paramPoint) {
         this(paramPoint.x, paramPoint.y);
@@ -101,6 +144,9 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     byte[] floatPt = null;
 
+    /**
+     * Returns the QDPoint packed into a 32bit integer
+     */
     public int getPoint() {
         return doEndianSwap ? this.x << 16 | this.y & 0xFFFF : this.y << 16 | this.x & 0xFFFF;
     }
@@ -129,14 +175,26 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return getQ3Point2D();
     }
 
+    /**
+     * Get the x location of the point.
+     * @return the current x location
+     */
     public int getX() {
         return this.x;
     }
 
+    /**
+     * Get the x location of the point.
+     * @return the current x location
+     */
     public float getXF() {
         return this.floatPt != null ? getFloatFromArray(this.floatPt, 0) : getX();
     }
 
+    /**
+     * Set the x location of the point.
+     * @param x the new x location
+     */
     public void setX(int paramInt) {
         if (this.floatPt == null)
             this.x = ((short) paramInt);
@@ -145,6 +203,10 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         }
     }
 
+    /**
+     * Set the x location of the point.
+     * @param x the new x location
+     */
     public void setX(float paramFloat) {
         if (this.floatPt == null)
             this.floatPt = new byte[8];
@@ -152,14 +214,26 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         this.x = ((short) (int) paramFloat);
     }
 
+    /**
+     * Get the y location of the point.
+     * @return the current y location
+     */
     public int getY() {
         return this.y;
     }
 
+    /**
+     * Get the y location of the point.
+     * @return the current y location
+     */
     public float getYF() {
         return this.floatPt != null ? getFloatFromArray(this.floatPt, 4) : getY();
     }
 
+    /**
+     * Set the y location of the point.
+     * @param y the new y location
+     */
     public void setY(int paramInt) {
         if (this.floatPt == null)
             this.y = ((short) paramInt);
@@ -168,6 +242,10 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         }
     }
 
+    /**
+     * Set the y location of the point.
+     * @param y the new y location
+     */
     public void setY(float paramFloat) {
         if (this.floatPt == null)
             this.floatPt = new byte[8];
@@ -175,24 +253,39 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         this.y = ((short) (int) paramFloat);
     }
 
+    /**
+     * Translates the point, by deltaX and deltaY.
+     */
     public void translate(int paramInt1, int paramInt2) {
         move(getX() + paramInt1, getY() + paramInt2);
     }
 
+    /**
+     * Translates the point, by deltaX and deltaY.
+     */
     public void translate(float paramFloat1, float paramFloat2) {
         move(getXF() + paramFloat1, getYF() + paramFloat2);
     }
 
+    /**
+     * Moves the point, to coordinates x, y.
+     */
     public void move(int paramInt1, int paramInt2) {
         setX(paramInt1);
         setY(paramInt2);
     }
 
+    /**
+     * Moves the point, to coordinates x, y.
+     */
     public void move(float paramFloat1, float paramFloat2) {
         setX(paramFloat1);
         setY(paramFloat2);
     }
 
+    /**
+     * Checks whether two int points are equal.
+     */
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
@@ -203,14 +296,25 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return false;
     }
 
+    /**
+     * Returns the String representation of this QDPoint's coordinate.
+     */
     public String toString() {
         return getClass().getName() + "[x=" + getXF() + ",y=" + getYF() + "]";
     }
 
+    /**
+     * Return a copy of the QDPoint
+     * @return a QDPoint
+     */
     public Object clone() {
         return copy();
     }
 
+    /**
+     * Returns a copy of the QDPoint with the correct return type.
+     * @return a QDPoint
+     */
     public QDPoint copy() {
         return new QDPoint(this.x, this.y, this.floatPt);
     }
@@ -223,7 +327,6 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     private static native void setFloatInArray(byte[] paramArrayOfByte, int paramInt, float paramFloat);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/
  * QDPoint.class

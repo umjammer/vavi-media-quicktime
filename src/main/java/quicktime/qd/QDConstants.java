@@ -1,7 +1,12 @@
-
 package quicktime.qd;
 
+/**
+ * This class represents all of the constants in the QuickDraw interface.
+ * ALL constants start with a small letter (not a capital one)
+ * except for constants that start with an acronym, such as MPEG...
+ */
 public abstract interface QDConstants {
+
     public static final int teJustLeft = 0;
 
     public static final int teJustCenter = 1;
@@ -18,6 +23,9 @@ public abstract interface QDConstants {
 
     public static final int teFlushLeft = -2;
 
+    /**
+     * MacOS font style constants
+     */
     public static final int normal = 0;
 
     public static final int bold = 1;
@@ -202,54 +210,129 @@ public abstract interface QDConstants {
 
     public static final int gwFlagErr = Integer.MIN_VALUE;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k1MonochromePixelFormat = 1;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k2IndexedPixelFormat = 2;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k4IndexedPixelFormat = 4;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k8IndexedPixelFormat = 8;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k16BE555PixelFormat = 16;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k24RGBPixelFormat = 24;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k32ARGBPixelFormat = 32;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k1IndexedGrayPixelFormat = 33;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k2IndexedGrayPixelFormat = 34;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k4IndexedGrayPixelFormat = 36;
 
+    /**
+     * MacOS Pixel formats used in QTNewGWorld
+     */
     public static final int k8IndexedGrayPixelFormat = 40;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k16LE555PixelFormat = 1278555445;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k16BE565PixelFormat = 1110783541;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k16LE565PixelFormat = 1278555701;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k24BGRPixelFormat = 842285639;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k32BGRAPixelFormat = 1111970369;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k32ABGRPixelFormat = 1094862674;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int k32RGBAPixelFormat = 1380401729;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kYUVSPixelFormat = 2037741171;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kYUVUPixelFormat = 2037741173;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kYVU9PixelFormat = 1498830137;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kYUV411PixelFormat = 1496592689;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kYVYU422PixelFormat = 1498830166;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kUYVY422PixelFormat = 1431918169;
 
+    /**
+     * Win32 Pixel formats used in QTNewGWorld
+     */
     public static final int kYUV211PixelFormat = 1496461617;
 
     public static final int srcCopy = 0;
@@ -388,7 +471,6 @@ public abstract interface QDConstants {
 
     public static final int pmAllUpdates = 57344;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/
  * QDConstants.class

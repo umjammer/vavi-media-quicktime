@@ -1,4 +1,3 @@
-
 package quicktime.app.view;
 
 import java.io.File;
@@ -23,20 +22,40 @@ import quicktime.std.movies.media.Media;
 import quicktime.std.qtcomponents.MovieImporter;
 import quicktime.util.QTHandle;
 
-
+/**
+ * The QTFactory class provides factory methods for creating classes that are used
+ * to present media that QuickTime can import. It also provides some utility methods
+ * for finding directories and files in the local file system.
+ *
+ * An example usage of some of the factory methods:
+ *
+ * File mediaFile = QTFactory.findAbsolutePath ("media/myMovie.mov");
+ * Movie movie = Movie.fromFile(mediaFile);
+ * Component component = QTFactory.makeQTComponent (movie);
+ * frame.add (component);
+ */
 public final class QTFactory {
+
     private static Vector<String> classPaths;
 
     private static final boolean debug = false;
 
+    /**
+     * Accepts a movie to display in the java component.
+     * @param movie the movie to be displayed
+     * @return QTComponent displaying the movie, this can be added to the FullScreenWindow for displaying movie
+     *  in fullscreen mode.
+     * @return {@link quicktime.QTException}
+     */
     public static QTComponent makeQTComponent(final Movie mov) throws QTException {
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
-
             class PrivelegedAction {
+
                 QTComponent comp;
 
                 void establish() {
                     AccessController.doPrivileged(new PrivilegedAction<QTComponent>() {
+
                         public QTComponent run() {
                             comp = new QTJavaCocoaCanvas(mov);
                             return comp;
@@ -55,14 +74,22 @@ public final class QTFactory {
         return new QTJavaAWTCanvas(mov);
     }
 
+    /**
+     * Accepts a movie and a controller as its parameters to display in the java component.
+     * @param ctlr the MovieController attached to the movie, if this is NULL the class creates its own controller object.
+     *  you can use the getMovieController() call of the component controller to get this movie controller.
+     * @return QTComponent displaying the movie and the controller attached to it.
+     * @return {@link quicktime.QTException}
+     */
     public static QTComponent makeQTComponent(final MovieController controller) throws QTException {
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
-
             class PrivelegedAction {
+
                 QTComponent comp;
 
                 void establish() {
                     AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                         public Object run() {
                             try {
                                 comp = new QTJavaCocoaCanvas(controller);
@@ -81,18 +108,24 @@ public final class QTFactory {
             privelegedAction.establish();
             return privelegedAction.getComponent();
         }
-
         return new QTJavaAWTCanvas(controller);
     }
 
+    /**
+     * Accepts a GraphicsImporter as its parameters to display in the java component.
+     * @param graphicsImporter the image to be displayed
+     * @return QTComponent displaying the image represented by the GraphicsImporter component.
+     * @return {@link quicktime.QTException}
+     */
     public static QTComponent makeQTComponent(final GraphicsImporter gi) throws QTException {
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
-
             class PrivelegedAction {
+
                 QTComponent comp;
 
                 void establish() {
                     AccessController.doPrivileged(new PrivilegedAction<QTComponent>() {
+
                         public QTComponent run() {
                             comp = new QTJavaCocoaCanvas(gi);
                             return comp;
@@ -108,24 +141,51 @@ public final class QTFactory {
             privelegedAction.establish();
             return privelegedAction.getComponent();
         }
-
         return new QTJavaAWTCanvas(gi);
     }
 
+    /**
+     * Accepts a GraphicsImporter as its parameters to display in the java component.
+     * @return javax.swing.JComponent displaying the image represented by the GraphicsImporter component.
+     * @return {@link quicktime.QTException}
+     */
     public static QTJComponent makeQTJComponent(GraphicsImporterDrawer paramGraphicsImporterDrawer) throws QTException {
         return new JQTCanvas(paramGraphicsImporterDrawer);
     }
 
+    /**
+     * Accepts a MoviePlayer object as its parameters to display in the java component.
+     * @param moviePlayer the movie to be displayed
+     * @return javax.swing.JComponent displaying the movie represented by the MoviePlayer object.
+     * @return {@link quicktime.QTException}
+     */
     public static QTJComponent makeQTJComponent(MoviePlayer paramMoviePlayer) throws QTException {
         return new JQTCanvas(paramMoviePlayer);
     }
 
+    /**
+     * This method will take apart the path specification of the fileName and return the
+     * first instance of the file (the last name in the path) that it finds within the
+     * directories that are known to Java at runtime.
+     * @throws java.lang.SecurityException will be returned if the Applet is not allowed access to the class path
+     *  system property. Typically this is the case - you should use the codeBase or documentBase paths of the
+     *  applet to position and locate files at run time.
+     * @throws java.io.IOException the file cannot be found in any of the class path locations.
+     */
     public static File findInSystemPaths(String paramString) throws IOException {
         if (classPaths == null)
             buildClassPathsVector();
         return _doFISP(paramString, false);
     }
 
+    /**
+     * This method will add a directory to the internal list of directories that are searched in
+     * the find methods. The incoming File object must specify a directory that exists or an IOException
+     * will be thrown. If the directory is already a member of the list it will not be added.
+     * Directories that are added explicitly will be searched first in the find calls.
+     * @param dir a directory
+     * @param java.io.IOException
+     */
     public static void addDirectory(File file) throws IOException {
         if (!file.exists())
             throw new IOException(file + ",does not exist");
@@ -146,6 +206,12 @@ public final class QTFactory {
         classPaths.addElement(path);
     }
 
+    /**
+     * This method will remove a directory from the internal list of directories that are searched in
+     * the find methods.
+     * @param dir a directory
+     * @param java.io.IOException
+     */
     public static void removeDirectory(File file) throws IOException {
         if (!file.exists())
             return;
@@ -163,6 +229,16 @@ public final class QTFactory {
         classPaths.removeElement(path);
     }
 
+    /**
+     * Given a filename this method will exhaustively search all paths found in the user.dir and the classPath and
+     * will return a file object that contains an absolute path to the specified argument.
+     * @param fileName the file to search for.
+     * @return a file object that represents the absolute path to the specified path.
+     * @throws java.lang.SecurityException will be returned if the Applet is not allowed access to the class path
+     *  system property. Typically this is the case - you should use the codeBase or documentBase paths of the
+     *  applet to position and locate files at run time.
+     * @throws java.io.IOException the file cannot be found in any of the class path locations.
+     */
     public static File findAbsolutePath(String paramString) throws IOException {
         paramString = paramString.replace('/', File.separatorChar);
         if (classPaths == null) {
@@ -171,7 +247,6 @@ public final class QTFactory {
         Enumeration<String> e = classPaths.elements();
         while (e.hasMoreElements()) {
             String path = e.nextElement();
-
             String file = returnExistingFile(path + paramString);
             if (file != null) {
                 return new File(file);
@@ -184,13 +259,10 @@ public final class QTFactory {
         String str1 = paramString;
         int i = str1.length();
         while (i > 0) {
-
             i = str1.substring(0, i).lastIndexOf('/');
             String str2 = (i == -1) || (i == 0) ? str1 : str1.substring(i + 1);
-
             for (int j = classPaths.size() - 1; j >= 0; j--) {
                 String str3 = classPaths.elementAt(j);
-
                 String str4 = returnExistingFile(str3 + str2);
                 if (str4 != null) {
                     return new File(str4);
@@ -202,7 +274,6 @@ public final class QTFactory {
 
     private static void buildClassPathsVector() throws IOException {
         classPaths = new Vector(8);
-
         String str1 = System.getProperty("java.class.path");
         while (str1 != null) {
             int i = str1.indexOf(File.pathSeparatorChar);
@@ -214,7 +285,6 @@ public final class QTFactory {
                 str3 = str1.substring(0, i);
                 str1 = str1.substring(i + 1);
             }
-
             str3 = returnExistingFile(str3);
             if (str3 != null) {
                 str3 = str3.substring(0, str3.lastIndexOf(File.separatorChar) + 1);
@@ -225,7 +295,6 @@ public final class QTFactory {
         }
         String str2 = System.getProperty("user.dir");
         str2 = returnExistingFile(str2);
-
         if (str2 != null)
             classPaths.addElement(str2);
     }
@@ -299,7 +368,6 @@ public final class QTFactory {
                 paramMovie.setActive(true);
                 return paramMovie;
             }
-
             localMedia.disposeQTObject();
             localTrack.disposeQTObject();
             paramMovie.disposeQTObject();

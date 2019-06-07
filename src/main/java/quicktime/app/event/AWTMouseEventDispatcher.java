@@ -1,20 +1,21 @@
-
 package quicktime.app.event;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.app.spaces.Space;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * This class is used to dispatch events to a QTMouseController when the source of events is some kind
+ * of java.awt.Component.
+ * @see {@link quicktime.app.event.EventDispatcher}
  */
 public class AWTMouseEventDispatcher extends EventDispatcher implements MouseListener, MouseMotionListener {
+
     private QTMouseEvent theEvent;
 
     private boolean addedButtonForEE;
@@ -25,10 +26,22 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
 
     private boolean addedButtonForTarget;
 
+    /**
+     * Deprecated.
+     * The space that is the source of the QTMouseEvent that is broadcast to the QTMouseController* @deprecated since QTJava 6.1
+     */
     protected Space space;
 
+    /**
+     * Deprecated.
+     * The controller that will dispatch the events to any of its registered listeners* @deprecated since QTJava 6.1
+     */
     protected QTMouseController cont;
 
+    /**
+     * Deprecated.
+     * The java.awt.Component which the space has been added to.* @deprecated since QTJava 6.1
+     */
     protected Component comp;
 
     static {
@@ -38,7 +51,16 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Creates an AWTMouseEventDispatcher for the specified QTMouseController.
+     * @param cont the controller which will distribute the events. This controller is attached to
+     *  some kind of quicktime.app.display.QTDisplaySpace object.
+     * @param interest The interest object must be some kind of java.awt.Component of a class cast exception
+     *  will be generated.
+     * @param space The space will be the Object (generally a QTDisplaySpace) which the controller
+     *  has been attached to and will become the source of events - ie. the space within which the controllers
+     *  events occur - for the controller
      */
     public AWTMouseEventDispatcher(QTMouseController paramQTMouseController, Space paramSpace, Object paramObject) {
         this.comp = ((Component) paramObject);
@@ -50,12 +72,20 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
 
     private boolean hasMMotionListener = false;
 
+    /**
+     * Deprecated.
+     * When the ListenerController is addedTo its source of interest this method is called.* @deprecated since QTJava 6.1
+     */
     protected void addedTo() {
         if (this.theEvent == null) {
             this.theEvent = new QTMouseEvent(this.space);
         }
     }
 
+    /**
+     * Deprecated.
+     * When the ListenerController is removedFrom its source of interest this method is called.* @deprecated since QTJava 6.1
+     */
     protected void removedFrom() {
         this.comp.removeMouseListener(this);
         this.comp.removeMouseMotionListener(this);
@@ -87,8 +117,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
             return;
         if (this.cont.hasMouseEnterExitListener())
             return;
-        if (((this.cont instanceof QTMouseTargetController))
-            && (((QTMouseTargetController) this.cont).hasMouseTargetListener())) {
+        if (((this.cont instanceof QTMouseTargetController)) && (((QTMouseTargetController) this.cont).hasMouseTargetListener())) {
             return;
         }
         this.comp.removeMouseListener(this);
@@ -100,8 +129,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
             return;
         if (this.cont.hasMouseEnterExitListener())
             return;
-        if (((this.cont instanceof QTMouseTargetController))
-            && (((QTMouseTargetController) this.cont).hasMouseTargetListener())) {
+        if (((this.cont instanceof QTMouseTargetController)) && (((QTMouseTargetController) this.cont).hasMouseTargetListener())) {
             return;
         }
         this.comp.removeMouseMotionListener(this);
@@ -147,12 +175,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mouseClicked(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(500,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(500, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseClicked(this.theEvent);
     }
 
@@ -160,12 +183,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mousePressed(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(501,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(501, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mousePressed(this.theEvent);
     }
 
@@ -173,12 +191,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mouseReleased(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(502,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(502, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseReleased(this.theEvent);
     }
 
@@ -186,12 +199,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mouseEntered(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(504,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(504, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseEntered(this.theEvent);
     }
 
@@ -199,12 +207,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mouseExited(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(505,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(505, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseExited(this.theEvent);
     }
 
@@ -212,12 +215,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(506,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(506, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseDragged(this.theEvent);
     }
 
@@ -225,12 +223,7 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * @deprecated
      */
     public void mouseMoved(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(503,
-                                             paramMouseEvent.getX(),
-                                             paramMouseEvent.getY(),
-                                             paramMouseEvent.getWhen(),
-                                             paramMouseEvent.getModifiers(),
-                                             paramMouseEvent.getClickCount());
+        this.theEvent.initialiseEventProfile(503, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseMoved(this.theEvent);
     }
 }

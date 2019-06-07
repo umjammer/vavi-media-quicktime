@@ -1,4 +1,3 @@
-
 package quicktime.std.sg;
 
 import java.io.IOException;
@@ -6,25 +5,29 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
-
 public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, QuickTimeLib, Cloneable {
+
     private static Object linkage;
 
+    /**
+     * This is the size (the number of bytes) that are required for this class
+     */
     public static final int kNativeSize = 42;
 
     private static final long serialVersionUID = -1283193746361395107L;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(DigitizerInfo.class);
                     }
@@ -43,11 +46,8 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
 
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[42];
-
         paramObjectInputStream.read(this.bytes);
-
         setShortInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, 0)));
-
         for (int i = 4; i < 18; i += 4) {
             setIntInArray(this.bytes, i, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, i)));
         }
@@ -58,60 +58,91 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
 
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[42];
-
         setShortInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 0)));
-
         for (int i = 2; i < 18; i += 4) {
             setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
         setIntInArray(arrayOfByte, 20, 0);
         setIntInArray(arrayOfByte, 24, 0);
-
         for (int i = 28; i < 38; i += 2) {
             setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
         setIntInArray(arrayOfByte, 38, 0);
-
         paramObjectOutputStream.write(arrayOfByte);
     }
 
+    /**
+     * Indicates the capabilities of the video digitizer component with respect to the input video signal.
+     * These flags are discussed in ÒCapability FlagsÓ beginning on page 8-14 of Inside Macintosh: QuickTime Components.
+     * @return input video signal features.
+     */
     public int getInputCapabilityFlags() {
         return getIntAt(2);
     }
 
+    /**
+     * Indicates the capabilities of the video digitizer component with respect to the output digitized video
+     * information. These flags are discussed in ÒCapability FlagsÓ beginning on page 8-14 of
+     * Inside Macintosh: QuickTime Components.
+     * @return output digitized video data features of digitizer component
+     */
     public int getOutputCapabilityFlags() {
         return getIntAt(6);
     }
 
+    /**
+     * Indicates the smallest height value the digitizer component can accommodate in its destination.
+     * @return the minimum Destination width
+     */
     public short getMinDestHeight() {
         return getShortAt(28);
     }
 
+    /**
+     * Indicates the smallest width value the digitizer component can accommodate in its destination.
+     * @return the minimum Destination width
+     */
     public short getMinDestWidth() {
         return getShortAt(30);
     }
 
+    /**
+     * Indicates the largest height value the digitizer component can accommodate in its destination.
+     * @return largest resizable height
+     */
     public short getmaxDestHeight() {
         return getShortAt(32);
     }
 
+    /**
+     * Indicates the maximum width the digitizer component can accommodate in its destination.
+     * @return largest resizable width
+     */
     public short getmaxDestWidth() {
         return getShortAt(34);
     }
 
+    /**
+     * Indicates the number of blend levels the video digitizer component supports.
+     * @return number of blend levels supported (2 if 1-bit mask)
+     */
     public short getblendLevels() {
         return getShortAt(36);
     }
 
+    /**
+     * Returns a copy of this class.
+     */
     public Object clone() {
         return new DigitizerInfo(this.bytes);
     }
 
+    /**
+     * Print information about this object.
+     * @return a string representing this object
+     */
     public String toString() {
-        return getClass().getName() + " MinDestHeight: " + getMinDestHeight() + " MinDestWidth: " + getMinDestWidth()
-               + " \nmaxDestHeight: " + getmaxDestHeight() + " MaxDestWidth: " + getmaxDestWidth() + " \nblendLevels: "
-               + getblendLevels() + " InputCapabilityFlags: " + getInputCapabilityFlags() + " \nOutputCapabilityFlags: "
-               + getOutputCapabilityFlags();
+        return getClass().getName() + " MinDestHeight: " + getMinDestHeight() + " MinDestWidth: " + getMinDestWidth() + " \nmaxDestHeight: " + getmaxDestHeight() + " MaxDestWidth: " + getmaxDestWidth() + " \nblendLevels: " + getblendLevels() + " InputCapabilityFlags: " + getInputCapabilityFlags() + " \nOutputCapabilityFlags: " + getOutputCapabilityFlags();
     }
 
     private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
@@ -122,7 +153,6 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
 
     private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/sg/
  * DigitizerInfo.class

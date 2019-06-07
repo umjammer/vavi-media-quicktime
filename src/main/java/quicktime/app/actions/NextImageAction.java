@@ -1,4 +1,3 @@
-
 package quicktime.app.actions;
 
 import quicktime.QTException;
@@ -7,11 +6,17 @@ import quicktime.QTSession;
 import quicktime.app.image.ImageSequencer;
 import quicktime.app.image.ImageSettable;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * This class will display the next image of its sequence of images
+ * whenever the doAction method is called from the super class
+ * tickle method.
  */
 public class NextImageAction extends SequencerAction implements Targetable {
+
+    /**
+     * Deprecated.
+     */
     protected ImageSettable target;
 
     static {
@@ -21,32 +26,47 @@ public class NextImageAction extends SequencerAction implements Targetable {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Creates an ImageAction.
+     * @param scale the amount with which a second is divided into at a rate of one
+     * @param period the number of scale ticks that elapse between invocations of the action.
+     * @param images the images that will be cycled through
+     * @param target this object is the target of the action.
      */
-    public NextImageAction(int paramInt1,
-            int paramInt2,
-            ImageSequencer paramImageSequencer,
-            ImageSettable paramImageSettable) throws QTException {
+    public NextImageAction(int paramInt1, int paramInt2, ImageSequencer paramImageSequencer, ImageSettable paramImageSettable) throws QTException {
         super(paramInt1, paramInt2, paramImageSequencer);
         this.target = paramImageSettable;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Sets the Target of the NextImageAction which is an ImageSettable object.
+     * @param target the new target for the Action
      */
     public void setTarget(Object paramObject) {
         this.target = ((ImageSettable) paramObject);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Returns the current target of the action.
+     * @return the target - an ImageSettable object
      */
     public Object getTarget() {
         return this.target;
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method does whatever actions are appropriate so that subsequent calls to getImage and getDescription
+     * return the correct image data.
+     * @param er the actual rate at which the action has been triggered
+     * @param t the time in Ticklish.kScale that the action has been triggered
+     * @param {@link quicktime.QTException}
      */
     protected void doAction(float paramFloat, int paramInt) throws QTException {
         if (paramFloat > 0.0F) {

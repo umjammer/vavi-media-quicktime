@@ -1,13 +1,25 @@
-
 package quicktime;
 
 public abstract interface Errors {
+
+    /**
+     * no error
+     */
     public static final int noErr = 0;
 
+    /**
+     * Unspecified error code.
+     */
     public static final int kUnspecifiedErr = -1;
 
+    /**
+     * Instrument number was incorrect
+     */
     public static final int kIllegalInstrumentErr = -2079;
 
+    /**
+     * An incorrect part number was supplied
+     */
     public static final int kInvalidPartNumberErr = -2075;
 
     public static final int pictIsOpenErr = -9;
@@ -68,214 +80,523 @@ public abstract interface Errors {
 
     public static final int cDepthErrInvalid = -157;
 
+    /**
+     * Resource errors
+     */
     public static final int rmvResFailed = -196;
 
+    /**
+     * Resource errors
+     */
     public static final int addResFailed = -194;
 
+    /**
+     * Resource errors
+     */
     public static final int resFNotFound = -193;
 
+    /**
+     * Resource errors
+     */
     public static final int resNotFound = -192;
 
+    /**
+     * Sound manager errors
+     */
     public static final int notEnoughHardwareErr = -201;
 
+    /**
+     * Sound manager errors
+     */
     public static final int queueFull = -203;
 
+    /**
+     * Sound manager errors
+     */
     public static final int badChannel = -205;
 
+    /**
+     * Sound manager errors
+     */
     public static final int resProblem = -204;
 
+    /**
+     * Sound manager errors
+     */
     public static final int badFormat = -206;
 
+    /**
+     * Sound manager errors
+     */
     public static final int notEnoughBufferSpace = -207;
 
+    /**
+     * Sound manager errors
+     */
     public static final int badFileFormat = -208;
 
+    /**
+     * Sound manager errors
+     */
     public static final int channelBusy = -209;
 
+    /**
+     * Sound manager errors
+     */
     public static final int buffersTooSmall = -210;
 
+    /**
+     * Sound manager errors
+     */
     public static final int channelNotBusy = -211;
 
+    /**
+     * Sound manager errors
+     */
     public static final int noMoreRealTime = -212;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siNoSoundInHardware = -220;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siBadSoundInDevice = -221;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siNoBufferSpecified = -222;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siInvalidCompression = -223;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siHardDriveTooSlow = -224;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siInvalidSampleRate = -225;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siInvalidSampleSize = -226;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siDeviceBusyErr = -227;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siBadDeviceName = -228;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siBadRefNum = -229;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siInputDeviceErr = -230;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siUnknownInfoType = -231;
 
+    /**
+     * Sound manager errors
+     */
     public static final int siUnknownQuality = -232;
 
+    /**
+     * Sound manager errors
+     */
     public static final int rgnTooBigErr = -500;
 
+    /**
+     * Port related errors
+     */
     public static final int noPortErr = -903;
 
+    /**
+     * Port related errors
+     */
     public static final int noGlobalsErr = -904;
 
+    /**
+     * Port related errors
+     */
     public static final int destPortErr = -906;
 
     public static final int duplicateHandlerErr = -1855;
 
     public static final int handlerNotFoundErr = -1856;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int couldNotResolveDataRef = -2000;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badImageDescription = -2001;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badPublicMovieAtom = -2002;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int cantFindHandler = -2003;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int cantOpenHandler = -2004;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badComponentType = -2005;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noMediaHandler = -2006;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noDataHandler = -2007;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidMedia = -2008;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidTrack = -2009;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidMovie = -2010;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSampleTable = -2011;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidDataRef = -2012;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidHandler = -2013;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidDuration = -2014;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidTime = -2015;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int cantPutPublicMovieAtom = -2016;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badEditList = -2017;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int mediaTypesDontMatch = -2018;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int progressProcAborted = -2019;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int movieToolboxUninitialized = -2020;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noRecordOfApp = -2020;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int wfFileNotFound = -2021;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int cantCreateSingleForkFile = -2022;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidEditState = -2023;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int nonMatchingEditState = -2024;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int staleEditState = -2025;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int userDataItemNotFound = -2026;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int maxSizeToGrowTooSmall = -2027;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badTrackIndex = -2028;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int trackIDNotFound = -2029;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int trackNotInMovie = -2030;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int timeNotInTrack = -2031;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int timeNotInMedia = -2032;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badEditIndex = -2033;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int internalQuickTimeError = -2034;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int cantEnableTrack = -2035;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidRect = -2036;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSampleNum = -2037;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidChunkNum = -2038;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSampleDescIndex = -2039;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidChunkCache = -2040;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSampleDescription = -2041;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int dataNotOpenForRead = -2042;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int dataNotOpenForWrite = -2043;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int dataAlreadyOpenForWrite = -2044;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int dataAlreadyClosed = -2045;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int endOfDataReached = -2046;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int dataNoDataRef = -2047;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noMovieFound = -2048;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidDataRefContainer = -2049;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int badDataRefIndex = -2050;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noDefaultDataRef = -2051;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int couldNotUseAnExistingSample = -2052;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int featureUnsupported = -2053;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noVideoTrackInMovieErr = -2054;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noSoundTrackInMovieErr = -2055;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int soundSupportNotAvailableErr = -2056;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int unsupportedAuxiliaryImportData = -2057;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int auxiliaryExportDataUnavailable = -2058;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int samplesAlreadyInMediaErr = -2059;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int noSourceTreeFoundErr = -2060;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int sourceNotFoundErr = -2061;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int movieTextNotFoundErr = -2062;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int missingRequiredParameterErr = -2063;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSpriteWorldPropertyErr = -2064;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSpritePropertyErr = -2065;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int gWorldsNotSameDepthAndSizeErr = -2066;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSpriteIndexErr = -2067;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidImageIndexErr = -2068;
 
+    /**
+     * Movie Toolbox errors
+     */
     public static final int invalidSpriteIDErr = -2069;
 
     public static final int internalComponentErr = -2070;
@@ -350,84 +671,204 @@ public abstract interface Errors {
 
     public static final int cannotBeLeafAtomErr = -2109;
 
+    /**
+     * Path errors
+     */
     public static final int pathTooLongErr = -2110;
 
+    /**
+     * Path errors
+     */
     public static final int emptyPathErr = -2111;
 
+    /**
+     * Path errors
+     */
     public static final int noPathMappingErr = -2112;
 
+    /**
+     * Path errors
+     */
     public static final int pathNotVerifiedErr = -2113;
 
+    /**
+     * Path errors
+     */
     public static final int unknownFormatErr = -2114;
 
+    /**
+     * Path errors
+     */
     public static final int wackBadFileErr = -2115;
 
+    /**
+     * Path errors
+     */
     public static final int wackForkNotFoundErr = -2116;
 
+    /**
+     * Path errors
+     */
     public static final int wackBadMetaDataErr = -2117;
 
+    /**
+     * Path errors
+     */
     public static final int qfcbNotFoundErr = -2118;
 
+    /**
+     * Path errors
+     */
     public static final int qfcbNotCreatedErr = -2119;
 
+    /**
+     * Path errors
+     */
     public static final int AAPNotCreatedErr = -2120;
 
+    /**
+     * Path errors
+     */
     public static final int AAPNotFoundErr = -2121;
 
+    /**
+     * Path errors
+     */
     public static final int ASDBadHeaderErr = -2122;
 
+    /**
+     * Path errors
+     */
     public static final int ASDBadForkErr = -2123;
 
+    /**
+     * Path errors
+     */
     public static final int ASDEntryNotFoundErr = -2124;
 
+    /**
+     * Path errors
+     */
     public static final int fileOffsetTooBigErr = -2125;
 
+    /**
+     * Path errors
+     */
     public static final int notAllowedToSaveMovieErr = -2126;
 
+    /**
+     * Path errors
+     */
     public static final int qtNetworkAlreadyAllocatedErr = -2127;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHHTTPProtocolErr = -2129;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHHTTPNoNetDriverErr = -2130;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHHTTPURLErr = -2131;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHHTTPRedirectErr = -2132;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPProtocolErr = -2133;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPShutdownErr = -2134;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPBadUserErr = -2135;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPBadPasswordErr = -2136;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPServerErr = -2137;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPDataConnectionErr = -2138;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPNoDirectoryErr = -2139;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPQuotaErr = -2140;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPPermissionsErr = -2141;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPFilenameErr = -2142;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPNoNetDriverErr = -2143;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPBadNameListErr = -2144;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPNeedPasswordErr = -2145;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPNoPasswordErr = -2146;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPServerDisconnectedErr = -2147;
 
+    /**
+     * Path errors
+     */
     public static final int urlDataHFTPURLErr = -2148;
 
+    /**
+     * Path errors
+     */
     public static final int notEnoughDataErr = -2149;
 
+    /**
+     * Path errors
+     */
     public static final int qtActionNotHandledErr = -2157;
 
     public static final int digiUnimpErr = -2201;
@@ -932,45 +1373,101 @@ public abstract interface Errors {
 
     public static final int qtvrUninitialized = -30555;
 
+    /**
+     * Component errors
+     */
     public static final int badComponentInstance = -2147450879;
 
+    /**
+     * Component errors
+     */
     public static final int badComponentSelector = -2147450878;
 
+    /**
+     * Music Errors
+     */
     public static final int notImplementedMusicErr = -2147420183;
 
+    /**
+     * Music Errors
+     */
     public static final int cantSendToSynthesizerErr = -2147420184;
 
+    /**
+     * Music Errors
+     */
     public static final int cantReceiveFromSynthesizerErr = -2147420185;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalVoiceAllocationErr = -2147420186;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalPartErr = -2147420187;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalChannelErr = -2147420188;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalKnobErr = -2147420189;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalKnobValueErr = -2147420190;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalInstrumentErr = -2147420191;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalControllerErr = -2147420192;
 
+    /**
+     * Music Errors
+     */
     public static final int midiManagerAbsentErr = -2147420193;
 
+    /**
+     * Music Errors
+     */
     public static final int synthesizerNotRespondingErr = -2147420194;
 
+    /**
+     * Music Errors
+     */
     public static final int synthesizerErr = -2147420195;
 
+    /**
+     * Music Errors
+     */
     public static final int illegalNoteChannelErr = -2147420196;
 
+    /**
+     * Music Errors
+     */
     public static final int noteChannelNotAllocatedErr = -2147420197;
 
+    /**
+     * Music Errors
+     */
     public static final int tunePlayerFullErr = -2147420198;
 
+    /**
+     * Music Errors
+     */
     public static final int tuneParseErr = -2147420199;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/Errors.
  * class

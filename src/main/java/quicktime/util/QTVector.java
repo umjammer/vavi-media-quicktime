@@ -1,4 +1,3 @@
-
 package quicktime.util;
 
 import java.security.AccessController;
@@ -9,16 +8,21 @@ import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 
-
+/**
+ * This class represents a Vector of uniform sized objects into a handle.
+ */
 public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
+
     private static Object linkage;
 
     private int mElSize;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QTVector.class);
                     }
@@ -43,8 +47,7 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
         return false;
     }
 
-    protected void insertElement(QTPointerRef paramQTPointerRef, int paramInt) throws UtilException,
-                                                                               ArrayIndexOutOfBoundsException {
+    protected void insertElement(QTPointerRef paramQTPointerRef, int paramInt) throws UtilException, ArrayIndexOutOfBoundsException {
         if (paramInt >= this.mNumElements)
             throw new ArrayIndexOutOfBoundsException("QTVector:insert past end");
         if (doSizeCheck()) {
@@ -55,11 +58,14 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
             BlockMove(i + 0, i + this.mElSize, this.mElSize * (this.mNumElements - paramInt));
         }
         int j = QTObject.ID(paramQTPointerRef);
-
         BlockMove(j + 0, i + 0, this.mElSize);
         this.mNumElements += 1;
     }
 
+    /**
+     * remove element at specified position
+     * java.lang.ArrayIndexOutOfBoundsException
+     */
     public void remove(int paramInt) throws ArrayIndexOutOfBoundsException, UtilException {
         if ((paramInt >= this.mNumElements) || (this.mNumElements == 0)) {
             throw new ArrayIndexOutOfBoundsException();
@@ -72,8 +78,7 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
         this.mNumElements -= 1;
     }
 
-    protected void getElement(QTPointerRef paramQTPointerRef, int paramInt) throws ArrayIndexOutOfBoundsException,
-                                                                            UtilException {
+    protected void getElement(QTPointerRef paramQTPointerRef, int paramInt) throws ArrayIndexOutOfBoundsException, UtilException {
         if ((paramInt >= this.mNumElements) || (this.mNumElements == 0)) {
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -90,6 +95,9 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
         this.mNumElements = 0;
     }
 
+    /**
+     * Returns the size of the QTPionter
+     */
     public int getSize() {
         return this.mNumElements * this.mElSize;
     }

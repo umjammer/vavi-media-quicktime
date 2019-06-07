@@ -1,17 +1,34 @@
-
 package quicktime.std.movies.media;
 
 import quicktime.QTException;
 import quicktime.util.QTPointerRef;
 
-
+/**
+ * The SampleReference class forms a general base class for information that can be
+ * constructed or gleaned about media samples and references.
+ */
 public final class SampleReference extends QTPointerRef {
+
+    /**
+     * This is the size (the number of bytes) that are required for this class
+     */
     public static final int kNativeSize = 18;
 
+    /**
+     * Create a Sample Reference object from the SampleReferenceVector
+     */
     public SampleReference() throws QTException {
         super(18, true);
     }
 
+    /**
+     * This constructor creates a SampleReference object.
+     * @param dataOffset an offset into the sample data.
+     * @param dataSize Specifies media sample's data size.
+     * @param durationPerSample Specifies media sample's duration.
+     * @param numberOfSamples Specifies the number of samples.
+     * @param sampleFlags Specifies flags for samples.
+     */
     public SampleReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) throws QTException {
         this();
         setDataOffset(paramInt1);
@@ -21,6 +38,9 @@ public final class SampleReference extends QTPointerRef {
         setFlags(paramInt5);
     }
 
+    /**
+     * The media sample's offset.
+     */
     public int getDataOffset() {
         return getIntAt(0);
     }
@@ -29,6 +49,9 @@ public final class SampleReference extends QTPointerRef {
         setIntAt(0, paramInt);
     }
 
+    /**
+     * The media sample's data size.
+     */
     public int getDataSize() {
         return getIntAt(4);
     }
@@ -37,6 +60,9 @@ public final class SampleReference extends QTPointerRef {
         setIntAt(4, paramInt);
     }
 
+    /**
+     * The media sample's duration per sample
+     */
     public int getDurationPerSample() {
         return getIntAt(8);
     }
@@ -45,6 +71,9 @@ public final class SampleReference extends QTPointerRef {
         setIntAt(8, paramInt);
     }
 
+    /**
+     * The number of samples.
+     */
     public int getNumberOfSamples() {
         return getIntAt(12);
     }
@@ -53,6 +82,9 @@ public final class SampleReference extends QTPointerRef {
         setIntAt(12, paramInt);
     }
 
+    /**
+     * The flags for the media samples.
+     */
     public int getFlags() {
         return getShortAt(16);
     }
@@ -61,7 +93,6 @@ public final class SampleReference extends QTPointerRef {
         setShortAt(16, (short) paramInt);
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
  * movies/media/SampleReference.class

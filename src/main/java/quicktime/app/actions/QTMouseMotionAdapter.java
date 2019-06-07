@@ -1,16 +1,18 @@
-
 package quicktime.app.actions;
 
 import java.awt.event.MouseEvent;
-
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
-
 /**
- * @deprecated
+ * Deprecated.
+ * The QTMouseMotionAdapter adapter which receives mouse events.
+ * The methods in this class are empty;  this class is provided as a
+ * convenience for easily creating listeners by extending this class
+ * and overriding only the methods of interest.
  */
 public abstract class QTMouseMotionAdapter implements QTMouseMotionListener {
+
     public void mouseDragged(MouseEvent paramMouseEvent) {
     }
 
@@ -29,7 +31,6 @@ public abstract class QTMouseMotionAdapter implements QTMouseMotionListener {
         }
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/
  * actions/QTMouseMotionAdapter.class

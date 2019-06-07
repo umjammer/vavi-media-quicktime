@@ -1,24 +1,41 @@
-
 package quicktime.std.qtcomponents;
 
 import quicktime.std.movies.Track;
 
-
+/**
+ * MovieImportInfo contains information for the movie import component.
+ * The results returned from querying a movie import component using a movie, a data reference and time values.
+ */
 public final class MovieImportInfo {
+
+    /**
+     * Creates a MovieImportInfo object containing given data.
+     * @param t The used track result from movie import withFile/withHandle method.
+     * @param timeVal The time value duration result from movie import withFile/withHandle method.
+     */
     public MovieImportInfo(Track paramTrack, int paramInt1, int paramInt2) {
         this.trackRef = paramTrack;
         this.duration = paramInt1;
         this.flags = paramInt2;
     }
 
+    /**
+     * returns the referenced track(usedTrack) from the movie import component withFile method
+     */
     public Track track() {
         return this.trackRef;
     }
 
+    /**
+     * returns the addedDuration from the movie import component withFile method
+     */
     public int getDuration() {
         return this.duration;
     }
 
+    /**
+     * returns the outflags from the movie import component withFile method
+     */
     public int getFlags() {
         return this.flags;
     }
@@ -29,7 +46,6 @@ public final class MovieImportInfo {
 
     private int flags = 0;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
  * qtcomponents/MovieImportInfo.class

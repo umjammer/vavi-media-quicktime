@@ -1,19 +1,21 @@
-
 package quicktime.qd;
 
 import java.awt.Canvas;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.peer.ComponentPeer;
-
 import quicktime.QTSession;
 import quicktime.QTUnknownOSException;
 import quicktime.WinJNIDrawingSurface;
 import sun.awt.DrawingSurface;
 import sun.awt.DrawingSurfaceInfo;
 
-
+/**
+ * You use this class to obtain a QDGraphics object from a Java object known to host
+ * a native graphics context. Currently known java objects are java.awt.Components
+ */
 public abstract class NativeGraphics {
+
     DrawingSurfaceInfo dsi;
 
     WinJNIDrawingSurface jnidrawingsurfaceinfo;
@@ -22,10 +24,16 @@ public abstract class NativeGraphics {
         return getContext(paramCanvas);
     }
 
-    public static final NativeGraphics getContext(Component paramComponent) throws NativeGraphicsException,
-                                                                            QTUnknownOSException {
+    /**
+     * This method is called by the Canvas to get the platform specific object that
+     * will be able to return the QDGraphics that will be dependent on the particular
+     * platform that we are currently running on.
+     * @return the platform specific implementation of the NativeGrapics class
+     * @return {@link quicktime.qd.NativeGraphicsException}
+     * @return {@link quicktime.QTUnknownOSException}
+     */
+    public static final NativeGraphics getContext(Component paramComponent) throws NativeGraphicsException, QTUnknownOSException {
         ComponentPeer localComponentPeer = paramComponent.getPeer();
-
         if (localComponentPeer == null)
             throw new NativeGraphicsException("AWT drawing environment is not initialised");
         Object localObject;
@@ -41,10 +49,17 @@ public abstract class NativeGraphics {
             localObject = ((DrawingSurface) localComponentPeer).getDrawingSurfaceInfo();
             return new WinNativeGraphics((DrawingSurfaceInfo) localObject);
         }
-
         throw new QTUnknownOSException();
     }
 
+    /**
+     * This method is called by a Java container object to get the platform specific object that
+     * will be able to return the QDGraphics that will be dependent on the particular
+     * platform and Java environment that we are currently running on.
+     * @return the platform specific implementation of the NativeGrapics class
+     * @return {@link quicktime.qd.NativeGraphicsException}
+     * @return {@link quicktime.QTUnknownOSException}
+     */
     public static final NativeGraphics getContext(Object paramObject) throws NativeGraphicsException, QTUnknownOSException {
         Class<?> localClass = paramObject.getClass();
         String str = localClass.getName();
@@ -52,10 +67,8 @@ public abstract class NativeGraphics {
             str = localClass.getName();
             localClass = localClass.getSuperclass();
         }
-
         if (str.equals("java.awt.Component")) {
             ComponentPeer localComponentPeer = ((Component) paramObject).getPeer();
-
             if (localComponentPeer == null)
                 throw new NativeGraphicsException("AWT drawing environment is not initialised");
             Object localObject;
@@ -71,10 +84,8 @@ public abstract class NativeGraphics {
                 localObject = ((DrawingSurface) localComponentPeer).getDrawingSurfaceInfo();
                 return new WinNativeGraphics((DrawingSurfaceInfo) localObject);
             }
-
             throw new QTUnknownOSException();
         }
-
         throw new NativeGraphicsException("Unknown Native Context");
     }
 
@@ -91,6 +102,10 @@ public abstract class NativeGraphics {
         this.jnidrawingsurfaceinfo = paramWinJNIDrawingSurface;
     }
 
+    /**
+     * This returns the QDGraphics that represents the native drawing surface
+     * that you get from java.
+     */
     public abstract QDGraphics getGWorld() throws NativeGraphicsException;
 
     abstract int _getWindow() throws NativeGraphicsException;
@@ -102,6 +117,9 @@ public abstract class NativeGraphics {
         return this.dsi.getBounds().getLocation();
     }
 
+    /**
+     * This will lock the native drawing surface.
+     */
     public void lock() {
         if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
             this.jnidrawingsurfaceinfo.lock();
@@ -110,6 +128,9 @@ public abstract class NativeGraphics {
         }
     }
 
+    /**
+     * This will unlock the native drawing surface.
+     */
     public void unlock() {
         if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
             this.jnidrawingsurfaceinfo.unlock();
@@ -123,7 +144,6 @@ public abstract class NativeGraphics {
         super.finalize();
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/
  * NativeGraphics.class

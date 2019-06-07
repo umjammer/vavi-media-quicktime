@@ -1,9 +1,7 @@
-
 package quicktime.util;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -12,16 +10,32 @@ import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 
-
+/**
+ * A QTPointerRef is a "smart" pointer in that it can be either a Reference to a pointer
+ * which is not disposable, or it can be a real "independent" pointer which is
+ * automatically disposed on finalization.This class is used as a generic base class for pointer based objects. See QTHandle
+ * for a user-level pointer object.
+ *
+ * The default setting is for the Ptr to be disposable - you must use the
+ * QTPointerRef(int, int, Object) constructor to create a non-disposable reference
+ * For non-disposable Pointers there are two situations to look out for:
+ * (1) Upon finalization the pointer should NOT be disposed - it belongs to a parent struct
+ * (2) The parent object from which the pointer is obtained should not be allowed to
+ * go away whilst the reference object is alive.
+ * In both situations we must maintain a reference to the parent or owner object.
+ */
 public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLib, InterfaceLib {
+
     private static Object linkage;
 
     private transient int size;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QTPointerRef.class);
                     }
@@ -47,6 +61,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         return i;
     }
 
+    /**
+     * Returns the size of the QTPionter
+     */
     public int getSize() {
         return this.size;
     }
@@ -135,6 +152,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         copyArrayToPointer(paramArrayOfDouble, paramInt2 * 8, _ID(), paramInt1, paramInt3 * 8);
     }
 
+    /**
+     * A String representation of the class.
+     */
     public String toString() {
         return super.toString() + "[size=" + getSize() + "]";
     }
@@ -146,7 +166,6 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         } catch (UtilException localUtilException) {
             throw new QTRuntimeException(localUtilException);
         }
-
         BlockMove(_ID() + paramInt1, i, this.size);
         return i;
     }
@@ -201,8 +220,7 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
 
     protected int strlen(int paramInt) {
         int i = 0;
-        while (getByteAt(paramInt++) != 0)
-            i++;
+        while (getByteAt(paramInt++) != 0) i++;
         return i;
     }
 
@@ -213,7 +231,6 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         }
         byte[] arrayOfByte = new byte[i];
         getBytesAt(paramInt, i, arrayOfByte, 0);
-
         return new String(arrayOfByte);
     }
 
@@ -234,7 +251,6 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         }
         byte[] arrayOfByte = new byte[i];
         getBytesAt(paramInt, i, arrayOfByte, 0);
-
         return new String(arrayOfByte);
     }
 
@@ -244,7 +260,6 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
             throw new UtilException(-50);
         }
         setByteAt(paramInt1++, (byte) paramInt2);
-
         byte[] arrayOfByte = paramString.getBytes();
         setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
     }
@@ -257,89 +272,33 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
 
     private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  byte[] paramArrayOfByte,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  short[] paramArrayOfShort,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, short[] paramArrayOfShort, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  char[] paramArrayOfChar,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, char[] paramArrayOfChar, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  int[] paramArrayOfInt,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  float[] paramArrayOfFloat,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  long[] paramArrayOfLong,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4);
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  double[] paramArrayOfDouble,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyPointerToArray(int paramInt1, int paramInt2, double[] paramArrayOfDouble, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(byte[] paramArrayOfByte,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(short[] paramArrayOfShort,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(short[] paramArrayOfShort, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(char[] paramArrayOfChar,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(char[] paramArrayOfChar, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(int[] paramArrayOfInt,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(float[] paramArrayOfFloat,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(float[] paramArrayOfFloat, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(long[] paramArrayOfLong,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(long[] paramArrayOfLong, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
-    private static native void copyArrayToPointer(double[] paramArrayOfDouble,
-                                                  int paramInt1,
-                                                  int paramInt2,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static native void copyArrayToPointer(double[] paramArrayOfDouble, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 
     private static native byte getByteFromPointer(int paramInt1, int paramInt2);
 
@@ -365,7 +324,6 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
 
     private static native void setDoubleInPointer(int paramInt1, int paramInt2, double paramDouble);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
  * QTPointerRef.class

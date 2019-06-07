@@ -1,7 +1,12 @@
-
 package quicktime.io;
 
+/**
+ * This class represents all of the constants in the QuickTime interface.
+ * ALL constants except for constants that start with an acronym, such as MPEG, ...
+ * start with a small letter (not a capital one)
+ */
 public abstract interface IOConstants {
+
     public static final int smSystemScript = -1;
 
     public static final int smCurrentScript = -2;
@@ -346,7 +351,6 @@ public abstract interface IOConstants {
 
     public static final int langAfricaans = 141;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/io/
  * IOConstants.class

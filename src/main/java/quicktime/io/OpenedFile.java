@@ -1,17 +1,19 @@
-
 package quicktime.io;
 
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 
-
+/**
+ * This class represents an OpenedFile. Subclasses define the type
+ * of file open procedures that are used
+ */
 public abstract class OpenedFile extends QTObject implements QuickTimeLib {
+
     private static Object linkage;
 
     private static final byte rPerm = 1;
@@ -24,8 +26,10 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
 
     static {
         class PrivelegedAction {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(OpenedFile.class);
                     }
@@ -47,10 +51,7 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         } catch (IOException localIOException) {
             throw new QTIOException(localIOException.getMessage());
         }
-
-        short[] arrayOfShort = {
-            0
-        };
+        short[] arrayOfShort = { 0 };
         byte b = 0;
         if ((paramInt1 & 0x100) != 0) {
             b = 1;
@@ -81,6 +82,11 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         return this.f;
     }
 
+    /**
+     * This method closes an open stream and the associated movie file.
+     * QuickTime::CloseMovieFile()
+     * QuickTime::FSClose()
+     */
     public final void close() throws QTIOException {
         if (this.closed)
             return;
@@ -110,7 +116,6 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
 
     private static native short FSClose(short paramShort);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/io/
  * OpenedFile.class

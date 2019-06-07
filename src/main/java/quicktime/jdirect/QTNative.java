@@ -1,10 +1,9 @@
-
 package quicktime.jdirect;
 
 import quicktime.QTSession;
 
-
 public final class QTNative {
+
     public static Object linkNativeMethods(Class<?> paramClass) {
         if (QTSession.isCurrentOS(2)) {
             JDirectLinker.linkNativeMethods(paramClass);
@@ -61,7 +60,6 @@ public final class QTNative {
         if (QTSession.isCurrentOS(4)) {
             return null;
         }
-
         throw new UnsatisfiedLinkError("Unknown OS");
     }
 
@@ -98,6 +96,12 @@ public final class QTNative {
         throw new UnsatisfiedLinkError("Unknown OS");
     }
 
+    /**
+     * This object is a global lock that must be grabbed through a synchronized (..) call
+     * before any global value in the Sytsem (such as the current graf port) is set.
+     * This ensures that global variables can only be written to (and read) by a single
+     * thread of execution at one time.
+     */
     public static final Object globalsLock = null;
 
     private static Object _lock;

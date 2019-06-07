@@ -1,24 +1,33 @@
-
 package quicktime.std.movies.media;
 
 import quicktime.QTException;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianFlipSpec;
 
-
+/**
+ * This class maps the SpriteDescription record of the MovieToolbox.
+ * SpriteDescription are used when adding and getting media samples to/from Sprite tracks.
+ */
 public final class SpriteDescription extends SampleDescription {
+
+    /**
+     * This is the size (the number of bytes) that are required for this class
+     */
     public static final int kNativeSize = 28;
 
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-
         EndianFlipSpec localEndianFlipSpec = new EndianFlipSpec(16, 4, 3);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec);
         return localEndianDescriptor;
     }
 
+    /**
+     * Returns the EndianDescriptor for this class.
+     * @return an EndianDescriptor
+     */
     public static EndianDescriptor getEndianDescriptor() {
         if (ed == null)
             ed = makeED();
@@ -33,6 +42,9 @@ public final class SpriteDescription extends SampleDescription {
         super(paramInt, null, false);
     }
 
+    /**
+     * Implementation of Cloneable Interface.
+     */
     public Object clone() {
         return new SpriteDescription(makeAndCopyHandle());
     }
@@ -61,7 +73,6 @@ public final class SpriteDescription extends SampleDescription {
         return getIntAt(24);
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
  * movies/media/SpriteDescription.class

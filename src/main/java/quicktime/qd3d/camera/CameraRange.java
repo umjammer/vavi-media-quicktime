@@ -1,10 +1,8 @@
-
 package quicktime.qd3d.camera;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.util.EndianDescriptor;
@@ -12,8 +10,18 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.UtilException;
 
-
+/**
+ * CameraRange contains information for the camera's range.
+ * Includes the distance to the nearest projection plane, hither plane,
+ * and the distance to the farthest projection plane, yon plane.
+ *
+ * Refer to TQ3CameraRange in QuickDraw3d
+ */
 public final class CameraRange extends QTByteObject implements Cloneable {
+
+    /**
+     * This is the size (the number of bytes) that are required for this class
+     */
     public static final int kNativeSize = 8;
 
     static final long serialVersionUID = -4968315887114751172L;
@@ -24,17 +32,26 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         }
     }
 
+    /**
+     * Returns the EndianDescriptor for this class.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
+    /**
+     * Creates a CameraRange object containing no data.
+     */
     public CameraRange() {
         super(8);
     }
 
+    /**
+     * Creates a CameraRange object containing given data.
+     */
     public CameraRange(float paramFloat1, float paramFloat2) {
         this();
-
         setHither(paramFloat1);
         setYon(paramFloat2);
     }
@@ -45,16 +62,13 @@ public final class CameraRange extends QTByteObject implements Cloneable {
 
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
-
         CameraRange localCameraRange = new CameraRange();
-
         paramObjectInputStream.read(localCameraRange.getBytes());
         try {
             EndianOrder.flipBigEndianToNative(localCameraRange, 0, getEndianDescriptor());
         } catch (UtilException localUtilException) {
             localUtilException.printStackTrace();
         }
-
         System.arraycopy(localCameraRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
@@ -65,31 +79,44 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         } catch (UtilException localUtilException) {
             localUtilException.printStackTrace();
         }
-
         paramObjectOutputStream.write(localCameraRange.getBytes());
     }
 
+    /**
+     * returns the camera range's distance away from the hither plane.
+     */
     public float getHither() {
         return getFloatAt(0);
     }
 
+    /**
+     * returns the camera range's distance away from the yon plane.
+     */
     public float getYon() {
         return getFloatAt(4);
     }
 
+    /**
+     * sets the camera range's distance away from the hither plane.
+     */
     public void setHither(float paramFloat) {
         setFloatAt(0, paramFloat);
     }
 
+    /**
+     * sets the camera range's distance away from the yon plane.
+     */
     public void setYon(float paramFloat) {
         setFloatAt(4, paramFloat);
     }
 
+    /**
+     * Returns a copy of this class.
+     */
     public Object clone() {
         return new CameraRange(getBytes());
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/
  * camera/CameraRange.class

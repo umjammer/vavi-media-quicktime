@@ -1,4 +1,3 @@
-
 package quicktime;
 
 import java.awt.Component;
@@ -26,16 +25,45 @@ import sun.awt.DrawingSurface;
 import sun.awt.DrawingSurfaceInfo;
 import sun.awt.Win32DrawingSurface;
 
-
+/**
+ * This class will check if QT is present and provides calls for enterMovies.
+ * This essentially does any initialisation that QT requires.
+ *
+ * QTSession.open will intialize QuickTime, do a gestalt check and call enterMovies. Calls
+ * to the initialize routine are accumulative - thus if your code calls QTSession.open (which calls
+ * QTSession.initialize) and/or QTSession.initialize, the current session of QuickTime will only
+ * be closed down when it gets the same number of calls to QTSession.close (which calls QTSession.terminate)
+ * and/or QTSession.terminate.
+ *
+ * A typical usage of QTSession calls by an application, applet or bean is: (this gives the applet version)
+ *
+ * public class MyApplet extends Applet {
+ * public void init () {
+ * try {
+ * QTSession.open();
+ * ...
+ * } catch (QTException e) {
+ * }
+ * }
+ *
+ * public void destroy () {
+ * QTSession.close();
+ * }
+ * }
+ *
+ * Thus the applet initializes the QTSession in its init method and closes it down in its destroy method.
+ * This ensures that if you have other applets (or beans, etc) that are running in the same process that
+ * the QuickTime session will only be terminated when all of the current Java QTSessions in that process
+ * have been destroyed.
+ */
 public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3DLib {
+
     private static Object linkage;
 
     static {
-
         if ((isCurrentOS(4)) && (getJavaVersion() >= 65540)) {
             Toolkit.getDefaultToolkit();
         }
-
         if (isCurrentOS(2)) {
             if (QuickTimeLib.libraryInstance == null) {
                 throw new UnsatisfiedLinkError("QuickTimeLib");
@@ -49,18 +77,17 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             if (SoundLib.libraryInstance == null) {
                 throw new UnsatisfiedLinkError("SoundLib");
             }
-
             if (System.getSecurityManager() != null) {
                 if (getJavaVersion() == 65537) {
                     if (WinJNINative.DoSecurityInit() != 0) {
                         throw new SecurityException("quicktime.QTSession");
-
                     }
-
                 } else {
                     class PrivelegedAction {
+
                         void establish() {
                             AccessController.doPrivileged(new PrivilegedAction<Void>() {
+
                                 public Void run() {
                                     System.setProperty("restrict.package.definition.quicktime", "true");
                                     return null;
@@ -72,10 +99,11 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                 }
             }
         }
-
         class PrivelegedAction {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QTSession.class);
                     }
@@ -94,12 +122,9 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             }
             int j = Character.getNumericValue(str1.charAt(i));
             jVersion = j << 16;
-
             int k = 0;
-
             if (str1.length() > i + 1) {
                 i++;
-
                 while ((str1.length() > i) && (!Character.isDigit(str1.charAt(i)))) {
                     i++;
                 }
@@ -107,12 +132,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                     k = Character.getNumericValue(str1.charAt(i));
                 }
             }
-
             jVersion |= k;
             if ((j < 1) || ((j == 1) && (k < 1))) {
                 throw new QTRuntimeException("QTJava requires Java Version 1.1 or greater");
             }
-
             String str2 = System.getProperty("java.vendor");
             String str3 = System.getProperty("os.name");
             if (isCurrentOS(2)) {
@@ -122,7 +145,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             } else if (!str2.startsWith("Apple ")) {
                 throw new QTRuntimeException("QTJava requires Apple Java VM 1.1 or greater");
             }
-
             doneVMCheck = true;
         }
     }
@@ -149,22 +171,46 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     private static Class theClass = null;
 
+    /**
+     * The list of currently supported operating systems for QTJava.
+     */
     public static final int kMacOS = 1;
 
+    /**
+     * The list of currently supported operating systems for QTJava.
+     */
     public static final int kWin32 = 2;
 
+    /**
+     * The list of currently supported operating systems for QTJava.
+     */
     public static final int kMacOSX = 4;
 
+    /**
+     * Flags that can be passed in to the open call to also initialise these environments.
+     */
     public static final int kInitVR = 1;
 
+    /**
+     * Flags that can be passed in to the open call to also initialise these environments.
+     */
     public static final int kInit3D = 2;
 
+    /**
+     * Return the Java version in the format of:0xVVVVSSSS.
+     * @return an int
+     */
     public static int getJavaVersion() {
         if (jVersion == 0)
             doVMCheck();
         return jVersion;
     }
 
+    /**
+     * To check if the class has been registered and is signed.
+     * @return true if applet is signed and registered.
+     *  Returns false if a signedClass has not been registered with the QTSession.initialize or open methods.
+     */
     public static boolean isClassSigned() {
         if (theClass != null) {
             Object[] arrayOfObject = theClass.getSigners();
@@ -185,6 +231,9 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         return false;
     }
 
+    /**
+     * @return true if program is able to run in FullScreen mode.
+     */
     public static boolean canDoFullScreen() {
         if (System.getSecurityManager() != null) {
             return (isClassSigned()) || (System.getSecurityManager().checkTopLevelWindow(new Frame()));
@@ -192,13 +241,18 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         return true;
     }
 
+    /**
+     * This method returns true if the passed in OS name is the OS upon which the current session of QuickTime
+     * is running.
+     * @param osName the osName of the system that you want to find out if you are running on.
+     * @return true if the current OS is the one as passed in or false if not.
+     */
     public static boolean isCurrentOS(int paramInt) {
         if (osConstant <= 0) {
             if (osConstant == -1) {
                 return false;
             }
             String str = System.getProperty("os.name");
-
             if ((str.regionMatches(false, 0, "Darwin", 0, 6)) || (str.regionMatches(false, 0, "Mac OS X", 0, 8))) {
                 osConstant = 4;
             } else if (str.regionMatches(false, 0, "Mac", 0, 3)) {
@@ -212,24 +266,51 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         return (paramInt & osConstant) != 0;
     }
 
+    /**
+     * This call will return true if the QuickTime Session has been initialized, otherwise false.
+     * An application should acquire the termination lock if it is possible that the QTSession has
+     * been terminated or could be terminated whilst this query is being processed.
+     *
+     * synchronized (QTSession.terminationLock()) {
+     * if (QTSession.isInitialized()) {
+     * //...
+     * }
+     * }
+     *
+     * @return true if still initialized
+     */
     public static boolean isInitialized() {
         return initDone != 0;
     }
 
+    /**
+     * This call will return true if the QuickTime Session has been initialized, otherwise false.
+     */
     public static boolean isVRInitialized() {
         return vrinitialized;
     }
 
+    /**
+     * This call will return true if the QuickTime Session has been initialized, otherwise false.
+     */
     public static boolean is3DInitialized() {
         return threeDInitialised;
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QT environment.
+     * If you use this call (and not the open calls) then you should also ensure that you check
+     * that QT is present through the gestalt call and call enterMovies to initialize the
+     * movie toolbox.
+     * QuickTime::InitializeQTML()
+     * @param flag flag that are valid for this call.
+     * @param {@link quicktime.QTException}
+     */
     public static void initialize(int paramInt) throws QTException {
         initialize(paramInt, null);
     }
 
     public static void initialize(int paramInt, Class paramClass) throws QTException {
-
         synchronized (terminationLock()) {
             if (initDone == 0) {
                 if (paramClass != null) {
@@ -240,7 +321,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                 if (isCurrentOS(2)) {
                     int i = InitializeQTML(paramInt);
                     QTException.checkError(i);
-
                     try {
                         Class.forName("java.awt.Frame");
                         if (dispatchFrame == null) {
@@ -252,24 +332,13 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                     } catch (ClassNotFoundException localClassNotFoundException) {
                     }
                 }
-
                 QTObject.qtIsNOTInitialized = false;
                 initDone = 1;
                 sessionID += 1;
-
                 if (!firstTime) {
-                    QDGraphics.scratch = new QDGraphics(QDGraphics.kDefaultPixelFormat,
-                                                        new QDRect(1, 1),
-                                                        null,
-                                                        GDevice.getMain(),
-                                                        2);
-                    QDGraphics.validScratch = new QDGraphics(QDGraphics.kDefaultPixelFormat,
-                                                             new QDRect(1, 1),
-                                                             null,
-                                                             GDevice.getMain(),
-                                                             2);
+                    QDGraphics.scratch = new QDGraphics(QDGraphics.kDefaultPixelFormat, new QDRect(1, 1), null, GDevice.getMain(), 2);
+                    QDGraphics.validScratch = new QDGraphics(QDGraphics.kDefaultPixelFormat, new QDRect(1, 1), null, GDevice.getMain(), 2);
                 }
-
                 if ((isCurrentOS(1)) && (macQuitter == null))
                     macQuitter = new MacDoQuit();
             } else {
@@ -279,6 +348,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     }
 
     static class QTFrame extends Frame {
+
         int HWND = 0;
 
         public void addNotify() {
@@ -295,7 +365,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                 ((DrawingSurfaceInfo) localObject).lock();
                 this.HWND = ((Win32DrawingSurface) ((DrawingSurfaceInfo) localObject).getSurface()).getHWnd();
                 ((DrawingSurfaceInfo) localObject).unlock();
-
                 QTSession.CreatePortAssociation(this.HWND, 0, 258);
             }
         }
@@ -313,7 +382,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     }
 
     private static void JQTinitialize() throws QTException {
-
         synchronized (terminationLock()) {
             if (qtjwiredDebug)
                 System.out.println("JQTinitialize...");
@@ -321,7 +389,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                 if (isCurrentOS(2)) {
                     hWnd = WinJNINative.GetHWND();
                 }
-
                 int i = gestalt(1903454573);
                 qtPresent = true;
                 version = i;
@@ -331,7 +398,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                     JQTterminate();
                     throw new QTException("Version of QuickTime not found");
                 }
-
                 QTObject.qtIsNOTInitialized = false;
                 initDone = 1;
                 sessionID += 1;
@@ -339,18 +405,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                     System.out.println("scratch depth 0x" + Integer.toHexString(QDGraphics.kDefaultPixelFormat));
                 }
                 if (!firstTime) {
-                    QDGraphics.scratch = new QDGraphics(QDGraphics.kDefaultPixelFormat,
-                                                        new QDRect(1, 1),
-                                                        null,
-                                                        GDevice.getMain(),
-                                                        2);
+                    QDGraphics.scratch = new QDGraphics(QDGraphics.kDefaultPixelFormat, new QDRect(1, 1), null, GDevice.getMain(), 2);
                     if (qtjwiredDebug)
                         System.out.println("validScratch depth 0x" + Integer.toHexString(QDGraphics.kDefaultPixelFormat));
-                    QDGraphics.validScratch = new QDGraphics(QDGraphics.kDefaultPixelFormat,
-                                                             new QDRect(1, 1),
-                                                             null,
-                                                             GDevice.getMain(),
-                                                             2);
+                    QDGraphics.validScratch = new QDGraphics(QDGraphics.kDefaultPixelFormat, new QDRect(1, 1), null, GDevice.getMain(), 2);
                 }
                 if (qtjwiredDebug)
                     System.out.println("JQTinitialized");
@@ -370,12 +428,15 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     static int sessionID;
 
+    /**
+     * This call will initialize QTVR. It must be called before any of the QTVR API calls are made.
+     * QuickTime::InitializeQTVR()
+     */
     public static void initializeVR() throws QTException {
         if (!isInitialized())
             initialize(0);
         if (!vrinitialized) {
             JQTinitializeVR();
-
             if (isCurrentOS(2)) {
                 int i = InitializeQTVR();
                 QTException.checkError(i);
@@ -403,25 +464,59 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         threeDInitialised = true;
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QTML environment.
+     * This will ensure that any required initialisations are performed,
+     * and that the required version of QuickTime is present. The minimal
+     * version of QT that is required is version 3.
+     * This will also call EnterMovies.
+     * QuickTime::InitializeQTML()
+     * QuickTime::Gestalt()
+     * QuickTime::EnterMovies()
+     */
     public static void open() throws QTException {
         open(3, 0, 0);
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QTML environment.
+     * This will ensure that any required initialisations are performed,
+     * and that the required version of QuickTime is present. The minimal
+     * version of QT that is required is version 3. You can set the initialisation options
+     * to also have this call initialise QuickTimeVR and/or QuickDraw3D.
+     * @param initFlag can also initialise VR or 3D.
+     *  This will also call EnterMovies.
+     *  QuickTime::InitializeQTML()
+     *  QuickTime::Gestalt()
+     *  QuickTime::EnterMovies()
+     * @param {@link quicktime.QTException}
+     */
     public static void open(int paramInt) throws QTException {
         open(3, 0, paramInt);
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QTML environment.
+     * You can optionally open a session where the specified minimal
+     * version and minorVersion of QT must be present or an exception will be
+     * thrown.
+     * This will also call EnterMovies for you.
+     * QuickTime::InitializeQTML()
+     * QuickTime::Gestalt()
+     * QuickTime::EnterMovies()
+     * @param minorVersion the minimal minorVersion of QT that must be present
+     * @param initFlag can also initialise VR or 3D.
+     * @param {@link quicktime.QTException}
+     */
     public static void open(int paramInt1, int paramInt2, int paramInt3) throws QTException {
         initialize(0);
         int i = gestalt(1903454573);
         qtPresent = true;
         version = i;
         if ((getMajorVersion() < paramInt1) || ((getMajorVersion() == paramInt1) && (getMinorVersion() < paramInt2))) {
-
             close();
             throw new QTException("Version of QuickTime not found");
         }
-
         enterMovies();
         enterCalled = true;
         if ((0x1 & paramInt3) != 0)
@@ -445,7 +540,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         qtPresent = true;
         version = i;
         if ((getMajorVersion() < paramInt1) || ((getMajorVersion() == paramInt1) && (getMinorVersion() < paramInt2))) {
-
             close();
             throw new QTException("Version of QuickTime not found");
         }
@@ -458,6 +552,14 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         }
     }
 
+    /**
+     * This call will close down the QTML environment, VR and QD3D. This
+     * will mean that the QTML environment will need to be reinitialised before it can be
+     * used again.
+     * This call should not be called from one of the quicktime.app.time.TaskThread objects
+     * as a side effect of this call is stopping all thread that belong to the TaskThread group.
+     * QuickTime::TerminateQTML()
+     */
     public static void terminate() {
         if (initDone > 1) {
             initDone -= 1;
@@ -465,22 +567,18 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             removeAllCanvases();
             TaskThread.killAllThreads();
             QTUtils.reclaimMemory();
-
             synchronized (terminationLock()) {
-
                 QTObject.qtIsNOTInitialized = true;
                 initDone = 0;
                 synchronized (QTNative.globalsLock) {
                     QTObjectManagement.removeAll();
                 }
-
                 terminateVR();
                 terminate3D();
                 if (enterCalled) {
                     exitMovies();
                     enterCalled = false;
                 }
-
                 if (!firstTime) {
                     QDGraphics.scratch = null;
                     QDGraphics.validScratch = null;
@@ -495,10 +593,8 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                         ((Frame) dispatchFrame).dispose();
                         dispatchFrame = null;
                     }
-
                     TerminateQTML();
                 }
-
                 theClass = null;
             }
         }
@@ -513,11 +609,9 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             removeAllCanvases();
             TaskThread.killAllThreads();
             QTUtils.reclaimMemory();
-
             synchronized (terminationLock()) {
                 QTObject.qtIsNOTInitialized = true;
                 initDone = 0;
-
                 QTObjectManagement.removeAll();
                 if (qtjwiredDebug) {
                     System.out.println("After RemoveAll");
@@ -535,23 +629,30 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                         hWnd = 0;
                     }
                 }
-
                 theClass = null;
                 vrinitialized = false;
             }
-
             if (qtjwiredDebug) {
                 System.out.println(" JQTterminated");
             }
         }
     }
 
+    /**
+     * This returns an object that can be synchronized against for termination checking.
+     * @see isInitialised
+     */
     public static Object terminationLock() {
         return termLock;
     }
 
     private static final Object termLock = new Object();
 
+    /**
+     * This call will terminate QTVR. You cannot call QTVR API's after you make this call unless you
+     * reinitialize QTVR first. QTSession.close will terminate VR if it has been initialized.
+     * QuickTime::TerminateQTVR()
+     */
     public static void terminateVR() {
         if (vrinitialized) {
             QTUtils.reclaimMemory();
@@ -561,6 +662,11 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         }
     }
 
+    /**
+     * This call will terminate QuickDraw3D. You cannot call QD3D API's after you make this call unless you
+     * reinitialize QD3D first. QTSession.close will terminate 3D if it has been initialized.
+     * QuickTime::Q3Exit()
+     */
     public static void terminate3D() {
         if (threeDInitialised) {
             QTUtils.reclaimMemory();
@@ -569,6 +675,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         }
     }
 
+    /**
+     * Determine whether it is safe to call a QuickDraw 3D API.
+     * QuickTime::Gestalt(gestaltQD3D,result)
+     */
     public static boolean isQD3DAvailable() throws QTException {
         if (!isCurrentOS(4)) {
             try {
@@ -581,6 +691,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         return false;
     }
 
+    /**
+     * Determine whether it is safe to call a QuickTime VR API.
+     * QuickTime::Gestalt(gestaltQTVRMgrAttr,result)
+     */
     public static boolean isQTVRAvailable() throws QTException {
         try {
             int i = gestalt(1903457906);
@@ -591,17 +705,26 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         return false;
     }
 
+    /**
+     * This call will do a gestalt check. If you are on a non-Macintosh machine this
+     * call will also initialise QTML if that has not already been done.
+     * It will return the result value if the gestalt check is successful,
+     * QuickTime::Gestalt()
+     * @param selector the selector code for the information you need.
+     * @param {@link quicktime.QTException}
+     */
     public static final int gestalt(int paramInt) throws QTException {
-        int[] arrayOfInt = {
-            0
-        };
+        int[] arrayOfInt = { 0 };
         int i = Gestalt(paramInt, arrayOfInt);
         QTException.checkError(i);
         return arrayOfInt[0];
     }
 
+    /**
+     * Before you call any Movie Toolbox functions, you must initialize the toolbox
+     * QuickTime::EnterMovies()
+     */
     public static final void enterMovies() throws QTException {
-
         synchronized (QTNative.globalsLock) {
             if ((isCurrentOS(4)) && (getQTVersion() >= 104857600)) {
                 setJavaThreadHook();
@@ -610,30 +733,51 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         }
     }
 
+    /**
+     * This contains the version of QuickTime that is currently present
+     */
     public static final int getMajorVersion() {
         return (version & 0xF000000) >> 24;
     }
 
+    /**
+     * This returns the sub version of QuickTime that is currently present
+     */
     public static final int getMinorVersion() {
         return (version & 0xF00000) >> 20;
     }
 
+    /**
+     * This returns the sub version of QuickTime that is currently present
+     */
     public static final int getBugFixVersion() {
         return (version & 0xF0000) >> 16;
     }
 
+    /**
+     * This returns the sub version of QuickTime that is currently present
+     */
     public static final int getDeveloperVersion() {
         return version & 0xFFFF;
     }
 
+    /**
+     * This returns the complete version number of QuickTime
+     */
     public static int getQTVersion() {
         return version;
     }
 
+    /**
+     * This returns the major version of QuickTime
+     */
     public static int getQTMajorVersion() {
         return (version & 0xFF000000) >>> 24;
     }
 
+    /**
+     * This returns the minor version of QuickTime
+     */
     public static int getQTMinorVersion() {
         return (version & 0xFF0000) >>> 16;
     }
@@ -642,14 +786,16 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     static boolean isQTCanvas(Object paramObject) {
         Class<?> localClass = paramObject.getClass();
-        while ((localClass != null) && ((localClass.getName().equals("quicktime.app.view.QTJavaAWTCanvas"))
-                                        || (localClass.getName().equals("quicktime.app.view.QTJavaCocoaCanvas")))) {
+        while ((localClass != null) && ((localClass.getName().equals("quicktime.app.view.QTJavaAWTCanvas")) || (localClass.getName().equals("quicktime.app.view.QTJavaCocoaCanvas")))) {
             localClass = localClass.getSuperclass();
         }
-
         return localClass != null;
     }
 
+    /**
+     * Adds a canvas to a registry of active canvases. You should not need to
+     * call this method.
+     */
     public static void addActiveCanvas(Object paramObject) {
         if (!isQTCanvas(paramObject))
             return;
@@ -658,6 +804,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         canvases.addElement(paramObject);
     }
 
+    /**
+     * Removes a canvas from a registry of active canvases. You should not need to
+     * call this method.
+     */
     public static void removeActiveCanvas(Object paramObject) {
         canvases.removeElement(paramObject);
     }
@@ -665,14 +815,25 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     private static void removeAllCanvases() {
         while (canvases.size() > 0) {
             Component localComponent = (Component) canvases.elementAt(0);
-
             removeActiveCanvas(localComponent);
         }
     }
 
+    /**
+     * This call will close down the QTML environment.
+     * This call should not be called from one of the quicktime.app.time.TaskThread objects
+     * as a side effect of this call is stopping all thread that belong to the TaskThread group.
+     * @see terminate
+     */
     public static void close() {
     }
 
+    /**
+     * QuickTime calls the ExitMovies function automatically when your application quits -
+     * you only need to call thi function if you finish with the Movie Toolbox long
+     * before your application is ready to quit.
+     * QuickTime::ExitMovies()
+     */
     public static final void exitMovies() {
     }
 
@@ -703,7 +864,6 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     private static native void SetJavaThreadCallbackProc();
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/QTSession
  * .class

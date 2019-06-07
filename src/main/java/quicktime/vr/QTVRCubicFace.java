@@ -1,24 +1,25 @@
-
 package quicktime.vr;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.qd.QDPoint;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.QTByteObject;
 
-
 public final class QTVRCubicFace extends QTByteObject implements Cloneable {
+
     private static final int kNativeSize = 32;
 
     private static EndianDescriptor ed;
 
     static final long serialVersionUID = 5183605583657368208L;
 
+    /**
+     * Creates a QTVRCubicFace object containing no data
+     */
     public QTVRCubicFace() {
         super(32);
     }
@@ -61,70 +62,113 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
         }
     }
 
+    /**
+     * returns the orientationW
+     */
     public float getOrientationW() {
         return getFloatAt(0);
     }
 
+    /**
+     * set the orientationW
+     */
     public void setOrientationW(float paramFloat) {
         setFloatAt(0, paramFloat);
     }
 
+    /**
+     * returns the orientationX
+     */
     public float getOrientationX() {
         return getFloatAt(4);
     }
 
+    /**
+     * set the orientationX
+     */
     public void setOrientationX(float paramFloat) {
         setFloatAt(4, paramFloat);
     }
 
+    /**
+     * returns the orientationY
+     */
     public float getOrientationY() {
         return getFloatAt(8);
     }
 
+    /**
+     * set the orientationY
+     */
     public void setOrientationY(float paramFloat) {
         setFloatAt(8, paramFloat);
     }
 
+    /**
+     * returns the orientationZ
+     */
     public float getOrientationZ() {
         return getFloatAt(12);
     }
 
+    /**
+     * set the orientationZ
+     */
     public void setOrientationZ(float paramFloat) {
         setFloatAt(12, paramFloat);
     }
 
+    /**
+     * returns the center
+     */
     public QDPoint getCenter() {
         return new QDPoint(getFloatAt(16), getFloatAt(20));
     }
 
+    /**
+     * set the center
+     */
     public void setCenter(QDPoint paramQDPoint) {
         setFloatAt(16, paramQDPoint.getXF());
         setFloatAt(20, paramQDPoint.getYF());
     }
 
+    /**
+     * aspect>1 => tall pixels; aspect <1 => squat pixels (default = 1)
+     */
     public float getAspect() {
         return getFloatAt(24);
     }
 
+    /**
+     * aspect>1 => tall pixels; aspect <1 => squat pixels (default = 1)
+     */
     public void setAspect(float paramFloat) {
         setFloatAt(24, paramFloat);
     }
 
+    /**
+     * returns the skew
+     */
     public float getSkew() {
         return getFloatAt(28);
     }
 
+    /**
+     * set the skew
+     */
     public void setSkew(float paramFloat) {
         setFloatAt(28, paramFloat);
     }
 
+    /**
+     * Returns a string representation of this object.
+     * @return a String
+     */
     public String toString() {
-        return getClass().getName() + "[orientation W=" + getOrientationW() + ",X=" + getOrientationX() + ",Y="
-               + getOrientationY() + ",Z=" + getOrientationZ() + ",center=" + getCenter() + ",aspect=" + getAspect() + ",skew="
-               + getSkew() + "]";
+        return getClass().getName() + "[orientation W=" + getOrientationW() + ",X=" + getOrientationX() + ",Y=" + getOrientationY() + ",Z=" + getOrientationZ() + ",center=" + getCenter() + ",aspect=" + getAspect() + ",skew=" + getSkew() + "]";
     }
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
  * QTVRCubicFace.class

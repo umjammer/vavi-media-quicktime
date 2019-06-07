@@ -1,12 +1,14 @@
-
 package quicktime;
 
 import quicktime.jdirect.QTNative;
 import quicktime.std.clocks.QTCallBack;
 import quicktime.std.movies.media.Media;
 
-
+/**
+ * This is a class that defines an unique identifier for QT objects.
+ */
 public abstract class QTObject {
+
     private static final boolean doSecurityCheck = false;
 
     static boolean qtIsNOTInitialized = true;
@@ -29,16 +31,14 @@ public abstract class QTObject {
         this.ref = paramObject;
         if (paramObject == null) {
             if (paramInt1 == 0)
-                throw new QTNullPointerException("The QT native object represented by this QTJava object is not valid:"
-                                                 + getClass().getName());
+                throw new QTNullPointerException("The QT native object represented by this QTJava object is not valid:" + getClass().getName());
             QTObjectManagement.add(this, this.nativeRep, paramInt2);
         }
     }
 
     protected QTObject(int paramInt1, int paramInt2) {
         if (paramInt1 == 0)
-            throw new QTNullPointerException("The QT native object represented by this QTJava object is not valid:"
-                                             + getClass().getName());
+            throw new QTNullPointerException("The QT native object represented by this QTJava object is not valid:" + getClass().getName());
         _doSC();
         this.nativeRep = paramInt1;
         QTObjectManagement.add(this, this.nativeRep, paramInt2);
@@ -52,15 +52,12 @@ public abstract class QTObject {
 
     protected final int _ID() {
         if ((qtIsNOTInitialized) || (this.nativeRep == 0) || (this.sessionAllocated != QTSession.sessionID)) {
-
             String str = getClass().getName();
             if (qtIsNOTInitialized)
                 throw new QTNullPointerException("QuickTime MUST be initialized:" + str);
             if (this.nativeRep == 0)
-                throw new QTNullPointerException("The QT native object represented by this QTJava object is no longer valid:"
-                                                 + str);
-            throw new QTNullPointerException("This QTJava object was allocated in a previous QTSession and is no longer valid:"
-                                             + str);
+                throw new QTNullPointerException("The QT native object represented by this QTJava object is no longer valid:" + str);
+            throw new QTNullPointerException("This QTJava object was allocated in a previous QTSession and is no longer valid:" + str);
         }
         return this.nativeRep;
     }
@@ -72,8 +69,7 @@ public abstract class QTObject {
     protected final void finalize() throws Throwable {
         try {
             synchronized (this) {
-                if ((QTSession.isInitialized()) && (this.nativeRep != 0) && (this.ref == null)
-                    && (this.sessionAllocated == QTSession.sessionID)) {
+                if ((QTSession.isInitialized()) && (this.nativeRep != 0) && (this.ref == null) && (this.sessionAllocated == QTSession.sessionID)) {
                     if (QTObjectManagement.isMember(this.nativeRep)) {
                         _dispose();
                         synchronized (QTNative.globalsLock) {
@@ -89,6 +85,11 @@ public abstract class QTObject {
         }
     }
 
+    /**
+     * This call will dispose the underlying QuickTime object that is associated with the QTJava object.
+     * After this call the QTJava object is no longer usable and will throw QTRuntimeExceptions to indicate
+     * that the QTJava object's native object has been disposed.
+     */
     public void disposeQTObject() throws QTException {
         try {
             finalize();
@@ -100,6 +101,10 @@ public abstract class QTObject {
     protected void _dispose() throws QTException {
     }
 
+    /**
+     * Indicates whether some other object is equal to this one.
+     * If true, indicates that the two objects refer to the same memory.
+     */
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
@@ -109,6 +114,9 @@ public abstract class QTObject {
         return false;
     }
 
+    /**
+     * A String representation of the class.
+     */
     public String toString() {
         return getClass().getName() + "@" + Integer.toHexString(this.nativeRep);
     }

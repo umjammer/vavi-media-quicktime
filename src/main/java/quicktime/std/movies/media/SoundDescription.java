@@ -1,9 +1,7 @@
-
 package quicktime.std.movies.media;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
@@ -15,18 +13,27 @@ import quicktime.util.QTHandle;
 import quicktime.util.QTHandleRef;
 import quicktime.util.QTUtils;
 
-
+/**
+ * This class maps the SoundDescription record of the MovieToolbox.
+ * SoundDescriptions are used when adding and getting media samples to/from Sound tracks.
+ */
 public final class SoundDescription extends SampleDescription implements QuickTimeLib {
+
     private static Object linkage;
 
+    /**
+     * This is the size (the number of bytes) that are required for this class
+     */
     public static final int kNativeSize = 36;
 
     private static EndianDescriptor ed;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(SoundDescription.class);
                     }
@@ -37,28 +44,31 @@ public final class SoundDescription extends SampleDescription implements QuickTi
 
     protected static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(16, 2, 2);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-
         EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(20, 4, 1);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-
         EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(20, 2, 4);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-
         EndianFlipSpec localEndianFlipSpec4 = new EndianFlipSpec(32, 4, 1);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec4);
-
         return localEndianDescriptor;
     }
 
+    /**
+     * Returns the EndianDescriptor for this class.
+     * @return an EndianDescriptor
+     */
     public static EndianDescriptor getEndianDescriptor() {
         if (ed == null)
             ed = makeED();
         return ed;
     }
 
+    /**
+     * This constructor makes an empty SoundDescription object.
+     * @param format the format of the sound data that the object describes
+     */
     public SoundDescription(int paramInt) throws QTException {
         super(kNativeSize, true, paramInt);
     }
@@ -67,6 +77,9 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         super(paramInt, null, false);
     }
 
+    /**
+     * Implementation of Cloneable Interface.
+     */
     public Object clone() {
         return new SoundDescription(makeAndCopyHandle(), null);
     }
@@ -147,21 +160,44 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         return (int) (QTUtils.Fix2X(getIntAt(32)) + 0.5D);
     }
 
+    /**
+     * Print information about this object.
+     * @return a string representation of this object.
+     */
     public String toString() {
-        return getClass().getName() + "[format=" + QTUtils.fromOSType(getDataFormat()) + ",numChannels=" + getNumberOfChannels()
-               + ",sampleSize=" + getSampleSize() + ",sampleRate=" + getSampleRate() + "]";
+        return getClass().getName() + "[format=" + QTUtils.fromOSType(getDataFormat()) + ",numChannels=" + getNumberOfChannels() + ",sampleSize=" + getSampleSize() + ",sampleRate=" + getSampleRate() + "]";
     }
 
+    /**
+     * Add application specific info to a Sound Description object
+     * QuickTime::AddSoundDescriptionExtension
+     * @param extension a QTHandle containing the info to add to the sound description
+     * @param idType an OSType used to tag the information for later retrieval or removal
+     * @param {@link quicktime.QTException}
+     */
     public void addExtension(QTHandleRef paramQTHandleRef, int paramInt) throws QTException {
         int i = AddSoundDescriptionExtension(_ID(), QTObject.ID(paramQTHandleRef), paramInt);
         StdQTException.checkError(i);
     }
 
+    /**
+     * Remove application specific info from a Sound Description object
+     * QuickTime::RemoveSoundDescriptionExtension
+     * @param idType an OSType identifying the information for removal
+     * @param {@link quicktime.QTException}
+     */
     public void removeExtension(int paramInt) throws QTException {
         int i = RemoveSoundDescriptionExtension(_ID(), paramInt);
         StdQTException.checkError(i);
     }
 
+    /**
+     * Retrieve application specific info from a Sound Description object
+     * QuickTime::GetSoundDescriptionExtension
+     * @param idType an OSType identifying the information for removal
+     * @return a dataref to the Extension
+     * @return {@link quicktime.QTException}
+     */
     public QTHandle getExtension(int paramInt) throws QTException {
         return QTHandle.fromSoundDescription(this, paramInt);
     }
@@ -170,7 +206,6 @@ public final class SoundDescription extends SampleDescription implements QuickTi
 
     private static native short RemoveSoundDescriptionExtension(int paramInt1, int paramInt2);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
  * movies/media/SoundDescription.class

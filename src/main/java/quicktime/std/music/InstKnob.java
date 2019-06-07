@@ -1,19 +1,23 @@
-
 package quicktime.std.music;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
-
+/**
+ * Contains information about state of a knob.
+ */
 public final class InstKnob extends QTByteObject {
+
     private static final int kNativeSize = 8;
 
     static final long serialVersionUID = 3340534534429409660L;
 
+    /**
+     * Makes an instance of this class
+     */
     public InstKnob() {
         super(kNativeSize);
     }
@@ -27,10 +31,18 @@ public final class InstKnob extends QTByteObject {
         paramObjectOutputStream.write(getBytes());
     }
 
+    /**
+     * The number of the knob.
+     * @return <DD/>
+     */
     public int getNumber() {
         return EndianOrder.flipBigEndianToNative32(getIntAt(0));
     }
 
+    /**
+     * The number of the knob.
+     * @param number -
+     */
     public void setNumber(int paramInt) {
         setIntAt(0, EndianOrder.flipNativeToBigEndian32(paramInt));
     }
@@ -39,10 +51,18 @@ public final class InstKnob extends QTByteObject {
         setIntAt(0, paramInt);
     }
 
+    /**
+     * The value of the knob.
+     * @return <DD/>
+     */
     public int getValue() {
         return EndianOrder.flipBigEndianToNative32(getIntAt(4));
     }
 
+    /**
+     * The value of the knob.
+     * @param value -
+     */
     public void setValue(int paramInt) {
         setIntAt(4, EndianOrder.flipNativeToBigEndian32(paramInt));
     }

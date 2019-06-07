@@ -1,4 +1,3 @@
-
 package quicktime.qd;
 
 import java.awt.Color;
@@ -7,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianDescriptor;
@@ -16,16 +14,24 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 
-
+/**
+ * Represents color as 16bit values for each component and alpha channel.
+ * Once created this class is a read only color. The static color variables
+ * are the same as the java.awt.Color colors, but in 16bit format. The default
+ * format for the class (ie. the bytes that are returned by getBytes) is RGBColor.
+ */
 public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneable {
+
     private static Object linkage;
 
     private static final int kNativeSize = 6;
 
     static {
         new Object() {
+
             void establish() {
                 linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
                     public Object run() {
                         return QTNative.linkNativeMethods(QDColor.class);
                     }
@@ -35,25 +41,67 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     }
 
     public static final QDColor black = new QDColor(0, 0, 0);
+
     public static final QDColor white = new QDColor(65535, 65535, 65535);
+
     public static final QDColor red = new QDColor(65535, 0, 0);
+
     public static final QDColor green = new QDColor(0, 65535, 0);
+
     public static final QDColor blue = new QDColor(0, 0, 65535);
+
     public static final QDColor yellow = new QDColor(65535, 65535, 0);
+
     public static final QDColor magenta = new QDColor(65535, 0, 65535);
+
     public static final QDColor cyan = new QDColor(0, 65535, 65535);
+
     public static final QDColor darkGray = new QDColor(16383, 16383, 16383);
+
     public static final QDColor gray = new QDColor(32767, 32767, 32767);
+
     public static final QDColor lightGray = new QDColor(49151, 49151, 49151);
+
     public static final QDColor pink = new QDColor(65535, 44976, 44976);
+
     public static final QDColor orange = new QDColor(65535, 51400, 0);
+
     public static final QDColor brown = new QDColor(32767, 16383, 0);
 
+    /**
+     * This is a convenience value - it represents the largest value that a colour component
+     * can have.
+     */
     public static final int kMaximumValue = 65535;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 4 formats the byte array is encoded in.
+     */
     public static final int kIsRGBColor = 6;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 4 formats the byte array is encoded in.
+     */
     public static final int kIsARGBColor = 8;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 4 formats the byte array is encoded in.
+     */
     public static final int kIsTQ3ColorRGB = 12;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 4 formats the byte array is encoded in.
+     */
     public static final int kIsGradientColor = 14;
+
+    /**
+     * These constants are used in the fromArray call to indicate
+     * which of the 4 formats the byte array is encoded in.
+     */
     public static final int kIsTQ3ColorARGB = 16;
 
     private static EndianDescriptor ed;
@@ -64,39 +112,63 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
 
     static final long serialVersionUID = -6088195721752787215L;
 
+    /**
+     * Returns the EndianDescriptor for RGBColor color.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorRGBColor() {
         return EndianDescriptor.flipAll16;
     }
 
+    /**
+     * Returns the EndianDescriptor for ARGBColor color.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorARGBColor() {
         return EndianDescriptor.flipAll16;
     }
 
+    /**
+     * Returns the EndianDescriptor for ARGBColor color.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorGradientColor() {
         if (ed == null) {
             ed = new EndianDescriptor(0);
-
             EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 4);
             ed.addFlipSpec(localEndianFlipSpec1);
-
             EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(8, 4, 1);
             ed.addFlipSpec(localEndianFlipSpec2);
         }
         return ed;
     }
 
+    /**
+     * Returns the EndianDescriptor for TQ3Color color.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorTQ3Color() {
         return EndianDescriptor.flipAll32;
     }
 
+    /**
+     * Returns the EndianDescriptor for TQ3ColorARGB color.
+     * @return an EndianDescriptor
+     */
     public static final EndianDescriptor getEndianDescriptorTQ3ColorARGB() {
         return EndianDescriptor.flipAll32;
     }
 
+    /**
+     * Takes an 8bit color value and converts it into a 16bit value.
+     */
     public static int convert8to16(int paramInt) {
         return (0xFF & paramInt) << 8 | 0xFF & paramInt;
     }
 
+    /**
+     * Takes a 16bit color value and converts it into an 8bit value.
+     */
     public static int convert16to8(int paramInt) {
         return (0xFF00 & paramInt) >> 8;
     }
@@ -108,57 +180,73 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         float f1;
         float f2;
         float f3;
-        switch (paramInt) {
-        case 6:
-            localQDColor = new QDColor();
-            System.arraycopy(paramArrayOfByte, 0, localQDColor.bytes, 0, 6);
-            return localQDColor;
-
-        case 8:
-            localQDColor = new QDColor();
-            System.arraycopy(paramArrayOfByte, 2, localQDColor.bytes, 0, 6);
-            localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(paramArrayOfByte, 0)));
-            return localQDColor;
-
-        case 14:
-            localQDColor = new QDColor();
-            System.arraycopy(paramArrayOfByte, 2, localQDColor.bytes, 0, 6);
-            localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(paramArrayOfByte, 0)));
-            localQDColor.endPercent = getIntFromArray(paramArrayOfByte, 8);
-            return localQDColor;
-
-        case 12:
-            f1 = getFloatFromArray(paramArrayOfByte, 0);
-            f2 = getFloatFromArray(paramArrayOfByte, 4);
-            f3 = getFloatFromArray(paramArrayOfByte, 8);
-            return new QDColor(f1, f2, f3);
-
-        case 16:
-            f1 = getFloatFromArray(paramArrayOfByte, 0);
-            f2 = getFloatFromArray(paramArrayOfByte, 4);
-            f3 = getFloatFromArray(paramArrayOfByte, 8);
-            float f4 = getFloatFromArray(paramArrayOfByte, 12);
-            return new QDColor(f2, f3, f4, f1);
+        switch(paramInt) {
+            case 6:
+                localQDColor = new QDColor();
+                System.arraycopy(paramArrayOfByte, 0, localQDColor.bytes, 0, 6);
+                return localQDColor;
+            case 8:
+                localQDColor = new QDColor();
+                System.arraycopy(paramArrayOfByte, 2, localQDColor.bytes, 0, 6);
+                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(paramArrayOfByte, 0)));
+                return localQDColor;
+            case 14:
+                localQDColor = new QDColor();
+                System.arraycopy(paramArrayOfByte, 2, localQDColor.bytes, 0, 6);
+                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(paramArrayOfByte, 0)));
+                localQDColor.endPercent = getIntFromArray(paramArrayOfByte, 8);
+                return localQDColor;
+            case 12:
+                f1 = getFloatFromArray(paramArrayOfByte, 0);
+                f2 = getFloatFromArray(paramArrayOfByte, 4);
+                f3 = getFloatFromArray(paramArrayOfByte, 8);
+                return new QDColor(f1, f2, f3);
+            case 16:
+                f1 = getFloatFromArray(paramArrayOfByte, 0);
+                f2 = getFloatFromArray(paramArrayOfByte, 4);
+                f3 = getFloatFromArray(paramArrayOfByte, 8);
+                float f4 = getFloatFromArray(paramArrayOfByte, 12);
+                return new QDColor(f2, f3, f4, f1);
         }
-
         throw new IllegalArgumentException("Unknown color format");
     }
 
+    /**
+     * Creates a QDColor with the specified ARGB value, where the alpha
+     * component is in bits 24-32 of the argument, where the red
+     * component is in bits 16-23 of the argument, the green
+     * component is in bits 8-15 of the argument, and the blue
+     * component is in bits 0-7. The value zero indicates no
+     * contribution from the primary color component.
+     */
     public static QDColor fromARGBColor(int paramInt) {
-        return new QDColor(convert8to16(paramInt & 0xFF0000),
-                           convert8to16(paramInt & 0xFF00),
-                           convert8to16(paramInt & 0xFF),
-                           convert8to16(paramInt & 0xFF000000));
+        return new QDColor(convert8to16(paramInt & 0xFF0000), convert8to16(paramInt & 0xFF00), convert8to16(paramInt & 0xFF), convert8to16(paramInt & 0xFF000000));
     }
 
+    /**
+     * Create an instance of an QDColor class - Black
+     */
     public QDColor() {
         super(6);
     }
 
+    /**
+     * Create an instance of an QDColor class. Alpha is set to default (0xFFFF - opaque).
+     * @param red the 16bit red value
+     * @param green the 16bit green value
+     * @param blue the 16bit blue value
+     */
     public QDColor(int paramInt1, int paramInt2, int paramInt3) {
         this(paramInt1, paramInt2, paramInt3, 65535);
     }
 
+    /**
+     * Create an instance of an QDColor class.
+     * @param red the 16bit red value
+     * @param green the 16bit green value
+     * @param blue the 16bit blue value
+     * @param alpha the 16bit alpha value
+     */
     public QDColor(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         this();
         setRed(paramInt1);
@@ -167,23 +255,44 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         setAlpha(paramInt4);
     }
 
+    /**
+     * Create an instance of an QDColor class. Alpha is set to default (0xFFFF - opaque).
+     * @param red the 0 to 1F red value
+     * @param green the 0 to 1F green value
+     * @param blue the 0 to 1F blue value
+     */
     public QDColor(float paramFloat1, float paramFloat2, float paramFloat3) {
         this(paramFloat1, paramFloat2, paramFloat3, 1.0F);
     }
 
+    /**
+     * Create an instance of an QDColor class.
+     * @param red the 0 to 1F red value
+     * @param green the 0 to 1F green value
+     * @param blue the 0 to 1F blue value
+     * @param alpha the 0 to 1F alpha value
+     */
     public QDColor(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
         this();
         paramFloat1 = checkRange(paramFloat1);
         paramFloat2 = checkRange(paramFloat2);
         paramFloat3 = checkRange(paramFloat3);
         paramFloat4 = checkRange(paramFloat4);
-
         setRed((int) (paramFloat1 * 65535.0F + 0.5F));
         setGreen((int) (paramFloat2 * 65535.0F + 0.5F));
         setBlue((int) (paramFloat3 * 65535.0F + 0.5F));
         setAlpha((int) (paramFloat4 * 65535.0F + 0.5F));
     }
 
+    /**
+     * Create an instance of an QDColor class.
+     * @param red the 0 to 1F red value
+     * @param green the 0 to 1F green value
+     * @param blue the 0 to 1F blue value
+     * @param alpha the 0 to 1F alpha value
+     * @param endingPercentage Specifies the percentage of the gradient (expressed as value between
+     *  0 and 1 , where 0 is the beginning of the gradient) at which the specified color begins.
+     */
     public QDColor(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
         this(paramFloat1, paramFloat2, paramFloat3, paramFloat4);
         setAlpha((int) (paramFloat4 * 65535.0F + 0.5F));
@@ -212,10 +321,8 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
 
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[6];
-
         byte[] arrayOfByte = new byte[10];
         paramObjectInputStream.read(arrayOfByte);
-
         for (int i = 0; i < 6; i += 2) {
             setShortInArray(getBytes(), i, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, i)));
         }
@@ -232,16 +339,12 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
 
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[18];
-
         for (int i = 0; i < 6; i += 2) {
             setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
-
         setIntInArray(arrayOfByte, 6, -1);
-
         setIntInArray(arrayOfByte, 10, EndianOrder.flipNativeToBigEndian32(this.alpha));
         setIntInArray(arrayOfByte, 14, EndianOrder.flipNativeToBigEndian32(this.endPercent));
-
         paramObjectOutputStream.write(arrayOfByte);
     }
 
@@ -281,58 +384,98 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         return arrayOfByte;
     }
 
+    /**
+     * Return value of red component
+     */
     public int getRed() {
         return QTUtils.UShort2Int(getShortAt(0));
     }
 
+    /**
+     * Return value of red component as float
+     */
     public float getRedF() {
         return QTUtils.UShort2Int(getShortAt(0)) / 65535.0F;
     }
 
+    /**
+     * Return value of green component
+     */
     public int getGreen() {
         return QTUtils.UShort2Int(getShortAt(2));
     }
 
+    /**
+     * Return value of green component as float
+     */
     public float getGreenF() {
         return QTUtils.UShort2Int(getShortAt(2)) / 65535.0F;
     }
 
+    /**
+     * Return value of blue component
+     */
     public int getBlue() {
         return QTUtils.UShort2Int(getShortAt(4));
     }
 
+    /**
+     * Return value of blue component as float
+     */
     public float getBlueF() {
         return QTUtils.UShort2Int(getShortAt(4)) / 65535.0F;
     }
 
+    /**
+     * Return value of alpha component
+     */
     public int getAlpha() {
         return this.alpha;
     }
 
+    /**
+     * Return value of alpha component as float
+     */
     public float getAlphaF() {
         return this.alpha / 65535.0F;
     }
 
+    /**
+     * Return value of ending percentage component
+     */
     public float getEndingPercentage() {
         return QTUtils.Fix2X(this.endPercent);
     }
 
+    /**
+     * Returns a copy of this object
+     */
     public Object clone() {
         return new QDColor(getRGBColor(), getAlpha());
     }
 
+    /**
+     * Converts to a packed int according to the pixel depth supplied.
+     * @return packed int of 8bit depth for each a, r, g, b component
+     */
     public int getARGB() {
-        return convert16to8(getAlpha()) << 24 | convert16to8(getRed()) << 16 | convert16to8(getGreen()) << 8
-               | convert16to8(getBlue());
+        return convert16to8(getAlpha()) << 24 | convert16to8(getRed()) << 16 | convert16to8(getGreen()) << 8 | convert16to8(getBlue());
     }
 
+    /**
+     * Converts to a packed int according to the pixel depth supplied.
+     * Alpha channel is 0 (the high 8 bits).
+     * @return packed int of 8bit depth for each r, g, b component
+     */
     public int getRGB() {
         return 0x0 | convert16to8(getRed()) << 16 | convert16to8(getGreen()) << 8 | convert16to8(getBlue());
     }
 
+    /**
+     * Returns the String representation of this object
+     */
     public String toString() {
-        return super.toString() + "[red=0x" + Integer.toHexString(getRed()) + ",green=0x" + Integer.toHexString(getGreen())
-               + ",blue=0x" + Integer.toHexString(getBlue()) + ",alpha=0x" + Integer.toHexString(getAlpha()) + "]";
+        return super.toString() + "[red=0x" + Integer.toHexString(getRed()) + ",green=0x" + Integer.toHexString(getGreen()) + ",blue=0x" + Integer.toHexString(getBlue()) + ",alpha=0x" + Integer.toHexString(getAlpha()) + "]";
     }
 
     private void setRed(int paramInt) {
@@ -363,7 +506,6 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
 
     private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/
  * QDColor.class

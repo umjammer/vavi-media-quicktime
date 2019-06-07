@@ -1,7 +1,12 @@
-
 package quicktime.sound;
 
+/**
+ * This class represents all of the constants in the Sound Manager interface.
+ * ALL constants except for constants that start with an acronym, such as MPEG, ...
+ * start with a small letter (not a capital one)
+ */
 public abstract interface SoundConstants {
+
     public static final int gestaltSoundAttr = 1936614432;
 
     public static final int gestaltStereoCapability = 0;
@@ -29,82 +34,98 @@ public abstract interface SoundConstants {
     public static final int gestalt16BitAudioSupport = 12;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int initCmd = 1;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int freeCmd = 2;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int totalLoadCmd = 26;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int loadCmd = 27;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int freqDurationCmd = 40;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int restCmd = 41;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int freqCmd = 42;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int ampCmd = 43;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int timbreCmd = 44;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int getAmpCmd = 45;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int waveTableCmd = 60;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int phaseCmd = 61;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int rateCmd = 82;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int continueCmd = 83;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int doubleBufferCmd = 84;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int getRateCmd = 85;
 
@@ -175,32 +196,38 @@ public abstract interface SoundConstants {
     public static final int initCompMask = 65280;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int squareWaveSynth = 1;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int waveTableSynth = 3;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int MACE3snthID = 11;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int MACE6snthID = 13;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int dbBufferReady = 1;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I/>
      */
     public static final int dbLastBuffer = 4;
 
@@ -638,17 +665,28 @@ public abstract interface SoundConstants {
 
     public static final int siSupportedExtendedFlags = 1702389356;
 
+    /**
+     * QT5 Constants
+     */
     public static final int siTerminalType = 1953790320;
 
+    /**
+     * QT5 Constants
+     */
     public static final int siVendorProduct = 1987080815;
 
+    /**
+     * QT5 Constants
+     */
     public static final int siRateConverterRollOffSlope = 1919116386;
 
+    /**
+     * QT5 Constants
+     */
     public static final int siOutputLatency = 1869378661;
 
     public static final int kMicrophoneArray = 1835623265;
 }
-
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
  * SoundConstants.class
