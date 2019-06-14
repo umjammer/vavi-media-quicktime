@@ -31,7 +31,18 @@ public abstract interface Paintable {
     public abstract void newSizeNotified(QTImageDrawer paramQTImageDrawer, Dimension paramDimension);
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Paint on the graphics. The image that is painted on this graphics is rendered by
+     * QuickTime. You can supply an array of Rectangles that tell the parent which parts
+     * of the image were changed by this call. Only the pixels that are within these
+     * rectangles will be changed in the pixel data that is drawn by the QT image.
+     * Typically your first call to paint after being notified of a new size will
+     * return a Rectangle which covers the entire image with subsequent calls having
+     * the option of returning rectangles that describe only those regions of the pixel
+     * data that have changed. Returning null will indicate that no pixel data has changed
+     * Intelligent usage of this can improve drawing performance.
+     * @param g the graphics to paint on.
      */
     public abstract Rectangle[] paint(Graphics paramGraphics);
 }

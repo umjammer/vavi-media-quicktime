@@ -172,7 +172,9 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been clicked on a component.
      */
     public void mouseClicked(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(500, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
@@ -180,7 +182,9 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouse button has been pressed on a component.
      */
     public void mousePressed(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(501, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
@@ -188,7 +192,9 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouse button has been released on a component.
      */
     public void mouseReleased(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(502, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
@@ -196,7 +202,9 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse enters a component.
      */
     public void mouseEntered(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(504, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
@@ -204,7 +212,9 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse exits a component.
      */
     public void mouseExited(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(505, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
@@ -212,7 +222,13 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouse button is pressed on a component and then
+     * dragged.  Mouse drag events will continue to be delivered to
+     * the component where the first originated until the mouse button is
+     * released (regardless of whether the mouse position is within the
+     * bounds of the component).
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(506, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
@@ -220,7 +236,10 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse button has been moved on a component
+     * (with no buttons no down).
      */
     public void mouseMoved(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(503, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());

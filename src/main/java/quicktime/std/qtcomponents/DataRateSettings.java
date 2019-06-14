@@ -46,6 +46,10 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
         setMinTemporalQuality(paramInt4);
     }
 
+    /**
+     * Constructor for building a data rate settings object from a byte array
+     * (such as the one you can get from an atom container)
+     */
     public DataRateSettings(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }

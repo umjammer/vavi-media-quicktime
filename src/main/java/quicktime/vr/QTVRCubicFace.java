@@ -24,6 +24,10 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
         super(32);
     }
 
+    /**
+     * Creates a QTVRCubicFace object from a byte array
+     * Used in cloning
+     */
     public QTVRCubicFace(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte);
         if (paramArrayOfByte.length != kNativeSize) {

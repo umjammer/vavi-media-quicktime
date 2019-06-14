@@ -152,7 +152,15 @@ public class SWController extends MouseController {
     private QDPoint p = new QDPoint(0, 0);
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method is called when a MouseController has received a mouse
+     * event in its space. This method returns a TwoDSprite object if the SpriteWorld.hitTest
+     * method returns a Sprite at the event's location.
+     * @param event a mouse down event
+     * @return a TwoDSprite object that is located at the event coordinates or null if no Sprite
+     *  at the location of the event.
+     * @return {@link quicktime.QTException}
      */
     protected Object getSelected(MouseEvent paramMouseEvent) throws QTException {
         QDRect localQDRect = this.sd.getDisplayBounds();

@@ -71,6 +71,16 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         setW(paramArrayOfFloat[2][2]);
     }
 
+    /**
+     * Construct a Matrix that is a delta matrix between
+     * the two sets of 4 points. This call is available only
+     * in QuickTime 4 or later. The resulting matrix can be concatenated
+     * with the matrix from which the source points are derived
+     * to transform the display object to the destination area.
+     * QuickTime::QuadToQuadMatrix
+     * @param source a set of 4 points t,l t,r b,r and b,l that describes the source area
+     * @param dest a set of 4 points t,l t,r b,r and b,l that describes the destination area
+     */
     public Matrix(QDPoint[] paramArrayOfQDPoint1, QDPoint[] paramArrayOfQDPoint2) throws QTException {
         this();
         if ((paramArrayOfQDPoint1.length < 4) || (paramArrayOfQDPoint2.length < 4) || (QTSession.getQTMajorVersion() < 4))
@@ -431,6 +441,14 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         return TransformFixedRect(getBytes(), paramQDRect.getFixedRect(), 0) != 0;
     }
 
+    /**
+     * transforms the upper left and lower right points of a rectangle through a specified
+     * matrix.
+     * QuickTime::TransformFixedRect
+     * @param r the QDRect to be transformed.
+     * @return false if the transformation is other than scaling and translation.
+     * @return {@link quicktime.QTException}
+     */
     public boolean transformDRect(QDRect paramQDRect, QDPoint[] paramArrayOfQDPoint) throws QTException {
         int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
         if (paramQDRect.getFixedRect() == null)
@@ -453,6 +471,13 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         return TransformRect(getBytes(), paramQDRect.getRect(), 0) != 0;
     }
 
+    /**
+     * transforms the upper left and lower right points of a rectangle through a specified matrix.
+     * QuickTime::TransformRect
+     * @param r the rectangle to be transformed.
+     * @return false if the transformation is other than scaling and translation.
+     * @return {@link quicktime.QTException}
+     */
     public boolean transformRect(QDRect paramQDRect, QDPoint[] paramArrayOfQDPoint) throws QTException {
         int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
         int i = TransformRect(getBytes(), paramQDRect.getRect(), arrayOfInt);

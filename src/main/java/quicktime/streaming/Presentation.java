@@ -748,14 +748,28 @@ public final class Presentation extends QTObject implements QTStreamingLib {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>use addSourcer()</I>
+     * This method adds a source component to the presenter
+     * @param s stream
+     * @param sourcer sourcer component to be added
+     * @param flags additional flags
+     *  QuickTime::QTSPresAddSourcer
+     * @param {@link quicktime.QTException}
      */
     public void addSource(Stream paramStream, Component paramComponent, int paramInt) throws QTException {
         addSourcer(paramStream, (Sourcer) paramComponent, paramInt);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>use removeSourcer()</I>
+     * This method removes a source component from the presenter
+     * @param s stream
+     * @param sourcer sourcer component to be removed
+     * @param flags additional flags
+     *  QuickTime::QTSPresRemoveSourcer
+     * @param {@link quicktime.QTException}
      */
     public void removeSource(Stream paramStream, Component paramComponent, int paramInt) throws QTException {
         removeSourcer(paramStream, (Sourcer) paramComponent, paramInt);

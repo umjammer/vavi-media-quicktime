@@ -269,14 +269,67 @@ public final class QTFactory {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This returns a QTDrawable object from the specified input stream.
+     * The input stream will be read in its entirety to a byte array which is then used as the
+     * source of the data to import. The hints are used by the importers to determine
+     * the format of the data contained within the input stream. Hints must be given to
+     * QuickTime about the format of the data
+     * that is contained within the InputStream. Hints can take one of three forms
+     *
+     * MIME Type	-> kDataRefMimeTypeTag
+     * MacOS File Type	-> kDataRefQTFileTypeTag
+     * File extension	-> kDataRefFileExtensionTag
+     *
+     * The preferred usage is to pass in either the MacOS File Type (which will also work on non-MacOS platforms)
+     * or the MIME type information. The File extension is a more arbitrary indicator and should be the least
+     * referred to. It uses the default QTDrawableMaker to return objects from a GraphicsImporter or
+     * a Movie.
+     * @param is the input stream from which the bytes will be read
+     * @param hintString contains the hint information
+     * @return a drawable object that can present the QT File
+     * @throws quicktime.std.StdQTException If the data is of a format that is not understood by QuickTime
+     *  the function will throw a StdQTException with error code invalidMovie.
+     * @throws java.io.IOException is thrown if the input stream is unable to aquire all the data
+     * @throws quicktime.QTException
+     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * {@link quicktime.app.players.QTPlayer},
+     * {@link quicktime.app.QTDrawableMaker}
      */
     public static QTDrawable makeDrawable(InputStream paramInputStream, int paramInt, String paramString) throws IOException, QTException {
         return makeDrawable(paramInputStream, paramInt, paramString, new QTDrawableMaker());
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This returns a QTDrawable object from the specified input stream.
+     * The input stream will be read in its entirety to a byte array which is then used as the
+     * source of the data to import. The hints are used by the importers to determine
+     * the format of the data contained within the input stream. Hints must be given to
+     * QuickTime about the format of the data
+     * that is contained within the InputStream. Hints can take one of three forms
+     *
+     * MIME Type	-> kDataRefMimeTypeTag
+     * MacOS File Type	-> kDataRefQTFileTypeTag
+     * File extension	-> kDataRefFileExtensionTag
+     *
+     * The preferred usage is to pass in either the MacOS File Type (which will also work on non-MacOS platforms)
+     * or the MIME type information. The File extension is a more arbitrary indicator and should be the least
+     * referred to. It uses the default QTDrawableMaker to return objects from a GraphicsImporter or
+     * a Movie.
+     * @param hintString contains the hint information
+     * @param maker specifies which type of QTDrawable object is returned when the factory imports a
+     *  Graphics or Movie based media.
+     * @return a drawable object that can present the QT File
+     * @throws quicktime.std.StdQTException If the data is of a format that is not understood by QuickTime
+     *  the function will throw a StdQTException with error code invalidMovie.
+     * @throws java.io.IOException is thrown if the input stream is unable to aquire all the data
+     * @throws quicktime.QTException
+     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * {@link quicktime.app.players.QTPlayer},
+     * {@link quicktime.app.QTDrawableMaker}
      */
     public static QTDrawable makeDrawable(InputStream paramInputStream, int paramInt, String paramString, QTDrawableMaker paramQTDrawableMaker) throws IOException, QTException {
         QTHandle localQTHandle = readBytesIntoHandle(paramInputStream);

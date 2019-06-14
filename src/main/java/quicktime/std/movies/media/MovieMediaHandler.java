@@ -99,6 +99,13 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
         return localMatrix;
     }
 
+    /**
+     * This method returns an array of all the track IDs associated with the currently
+     * instantiated embedded movie
+     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @return an array of track IDs of the movie
+     * @return {@link quicktime.std.StdQTException}
+     */
     public int[] getCurrentMoviePropertyTrackList() throws StdQTException {
         int[] arrayOfInt = { 0 };
         int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953264500, arrayOfInt);

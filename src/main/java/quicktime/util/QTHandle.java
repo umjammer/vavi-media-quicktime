@@ -270,6 +270,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
         super(paramInt, paramBoolean);
     }
 
+    /**
+     * Construct a handle from input data.
+     * @param byteArray the input data.
+     */
     public QTHandle(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte.length, false);
         setBytesAt(0, paramArrayOfByte.length, paramArrayOfByte, 0);

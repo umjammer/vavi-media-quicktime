@@ -23,6 +23,10 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRCubicView object from a byte array
+     * Used in cloning
+     */
     public QTVRCubicView(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte);
         if (paramArrayOfByte.length != kNativeSize) {

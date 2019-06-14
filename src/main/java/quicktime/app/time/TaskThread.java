@@ -125,6 +125,11 @@ public class TaskThread implements Runnable {
         return this.tasks.elements();
     }
 
+    /**
+     * This method will add a taskable client to the list.
+     * If the thread was stopped (because there were no objects to task) this will start the thread up.
+     * @param t the Taskable object to add to the collection.
+     */
     public void addAndStart(Taskable paramTaskable) {
         addMember(paramTaskable);
         start();

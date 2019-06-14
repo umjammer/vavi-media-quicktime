@@ -310,6 +310,16 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         initialize(paramInt, null);
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QT environment.
+     * If you use this call (and not the open calls) then you should also ensure that you check
+     * that QT is present through the gestalt call and call enterMovies to initialize the
+     * movie toolbox.
+     * QuickTime::InitializeQTML()
+     * @param flag flag that are valid for this call.
+     * @param signedClass the Class object which is signed
+     * @param {@link quicktime.QTException}
+     */
     public static void initialize(int paramInt, Class paramClass) throws QTException {
         synchronized (terminationLock()) {
             if (initDone == 0) {
@@ -526,14 +536,47 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         }
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QTML environment.
+     * This will ensure that any required initialisations are performed,
+     * and that the required version of QuickTime is present. The minimal
+     * version of QT that is required is version 3.
+     * This will also call EnterMovies.
+     * QuickTime::InitializeQTML()
+     * QuickTime::Gestalt()
+     * QuickTime::EnterMovies()
+     */
     public static void open(Class paramClass) throws QTException {
         open(3, 0, 0, paramClass);
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QTML environment.
+     * This will ensure that any required initialisations are performed,
+     * and that the required version of QuickTime is present. The minimal
+     * version of QT that is required is version 3. You can set the initialisation options
+     * to also have this call initialise QuickTimeVR and/or QuickDraw3D.
+     * @param initFlag can also initialise VR or 3D.
+     * @param {@link quicktime.QTException}
+     */
     public static void open(int paramInt, Class paramClass) throws QTException {
         open(3, 0, paramInt, paramClass);
     }
 
+    /**
+     * This call will open a QTSession and perform any initialisations of the QTML environment.
+     * You can optionally open a session where the specified minimal
+     * version and minorVersion of QT must be present or an exception will be
+     * thrown.
+     * This will also call EnterMovies for you.
+     * QuickTime::InitializeQTML()
+     * QuickTime::Gestalt()
+     * QuickTime::EnterMovies()
+     * @param minorVersion the minimal minorVersion of QT that must be present
+     * @param initFlag can also initialise VR or 3D.
+     * @param signedClass the Class object which is signed
+     * @param {@link quicktime.QTException}
+     */
     public static void open(int paramInt1, int paramInt2, int paramInt3, Class paramClass) throws QTException {
         initialize(0, paramClass);
         int i = gestalt(1903454573);

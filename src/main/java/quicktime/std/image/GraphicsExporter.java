@@ -478,6 +478,16 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
         return arrayOfInt[0];
     }
 
+    /**
+     * Used by format-specific graphics exporters when transcoding:
+     * Returns the number of bytes of original image data that can be read.
+     * QuickTime::GraphicsExportReadInputData
+     * @param dataOffset The offset of the image data within the source image data. The function begins reading image
+     *  data from this offset.
+     * @param dataSize The number of bytes of image data to read.
+     * @return the data of size datasize.
+     * @return {@link quicktime.std.StdQTException}
+     */
     public byte[] readInputData(int paramInt1, int paramInt2) throws StdQTException {
         byte[] arrayOfByte = new byte[paramInt2];
         int i = GraphicsExportReadInputData(_ID(), arrayOfByte, paramInt1, paramInt2);
@@ -957,11 +967,26 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
         return arrayOfInt[0];
     }
 
+    /**
+     * This function is used by format-specific graphics exporters to write output data. Writes output image data.
+     * QuickTime::GraphicsExportWriteOutputData
+     * @param data block containing the data.
+     * @param dataSize The number of bytes of image data to write.
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void GraphicsExportWriteOutputData(byte[] paramArrayOfByte, int paramInt) throws StdQTException {
         int i = GraphicsExportWriteOutputData(_ID(), paramArrayOfByte, paramInt);
         StdQTException.checkError(i);
     }
 
+    /**
+     * This function is used by format-specific graphics exporters to write output data. Reads output image data.
+     * Not all output data types support this feature.
+     * QuickTime::GraphicsExportReadOutputData
+     * @param dataOffset The offset of the image data within the data reference. The function begins reading image data from this offset.
+     * @param dataSize The number of bytes of image data to read.
+     * @param {@link quicktime.std.StdQTException}
+     */
     public byte[] GraphicsExportReadOutputData(int paramInt1, int paramInt2) throws StdQTException {
         byte[] arrayOfByte = new byte[paramInt2];
         int i = GraphicsExportReadOutputData(_ID(), arrayOfByte, paramInt1, paramInt2);

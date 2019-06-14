@@ -80,6 +80,19 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         return EndianDescriptor.flipAll16;
     }
 
+    /**
+     * Creates a QDRect from an array of bytes. The minimum length of the array
+     * must equate to the requirements of the size of the native structure to
+     * store the result.
+     *
+     * kIsRect, length == 8, top, left, right, bottom of 2 bytes each
+     * kIsFixedRect, length == 16, left, top, right, bottom of 4 bytes each (fixed format 16.16)
+     *
+     * @param rectBytes the byte array containing the rect values
+     * @param flag flag that describes the format of the byte array
+     * @return a QDRect
+     * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
+     */
     public static QDRect fromArray(byte[] paramArrayOfByte, int paramInt) {
         if (paramInt > paramArrayOfByte.length)
             throw new IllegalArgumentException("Mismatch between flag and supplied rectBytes");
@@ -264,10 +277,16 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         paramObjectOutputStream.write(arrayOfByte1);
     }
 
+    /**
+     * Returns the bytes for the QDRect
+     */
     public byte[] getRect() {
         return this.bytes;
     }
 
+    /**
+     * Returns the bytes for the FixedRect
+     */
     public byte[] getFixedRect() {
         if (this.fixedRect == null) {
             this.fixedRect = new byte[16];

@@ -56,6 +56,10 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
         super(14);
     }
 
+    /**
+     * Constructor for building a spacial settings object from a byte array
+     * (such as the one you can get from an atom container)
+     */
     public SpatialSettings(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }

@@ -24,6 +24,9 @@ public final class QTVRNodeLocation extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRNodeLocation object from a byte array
+     */
     public QTVRNodeLocation(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

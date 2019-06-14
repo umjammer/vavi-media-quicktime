@@ -13,15 +13,31 @@ import quicktime.QTSession;
  */
 public abstract class QTMouseMotionAdapter implements QTMouseMotionListener {
 
+    /**
+     * Deprecated.
+     */
     public void mouseDragged(MouseEvent paramMouseEvent) {
     }
 
+    /**
+     * Deprecated.
+     */
     public void mouseMoved(MouseEvent paramMouseEvent) {
     }
 
+    /**
+     * Deprecated.
+     * Invoked when a mouseMoved event enters a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
+     */
     public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
     }
 
+    /**
+     * Deprecated.
+     * Invoked when a mouseMoved event exits a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
+     */
     public void mouseExitedTarget(MouseEvent paramMouseEvent) {
     }
 

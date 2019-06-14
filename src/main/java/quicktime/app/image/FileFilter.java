@@ -151,7 +151,17 @@ public class FileFilter implements FilenameFilter {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method is called after the directory has been filtered. The incoming array
+     * contains both the file list (files found within the directory that have been accepted
+     * as a match) and the order of the files in this list is the order that the files will
+     * be added to the sequence. The method can alter this array (or return a new one). The
+     * returned array should contain no null values, and the order of the filenames in the
+     * returned array is the order that the files will be added to the sequence.
+     *
+     * The default implementation returns the list as is.
+     * @return the ordered list of files that the sequence will be created from.
      */
     protected String[] postProcess(String[] paramArrayOfString) {
         return paramArrayOfString;

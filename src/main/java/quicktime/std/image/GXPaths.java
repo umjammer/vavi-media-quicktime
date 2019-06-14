@@ -40,6 +40,13 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
         return i;
     }
 
+    /**
+     * Creates a GXPaths object which corresponds to gxPaths object of QuickDrawGX
+     * It sets the total number of contours in the path equal to the total number of paths
+     * ie every path has one contour.
+     * @param curveComponent the curve Component
+     * @param ar array of GXPath objects containing the geometries for the paths
+     */
     public GXPaths(Curve paramCurve, GXPath[] paramArrayOfGXPath) {
         super(howManyBytes(paramArrayOfGXPath) + 4);
         setIntAt(0, paramArrayOfGXPath.length);
@@ -103,6 +110,14 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
         return new PathPointInfo(localQDPoint, arrayOfByte[0] != 0);
     }
 
+    /**
+     * This method is used to get the point at a specified distance along a curve.
+     * QuickTime::CurveLengthToPoint
+     * @param index Specifies the index of the path contour from which to get the point.
+     * @param length Specifies the distance along the curve at which to find the point.
+     * @return QDPoint[] array of two points containing the location (first element) and the tangent point (second element)
+     * @return {@link quicktime.std.StdQTException}
+     */
     public QDPoint[] lengthToPoint(int paramInt1, int paramInt2) throws StdQTException {
         QDPoint localQDPoint1 = new QDPoint(0.0F, 0.0F);
         QDPoint localQDPoint2 = new QDPoint(0.0F, 0.0F);

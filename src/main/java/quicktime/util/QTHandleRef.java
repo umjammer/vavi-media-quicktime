@@ -132,6 +132,10 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return GetHandleSize(_ID());
     }
 
+    /**
+     * Returns a copy of the data of the handle as a byte array
+     * @return a byte array - copy of handle data
+     */
     public byte[] getBytes() {
         int i = getSize();
         byte[] arrayOfByte = new byte[i];
@@ -146,11 +150,27 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient byte[] copy that copies length bytes from the handle to the
+     * byte array.
+     * @param handleOffset the byte offset from the handle to copy the bytes from
+     * @param destArray the destination byte array
+     * @param destOffset the offset within the byte array to start copying to
+     * @param length the number of bytes to copy
+     */
     public final void copyToArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 1, paramInt2, paramArrayOfByte.length);
         getBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
     }
 
+    /**
+     * An efficient short[] copy that copies length shorts from the handle to the
+     * short array.
+     * @param handleOffset the byte offset from the handle to copy the shorts from
+     * @param destArray the destination short array
+     * @param destOffset the offset within the short array to start copying to
+     * @param length the number of shorts to copy
+     */
     public final void copyToArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfShort.length);
         copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfShort, paramInt2 * 2, paramInt3 * 2);
@@ -159,6 +179,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient char[] copy that copies length chars from the handle to the
+     * char array.
+     * @param handleOffset the byte offset from the handle to copy the chars from
+     * @param destArray the destination char array
+     * @param destOffset the offset within the char array to start copying to
+     * @param length the number of chars to copy
+     */
     public final void copyToArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfChar.length);
         copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfChar, paramInt2 * 2, paramInt3 * 2);
@@ -167,6 +195,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient int[] copy that copies length ints from the handle to the
+     * int array.
+     * @param handleOffset the byte offset from the handle to copy the ints from
+     * @param destArray the destination int array
+     * @param destOffset the offset within the int array to start copying to
+     * @param length the number of ints to copy
+     */
     public final void copyToArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfInt.length);
         copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfInt, paramInt2 * 4, paramInt3 * 4);
@@ -175,6 +211,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient float[] copy that copies length floats from the handle to the
+     * float array.
+     * @param handleOffset the byte offset from the handle to copy the floats from
+     * @param destArray the destination float array
+     * @param destOffset the offset within the float array to start copying to
+     * @param length the number of floats to copy
+     */
     public final void copyToArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfFloat.length);
         copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfFloat, paramInt2 * 4, paramInt3 * 4);
@@ -183,6 +227,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient long[] copy that copies length longs from the handle to the
+     * long array.
+     * @param handleOffset the byte offset from the handle to copy the longs from
+     * @param destArray the destination long array
+     * @param destOffset the offset within the long array to start copying to
+     * @param length the number of longs to copy
+     */
     public final void copyToArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfLong.length);
         copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfLong, paramInt2 * 8, paramInt3 * 8);
@@ -191,6 +243,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient double[] copy that copies length doubles from the handle to the
+     * double array.
+     * @param handleOffset the byte offset from the handle to copy the doubles from
+     * @param destArray the destination double array
+     * @param destOffset the offset within the double array to start copying to
+     * @param length the number of doubles to copy
+     */
     public final void copyToArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfDouble.length);
         copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfDouble, paramInt2 * 8, paramInt3 * 8);
@@ -205,11 +265,27 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient byte[] copy that copies length bytes from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the byte[] to copy
+     * @param srcOffset the nth index within the byte [] to start copying from
+     * @param length how many elements of the byte array to copy
+     */
     public final void copyFromArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 1, paramInt2, paramArrayOfByte.length);
         setBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
     }
 
+    /**
+     * An efficient short[] copy that copies length shorts from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the short[] to copy
+     * @param srcOffset the nth index within the short array to start copying from
+     * @param length how many elements of the short array to copy
+     */
     public final void copyFromArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfShort.length);
         copyArrayToPointer(paramArrayOfShort, paramInt2 * 2, lockAndDeref(0), paramInt1, paramInt3 * 2);
@@ -218,6 +294,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient char[] copy that copies length chars from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the char[] to copy
+     * @param srcOffset the nth index within the char array to start copying from
+     * @param length how many elements of the char array to copy
+     */
     public final void copyFromArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfChar.length);
         copyArrayToPointer(paramArrayOfChar, paramInt2 * 2, lockAndDeref(0), paramInt1, paramInt3 * 2);
@@ -226,6 +310,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient int[] copy that copies length ints from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the int[] to copy
+     * @param srcOffset the nth index within the int array to start copying from
+     * @param length how many elements of the int array to copy
+     */
     public final void copyFromArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfInt.length);
         copyArrayToPointer(paramArrayOfInt, paramInt2 * 4, lockAndDeref(0), paramInt1, paramInt3 * 4);
@@ -234,6 +326,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient float[] copy that copies length floats from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the float[] to copy
+     * @param srcOffset the nth index within the float array to start copying from
+     * @param length how many elements of the float array to copy
+     */
     public final void copyFromArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfFloat.length);
         copyArrayToPointer(paramArrayOfFloat, paramInt2 * 4, lockAndDeref(0), paramInt1, paramInt3 * 4);
@@ -242,6 +342,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient long[] copy that copies length longs from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the long[] to copy
+     * @param srcOffset the nth index within the long array to start copying from
+     * @param length how many elements of the long array to copy
+     */
     public final void copyFromArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfLong.length);
         copyArrayToPointer(paramArrayOfLong, paramInt2 * 8, lockAndDeref(0), paramInt1, paramInt3 * 8);
@@ -250,6 +358,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         }
     }
 
+    /**
+     * An efficient double[] copy that copies length doubles from the byte array to
+     * the handle.
+     * @param handleOffset how many bytes offset from the base handle to copy to.
+     * @param srcArray the double[] to copy
+     * @param srcOffset the nth index within the double array to start copying from
+     * @param length how many elements of the double array to copy
+     */
     public final void copyFromArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfDouble.length);
         copyArrayToPointer(paramArrayOfDouble, paramInt2 * 8, lockAndDeref(0), paramInt1, paramInt3 * 8);

@@ -24,6 +24,10 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRLinkHotSpot object from a byte array
+     * Used in cloning
+     */
     public QTVRLinkHotSpot(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

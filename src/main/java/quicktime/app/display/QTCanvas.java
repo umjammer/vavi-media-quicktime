@@ -1065,7 +1065,11 @@ public class QTCanvas extends Canvas {
     ComponentListener clientListener;
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * We override the update method to call our paint method as the background colour repaint is
+     * not valid for a QTCanvas object. However, subclasses can override the update method to
+     * do whatever is appropriate for their particular situation.
      */
     public void update(Graphics paramGraphics) {
         if (this.qtcHelper.mClient == null) {
@@ -1102,7 +1106,114 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * A ComponentListener and ComponentEvent are used to listen to these types
+     * of events that occur to the QTCanvas' client - ie. when the QTCanvas' client
+     * is resized, moved, shown or hidden. These events generally occur in conjunction
+     * with the Component events they mirror - with some exceptions:
+     * ComponentShown and ComponentHidden are generated when the QTCanvas is shown
+     * or hidden and when the QTDrawable client is set or removed.
+     * ComonentMoved and ComponentResized are generated when the QTCanvas is
+     * moved or resized but the event is actually generated when the QTCanvas is repainted
+     * as this is when the QTDrawable client is itself resized or moved.
+     * @param e the ComponentListener
+     * <HR/>
+     * <A/>
+     * <H3>
+     * removeQTClientListener</H3>
+     *
+     * public void removeQTClientListener(java.awt.event.ComponentListener
+     * e)
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Remove a previously registered ComponentListener that is listening
+     * to events that occur with the QTCanvas' QTDrawable client.
+     * @param e the ComponentListener
+     * @see addQTClientListener
+     * <HR/>
+     * <A/>
+     * <H3>
+     * addNotify</H3>
+     *
+     * public void addNotify()
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * We use this method to notify an existing client that its NativeGraphics
+     * environment may have changed and it should recheck its status
+     * <HR/>
+     * <A/>
+     * <H3>
+     * removeNotify</H3>
+     *
+     * public void removeNotify()
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Overridden to notify the client associated with this QTCanvas that it no
+     * longer has a grafport to draw to and should stop all graphics operations.
+     * <HR/>
+     * <A/>
+     * <H3>
+     * toString</H3>
+     *
+     * public java.lang.String toString()
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Print information about this object.
+     * @return a string representing this QTCanvas object
+     * <HR/>
+     * <A/>
+     * <H3>
+     * finalize</H3>
+     *
+     * protected void finalize()
+     * throws java.lang.Throwable
+     * Deprecated.
+     * java.lang.Throwable
+     * <HR/>
+     * <A/>
+     * <TABLE>
+     *
+     * <TR>
+     * <A/>
+     * <TABLE>
+     *
+     * <TR>    <A href="../../../overview-summary.html">Overview</A> 
+     * <TD>    <A href="package-summary.html">Package</A> </TD>
+     * <TD>  Class </TD>
+     * <TD>    <A href="package-tree.html">Tree</A> </TD>
+     * <TD>    <A href="../../../deprecated-list.html">Deprecated</A> </TD>
+     * <TD>    <A href="../../../index-all.html">Index</A> </TD>
+     * <TD>    <A href="../../../help-doc.html">Help</A> </TD>
+     * </TR>
+     * </TABLE>
+     *
+     * <TD>
+     *
+     * </TD>
+     * </TR>
+     *
+     * <TR>
+     * <TD>
+     *  <A href="../../../quicktime/app/display/JQTCanvas.html">PREV CLASS</A> 
+     *  NEXT CLASS</TD>
+     * <TD>
+     * <A href="../../../index.html" target="_top">FRAMES</A>   
+     *  <A href="QTCanvas.html" target="_top">NO FRAMES</A>   
+     *  
+     *
+     * <A href="../../../allclasses-noframe.html" target="">All Classes</A>
+     *
+     * </TD>
+     * </TR>
+     * <TR>
+     * <TD>
+     * SUMMARY: NESTED | <A href="#field_summary">FIELD</A> | <A href="#constructor_summary">CONSTR</A> | <A href="#method_summary">METHOD</A></TD>
+     * <TD>
+     * DETAIL: <A href="#field_detail">FIELD</A> | <A href="#constructor_detail">CONSTR</A> | <A href="#method_detail">METHOD</A></TD>
+     * </TR>
+     * </TABLE>
+     * <HR/>
      */
     public void addQTClientListener(ComponentListener paramComponentListener) {
         this.clientListener = AWTEventMulticaster.add(this.clientListener, paramComponentListener);
@@ -1189,6 +1300,11 @@ public class QTCanvas extends Canvas {
         super.finalize();
     }
 
+    /**
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Override the standard paint method.
+     */
     @Deprecated
     public void paint(Graphics g) {
         if (qtcHelper.mClient != null) {

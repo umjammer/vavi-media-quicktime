@@ -98,7 +98,24 @@ public final class ImageUtil {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Takes an ImageSpec object and recompresses the images so that the images have
+     * the keyColor set as a transparent colour that will not draw. It uses the
+     * animation codec to do this, and there is no loss in quality. This will use the depth
+     * of the source image to map the colour into. This will use the depth
+     * of the supplied QDGraphics to compress into - pixel sizes other than 8, 16, or 32 will throw
+     * an exception. The r parameter allows the application to specify an array of Regions that are used as hit-test
+     * regions - whether pixels are visible from this image at those locations or not. This array must at least be the same length
+     * as the number of images in the sequence. As each image is recompressed the corresponding element of the Region array
+     * will be used as the hit-test Region for that image.
+     * @param keyColor the color that will be removed from the images appearance
+     * @param gw the QDGraphics that is used to contain the depth and pixel data of the recompressed image(s).
+     *  This graphics should be the size of the image (or a portion) that will be used to determine which
+     *  parts of the image are compressed.
+     * @param r an array of Regions that supply hit test data for each image in the sequence.
+     * @return an ImageDataSequence object that contains the new images
+     * @return {@link quicktime.QTException}
      */
     public static ImageDataSequence makeTransparent(ImageDataSequence paramImageDataSequence, QDColor paramQDColor, QDGraphics paramQDGraphics, Region[] paramArrayOfRegion) throws QTException {
         return makeTransparent(paramImageDataSequence, paramQDColor, paramQDGraphics, null, paramArrayOfRegion);

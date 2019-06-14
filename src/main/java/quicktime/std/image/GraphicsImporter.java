@@ -683,6 +683,12 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
+    /**
+     * Returns the data reference starting offset and data size limit.
+     * QuickTime::GraphicsImportGetDataReferenceOffsetAndLimit
+     * @return an array of length 2 with 1st element as the offset and 2nd element as the limit.
+     * @return {@link quicktime.std.StdQTException}
+     */
     public final int[] getDataReferenceOffsetAndLimit() throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };

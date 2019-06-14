@@ -68,6 +68,10 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         return this.size;
     }
 
+    /**
+     * Returns a copy of the data of the pointer as a byte array
+     * @return a byte array - copy of pointer data
+     */
     public byte[] getBytes() {
         byte[] arrayOfByte = new byte[this.size];
         getBytesAt(0, this.size, arrayOfByte, 0);
@@ -82,71 +86,183 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         copyArrayToPointer(paramArrayOfByte, paramInt3, _ID(), paramInt1, paramInt2);
     }
 
+    /**
+     * An efficient byte[] copy that copies length bytes from the pointer to the
+     * byte array.
+     * @param ptrOffset the byte offset from the pointer to copy the bytes from
+     * @param destArray the destination byte array
+     * @param destOffset the offset within the byte array to start copying to
+     * @param length the number of bytes to copy
+     */
     public final void copyToArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 1, paramInt2, paramArrayOfByte.length);
         getBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
     }
 
+    /**
+     * An efficient short[] copy that copies length shorts from the pointer to the
+     * short array.
+     * @param ptrOffset the byte offset from the pointer to copy the shorts from
+     * @param destArray the destination short array
+     * @param destOffset the offset within the short array to start copying to
+     * @param length the number of shorts to copy
+     */
     public final void copyToArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfShort.length);
         copyPointerToArray(_ID(), paramInt1, paramArrayOfShort, paramInt2 * 2, paramInt3 * 2);
     }
 
+    /**
+     * An efficient char[] copy that copies length chars from the pointer to the
+     * char array.
+     * @param ptrOffset the byte offset from the pointer to copy the chars from
+     * @param destArray the destination char array
+     * @param destOffset the offset within the char array to start copying to
+     * @param length the number of chars to copy
+     */
     public final void copyToArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfChar.length);
         copyPointerToArray(_ID(), paramInt1, paramArrayOfChar, paramInt2 * 2, paramInt3 * 2);
     }
 
+    /**
+     * An efficient int[] copy that copies length ints from the pointer to the
+     * int array.
+     * @param ptrOffset the byte offset from the pointer to copy the ints from
+     * @param destArray the destination int array
+     * @param destOffset the offset within the int array to start copying to
+     * @param length the number of ints to copy
+     */
     public final void copyToArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfInt.length);
         copyPointerToArray(_ID(), paramInt1, paramArrayOfInt, paramInt2 * 4, paramInt3 * 4);
     }
 
+    /**
+     * An efficient float[] copy that copies length floats from the pointer to the
+     * float array.
+     * @param ptrOffset the byte offset from the pointer to copy the floats from
+     * @param destArray the destination float array
+     * @param destOffset the offset within the float array to start copying to
+     * @param length the number of floats to copy
+     */
     public final void copyToArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfFloat.length);
         copyPointerToArray(_ID(), paramInt1, paramArrayOfFloat, paramInt2 * 4, paramInt3 * 4);
     }
 
+    /**
+     * An efficient long[] copy that copies length longs from the pointer to the
+     * long array.
+     * @param ptrOffset the byte offset from the pointer to copy the longs from
+     * @param destArray the destination long array
+     * @param destOffset the offset within the long array to start copying to
+     * @param length the number of longs to copy
+     */
     public final void copyToArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfLong.length);
         copyPointerToArray(_ID(), paramInt1, paramArrayOfLong, paramInt2 * 8, paramInt3 * 8);
     }
 
+    /**
+     * An efficient double[] copy that copies length doubles from the pointer to the
+     * double array.
+     * @param ptrOffset the byte offset from the pointer to copy the doubles from
+     * @param destArray the destination double array
+     * @param destOffset the offset within the double array to start copying to
+     * @param length the number of doubles to copy
+     */
     public final void copyToArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfDouble.length);
         copyPointerToArray(_ID(), paramInt1, paramArrayOfDouble, paramInt2 * 8, paramInt3 * 8);
     }
 
+    /**
+     * An efficient byte[] copy that copies length bytes from the byte array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the byte[] to copy
+     * @param srcOffset the nth index within the byte [] to start copying from
+     * @param length how many elements of the byte array to copy
+     */
     public final void copyFromArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 1, paramInt2, paramArrayOfByte.length);
         setBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
     }
 
+    /**
+     * An efficient short[] copy that copies length shorts from the short array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the short[] to copy
+     * @param srcOffset the nth index within the short [] to start copying from
+     * @param length how many elements of the short array to copy
+     */
     public final void copyFromArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfShort.length);
         copyArrayToPointer(paramArrayOfShort, paramInt2 * 2, _ID(), paramInt1, paramInt3 * 2);
     }
 
+    /**
+     * An efficient char[] copy that copies length chars from the char array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the char[] to copy
+     * @param srcOffset the nth index within the char [] to start copying from
+     * @param length how many elements of the char array to copy
+     */
     public final void copyFromArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfChar.length);
         copyArrayToPointer(paramArrayOfChar, paramInt2 * 2, _ID(), paramInt1, paramInt3 * 2);
     }
 
+    /**
+     * An efficient int[] copy that copies length ints from the int array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the int[] to copy
+     * @param srcOffset the nth index within the int [] to start copying from
+     * @param length how many elements of the int array to copy
+     */
     public final void copyFromArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfInt.length);
         copyArrayToPointer(paramArrayOfInt, paramInt2 * 4, _ID(), paramInt1, paramInt3 * 4);
     }
 
+    /**
+     * An efficient float[] copy that copies length floats from the float array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the float[] to copy
+     * @param srcOffset the nth index within the float [] to start copying from
+     * @param length how many elements of the float array to copy
+     */
     public final void copyFromArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfFloat.length);
         copyArrayToPointer(paramArrayOfFloat, paramInt2 * 4, _ID(), paramInt1, paramInt3 * 4);
     }
 
+    /**
+     * An efficient long[] copy that copies length longs from the long array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the long[] to copy
+     * @param srcOffset the nth index within the long [] to start copying from
+     * @param length how many elements of the long array to copy
+     */
     public final void copyFromArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfLong.length);
         copyArrayToPointer(paramArrayOfLong, paramInt2 * 8, _ID(), paramInt1, paramInt3 * 8);
     }
 
+    /**
+     * An efficient double[] copy that copies length doubles from the double array to
+     * the pointer.
+     * @param ptrOffset how many bytes offset from the base pointer to copy to.
+     * @param srcArray the double[] to copy
+     * @param srcOffset the nth index within the double [] to start copying from
+     * @param length how many elements of the double array to copy
+     */
     public final void copyFromArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
         QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfDouble.length);
         copyArrayToPointer(paramArrayOfDouble, paramInt2 * 8, _ID(), paramInt1, paramInt3 * 8);

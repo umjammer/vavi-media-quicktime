@@ -296,6 +296,9 @@ public class MediaParams extends QTPointerRef {
         return getShortAt(72);
     }
 
+    /**
+     * gets the frequency bands associated with the sound media
+     */
     public byte[] getFrequencyBands() {
         if (this.bands != null)
             return this.bands.getBytes();

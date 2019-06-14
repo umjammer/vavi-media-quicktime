@@ -15,6 +15,11 @@ public final class QTVRString extends QTPointerRef {
         System.arraycopy(paramString.getBytes(), 0, getBytes(), 4, paramString.length());
     }
 
+    /**
+     * Creates a QTVRString object from a byte array
+     * @throws if the byte array does not conform to valid QTVRString data
+     * @throws quicktime.QTException
+     */
     public QTVRString(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte.length, true);
         if (paramArrayOfByte.length < 4)

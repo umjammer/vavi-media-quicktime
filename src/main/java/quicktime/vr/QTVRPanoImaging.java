@@ -23,6 +23,10 @@ public final class QTVRPanoImaging extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRPanoImaging object from a byte array
+     * Used in cloning
+     */
     public QTVRPanoImaging(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

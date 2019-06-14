@@ -173,6 +173,21 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         return (0xFF00 & paramInt) >> 8;
     }
 
+    /**
+     * Takes a byte array and converts it to a QDColor. The flag tells the
+     * call what format the bytes are in. The length of the array must equate
+     * to at least the required length of bytes.
+     *
+     * kIsRGBColorBytes, length == 6, r, g, b of 2 bytes each (unsigned short)(range 0->65535 for each component)
+     * kIsARGBColorBytes, length == 8, a, r, g, b of 2 bytes each (unsigned short)(range 0->65535 for each component)
+     * kIsTQ3ColorRGBBytes, length == 12, r, g, b of 4 bytes each (float)(range 0->1 for each component)
+     * kIsTQ3ColorARGBBytes, length == 16, a, r, g, b of 4 bytes each (float)(range 0->1 for each component)
+     *
+     * @param colorBytes the byte array containing the color values
+     * @param flag flag that describes the format of the byte array
+     * @return a QDColor
+     * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
+     */
     public static QDColor fromArray(byte[] paramArrayOfByte, int paramInt) {
         if (paramInt > paramArrayOfByte.length)
             throw new IllegalArgumentException("Mismatch between flag and supplied colorBytes");
@@ -300,7 +315,10 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>as of QTJava 4.0</I>
+     * Create an instance of an QDColor class
+     * @param color the java.awt.Color class to convert
      */
     public QDColor(Color paramColor) {
         this(convert8to16(paramColor.getRed()), convert8to16(paramColor.getGreen()), convert8to16(paramColor.getBlue()));
@@ -348,10 +366,16 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         paramObjectOutputStream.write(arrayOfByte);
     }
 
+    /**
+     * Returns the color as an RGBColor value
+     */
     public byte[] getRGBColor() {
         return this.bytes;
     }
 
+    /**
+     * Returns the color as an ARGBColor value
+     */
     public byte[] getARGBColor() {
         byte[] arrayOfByte = new byte[8];
         setShortInArray(arrayOfByte, 0, (short) this.alpha);
@@ -359,6 +383,9 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         return arrayOfByte;
     }
 
+    /**
+     * Returns the color as an GradientColor value
+     */
     public byte[] getGradientColor() {
         byte[] arrayOfByte = new byte[12];
         setShortInArray(arrayOfByte, 0, (short) this.alpha);
@@ -367,6 +394,9 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         return arrayOfByte;
     }
 
+    /**
+     * Returns the color as a TQ3ColorRGB value
+     */
     public byte[] getTQ3ColorRGB() {
         byte[] arrayOfByte = new byte[12];
         setFloatInArray(arrayOfByte, 0, getRed() / 65535.0F);
@@ -375,6 +405,9 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         return arrayOfByte;
     }
 
+    /**
+     * Returns the color as a TQ3ColorARGB value
+     */
     public byte[] getTQ3ColorARGB() {
         byte[] arrayOfByte = new byte[16];
         setFloatInArray(arrayOfByte, 0, getAlpha() / 65535.0F);

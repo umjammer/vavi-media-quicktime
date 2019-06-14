@@ -24,6 +24,10 @@ public final class QTVRNodeHeader extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRNodeHeader object from a byte array
+     * Used in cloning
+     */
     public QTVRNodeHeader(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

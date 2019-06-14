@@ -45,7 +45,10 @@ public class Protocol implements Collection {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Creates a Protocol from the supplied class. These default class cannot be
+     * removed from this Protocol once created.
      */
     public Protocol(Class paramClass) {
         if (paramClass != null)

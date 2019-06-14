@@ -81,6 +81,10 @@ public final class QTVRObjectSample extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRObjectSample object from a byte array
+     * Used in cloning
+     */
     public QTVRObjectSample(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

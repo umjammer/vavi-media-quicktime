@@ -128,6 +128,12 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
         return arrayOfInt[0];
     }
 
+    /**
+     * Sets the current list of compression types for a dialog.
+     * QuickTime::SCSetInfo()
+     * @param compTypes the new compression types, if null then show all available compression options.
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void setInfoCompressionList(int[] paramArrayOfInt) throws StdQTException {
         if (paramArrayOfInt == null) {
             StdQTException.checkError(SCSetInfo(_ID(), 1668577644, (int[]) null));
@@ -140,6 +146,12 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
         }
     }
 
+    /**
+     * Retrieves the current compression type list for a dialog.
+     * QuickTime::SCGetInfo()
+     * @return the compression list
+     * @return {@link quicktime.std.StdQTException}
+     */
     public int[] getInfoCompressionList() throws StdQTException {
         int i = NewHandle(4);
         int[] arrayOfInt1 = { i };

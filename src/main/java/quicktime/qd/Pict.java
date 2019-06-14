@@ -270,6 +270,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         return new Pict(i);
     }
 
+    /**
+     * Create a Pict object from an array of bytes. This is expected to be in
+     * the format of a Pict Handle - ie. if you are reading this in from a Pict file
+     * you must drop the first 512 bytes from the file.
+     * @param pictBytes the bytes of the pict handle
+     */
     public Pict(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte.length, false);
         copyFromArray(0, paramArrayOfByte, 0, paramArrayOfByte.length);

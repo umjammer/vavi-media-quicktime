@@ -23,6 +23,10 @@ public final class QTVRWorldHeader extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRWorldHeader object from a byte array
+     * Used in cloning
+     */
     public QTVRWorldHeader(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

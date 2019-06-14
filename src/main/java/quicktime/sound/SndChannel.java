@@ -294,6 +294,12 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
         SoundException.checkError(SndSetInfo(_ID(), 1701933922, paramMediaEQSpectrumBands.getBytes()));
     }
 
+    /**
+     * Gets the Equalizer Band Levels. The levels are equal to supplied the bands count.
+     * QuickTime::SndGetInfo
+     * @return bandLevels
+     * @return {@link quicktime.sound.SoundException}
+     */
     public int[] getEQSpectrumLevels(int paramInt) throws SoundException {
         byte[] arrayOfByte = new byte[paramInt];
         SoundException.checkError(SndGetInfo(_ID(), 1701932150, arrayOfByte));
@@ -342,6 +348,13 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
         SoundException.checkError(SndSetInfo(_ID(), 1701934183, k));
     }
 
+    /**
+     * Gets the values of the bass and treble tone control gain values.
+     * Range is 0 to 255 unity gain. You can overdrive these values...
+     * QuickTime::SndGetInfo
+     * @return an array on length 2, containing 1st element as bass and 2nd element as treble.
+     * @return {@link quicktime.sound.SoundException}
+     */
     public int[] getEQToneControlGain() throws SoundException {
         int[] arrayOfInt = new int[2];
         SoundException.checkError(SndGetInfo(_ID(), 1701934183, arrayOfInt));

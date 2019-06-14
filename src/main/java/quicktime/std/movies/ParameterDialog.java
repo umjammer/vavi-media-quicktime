@@ -146,6 +146,22 @@ public final class ParameterDialog implements QuickTimeLib {
         return parameters;
     }
 
+    /**
+     * This call shows the effects parameter dialog with the specified parameters.
+     * It shows the effects parameter dialog as a modal dialog.
+     * QuickTime::QTCreateStandardParameterDialog
+     * QuickTime::QTStandardParameterDialogDoAction
+     * QuickTime::QTIsStandardParameterDialogEvent
+     * QuickTime::QTDismissStandardParameterDialog
+     * @param effectsList governs the list of effects that are displayed in the dialog
+     * @param dialogOptions options of type StdQTConstants.pdOptions...
+     * @param parameters any previous effects parameter AtomContainer, or null
+     * @param title the title of the parameter dialog, or null
+     * @param pictArray array of preview picture(s) used in the dialog, or null
+     * @return the AtomContainer containing the information to display the effect
+     * @throws on userCanceledErr or if an error occurred
+     * @throws quicktime.QTException
+     */
     public static AtomContainer showParameterDialog(final EffectsList paramEffectsList, int paramInt, AtomContainer paramAtomContainer, final String title, final Pict[] pictArray) throws QTException {
         AtomContainer localAtomContainer = null;
         if (paramAtomContainer == null) {

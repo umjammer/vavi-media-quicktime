@@ -146,6 +146,14 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
         return getPStringAt(paramInt);
     }
 
+    /**
+     * Returns the byte values at the given position(offset) within the	object's memory area.
+     * @param offset the given number of bytes to locate the struct.
+     * @param length the given number of bytes of memory. The maximum length that will be copied is
+     *  (size - offset) bytes. If zero then this will return all of the available bytes from the offset.
+     * @return the byte array
+     * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
+     */
     public byte[] getBytes(int paramInt1, int paramInt2) throws IndexOutOfBoundsException {
         checkOffset(paramInt1);
         int i = getSize() - paramInt1;

@@ -21,6 +21,10 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
         super(8);
     }
 
+    /**
+     * Creates a QTVRTrackRefEntry object from a byte array
+     * Used in cloning
+     */
     public CursorRecord(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte);
         if (paramArrayOfByte.length != 8) {

@@ -20,6 +20,14 @@ public abstract class NativeGraphics {
 
     WinJNIDrawingSurface jnidrawingsurfaceinfo;
 
+    /**
+     * This method is called by the Canvas to get the platform specific object that
+     * will be able to return the QDGraphics that will be dependent on the particular
+     * platform that we are currently running on.
+     * @return the platform specific implementation of the NativeGrapics class
+     * @return {@link quicktime.qd.NativeGraphicsException}
+     * @return {@link quicktime.QTUnknownOSException}
+     */
     public static final NativeGraphics getContext(Canvas paramCanvas) throws NativeGraphicsException, QTUnknownOSException {
         return getContext(paramCanvas);
     }

@@ -1442,6 +1442,16 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         StdQTException.checkError(GetMoviesError());
     }
 
+    /**
+     * This method searches for times of interest in a movie.
+     * QuickTime::GetMovieNextInterestingTime()
+     * @param interestingTimeFlags Specifies the search criteria.
+     * @param mediaTypes Specifies an array of media types
+     * @param time Specifies a time value that establishes the starting point for the search.
+     * @param rate Contains the search direction.
+     * @return a TimeInfo object specifying the interesting time.
+     * @return {@link quicktime.std.StdQTException}
+     */
     public TimeInfo getNextInterestingTime(int paramInt1, int[] paramArrayOfInt, int paramInt2, float paramFloat) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];

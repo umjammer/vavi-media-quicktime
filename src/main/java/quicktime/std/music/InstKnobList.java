@@ -23,6 +23,11 @@ public final class InstKnobList extends QTByteObject {
         setIntAt(12, EndianOrder.flipNativeToBigEndian32(1));
     }
 
+    /**
+     * Makes a KnobList from the supplied array of knobs.
+     * @param knobFlags the knobFlags
+     * @param knobs the array of knobs
+     */
     public InstKnobList(int paramInt, InstKnob[] paramArrayOfInstKnob) {
         super(8 + paramArrayOfInstKnob.length * 8);
         setIntAt(0, EndianOrder.flipNativeToBigEndian32(paramArrayOfInstKnob.length));

@@ -60,7 +60,12 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Creates a awt.Window for use in full screen mode. The application can pass in the
+     * FullScreen object which enables the screen to be placed into full screen mode.
+     * @param fs the QuickTime FullScreen object
+     * @param f the Frame that owns the Window object.
      */
     public FullScreenWindow(FullScreen paramFullScreen, Frame paramFrame) throws QTException {
         super(paramFrame);

@@ -235,6 +235,10 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         setDeviceInfo(1936684402, arrayOfShort);
     }
 
+    /**
+     * Get a list of the names of all the sound input sources
+     * supported by the sound input device
+     */
     public String[] getInputSourceNames() throws SoundException {
         byte[] arrayOfByte1 = new byte[4];
         getDeviceInfo(1936613741, arrayOfByte1);
@@ -332,6 +336,12 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         return QTUtils.UFix2X(arrayOfInt[0]);
     }
 
+    /**
+     * Returns a float list containing the sample rates available.
+     * QuickTime::SPBGetDeviceInfo
+     * @return a float array containing the list of sample rates.
+     * @return {@link quicktime.sound.SoundException}
+     */
     public float[] getSampleRateAvailable() throws SoundException {
         byte[] arrayOfByte = new byte[6];
         getDeviceInfo(1936941430, arrayOfByte);
@@ -373,6 +383,12 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         return arrayOfShort[0];
     }
 
+    /**
+     * Returns an integer list containing the sample sizes available.
+     * QuickTime::SPBGetDeviceInfo
+     * @return an integer array containing the list of samples.
+     * @return {@link quicktime.sound.SoundException}
+     */
     public int[] getSampleSizeAvailable() throws SoundException {
         byte[] arrayOfByte = new byte[6];
         getDeviceInfo(1936941430, arrayOfByte);
@@ -466,6 +482,12 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
+    /**
+     * Returns an integer (OSTypes) list containing the available compression types.
+     * QuickTime::SPBGetDeviceInfo
+     * @return an integer array containing the list of compression types.
+     * @return {@link quicktime.sound.SoundException}
+     */
     public int[] getCompressionAvailable() throws SoundException {
         byte[] arrayOfByte = new byte[6];
         getDeviceInfo(1668112758, arrayOfByte);
@@ -509,6 +531,11 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         return QTUtils.PString2String(arrayOfByte, 0);
     }
 
+    /**
+     * Get the current signal level for each active channel.
+     * @return an short[] of the current signal level
+     * @return {@link quicktime.sound.SoundException}
+     */
     public int[] getActiveLevels() throws SoundException {
         int i = getNumberChannels();
         int j = NewPtr(i * 2);

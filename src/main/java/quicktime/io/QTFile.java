@@ -228,6 +228,13 @@ public final class QTFile extends File implements QuickTimeLib {
         return i;
     }
 
+    /**
+     * Present a standard open file panel to the user to retrieve a file.
+     * QuickTime::StandardGetFilePreview()
+     * @param fileTypes the particular file types you want the user to see. No fileTypes assumes all files. Max of 4.
+     * @return The file object.
+     * @return {@link quicktime.QTException}
+     */
     public static QTFile standardGetFilePreview(int[] paramArrayOfInt) throws QTException {
         byte[] arrayOfByte1;
         if (QTSession.isCurrentOS(4)) {
@@ -274,6 +281,12 @@ public final class QTFile extends File implements QuickTimeLib {
         this.fileSpec = paramArrayOfByte;
     }
 
+    /**
+     * Returns the byte array containing the fsspec.
+     * @param permissions you must specify whether the file will be reading or writing.
+     * @return the byte array
+     * @return {@link quicktime.io.QTIOException}
+     */
     public final byte[] getFSSpec(boolean paramBoolean, int paramInt) throws QTIOException {
         if (this.fileSpec == null) {
             try {

@@ -65,7 +65,14 @@ public class GroupController extends MouseController {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method is called when a GroupController has received a mouse
+     * event in its space. This method returns the frontmost QTDrawable object at the
+     * event's location if it finds such an object at the location of the event.
+     * @param event a mouse down event
+     * @return a QTDrawable object that is located at the event coordinates or null
+     * @return {@link quicktime.QTException}
      */
     protected Object getSelected(MouseEvent paramMouseEvent) throws QTException {
         this.current = ((QTDrawable) this.group.hitTest(paramMouseEvent.getX(), paramMouseEvent.getY()));
@@ -99,7 +106,13 @@ public class GroupController extends MouseController {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Drag the target QTDrawable that is effected by the delegated MouseResponder.
+     * This method ensures that the display logic of the GroupDrawable is kept
+     * updated due to any changes in the display characteristics of a mouseDragged
+     * event.
+     * @param e the mouse event that triggered the drag
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
         if (!this.isActive)

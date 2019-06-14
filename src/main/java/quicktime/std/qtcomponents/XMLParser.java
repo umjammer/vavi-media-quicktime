@@ -168,6 +168,18 @@ public final class XMLParser extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
+    /**
+     * tell the parser that the particular attribute of an element may have an additional kind of value,
+     * as specified by attributeValueKind and attributeValueKindInfo
+     * QuickTime::XMLParseAddAttributeValueKind
+     * @param elementID non zero unique tokenized element identifier
+     * @param attributeID non zero unique tokenized attribute identifier
+     * @param attributeValueKind -
+     * @param attributeValueKindInfo -
+     * @throws on zero elementID
+     * @throws on zero attributeID
+     * @throws quicktime.std.StdQTException
+     */
     public void addAttributeValueKind(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) throws StdQTException {
         if (paramInt1 == 0)
             throw new StdQTException(-50);
@@ -276,6 +288,16 @@ public final class XMLParser extends Component implements QuickTimeLib {
         addAttributeValueKind(paramInt1, paramInt2, 16, paramQDColor.getRGBColor());
     }
 
+    /**
+     * tell the parser of an enumerated attribute, of type attributeValueKindEnum or attributeValueKindCaseSensEnum, for the specified element
+     * QuickTime::XMLParseAddAttributeAndValue
+     * @param elementID non zero tokenized element identifier
+     * @param attributeID non zero unique tokenized attribute identifier
+     * @param attributeList String[] of attributes
+     * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
+     * @throws on zero elementID
+     * @throws quicktime.std.StdQTException
+     */
     public void addAttributeValueKind(int paramInt1, int paramInt2, String[] paramArrayOfString, boolean paramBoolean) throws StdQTException {
         int i = paramArrayOfString.length;
         int j = 0;
@@ -298,6 +320,19 @@ public final class XMLParser extends Component implements QuickTimeLib {
         addAttributeValueKind(paramInt1, paramInt2, n, arrayOfByte);
     }
 
+    /**
+     * tell the parser of an attribute, which may have a particular type of value, for the specified element
+     * QuickTime::XMLParseAddAttributeAndValue
+     * @param elementID non zero tokenized element identifier
+     * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
+     * @param attributeName name
+     * @param attributeID non zero unique tokenized attribute identifier
+     * @param attributeValueKind -
+     * @param attributeValueKindInfo -
+     * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
+     * @throws on zero elementID
+     * @throws quicktime.std.StdQTException
+     */
     public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, int paramInt4, byte[] paramArrayOfByte) throws StdQTException {
         if (paramInt1 == 0)
             throw new StdQTException(-50);
@@ -417,6 +452,18 @@ public final class XMLParser extends Component implements QuickTimeLib {
         return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, 16, paramQDColor.getRGBColor());
     }
 
+    /**
+     * tell the parser of an enumerated attribute, of type attributeValueKindEnum or attributeValueKindCaseSensEnum, for the specified element
+     * QuickTime::XMLParseAddAttributeAndValue
+     * @param elementID non zero tokenized element identifier
+     * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
+     * @param attributeName name
+     * @param attributeID non zero unique tokenized attribute identifier
+     * @param attributeList String[] of attributes
+     * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
+     * @throws on zero elementID
+     * @throws quicktime.std.StdQTException
+     */
     public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, String[] paramArrayOfString, boolean paramBoolean) throws StdQTException {
         int i = paramArrayOfString.length;
         int j = 0;

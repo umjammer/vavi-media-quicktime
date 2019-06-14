@@ -53,6 +53,10 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
         super(12);
     }
 
+    /**
+     * Constructor for building a temporal settings object from a byte array
+     * (such as the one you can get from an atom container)
+     */
     public TemporalSettings(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }

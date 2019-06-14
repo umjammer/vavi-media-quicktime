@@ -689,6 +689,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
         return localRegion;
     }
 
+    /**
+     * Returns a list of IDs of all the hot spots in the QuickTimeÊVR instance
+     * that are currently visible.
+     * QuickTime::QTVRGetVisibleHotSpots
+     * @return currently visible hot spot IDs
+     */
     public int[] getVisibleHotSpots() {
         int i = NewHandle(4);
         int j = 0;

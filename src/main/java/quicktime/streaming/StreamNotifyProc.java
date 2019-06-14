@@ -59,6 +59,15 @@ public abstract class StreamNotifyProc {
         return 0;
     }
 
+    /**
+     * This method should be overridden to handle the following notification types:
+     * kQTSStreamChangedNotification
+     *
+     * @param type the type of notification
+     * @param s the Stream that originated the notification
+     * @param comp the component that changed
+     * @return 0 if no error occurred processing the notification
+     */
     public int execute(int paramInt, Stream paramStream, Component paramComponent) {
         return 0;
     }

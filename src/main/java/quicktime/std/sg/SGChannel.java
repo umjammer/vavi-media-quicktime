@@ -118,6 +118,15 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
         }
     }
 
+    /**
+     * Instructs the sequence grabber to display its settings dialog box to the user.
+     * QuickTime::SGSettingsDialog
+     * @param flags The control flags for the current operation.
+     * @param panelList An array of sequence grabber panel component identifiers.
+     *   Will only present these components in the panel component pop-up menu. Set to null to use all identifiers.
+     *          SGPanel[] panelList
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void settingsDialog(int paramInt, Component[] paramArrayOfComponent) throws StdQTException {
         int i = 0;
         final int j = i;

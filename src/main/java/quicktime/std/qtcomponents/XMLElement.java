@@ -111,6 +111,12 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
         return 0;
     }
 
+    /**
+     * get the attributes
+     * @return array of XMLAttribute
+     * @return {@link quicktime.std.StdQTException}
+     * @return {@link quicktime.QTException}
+     */
     public XMLAttribute[] getAttributes() throws StdQTException, QTException {
         int i = countAttributes();
         if (i != 0) {
@@ -143,6 +149,12 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
         return 0;
     }
 
+    /**
+     * get the content items of the XMLElement
+     * @return array of XMLContent
+     * @return {@link quicktime.std.StdQTException}
+     * @return {@link quicktime.QTException}
+     */
     public XMLContent[] getContents() throws StdQTException, QTException {
         int i = countContents();
         if (i != 0) {

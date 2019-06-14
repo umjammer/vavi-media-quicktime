@@ -217,7 +217,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been clicked on a found and valid target within the enclosing space.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseClicked(MouseEvent paramMouseEvent) {
         if (this.mouseListener != null) {
@@ -226,7 +229,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse enters a QTDrawable space. There is no target set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseEntered(MouseEvent paramMouseEvent) {
         if (this.mouseListener != null) {
@@ -235,7 +241,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse exits a QTDrawable space. There is no target set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseExited(MouseEvent paramMouseEvent) {
         if (this.mouseListener != null) {
@@ -244,7 +253,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event enters a Target within an enclosing space. The Target is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
         if (this.qtMouseListener != null) {
@@ -253,7 +265,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event exits a Target within an enclosing space. The Target is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseExitedTarget(MouseEvent paramMouseEvent) {
         if (this.qtMouseListener != null) {
@@ -262,7 +277,11 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse button has been moved over a space. There is no target set for events of this kind.
+     * (with no buttons no down).
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseMoved(MouseEvent paramMouseEvent) {
         if (this.qtMouseListener != null)
@@ -273,7 +292,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been pressed on a found and valid target within the enclosing space.
+     * @param e the MouseEvent that triggered this event
      */
     public void mousePressed(MouseEvent paramMouseEvent) {
         if (this.mouseListener != null) {
@@ -282,7 +304,11 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been dragged on a found and valid target within the enclosing space.
+     * This method is only called if the responder has been activated by a mouse pressed event.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
         if (this.qtMouseListener != null)
@@ -293,7 +319,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been released after being pressed on a found and valid target within the enclosing space.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseReleased(MouseEvent paramMouseEvent) {
         if (this.mouseListener != null) {
@@ -332,7 +361,16 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Registers a MouseListener to this responder. The listener will be invoked with any of the
+     * mouse events the responder is invoked by. If the Responder has not been created to listen to these
+     * type of events then the listener will not be registered. The application can test this
+     * by calling:
+     *
+     * myGenericResponder.isInterested (MouseResponder.kMouseEvents)
+     *
+     * @param ml the new MouseListener
      */
     public void addMouseListener(MouseListener paramMouseListener) {
         if (isInterested(51)) {
@@ -341,14 +379,26 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Removes the specified MouseListener from the GenericResponder.
+     * @param ml the MouseListener to remove
      */
     public void removeMouseListener(MouseListener paramMouseListener) {
         this.mouseListener = GREventMulticaster.remove(this.mouseListener, paramMouseListener);
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Registers a MouseListener to this responder. The listener will be invoked with any of the
+     * mouse events the responder is invoked by. If the Responder has not been created to listen to these
+     * type of events then the listener will not be registered. The application can test this
+     * by calling:
+     *
+     * myGenericResponder.isInterested (MouseResponder.kMouseMotionEvents)
+     *
+     * @param ml the new MouseListener
      */
     public void addMouseMotionListener(MouseMotionListener paramMouseMotionListener) {
         if (isInterested(12)) {
@@ -357,7 +407,10 @@ public class GenericResponder extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Removes the specified MouseListener from the GenericResponder.
+     * @param ml the MouseListener to remove
      */
     public void removeMouseMotionListener(MouseMotionListener paramMouseMotionListener) {
         this.mouseMotionListener = GREventMulticaster.remove(this.mouseMotionListener, paramMouseMotionListener);

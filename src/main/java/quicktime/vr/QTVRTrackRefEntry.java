@@ -24,6 +24,10 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRTrackRefEntry object from a byte array
+     * Used in cloning
+     */
     public QTVRTrackRefEntry(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte);
         if (paramArrayOfByte.length != kNativeSize) {

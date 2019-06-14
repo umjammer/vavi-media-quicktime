@@ -66,6 +66,9 @@ public class JDirectLinker {
         }
     }
 
+    /**
+     * Uses interfaces to supply the DLL handles.
+     */
     public static void linkNativeMethods(Class<?> paramClass) {
         int[] arrayOfInt = gatherLibraries(paramClass);
         MethodSpec[] arrayOfMethodSpec = getNativeMethods(paramClass);

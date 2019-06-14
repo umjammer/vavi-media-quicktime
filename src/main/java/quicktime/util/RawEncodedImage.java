@@ -83,16 +83,31 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
         return new RawEncodedImage(arrayOfInt[0], paramSprite.getImageDataSize(), paramSprite, -1);
     }
 
+    /**
+     * This will return a RawEncodedImage object from a byte array. It will copy
+     * the bytes.
+     */
     public RawEncodedImage(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte);
         this.rowBytes = -1;
     }
 
+    /**
+     * This will return a RawEncodedImage object from an int array. It will copy
+     * the ints.
+     * @param ints the int array containing the image data
+     */
     public RawEncodedImage(int[] paramArrayOfInt) throws QTException {
         this(paramArrayOfInt.length * 4, false);
         copyFromArray(0, paramArrayOfInt, 0, paramArrayOfInt.length);
     }
 
+    /**
+     * This will return a RawEncodedImage object from an int array. It will copy
+     * the ints.
+     * @param ints the int array containing the image data
+     * @param rowBytes the row bytes of the image data
+     */
     public RawEncodedImage(int[] paramArrayOfInt, int paramInt) throws QTException {
         this(paramArrayOfInt.length * 4, false, paramInt);
         copyFromArray(0, paramArrayOfInt, 0, paramArrayOfInt.length);
@@ -197,6 +212,11 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
         setIntAt(paramInt1, paramInt2);
     }
 
+    /**
+     * Sets an array of ints at the specified offset
+     * @param offset The offset is specified in bytes into the encoded image object.
+     * @param value an array of ints
+     */
     public void setInts(int paramInt, int[] paramArrayOfInt) {
         if ((paramInt + paramArrayOfInt.length * 4 > getSize()) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();

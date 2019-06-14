@@ -317,55 +317,84 @@ public abstract class MouseResponder {
     public abstract boolean isAppropriate(Object paramObject);
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been clicked on a found and valid target within the enclosing space.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseClicked(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse enters a QTDrawable space. There is no target set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseEntered(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse exits a QTDrawable space. There is no target set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseExited(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event enters a Target within an enclosing space. The Target is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event exits a Target within an enclosing space. The Target is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseExitedTarget(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse button has been moved over a space. There is no target set for events of this kind.
+     * (with no buttons no down).
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseMoved(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been pressed on a found and valid target within the enclosing space.
+     * @param e the MouseEvent that triggered this event
      */
     public void mousePressed(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been dragged on a found and valid target within the enclosing space.
+     * This method is only called if the responder has been activated by a mouse pressed event.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when the mouse has been released after being pressed on a found and valid target within the enclosing space.
+     * @param e the MouseEvent that triggered this event
      */
     public void mouseReleased(MouseEvent paramMouseEvent) {
     }

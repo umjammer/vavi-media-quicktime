@@ -128,6 +128,10 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
         }
     }
 
+    /**
+     * Deprecated.
+     * Key pressed events are passed on to the movie controller * @deprecated since QTJava 6.1
+     */
     public void keyPressed(KeyEvent paramKeyEvent) {
         try {
             this.player.controller.key(paramKeyEvent.getKeyCode(), paramKeyEvent.getModifiers());
@@ -136,6 +140,10 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
         }
     }
 
+    /**
+     * Deprecated.
+     * Mouse pressed events are passed on to the movie controller * @deprecated since QTJava 6.1
+     */
     public void mousePressed(MouseEvent paramMouseEvent) {
         try {
             this.player.controller.click(new QDPoint(paramMouseEvent.getX(), paramMouseEvent.getY()), paramMouseEvent.getModifiers());
@@ -144,21 +152,39 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
         }
     }
 
+    /**
+     * Deprecated.
+     */
     public void keyReleased(KeyEvent paramKeyEvent) {
     }
 
+    /**
+     * Deprecated.
+     */
     public void keyTyped(KeyEvent paramKeyEvent) {
     }
 
+    /**
+     * Deprecated.
+     */
     public void mouseClicked(MouseEvent paramMouseEvent) {
     }
 
+    /**
+     * Deprecated.
+     */
     public void mouseEntered(MouseEvent paramMouseEvent) {
     }
 
+    /**
+     * Deprecated.
+     */
     public void mouseExited(MouseEvent paramMouseEvent) {
     }
 
+    /**
+     * Deprecated.
+     */
     public void mouseReleased(MouseEvent paramMouseEvent) {
     }
 }

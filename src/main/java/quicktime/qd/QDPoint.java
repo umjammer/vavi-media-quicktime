@@ -83,10 +83,27 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     private short y;
 
+    /**
+     * Creates a QDPoint from an array of bytes that represent a FixedPoint, so the
+     * byte array must be 8bytes long at least.
+     * @param ptBytes the byte array containing the packed point values
+     * @param ptType the type of point to be found in the array
+     * @return a QDPoint
+     * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
+     */
     public static QDPoint fromArray(byte[] paramArrayOfByte, int paramInt) {
         return fromArray(paramArrayOfByte, paramInt, 0);
     }
 
+    /**
+     * Creates a QDPoint from an array of bytes that represent a FixedPoint, so the
+     * byte array must be 8bytes long at least.
+     * @param ptBytes the byte array containing the packed point values
+     * @param ptType the type of point to be found in the array
+     * @param offset the offset in the array where the point is to be found
+     * @return a QDPoint
+     * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
+     */
     public static QDPoint fromArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
         if (paramArrayOfByte.length - paramInt2 < 8) {
             throw new IllegalArgumentException("Mismatch between flag and supplied ptBytes");
@@ -151,10 +168,16 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return doEndianSwap ? this.x << 16 | this.y & 0xFFFF : this.y << 16 | this.x & 0xFFFF;
     }
 
+    /**
+     * Returns a byte array that contains the packed value of a GXPoint
+     */
     public byte[] getGXPoint() {
         return getFixedPoint();
     }
 
+    /**
+     * Returns a byte array that contains the packed value of a FixedPoint
+     */
     public byte[] getFixedPoint() {
         byte[] arrayOfByte = new byte[8];
         setIntInArray(arrayOfByte, 0, QTUtils.X2Fix(getXF()));
@@ -162,6 +185,9 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return arrayOfByte;
     }
 
+    /**
+     * Returns a byte array that contains the packed value of a 3Point2D
+     */
     public byte[] getQ3Point2D() {
         if (this.floatPt == null) {
             this.floatPt = new byte[8];
@@ -171,6 +197,9 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return this.floatPt;
     }
 
+    /**
+     * Returns a byte array that contains the packed value of a QTVRFloatPoint
+     */
     public byte[] getQTVRFloatPoint() {
         return getQ3Point2D();
     }

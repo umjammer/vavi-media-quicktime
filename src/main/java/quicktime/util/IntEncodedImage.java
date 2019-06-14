@@ -31,10 +31,19 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         new PrivelegedAction().establish();
     }
 
+    /**
+     * This will make a ByteEncodedImage from an array of ints. It will not copy
+     * the int array but creates a proxy for the same ints.
+     */
     public static IntEncodedImage fromIntArray(int[] paramArrayOfInt) {
         return new IntEncodedImage(paramArrayOfInt);
     }
 
+    /**
+     * This will make a ByteEncodedImage from an array of ints. It will not copy
+     * the int array but creates a proxy for the same ints. It will set the
+     * row bytes as specified.
+     */
     public static IntEncodedImage fromIntArray(int[] paramArrayOfInt, int paramInt) {
         return new IntEncodedImage(paramArrayOfInt, paramInt);
     }
@@ -75,6 +84,10 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         this.rowBytes = paramInt;
     }
 
+    /**
+     * Returns the internal int array. This is NOT a copy so any alteration
+     * of the int values will effect any usage of this object.
+     */
     public int[] getInts() {
         return this.ints;
     }

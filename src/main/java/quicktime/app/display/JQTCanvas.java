@@ -729,7 +729,75 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * A ComponentListener and ComponentEvent are used to listen to these types
+     * of events that occur to the QTCanvas' client - ie. when the QTCanvas' client
+     * is resized, moved, shown or hidden. These events generally occur in conjunction
+     * with the Component events they mirror - with some exceptions:
+     * ComponentShown and ComponentHidden are generated when the QTCanvas is shown
+     * or hidden and when the QTDrawable client is set or removed.
+     * ComonentMoved and ComponentResized are generated when the QTCanvas is
+     * moved or resized but the event is actually generated when the QTCanvas is repainted
+     * as this is when the QTDrawable client is itself resized or moved.
+     * @param e the ComponentListener
+     * <HR/>
+     * <A/>
+     * <H3>
+     * removeQTClientListener</H3>
+     *
+     * public void removeQTClientListener(java.awt.event.ComponentListener
+     * e)
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Remove a previously registered ComponentListener that is listening
+     * to events that occur with the QTCanvas' QTDrawable client.
+     * @param e the ComponentListener
+     * @see addQTClientListener
+     * <HR/>
+     * <A/>
+     * <TABLE>
+     *
+     * <TR>
+     * <A/>
+     * <TABLE>
+     *
+     * <TR>    <A href="../../../overview-summary.html">Overview</A> 
+     * <TD>    <A href="package-summary.html">Package</A> </TD>
+     * <TD>  Class </TD>
+     * <TD>    <A href="package-tree.html">Tree</A> </TD>
+     * <TD>    <A href="../../../deprecated-list.html">Deprecated</A> </TD>
+     * <TD>    <A href="../../../index-all.html">Index</A> </TD>
+     * <TD>    <A href="../../../help-doc.html">Help</A> </TD>
+     * </TR>
+     * </TABLE>
+     *
+     * <TD>
+     *
+     * </TD>
+     * </TR>
+     *
+     * <TR>
+     * <TD>
+     *  <A href="../../../quicktime/app/display/GroupMember.html">PREV CLASS</A> 
+     *  <A href="../../../quicktime/app/display/QTCanvas.html">NEXT CLASS</A></TD>
+     * <TD>
+     * <A href="../../../index.html" target="_top">FRAMES</A>   
+     *  <A href="JQTCanvas.html" target="_top">NO FRAMES</A>   
+     *  
+     *
+     * <A href="../../../allclasses-noframe.html" target="">All Classes</A>
+     *
+     * </TD>
+     * </TR>
+     * <TR>
+     * <TD>
+     * SUMMARY: NESTED | <A href="#field_summary">FIELD</A> | <A href="#constructor_summary">CONSTR</A> | <A href="#method_summary">METHOD</A></TD>
+     * <TD>
+     * DETAIL: <A href="#field_detail">FIELD</A> | <A href="#constructor_detail">CONSTR</A> | <A href="#method_detail">METHOD</A></TD>
+     * </TR>
+     * </TABLE>
+     * <HR/>
      */
     public void addQTClientListener(ComponentListener paramComponentListener) {
         this.clientListener = java.awt.AWTEventMulticaster.add(this.clientListener, paramComponentListener);

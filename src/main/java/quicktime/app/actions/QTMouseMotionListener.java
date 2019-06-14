@@ -12,12 +12,18 @@ import java.awt.event.MouseMotionListener;
 public abstract interface QTMouseMotionListener extends MouseMotionListener {
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event enters a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public abstract void mouseEnteredTarget(MouseEvent paramMouseEvent);
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Invoked when a mouseMoved event exits a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
+     * @param e the MouseEvent that triggered this event
      */
     public abstract void mouseExitedTarget(MouseEvent paramMouseEvent);
 }

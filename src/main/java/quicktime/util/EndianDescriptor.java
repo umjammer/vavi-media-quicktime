@@ -165,6 +165,10 @@ public class EndianDescriptor {
         return null;
     }
 
+    /**
+     * Returns an Enumeration to iterate over the collection of EndianFlipSpecs
+     * or null if there is no collection to iterate over
+     */
     public Enumeration<EndianFlipSpec> flipSpecs() {
         return this.vec == null ? null : this.vec.elements();
     }

@@ -113,6 +113,14 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
         StdQTException.checkError(MediaSetSoundEqualizerBands(_ID(), paramMediaEQSpectrumBands.getBytes()));
     }
 
+    /**
+     * Gets SoundEqualizer BandLevels . the levels is equal to the bands count ( from the getSoundEqualizerBands)
+     * you pass in the expected count of levels and it would return the array of levels of count length having
+     * band levels.(Not Documented)
+     * QuickTime::MediaGetSoundEqualizerBandLevels
+     * @return bandLevels
+     * @return {@link quicktime.std.StdQTException}
+     */
     public final int[] getSoundEqualizerBandLevels(int paramInt) throws StdQTException {
         byte[] arrayOfByte = new byte[paramInt];
         StdQTException.checkError(MediaGetSoundEqualizerBandLevels(_ID(), arrayOfByte));
@@ -135,6 +143,13 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
         StdQTException.checkError(MediaSetSoundBassAndTreble(_ID(), (short) paramInt1, (short) paramInt2));
     }
 
+    /**
+     * Gets  Sound Bass and Treble (Not Documented).
+     * Range is -1 to 1 where 0 is unity gain, 256 is maximum boost, -256 is maximum attenuation.
+     * QuickTime::MediaGetSoundBassAndTreble
+     * @return an array on length 2, containing 1st element as bass and 2nd element as treble.
+     * @return {@link quicktime.std.StdQTException}
+     */
     public final int[] getSoundBassAndTreble() throws StdQTException {
         short[] arrayOfShort1 = { 0 };
         short[] arrayOfShort2 = { 0 };

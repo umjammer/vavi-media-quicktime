@@ -79,6 +79,14 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
         StdQTException.checkError(i);
     }
 
+    /**
+     * Used  to add an atom to a vector data stream. When using this call make sure that the
+     * byte array passed in has all its bytes flipped to BigEndian .
+     * QuickTime::CurveAddAtomToVectorStream
+     * @param atomType Specifies the type of atom to add to the vector data stream.
+     * @param atomData the data for the atom.The EndianFlipping should be done by the application
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void addAtom(int paramInt, byte[] paramArrayOfByte) throws StdQTException {
         int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), paramInt, paramArrayOfByte.length, paramArrayOfByte, _ID());
         StdQTException.checkError(i);
@@ -109,6 +117,14 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
         StdQTException.checkError(i);
     }
 
+    /**
+     * Used  to add an atom of type kCurvePathAtom to a vector data stream. By default this has one contour per path.
+     * This is used to add points that are all on curve or off curve.
+     * QuickTime::CurveAddAtomToVectorStream
+     * @param onCurve if points are on curve set to true.
+     * @param points Specifies countour points that are  to be added to the vector data stream.
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void addAtom(boolean paramBoolean, QDPoint[] paramArrayOfQDPoint) throws StdQTException {
         int[] arrayOfInt = new int[paramArrayOfQDPoint.length * 2 + 3];
         arrayOfInt[0] = 1;

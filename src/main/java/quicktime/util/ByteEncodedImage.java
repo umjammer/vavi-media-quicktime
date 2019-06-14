@@ -13,10 +13,18 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
 
     static final long serialVersionUID = -2074813762531832L;
 
+    /**
+     * This will make a ByteEncodedImage from an array of bytes. It will not copy
+     * the byte array but creates a proxy for the same bytes.
+     */
     public static ByteEncodedImage fromByteArray(byte[] paramArrayOfByte) {
         return new ByteEncodedImage(paramArrayOfByte);
     }
 
+    /**
+     * This will make a ByteEncodedImage from an array of bytes. It will not copy
+     * the byte array but creates a proxy for the same bytes.
+     */
     public static ByteEncodedImage fromByteArray(byte[] paramArrayOfByte, int paramInt) {
         return new ByteEncodedImage(paramArrayOfByte, paramInt);
     }

@@ -77,7 +77,16 @@ public class JImagePainter implements Paintable {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * Paint on the graphics. The supplied component is the component from which
+     * the graphics object was derived or related to and is also the component
+     * that is the object that paint was called upon that has called this method.
+     * The Graphics object is what you should paint on.
+     * This maybe an on or off screen graphics.
+     * You should not cache this graphics object as it can be different
+     * between different calls.
+     * @param g the graphics to paint on.
      */
     public Rectangle[] paint(Graphics paramGraphics) {
         paramGraphics.drawImage(this.image, 0, 0, this.width, this.height, null);

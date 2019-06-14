@@ -309,6 +309,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
         }
     }
 
+    /**
+     * Registers an object as a listener of the MoviePlayer. The object will receive notification when the MoviePlayer draws a frame
+     */
     public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList == null) {
             this.listenerList = new Vector();
@@ -327,6 +330,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
         }
     }
 
+    /**
+     * Removes an object that is a listener of the MoviePlayer. The object will no longer receive notification when the MoviePlayer draws a frame
+     */
     public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList != null) {
             this.listenerList.removeElement(paramDrawingListener);

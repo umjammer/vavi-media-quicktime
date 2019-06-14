@@ -38,6 +38,12 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         }.establish();
     }
 
+    /**
+     * This call will return a QTByteObject which becomes a proxy for the
+     * specified byte array. It does not copy the byte array - but references it.
+     * @param ar the byte array to represent
+     * @return a QTByteObject with the specified array as its target bytes
+     */
     public static QTByteObject fromArray(byte[] paramArrayOfByte) {
         QTByteObject localQTByteObject = new QTByteObject();
         localQTByteObject.bytes = paramArrayOfByte;
@@ -63,6 +69,10 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         System.arraycopy(this.bytes, paramInt1, paramArrayOfByte, paramInt3, paramInt2);
     }
 
+    /**
+     * Returns the byte array containing the packed native object.
+     * @return the actual byte array NOT a copy
+     */
     public final byte[] getBytes() {
         return this.bytes;
     }

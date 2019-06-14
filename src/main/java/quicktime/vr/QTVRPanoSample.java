@@ -29,6 +29,10 @@ public final class QTVRPanoSample extends QTVRAtom {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRPanoSample object from a byte array
+     * Used in cloning
+     */
     public QTVRPanoSample(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte, kNativeSize);
     }

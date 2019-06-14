@@ -62,11 +62,19 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
         super(255);
     }
 
+    /**
+     * The incoming byte[] contains MIDI data only.
+     */
     public MusicMIDIPacket(byte[] paramArrayOfByte) {
         this();
         setMIDIData(paramArrayOfByte);
     }
 
+    /**
+     * Gets the current MIDI data. The length of the packet is the length of the
+     * data array that is returned
+     * @return the data array containing MIDI data
+     */
     public byte[] getMIDIData() {
         int i = getShortAt(0);
         byte[] arrayOfByte = new byte[i];
@@ -74,6 +82,12 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
         return arrayOfByte;
     }
 
+    /**
+     * Sets the current MIDI data. The length of the packet is the length of the
+     * data array that is supplied. The maximum length of the data packet is 249
+     * bytes - a longer byte array will be truncated to the first 249 bytes
+     * @param mData the MIDI data
+     */
     public void setMIDIData(byte[] paramArrayOfByte) {
         int i = paramArrayOfByte.length > 249 ? 249 : paramArrayOfByte.length;
         setShortAt(0, (short) i);

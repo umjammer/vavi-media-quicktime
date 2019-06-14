@@ -66,6 +66,12 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
         return new AliasHandle(QTObject.ID(paramDataRef), paramDataRef, paramDataRef.isLocked(), false);
     }
 
+    /**
+     * Creates an AliasHandle from the given byte array containing AliasHandle data
+     * @param srcArray byte array containing AliasHandle data
+     * @return AliasHandle object pointing to the data contained in srcArray
+     * @return {@link quicktime.QTException}
+     */
     public static AliasHandle fromArray(byte[] paramArrayOfByte) throws QTException {
         AliasHandle localAliasHandle = new AliasHandle(paramArrayOfByte.length, false);
         localAliasHandle.copyFromArray(0, paramArrayOfByte, 0, paramArrayOfByte.length);

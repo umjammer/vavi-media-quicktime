@@ -190,6 +190,10 @@ public final class QTUtils implements QuickTimeLib {
         return paramInt & 0xFFFFFFFF;
     }
 
+    /**
+     * Convert a java.lang.String to a CString byte array.
+     * @param str the String to convert
+     */
     public static byte[] String2CString(String paramString) {
         byte[] arrayOfByte1 = new byte[paramString.length() + 1];
         byte[] arrayOfByte2 = paramString.getBytes();
@@ -198,6 +202,11 @@ public final class QTUtils implements QuickTimeLib {
         return arrayOfByte1;
     }
 
+    /**
+     * Convert a java.lang.String to a PString byte array.
+     * @param str the String to convert
+     * @param len the maximum length of the Pstring, max length is 255.
+     */
     public static byte[] String2PString(String paramString, int paramInt) {
         byte[] arrayOfByte1 = paramString.getBytes();
         int i;
@@ -211,6 +220,10 @@ public final class QTUtils implements QuickTimeLib {
         return arrayOfByte2;
     }
 
+    /**
+     * Converts a CString into a java.lang.String. The offset specifies where the C string
+     * begins and it terminates at the first 0 value that it finds.
+     */
     public static String CString2String(byte[] paramArrayOfByte, int paramInt) {
         int i;
         for (i = paramInt; i < paramArrayOfByte.length; i++) if (paramArrayOfByte[i] == 0)
@@ -220,6 +233,10 @@ public final class QTUtils implements QuickTimeLib {
         return new String(arrayOfByte);
     }
 
+    /**
+     * Converts a PString into a java.lang.String. The offset specifies where the count byte
+     * is within the byte array that is passed in - typically 0.
+     */
     public static String PString2String(byte[] paramArrayOfByte, int paramInt) {
         byte[] arrayOfByte = new byte[paramArrayOfByte[paramInt]];
         System.arraycopy(paramArrayOfByte, paramInt + 1, arrayOfByte, 0, paramArrayOfByte[paramInt]);

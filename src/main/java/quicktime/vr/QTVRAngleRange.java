@@ -23,6 +23,10 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
         super(kNativeSize);
     }
 
+    /**
+     * Creates a QTVRAngleRange object from a byte array
+     * Used in cloning
+     */
     public QTVRAngleRange(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte);
         if (paramArrayOfByte.length != 8) {

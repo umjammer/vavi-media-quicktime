@@ -89,6 +89,10 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
         super(paramInt, paramBoolean);
     }
 
+    /**
+     * Construct a pointer from input data.
+     * @param byteArray the input data.
+     */
     public QTPointer(byte[] paramArrayOfByte) throws QTException {
         super(paramArrayOfByte.length, false);
         setBytesAt(0, paramArrayOfByte.length, paramArrayOfByte, 0);

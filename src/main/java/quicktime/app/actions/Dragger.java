@@ -263,7 +263,15 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method is called by the MouseController when the mouse is first pressed down on
+     * a valid Transformable object within the space it is controlling.
+     * For efficiency it is assumed that the overall characteristics of the enclosing space
+     * will not be changing during the duration of the drag event - ie. the Matrix
+     * of the enclosing space is not changing during a mouse drag. However the Target's
+     * matrix can and will change as a result of the drag operation.
+     * @param event the mouse down event that may begin the drag action
      */
     public void mousePressed(MouseEvent paramMouseEvent) {
         try {
@@ -287,7 +295,12 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method will allow the user to drag the transformable object around.
+     * This method also does constraints testing based on the current state
+     * of the constraints.
+     * @param event the mouse drag event that triggered the drag action.
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
         try {

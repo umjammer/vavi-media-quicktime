@@ -546,6 +546,12 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
         return arrayOfInt[0];
     }
 
+    /**
+     * Copies the atom data for the specifiec leaf atom.
+     * QuickTime::QTGetAtomDataPtr
+     * @param atom (offset) for AtomContainers this is an "atom" that acts as the offset
+     * @param {@link quicktime.std.StdQTException}
+     */
     public byte[] copyAtomDataToArray(Atom paramAtom) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };

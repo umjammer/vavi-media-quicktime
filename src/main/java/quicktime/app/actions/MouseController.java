@@ -294,7 +294,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mouseEntered events it will
+     * be activated when the user's mouse enters the QTCanvas space.
+     * @param e the mouse event
      */
     public void mouseEntered(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(16, paramMouseEvent.getModifiers())) {
@@ -311,7 +315,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mouseExited events it will
+     * be deactivated after the user's mouse exits the QTCanvas space.
+     * @param e the mouse event
      */
     public void mouseExited(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(32, paramMouseEvent.getModifiers())) {
@@ -348,7 +356,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mousePressed events it will
+     * be activated when the user presses the mouse within the display space.
+     * @param e the mouse event
      */
     public void mousePressed(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(2, paramMouseEvent.getModifiers())) {
@@ -362,7 +374,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mouseReleased events it will
+     * be activated when the user releases the mouse within the display space.
+     * @param e the mouse event
      */
     public void mouseReleased(MouseEvent paramMouseEvent) {
         if ((this.responder.isInterested(2, paramMouseEvent.getModifiers())) && (this.responder.isActive())) {
@@ -381,7 +397,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mouseClick events it will
+     * be activated when the user clicks.
+     * @param e the mouse event
      */
     public void mouseClicked(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(1, paramMouseEvent.getModifiers())) {
@@ -396,7 +416,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mouseMoved events it will
+     * be activated when the user's mouse moves within the display space.
+     * @param e the mouse event
      */
     public void mouseMoved(MouseEvent paramMouseEvent) {
         if (!this.responder.isInterested(72, paramMouseEvent.getModifiers())) {
@@ -455,7 +479,11 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * If the responder is interested in mouseDragged events it will
+     * be activated when the user drags the mouse within the display space.
+     * @param e the mouse event
      */
     public void mouseDragged(MouseEvent paramMouseEvent) {
         if ((this.responder.isInterested(4)) && (this.responder.isActive())) {
@@ -467,6 +495,9 @@ public abstract class MouseController implements ListenerController, Collection,
         }
     }
 
+    /**
+     * Deprecated.
+     */
     protected void doDragTarget(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(64, paramMouseEvent.getModifiers())) {
             try {
@@ -535,7 +566,14 @@ public abstract class MouseController implements ListenerController, Collection,
     protected abstract void setTargetSpace(Space paramSpace);
 
     /**
-     * @deprecated
+     * Deprecated.
+     * <I>since QTJava 6.1</I>
+     * This method is called when a MouseController has received a mouse press, click, drag,
+     * event in its space. This method returns a Transformable object if it finds
+     * such an object at the location of the event.
+     * @param event a mouse down event
+     * @return a transformable object that is located at the event coordinates or null
+     * @return {@link quicktime.QTException}
      */
     protected abstract Object getSelected(MouseEvent paramMouseEvent) throws QTException;
 

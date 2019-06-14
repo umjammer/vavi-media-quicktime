@@ -259,6 +259,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], paramDSequence);
     }
 
+    /**
+     * This will return a QDGraphics object from a native graphics object
+     * QuickTime::GetNativeWindowPort
+     */
     public static QDGraphics fromNativeGraphics(WinNativeGraphics paramWinNativeGraphics) throws NativeGraphicsException {
         if (paramWinNativeGraphics.hWnd == 0)
             throw new NativeGraphicsException("invalid HWnd");
@@ -268,6 +272,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return new QDGraphics(i, paramWinNativeGraphics);
     }
 
+    /**
+     * This will return a QDGraphics object from a native graphics object
+     */
     public static QDGraphics fromNativeGraphics(MacNativeGraphics paramMacNativeGraphics) throws NativeGraphicsException {
         synchronized (QTNative.globalsLock) {
             try {

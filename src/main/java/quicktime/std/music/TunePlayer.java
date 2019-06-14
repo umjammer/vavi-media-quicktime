@@ -223,6 +223,12 @@ public final class TunePlayer extends Component implements QuickTimeLib {
         StdQTException.checkError(TuneUnroll(_ID()));
     }
 
+    /**
+     * Prepares the tune player to accept music event sequences by allocating specified note channels for them.
+     * QuickTime::TuneSetNoteChannels
+     * @param noteChannelList the note channels to be set for the tune player
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void setNoteChannels(NoteChannel[] paramArrayOfNoteChannel) throws StdQTException {
         int i = paramArrayOfNoteChannel.length;
         int[] arrayOfInt = new int[i];
