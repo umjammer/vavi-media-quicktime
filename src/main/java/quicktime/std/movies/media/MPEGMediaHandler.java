@@ -175,8 +175,4 @@ public class MPEGMediaHandler extends VideoMediaHandler implements QuickTimeLib,
 
     private static native int MediaGetSoundEqualizerBandLevels(int paramInt, byte[] paramArrayOfByte);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/MPEGMediaHandler.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

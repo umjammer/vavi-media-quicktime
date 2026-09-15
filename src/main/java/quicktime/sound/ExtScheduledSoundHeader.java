@@ -259,8 +259,4 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
 
     private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
- * ExtScheduledSoundHeader.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

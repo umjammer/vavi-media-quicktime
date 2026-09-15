@@ -90,8 +90,4 @@ public final class SndInfo implements SoundLib, InterfaceLib {
 
     private static native short SetupAIFFHeader(short paramShort1, short paramShort2, int paramInt1, short paramShort3, int paramInt2, int paramInt3, int paramInt4);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
- * SndInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

@@ -191,8 +191,4 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
 
     private static native long getLongFromArray(byte[] paramArrayOfByte, int paramInt);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/sg/
- * SGOutput.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

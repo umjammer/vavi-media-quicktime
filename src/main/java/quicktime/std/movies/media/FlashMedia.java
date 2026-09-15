@@ -67,8 +67,4 @@ public final class FlashMedia extends Media {
         return localFlashDescription;
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/FlashMedia.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

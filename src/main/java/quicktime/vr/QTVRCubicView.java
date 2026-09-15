@@ -193,8 +193,4 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
         return getClass().getName() + "[minPan=" + getMinPan() + ",maxPan=" + getMaxPan() + ",minTilt=" + getMinTilt() + ",maxTilt" + getMaxTilt() + ",minFieldOfView" + getMinFieldOfView() + ",maxFieldOfView" + getMaxFieldOfView() + ",defaultPan" + getDefaultPan() + ",defaultTilt" + getDefaultTilt() + ",defaultFieldOfView" + getDefaultFieldOfView() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
- * QTVRCubicView.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

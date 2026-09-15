@@ -755,8 +755,4 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
 
     private static native void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/sg/
- * SequenceGrabber.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

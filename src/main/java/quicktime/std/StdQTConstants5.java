@@ -1208,8 +1208,4 @@ public abstract interface StdQTConstants5 {
 
     public static final int kMediaQTIdleFrequencySelector = 1768187505;
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * StdQTConstants5.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

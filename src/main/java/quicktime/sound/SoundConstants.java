@@ -687,8 +687,4 @@ public abstract interface SoundConstants {
 
     public static final int kMicrophoneArray = 1835623265;
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
- * SoundConstants.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

@@ -34,8 +34,4 @@ public class TimeInfo {
         return getClass().getName() + "[time=" + this.time + ",duration=" + this.duration + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/TimeInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

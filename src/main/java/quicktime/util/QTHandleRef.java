@@ -670,8 +670,4 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     private static native void setDoubleInHandle(int paramInt1, int paramInt2, double paramDouble);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
- * QTHandleRef.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

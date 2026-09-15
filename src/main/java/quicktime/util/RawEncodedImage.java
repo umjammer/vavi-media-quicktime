@@ -251,8 +251,4 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
- * RawEncodedImage.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

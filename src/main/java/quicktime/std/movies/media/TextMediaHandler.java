@@ -149,8 +149,4 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
 
     private static native int TextMediaSetTextSampleData(int paramInt1, int[] paramArrayOfInt, int paramInt2);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/TextMediaHandler.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

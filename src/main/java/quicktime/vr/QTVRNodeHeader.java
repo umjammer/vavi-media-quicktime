@@ -172,8 +172,4 @@ public final class QTVRNodeHeader extends QTVRAtom {
         return getClass().getName() + "[nodeType=" + QTUtils.fromOSType(getNodeType()) + ",nodeID=" + getNodeID() + ",nameAtomID=" + getNameAtomID() + ",commentAtomID" + getCommentAtomID() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
- * QTVRNodeHeader.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

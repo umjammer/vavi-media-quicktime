@@ -351,8 +351,4 @@ public abstract interface IOConstants {
 
     public static final int langAfricaans = 141;
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/io/
- * IOConstants.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

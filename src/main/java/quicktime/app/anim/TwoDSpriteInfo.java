@@ -128,8 +128,4 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
         return getClass().getName() + "[image=" + this.image + ",desc=" + this.desc + ",matrix=" + this.matrix + ",layer=" + this.layer + ",visible=" + this.visible + ",graphicsMode=" + this.graphicsMode + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/anim/
- * TwoDSpriteInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

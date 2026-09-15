@@ -220,8 +220,4 @@ public class UIElement extends TwoDSprite implements DynamicImage {
         }
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/ui/
- * UIElement.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

@@ -643,8 +643,4 @@ public final class QTUtils implements QuickTimeLib {
 
     private static native void setLongInPointer(int paramInt1, int paramInt2, long paramLong);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
- * QTUtils.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

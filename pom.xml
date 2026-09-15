@@ -6,9 +6,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.apple</groupId>
-  <artifactId>quicktime4java</artifactId>
-  <version>6.1.0</version>
+  <groupId>vavi</groupId>
+  <artifactId>vavi-media-quicktime</artifactId>
+  <version>6.1.1-SNAPSHOT</version>
 
   <name>Quick Time for Java</name>
   <organization>
@@ -25,12 +25,29 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.12.1</version>
         <configuration>
-          <source>8</source>
-          <target>8</target>
-          <encoding>UTF-8</encoding>
-          <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
+          <release>25</release>
+          <compilerArgs>
+            <arg>-XDignore.symbol.file=true</arg>
+            <arg>--add-exports</arg>
+            <arg>java.desktop/java.awt.peer=ALL-UNNAMED</arg>
+          </compilerArgs>
+          <fork>true</fork>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <argLine>
+            -Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties
+            -Dvavi.test.volume=@{vavi.test.volume}
+          </argLine>
+          <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
     </plugins>
@@ -38,37 +55,44 @@
 
   <repositories>
     <repository>
-      <id>central</id>
-      <name>bintray</name>
-      <url>http://jcenter.bintray.com</url>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>6.1.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
-      <groupId>org.rococoa</groupId>
-      <artifactId>rococoa-core</artifactId>
-      <version>0.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.rococoa</groupId>
+      <groupId>com.github.umjammer.rococoa</groupId> <!-- org.rococoa / com.github.umjammer.rococoa -->
       <artifactId>rococoa-cocoa</artifactId>
-      <version>0.5</version>
-      <optional>false</optional>
+      <version>0.8.16</version>
     </dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>

@@ -53,8 +53,4 @@ public final class MovieMedia extends Media {
         return new MovieMediaHandler(getNativeMediaHandler(), this);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/MovieMedia.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

@@ -41,8 +41,4 @@ public class SGDeviceName extends QTByteObject {
         return getClass().getName() + "[flags=" + getFlags() + ",name=" + getName() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/sg/
- * SGDeviceName.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

@@ -166,8 +166,4 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     private static native short MemError();
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/SampleDescription.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

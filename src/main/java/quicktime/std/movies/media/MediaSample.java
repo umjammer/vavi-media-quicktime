@@ -26,8 +26,4 @@ public final class MediaSample extends SampleInfo {
         return getClass().getName() + "[time=" + this.time + ",duration=" + this.duration + ",offset=" + this.offset + ",size=" + this.size + ",numSamples=" + this.numberOfSamples + ",flags=" + this.flags + ",description=" + this.description + ",descriptionIndex=" + this.descriptionIndex + ",data=" + this.data + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/MediaSample.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

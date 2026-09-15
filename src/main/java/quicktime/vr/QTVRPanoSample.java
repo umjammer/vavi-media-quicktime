@@ -356,8 +356,4 @@ public final class QTVRPanoSample extends QTVRAtom {
         return getClass().getName() + "[imageRefTrackIndex=" + getImageRefTrackIndex() + ",hotSpotRefTrackIndex=" + getHotSpotRefTrackIndex() + ",minPan=" + getMinPan() + ",maxPan=" + getMaxPan() + ",minTilt=" + getMinTilt() + ",maxTilt=" + getMaxTilt() + ",minFieldOfView=" + getMinFieldOfView() + ",maxFieldOfView=" + getMaxFieldOfView() + ",defaultPan=" + getDefaultPan() + ",defaultTilt=" + getDefaultTilt() + ",defaultFieldOfView=" + getDefaultFieldOfView() + ",imageSize=" + getImageSize() + ",imageNumFrames=" + getNumFrames() + ",hotSpotSize=" + getHotSpotSize() + ",hotSpotNumFrames=" + getHotSpotNumFrames() + ",flags=" + getFlags() + ",panoType=" + getPanoType() + ",reserved2=" + getReserved2() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
- * QTVRPanoSample.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

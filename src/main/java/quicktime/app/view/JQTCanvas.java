@@ -10,7 +10,7 @@ import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.ImageProducer;
-import java.awt.image.MacDirectColorModel;
+import vavi.awt.image.MacDirectColorModel;
 import java.awt.image.MemoryImageSource;
 
 import javax.swing.JComponent;

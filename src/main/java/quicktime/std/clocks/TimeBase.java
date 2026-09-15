@@ -550,8 +550,4 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
 
     private static native short QTGetWallClockTimeBase(int[] paramArrayOfInt);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * clocks/TimeBase.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

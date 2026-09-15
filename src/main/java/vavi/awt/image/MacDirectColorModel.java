@@ -1,6 +1,8 @@
-package java.awt.image;
+package vavi.awt.image;
 
 import java.awt.Image;
+import java.awt.image.ColorModel;
+
 
 public class MacDirectColorModel extends ColorModel {
 

@@ -124,8 +124,4 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
         return getClass().getName();
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/
- * transform/RotateTransformData.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

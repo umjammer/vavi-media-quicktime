@@ -440,8 +440,4 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
 
     private static native void setDoubleInPointer(int paramInt1, int paramInt2, double paramDouble);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/util/
- * QTPointerRef.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

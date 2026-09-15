@@ -85,8 +85,4 @@ public final class TimeCodeInfo {
         return getClass().getName() + "[" + "frameNumber=" + this.frameNumber + "definition=" + this.definition.toString() + "time=" + this.time.toString() + "counter=" + this.counter + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * qtcomponents/TimeCodeInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

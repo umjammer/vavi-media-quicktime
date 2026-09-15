@@ -102,8 +102,4 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
 
     private static native int getIntFromHandle(int paramInt1, int paramInt2);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
- * CursorRecord.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

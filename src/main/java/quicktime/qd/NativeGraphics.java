@@ -68,7 +68,7 @@ public abstract class NativeGraphics {
      * @return {@link quicktime.qd.NativeGraphicsException}
      * @return {@link quicktime.QTUnknownOSException}
      */
-    public static final NativeGraphics getContext(Object paramObject) throws NativeGraphicsException, QTUnknownOSException {
+    public static NativeGraphics getContext(Object paramObject) throws NativeGraphicsException, QTUnknownOSException {
         Class<?> localClass = paramObject.getClass();
         String str = localClass.getName();
         while (!localClass.getName().equals("java.lang.Object")) {
@@ -85,7 +85,7 @@ public abstract class NativeGraphics {
                 return new MacNativeGraphics((DrawingSurfaceInfo) localObject);
             }
             if (QTSession.isCurrentOS(2)) {
-                if (QTSession.getJavaVersion() >= 65540) {
+                if (QTSession.getJavaVersion() >= 0x10004) {
                     localObject = new WinJNIDrawingSurface((Component) paramObject);
                     return new WinNativeGraphics((WinJNIDrawingSurface) localObject);
                 }
@@ -119,7 +119,7 @@ public abstract class NativeGraphics {
     abstract int _getWindow() throws NativeGraphicsException;
 
     public final Point getLocation() {
-        if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
+        if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 0x10004)) {
             return this.jnidrawingsurfaceinfo.getBounds().getLocation();
         }
         return this.dsi.getBounds().getLocation();
@@ -129,7 +129,7 @@ public abstract class NativeGraphics {
      * This will lock the native drawing surface.
      */
     public void lock() {
-        if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
+        if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 0x10004)) {
             this.jnidrawingsurfaceinfo.lock();
         } else {
             this.dsi.lock();
@@ -140,7 +140,7 @@ public abstract class NativeGraphics {
      * This will unlock the native drawing surface.
      */
     public void unlock() {
-        if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
+        if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 0x10004)) {
             this.jnidrawingsurfaceinfo.unlock();
         } else
             this.dsi.lock();
@@ -152,8 +152,4 @@ public abstract class NativeGraphics {
         super.finalize();
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/
- * NativeGraphics.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

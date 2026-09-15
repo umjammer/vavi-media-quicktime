@@ -969,8 +969,4 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      */
     public abstract Object getSpriteMember(TwoDSprite paramTwoDSprite);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/anim/
- * SWCompositor.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

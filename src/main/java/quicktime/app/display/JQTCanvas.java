@@ -11,6 +11,8 @@ import quicktime.app.anim.SWCompositor;
 import quicktime.app.image.QTImageProducer;
 import quicktime.qd.QDRect;
 import quicktime.util.RawEncodedImage;
+import vavi.awt.image.MacDirectColorModel;
+
 
 /**
  * Deprecated.
@@ -292,7 +294,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
                 }
                 if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                     boolean bool = false;
-                    this.image = java.awt.image.MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
+                    this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                 } else {
                     this.pixels = new int[((RawEncodedImage) localSWCompositor.getImage()).getRowBytes() / 4 * paramQDRect.getHeight()];
                     this.image = imageFromEncodedImage((RawEncodedImage) localSWCompositor.getImage(), localSWCompositor.getDescription().getBounds());
@@ -321,7 +323,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
             Dimension localDimension = localQTImageProducer.getSize();
             quicktime.qd.QDGraphics localQDGraphics = localQTImageProducer.getGWorld();
             this.gw = localQDGraphics;
-            java.awt.image.BufferedImage localBufferedImage = (BufferedImage) java.awt.image.MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(localQDGraphics), 32, localDimension.width, localDimension.height, bool);
+            java.awt.image.BufferedImage localBufferedImage = (BufferedImage) MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(localQDGraphics), 32, localDimension.width, localDimension.height, bool);
             return localBufferedImage;
         }
         return super.createImage(paramImageProducer);
@@ -355,7 +357,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
                     localSWCompositor.setGWorld(this.gw);
                     if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                         boolean bool = false;
-                        this.image = java.awt.image.MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
+                        this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                     } else {
                         this.pixels = new int[((RawEncodedImage) localSWCompositor.getImage()).getRowBytes() / 4 * this.gwBounds.getHeight()];
                         this.image = imageFromEncodedImage((RawEncodedImage) localSWCompositor.getImage(), this.gwBounds);
@@ -707,7 +709,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
             try {
                 if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                     boolean bool = false;
-                    this.image = java.awt.image.MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
+                    this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                 } else {
                     this.image = imageFromEncodedImage((RawEncodedImage) ((SWCompositor) paramQTDrawable).getImage(), ((SWCompositor) paramQTDrawable).getDescription().getBounds());
                 }

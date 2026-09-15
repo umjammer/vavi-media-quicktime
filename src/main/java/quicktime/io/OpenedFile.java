@@ -116,8 +116,4 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
 
     private static native short FSClose(short paramShort);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/io/
- * OpenedFile.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

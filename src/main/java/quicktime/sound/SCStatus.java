@@ -155,8 +155,4 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
- * SCStatus.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

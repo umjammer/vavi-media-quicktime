@@ -459,8 +459,4 @@ public final class QTVRObjectSample extends QTVRAtom {
         return getClass().getName() + "[movieType=" + getMovieType() + ",viewStateCount=" + getViewStateCount() + ",defaultViewState=" + getDefaultViewState() + ",mouseDownViewState=" + getMouseDownViewState() + ",viewDuration=" + getViewDuration() + ",columns=" + getColumns() + ",rows=" + getRows() + ",mouseMotionScale=" + getMouseMotionScale() + ",minPan=" + getMinPan() + ",maxPan=" + getMaxPan() + ",defaultPan=" + getDefaultPan() + ",minTilt=" + getMinTilt() + ",maxTilt=" + getMaxTilt() + ",defaultTilt=" + getDefaultTilt() + ",minFieldOfView=" + getMinFieldOfView() + ",fieldOfView=" + getFieldOfView() + ",defaultFieldOfView=" + getDefaultFieldOfView() + ",defaultViewCenter=" + getDefaultViewCenter() + ",viewRate=" + getViewRate() + ",frameRate=" + getFrameRate() + ",animationSettings=" + getAnimationSettings() + ",controlSettings" + getControlSettings() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
- * QTVRObjectSample.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

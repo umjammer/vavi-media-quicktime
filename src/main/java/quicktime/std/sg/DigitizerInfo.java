@@ -153,8 +153,4 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
 
     private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/sg/
- * DigitizerInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

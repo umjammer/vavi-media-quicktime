@@ -85,8 +85,4 @@ public class TickleNode {
         return getClass().getName() + "[action=" + this.action + ",active=" + this.active + ",next=" + this.next + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/
- * actions/TickleNode.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

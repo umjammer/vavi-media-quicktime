@@ -296,8 +296,4 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
         return getClass().getName() + "[hotSpotType=" + QTUtils.fromOSType(getHotSpotType()) + ",nameAtomID=" + getNameAtomID() + ",commentAtomID=" + getCommentAtomID() + ",bestPan" + getBestPan() + ",bestTilt" + getBestTilt() + ",bestFOV" + getBestFOV() + ",bestViewCenter" + getBestViewCenter() + ",hotSpotRect" + getHotSpotRect() + ",flags" + getFlags() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/vr/
- * QTVRHotSpotInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

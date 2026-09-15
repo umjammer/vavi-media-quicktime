@@ -237,8 +237,4 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
 
     private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * qtcomponents/XMLAttribute.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

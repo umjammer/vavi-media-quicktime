@@ -186,8 +186,4 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/
- * movies/media/MovieMediaHandler.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

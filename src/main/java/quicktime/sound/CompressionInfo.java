@@ -181,8 +181,4 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
 
     private static native short GetCompressionInfo(short paramShort1, int paramInt, short paramShort2, short paramShort3, byte[] paramArrayOfByte);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/sound/
- * CompressionInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+

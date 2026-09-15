@@ -1831,8 +1831,4 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     private static native short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/
- * QDGraphics.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
+
