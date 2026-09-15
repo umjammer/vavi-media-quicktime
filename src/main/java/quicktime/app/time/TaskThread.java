@@ -225,7 +225,7 @@ public class TaskThread implements Runnable {
         if (this.theThread != null) {
             synchronized (this.theThread) {
                 this.threadIsRunning = false;
-                this.theThread.resume();
+                resume();
                 this.theThread.interrupt();
             }
             this.theThread = null;
@@ -234,22 +234,25 @@ public class TaskThread implements Runnable {
 
     private boolean threadIsRunning = false;
 
+    private volatile boolean suspended = false;
+
     private static Vector threads = new Vector();
 
     /**
      * Suspends the execution of the task thread.
      */
-    public void suspend() {
-        if (this.theThread != null)
-            this.theThread.suspend();
+    public synchronized void suspend() {
+        this.suspended = true;
     }
 
     /**
      * Resumes the execution of the task thread.
      */
-    public void resume() {
-        if (this.theThread != null)
-            this.theThread.resume();
+    public synchronized void resume() {
+        if (this.suspended) {
+            this.suspended = false;
+            notifyAll();
+        }
     }
 
     /**
@@ -284,7 +287,19 @@ public class TaskThread implements Runnable {
      */
     public void run() {
         end: while (true) {
-            if (this.threadIsRunning && this.tasks.size() > 0) {
+            synchronized (this) {
+                while (this.suspended && this.threadIsRunning) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        if (!this.threadIsRunning)
+                            break end;
+                    }
+                }
+            }
+            if (!this.threadIsRunning)
+                break end;
+            if (this.tasks.size() > 0) {
                 synchronized (this.theThread) {
                     if (!this.threadIsRunning)
                         break end;

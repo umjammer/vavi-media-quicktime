@@ -245,7 +245,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
         if (paramSequenceGrabber != null) {
             try {
                 doSetGWorld(this.canvas.isVisible());
-                if (this.canvas.getPeer() != null) {
+                if (this.canvas.isDisplayable()) {
                     addedTo();
                     this.canvas.repaint();
                 }
@@ -281,7 +281,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
             doSetBounds();
             try {
                 doSetGWorld(this.canvas.isVisible());
-                if (this.canvas.getPeer() != null) {
+                if (this.canvas.isDisplayable()) {
                     addedTo();
                     this.canvas.repaint();
                 }
@@ -323,7 +323,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
             try {
                 doSetGWorld(this.canvas.isVisible());
                 this.canvas.movieController.setKeysEnabled(true);
-                if (this.canvas.getPeer() != null) {
+                if (this.canvas.isDisplayable()) {
                     addedTo();
                     this.canvas.repaint();
                 }
@@ -363,7 +363,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
             doSetBounds();
             try {
                 doSetGWorld(this.canvas.isVisible());
-                if (this.canvas.getPeer() != null) {
+                if (this.canvas.isDisplayable()) {
                     addedTo();
                     this.canvas.repaint();
                 }
@@ -417,7 +417,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
 
     void doSetGWorld(boolean paramBoolean) throws QTException {
         QDGraphics localQDGraphics1;
-        if ((paramBoolean) && (this.canvas.getPeer() != null)) {
+        if ((paramBoolean) && (this.canvas.isDisplayable())) {
             localQDGraphics1 = this.canvas.getPort();
         } else {
             localQDGraphics1 = QDGraphics.scratch;

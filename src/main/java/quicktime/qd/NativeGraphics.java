@@ -41,7 +41,7 @@ public abstract class NativeGraphics {
      * @return {@link quicktime.QTUnknownOSException}
      */
     public static final NativeGraphics getContext(Component paramComponent) throws NativeGraphicsException, QTUnknownOSException {
-        ComponentPeer localComponentPeer = paramComponent.getPeer();
+        ComponentPeer localComponentPeer = sun.awt.AWTAccessor.getComponentAccessor().getPeer(paramComponent);
         if (localComponentPeer == null)
             throw new NativeGraphicsException("AWT drawing environment is not initialised");
         Object localObject;
@@ -76,7 +76,7 @@ public abstract class NativeGraphics {
             localClass = localClass.getSuperclass();
         }
         if (str.equals("java.awt.Component")) {
-            ComponentPeer localComponentPeer = ((Component) paramObject).getPeer();
+            ComponentPeer localComponentPeer = sun.awt.AWTAccessor.getComponentAccessor().getPeer((Component) paramObject);
             if (localComponentPeer == null)
                 throw new NativeGraphicsException("AWT drawing environment is not initialised");
             Object localObject;

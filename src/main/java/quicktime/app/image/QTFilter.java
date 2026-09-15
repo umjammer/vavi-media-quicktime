@@ -233,7 +233,19 @@ public class QTFilter extends QTEffect {
             this.imgDataSeq.setSourceData(this.encImage);
         }
 
+        private boolean needRedraw = false;
+        private boolean running = true;
+
+        synchronized void requestRedraw() {
+            needRedraw = true;
+            notifyAll();
+        }
+
         void dispose() throws QTException {
+            running = false;
+            synchronized (this) {
+                notifyAll();
+            }
             if (this.imgDataSeq != null) {
                 this.imgDataSeq.dispose();
             }
@@ -257,7 +269,7 @@ public class QTFilter extends QTEffect {
                     localQTException.printStackTrace();
                 }
                 if ((!QTFilter.this.inEffect) && (this == QTFilter.this.drawSourceListener)) {
-                    resume();
+                    requestRedraw();
                 }
             }
         }
@@ -266,14 +278,23 @@ public class QTFilter extends QTEffect {
          * @deprecated
          */
         public void run() {
-            suspend();
-            for (; ; ) {
+            while (running) {
+                synchronized (this) {
+                    while (!needRedraw && running) {
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            if (!running) return;
+                        }
+                    }
+                    needRedraw = false;
+                }
+                if (!running) break;
                 try {
                     QTFilter.this.redraw(null);
                 } catch (QTException localQTException) {
                     localQTException.printStackTrace();
                 }
-                suspend();
             }
         }
     }

@@ -29,14 +29,33 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.12.1</version>
         <configuration>
-          <release>25</release>
+          <source>25</source>
+          <target>25</target>
           <compilerArgs>
             <arg>-XDignore.symbol.file=true</arg>
             <arg>--add-exports</arg>
             <arg>java.desktop/java.awt.peer=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>java.desktop/sun.awt=ALL-UNNAMED</arg>
           </compilerArgs>
           <fork>true</fork>
         </configuration>
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <configuration>
+              <compilerArgs>
+                <arg>-XDignore.symbol.file=true</arg>
+                <arg>--patch-module</arg>
+                <arg>java.desktop=src/main/java</arg>
+                <arg>--add-exports</arg>
+                <arg>java.desktop/java.awt.peer=ALL-UNNAMED</arg>
+                <arg>--add-exports</arg>
+                <arg>java.desktop/sun.awt=ALL-UNNAMED</arg>
+              </compilerArgs>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -82,7 +82,7 @@ class QTCanvasHelper {
             }
             try {
                 doSetGWorld(this.canvas.isVisible());
-                if (this.canvas.getPeer() != null) {
+                if (this.canvas.isDisplayable()) {
                     this.mClient.addedTo(this.canvas);
                     this.canvas.repaint();
                 }
@@ -104,7 +104,7 @@ class QTCanvasHelper {
         if ((this.mClient instanceof QTDrawable)) {
             QTDrawable localQTDrawable = (QTDrawable) this.mClient;
             QDGraphics localQDGraphics1;
-            if ((paramBoolean) && (this.canvas.getPeer() != null)) {
+            if ((paramBoolean) && (this.canvas.isDisplayable())) {
                 localQDGraphics1 = this.canvas.getPort();
             } else {
                 localQDGraphics1 = QDGraphics.scratch;

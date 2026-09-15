@@ -115,36 +115,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     private static void doVMCheck() {
         if (!doneVMCheck) {
-            String str1 = System.getProperty("java.version");
-            int i = 0;
-            while (!Character.isDigit(str1.charAt(i))) {
-                i++;
-            }
-            int j = Character.getNumericValue(str1.charAt(i));
-            jVersion = j << 16;
-            int k = 0;
-            if (str1.length() > i + 1) {
-                i++;
-                while ((str1.length() > i) && (!Character.isDigit(str1.charAt(i)))) {
-                    i++;
-                }
-                if (str1.length() > i) {
-                    k = Character.getNumericValue(str1.charAt(i));
-                }
-            }
-            jVersion |= k;
-            if ((j < 1) || ((j == 1) && (k < 1))) {
-                throw new QTRuntimeException("QTJava requires Java Version 1.1 or greater");
-            }
-            String str2 = System.getProperty("java.vendor");
-            String str3 = System.getProperty("os.name");
-            if (isCurrentOS(2)) {
-                if ((str2.startsWith("Netscape")) || (str2.startsWith("Microsoft"))) {
-                    throw new QTRuntimeException("QTJava requires Sun Java VM 1.1 or greater");
-                }
-            } else if (!str2.startsWith("Apple ")) {
-                throw new QTRuntimeException("QTJava requires Apple Java VM 1.1 or greater");
-            }
+            Runtime.Version version = Runtime.version();
+            int j = version.feature();
+            int k = version.interim();
+            jVersion = (j << 16) | k;
             doneVMCheck = true;
         }
     }
@@ -235,10 +209,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @return true if program is able to run in FullScreen mode.
      */
     public static boolean canDoFullScreen() {
-        if (System.getSecurityManager() != null) {
-            return (isClassSigned()) || (System.getSecurityManager().checkTopLevelWindow(new Frame()));
-        }
-        return true;
+        return !hasSecurityRestrictions() || isClassSigned();
     }
 
     /**
@@ -370,12 +341,15 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                 this.HWND = ((WinJNIDrawingSurface) localObject).getHWnd();
                 ((WinJNIDrawingSurface) localObject).unlock();
                 QTSession.CreatePortAssociation(this.HWND, 0, 258);
-            } else if ((getPeer() instanceof DrawingSurface)) {
-                localObject = ((DrawingSurface) getPeer()).getDrawingSurfaceInfo();
-                ((DrawingSurfaceInfo) localObject).lock();
-                this.HWND = ((Win32DrawingSurface) ((DrawingSurfaceInfo) localObject).getSurface()).getHWnd();
-                ((DrawingSurfaceInfo) localObject).unlock();
-                QTSession.CreatePortAssociation(this.HWND, 0, 258);
+            } else {
+                java.awt.peer.ComponentPeer peer = sun.awt.AWTAccessor.getComponentAccessor().getPeer(this);
+                if (peer instanceof DrawingSurface) {
+                    localObject = ((DrawingSurface) peer).getDrawingSurfaceInfo();
+                    ((DrawingSurfaceInfo) localObject).lock();
+                    this.HWND = ((Win32DrawingSurface) ((DrawingSurfaceInfo) localObject).getSurface()).getHWnd();
+                    ((DrawingSurfaceInfo) localObject).unlock();
+                    QTSession.CreatePortAssociation(this.HWND, 0, 258);
+                }
             }
         }
     }
