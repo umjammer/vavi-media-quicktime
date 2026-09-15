@@ -861,13 +861,19 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     private static native int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3);
 
-    private static native short InitializeQTML(int paramInt);
+    private static short InitializeQTML(int paramInt) {
+        return 0;
+    }
 
-    private static native void TerminateQTML();
+    private static void TerminateQTML() {
+    }
 
-    private static native short EnterMovies();
+    private static short EnterMovies() {
+        return 0;
+    }
 
-    private static native void ExitMovies();
+    private static void ExitMovies() {
+    }
 
     private static native short Gestalt(int paramInt, int[] paramArrayOfInt);
 

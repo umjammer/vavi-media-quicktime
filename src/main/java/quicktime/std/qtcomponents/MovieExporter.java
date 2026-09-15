@@ -72,6 +72,8 @@ public final class MovieExporter extends Component implements QuickTimeLib {
         setProgressProc(null);
     }
 
+    private AtomContainer settings;
+
     /**
      * This method establishes a MovieProgress object for the MovieExporter
      * that will be called for you by the Movie Toolbox whenever it
@@ -81,18 +83,6 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @param {@link quicktime.std.StdQTException}
      */
     public void setProgressProc(MovieProgress paramMovieProgress) throws StdQTException {
-        int i = 0;
-        if (this.progUPP != null)
-            this.progUPP.cleanupMethodClosure();
-        if (paramMovieProgress != null) {
-            this.progUPP = new QTCompDispatcher(paramMovieProgress);
-        } else {
-            this.progUPP = new QTCompDispatcher(this);
-        }
-        synchronized (QTNative.globalsLock) {
-            i = MovieExportSetProgressProc(_ID(), this.progUPP.ID(), 0);
-        }
-        StdQTException.checkError(i);
     }
 
     /**
@@ -188,32 +178,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return {@link quicktime.std.StdQTException}
      */
     public boolean doUserDialog(Movie paramMovie, Track paramTrack, int paramInt1, int paramInt2) throws StdQTException {
-        final byte[] arrayOfByte = new byte[1];
-        final Movie localMovie = paramMovie;
-        final Track localTrack = paramTrack;
-        final int i = paramInt1;
-        final int j = paramInt2;
-        final int k = _ID();
-        int m = 0;
-        if (QTSession.isCurrentOS(4)) {
-            m = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                public Object invoke() {
-                    int l = 0;
-                    synchronized (QTNative.globalsLock) {
-                        l = MovieExporter.MovieExportDoUserDialog(k, QTObject.ID(localMovie), QTObject.ID(localTrack), i, j, arrayOfByte);
-                    }
-                    return l;
-                }
-            })).intValue();
-            StdQTException.checkError(m);
-        } else {
-            synchronized (QTNative.globalsLock) {
-                m = MovieExportDoUserDialog(_ID(), QTObject.ID(paramMovie), QTObject.ID(paramTrack), paramInt1, paramInt2, arrayOfByte);
-                StdQTException.checkError(m);
-            }
-        }
-        return arrayOfByte[0] != 0;
+        return false;
     }
 
     /**
@@ -253,7 +218,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return {@link quicktime.std.StdQTException}
      */
     public AtomContainer getExportSettingsFromAtomContainer() throws StdQTException {
-        return AtomContainer.fromMovieExporter(this);
+        return this.settings != null ? this.settings : AtomContainer.fromMovieExporter(this);
     }
 
     /**
@@ -261,8 +226,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * QuickTime::MovieExportSetSettingsFromAtomContainer
      */
     public void setExportSettingsFromAtomContainer(AtomContainer paramAtomContainer) throws StdQTException {
-        int i = MovieExportSetSettingsFromAtomContainer(_ID(), QTObject.ID(paramAtomContainer));
-        StdQTException.checkError(i);
+        this.settings = paramAtomContainer;
     }
 
     /**

@@ -298,86 +298,92 @@ final class QTObjectManagement implements
     }
 
     private static void disposeSessionObject(int paramInt, String paramString, Object paramObject) throws QTException {
-        if (paramObject == null) {
-            disposeSessionObject(paramInt, paramString);
-        } else if ((paramObject instanceof SndChannel)) {
-            boolean bool = ((SndChannel) paramObject).isQuietNow();
-            int i = SndDisposeChannel(paramInt, (byte) (bool ? 1 : 0));
+        try {
+            if (paramObject == null) {
+                disposeSessionObject(paramInt, paramString);
+            } else if ((paramObject instanceof SndChannel)) {
+                boolean bool = ((SndChannel) paramObject).isQuietNow();
+                int i = SndDisposeChannel(paramInt, (byte) (bool ? 1 : 0));
 
-            QTException.checkError(i);
-        } else {
-            disposeSessionObject(paramInt, paramString);
+                QTException.checkError(i);
+            } else {
+                disposeSessionObject(paramInt, paramString);
+            }
+        } catch (UnsatisfiedLinkError ignored) {
         }
     }
 
     private static void disposeSessionObject(int paramInt, String paramString) throws QTException {
-        Object localObject = null;
+        try {
+            Object localObject = null;
 
-        int i = 0;
-        if (paramString.startsWith("AtomContainer")) {
-            i = QTDisposeAtomContainer(paramInt);
-        } else if (paramString.startsWith("Component")) {
-            i = CloseComponent(paramInt);
-        } else if (paramString.startsWith("CDSequence")) {
-            i = CDSequenceEnd(paramInt);
-        } else if (paramString.startsWith("CodecNameList")) {
-            i = DisposeCodecNameList(paramInt);
-        } else if (paramString.startsWith("ColorTable")) {
-            DisposeCTable(paramInt);
-        } else if (paramString.startsWith("QDGraphics")) {
-            DisposeGWorld(paramInt);
-        } else if (paramString.startsWith("QTHandleRef")) {
-            DisposeHandle(paramInt);
+            int i = 0;
+            if (paramString.startsWith("AtomContainer")) {
+                i = QTDisposeAtomContainer(paramInt);
+            } else if (paramString.startsWith("Component")) {
+                i = CloseComponent(paramInt);
+            } else if (paramString.startsWith("CDSequence")) {
+                i = CDSequenceEnd(paramInt);
+            } else if (paramString.startsWith("CodecNameList")) {
+                i = DisposeCodecNameList(paramInt);
+            } else if (paramString.startsWith("ColorTable")) {
+                DisposeCTable(paramInt);
+            } else if (paramString.startsWith("QDGraphics")) {
+                DisposeGWorld(paramInt);
+            } else if (paramString.startsWith("QTHandleRef")) {
+                DisposeHandle(paramInt);
 
-        } else if (paramString.startsWith("MovieEditState")) {
-            i = DisposeMovieEditState(paramInt);
-        } else if (paramString.startsWith("MovieController")) {
-            DisposeMovieController(paramInt);
-        } else if (paramString.startsWith("Movie")) {
-            DisposeMovie(paramInt);
-        } else {
-            int j;
-            if (paramString.startsWith("NoteChannel")) {
-                j = pullIDFromName(paramString);
-                if (j != 0) {
-                    i = NADisposeNoteChannel(j, paramInt);
+            } else if (paramString.startsWith("MovieEditState")) {
+                i = DisposeMovieEditState(paramInt);
+            } else if (paramString.startsWith("MovieController")) {
+                DisposeMovieController(paramInt);
+            } else if (paramString.startsWith("Movie")) {
+                DisposeMovie(paramInt);
+            } else {
+                int j;
+                if (paramString.startsWith("NoteChannel")) {
+                    j = pullIDFromName(paramString);
+                    if (j != 0) {
+                        i = NADisposeNoteChannel(j, paramInt);
+                    }
+                } else if (paramString.startsWith("Pict")) {
+                    KillPicture(paramInt);
+                } else if (paramString.startsWith("PixMap")) {
+                    DisposeMatte(paramInt);
+                } else if (paramString.startsWith("QTPointerRef")) {
+                    DisposePtr(paramInt);
+                } else if (paramString.startsWith("Region")) {
+                    DisposeRgn(paramInt);
+                } else if (paramString.startsWith("Polygon")) {
+                    KillPoly(paramInt);
+                } else if (paramString.startsWith("Presentation")) {
+                    i = QTSDisposePresentation(paramInt, 0);
+                } else if (paramString.startsWith("SndChannel")) {
+                    i = SndDisposeChannel(paramInt, (byte) 1);
+                } else if (paramString.startsWith("SPBDevice")) {
+                    SPBCloseDevice(paramInt);
+                } else if (paramString.startsWith("SGDeviceList")) {
+
+                    j = pullIDFromName(paramString);
+                    if (j != 0) {
+                        i = SGDisposeDeviceList(j, paramInt);
+                    }
+                } else if (paramString.startsWith("SpriteWorld")) {
+                    DisposeSpriteWorld(paramInt);
+                } else if (paramString.startsWith("Stream")) {
+                    i = QTSDisposeStream(paramInt, 0);
+                } else if (paramString.startsWith("TimeBase")) {
+                    DisposeTimeBase(paramInt);
+                } else if (paramString.startsWith("TrackEditState")) {
+                    i = DisposeTrackEditState(paramInt);
+                } else if (paramString.startsWith("UserData")) {
+                    i = DisposeUserData(paramInt);
                 }
-            } else if (paramString.startsWith("Pict")) {
-                KillPicture(paramInt);
-            } else if (paramString.startsWith("PixMap")) {
-                DisposeMatte(paramInt);
-            } else if (paramString.startsWith("QTPointerRef")) {
-                DisposePtr(paramInt);
-            } else if (paramString.startsWith("Region")) {
-                DisposeRgn(paramInt);
-            } else if (paramString.startsWith("Polygon")) {
-                KillPoly(paramInt);
-            } else if (paramString.startsWith("Presentation")) {
-                i = QTSDisposePresentation(paramInt, 0);
-            } else if (paramString.startsWith("SndChannel")) {
-                i = SndDisposeChannel(paramInt, (byte) 1);
-            } else if (paramString.startsWith("SPBDevice")) {
-                SPBCloseDevice(paramInt);
-            } else if (paramString.startsWith("SGDeviceList")) {
-
-                j = pullIDFromName(paramString);
-                if (j != 0) {
-                    i = SGDisposeDeviceList(j, paramInt);
-                }
-            } else if (paramString.startsWith("SpriteWorld")) {
-                DisposeSpriteWorld(paramInt);
-            } else if (paramString.startsWith("Stream")) {
-                i = QTSDisposeStream(paramInt, 0);
-            } else if (paramString.startsWith("TimeBase")) {
-                DisposeTimeBase(paramInt);
-            } else if (paramString.startsWith("TrackEditState")) {
-                i = DisposeTrackEditState(paramInt);
-            } else if (paramString.startsWith("UserData")) {
-                i = DisposeUserData(paramInt);
             }
-        }
 
-        QTException.checkError(i);
+            QTException.checkError(i);
+        } catch (UnsatisfiedLinkError ignored) {
+        }
     }
 
     private static native short QTDisposeAtomContainer(int paramInt);

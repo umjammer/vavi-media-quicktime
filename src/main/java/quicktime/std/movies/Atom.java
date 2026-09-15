@@ -29,5 +29,18 @@ public final class Atom {
     public String toString() {
         return getClass().getName() + "[atom=" + this.atom + "]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Atom atom1 = (Atom) o;
+        return atom == atom1.atom;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(atom);
+    }
 }
 

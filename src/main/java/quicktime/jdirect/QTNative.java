@@ -102,18 +102,5 @@ public final class QTNative {
      * This ensures that global variables can only be written to (and read) by a single
      * thread of execution at one time.
      */
-    public static final Object globalsLock = null;
-
-    private static Object _lock;
-
-    private static Object _getLock() {
-        if ((QTSession.isCurrentOS(4)) && (QTSession.getJavaVersion() < 65540)) {
-            _lock = com.apple.mrj.macos.carbon.CarbonLock.getInstance();
-        } else if (QTSession.isCurrentOS(1)) {
-            _lock = com.apple.mrj.macos.toolbox.Toolbox.LOCK;
-        } else if (_lock == null) {
-            _lock = new Object();
-        }
-        return _lock;
-    }
+    public static final Object globalsLock = new Object();
 }

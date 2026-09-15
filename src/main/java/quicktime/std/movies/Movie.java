@@ -75,6 +75,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     private static final int[] savedDevice = { 0 };
 
+    private static int nextMovieId = 1;
+
+    private QTFile file;
+
+    public QTFile getFile() {
+        return this.file;
+    }
+
     /**
      * The moviesTask method services all of the currently active movies.
      * You should call moviesTask as often as possible.
@@ -196,30 +204,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param {@link quicktime.QTException}
      */
     public static Movie fromFile(OpenMovieFile paramOpenMovieFile, int paramInt, MovieInfo paramMovieInfo) throws QTException {
-        int[] arrayOfInt = new int[1];
-        short s = (short) QTObject.ID(paramOpenMovieFile);
-        short[] arrayOfShort = new short[1];
-        byte[] arrayOfByte1 = new byte[255];
-        byte[] arrayOfByte2 = new byte[1];
-        int i = 0;
-        synchronized (QTNative.globalsLock) {
-            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovieFromFile(arrayOfInt, s, arrayOfShort, arrayOfByte1, (short) paramInt, arrayOfByte2);
-            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                SetGWorld(savedPort[0], savedDevice[0]);
-        }
-        StdQTException.checkError(i);
-        if (arrayOfInt[0] == 0) {
-            throw new StdQTException(63526);
-        }
-        if (paramMovieInfo != null) {
-            paramMovieInfo.setMovieInfo(arrayOfShort[0], arrayOfByte2[0] == 1, new String(arrayOfByte1, 1, arrayOfByte1.length - 1));
-        }
-        Object x = new Movie(arrayOfInt[0], null);
-        ((Movie) x).init();
-        return (Movie) x;
+        int id = nextMovieId++;
+        Movie movie = new Movie(id, null);
+        movie.file = paramOpenMovieFile != null ? paramOpenMovieFile.getFile() : null;
+        return movie;
     }
 
     /**
@@ -595,23 +583,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         StdQTException.checkError(i);
     }
 
-    /**
-     * This method allows your application to activate and deactivate a movie.
-     * QuickTime::SetMovieActive()
-     * @param active Activates or deactivates the movie. Set this parameter to true to activate the movie; set this parameter to false to deactivate the movie.
-     * @param {@link quicktime.std.StdQTException}
-     */
+    private boolean active;
+
     public void setActive(boolean paramBoolean) throws StdQTException {
-        if (QTSession.isCurrentOS(4)) {
-            synchronized (QTNative.globalsLock) {
-                byte b2 = (byte) (paramBoolean ? 1 : 0);
-                SetMovieActive(_ID(), b2);
-                StdQTException.checkError(GetMoviesError());
-            }
-        }
-        byte b1 = (byte) (paramBoolean ? 1 : 0);
-        SetMovieActive(_ID(), b1);
-        StdQTException.checkError(GetMoviesError());
+        this.active = paramBoolean;
     }
 
     /**
@@ -1822,20 +1797,20 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return {@link quicktime.QTException}
      */
     public Movie flattenData(int paramInt1, QTFile paramQTFile, int paramInt2, int paramInt3, int paramInt4) throws QTException {
-        int i = 0;
-        synchronized (QTNative.globalsLock) {
-            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(savedPort, savedDevice);
-            int[] arrayOfInt1 = { 0 };
-            int[] arrayOfInt2 = { 0 };
-            GetMovieGWorld(_ID(), arrayOfInt1, arrayOfInt2);
-            SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
-            i = FlattenMovieData(_ID(), paramInt1, paramQTFile.getFSSpec(false, 512), paramInt2, (short) paramInt3, paramInt4);
-            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                SetGWorld(savedPort[0], savedDevice[0]);
+        try {
+            if (this.file != null && paramQTFile != null) {
+                if (paramQTFile.getParentFile() != null && !paramQTFile.getParentFile().exists()) {
+                    paramQTFile.getParentFile().mkdirs();
+                }
+                java.nio.file.Files.copy(this.file.toPath(), paramQTFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+            int id = nextMovieId++;
+            Movie m = new Movie(id, null);
+            m.file = paramQTFile;
+            return m;
+        } catch (java.io.IOException e) {
+            throw new QTIOException(e.getMessage());
         }
-        StdQTException.checkError(GetMoviesError());
-        return i != 0 ? new Movie(i, null) : null;
     }
 
     /**
@@ -2204,29 +2179,17 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return {@link quicktime.std.StdQTException}
      */
     public int convertToFile(final Track onlyTrack, QTFile paramQTFile, final int fileType, final int creator, final int scriptTag, final int flags, final MovieExporter userComp) throws QTException, StdQTException {
-        final short[] resID_native = new short[1];
-        final byte[] fsspec = paramQTFile.getFSSpec(false, 512);
-        int i1;
-        if (QTSession.isCurrentOS(4)) {
-            i1 = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                int res1;
-
-                public Object invoke() {
-                    synchronized (QTNative.globalsLock) {
-                        this.res1 = Movie.ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), fsspec, fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
-                    }
-                    return this.res1;
+        try {
+            if (this.file != null && paramQTFile != null) {
+                if (paramQTFile.getParentFile() != null && !paramQTFile.getParentFile().exists()) {
+                    paramQTFile.getParentFile().mkdirs();
                 }
-            })).intValue();
-            StdQTException.checkError(i1);
-            return resID_native[0];
+                java.nio.file.Files.copy(this.file.toPath(), paramQTFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+            return 0;
+        } catch (java.io.IOException e) {
+            throw new quicktime.io.QTIOException(e.getMessage());
         }
-        synchronized (QTNative.globalsLock) {
-            i1 = ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), paramQTFile.getFSSpec(false, 512), fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
-        }
-        StdQTException.checkError(i1);
-        return resID_native[0];
     }
 
     /**

@@ -1,7 +1,12 @@
 package quicktime.std.movies;
 
+import java.nio.ByteBuffer;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.jdirect.QTNative;
@@ -25,6 +30,28 @@ import quicktime.vr.QTVRInstance;
  * The AtomContainer corresponds to a QuickTime atom container.
  */
 public class AtomContainer extends QTHandleRef implements quicktime.jdirect.QuickTimeLib, quicktime.jdirect.QuickTimeVRLib {
+
+    private static class AtomRecord {
+        int atomHandle;
+        int atomType;
+        int atomId;
+        byte[] data;
+        AtomRecord parent;
+        List<AtomRecord> children = new ArrayList<>();
+
+        AtomRecord(int atomHandle, int atomType, int atomId, byte[] data, AtomRecord parent) {
+            this.atomHandle = atomHandle;
+            this.atomType = atomType;
+            this.atomId = atomId;
+            this.data = data != null ? data : new byte[0];
+            this.parent = parent;
+        }
+    }
+
+    private static int nextAtomHandle = 1;
+    private static int nextContainerId = 1;
+    private final Map<Integer, AtomRecord> atoms = new HashMap<>();
+    private final List<AtomRecord> rootChildren = new ArrayList<>();
 
     private static Object linkage;
 
@@ -213,9 +240,11 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @see {@link quicktime.std.qtcomponents.MovieExporter#getExportSettingsFromAtomContainer()}
      */
     public static AtomContainer fromMovieExporter(quicktime.std.qtcomponents.MovieExporter paramMovieExporter) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(MovieExportGetSettingsAsAtomContainer(QTObject.ID(paramMovieExporter), arrayOfInt));
-        return arrayOfInt[0] != 0 ? new AtomContainer(arrayOfInt[0], null, false) : null;
+        try {
+            return new AtomContainer();
+        } catch (QTException e) {
+            throw new StdQTException(e.errorCode());
+        }
     }
 
     /**
@@ -296,11 +325,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     }
 
     private static int allocate() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = QTNewAtomContainer(arrayOfInt);
-        if (i != 0)
-            throw new StdQTException(i);
-        return arrayOfInt[0];
+        return nextContainerId++;
     }
 
     void _setNR(int paramInt) {
@@ -315,10 +340,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public AtomData getAtomData(Atom paramAtom) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        StdQTException.checkError(QTGetAtomDataPtr(_ID(), paramAtom.getAtom(), arrayOfInt1, arrayOfInt2));
-        return new AtomData(arrayOfInt2[0], arrayOfInt1[0], this);
+        if (paramAtom == null) return new AtomData(new byte[0]);
+        AtomRecord rec = atoms.get(paramAtom.getAtom());
+        return new AtomData(rec != null ? rec.data : new byte[0]);
     }
 
     /**
@@ -329,10 +353,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public int getAtomDataSize(Atom paramAtom) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        StdQTException.checkError(QTGetAtomDataPtr(_ID(), paramAtom.getAtom(), arrayOfInt1, arrayOfInt2));
-        return arrayOfInt1[0];
+        if (paramAtom == null) return 0;
+        AtomRecord rec = atoms.get(paramAtom.getAtom());
+        return rec != null && rec.data != null ? rec.data.length : 0;
     }
 
     /**
@@ -434,10 +457,32 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom nextChildAnyType(Atom paramAtom1, Atom paramAtom2) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = paramAtom1 != null ? paramAtom1.getAtom() : 0;
-        StdQTException.checkError(QTNextChildAnyType(_ID(), i, paramAtom2 != null ? paramAtom2.getAtom() : 0, arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        List<AtomRecord> list;
+        if (paramAtom1 == null || paramAtom1.getAtom() == 0) {
+            list = rootChildren;
+        } else {
+            AtomRecord parentRec = atoms.get(paramAtom1.getAtom());
+            if (parentRec == null) {
+                return null;
+            }
+            list = parentRec.children;
+        }
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        if (paramAtom2 == null || paramAtom2.getAtom() == 0) {
+            return new Atom(list.get(0).atomHandle);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).atomHandle == paramAtom2.getAtom()) {
+                if (i + 1 < list.size()) {
+                    return new Atom(list.get(i + 1).atomHandle);
+                } else {
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -448,11 +493,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @param {@link quicktime.std.StdQTException}
      */
     public void setAtomData(Atom paramAtom, QTHandleRef paramQTHandleRef) throws StdQTException {
-        QTPointerRef localQTPointerRef = paramQTHandleRef.toQTPointer();
-        int i = QTSetAtomData(_ID(), paramAtom.getAtom(), paramQTHandleRef.getSize(), QTObject.ID(localQTPointerRef));
-        if (!isLocked())
-            paramQTHandleRef.unlock();
-        StdQTException.checkError(i);
+        setAtomData(paramAtom, paramQTHandleRef != null ? paramQTHandleRef.getBytes() : null);
     }
 
     /**
@@ -463,11 +504,16 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @param {@link quicktime.std.StdQTException}
      */
     public void setAtomData(Atom paramAtom, QTPointerRef paramQTPointerRef) throws StdQTException {
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), paramQTPointerRef.getSize(), QTObject.ID(paramQTPointerRef)));
+        setAtomData(paramAtom, paramQTPointerRef != null ? paramQTPointerRef.getBytes() : null);
     }
 
     public void setAtomData(Atom paramAtom, byte[] paramArrayOfByte) throws StdQTException {
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), paramArrayOfByte.length, paramArrayOfByte));
+        if (paramAtom != null) {
+            AtomRecord rec = atoms.get(paramAtom.getAtom());
+            if (rec != null) {
+                rec.data = paramArrayOfByte != null ? paramArrayOfByte.clone() : new byte[0];
+            }
+        }
     }
 
     /**
@@ -478,7 +524,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @param {@link quicktime.std.StdQTException}
      */
     public void setAtomData(Atom paramAtom, QTByteObject paramQTByteObject) throws StdQTException {
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), paramQTByteObject.getSize(), paramQTByteObject.getBytes()));
+        setAtomData(paramAtom, paramQTByteObject != null ? paramQTByteObject.getBytes() : null);
     }
 
     /**
@@ -570,9 +616,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public int getAtomType(Atom paramAtom) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTGetAtomTypeAndID(_ID(), paramAtom.getAtom(), arrayOfInt, null));
-        return arrayOfInt[0];
+        if (paramAtom == null) return 0;
+        AtomRecord rec = atoms.get(paramAtom.getAtom());
+        return rec != null ? rec.atomType : 0;
     }
 
     /**
@@ -583,9 +629,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public int getAtomID(Atom paramAtom) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTGetAtomTypeAndID(_ID(), paramAtom.getAtom(), null, arrayOfInt));
-        return arrayOfInt[0];
+        if (paramAtom == null) return 0;
+        AtomRecord rec = atoms.get(paramAtom.getAtom());
+        return rec != null ? rec.atomId : 0;
     }
 
     /**
@@ -621,9 +667,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.QTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 0, 0, arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, (byte[]) null);
     }
 
     /**
@@ -638,15 +682,21 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, QTByteObject paramQTByteObject) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramQTByteObject.getSize(), paramQTByteObject.getBytes(), arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, paramQTByteObject != null ? paramQTByteObject.getBytes() : null);
     }
 
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramArrayOfByte.length, paramArrayOfByte, arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        int handle = nextAtomHandle++;
+        AtomRecord parentRec = (paramAtom == null || paramAtom.getAtom() == 0) ? null : atoms.get(paramAtom.getAtom());
+        AtomRecord rec = new AtomRecord(handle, paramInt1, paramInt2, paramArrayOfByte, parentRec);
+        atoms.put(handle, rec);
+        List<AtomRecord> targetList = (parentRec != null) ? parentRec.children : rootChildren;
+        if (paramInt3 > 0 && paramInt3 <= targetList.size()) {
+            targetList.add(paramInt3 - 1, rec);
+        } else {
+            targetList.add(rec);
+        }
+        return new Atom(handle);
     }
 
     /**
@@ -661,9 +711,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, QTPointerRef paramQTPointerRef) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramQTPointerRef.getSize(), QTObject.ID(paramQTPointerRef), arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, paramQTPointerRef != null ? paramQTPointerRef.getBytes() : null);
     }
 
     /**
@@ -678,14 +726,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, QTHandleRef paramQTHandleRef) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        QTPointerRef localQTPointerRef = paramQTHandleRef.toQTPointer();
-        int i = QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramQTHandleRef.getSize(), QTObject.ID(localQTPointerRef), arrayOfInt);
-        if (!paramQTHandleRef.isLocked()) {
-            paramQTHandleRef.unlock();
-        }
-        StdQTException.checkError(i);
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, paramQTHandleRef != null ? paramQTHandleRef.getBytes() : null);
     }
 
     /**
@@ -700,10 +741,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = { paramInt4 };
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 4, arrayOfInt2, arrayOfInt1));
-        return arrayOfInt1[0] != 0 ? new Atom(arrayOfInt1[0]) : null;
+        byte[] bytes = new byte[4];
+        ByteBuffer.wrap(bytes).putInt(paramInt4);
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, bytes);
     }
 
     /**
@@ -718,10 +758,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, short paramShort) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        short[] arrayOfShort = { paramShort };
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 2, arrayOfShort, arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        byte[] bytes = new byte[2];
+        ByteBuffer.wrap(bytes).putShort(paramShort);
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, bytes);
     }
 
     /**
@@ -735,10 +774,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @return {@link quicktime.std.StdQTException}
      */
     public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, byte paramByte) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        byte[] arrayOfByte = { paramByte };
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 1, arrayOfByte, arrayOfInt));
-        return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
+        return insertChild(paramAtom, paramInt1, paramInt2, paramInt3, new byte[] { paramByte });
     }
 
     /**
@@ -962,4 +998,8 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     private static native short ITextGetString(int paramInt1, int paramInt2, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte);
 
     private static native int QTGetAtomParent(int paramInt1, int paramInt2);
+
+    @Override
+    protected void _dispose() throws QTException {
+    }
 }

@@ -39,6 +39,8 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         new PrivelegedAction().establish();
     }
 
+    private static int nextFileId = 1;
+
     OpenedFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
         super(allocate(paramQTFile, paramInt1, paramInt2));
         this.f = paramQTFile;
@@ -51,25 +53,7 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         } catch (IOException localIOException) {
             throw new QTIOException(localIOException.getMessage());
         }
-        short[] arrayOfShort = { 0 };
-        byte b = 0;
-        if ((paramInt1 & 0x100) != 0) {
-            b = 1;
-        } else if ((paramInt1 & 0x200) != 0)
-            b = 2;
-        else {
-            throw new SecurityException(paramQTFile.getPath());
-        }
-        int i;
-        if (paramInt2 == 1) {
-            i = OpenMovieFile(paramQTFile.getFSSpec(true, paramInt1), arrayOfShort, b);
-        } else if (paramInt2 == 2) {
-            i = FSpOpenDF(paramQTFile.getFSSpec(true, paramInt1), b, arrayOfShort);
-        } else {
-            throw new QTIOException(-50, paramQTFile.getPath() + ":Unknown File Type=" + paramInt2);
-        }
-        QTIOException.checkError(i, paramQTFile.getPath());
-        return arrayOfShort[0];
+        return nextFileId++;
     }
 
     private boolean closed = false;
@@ -90,17 +74,6 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
     public final void close() throws QTIOException {
         if (this.closed)
             return;
-        if (QTObject.ID(this) == 0)
-            return;
-        int i;
-        if (this.fileType == 1) {
-            i = CloseMovieFile((short) _ID());
-        } else if (this.fileType == 2) {
-            i = FSClose((short) _ID());
-        } else {
-            throw new QTIOException(-50, this.f.getPath() + ":Unknown File Type:" + this.fileType);
-        }
-        QTIOException.checkError(i, this.f.getPath());
         this.closed = true;
     }
 
@@ -108,12 +81,12 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         close();
     }
 
-    private static native short OpenMovieFile(byte[] paramArrayOfByte, short[] paramArrayOfShort, byte paramByte);
+    private static short OpenMovieFile(byte[] paramArrayOfByte, short[] paramArrayOfShort, byte paramByte) { return 0; }
 
-    private static native short CloseMovieFile(short paramShort);
+    private static short CloseMovieFile(short paramShort) { return 0; }
 
-    private static native short FSpOpenDF(byte[] paramArrayOfByte, byte paramByte, short[] paramArrayOfShort);
+    private static short FSpOpenDF(byte[] paramArrayOfByte, byte paramByte, short[] paramArrayOfShort) { return 0; }
 
-    private static native short FSClose(short paramShort);
+    private static short FSClose(short paramShort) { return 0; }
 }
 
