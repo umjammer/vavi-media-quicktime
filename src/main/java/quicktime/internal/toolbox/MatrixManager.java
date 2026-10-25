@@ -359,16 +359,6 @@ public final class MatrixManager {
         throw new UnsupportedToolboxException("QTSPresSetMatrix");
     }
 
-    /** used by VisualChannel */
-    public static int SGGetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("SGGetChannelMatrix");
-    }
-
-    /** used by VisualChannel */
-    public static int SGSetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("SGSetChannelMatrix");
-    }
-
     /** used by SpriteWorld */
     public static short SetSpriteWorldMatrix(int paramInt, byte[] paramArrayOfByte) {
         throw new UnsupportedToolboxException("SetSpriteWorldMatrix");

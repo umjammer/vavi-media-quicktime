@@ -181,6 +181,7 @@ public final class ComponentManager {
         ImageCompressionManager.register();
         GraphicsImportManager.register();
         GraphicsExportManager.register();
+        SequenceGrabberManager.register();
     }
 
     static ComponentRec component(int ref) {

@@ -460,9 +460,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
             synchronized (QTNative.globalsLock) {
                 i = SGSetDataOutput(_ID(), null, paramInt);
             }
-        }
-        synchronized (QTNative.globalsLock) {
-            i = SGSetDataOutput(_ID(), paramQTFile.getFSSpec(false, 256), paramInt);
+        } else {
+            synchronized (QTNative.globalsLock) {
+                i = SGSetDataOutput(_ID(), paramQTFile.getFSSpec(false, 256), paramInt);
+            }
         }
         StdQTException.checkError(i);
     }

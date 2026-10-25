@@ -4,7 +4,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.MatrixManager;
 import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -117,10 +116,10 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
     }
 
     private static int SGSetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.SGSetChannelMatrix(paramInt, paramArrayOfByte);
+        return SequenceGrabberManager.SGSetChannelMatrix(paramInt, paramArrayOfByte);
     }
 
     private static int SGGetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.SGGetChannelMatrix(paramInt, paramArrayOfByte);
+        return SequenceGrabberManager.SGGetChannelMatrix(paramInt, paramArrayOfByte);
     }
 }
