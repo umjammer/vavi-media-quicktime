@@ -1,1 +1,0 @@
-java -classpath %CLASSPATH%;SoundRecord.zip SoundRecord

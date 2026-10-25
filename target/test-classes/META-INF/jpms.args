@@ -1,4 +1,0 @@
---add-exports
-java.desktop/java.awt.peer=ALL-UNNAMED
---add-exports
-java.desktop/sun.awt=ALL-UNNAMED

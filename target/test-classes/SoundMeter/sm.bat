@@ -1,1 +1,0 @@
-java -classpath %CLASSPATH%;SoundMeter.zip SoundMeter

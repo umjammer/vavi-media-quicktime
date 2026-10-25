@@ -1,1 +1,0 @@
-java -classpath %CLASSPATH%;ImageFileDemo.zip ImageFileDemo

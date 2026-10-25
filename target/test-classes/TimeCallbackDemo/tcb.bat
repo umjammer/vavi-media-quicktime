@@ -1,1 +1,0 @@
-java -classpath %JDKHOME%\lib\classes.zip;%QTJAVA%;TimeCallbackDemo.zip TimeCallbackDemo

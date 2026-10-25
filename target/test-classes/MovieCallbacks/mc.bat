@@ -1,1 +1,0 @@
-java -classpath %CLASSPATH%;MovieCallbacks.zip MovieCallbacks

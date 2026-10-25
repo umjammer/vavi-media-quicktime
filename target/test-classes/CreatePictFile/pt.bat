@@ -1,1 +1,0 @@
-java -classpath %CLASSPATH%;CreatePictFile.zip CreatePictFile
