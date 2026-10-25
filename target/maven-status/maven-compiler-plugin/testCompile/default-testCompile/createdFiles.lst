@@ -22,6 +22,7 @@ MovieTextFinder/MovieTextFinder$2.class
 PlaySound/PlaySound$1.class
 DukeMovie/duke/MovieScreen.class
 TimeCode/TimeCode.class
+quicktime/internal/toolbox/RenderingTest.class
 DetachedController/DetachedController$1.class
 PlayMovie/PlayMovie$2.class
 Applets/QTTestApplet/QTTestApplet$DoQT.class
@@ -72,6 +73,7 @@ SoundMeter/SoundMeter$1.class
 TimeCallbackDemo/TimeCallbackDemo.class
 CreatePictFile/CreatePictFile.class
 TimeCallbackDemo/TimeCallbackDemo$TimeBaseTimeJumpCallBack.class
+quicktime/internal/avf/AVFMediaEngineTest.class
 VRInteraction/vrInteraction$TriggerHotSpotInterceptor.class
 TimeCode/FileMenu2$1.class
 SoundRecord/PlayMovie2.class

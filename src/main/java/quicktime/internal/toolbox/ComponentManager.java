@@ -364,7 +364,10 @@ public final class ComponentManager {
     static MovieRec importFile(String path, int flags) throws IOException {
         MovieRec m = Importers.importFile(path);
         if (m == null) {
-            m = MediaEngine.get().importFile(path);
+            String converted = MediaEngine.get().importFile(path);
+            if (converted != null) {
+                m = MovieAtoms.readFile(converted);
+            }
         }
         return m;
     }

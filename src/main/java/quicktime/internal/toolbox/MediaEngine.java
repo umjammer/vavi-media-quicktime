@@ -53,39 +53,52 @@ public abstract class MediaEngine {
         engine = e;
     }
 
+    /** export progress, return non 0 to abort */
+    public interface Progress {
+        int progress(float fraction);
+    }
+
     /** @return true if media can be decoded */
     public abstract boolean isAvailable();
 
-    /** called from MoviesTask, plays and draws the movie following its time base */
-    public abstract void task(MovieRec movie);
+    /** called from MoviesTask, plays and draws the movie following its time base, see {@link MovieAccess} */
+    public abstract void task(Object movie);
 
     /** the time, rate or volume of the movie changed */
-    public abstract void sync(MovieRec movie);
+    public abstract void sync(Object movie);
 
     /** the movie needs to be redrawn */
-    public abstract void invalidate(MovieRec movie);
+    public abstract void invalidate(Object movie);
 
     /** the movie is disposed */
-    public abstract void dispose(MovieRec movie);
+    public abstract void dispose(Object movie);
 
     /** @return the image of the movie at the movie time, null if there is no visual media or it cannot be decoded */
-    public abstract BufferedImage frame(MovieRec movie, long time) throws IOException;
-
-    /** @return the image of the track at the movie time */
-    public abstract BufferedImage frame(TrackRec track, long time) throws IOException;
+    public abstract BufferedImage frame(Object movie, long time) throws IOException;
 
     /**
      * Exports the movie with the platform's exporters.
      * @param fileType the QuickTime file type ('mpg4', '3gpp', 'M4V ', 'AIFF', 'WAVE', ...)
      * @return an OSErr
      */
-    public abstract int export(MovieRec movie, String path, int fileType, MovieFiles.Progress progress) throws IOException;
+    public abstract int export(Object movie, String path, int fileType, Progress progress) throws IOException;
 
     /**
      * Imports a file that is not a movie file, by converting it to a QuickTime movie.
-     * @return the movie, null if the file cannot be imported
+     * @return the path of the QuickTime movie, null if the file cannot be imported
      */
-    public abstract MovieRec importFile(String path) throws IOException;
+    public abstract String importFile(String path) throws IOException;
+
+    /** @return the image of the track at the movie time */
+    BufferedImage frame(TrackRec track, long time) throws IOException {
+        MovieRec part = Exporters.part(track.movie, track, 0, track.movie.duration());
+        try {
+            return frame(part, time);
+        } finally {
+            dispose(part);
+            part.dispose();
+        }
+    }
 
     /** @return a PicHandle of the movie at the time, 0 if not available */
     int pict(MovieRec movie, long time) {
@@ -118,40 +131,35 @@ public abstract class MediaEngine {
         }
 
         @Override
-        public void task(MovieRec movie) {
-            MovieDrawing.task(movie, this);
+        public void task(Object movie) {
+            MovieDrawing.task((MovieRec) movie, this);
         }
 
         @Override
-        public void sync(MovieRec movie) {
+        public void sync(Object movie) {
         }
 
         @Override
-        public void invalidate(MovieRec movie) {
-            MovieDrawing.invalidate(movie);
+        public void invalidate(Object movie) {
+            MovieDrawing.invalidate((MovieRec) movie);
         }
 
         @Override
-        public void dispose(MovieRec movie) {
+        public void dispose(Object movie) {
         }
 
         @Override
-        public BufferedImage frame(MovieRec movie, long time) {
-            return null;
+        public BufferedImage frame(Object movie, long time) throws IOException {
+            return JavaFrames.frame((MovieRec) movie, time);
         }
 
         @Override
-        public BufferedImage frame(TrackRec track, long time) {
-            return null;
-        }
-
-        @Override
-        public int export(MovieRec movie, String path, int fileType, MovieFiles.Progress progress) {
+        public int export(Object movie, String path, int fileType, Progress progress) {
             return MovieToolbox.featureUnsupported;
         }
 
         @Override
-        public MovieRec importFile(String path) {
+        public String importFile(String path) {
             return null;
         }
     }

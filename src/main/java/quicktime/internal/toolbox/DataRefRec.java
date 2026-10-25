@@ -87,8 +87,11 @@ final class DataRefRec {
 
     /** @return the file path of the data, or null for non file references */
     String path() {
+        if ((flags & selfReference) != 0) {
+            return selfPath;
+        }
         if (type == alis) {
-            if ((flags & selfReference) != 0 || data.length == 0) {
+            if (data.length == 0) {
                 return selfPath;
             }
             return FileManager.resolveAliasRecord(data);

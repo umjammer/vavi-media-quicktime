@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="quicktime.internal.toolbox.HeapTest" time="0.311" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="quicktime.internal.toolbox.HeapTest" time="0.323" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="ANSI_X3.4-1968"/>
@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/home/user/jdk/jdk-25.0.5+8/lib"/>
-    <property name="sun.java.command" value="/home/user/vavi-media-quicktime/target/surefire/surefirebooter-20261025130106325_3.jar /home/user/vavi-media-quicktime/target/surefire 2026-10-25T13-01-06_249-jvmRun1 surefire-20261025130106325_1tmp surefire_0-20261025130106325_2tmp"/>
+    <property name="sun.java.command" value="/home/user/vavi-media-quicktime/target/surefire/surefirebooter-20261025130855953_3.jar /home/user/vavi-media-quicktime/target/surefire 2026-10-25T13-08-55_848-jvmRun1 surefire-20261025130855953_1tmp surefire_0-20261025130855953_2tmp"/>
     <property name="http.nonProxyHosts" value="localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/user/vavi-media-quicktime/target/test-classes:/home/user/vavi-media-quicktime/target/classes:/root/.m2/repository/com/github/umjammer/rococoa/rococoa-cocoa/0.8.16/rococoa-cocoa-0.8.16.jar:/root/.m2/repository/com/github/umjammer/rococoa/rococoa-core/0.8.16/rococoa-core-0.8.16.jar:/root/.m2/repository/net/java/dev/jna/jna/5.19.1/jna-5.19.1.jar:/root/.m2/repository/net/bytebuddy/byte-buddy/1.18.11/byte-buddy-1.18.11.jar:/root/.m2/repository/org/junit/jupiter/junit-jupiter-api/6.1.1/junit-jupiter-api-6.1.1.jar:/root/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/root/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/root/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:/root/.m2/repository/org/junit/jupiter/junit-jupiter-engine/6.1.1/junit-jupiter-engine-6.1.1.jar:/root/.m2/repository/org/junit/platform/junit-platform-engine/6.1.1/junit-platform-engine-6.1.1.jar:/root/.m2/repository/org/junit/platform/junit-platform-commons/6.1.1/junit-platform-commons-6.1.1.jar:"/>
@@ -33,7 +33,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="jdk.http.auth.proxying.disabledSchemes" value=""/>
-    <property name="surefire.real.class.path" value="/home/user/vavi-media-quicktime/target/surefire/surefirebooter-20261025130106325_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/user/vavi-media-quicktime/target/surefire/surefirebooter-20261025130855953_3.jar"/>
     <property name="javax.net.ssl.trustStore" value="/etc/ssl/certs/java/cacerts"/>
     <property name="java.util.logging.config.file" value="/home/user/vavi-media-quicktime/target/test-classes/logging.properties"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -64,8 +64,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="testQTHandle" classname="quicktime.internal.toolbox.HeapTest" time="0.086"/>
-  <testcase name="testAtomContainer" classname="quicktime.internal.toolbox.HeapTest" time="0.072"/>
-  <testcase name="testArrays" classname="quicktime.internal.toolbox.HeapTest" time="0.071"/>
-  <testcase name="testHandle" classname="quicktime.internal.toolbox.HeapTest" time="0.074"/>
+  <testcase name="testQTHandle" classname="quicktime.internal.toolbox.HeapTest" time="0.087"/>
+  <testcase name="testAtomContainer" classname="quicktime.internal.toolbox.HeapTest" time="0.078"/>
+  <testcase name="testArrays" classname="quicktime.internal.toolbox.HeapTest" time="0.075"/>
+  <testcase name="testHandle" classname="quicktime.internal.toolbox.HeapTest" time="0.077"/>
 </testsuite>

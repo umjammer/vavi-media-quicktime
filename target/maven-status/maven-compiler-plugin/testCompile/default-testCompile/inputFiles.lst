@@ -42,5 +42,7 @@
 /home/user/vavi-media-quicktime/src/test/java/TimeCode/TimeCode.java
 /home/user/vavi-media-quicktime/src/test/java/VRInteraction/vrInteraction.java
 /home/user/vavi-media-quicktime/src/test/java/quicktime/QTExceptionTest.java
+/home/user/vavi-media-quicktime/src/test/java/quicktime/internal/avf/AVFMediaEngineTest.java
 /home/user/vavi-media-quicktime/src/test/java/quicktime/internal/toolbox/HeapTest.java
+/home/user/vavi-media-quicktime/src/test/java/quicktime/internal/toolbox/RenderingTest.java
 /home/user/vavi-media-quicktime/src/test/java/quicktime/std/movies/MovieTest.java

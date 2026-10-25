@@ -46,6 +46,9 @@ final class Exporters {
             Bytes.fourCC("mp4v"), Bytes.fourCC("s263"), Bytes.fourCC("h263"), Bytes.fourCC("jpeg"));
     private static final Set<Integer> ISO_AUDIO = Set.of(Bytes.fourCC("mp4a"), Bytes.fourCC("samr"), Bytes.fourCC("sawb"), Bytes.fourCC("sevc"),
             Bytes.fourCC("alac"), Bytes.fourCC("ac-3"), Bytes.fourCC("ec-3"));
+    /** codecs allowed in 3GPP files */
+    private static final Set<Integer> _3GPP_VIDEO = Set.of(Bytes.fourCC("s263"), Bytes.fourCC("h263"), Bytes.fourCC("mp4v"), Bytes.fourCC("avc1"));
+    private static final Set<Integer> _3GPP_AUDIO = Set.of(Bytes.fourCC("samr"), Bytes.fourCC("sawb"), Bytes.fourCC("mp4a"), Bytes.fourCC("sevc"));
 
     /** @return the 'ftyp' brands of the file type, null for QuickTime */
     static int[] brands(int fileType) {
@@ -122,7 +125,7 @@ final class Exporters {
             }
             int[] brands = brands(fileType);
             if (brands != null) {
-                if (toIso(part, fileType == M4A)) {
+                if (toIso(part, fileType == M4A, fileType == _3gpp || fileType == _3gp2)) {
                     MovieFiles.flatten(part, path, MovieFiles.flattenForceMovieResourceBeforeMovieData, brands, true, progress).dispose();
                     part = null;
                     return 0;
@@ -134,7 +137,7 @@ final class Exporters {
             } else if (fileType == TEXT) {
                 return writeText(part, path);
             }
-            return MediaEngine.get().export(part, path, fileType, progress);
+            return MediaEngine.get().export(part, path, fileType, f -> progress.progress(1, 12, (int) (f * 0x10000)));
         } finally {
             if (part != null) {
                 part.dispose();
@@ -145,7 +148,9 @@ final class Exporters {
     // ---- ISO
 
     /** converts the movie for an ISO file, @return false if a codec does not fit */
-    static boolean toIso(MovieRec m, boolean audioOnly) {
+    static boolean toIso(MovieRec m, boolean audioOnly, boolean threeGpp) {
+        Set<Integer> videoCodecs = threeGpp ? _3GPP_VIDEO : ISO_VIDEO;
+        Set<Integer> audioCodecs = threeGpp ? _3GPP_AUDIO : ISO_AUDIO;
         for (TrackRec t : new ArrayList<>(m.tracks)) {
             if (t.media == null || !t.enabled) {
                 m.removeTrack(t);
@@ -166,11 +171,11 @@ final class Exporters {
             for (int i = 0; i < md.descriptions.size(); i++) {
                 byte[] d = md.descriptions.get(i);
                 int format = Bytes.getInt(d, 4);
-                if (video && !ISO_VIDEO.contains(format)) {
+                if (video && !videoCodecs.contains(format)) {
                     return false;
                 }
                 if (sound) {
-                    if (!ISO_AUDIO.contains(format)) {
+                    if (!audioCodecs.contains(format)) {
                         return false;
                     }
                     md.descriptions.set(i, isoSoundDescription(d));
