@@ -136,11 +136,44 @@ final class JavaFrames {
                 at.scale(tw == 0 ? 1 : tw / img.getWidth(), th == 0 ? 1 : th / img.getHeight());
                 g.drawImage(img, at, null);
             }
+            for (TrackRec t : m.tracks) {
+                if (frame == null || !t.enabled || t.media == null || t.media.type != TMCD || !TimeCodeManager.isShown(t.media)) {
+                    continue;
+                }
+                long mt = t.trackTimeToMediaTime(time);
+                String text = mt < 0 ? null : TimeCodeManager.text(t.media, mt);
+                if (text != null) {
+                    drawTimeCode(g, t, text, -n[0], -n[1], frame);
+                }
+            }
         } finally {
             if (g != null) {
                 g.dispose();
             }
         }
         return frame;
+    }
+
+    static final int TMCD = Bytes.fourCC("tmcd");
+
+    /** the timecode as text with the display options at the bottom of the track box */
+    private static void drawTimeCode(Graphics2D g, TrackRec t, String text, double dx, double dy, BufferedImage frame) {
+        byte[] o = TimeCodeManager.displayOptions(t.media);
+        int size = Math.max(6, Bytes.getShort(o, 4));
+        java.awt.Color fore = new java.awt.Color(o[8] & 0xff, o[10] & 0xff, o[12] & 0xff);
+        java.awt.Color back = new java.awt.Color(o[14] & 0xff, o[16] & 0xff, o[18] & 0xff);
+        g.setFont(new java.awt.Font(java.awt.Font.MONOSPACED, (Bytes.getShort(o, 2) & 1) != 0 ? java.awt.Font.BOLD : java.awt.Font.PLAIN, size));
+        java.awt.FontMetrics fm = g.getFontMetrics();
+        double[][] tm = MatrixManager.toDoubles(t.matrix);
+        int w = t.width > 0 ? t.width >> 16 : fm.stringWidth(text) + 4;
+        int h = t.height > 0 ? t.height >> 16 : fm.getHeight() + 2;
+        int x = (int) Math.round(tm[2][0] + dx), y = (int) Math.round(tm[2][1] + dy);
+        if (t.width == 0 && t.height == 0) {
+            y = frame.getHeight() - h;
+        }
+        g.setColor(back);
+        g.fillRect(x, y, w, h);
+        g.setColor(fore);
+        g.drawString(text, x + Math.max(2, (w - fm.stringWidth(text)) / 2), y + (h + fm.getAscent() - fm.getDescent()) / 2);
     }
 }

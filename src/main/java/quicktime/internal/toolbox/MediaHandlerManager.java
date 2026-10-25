@@ -41,7 +41,7 @@ public final class MediaHandlerManager {
         return states.computeIfAbsent(m, k -> new HandlerState());
     }
 
-    private static MediaRec media(int mh) {
+    static MediaRec media(int mh) {
         MediaRec m = ComponentManager.mediaOfHandler(mh);
         if (m == null) {
             throw new IllegalArgumentException("not a media handler: 0x" + Integer.toHexString(mh));

@@ -4,7 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.TimeCodeManager;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.GraphicsImportManager;
@@ -378,15 +378,15 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
     }
 
     private static int TCGetTimeCodeAtTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
-        return ComponentManager.TCGetTimeCodeAtTime(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
+        return TimeCodeManager.TCGetTimeCodeAtTime(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
     }
 
     private static int TCGetCurrentTimeCode(int paramInt, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
-        return ComponentManager.TCGetCurrentTimeCode(paramInt, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
+        return TimeCodeManager.TCGetCurrentTimeCode(paramInt, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
     }
 
     private static int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ComponentManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
+        return TimeCodeManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
     }
 
     private static short GetTrackSoundLocalizationSettings(int paramInt, int[] paramArrayOfInt) {

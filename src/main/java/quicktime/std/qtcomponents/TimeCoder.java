@@ -4,7 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.TimeCodeManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -235,39 +235,39 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
     }
 
     private static int TCTimeCodeToString(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return ComponentManager.TCTimeCodeToString(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+        return TimeCodeManager.TCTimeCodeToString(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
     }
 
     private static int TCTimeCodeToString(int paramInt, byte[] paramArrayOfByte1, int[] paramArrayOfInt, byte[] paramArrayOfByte2) {
-        return ComponentManager.TCTimeCodeToString(paramInt, paramArrayOfByte1, paramArrayOfInt, paramArrayOfByte2);
+        return TimeCodeManager.TCTimeCodeToString(paramInt, paramArrayOfByte1, paramArrayOfInt, paramArrayOfByte2);
     }
 
     private static int TCTimeCodeToFrameNumber(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return ComponentManager.TCTimeCodeToFrameNumber(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+        return TimeCodeManager.TCTimeCodeToFrameNumber(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
     }
 
     private static int TCFrameNumberToTimeCode(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return ComponentManager.TCFrameNumberToTimeCode(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2);
+        return TimeCodeManager.TCFrameNumberToTimeCode(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2);
     }
 
     private static int TCSetSourceRef(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.TCSetSourceRef(paramInt1, paramInt2, paramInt3);
+        return TimeCodeManager.TCSetSourceRef(paramInt1, paramInt2, paramInt3);
     }
 
     private static int TCSetTimeCodeFlags(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.TCSetTimeCodeFlags(paramInt1, paramInt2, paramInt3);
+        return TimeCodeManager.TCSetTimeCodeFlags(paramInt1, paramInt2, paramInt3);
     }
 
     private static int TCGetTimeCodeFlags(int paramInt, int[] paramArrayOfInt) {
-        return ComponentManager.TCGetTimeCodeFlags(paramInt, paramArrayOfInt);
+        return TimeCodeManager.TCGetTimeCodeFlags(paramInt, paramArrayOfInt);
     }
 
     private static int TCSetDisplayOptions(int paramInt, byte[] paramArrayOfByte) {
-        return ComponentManager.TCSetDisplayOptions(paramInt, paramArrayOfByte);
+        return TimeCodeManager.TCSetDisplayOptions(paramInt, paramArrayOfByte);
     }
 
     private static int TCGetDisplayOptions(int paramInt, byte[] paramArrayOfByte) {
-        return ComponentManager.TCGetDisplayOptions(paramInt, paramArrayOfByte);
+        return TimeCodeManager.TCGetDisplayOptions(paramInt, paramArrayOfByte);
     }
 }
 

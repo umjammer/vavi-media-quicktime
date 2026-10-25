@@ -4,7 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.XMLParserManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -68,6 +68,6 @@ public final class XMLDoc extends QTObject implements PrimitivesLib, QuickTimeLi
     }
 
     private static short XMLParseDisposeXMLDoc(int paramInt1, int paramInt2) {
-        return ComponentManager.XMLParseDisposeXMLDoc(paramInt1, paramInt2);
+        return XMLParserManager.XMLParseDisposeXMLDoc(paramInt1, paramInt2);
     }
 }

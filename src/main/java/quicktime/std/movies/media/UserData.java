@@ -4,7 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.TimeCodeManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.internal.toolbox.MemoryManager;
@@ -440,7 +440,7 @@ public final class UserData extends QTObject implements QuickTimeLib {
     }
 
     private static int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ComponentManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
+        return TimeCodeManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
     }
 
     private static int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt) {
