@@ -176,48 +176,30 @@ public final class MediaHandlerManager {
         return noErr;
     }
 
-    /** @return the peak levels (0 - 255) of each channel around the current movie time, null if not PCM */
+    /** @return the peak levels (0 - 255) of each channel around the current movie time, null if it cannot be decoded */
     private static int[] peaks(MediaRec m, int channelsWanted) {
         if (m.track == null || m.track.movie == null || m.descriptions.isEmpty()) {
             return null;
         }
-        Exporters.Pcm pcm = Exporters.pcm(m.descriptions.getFirst());
-        if (pcm == null) {
+        Audio.Decoder dec = Audio.decoder(m.descriptions.getFirst());
+        if (dec == null) {
             return null;
         }
+        int channels = Math.max(1, dec.channels);
+        int[] peaks = new int[channels];
         long mt = m.track.trackTimeToMediaTime(m.track.movie.time());
-        long s = mt < 0 ? 0 : m.sampleAt(mt);
-        int[] peaks = new int[Math.max(1, pcm.channels())];
-        if (s == 0) {
+        if (mt < 0) {
             return peaks;
         }
-        int r = m.runOfSample(s);
-        MediaRec.SampleRun run = m.runs.get(r);
-        long k = s - m.firstSampleOf(r);
-        long n = Math.min(run.count - k, Math.max(1, m.timeScale / 30));
+        int frames = (int) Math.max(1, m.timeScale / 30);
         try {
-            byte[] data = m.dataRef(run.dataRefIndex).read(run.offsetOf(k), (int) run.bytesOf(k, n));
-            int frame = pcm.frameBytes();
-            int bytes = (pcm.bits() + 7) / 8;
-            for (int i = 0; i + frame <= data.length; i += frame) {
-                for (int c = 0; c < pcm.channels(); c++) {
-                    long v = 0;
-                    for (int b = 0; b < bytes; b++) {
-                        v = (v << 8) | (data[i + c * bytes + (pcm.bigEndian() ? b : bytes - 1 - b)] & 0xff);
-                    }
-                    double x;
-                    if (pcm.isFloat()) {
-                        x = bytes == 8 ? Double.longBitsToDouble(v) : Float.intBitsToFloat((int) v);
-                    } else {
-                        if (pcm.signed()) {
-                            v = (v << (64 - pcm.bits())) >> (64 - pcm.bits());
-                        } else {
-                            v -= 1L << (pcm.bits() - 1);
-                        }
-                        x = v / (double) (1L << (pcm.bits() - 1));
-                    }
-                    peaks[c] = Math.max(peaks[c], (int) Math.min(255, Math.abs(x) * 255));
-                }
+            float[] pcm = Audio.read(m, mt, frames, channels);
+            if (pcm == null) {
+                return null;
+            }
+            for (int i = 0; i < pcm.length; i++) {
+                int c = i % channels;
+                peaks[c] = Math.max(peaks[c], (int) Math.min(255, Math.abs(pcm[i]) * 255));
             }
         } catch (IOException e) {
             return peaks;

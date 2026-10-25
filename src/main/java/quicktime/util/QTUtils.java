@@ -132,14 +132,14 @@ public final class QTUtils implements QuickTimeLib {
      * Convert a 16.16 Unsigned Fixed format to a float
      */
     public static int X2UFix(float paramFloat) {
-        return (int) (paramFloat * 65536.0F) & 0xFFFFFFFF;
+        return (int) (long) (paramFloat * 65536.0D);
     }
 
     /**
      * Convert a 16.16 Unsigned Fixed format to a float
      */
     public static float UFix2X(int paramInt) {
-        return (float) ((paramInt & 0xFFFFFFFF) / 65536.0D);
+        return (float) ((paramInt & 0xFFFFFFFFL) / 65536.0D);
     }
 
     /**
@@ -188,7 +188,7 @@ public final class QTUtils implements QuickTimeLib {
      * converts an unsigned int to long.
      */
     public static long UInt2Long(int paramInt) {
-        return paramInt & 0xFFFFFFFF;
+        return paramInt & 0xFFFFFFFFL;
     }
 
     /**

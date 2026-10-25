@@ -124,4 +124,10 @@ public final class MovieAccess {
         }
         return false;
     }
+
+    /** the session ends: sound stops */
+    public static void terminate() {
+        SoundPlayer.stopAll();
+        SoundManager.disposeAll();
+    }
 }

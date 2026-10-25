@@ -576,6 +576,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         } else if (initDone == 1) {
             removeAllCanvases();
             TaskThread.killAllThreads();
+            quicktime.internal.toolbox.MovieAccess.terminate();
             QTUtils.reclaimMemory();
             synchronized (terminationLock()) {
                 QTObject.qtIsNOTInitialized = true;

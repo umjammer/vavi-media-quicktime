@@ -290,25 +290,6 @@ final class Exporters {
         return null;
     }
 
-    /** @return a sample as a double in [-1, 1) */
-    private static double sample(byte[] b, int o, Pcm f) {
-        int bytes = (f.bits + 7) / 8;
-        long v = 0;
-        for (int i = 0; i < bytes; i++) {
-            int x = b[o + (f.bigEndian ? i : bytes - 1 - i)] & 0xff;
-            v = (v << 8) | x;
-        }
-        if (f.isFloat) {
-            return bytes == 8 ? Double.longBitsToDouble(v) : Float.intBitsToFloat((int) v);
-        }
-        if (f.signed) {
-            v = (v << (64 - f.bits)) >> (64 - f.bits);
-        } else {
-            v -= 1L << (f.bits - 1);
-        }
-        return v / (double) (1L << (f.bits - 1));
-    }
-
     private static void putSample(byte[] b, int o, double s, int bits, boolean bigEndian, boolean signed) {
         int bytes = bits / 8;
         long max = (1L << (bits - 1)) - 1;
@@ -321,7 +302,7 @@ final class Exporters {
         }
     }
 
-    /** writes the first enabled PCM sound track, @return false if there is none */
+    /** writes the first enabled sound track a Java decoder can read, @return false if there is none */
     static boolean writePcm(MovieRec m, String path, boolean aiff) throws IOException {
         TrackRec sound = null;
         int soundTracks = 0;
@@ -335,15 +316,22 @@ final class Exporters {
             return false;
         }
         MediaRec md = sound.media;
+        Audio.Decoder dec = null;
         Pcm in = null;
         for (byte[] d : md.descriptions) {
-            Pcm p = pcm(d);
-            if (p == null || (in != null && !in.equals(p))) {
+            Audio.Decoder x = Audio.decoder(d);
+            if (x == null || (dec != null && (x.channels != dec.channels || x.rate != dec.rate))) {
                 return false;
             }
-            in = p;
+            Pcm p = pcm(d);
+            if (dec == null) {
+                in = p != null ? p : new Pcm(x.channels, 16, x.rate, true, false, true);
+            } else if (p == null || !p.equals(in)) {
+                in = new Pcm(x.channels, 16, x.rate, true, false, true);
+            }
+            dec = x;
         }
-        if (in == null) {
+        if (dec == null) {
             return false;
         }
         for (TrackRec.Edit e : sound.edits) {
@@ -351,8 +339,9 @@ final class Exporters {
                 return false;
             }
         }
+        int channels = dec.channels;
         int outBits = in.isFloat ? 16 : Math.min(32, Math.max(8, in.bits));
-        int outFrame = in.channels * outBits / 8;
+        int outFrame = channels * outBits / 8;
         // frames in the media time scale, which is the sample rate for sound
         long frames = 0;
         for (TrackRec.Edit e : sound.edits) {
@@ -360,48 +349,23 @@ final class Exporters {
         }
         DataRefRec.closeReader(path);
         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(path))) {
-            byte[] header = aiff ? aiffHeader(in, outBits, frames) : waveHeader(in, outBits, frames);
-            os.write(header);
-            byte[] silence = new byte[outFrame];
-            if (!aiff && outBits == 8) {
-                java.util.Arrays.fill(silence, (byte) 0x80);
-            }
+            os.write(aiff ? aiffHeader(in, outBits, frames) : waveHeader(in, outBits, frames));
             for (TrackRec.Edit e : sound.edits) {
                 long n = sound.mediaDuration(e.duration, 0x10000);
-                if (e.isEmpty()) {
-                    for (long i = 0; i < n; i++) {
-                        os.write(silence);
-                    }
-                    continue;
-                }
                 long t = e.mediaTime;
-                long left = n;
-                while (left > 0) {
-                    long s = md.sampleAt(t);
-                    if (s == 0) {
-                        for (long i = 0; i < left; i++) {
-                            os.write(silence);
-                        }
-                        break;
+                while (n > 0) {
+                    int chunk = (int) Math.min(n, 65536);
+                    float[] pcm = e.isEmpty() ? new float[chunk * channels] : Audio.read(md, t, chunk, channels);
+                    if (pcm == null) {
+                        pcm = new float[chunk * channels];
                     }
-                    int r = md.runOfSample(s);
-                    MediaRec.SampleRun run = md.runs.get(r);
-                    long k = s - md.firstSampleOf(r);
-                    long count = Math.min(run.count - k, Math.max(1, left / Math.max(1, run.duration)));
-                    count = Math.min(count, 65536);
-                    byte[] data = md.dataRef(run.dataRefIndex).read(run.offsetOf(k), (int) run.bytesOf(k, count));
-                    long framesHere = Math.min(left, count * run.duration);
-                    int inFrame = in.frameBytes();
-                    byte[] out = new byte[(int) framesHere * outFrame];
-                    for (int i = 0; i < framesHere && (long) (i + 1) * inFrame <= data.length; i++) {
-                        for (int c = 0; c < in.channels; c++) {
-                            double v = sample(data, i * inFrame + c * ((in.bits + 7) / 8), in);
-                            putSample(out, i * outFrame + c * (outBits / 8), v, outBits, aiff, aiff || outBits > 8);
-                        }
+                    byte[] out = new byte[chunk * outFrame];
+                    for (int i = 0; i < chunk * channels; i++) {
+                        putSample(out, i * (outBits / 8), pcm[i], outBits, aiff, aiff || outBits > 8);
                     }
                     os.write(out);
-                    left -= framesHere;
-                    t += framesHere;
+                    n -= chunk;
+                    t += chunk;
                 }
             }
             if ((frames * outFrame & 1) != 0) {

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * Decodes, renders and plays the media of movies.
  * <p>
  * The movie model is pure Java, the codecs are the platform's. On macOS this is AVFoundation
- * ({@code quicktime.internal.avf.AVFMediaEngine}), elsewhere media can be edited, read and written but not decoded.
+ * ({@code quicktime.internal.avf.AVFMediaEngine}), elsewhere the Java codecs of {@link Codecs} and {@link Audio} decode what they can.
  */
 public abstract class MediaEngine {
 
@@ -137,6 +137,7 @@ public abstract class MediaEngine {
 
         @Override
         public void sync(Object movie) {
+            SoundPlayer.sync((MovieRec) movie);
         }
 
         @Override
@@ -146,6 +147,7 @@ public abstract class MediaEngine {
 
         @Override
         public void dispose(Object movie) {
+            SoundPlayer.dispose((MovieRec) movie);
         }
 
         @Override
