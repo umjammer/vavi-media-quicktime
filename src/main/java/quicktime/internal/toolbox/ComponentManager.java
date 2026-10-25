@@ -6,228 +6,884 @@
 
 package quicktime.internal.toolbox;
 
-import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 
 /**
  * ComponentManager.
  * <p>
- * Java replacement for the QuickTime native functions of this subsystem.
- * Functions that have no modern equivalent throw {@link UnsupportedToolboxException}.
+ * The Component Manager with the components of the emulated toolbox: the clock, media handlers, data handlers,
+ * movie importers ('eat ') and movie exporters ('spit').
+ * A ComponentDescription is 20 bytes: type, subType, manufacturer, flags, flagsMask; 0 matches anything.
  */
 public final class ComponentManager {
 
     private ComponentManager() {
     }
 
-    /** used by QTObjectManagement */
-    public static short CloseComponent(int paramInt) {
-        throw new UnsupportedToolboxException("CloseComponent");
+    static final short noErr = 0;
+    static final short paramErr = -50;
+    static final short badComponentInstance = (short) 0x8001;
+    static final short badComponentSelector = (short) 0x8002;
+    static final short invalidComponentID = -3000;
+    static final short cantFindHandler = -2003;
+    static final short noExportProcAvailableErr = -2089;
+
+    static final int clok = Bytes.fourCC("clok");
+    static final int mhlr = Bytes.fourCC("mhlr");
+    static final int dhlr = Bytes.fourCC("dhlr");
+    static final int eat = Bytes.fourCC("eat ");
+    static final int spit = Bytes.fourCC("spit");
+    static final int appl = Bytes.fourCC("appl");
+
+    // movie import / export component flags
+    static final int canMovieImportHandles = 1;
+    static final int canMovieImportFiles = 2;
+    static final int hasMovieImportUserInterface = 4;
+    static final int canMovieExportHandles = 8;
+    static final int canMovieExportFiles = 16;
+    static final int hasMovieExportUserInterface = 32;
+    static final int movieImportSubTypeIsFileExtension = 64;
+    static final int canMovieImportInPlace = 128;
+    static final int dontAutoFileMovieImport = 256;
+    static final int canMovieExportAuxDataHandle = 512;
+    static final int canMovieImportValidateHandles = 1024;
+    static final int canMovieImportValidateFile = 2048;
+    static final int dontRegisterWithEasyOpen = 4096;
+    static final int canMovieImportInPlaceWithIdle = 8192;
+    static final int movieImportMustGetDestinationMediaType = 1 << 14;
+    static final int movieExportNeedsResourceFork = 1 << 15;
+    static final int canMovieImportDataReferences = 1 << 16;
+    static final int movieExportMustGetSourceMediaType = 1 << 17;
+    static final int canMovieImportWithIdle = 1 << 18;
+    static final int canMovieImportValidateDataReferences = 1 << 19;
+    static final int reservedForUseByGraphicsImporters = 1 << 23;
+
+    /** a registered component */
+    static final class ComponentRec {
+        final int ref;
+        final int type;
+        final int subType;
+        final int manufacturer;
+        final int flags;
+        final String name;
+        final String info;
+        final Function<InstanceRec, Object> factory;
+        int instances;
+
+        ComponentRec(int type, int subType, int flags, String name, String info, Function<InstanceRec, Object> factory) {
+            this.ref = Heap.newObject(this, 4);
+            this.type = type;
+            this.subType = subType;
+            this.manufacturer = appl;
+            this.flags = flags;
+            this.name = name;
+            this.info = info;
+            this.factory = factory;
+        }
     }
 
-    /** used by ComponentDescription */
-    public static int CountComponents(byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("CountComponents");
+    /** an open component instance */
+    static final class InstanceRec {
+        final int ref;
+        final ComponentRec component;
+        Object impl;
+
+        InstanceRec(ComponentRec component) {
+            this.ref = Heap.newObject(this, 4);
+            this.component = component;
+            this.impl = component.factory == null ? null : component.factory.apply(this);
+        }
     }
 
-    /** used by ComponentIdentifier */
-    public static int FindNextComponent(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("FindNextComponent");
+    /** the settings of an importer or exporter instance */
+    static final class MovieComponent {
+        int progressProc;
+        int progressRefCon;
+        byte[] settings;
+        int newMovieFlags;
+        int chunkSize;
+        int duration;
+        int width;
+        int height;
+        int sampleDuration;
+        int sampleDurationScale;
+        byte[] sampleDescription;
+        int sampleDescriptionMediaType;
+        long offset;
+        long limit = -1;
+        int auxiliaryData;
+        int auxiliaryDataType;
+        byte[] mediaFile;
+
+        MovieFiles.Progress progress(MovieRec m, int operation) {
+            if (progressProc == 0 || progressProc == -1) {
+                return MovieFiles.NO_PROGRESS;
+            }
+            return (message, op, percent) -> Closures.callInt(progressProc, m == null ? 0 : m.ref, message, operation, percent, progressRefCon);
+        }
     }
 
-    /** used by ComponentIdentifier, SGDispatcher */
-    public static short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
-        throw new UnsupportedToolboxException("GetComponentInfo");
+    private static final List<ComponentRec> components = new ArrayList<>();
+
+    private static ComponentRec register(int type, int subType, int flags, String name, String info, Function<InstanceRec, Object> factory) {
+        ComponentRec c = new ComponentRec(type, subType, flags, name, info, factory);
+        components.add(c);
+        return c;
     }
 
-    /** used by DataHandler, DataRef */
-    public static int GetDataHandler(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("GetDataHandler");
+    static {
+        register(clok, Bytes.fourCC("micr"), 0, "Microsecond Clock", "Microsecond clock", null);
+        register(clok, Bytes.fourCC("tick"), 0, "Tick Clock", "Tick clock", null);
+        String[][] media = {
+                {"vide", "Apple Video Media Handler"}, {"soun", "Apple Sound Media Handler"}, {"text", "Apple Text Media Handler"},
+                {"tmcd", "Apple Time Code Media Handler"}, {"sprt", "Apple Sprite Media Handler"}, {"musi", "Apple Music Media Handler"},
+                {"MPEG", "Apple MPEG Media Handler"}, {"flsh", "Apple Flash Media Handler"}, {"strm", "Apple Streaming Media Handler"},
+                {"qd3d", "Apple 3D Media Handler"}, {"twen", "Apple Tween Media Handler"}, {"moov", "Apple Movie Media Handler"},
+                {"qtvr", "Apple QTVR Media Handler"}, {"tx3g", "Apple Timed Text Media Handler"}, {"sbtl", "Apple Subtitle Media Handler"},
+                {"clcp", "Apple Closed Caption Media Handler"}, {"meta", "Apple Metadata Media Handler"}, {"hint", "Apple Hint Media Handler"},
+        };
+        for (String[] m : media) {
+            register(mhlr, Bytes.fourCC(m[0]), 0, m[1], m[1], null);
+        }
+        String[][] data = {{"alis", "Apple Alias Data Handler"}, {"url ", "Apple URL Data Handler"}, {"hndl", "Apple Handle Data Handler"},
+                {"rsrc", "Apple Resource Data Handler"}, {"null", "Apple Null Data Handler"}};
+        for (String[] d : data) {
+            register(dhlr, Bytes.fourCC(d[0]), 0, d[1], d[1], null);
+        }
+        int importFlags = canMovieImportFiles | canMovieImportHandles | canMovieImportDataReferences | canMovieImportInPlace | canMovieImportValidateFile;
+        String[][] importers = {
+                {"MooV", "QuickTime Movie"}, {"mpg4", "MPEG-4"}, {"3gpp", "3GPP"}, {"3gp2", "3GPP2"}, {"M4A ", "MPEG-4 Audio"},
+                {"M4V ", "MPEG-4 Video"}, {"AIFF", "AIFF"}, {"AIFC", "AIFC"}, {"WAVE", "WAVE"}, {"JPEG", "JPEG Image"},
+                {"PNGf", "PNG Image"}, {"GIFf", "GIF Image"}, {"BMPf", "BMP Image"},
+                {"MP3 ", "MP3 Audio"}, {"Mp3 ", "MP3 Audio"}, {"MPEG", "MPEG"}, {"caff", "Core Audio Format"}, {"AAC ", "AAC Audio"},
+        };
+        for (String[] i : importers) {
+            register(eat, Bytes.fourCC(i[0]), importFlags, i[1], i[1] + " importer", c -> new MovieComponent());
+        }
+        int exportFlags = canMovieExportFiles | canMovieExportHandles;
+        String[][] exporters = {
+                {"MooV", "QuickTime Movie"}, {"mpg4", "MPEG-4"}, {"M4V ", "MPEG-4 Video (iPod)"}, {"M4A ", "MPEG-4 Audio"},
+                {"3gpp", "3GPP"}, {"3gp2", "3GPP2"}, {"AIFF", "AIFF"}, {"WAVE", "WAVE"}, {"TEXT", "Text"},
+        };
+        for (String[] e : exporters) {
+            register(spit, Bytes.fourCC(e[0]), exportFlags, e[1], "Movie to " + e[1], c -> new MovieComponent());
+        }
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportDoUserDialog(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("MovieExportDoUserDialog");
+    static ComponentRec component(int ref) {
+        ComponentRec c = Heap.peerOrNull(ref, ComponentRec.class);
+        if (c == null) {
+            InstanceRec i = Heap.peerOrNull(ref, InstanceRec.class);
+            if (i != null) {
+                return i.component;
+            }
+        }
+        return c;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportGetAuxiliaryData(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieExportGetAuxiliaryData");
+    static InstanceRec instance(int ref) {
+        return Heap.peerOrNull(ref, InstanceRec.class);
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportGetCreatorType(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieExportGetCreatorType");
+    private static boolean matches(ComponentRec c, byte[] desc) {
+        int type = Bytes.getInt(desc, 0);
+        int subType = Bytes.getInt(desc, 4);
+        int manufacturer = Bytes.getInt(desc, 8);
+        int flags = Bytes.getInt(desc, 12);
+        int mask = Bytes.getInt(desc, 16);
+        return (type == 0 || type == c.type) && (subType == 0 || subType == c.subType) && (manufacturer == 0 || manufacturer == c.manufacturer)
+                && (c.flags & mask) == (flags & mask);
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportGetFileNameExtension(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieExportGetFileNameExtension");
+    private static ComponentRec find(int type, int subType) {
+        for (ComponentRec c : components) {
+            if (c.type == type && (subType == 0 || c.subType == subType)) {
+                return c;
+            }
+        }
+        return null;
     }
 
-    /** used by AtomContainer */
-    public static int MovieExportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieExportGetSettingsAsAtomContainer");
+    static int open(ComponentRec c) {
+        c.instances++;
+        return new InstanceRec(c).ref;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportGetShortFileTypeString(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("MovieExportGetShortFileTypeString");
+    // ---- Component Manager
+
+    public static int FindNextComponent(int previous, byte[] desc) {
+        boolean after = previous == 0;
+        ComponentRec prev = component(previous);
+        for (ComponentRec c : components) {
+            if (!after) {
+                after = c == prev;
+                continue;
+            }
+            if (matches(c, desc)) {
+                return c.ref;
+            }
+        }
+        return 0;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportGetSourceMediaType(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieExportGetSourceMediaType");
+    public static int CountComponents(byte[] desc) {
+        int n = 0;
+        for (ComponentRec c : components) {
+            if (matches(c, desc)) {
+                n++;
+            }
+        }
+        return n;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportSetProgressProc(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieExportSetProgressProc");
+    public static short GetComponentInfo(int component, byte[] desc, int nameHandle, int infoHandle, int iconHandle) {
+        ComponentRec c = component(component);
+        if (c == null) {
+            return invalidComponentID;
+        }
+        if (desc != null) {
+            Bytes.putInt(desc, 0, c.type);
+            Bytes.putInt(desc, 4, c.subType);
+            Bytes.putInt(desc, 8, c.manufacturer);
+            Bytes.putInt(desc, 12, c.flags);
+            Bytes.putInt(desc, 16, 0);
+        }
+        if (nameHandle != 0) {
+            byte[] p = new byte[256];
+            Bytes.putPString(p, 0, c.name, 256);
+            Heap.setHandleBytes(nameHandle, java.util.Arrays.copyOf(p, (p[0] & 0xff) + 1));
+        }
+        if (infoHandle != 0) {
+            byte[] p = new byte[256];
+            Bytes.putPString(p, 0, c.info, 256);
+            Heap.setHandleBytes(infoHandle, java.util.Arrays.copyOf(p, (p[0] & 0xff) + 1));
+        }
+        return noErr;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieExportSetSampleDescription");
+    public static short OpenAComponent(int component, int[] ci) {
+        ComponentRec c = component(component);
+        if (c == null) {
+            return invalidComponentID;
+        }
+        ci[0] = open(c);
+        return noErr;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("MovieExportSetSettingsFromAtomContainer");
+    public static short OpenADefaultComponent(int componentType, int componentSubType, int[] ci) {
+        ComponentRec c = find(componentType, componentSubType);
+        if (c == null) {
+            return cantFindHandler;
+        }
+        ci[0] = open(c);
+        return noErr;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7) {
-        throw new UnsupportedToolboxException("MovieExportToDataRef");
+    public static short CloseComponent(int ci) {
+        InstanceRec i = instance(ci);
+        if (i == null) {
+            return badComponentInstance;
+        }
+        i.component.instances--;
+        Heap.free(ci);
+        return noErr;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportToFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        throw new UnsupportedToolboxException("MovieExportToFile");
+    public static int CountComponentInstances(int component) {
+        ComponentRec c = component(component);
+        return c == null ? 0 : c.instances;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportToHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        throw new UnsupportedToolboxException("MovieExportToHandle");
+    // ---- handlers and clocks
+
+    private static int defaultClock;
+
+    static synchronized int defaultClock() {
+        if (defaultClock == 0) {
+            defaultClock = open(find(clok, Bytes.fourCC("micr")));
+        }
+        return defaultClock;
     }
 
-    /** used by MovieExporter */
-    public static int MovieExportValidate(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("MovieExportValidate");
+    /** @return a media handler instance for the media */
+    static int newMediaHandler(MediaRec m) {
+        ComponentRec c = find(mhlr, m.type);
+        if (c == null) {
+            c = register(mhlr, m.type, 0, mediaHandlerName(m.type), mediaHandlerName(m.type), null);
+        }
+        int ci = open(c);
+        instance(ci).impl = m;
+        return ci;
     }
 
-    /** used by Track */
-    public static int MovieImportDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int paramInt6, int[] paramArrayOfInt2, int paramInt7, int[] paramArrayOfInt3) {
-        throw new UnsupportedToolboxException("MovieImportDataRef");
+    /** @return the media of a media handler instance, null if none */
+    static MediaRec mediaOfHandler(int handler) {
+        InstanceRec i = instance(handler);
+        return i != null && i.impl instanceof MediaRec m ? m : null;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportDoUserDialog(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2) {
-        throw new UnsupportedToolboxException("MovieImportDoUserDialog");
+    static String mediaHandlerName(int type) {
+        ComponentRec c = find(mhlr, type);
+        return c != null ? c.name : "Apple " + Bytes.fourCC(type).trim() + " Media Handler";
     }
 
-    /** used by Track */
-    public static int MovieImportFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int paramInt5, int[] paramArrayOfInt3) {
-        throw new UnsupportedToolboxException("MovieImportFile");
+    static String dataHandlerName(int type) {
+        ComponentRec c = find(dhlr, type);
+        return c != null ? c.name : "Apple Data Handler";
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportGetAuxiliaryDataType(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieImportGetAuxiliaryDataType");
+    /** @return a data handler instance */
+    static int dataHandler(int type) {
+        ComponentRec c = find(dhlr, type);
+        return c == null ? 0 : open(c);
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportGetFileType(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieImportGetFileType");
+    public static int GetDataHandler(int dataRef, int dataHandlerSubType, int flags) {
+        ComponentRec c = find(dhlr, dataHandlerSubType);
+        return c == null ? 0 : c.ref;
     }
 
-    /** used by AtomContainer */
-    public static int MovieImportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieImportGetMIMETypeList");
+    // ---- importing
+
+    /** @return the importer subtype for the file, 0 if no Java importer reads it */
+    private static int importType(String path) {
+        int t = Importers.detect(path);
+        return t != 0 ? t : Importers.byExtension(path);
     }
 
-    /** used by MovieImporter, SampleDescription */
-    public static int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        throw new UnsupportedToolboxException("MovieImportGetSampleDescription");
+    /** @return the imported movie, null if it cannot be imported */
+    static MovieRec importFile(String path, int flags) throws IOException {
+        MovieRec m = Importers.importFile(path);
+        if (m == null) {
+            m = MediaEngine.get().importFile(path);
+        }
+        return m;
     }
 
-    /** used by AtomContainer */
-    public static int MovieImportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("MovieImportGetSettingsAsAtomContainer");
+    /** imports a URL, remote files are downloaded first */
+    static MovieRec importURL(String url, int flags) throws IOException {
+        URI uri = URI.create(url);
+        if ("file".equals(uri.getScheme())) {
+            return MovieToolbox.load(new File(uri).getPath(), flags);
+        }
+        String name = new File(uri.getPath()).getName();
+        File temp = File.createTempFile("qt", name.isEmpty() ? ".mov" : "-" + name);
+        temp.deleteOnExit();
+        try (InputStream is = uri.toURL().openStream()) {
+            Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+        return MovieToolbox.load(temp.getPath(), flags);
     }
 
-    /** used by Track */
-    public static int MovieImportHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int paramInt5, int[] paramArrayOfInt2, int paramInt6, int[] paramArrayOfInt3) {
-        throw new UnsupportedToolboxException("MovieImportHandle");
+    /** @return an importer instance for the data reference, 0 if none */
+    static int findImporter(DataRefRec d) {
+        String path = d.path();
+        int type = path != null ? importType(path) : Importers.MooV;
+        ComponentRec c = type != 0 ? find(eat, type) : null;
+        if (c == null && path != null && MediaEngine.get().isAvailable()) {
+            c = find(eat, Bytes.fourCC("MPEG"));
+        }
+        return c == null ? 0 : open(c);
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetAuxiliaryData(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieImportSetAuxiliaryData");
+    private static MovieComponent settings(int ci) {
+        InstanceRec i = instance(ci);
+        return i != null && i.impl instanceof MovieComponent m ? m : null;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetChunkSize(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("MovieImportSetChunkSize");
+    /** imports into an existing movie, as MovieImportFile and friends */
+    private static int importInto(MovieRec src, int ci, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        final int movieImportCreateTrack = 1;
+        final int movieImportInParallel = 2;
+        final int movieImportMustUseTrack = 4;
+        final int movieImportResultUsedMultipleTracks = 8;
+        MovieRec dst = MovieToolbox.movie(theMovie);
+        MovieComponent s = settings(ci);
+        if (s != null && s.duration > 0 && src.tracks.size() == 1 && src.tracks.getFirst().media != null && !src.tracks.getFirst().media.isSound()) {
+            // still images get the requested duration
+            TrackRec t = src.tracks.getFirst();
+            if (t.edits.size() == 1) {
+                t.edits.getFirst().duration = ClockManager.convert(s.duration, dst.timeScale, src.timeScale);
+            }
+        }
+        long duration = src.duration();
+        long at = atTime < 0 ? dst.duration() : atTime;
+        int used = 0;
+        if ((inFlags & movieImportMustUseTrack) != 0 && targetTrack != 0) {
+            TrackRec target = MovieToolbox.track(targetTrack);
+            for (TrackRec t : src.tracks) {
+                if (t.media != null && target.media != null && t.media.type == target.media.type) {
+                    MovieEdits.insertTrackSegment(t, target, 0, t.duration(), at);
+                    used = target.ref;
+                    break;
+                }
+            }
+        } else if ((inFlags & movieImportInParallel) != 0 || (inFlags & movieImportCreateTrack) != 0) {
+            for (TrackRec t : src.tracks) {
+                TrackRec n = dst.newTrack();
+                t.copySettings(n);
+                if (at > 0) {
+                    n.insertEmpty(0, at);
+                }
+                MovieEdits.insertTrackSegment(t, n, 0, t.duration(), at);
+                used = used == 0 ? n.ref : used;
+            }
+        } else {
+            MovieEdits.insertMovieSegment(src, dst, 0, duration, at);
+            for (TrackRec t : dst.tracks) {
+                used = used == 0 ? t.ref : used;
+            }
+        }
+        dst.updateTimeBase();
+        if (usedTrack != null && usedTrack.length > 0) {
+            usedTrack[0] = used;
+        }
+        if (addedDuration != null && addedDuration.length > 0) {
+            addedDuration[0] = (int) ClockManager.convert(duration, src.timeScale, dst.timeScale);
+        }
+        if (outFlags != null && outFlags.length > 0) {
+            outFlags[0] = src.tracks.size() > 1 ? movieImportResultUsedMultipleTracks : 0;
+        }
+        src.dispose();
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetDimensions(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieImportSetDimensions");
+    public static int MovieImportFile(int ci, byte[] fsspec, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        String path = FileManager.specToPath(fsspec);
+        if (path == null) {
+            return paramErr;
+        }
+        try {
+            MovieRec src = importFile(path, 0);
+            if (src == null) {
+                return cantFindHandler;
+            }
+            return importInto(src, ci, theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
+        } catch (IOException e) {
+            return MovieToolbox.ioErr;
+        }
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetDuration(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("MovieImportSetDuration");
+    public static int MovieImportHandle(int ci, int h, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        try {
+            // the handle data is written to a temporary file the movie refers to
+            File temp = File.createTempFile("qtimport", ".dat");
+            temp.deleteOnExit();
+            Files.write(temp.toPath(), Heap.handleBytes(h));
+            MovieRec src = importFile(temp.getPath(), 0);
+            if (src == null) {
+                return cantFindHandler;
+            }
+            return importInto(src, ci, theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
+        } catch (IOException e) {
+            return MovieToolbox.ioErr;
+        }
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetFromScrap(int paramInt, byte paramByte) {
-        throw new UnsupportedToolboxException("MovieImportSetFromScrap");
+    public static int MovieImportDataRef(int ci, int dataRef, int dataRefType, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        DataRefRec d = MovieToolbox.dataRef(dataRef, dataRefType);
+        if (d == null) {
+            return MovieToolbox.invalidDataRef;
+        }
+        try {
+            MovieRec src;
+            if (d.path() != null) {
+                src = importFile(d.path(), 0);
+            } else if (d.type == DataRefRec.url) {
+                src = importURL(d.cString(), 0);
+            } else if (d.type == DataRefRec.hndl) {
+                return MovieImportHandle(ci, d.handle(), theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
+            } else {
+                return MovieToolbox.couldNotResolveDataRef;
+            }
+            if (src == null) {
+                return cantFindHandler;
+            }
+            return importInto(src, ci, theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
+        } catch (IOException e) {
+            return MovieToolbox.ioErr;
+        }
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetMediaFile(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("MovieImportSetMediaFile");
+    public static int MovieImportValidate(int ci, byte[] fsspec, int h, byte[] valid) {
+        InstanceRec i = instance(ci);
+        boolean ok;
+        if (fsspec != null) {
+            String path = FileManager.specToPath(fsspec);
+            int type = path == null ? 0 : importType(path);
+            ok = type != 0 && (i == null || i.component.subType == type || (i.component.subType == Importers.MooV && type == Importers.MooV));
+            if (!ok && path != null && MediaEngine.get().isAvailable()) {
+                ok = true;
+            }
+        } else {
+            byte[] b = Heap.handleBytes(h);
+            ok = b.length >= 8 && (Bytes.getInt(b, 4) == MovieAtoms.moov || Bytes.getInt(b, 0) == Bytes.fourCC("FORM") || Bytes.getInt(b, 0) == Bytes.fourCC("RIFF"));
+        }
+        if (valid != null && valid.length > 0) {
+            valid[0] = (byte) (ok ? 1 : 0);
+        }
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetNewMovieFlags(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("MovieImportSetNewMovieFlags");
+    /** there is no user interface, the defaults are accepted */
+    public static int MovieImportDoUserDialog(int ci, byte[] fsspec, int h, byte[] canceled) {
+        if (canceled != null && canceled.length > 0) {
+            canceled[0] = 0;
+        }
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieImportSetOffsetAndLimit");
+    public static int MovieImportGetFileType(int ci, int[] fileType) {
+        InstanceRec i = instance(ci);
+        fileType[0] = i == null ? 0 : i.component.subType;
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetProgressProc(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieImportSetProgressProc");
+    public static int MovieImportGetAuxiliaryDataType(int ci, int[] auxType) {
+        MovieComponent s = settings(ci);
+        auxType[0] = s == null ? 0 : s.auxiliaryDataType;
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieImportSetSampleDescription");
+    public static int MovieImportSetAuxiliaryData(int ci, int data, int handleType) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.auxiliaryData = data;
+            s.auxiliaryDataType = handleType;
+        }
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetSampleDuration(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("MovieImportSetSampleDuration");
+    public static int MovieImportSetChunkSize(int ci, int chunkSize) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.chunkSize = chunkSize;
+        }
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("MovieImportSetSettingsFromAtomContainer");
+    public static int MovieImportSetDimensions(int ci, int width, int height) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.width = width;
+            s.height = height;
+        }
+        return noErr;
     }
 
-    /** used by MovieImporter */
-    public static int MovieImportValidate(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2) {
-        throw new UnsupportedToolboxException("MovieImportValidate");
+    public static int MovieImportSetDuration(int ci, int duration) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.duration = duration;
+        }
+        return noErr;
     }
 
-    /** used by DataHandler */
-    public static short OpenAComponent(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("OpenAComponent");
+    public static int MovieImportSetSampleDuration(int ci, int duration, int scale) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.sampleDuration = duration;
+            s.sampleDurationScale = scale;
+        }
+        return noErr;
+    }
+
+    public static int MovieImportSetSampleDescription(int ci, int desc, int mediaType) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.sampleDescription = desc == 0 ? null : Heap.handleBytes(desc);
+            s.sampleDescriptionMediaType = mediaType;
+        }
+        return noErr;
+    }
+
+    public static int MovieImportGetSampleDescription(int ci, int[] desc, int[] mediaType) {
+        MovieComponent s = settings(ci);
+        desc[0] = s == null || s.sampleDescription == null ? 0 : Heap.newHandle(s.sampleDescription);
+        mediaType[0] = s == null ? 0 : s.sampleDescriptionMediaType;
+        return noErr;
+    }
+
+    public static int MovieImportSetMediaFile(int ci, int alias) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.mediaFile = alias == 0 ? null : Heap.handleBytes(alias);
+        }
+        return noErr;
+    }
+
+    public static int MovieImportSetOffsetAndLimit(int ci, int offset, int limit) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.offset = offset & 0xffff_ffffL;
+            s.limit = limit & 0xffff_ffffL;
+        }
+        return noErr;
+    }
+
+    public static int MovieImportSetFromScrap(int ci, byte fromScrap) {
+        return noErr;
+    }
+
+    public static int MovieImportSetNewMovieFlags(int ci, int flags) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.newMovieFlags = flags;
+        }
+        return noErr;
+    }
+
+    public static int MovieImportSetProgressProc(int ci, int proc, int refCon) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.progressProc = proc;
+            s.progressRefCon = refCon;
+        }
+        return noErr;
+    }
+
+    public static int MovieImportGetSettingsAsAtomContainer(int ci, int[] settings) {
+        MovieComponent s = settings(ci);
+        settings[0] = s == null || s.settings == null ? AtomManager.newContainer() : Heap.newHandle(s.settings);
+        return noErr;
+    }
+
+    public static int MovieImportSetSettingsFromAtomContainer(int ci, int settings) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.settings = settings == 0 ? null : Heap.handleBytes(settings);
+        }
+        return noErr;
+    }
+
+    /** a 'mime' atom per type: 'mime' > 'mcpy' (MIME type), 'desc', 'ext ' */
+    private static int mimeList(int subType) {
+        int container = AtomManager.newContainer();
+        String[] mime = switch (Bytes.fourCC(subType)) {
+            case "MooV" -> new String[] {"video/quicktime", "mov"};
+            case "mpg4", "M4V " -> new String[] {"video/mp4", "mp4"};
+            case "M4A " -> new String[] {"audio/mp4", "m4a"};
+            case "3gpp" -> new String[] {"video/3gpp", "3gp"};
+            case "3gp2" -> new String[] {"video/3gpp2", "3g2"};
+            case "AIFF", "AIFC" -> new String[] {"audio/aiff", "aif"};
+            case "WAVE" -> new String[] {"audio/wav", "wav"};
+            case "JPEG" -> new String[] {"image/jpeg", "jpg"};
+            case "PNGf" -> new String[] {"image/png", "png"};
+            case "GIFf" -> new String[] {"image/gif", "gif"};
+            case "MP3 ", "Mp3 " -> new String[] {"audio/mpeg", "mp3"};
+            default -> null;
+        };
+        if (mime != null) {
+            int[] a = new int[1];
+            AtomManager.QTInsertChild(container, 0, Bytes.fourCC("mime"), 1, (short) 0, 0, 0, a);
+            int mimeAtom = a[0];
+            byte[] t = mime[0].getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+            AtomManager.QTInsertChild(container, mimeAtom, Bytes.fourCC("mcpy"), 1, (short) 0, t.length, t, null);
+            mimeAtom = AtomManager.QTFindChildByIndex(container, 0, Bytes.fourCC("mime"), (short) 1, null);
+            byte[] e = mime[1].getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+            AtomManager.QTInsertChild(container, mimeAtom, Bytes.fourCC("ext "), 1, (short) 0, e.length, e, null);
+        }
+        return container;
+    }
+
+    public static int MovieImportGetMIMETypeList(int ci, int[] list) {
+        InstanceRec i = instance(ci);
+        list[0] = mimeList(i == null ? 0 : i.component.subType);
+        return noErr;
+    }
+
+    // ---- exporting
+
+    /** exports with the exporter instance or the exporter of the file type */
+    static short exportToFile(MovieRec m, TrackRec only, String path, int fileType, int userComp) {
+        InstanceRec i = instance(userComp);
+        int type = i != null ? i.component.subType : fileType == 0 ? Exporters.MooV : fileType;
+        MovieComponent s = settings(userComp);
+        try {
+            MovieRec part = Exporters.part(m, only, 0, m.duration());
+            int err = Exporters.export(part, path, type, s != null ? s.progress(m, 12) : MovieFiles.progressOf(m));
+            return (short) err;
+        } catch (IOException e) {
+            return MovieToolbox.ioErr;
+        }
+    }
+
+    static short exportToHandle(MovieRec part, int handleType, int h, int userComp) {
+        try {
+            File temp = File.createTempFile("qtexport", "." + Exporters.extension(handleType));
+            try {
+                int err = Exporters.export(MovieEdits.copy(part), temp.getPath(), handleType, MovieFiles.NO_PROGRESS);
+                if (err == 0) {
+                    Heap.setHandleBytes(h, Files.readAllBytes(temp.toPath()));
+                }
+                return (short) err;
+            } finally {
+                temp.delete();
+            }
+        } catch (IOException e) {
+            return MovieToolbox.ioErr;
+        }
+    }
+
+    public static int MovieExportToFile(int ci, byte[] fsspec, int theMovie, int onlyThisTrack, int startTime, int duration) {
+        String path = FileManager.specToPath(fsspec);
+        if (path == null) {
+            return paramErr;
+        }
+        InstanceRec i = instance(ci);
+        if (i == null) {
+            return badComponentInstance;
+        }
+        MovieRec m = MovieToolbox.movie(theMovie);
+        MovieComponent s = settings(ci);
+        try {
+            MovieRec part = Exporters.part(m, onlyThisTrack == 0 ? null : MovieToolbox.track(onlyThisTrack), startTime, duration);
+            return Exporters.export(part, path, i.component.subType, s != null ? s.progress(m, 12) : MovieFiles.NO_PROGRESS);
+        } catch (IOException e) {
+            return MovieToolbox.ioErr;
+        }
+    }
+
+    public static int MovieExportToHandle(int ci, int h, int theMovie, int onlyThisTrack, int startTime, int duration) {
+        InstanceRec i = instance(ci);
+        if (i == null) {
+            return badComponentInstance;
+        }
+        MovieRec m = MovieToolbox.movie(theMovie);
+        MovieRec part = Exporters.part(m, onlyThisTrack == 0 ? null : MovieToolbox.track(onlyThisTrack), startTime, duration);
+        try {
+            if (i.component.subType == Exporters.MooV) {
+                Heap.setHandleBytes(h, MovieAtoms.write(part));
+                return noErr;
+            }
+            return exportToHandle(part, i.component.subType, h, ci);
+        } finally {
+            part.dispose();
+        }
+    }
+
+    public static int MovieExportToDataRef(int ci, int dataRef, int dataRefType, int theMovie, int onlyThisTrack, int startTime, int duration) {
+        DataRefRec d = MovieToolbox.dataRef(dataRef, dataRefType);
+        if (d == null) {
+            return MovieToolbox.invalidDataRef;
+        }
+        if (d.type == DataRefRec.hndl) {
+            return MovieExportToHandle(ci, d.handle(), theMovie, onlyThisTrack, startTime, duration);
+        }
+        String path = d.path();
+        if (path == null) {
+            return MovieToolbox.couldNotResolveDataRef;
+        }
+        return MovieExportToFile(ci, FileManager.pathToSpec(path), theMovie, onlyThisTrack, startTime, duration);
+    }
+
+    public static int MovieExportValidate(int ci, int theMovie, int onlyThisTrack, byte[] valid) {
+        InstanceRec i = instance(ci);
+        MovieRec m = MovieToolbox.movie(theMovie);
+        boolean ok = true;
+        if (i != null) {
+            int type = i.component.subType;
+            boolean sound = false, visual = false, text = false;
+            for (TrackRec t : m.tracks) {
+                if (onlyThisTrack != 0 && t.ref != onlyThisTrack) {
+                    continue;
+                }
+                if (t.media != null) {
+                    sound |= t.media.isSound();
+                    visual |= t.media.isVisual();
+                    text |= t.media.type == Bytes.fourCC("text");
+                }
+            }
+            if (type == Exporters.AIFF || type == Exporters.WAVE || type == Exporters.M4A) {
+                ok = sound;
+            } else if (type == Exporters.TEXT) {
+                ok = text;
+            } else if (type != Exporters.MooV) {
+                ok = sound || visual;
+            }
+        }
+        if (valid != null && valid.length > 0) {
+            valid[0] = (byte) (ok ? 1 : 0);
+        }
+        return noErr;
+    }
+
+    public static int MovieExportDoUserDialog(int ci, int theMovie, int onlyThisTrack, int startTime, int duration, byte[] canceled) {
+        if (canceled != null && canceled.length > 0) {
+            canceled[0] = 0;
+        }
+        return noErr;
+    }
+
+    public static int MovieExportGetSettingsAsAtomContainer(int ci, int[] settings) {
+        MovieComponent s = settings(ci);
+        settings[0] = s == null || s.settings == null ? AtomManager.newContainer() : Heap.newHandle(s.settings);
+        return noErr;
+    }
+
+    public static int MovieExportSetSettingsFromAtomContainer(int ci, int settings) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.settings = settings == 0 ? null : Heap.handleBytes(settings);
+        }
+        return noErr;
+    }
+
+    public static int MovieExportSetProgressProc(int ci, int proc, int refCon) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.progressProc = proc;
+            s.progressRefCon = refCon;
+        }
+        return noErr;
+    }
+
+    public static int MovieExportSetSampleDescription(int ci, int desc, int mediaType) {
+        MovieComponent s = settings(ci);
+        if (s != null) {
+            s.sampleDescription = desc == 0 ? null : Heap.handleBytes(desc);
+            s.sampleDescriptionMediaType = mediaType;
+        }
+        return noErr;
+    }
+
+    public static int MovieExportGetAuxiliaryData(int ci, int dataH, int[] handleType) {
+        return MovieToolbox.featureUnsupported;
+    }
+
+    public static int MovieExportGetFileNameExtension(int ci, int[] extension) {
+        InstanceRec i = instance(ci);
+        String e = Exporters.extension(i == null ? 0 : i.component.subType);
+        extension[0] = Bytes.fourCC((e + "    ").substring(0, 4));
+        return noErr;
+    }
+
+    public static int MovieExportGetShortFileTypeString(int ci, byte[] typeString) {
+        InstanceRec i = instance(ci);
+        String e = Exporters.extension(i == null ? 0 : i.component.subType).toUpperCase(java.util.Locale.ROOT);
+        Bytes.putPString(typeString, 0, e, typeString.length);
+        return noErr;
+    }
+
+    public static int MovieExportGetCreatorType(int ci, int[] creator) {
+        creator[0] = Bytes.fourCC("TVOD");
+        return noErr;
+    }
+
+    public static int MovieExportGetSourceMediaType(int ci, int[] mediaType) {
+        InstanceRec i = instance(ci);
+        int type = i == null ? 0 : i.component.subType;
+        mediaType[0] = type == Exporters.AIFF || type == Exporters.WAVE || type == Exporters.M4A ? Bytes.fourCC("soun") : type == Exporters.TEXT ? Bytes.fourCC("text") : 0;
+        return noErr;
     }
 
     /** used by TimeCoder */
@@ -375,11 +1031,4 @@ public final class ComponentManager {
         throw new UnsupportedToolboxException("XMLParseSetStartElementHandler");
     }
 
-    public static short OpenADefaultComponent(int componentType, int componentSubType, int[] ci) {
-        throw new UnsupportedToolboxException("OpenADefaultComponent");
-    }
-
-    public static int CountComponentInstances(int component) {
-        throw new UnsupportedToolboxException("CountComponentInstances");
-    }
 }

@@ -1435,4 +1435,9 @@ public final class ImageCompressionManager {
         throw new UnsupportedToolboxException("TrimImage");
     }
 
+    /** used by GraphicsImporter, QTHandle */
+    public static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        throw new UnsupportedToolboxException("GraphicsImportGetAliasedDataReference");
+    }
+
 }

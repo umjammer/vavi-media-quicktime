@@ -5,7 +5,6 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.FileManager;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MatrixManager;
 import quicktime.internal.toolbox.QuickDrawManager;
@@ -951,7 +950,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
     }
 
     private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return FileManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return ImageCompressionManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GraphicsImportSetGWorld(int paramInt1, int paramInt2, int paramInt3) {

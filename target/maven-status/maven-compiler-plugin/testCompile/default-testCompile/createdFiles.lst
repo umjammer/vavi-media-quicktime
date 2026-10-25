@@ -66,6 +66,7 @@ MovieTextFinder/MovieTextFinder$4.class
 JavaDrawing/JavaDrawing$1.class
 ImageProducing/ip/ControlPanel$2.class
 DukeMovie/duke/ControlPanel$Action.class
+quicktime/std/movies/MovieTest$QDConstantsHolder.class
 CreatePictFile/CreatePictFile$1.class
 SoundMeter/SoundMeter$1.class
 TimeCallbackDemo/TimeCallbackDemo.class
@@ -115,6 +116,7 @@ ImageFile/ImageFileDemo.class
 PlaySound/PlaySound$Action.class
 CustomMedia/com/vr/VRSampleDescription.class
 PlayTune/PlayTune$2.class
+quicktime/std/movies/MovieTest.class
 MovieCallbacks/MovieCallbacks.class
 TimeCallbackDemo/TimeCallbackDemo$Tickler.class
 KeyboardController/KeyBoardController.class

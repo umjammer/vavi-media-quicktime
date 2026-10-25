@@ -79,7 +79,7 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
                 Object doPrivelegedAction() {
                     return AccessController.doPrivileged(new PrivilegedAction<Thread>() {
                         public Thread run() {
-                            return new Thread(cbThread, privActStrCached);
+                            return new Thread(CBRunner.this, privActStrCached);
                         }
                     });
                 }

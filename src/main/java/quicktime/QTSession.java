@@ -836,6 +836,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @see terminate
      */
     public static void close() {
+        terminate();
     }
 
     /**

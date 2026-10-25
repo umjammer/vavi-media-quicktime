@@ -54,7 +54,7 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
         if (i == 0) {
             return null;
         }
-        return new TimeBase(QTObject.ID(paramTimeRecord) + 12, paramTimeRecord);
+        return new TimeBase(i, paramTimeRecord);
     }
 
     /**

@@ -334,6 +334,21 @@ public final class Heap {
         return b != null && clazz.isInstance(b.peer) ? clazz.cast(b.peer) : null;
     }
 
+    /**
+     * @return the backing array of the block starting at the address, for rasters sharing the memory.
+     *         the block must not be resized while the array is in use
+     */
+    public static synchronized byte[] backing(int address) {
+        Block b = blocks.get(address);
+        if (b == null) {
+            throw new IllegalArgumentException("not a block: 0x" + Integer.toHexString(address));
+        }
+        if (b.data.length != b.size) {
+            b.data = java.util.Arrays.copyOf(b.data, b.size);
+        }
+        return b.data;
+    }
+
     // ---- access
 
     private static Block checked(int address, int length) {

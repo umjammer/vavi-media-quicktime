@@ -64,12 +64,14 @@ quicktime/std/clocks/CBRunner$MRJIdler.class
 quicktime/std/qtcomponents/DataCodecDecompressor.class
 quicktime/app/ui/PressActionButton$1.class
 quicktime/std/image/DataRateParams.class
+quicktime/internal/toolbox/UserDataRec.class
 quicktime/sound/SndChannel$1.class
 quicktime/qd/Pict$1$1.class
 quicktime/app/event/QTMouseController.class
 quicktime/std/sg/SGVideoChannel$1$1.class
 quicktime/std/sg/AudioChannel$1$1.class
 quicktime/internal/toolbox/MovieControllerManager.class
+quicktime/internal/toolbox/PictCodec$Out.class
 quicktime/std/movies/media/MovieMediaHandler.class
 quicktime/app/display/DirectGroup.class
 quicktime/sound/Sound$1$1.class
@@ -80,6 +82,7 @@ quicktime/std/qtcomponents/DataCodecInfo.class
 quicktime/std/qtcomponents/XMLCommentProc.class
 quicktime/std/image/GraphicsExporter$1$1.class
 quicktime/std/music/NoteChannel$1$1.class
+quicktime/internal/toolbox/MediaRec$SampleRun.class
 quicktime/QTObjectManagement.class
 quicktime/sound/Sound.class
 quicktime/app/sg/SGDrawer$1.class
@@ -118,6 +121,7 @@ quicktime/jdirect/QD3DJavaLib.class
 quicktime/app/players/MoviePlayer$PrerollCallback.class
 quicktime/app/event/MouseTargetListener.class
 quicktime/app/display/QTCanvasHelper.class
+quicktime/internal/toolbox/ComponentManager$ComponentRec.class
 quicktime/qd3d/math/Point2D$1PrivelegedAction$1.class
 quicktime/QTException.class
 quicktime/vr/QTVRMouseOverHotSpot.class
@@ -129,6 +133,7 @@ quicktime/std/movies/EffectsList$1$1.class
 quicktime/std/anim/Sprite.class
 quicktime/std/movies/media/SpriteMediaHandler$1$1.class
 quicktime/internal/toolbox/AtomManager$Node.class
+quicktime/internal/toolbox/MediaRec.class
 quicktime/std/movies/EffectsList.class
 quicktime/sound/SndInfo.class
 quicktime/app/spaces/Listener.class
@@ -147,6 +152,7 @@ quicktime/std/movies/media/StreamDescription.class
 quicktime/util/QTByteObject$1$1.class
 quicktime/std/music/MixStateInfo.class
 quicktime/sound/ExtScheduledSoundHeader$1.class
+quicktime/internal/toolbox/MovieFiles.class
 quicktime/app/view/AWTCanvasHelper.class
 quicktime/qd/NativeGraphics.class
 quicktime/app/actions/QTMouseMotionListener.class
@@ -233,6 +239,7 @@ quicktime/vr/QTVRLinkHotSpot.class
 quicktime/std/music/SynthesizerConnections.class
 quicktime/app/anim/SWController.class
 quicktime/std/sg/SGChannel$1.class
+quicktime/internal/toolbox/MovieDrawing.class
 quicktime/util/QTVector.class
 com/apple/mrj/jdirect/MethodClosure.class
 quicktime/internal/toolbox/FileManager.class
@@ -242,6 +249,7 @@ quicktime/std/movies/media/SampleTimeInfo.class
 quicktime/qd3d/camera/CameraData$1PrivelegedAction.class
 quicktime/std/sg/SGChannel$2.class
 quicktime/std/sg/SGMusicChannel$1$1.class
+quicktime/internal/toolbox/UserDataRec$Item.class
 com/apple/mrj/macos/carbon/CarbonLock.class
 quicktime/app/image/ImageSettable.class
 quicktime/sound/ExtScheduledSoundHeader$1$1.class
@@ -257,6 +265,7 @@ quicktime/std/image/ImageDescription$1PrivelegedAction$1.class
 quicktime/std/qtcomponents/TimeCodeInfo.class
 quicktime/qd/NativeGraphicsException.class
 quicktime/std/image/CurvePath$1$1.class
+quicktime/internal/toolbox/ClockManager$TimeBaseRec.class
 quicktime/std/qtcomponents/XMLPreprocessorProc.class
 quicktime/std/image/CDSequence$1$1.class
 quicktime/app/image/ImageSpec.class
@@ -359,6 +368,7 @@ quicktime/app/time/Timer.class
 quicktime/io/IODispatcher$IOMovie.class
 quicktime/app/time/Taskable.class
 quicktime/vr/VRDispatcher.class
+quicktime/internal/toolbox/MovieEdits$TrackEditState.class
 quicktime/util/ByteEncodedImage.class
 quicktime/util/StringHandle$1PrivelegedAction.class
 quicktime/util/QTByteObject.class
@@ -381,11 +391,13 @@ quicktime/std/movies/media/DataHandler$1$1.class
 quicktime/std/movies/MultiMovieController.class
 quicktime/std/qtcomponents/XMLDoc$1$1.class
 quicktime/qd/Region.class
+quicktime/internal/toolbox/Importers.class
 quicktime/std/music/MusicMIDIPacket$1$1.class
 quicktime/streaming/StreamDispatcher$StreamNotifyClosure.class
 quicktime/std/qtcomponents/XMLEndDocProc.class
 quicktime/io/IODispatcher.class
 quicktime/std/movies/media/MovieMediaHandler$1$1.class
+quicktime/internal/toolbox/Exporters.class
 quicktime/qd3d/math/Matrix4x4.class
 quicktime/qd3d/transform/RotateTransformData.class
 quicktime/internal/toolbox/PlatformManager.class
@@ -396,6 +408,7 @@ quicktime/app/event/MouseEnterExitListener.class
 quicktime/std/sg/SGDispatcher$SGHdl.class
 quicktime/app/view/QTFactory$3PrivelegedAction.class
 quicktime/std/clocks/QTCallBack$1$1.class
+quicktime/internal/toolbox/ComponentManager$InstanceRec.class
 quicktime/io/AliasHandle$1PrivelegedAction$1.class
 quicktime/vr/QTVREnteringNode.class
 quicktime/jdirect/JDirectLinker$1PrivelegedAction.class
@@ -405,6 +418,7 @@ quicktime/std/image/CSequence.class
 quicktime/vr/QTVRInterceptor.class
 quicktime/vr/QTVRInstance$1PrivelegedAction.class
 quicktime/std/movies/MoviesDispatcher$AFTimeRecord.class
+quicktime/internal/toolbox/MovieAtoms.class
 quicktime/app/audio/AudioSpec.class
 quicktime/app/anim/Compositor.class
 quicktime/std/comp/Component.class
@@ -450,6 +464,7 @@ quicktime/std/image/GXPaths.class
 quicktime/std/clocks/TimeBase$1$1.class
 quicktime/io/OpenedFile.class
 quicktime/app/event/DragAdapter.class
+quicktime/internal/toolbox/MovieEdits$MovieEditState.class
 quicktime/std/movies/media/StreamMediaHandler$1$1.class
 quicktime/streaming/Presentation$1PrivelegedAction$1.class
 quicktime/app/QTDrawableMaker.class
@@ -469,6 +484,7 @@ quicktime/std/clocks/CBRunner$1.class
 quicktime/std/qtcomponents/SoundCompressionDialog$1$1.class
 quicktime/app/image/ImageViewer.class
 quicktime/std/clocks/TimeRecord.class
+quicktime/internal/toolbox/QuickDrawManager$Port.class
 quicktime/util/QTHandleRef$1.class
 quicktime/app/audio/NoteChannelControl.class
 quicktime/app/view/MoviePlayer$PrerollCallback.class
@@ -501,6 +517,7 @@ quicktime/std/movies/StatusInfo.class
 quicktime/std/movies/AtomContainer$1$1.class
 quicktime/qd/SetGWorld.class
 quicktime/std/movies/media/MusicDescription$1.class
+quicktime/internal/toolbox/MovieFiles$Chunk.class
 quicktime/std/clocks/CBRunner$1PrivelegedAction$1.class
 quicktime/app/view/QTJavaJNIAWTCanvas$1PrivelegedAction$1.class
 quicktime/std/qtcomponents/XMLElement$1.class
@@ -524,6 +541,7 @@ quicktime/qd/QDPoint.class
 quicktime/sound/SPB.class
 quicktime/std/image/ICMPixelFormatInfo.class
 quicktime/app/image/CompositableEffect$CEInvalidator.class
+quicktime/internal/toolbox/MovieAtoms$Out.class
 quicktime/std/movies/media/FlashMediaHandler$1.class
 quicktime/std/music/NoteRequestInfo.class
 quicktime/std/qtcomponents/XMLAttribute$1.class
@@ -534,6 +552,7 @@ quicktime/std/music/SynthesizerConnections$1.class
 quicktime/qd3d/camera/CameraPlacement$1PrivelegedAction.class
 quicktime/QTRuntimeHandler.class
 quicktime/std/movies/media/VideoMediaHandler.class
+quicktime/internal/toolbox/Exporters$Pcm.class
 quicktime/std/QTPreferences$AC.class
 quicktime/std/image/GraphicsImporter$1$1.class
 quicktime/std/qtcomponents/SpatialSettings.class
@@ -551,6 +570,7 @@ quicktime/std/movies/media/FlashMediaHandler$myStringHandle.class
 quicktime/std/qtcomponents/XMLDispatcher$1$1.class
 quicktime/std/movies/media/SoundMediaHandler$1.class
 quicktime/streaming/Presentation$1PrivelegedAction.class
+quicktime/internal/toolbox/DataRefRec.class
 quicktime/sound/SoundRunner$SoundMethodClosure.class
 quicktime/qd/WinNativeGraphics$1PrivelegedAction$1.class
 quicktime/vr/QTVRInstance$1PrivelegedAction$1.class
@@ -596,6 +616,7 @@ quicktime/std/clocks/CBRunner$CBMethodClosure.class
 quicktime/std/qtcomponents/XMLContent$1$1.class
 quicktime/std/movies/MovieProgress.class
 quicktime/qd/SetGWorld$1.class
+quicktime/internal/toolbox/MdatWriter.class
 quicktime/std/music/NoteRequestInfo$1$1.class
 quicktime/std/comp/ComponentDescription$1PrivelegedAction.class
 quicktime/app/time/TaskThread$1QTJPrivelegedAction.class
@@ -710,6 +731,7 @@ com/apple/mrj/jdirect/JDirectLinker.class
 quicktime/vr/VRDispatcher$1PrivelegedAction.class
 quicktime/std/movies/media/TextMediaHandler.class
 quicktime/std/sg/SGTextChannel.class
+quicktime/internal/toolbox/FileManager$OpenedFile.class
 quicktime/std/music/MusicData.class
 quicktime/std/qtcomponents/CompressionDialog$1$1.class
 quicktime/std/music/AtomicInstrument.class
@@ -719,6 +741,7 @@ quicktime/std/movies/ResolvedQTEventSpec.class
 quicktime/qd/QDDimension$1$1.class
 quicktime/vr/QTVRString.class
 quicktime/sound/SoundCallBack.class
+quicktime/internal/toolbox/MovieEdits.class
 quicktime/util/QTHandle$1.class
 quicktime/streaming/SourcerLoopParams.class
 quicktime/std/movies/media/SpriteMedia.class
@@ -765,6 +788,8 @@ quicktime/util/RawEncodedImage$1PrivelegedAction.class
 quicktime/std/music/SynthesizerDescription$1.class
 quicktime/std/movies/media/UserData$1$1.class
 quicktime/jdirect/JDirectLinker$MethodSpec.class
+quicktime/internal/toolbox/PictCodec.class
+quicktime/internal/toolbox/MediaEngine.class
 quicktime/std/qtcomponents/ImageCompressionDialog$1.class
 quicktime/WinJNINative$1PrivelegedAction.class
 quicktime/std/qtcomponents/XMLContent$1.class
@@ -825,9 +850,12 @@ quicktime/app/players/MoviePresenter.class
 quicktime/std/movies/ParameterDialog.class
 quicktime/qd3d/math/Quaternion.class
 quicktime/std/qtcomponents/XMLAttribute.class
+quicktime/internal/toolbox/TrackRec$Edit.class
+quicktime/internal/toolbox/MovieAtoms$Atom.class
 quicktime/std/movies/MovieController$1$1.class
 quicktime/std/qtcomponents/TimeCodeDescription$1.class
 quicktime/std/movies/Movie$2.class
+quicktime/internal/toolbox/MovieRec.class
 quicktime/app/anim/SWCompositor.class
 quicktime/vr/QTVRHotSpotInfo.class
 quicktime/qd/QDFont.class
@@ -876,8 +904,10 @@ quicktime/jdirect/MCX.class
 com/apple/mrj/jdirect/CompletionRoutineNotifier.class
 quicktime/app/actions/TranslateMatrix.class
 quicktime/sound/SoundRunner$SndCallbackRunner.class
+quicktime/internal/toolbox/ComponentManager$MovieComponent.class
 quicktime/app/view/JQTCanvas.class
 quicktime/std/movies/media/FoundTextInfo.class
+quicktime/internal/toolbox/MovieFiles$Progress.class
 quicktime/app/actions/TransformMatrix.class
 quicktime/std/qtcomponents/XMLElement.class
 quicktime/app/spaces/Collection.class
@@ -889,6 +919,7 @@ quicktime/std/image/DSequence.class
 quicktime/streaming/StreamDispatcher.class
 quicktime/streaming/SettingsDialog$1PrivelegedAction$1.class
 quicktime/app/image/Compositable.class
+quicktime/internal/toolbox/MediaEngine$NullEngine.class
 quicktime/app/time/Timer$RC.class
 quicktime/app/image/GraphicsImporterDrawer.class
 quicktime/qd/PixMap$1$1.class
@@ -939,16 +970,19 @@ quicktime/std/qtcomponents/MovieExporter$1$1.class
 quicktime/std/sg/DigitizerInfo$1.class
 quicktime/streaming/Presentation.class
 quicktime/sound/SCStatus$1.class
+quicktime/internal/toolbox/ClockManager$CallBackRec.class
 quicktime/app/actions/Notifier.class
 quicktime/app/image/ImageDrawer.class
 quicktime/app/actions/GenericResponder.class
 quicktime/app/event/QTActionListener.class
 quicktime/std/StdQTConstants4.class
+quicktime/internal/toolbox/Regions.class
 quicktime/std/movies/media/TextMedia.class
 quicktime/internal/awt/MacDrawingSurface.class
 quicktime/qd/QDRect$1.class
 quicktime/sound/SPBDevice$1PrivelegedAction$1.class
 quicktime/app/spaces/SimpleSpace.class
+quicktime/internal/toolbox/MdatWriter$Open.class
 quicktime/sound/SndInfo$1.class
 quicktime/app/players/QTPlayerAWTEventHandler.class
 quicktime/std/qtcomponents/TimeCodeDef$1.class
@@ -977,6 +1011,7 @@ quicktime/qd3d/math/Quaternion$1PrivelegedAction$1.class
 quicktime/qd3d/math/Point2D$1PrivelegedAction.class
 quicktime/qd/ColorTable.class
 quicktime/util/QTHandleRef$1$1.class
+quicktime/internal/toolbox/TrackRec.class
 com/apple/mrj/macos/carbon/EventLoopTimerClosureUPP.class
 quicktime/std/sg/SGSoundChannel$1.class
 quicktime/QTNullPointerException.class

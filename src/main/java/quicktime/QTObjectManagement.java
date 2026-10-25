@@ -322,7 +322,7 @@ final class QTObjectManagement implements
             } else {
                 disposeSessionObject(paramInt, paramString);
             }
-        } catch (UnsatisfiedLinkError ignored) {
+        } catch (UnsatisfiedLinkError | UnsupportedOperationException ignored) {
         }
     }
 
@@ -395,7 +395,7 @@ final class QTObjectManagement implements
             }
 
             QTException.checkError(i);
-        } catch (UnsatisfiedLinkError ignored) {
+        } catch (UnsatisfiedLinkError | UnsupportedOperationException ignored) {
         }
     }
 

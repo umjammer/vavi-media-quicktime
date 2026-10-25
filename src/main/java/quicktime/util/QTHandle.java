@@ -5,7 +5,6 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
-import quicktime.internal.toolbox.FileManager;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
@@ -373,7 +372,7 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
     }
 
     private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return FileManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return ImageCompressionManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int TCGetTimeCodeAtTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
