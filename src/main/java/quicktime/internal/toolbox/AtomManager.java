@@ -687,4 +687,22 @@ public final class AtomManager {
         return n.data;
     }
 
+
+    /** @return the data of the first child of each type of the parent */
+    static java.util.Map<Integer, byte[]> children(int container, int parent) {
+        java.util.Map<Integer, byte[]> m = new java.util.LinkedHashMap<>();
+        int type = 0;
+        while ((type = QTGetNextChildType(container, parent, type)) != 0) {
+            int atom = QTFindChildByIndex(container, parent, type, (short) 1, null);
+            if (atom == 0) {
+                continue;
+            }
+            int[] size = new int[1];
+            int[] ptr = new int[1];
+            if (QTGetAtomDataPtr(container, atom, size, ptr) == 0) {
+                m.put(type, Heap.read(ptr[0], size[0]));
+            }
+        }
+        return m;
+    }
 }

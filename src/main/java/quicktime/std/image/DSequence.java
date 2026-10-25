@@ -6,7 +6,6 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.internal.toolbox.MatrixManager;
 import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.PixMap;
@@ -618,7 +617,7 @@ public final class DSequence extends CDSequence {
     }
 
     private static short SetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.SetDSequenceMatrix(paramInt, paramArrayOfByte);
+        return ImageCompressionManager.SetDSequenceMatrix(paramInt, paramArrayOfByte);
     }
 
     private static short SetDSequenceMask(int paramInt1, int paramInt2) {
@@ -634,7 +633,7 @@ public final class DSequence extends CDSequence {
     }
 
     private static short GetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.GetDSequenceMatrix(paramInt, paramArrayOfByte);
+        return ImageCompressionManager.GetDSequenceMatrix(paramInt, paramArrayOfByte);
     }
 
     private static short SetDSequenceFlags(int paramInt1, int paramInt2, int paramInt3) {

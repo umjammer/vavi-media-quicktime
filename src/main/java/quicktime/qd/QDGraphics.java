@@ -6,6 +6,8 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieControllerManager;
 import quicktime.internal.toolbox.MovieToolbox;
@@ -1662,7 +1664,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     }
 
     private static int GraphicsExportGetInputGWorld(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetInputGWorld(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetInputGWorld(paramInt, paramArrayOfInt);
     }
 
     private static short QTGetPixelSize(int paramInt) {
@@ -1670,7 +1672,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     }
 
     private static int GraphicsImportGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsImportGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsImportManager.GraphicsImportGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {

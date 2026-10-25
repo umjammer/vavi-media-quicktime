@@ -871,7 +871,7 @@ public abstract interface StdQTConstants {
 
     public static final int kPlanarRGBCodecType = 943870035;
 
-    public static final int kMacPaintCodecType = 1346589767;
+    public static final int kMacPaintCodecType = 1347310663;
 
     public static final int kGIFCodecType = 1734960672;
 

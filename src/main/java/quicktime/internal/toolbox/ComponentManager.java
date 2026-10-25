@@ -134,7 +134,7 @@ public final class ComponentManager {
 
     private static final List<ComponentRec> components = new ArrayList<>();
 
-    private static ComponentRec register(int type, int subType, int flags, String name, String info, Function<InstanceRec, Object> factory) {
+    static ComponentRec register(int type, int subType, int flags, String name, String info, Function<InstanceRec, Object> factory) {
         ComponentRec c = new ComponentRec(type, subType, flags, name, info, factory);
         components.add(c);
         return c;
@@ -178,6 +178,9 @@ public final class ComponentManager {
         for (String[] e : exporters) {
             register(spit, Bytes.fourCC(e[0]), exportFlags, e[1], "Movie to " + e[1], c -> new MovieComponent());
         }
+        ImageCompressionManager.register();
+        GraphicsImportManager.register();
+        GraphicsExportManager.register();
     }
 
     static ComponentRec component(int ref) {
@@ -205,7 +208,7 @@ public final class ComponentManager {
                 && (c.flags & mask) == (flags & mask);
     }
 
-    private static ComponentRec find(int type, int subType) {
+    static ComponentRec find(int type, int subType) {
         for (ComponentRec c : components) {
             if (c.type == type && (subType == 0 || c.subType == subType)) {
                 return c;

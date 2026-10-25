@@ -6,6 +6,8 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
 import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.SoundManager;
@@ -368,11 +370,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
     }
 
     private static int GraphicsImportGetDataHandle(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetDataHandle(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetDataHandle(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsImportManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int TCGetTimeCodeAtTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
@@ -416,15 +418,15 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
     }
 
     private static int GraphicsExportGetInputHandle(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetInputHandle(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetInputHandle(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsExportGetOutputHandle(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetOutputHandle(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetOutputHandle(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsExportGetSettingsAsText(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetSettingsAsText(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetSettingsAsText(paramInt, paramArrayOfInt);
     }
 
     private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {

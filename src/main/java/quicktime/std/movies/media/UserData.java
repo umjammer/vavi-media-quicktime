@@ -5,7 +5,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
-import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
@@ -444,7 +444,7 @@ public final class UserData extends QTObject implements QuickTimeLib {
     }
 
     private static int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetMetaData(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetMetaData(paramInt, paramArrayOfInt);
     }
 
     private static int GetMovieUserData(int paramInt) {

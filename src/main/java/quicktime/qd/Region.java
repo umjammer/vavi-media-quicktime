@@ -6,7 +6,7 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieControllerManager;
 import quicktime.internal.toolbox.MovieToolbox;
@@ -774,11 +774,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     }
 
     private static int GraphicsImportGetClip(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetClip(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetClip(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportGetDefaultClip(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetDefaultClip(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetDefaultClip(paramInt, paramArrayOfInt);
     }
 
     private static int GetMovieDisplayClipRgn(int paramInt) {

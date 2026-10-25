@@ -160,6 +160,15 @@ public final class Heap {
         return e != null && address - e.getValue().address <= e.getValue().size;
     }
 
+    /** @return the number of bytes from the address to the end of its block, 0 if it is not in a block */
+    public static synchronized int remaining(int address) {
+        Map.Entry<Integer, Block> e = blocks.floorEntry(address);
+        if (e == null || address - e.getValue().address > e.getValue().size) {
+            return 0;
+        }
+        return e.getValue().size - (address - e.getValue().address);
+    }
+
     /** @return the size of the block starting at the address */
     public static synchronized int ptrSize(int address) {
         Block b = blocks.get(address);

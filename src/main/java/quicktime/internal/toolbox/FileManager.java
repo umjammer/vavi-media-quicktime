@@ -158,6 +158,35 @@ public final class FileManager {
         return openedFiles.get(refNum);
     }
 
+    /** @return the whole data fork of an open file */
+    static byte[] readFork(short refNum) throws IOException {
+        OpenedFile f = opened(refNum);
+        if (f == null) {
+            throw new IOException("bad reference number: " + refNum);
+        }
+        synchronized (f) {
+            RandomAccessFile r = f.file();
+            byte[] b = new byte[(int) r.length()];
+            r.seek(0);
+            r.readFully(b);
+            return b;
+        }
+    }
+
+    /** replaces the data fork of an open file */
+    static void writeFork(short refNum, byte[] b) throws IOException {
+        OpenedFile f = opened(refNum);
+        if (f == null || !f.writable) {
+            throw new IOException("bad reference number: " + refNum);
+        }
+        synchronized (f) {
+            RandomAccessFile r = f.file();
+            r.setLength(0);
+            r.seek(0);
+            r.write(b);
+        }
+    }
+
     public static short FSpOpenDF(byte[] fsspec, byte permission, short[] refNum) {
         String path = specToPath(fsspec);
         if (path == null) {

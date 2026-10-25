@@ -173,6 +173,16 @@ public final class QuickDrawManager {
         return ports.get(ref);
     }
 
+    /** @return the port owning the PixMap handle, null if none */
+    static synchronized Port portOfPixMap(int pixMap) {
+        for (Port p : ports.values()) {
+            if (p.pixMap == pixMap) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     private static int currentPort;
     private static int currentDevice;
     private static short qdError;

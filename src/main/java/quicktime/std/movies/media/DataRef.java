@@ -8,7 +8,7 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ComponentManager;
-import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.io.AliasHandle;
@@ -339,11 +339,11 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
     }
 
     private static int GraphicsExportGetInputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsExportGetInputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsExportManager.GraphicsExportGetInputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GraphicsExportGetOutputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsExportGetOutputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsExportManager.GraphicsExportGetOutputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GetDataHandler(int paramInt1, int paramInt2, int paramInt3) {

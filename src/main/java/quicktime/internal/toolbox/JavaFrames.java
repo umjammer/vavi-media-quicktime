@@ -11,22 +11,44 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import javax.imageio.ImageIO;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 
 /**
- * Frames of movies whose video samples are still images Java can decode:
- * 'jpeg', 'png ', 'gif ', 'tiff', 'BMPf' and uncompressed 'raw ' (24 and 32 bit).
+ * Frames of movies whose video samples a Java codec of {@link Codecs} can decode.
  * The tracks are composed by layer with their matrices into the natural bounds of the movie.
  */
 final class JavaFrames {
 
     private JavaFrames() {
+    }
+
+    /** the last decoded frame of a media, temporal codecs decode on from it */
+    private static final class Last {
+        long sample;
+        int descIndex;
+        Codecs.Desc desc;
+        BufferedImage image;
+    }
+
+    private static final Map<MediaRec, Last> last = Collections.synchronizedMap(new WeakHashMap<>());
+
+    /** @return the bytes of the sample */
+    private static byte[] sample(MediaRec m, long s) throws IOException {
+        int r = m.runOfSample(s);
+        MediaRec.SampleRun run = m.runs.get(r);
+        long k = s - m.firstSampleOf(r);
+        DataRefRec d = m.dataRef(run.dataRefIndex);
+        if (d == null) {
+            throw new IOException("no data reference");
+        }
+        return d.read(run.offsetOf(k), (int) run.bytesOf(k, 1));
     }
 
     /** @return the image of the sample at the media time, null if the codec is not supported */
@@ -35,49 +57,40 @@ final class JavaFrames {
         if (s == 0) {
             return null;
         }
-        int r = m.runOfSample(s);
-        MediaRec.SampleRun run = m.runs.get(r);
-        byte[] desc = m.descriptions.get(run.descIndex - 1);
-        int codec = Bytes.getInt(desc, 4);
-        long k = s - m.firstSampleOf(r);
-        DataRefRec d = m.dataRef(run.dataRefIndex);
-        if (d == null) {
+        int descIndex = m.runs.get(m.runOfSample(s)).descIndex;
+        byte[] descBytes = m.descriptions.get(descIndex - 1);
+        Codecs.Codec c = Codecs.get(Bytes.getInt(descBytes, 4));
+        if (c == null) {
             return null;
         }
-        String c = Bytes.fourCC(codec);
-        switch (c) {
-            case "jpeg", "png ", "gif ", "tiff", "BMPf", "WRLE" -> {
-                byte[] data = d.read(run.offsetOf(k), (int) run.bytesOf(k, 1));
-                return ImageIO.read(new ByteArrayInputStream(data));
-            }
-            case "raw " -> {
-                int width = Bytes.getShort(desc, 32);
-                int height = Bytes.getShort(desc, 34);
-                int depth = Bytes.getShort(desc, 82);
-                if (depth != 24 && depth != 32) {
-                    return null;
-                }
-                byte[] data = d.read(run.offsetOf(k), (int) run.bytesOf(k, 1));
-                int bpp = depth / 8;
-                int rowBytes = height == 0 ? 0 : data.length / height;
-                BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        int o = y * rowBytes + x * bpp;
-                        if (o + bpp > data.length) {
-                            break;
-                        }
-                        int rgb = depth == 32 ? ((data[o + 1] & 0xff) << 16) | ((data[o + 2] & 0xff) << 8) | (data[o + 3] & 0xff)
-                                : ((data[o] & 0xff) << 16) | ((data[o + 1] & 0xff) << 8) | (data[o + 2] & 0xff);
-                        img.setRGB(x, y, 0xff00_0000 | rgb);
-                    }
-                }
-                return img;
-            }
-            default -> {
-                return null;
-            }
+        if (!c.isTemporal()) {
+            return c.decode(sample(m, s), new Codecs.Desc(descBytes), null);
         }
+        Last l = last.get(m);
+        if (l != null && l.sample == s && l.descIndex == descIndex) {
+            return l.image;
+        }
+        long sync = m.syncSampleAtOrBefore(s);
+        long from;
+        if (l != null && l.descIndex == descIndex && l.sample < s && l.sample >= sync) {
+            from = l.sample + 1;
+        } else {
+            l = new Last();
+            l.descIndex = descIndex;
+            l.desc = new Codecs.Desc(descBytes);
+            from = Math.max(1, sync);
+        }
+        BufferedImage img = l.image;
+        for (long i = from; i <= s; i++) {
+            if (m.runs.get(m.runOfSample(i)).descIndex != descIndex) {
+                continue;
+            }
+            img = c.decode(sample(m, i), l.desc, img);
+        }
+        l.sample = s;
+        l.image = img;
+        last.put(m, l);
+        return img;
     }
 
     /** @return the composed frame at the movie time, null if nothing could be decoded */

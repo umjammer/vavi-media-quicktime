@@ -6,6 +6,8 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
@@ -590,15 +592,15 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
     }
 
     private static int GraphicsExportDoUseCompressor(int i, int j, int[] ai) {
-        return ImageCompressionManager.GraphicsExportDoUseCompressor(i, j, ai);
+        return GraphicsExportManager.GraphicsExportDoUseCompressor(i, j, ai);
     }
 
     private static int GraphicsExportGetInputImageDescription(int i, int[] ai) {
-        return ImageCompressionManager.GraphicsExportGetInputImageDescription(i, ai);
+        return GraphicsExportManager.GraphicsExportGetInputImageDescription(i, ai);
     }
 
     private static int GraphicsImportGetImageDescription(int i, int[] ai) {
-        return ImageCompressionManager.GraphicsImportGetImageDescription(i, ai);
+        return GraphicsImportManager.GraphicsImportGetImageDescription(i, ai);
     }
 
     private static short GetSpriteProperty(int i, int j, int[] ai) {

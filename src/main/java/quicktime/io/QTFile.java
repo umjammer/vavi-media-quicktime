@@ -10,7 +10,8 @@ import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.FileManager;
-import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.SequenceGrabberManager;
@@ -771,19 +772,19 @@ public final class QTFile extends File implements QuickTimeLib {
     }
 
     private static int GraphicsImportGetDataFile(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetDataFile(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetDataFile(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsExportGetInputFile(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsExportGetInputFile(paramInt, paramArrayOfByte);
+        return GraphicsExportManager.GraphicsExportGetInputFile(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsExportGetOutputFile(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsExportGetOutputFile(paramInt, paramArrayOfByte);
+        return GraphicsExportManager.GraphicsExportGetOutputFile(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportDoExportImageFileDialog(int paramInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt2, int[] paramArrayOfInt, byte[] paramArrayOfByte3, short[] paramArrayOfShort) {
-        return ImageCompressionManager.GraphicsImportDoExportImageFileDialog(paramInt1, paramArrayOfByte1, paramArrayOfByte2, paramInt2, paramArrayOfInt, paramArrayOfByte3, paramArrayOfShort);
+        return GraphicsImportManager.GraphicsImportDoExportImageFileDialog(paramInt1, paramArrayOfByte1, paramArrayOfByte2, paramInt2, paramArrayOfInt, paramArrayOfByte3, paramArrayOfShort);
     }
 
     private static int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {

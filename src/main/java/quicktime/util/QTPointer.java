@@ -5,7 +5,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -165,7 +165,7 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
     }
 
     private static int GraphicsExportGetInputPtr(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsExportGetInputPtr(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsExportManager.GraphicsExportGetInputPtr(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {

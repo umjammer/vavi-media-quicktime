@@ -7,6 +7,8 @@ import quicktime.QTObject;
 import quicktime.internal.toolbox.AtomManager;
 import quicktime.internal.toolbox.ComponentManager;
 import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.QuickDrawManager;
@@ -873,15 +875,15 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     }
 
     private static int GraphicsExportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetSettingsAsAtomContainer(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsExportCanUseCompressor(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportCanUseCompressor(paramInt, paramArrayOfByte, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportCanUseCompressor(paramInt, paramArrayOfByte, paramArrayOfInt);
     }
 
     private static int GraphicsExportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetMIMETypeList(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetMIMETypeList(paramInt, paramArrayOfInt);
     }
 
     private static short QTVRGetVRWorld(int paramInt, int[] paramArrayOfInt) {
@@ -893,15 +895,15 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     }
 
     private static int GraphicsImportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetMIMETypeList(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetMIMETypeList(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportGetExportImageTypeList(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetExportImageTypeList(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetExportImageTypeList(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportGetExportSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetExportSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetExportSettingsAsAtomContainer(paramInt, paramArrayOfInt);
     }
 
     private static short GetMediaInputMap(int paramInt, int[] paramArrayOfInt) {

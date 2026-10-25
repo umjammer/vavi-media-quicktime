@@ -318,23 +318,77 @@ final class PictCodec {
         return r.length >= rowBytes ? r : java.util.Arrays.copyOf(r, rowBytes);
     }
 
-    /** QuickTime compressed picture: version(2) matrix(36) matteSize(4) matteRect(8) mode(2) srcRect(8) accuracy(4) maskSize(4), matte, mask, image description, data */
+    /** QuickTime compressed picture: version(2) matrix(36) matteSize(4) matteRect(8) mode(2) srcRect(8) at 52, accuracy(4) maskSize(4) at 64, matte, mask, image description, data */
     private static BufferedImage compressed(byte[] b, int p, int size) {
+        int[] matrix = new int[9];
+        for (int i = 0; i < 9; i++) {
+            matrix[i] = Bytes.getInt(b, p + 2 + i * 4);
+        }
         int matteSize = Bytes.getInt(b, p + 38);
         int maskSize = Bytes.getInt(b, p + 64);
-        int src = p + 50;
-        lastDst[0] = Bytes.getShort(b, src);
-        lastDst[1] = Bytes.getShort(b, src + 2);
-        lastDst[2] = Bytes.getShort(b, src + 4);
-        lastDst[3] = Bytes.getShort(b, src + 6);
+        int src = p + 52;
+        int top = Bytes.getShort(b, src), left = Bytes.getShort(b, src + 2), bottom = Bytes.getShort(b, src + 4), right = Bytes.getShort(b, src + 6);
+        double[][] m = MatrixManager.toDoubles(matrix);
+        double[] tl = MatrixManager.transform(m, left, top);
+        double[] br = MatrixManager.transform(m, right, bottom);
+        lastDst[0] = (int) Math.round(Math.min(tl[1], br[1]));
+        lastDst[1] = (int) Math.round(Math.min(tl[0], br[0]));
+        lastDst[2] = (int) Math.round(Math.max(tl[1], br[1]));
+        lastDst[3] = (int) Math.round(Math.max(tl[0], br[0]));
         int d = p + 68 + matteSize + maskSize;
         int descSize = Bytes.getInt(b, d);
         int dataSize = Bytes.getInt(b, d + 44);
         int data = d + descSize;
-        try {
-            return ImageIO.read(new ByteArrayInputStream(b, data, Math.min(dataSize > 0 ? dataSize : size, b.length - data)));
-        } catch (IOException e) {
+        int length = Math.min(dataSize > 0 ? dataSize : size, b.length - data);
+        if (descSize < 86 || length <= 0) {
             return null;
         }
+        byte[] desc = java.util.Arrays.copyOfRange(b, d, d + descSize);
+        byte[] bytes = java.util.Arrays.copyOfRange(b, data, data + length);
+        try {
+            BufferedImage img = Codecs.decode(desc, bytes, null);
+            if (img != null) {
+                return img;
+            }
+            return ImageIO.read(new ByteArrayInputStream(bytes));
+        } catch (IOException | RuntimeException e) {
+            logger.fine("compressed picture: " + e);
+            return null;
+        }
+    }
+
+    /** @return a picture of compressed image data (opcode 0x8200) drawn into the rect, left top right bottom */
+    static byte[] encodeCompressed(byte[] desc, byte[] data, int left, int top, int right, int bottom) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        Out o = new Out(os);
+        int w = Bytes.getShort(desc, 32), h = Bytes.getShort(desc, 34);
+        o.s(0);
+        o.rect(top, left, bottom, right);
+        o.s(0x0011).s(0x02ff);
+        o.s(0x0c00).s(-2).s(0).i(72 << 16).i(72 << 16).rect(top, left, bottom, right).i(0);
+        o.s(0x001e);
+        o.s(0x0001).s(10).rect(top, left, bottom, right);
+        o.s(0x8200);
+        int payload = 68 + desc.length + data.length;
+        o.i(payload);
+        o.s(0);
+        double sx = w == 0 ? 1 : (right - left) / (double) w, sy = h == 0 ? 1 : (bottom - top) / (double) h;
+        int[] matrix = MatrixManager.fromDoubles(new double[][] {{sx, 0, 0}, {0, sy, 0}, {left, top, 1}});
+        for (int v : matrix) {
+            o.i(v);
+        }
+        o.i(0).rect(0, 0, 0, 0);
+        o.s(64);
+        o.rect(0, 0, h, w);
+        o.i(0).i(0);
+        os.writeBytes(desc);
+        os.writeBytes(data);
+        if ((os.size() & 1) != 0) {
+            os.write(0);
+        }
+        o.s(0x00ff);
+        byte[] b = os.toByteArray();
+        Bytes.putShort(b, 0, b.length & 0xffff);
+        return b;
     }
 }

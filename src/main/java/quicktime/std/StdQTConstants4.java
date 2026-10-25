@@ -1481,7 +1481,7 @@ public abstract interface StdQTConstants4 {
     /**
      * QuickTime 4 Codec component
      */
-    public static final int kTIFFCodecType = 1952540262;
+    public static final int kTIFFCodecType = 1953064550;
 
     /**
      * QuickTime 4 Codec component

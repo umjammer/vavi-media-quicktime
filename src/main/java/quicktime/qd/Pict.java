@@ -11,6 +11,8 @@ import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.QuickDrawManager;
@@ -519,7 +521,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     }
 
     private static int GraphicsImportGetAsPicture(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetAsPicture(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetAsPicture(paramInt, paramArrayOfInt);
     }
 
     private static int SCCompressPicture(int paramInt1, int paramInt2, int paramInt3) {
@@ -559,7 +561,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     }
 
     private static int GraphicsExportGetInputPicture(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetInputPicture(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetInputPicture(paramInt, paramArrayOfInt);
     }
 
     private static void SetGWorld(int paramInt1, int paramInt2) {

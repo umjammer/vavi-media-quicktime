@@ -344,26 +344,6 @@ public final class MatrixManager {
         return new double[][] {{a, d, g}, {b, e, h}, {c, f, 1}};
     }
 
-    /** used by DSequence */
-    public static short GetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("GetDSequenceMatrix");
-    }
-
-    /** used by GraphicsImporter */
-    public static int GraphicsImportGetDefaultMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("GraphicsImportGetDefaultMatrix");
-    }
-
-    /** used by GraphicsImporter */
-    public static int GraphicsImportGetMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("GraphicsImportGetMatrix");
-    }
-
-    /** used by GraphicsImporter */
-    public static int GraphicsImportSetMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("GraphicsImportSetMatrix");
-    }
-
     /** used by Quaternion */
     public static int Q3Quaternion_SetMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
         throw new UnsupportedToolboxException("Q3Quaternion_SetMatrix");
@@ -387,11 +367,6 @@ public final class MatrixManager {
     /** used by VisualChannel */
     public static int SGSetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
         throw new UnsupportedToolboxException("SGSetChannelMatrix");
-    }
-
-    /** used by DSequence */
-    public static short SetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("SetDSequenceMatrix");
     }
 
     /** used by SpriteWorld */

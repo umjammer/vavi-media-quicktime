@@ -4,7 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.QuickDrawManager;
@@ -193,7 +193,7 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
     }
 
     private static int GraphicsExportGetInputPixmap(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetInputPixmap(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetInputPixmap(paramInt, paramArrayOfInt);
     }
 
     private static int GetGWorldPixMap(int paramInt) {

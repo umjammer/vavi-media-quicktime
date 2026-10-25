@@ -15,7 +15,7 @@ public abstract interface StdQTConstants6 {
     /**
      * QT6 supported codec types
      */
-    public static final int kMPEG4VisualCodecType = 1836085622;
+    public static final int kMPEG4VisualCodecType = 1836070006;
 
     /**
      * QuickTime 5.1 supported media type

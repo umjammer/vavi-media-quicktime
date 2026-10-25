@@ -5,8 +5,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
 import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
@@ -838,143 +838,143 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
     }
 
     private static int GraphicsExportGetInputGraphicsImporter(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsExportGetInputGraphicsImporter(paramInt, paramArrayOfInt);
+        return GraphicsExportManager.GraphicsExportGetInputGraphicsImporter(paramInt, paramArrayOfInt);
     }
 
     private static short GetGraphicsImporterForFile(byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetGraphicsImporterForFile(paramArrayOfByte, paramArrayOfInt);
+        return GraphicsImportManager.GetGraphicsImporterForFile(paramArrayOfByte, paramArrayOfInt);
     }
 
     private static short GetGraphicsImporterForFileWithFlags(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
-        return ImageCompressionManager.GetGraphicsImporterForFileWithFlags(paramArrayOfByte, paramArrayOfInt, paramInt);
+        return GraphicsImportManager.GetGraphicsImporterForFileWithFlags(paramArrayOfByte, paramArrayOfInt, paramInt);
     }
 
     private static short GetGraphicsImporterForDataRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetGraphicsImporterForDataRef(paramInt1, paramInt2, paramArrayOfInt);
+        return GraphicsImportManager.GetGraphicsImporterForDataRef(paramInt1, paramInt2, paramArrayOfInt);
     }
 
     private static short GetGraphicsImporterForDataRefWithFlags(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
-        return ImageCompressionManager.GetGraphicsImporterForDataRefWithFlags(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+        return GraphicsImportManager.GetGraphicsImporterForDataRefWithFlags(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
     }
 
     private static int GraphicsImportSetDataReference(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.GraphicsImportSetDataReference(paramInt1, paramInt2, paramInt3);
+        return GraphicsImportManager.GraphicsImportSetDataReference(paramInt1, paramInt2, paramInt3);
     }
 
     private static int GraphicsImportGetDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsImportGetDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsImportManager.GraphicsImportGetDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GraphicsImportSetDataFile(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportSetDataFile(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportSetDataFile(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportSetDataHandle(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSetDataHandle(paramInt1, paramInt2);
+        return GraphicsImportManager.GraphicsImportSetDataHandle(paramInt1, paramInt2);
     }
 
     private static int GraphicsImportGetDataOffsetAndSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsImportGetDataOffsetAndSize(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsImportManager.GraphicsImportGetDataOffsetAndSize(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GraphicsImportReadData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return ImageCompressionManager.GraphicsImportReadData(paramInt1, paramInt2, paramInt3, paramInt4);
+        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramInt2, paramInt3, paramInt4);
     }
 
     private static int GraphicsImportReadData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.GraphicsImportReadData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
     }
 
     private static int GraphicsImportReadData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.GraphicsImportReadData(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
+        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
     }
 
     private static int GraphicsImportSetClip(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSetClip(paramInt1, paramInt2);
+        return GraphicsImportManager.GraphicsImportSetClip(paramInt1, paramInt2);
     }
 
     private static int GraphicsImportSetSourceRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportSetSourceRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportSetSourceRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetSourceRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetSourceRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetSourceRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetNaturalBounds(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetNaturalBounds(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetNaturalBounds(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportDraw(int paramInt) {
-        return ImageCompressionManager.GraphicsImportDraw(paramInt);
+        return GraphicsImportManager.GraphicsImportDraw(paramInt);
     }
 
     private static int GraphicsImportSetMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.GraphicsImportSetMatrix(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportSetMatrix(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.GraphicsImportGetMatrix(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetMatrix(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportSetBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportSetBoundsRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportSetBoundsRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetBoundsRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetBoundsRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportSaveAsPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSaveAsPicture(paramInt1, paramArrayOfByte, paramInt2);
+        return GraphicsImportManager.GraphicsImportSaveAsPicture(paramInt1, paramArrayOfByte, paramInt2);
     }
 
     private static int GraphicsImportSaveAsQuickTimeImageFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSaveAsQuickTimeImageFile(paramInt1, paramArrayOfByte, paramInt2);
+        return GraphicsImportManager.GraphicsImportSaveAsQuickTimeImageFile(paramInt1, paramArrayOfByte, paramInt2);
     }
 
     private static int GraphicsImportSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportSetQuality(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSetQuality(paramInt1, paramInt2);
+        return GraphicsImportManager.GraphicsImportSetQuality(paramInt1, paramInt2);
     }
 
     private static int GraphicsImportGetQuality(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetQuality(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetQuality(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsImportManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GraphicsImportSetGWorld(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.GraphicsImportSetGWorld(paramInt1, paramInt2, paramInt3);
+        return GraphicsImportManager.GraphicsImportSetGWorld(paramInt1, paramInt2, paramInt3);
     }
 
     private static int GraphicsImportValidate(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportValidate(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportValidate(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportDoesDrawAllPixels(int paramInt, short[] paramArrayOfShort) {
-        return ImageCompressionManager.GraphicsImportDoesDrawAllPixels(paramInt, paramArrayOfShort);
+        return GraphicsImportManager.GraphicsImportDoesDrawAllPixels(paramInt, paramArrayOfShort);
     }
 
     private static int GraphicsImportGetMetaData(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportGetMetaData(paramInt1, paramInt2);
+        return GraphicsImportManager.GraphicsImportGetMetaData(paramInt1, paramInt2);
     }
 
     private static short GraphicsImportExportImageFile(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, short paramShort) {
-        return ImageCompressionManager.GraphicsImportExportImageFile(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramShort);
+        return GraphicsImportManager.GraphicsImportExportImageFile(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramShort);
     }
 
     private static int GraphicsImportSetExportSettingsFromAtomContainer(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportSetExportSettingsFromAtomContainer(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportSetExportSettingsFromAtomContainer(paramInt, paramArrayOfInt);
     }
 
     private static void SetGWorld(int paramInt1, int paramInt2) {
@@ -986,51 +986,51 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
     }
 
     private static int GraphicsImportSetDataReferenceOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.GraphicsImportSetDataReferenceOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+        return GraphicsImportManager.GraphicsImportSetDataReferenceOffsetAndLimit(paramInt1, paramInt2, paramInt3);
     }
 
     private static int GraphicsImportGetDataReferenceOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GraphicsImportGetDataReferenceOffsetAndLimit(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+        return GraphicsImportManager.GraphicsImportGetDataReferenceOffsetAndLimit(paramInt, paramArrayOfInt1, paramArrayOfInt2);
     }
 
     private static int GraphicsImportGetImageCount(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetImageCount(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetImageCount(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportSetImageIndex(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSetImageIndex(paramInt1, paramInt2);
+        return GraphicsImportManager.GraphicsImportSetImageIndex(paramInt1, paramInt2);
     }
 
     private static int GraphicsImportGetImageIndex(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetImageIndex(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetImageIndex(paramInt, paramArrayOfInt);
     }
 
     private static int GraphicsImportGetDefaultMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.GraphicsImportGetDefaultMatrix(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetDefaultMatrix(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetDefaultGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetDefaultGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetDefaultGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetDefaultSourceRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetDefaultSourceRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetDefaultSourceRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportSetDestRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportSetDestRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportSetDestRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportGetDestRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GraphicsImportGetDestRect(paramInt, paramArrayOfByte);
+        return GraphicsImportManager.GraphicsImportGetDestRect(paramInt, paramArrayOfByte);
     }
 
     private static int GraphicsImportSetFlags(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GraphicsImportSetFlags(paramInt1, paramInt2);
+        return GraphicsImportManager.GraphicsImportSetFlags(paramInt1, paramInt2);
     }
 
     private static int GraphicsImportGetFlags(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GraphicsImportGetFlags(paramInt, paramArrayOfInt);
+        return GraphicsImportManager.GraphicsImportGetFlags(paramInt, paramArrayOfInt);
     }
 }
 /* Location:
