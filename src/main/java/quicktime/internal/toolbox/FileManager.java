@@ -80,4 +80,11 @@ public final class FileManager {
         throw new UnsupportedToolboxException("StandardGetFilePreview");
     }
 
+    public static short FSpOpenDF(byte[] fsspec, byte permission, short[] refNum) {
+        throw new UnsupportedToolboxException("FSpOpenDF");
+    }
+
+    public static short FSClose(short refNum) {
+        throw new UnsupportedToolboxException("FSClose");
+    }
 }

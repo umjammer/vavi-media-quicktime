@@ -340,44 +340,4 @@ public final class StreamingManager {
         throw new UnsupportedToolboxException("QTSSourcerSetTimeScale");
     }
 
-    /** used by AtomContainer */
-    public static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("QTSetAtomData");
-    }
-
-    /** used by AtomContainer */
-    public static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        throw new UnsupportedToolboxException("QTSetAtomData");
-    }
-
-    /** used by AtomContainer */
-    public static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("QTSetAtomData");
-    }
-
-    /** used by AtomContainer */
-    public static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort) {
-        throw new UnsupportedToolboxException("QTSetAtomData");
-    }
-
-    /** used by AtomContainer */
-    public static short QTSetAtomID(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("QTSetAtomID");
-    }
-
-    /** used by ParameterDialog */
-    public static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("QTStandardParameterDialogDoAction");
-    }
-
-    /** used by ParameterDialog */
-    public static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("QTStandardParameterDialogDoAction");
-    }
-
-    /** used by AtomContainer */
-    public static short QTSwapAtoms(int paramInt1, int paramInt2, int paramInt3) {
-        throw new UnsupportedToolboxException("QTSwapAtoms");
-    }
-
 }

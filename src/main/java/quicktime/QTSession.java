@@ -24,9 +24,9 @@ import quicktime.qd.QDRect;
 import quicktime.qd3d.QD3DException;
 import quicktime.util.QTBuild;
 import quicktime.util.QTUtils;
-import sun.awt.DrawingSurface;
-import sun.awt.DrawingSurfaceInfo;
-import sun.awt.Win32DrawingSurface;
+import quicktime.internal.awt.DrawingSurface;
+import quicktime.internal.awt.DrawingSurfaceInfo;
+import quicktime.internal.awt.Win32DrawingSurface;
 
 /**
  * This class will check if QT is present and provides calls for enterMovies.
@@ -220,22 +220,12 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * is running.
      * @param osName the osName of the system that you want to find out if you are running on.
      * @return true if the current OS is the one as passed in or false if not.
+     *         Since the QuickTime toolbox is emulated, this is always {@link #kMacOSX}.
      */
     public static boolean isCurrentOS(int paramInt) {
-        if (osConstant <= 0) {
-            if (osConstant == -1) {
-                return false;
-            }
-            String str = System.getProperty("os.name");
-            if ((str.regionMatches(false, 0, "Darwin", 0, 6)) || (str.regionMatches(false, 0, "Mac OS X", 0, 8))) {
-                osConstant = 4;
-            } else if (str.regionMatches(false, 0, "Mac", 0, 3)) {
-                osConstant = 1;
-            } else if (str.regionMatches(false, 0, "Win", 0, 3)) {
-                osConstant = 2;
-            } else {
-                osConstant = -1;
-            }
+        // the toolbox is emulated in Java (quicktime.internal.toolbox), every host behaves like Mac OS X
+        if (osConstant == 0) {
+            osConstant = kMacOSX;
         }
         return (paramInt & osConstant) != 0;
     }

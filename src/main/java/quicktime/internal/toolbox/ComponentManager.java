@@ -375,4 +375,11 @@ public final class ComponentManager {
         throw new UnsupportedToolboxException("XMLParseSetStartElementHandler");
     }
 
+    public static short OpenADefaultComponent(int componentType, int componentSubType, int[] ci) {
+        throw new UnsupportedToolboxException("OpenADefaultComponent");
+    }
+
+    public static int CountComponentInstances(int component) {
+        throw new UnsupportedToolboxException("CountComponentInstances");
+    }
 }

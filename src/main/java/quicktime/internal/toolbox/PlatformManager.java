@@ -42,22 +42,22 @@ public final class PlatformManager {
 
     /** used by WinJNINative */
     public static void DestroyPortAssociations() {
-        throw new UnsupportedToolboxException("DestroyPortAssociations");
+
     }
 
     /** used by MethodClosure */
     public static void DisposeMethodClosure(int paramInt) {
-        throw new UnsupportedToolboxException("DisposeMethodClosure");
+        Closures.dispose(paramInt);
     }
 
     /** used by WinJNINative */
     public static int DoSecurityInit() {
-        throw new UnsupportedToolboxException("DoSecurityInit");
+        return 0;
     }
 
     /** used by FullScreenWindow */
     public static void DrawMenuBar() {
-        throw new UnsupportedToolboxException("DrawMenuBar");
+
     }
 
     /** used by FullScreen */
@@ -67,7 +67,7 @@ public final class PlatformManager {
 
     /** used by QTSession */
     public static short Gestalt(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("Gestalt");
+        return Gestalts.gestalt(paramInt, paramArrayOfInt);
     }
 
     /** used by WinJNINative */
@@ -77,7 +77,7 @@ public final class PlatformManager {
 
     /** used by HIToolBoxFunctions, ToneDescription */
     public static int GetMainEventLoop() {
-        throw new UnsupportedToolboxException("GetMainEventLoop");
+        return EventLoop.MAIN;
     }
 
     /** used by QDGraphics, WinNativeGraphics */
@@ -87,22 +87,22 @@ public final class PlatformManager {
 
     /** used by ParameterDialog */
     public static boolean GetNextEvent(short paramShort, byte[] paramArrayOfByte) {
-        throw new UnsupportedToolboxException("GetNextEvent");
+        return false;
     }
 
     /** used by QTPreferences */
     public static short GetQuickTimePreference(int paramInt, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("GetQuickTimePreference");
+        return Gestalts.getPreference(paramInt, paramArrayOfInt);
     }
 
     /** used by HIToolBoxFunctions */
     public static int InstallEventLoopTimer(int paramInt1, double paramDouble1, double paramDouble2, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        throw new UnsupportedToolboxException("InstallEventLoopTimer");
+        return EventLoop.install(paramDouble1, paramDouble2, paramInt2, paramInt3, paramArrayOfInt);
     }
 
     /** used by MethodClosure */
     public static int NewMethodClosure(Object paramObject, String paramString1, String paramString2) {
-        throw new UnsupportedToolboxException("NewMethodClosure");
+        return Closures.newClosure(paramObject, paramString1, paramString2);
     }
 
     /** used by QTPreferences */
@@ -142,37 +142,37 @@ public final class PlatformManager {
 
     /** used by QTCanvas */
     public static void RemoveContext(Object paramObject) {
-        throw new UnsupportedToolboxException("RemoveContext");
+
     }
 
     /** used by HIToolBoxFunctions */
     public static int RemoveEventLoopTimer(int paramInt) {
-        throw new UnsupportedToolboxException("RemoveEventLoopTimer");
+        return EventLoop.remove(paramInt);
     }
 
     /** used by QTJavaJNIAWTCanvas */
     public static void RemoveNewContext(Object paramObject) {
-        throw new UnsupportedToolboxException("RemoveNewContext");
+
     }
 
     /** used by HIToolBoxFunctions */
     public static int SetEventLoopTimerNextFireTime(int paramInt, double paramDouble) {
-        throw new UnsupportedToolboxException("SetEventLoopTimerNextFireTime");
+        return EventLoop.setNextFireTime(paramInt, paramDouble);
     }
 
     /** used by QTSession */
     public static void SetJavaThreadCallbackProc() {
-        throw new UnsupportedToolboxException("SetJavaThreadCallbackProc");
+
     }
 
     /** used by QTPreferences */
     public static short SetQuickTimePreference(int paramInt1, int paramInt2) {
-        throw new UnsupportedToolboxException("SetQuickTimePreference");
+        return Gestalts.setPreference(paramInt1, paramInt2);
     }
 
     /** used by HIToolBoxFunctions */
     public static void _UseMainRunLoopForCurrentThread() {
-        throw new UnsupportedToolboxException("_UseMainRunLoopForCurrentThread");
+
     }
 
     /** used by QTJavaCocoaCanvas */
@@ -222,7 +222,7 @@ public final class PlatformManager {
 
     /** used by QTJavaCocoaCanvas */
     public static void initGlobalLock(Object paramObject) {
-        throw new UnsupportedToolboxException("initGlobalLock");
+
     }
 
     /** used by QTJavaCocoaCanvas */

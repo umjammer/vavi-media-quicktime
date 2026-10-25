@@ -6,7 +6,7 @@ import quicktime.jdirect.MethodClosure;
 
 class EventLoopTimerClosureUPP extends MethodClosure {
     EventLoopTimerClosureUPP(Object paramObject) {
-        super(paramObject, "run", "()V", 0);
+        super(paramObject, "EventLoopTimer", "(II)V", 0);
     }
 
     void dispose() {

@@ -1,5 +1,3 @@
---patch-module
-java.desktop=src/main/java
 --add-exports
 java.desktop/java.awt.peer=ALL-UNNAMED
 --add-exports

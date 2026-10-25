@@ -582,7 +582,7 @@ public final class MovieToolbox {
 
     /** used by AtomContainer, Media, Movie, MovieController, MovieImporter, MultiMovieController, Pict, PixMap, QDGraphics, Region, SpriteWorld, TimeBase, TimeCoder, Track, UserData */
     public static short GetMoviesError() {
-        throw new UnsupportedToolboxException("GetMoviesError");
+        return MoviesError.get();
     }
 
     /** used by Movie */
@@ -1395,4 +1395,11 @@ public final class MovieToolbox {
         throw new UnsupportedToolboxException("UseTrackEditState");
     }
 
+    public static short OpenMovieFile(byte[] fsspec, short[] resRefNum, byte permission) {
+        throw new UnsupportedToolboxException("OpenMovieFile");
+    }
+
+    public static short CloseMovieFile(short resRefNum) {
+        throw new UnsupportedToolboxException("CloseMovieFile");
+    }
 }

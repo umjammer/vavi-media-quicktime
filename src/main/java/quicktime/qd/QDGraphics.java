@@ -30,8 +30,8 @@ import quicktime.streaming.Presentation;
 import quicktime.streaming.Stream;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
-import sun.awt.DrawingSurfaceInfo;
-import sun.awt.MacDrawingSurface;
+import quicktime.internal.awt.DrawingSurfaceInfo;
+import quicktime.internal.awt.MacDrawingSurface;
 
 /**
  * A color graphics port defines a complete drawing environment that determines where

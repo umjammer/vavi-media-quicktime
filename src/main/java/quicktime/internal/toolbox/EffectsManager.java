@@ -45,4 +45,14 @@ public final class EffectsManager {
         throw new UnsupportedToolboxException("QTIsStandardParameterDialogEvent");
     }
 
+    /** used by ParameterDialog */
+    public static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        throw new UnsupportedToolboxException("QTStandardParameterDialogDoAction");
+    }
+
+    /** used by ParameterDialog */
+    public static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        throw new UnsupportedToolboxException("QTStandardParameterDialogDoAction");
+    }
+
 }

@@ -4,23 +4,23 @@
  * Programmed by Naohide Sano
  */
 
-package sun.awt;
+package quicktime.internal.awt;
 
 
 /**
- * DrawingSurface.
+ * MacDrawingSurface.
  *
  * @author <a href="mailto:umjammer@gmail.com">Naohide Sano</a> (umjammer)
  * @version 0.00 2017/11/21 umjammer initial version <br>
  */
-public class DrawingSurface {
+public class MacDrawingSurface extends DrawingSurface {
 
     /**
      * @return
      */
-    public Object getDrawingSurfaceInfo() {
+    public int getPort() {
         // TODO Auto-generated method stub
-        return null;
+        return 0;
     }
 
 }

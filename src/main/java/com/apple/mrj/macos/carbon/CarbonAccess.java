@@ -24,12 +24,8 @@ public class CarbonAccess {
         };
 
         Runner runner = new Runner();
-        if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() == 65539) {
-            Timer.startOneShotAndBlock(runner);
-        } else if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
-            Timer.startOneShotAndBlock(runner);
-        }
-
+        // the toolbox is emulated in Java and thread safe, no need to hop onto the carbon event loop
+        runner.run();
         return runner.fResult;
     }
 }

@@ -151,6 +151,7 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
     public void setSize(int paramInt) throws UtilException {
         SetPtrSize(_ID(), paramInt);
         UtilException.checkError(MemError());
+        setSizeField(paramInt);
     }
 
     /**

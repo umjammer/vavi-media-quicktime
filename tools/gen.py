@@ -36,7 +36,7 @@ def route(name):
     return 'MovieToolbox'
 
 DEFAULTS = {'void': None}
-def main():
+def main(write_facades=True):
     ns = scan()
     sigs = collections.OrderedDict()   # (fac,name,ptypes) -> dict
     for n in sorted(ns, key=lambda n: (n['name'], n['file'])):
@@ -51,9 +51,17 @@ def main():
         fret[k] = v['ret'].most_common(1)[0][0]
     # facades
     os.makedirs(OUT, exist_ok=True)
+    if not write_facades:
+        missing = []
+        for k in sigs:
+            fsrc = open(os.path.join(OUT, k[0] + '.java')).read()
+            if not re.search(r'public static [\w\[\]]+ %s\(%s\)' % (k[1], ', '.join(re.escape(t) + r' \w+' for t in k[2])), fsrc):
+                missing.append(k)
+                print('MISSING', k, fret[k])
+    byfac0 = None
     byfac = collections.defaultdict(list)
     for k, v in sigs.items(): byfac[k[0]].append(k)
-    for fac, keys in byfac.items():
+    for fac, keys in (byfac.items() if write_facades else []):
         lines = []
         lines.append('/*\n * Copyright (c) 2026 by Naohide Sano, All rights reserved.\n *\n * Programmed by Naohide Sano\n */\n')
         lines.append('package %s;\n' % PKG)
@@ -109,4 +117,5 @@ def main():
         open(p, 'w', encoding='utf-8').write(src)
     c = collections.Counter(k[0] for k in sigs)
     print(sorted(c.items(), key=lambda x: -x[1]))
-main()
+import sys
+main('--no-facades' not in sys.argv)

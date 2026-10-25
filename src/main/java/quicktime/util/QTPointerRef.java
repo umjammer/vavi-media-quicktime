@@ -69,6 +69,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         return this.size;
     }
 
+    /** updates the size after the memory block was resized */
+    void setSizeField(int size) {
+        this.size = size;
+    }
+
     /**
      * Returns a copy of the data of the pointer as a byte array
      * @return a byte array - copy of pointer data

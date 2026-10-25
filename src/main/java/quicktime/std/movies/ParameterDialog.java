@@ -12,7 +12,6 @@ import quicktime.QTSession;
 import quicktime.internal.toolbox.EffectsManager;
 import quicktime.internal.toolbox.PlatformManager;
 import quicktime.internal.toolbox.QuickDrawManager;
-import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.Pict;
@@ -321,11 +320,11 @@ public final class ParameterDialog implements QuickTimeLib {
     }
 
     private static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfInt);
+        return EffectsManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfInt);
     }
 
     private static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return StreamingManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfByte);
+        return EffectsManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfByte);
     }
 
     private static short QTIsStandardParameterDialogEvent(byte[] paramArrayOfByte, int paramInt) {

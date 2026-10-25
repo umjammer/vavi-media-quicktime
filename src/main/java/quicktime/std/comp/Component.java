@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -65,18 +66,22 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         super(allocate(paramInt), null);
     }
 
-    private static int nextComponentId = 1;
-
     private static int allocate(ComponentIdentifier paramComponentIdentifier, int paramInt) throws StdQTException {
-        return nextComponentId++;
+        if (paramComponentIdentifier.getInfo().getType() != paramInt)
+            throw new StdQTException(62536);
+        return allocate(QTObject.ID(paramComponentIdentifier));
     }
 
     private static int allocate(int paramInt1, int paramInt2) throws StdQTException {
-        return nextComponentId++;
+        int[] arrayOfInt = new int[1];
+        StdQTException.checkError(OpenADefaultComponent(paramInt1, paramInt2, arrayOfInt));
+        return arrayOfInt[0];
     }
 
     private static int allocate(int paramInt) throws StdQTException {
-        return nextComponentId++;
+        int[] arrayOfInt = new int[1];
+        StdQTException.checkError(OpenAComponent(paramInt, arrayOfInt));
+        return arrayOfInt[0];
     }
 
     /**
@@ -88,9 +93,15 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         return CountComponentInstances(_ID());
     }
 
-    private static short OpenADefaultComponent(int paramInt1, int paramInt2, int[] paramArrayOfInt) { return 0; }
+    private static short OpenADefaultComponent(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ComponentManager.OpenADefaultComponent(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static short OpenAComponent(int paramInt, int[] paramArrayOfInt) { return 0; }
+    private static short OpenAComponent(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.OpenAComponent(paramInt, paramArrayOfInt);
+    }
 
-    private static int CountComponentInstances(int paramInt) { return 0; }
+    private static int CountComponentInstances(int paramInt) {
+        return ComponentManager.CountComponentInstances(paramInt);
+    }
 }

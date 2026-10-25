@@ -12,8 +12,8 @@ import quicktime.WinJNIDrawingSurface;
 import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
-import sun.awt.DrawingSurfaceInfo;
-import sun.awt.Win32DrawingSurface;
+import quicktime.internal.awt.DrawingSurfaceInfo;
+import quicktime.internal.awt.Win32DrawingSurface;
 
 
 final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {

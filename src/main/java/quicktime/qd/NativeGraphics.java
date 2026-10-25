@@ -7,8 +7,8 @@ import java.awt.peer.ComponentPeer;
 import quicktime.QTSession;
 import quicktime.QTUnknownOSException;
 import quicktime.WinJNIDrawingSurface;
-import sun.awt.DrawingSurface;
-import sun.awt.DrawingSurfaceInfo;
+import quicktime.internal.awt.DrawingSurface;
+import quicktime.internal.awt.DrawingSurfaceInfo;
 
 /**
  * You use this class to obtain a QDGraphics object from a Java object known to host
