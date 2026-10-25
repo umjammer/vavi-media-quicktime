@@ -176,6 +176,7 @@
 /home/user/vavi-media-quicktime/src/main/java/quicktime/app/view/QTJComponent.java
 /home/user/vavi-media-quicktime/src/main/java/quicktime/app/view/QTJavaAWTCanvas.java
 /home/user/vavi-media-quicktime/src/main/java/quicktime/app/view/QTJavaCocoaCanvas.java
+/home/user/vavi-media-quicktime/src/main/java/quicktime/app/view/QTJavaJ2DCanvas.java
 /home/user/vavi-media-quicktime/src/main/java/quicktime/app/view/QTJavaJNIAWTCanvas.java
 /home/user/vavi-media-quicktime/src/main/java/quicktime/internal/avf/AVAsset.java
 /home/user/vavi-media-quicktime/src/main/java/quicktime/internal/avf/AVAssetExportSession.java

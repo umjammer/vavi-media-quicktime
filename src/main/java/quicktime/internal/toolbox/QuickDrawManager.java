@@ -573,6 +573,12 @@ public final class QuickDrawManager {
         }
     }
 
+    /** @return the image sharing the pixels of the port, null if the pixel format has no image, for components to paint */
+    public static BufferedImage portImage(int port) {
+        Port p = portOrNull(port);
+        return p == null ? null : p.image;
+    }
+
     /** @return a copy of the pixels of the port as an ARGB image */
     static BufferedImage snapshot(int port) {
         Port p = port(port);

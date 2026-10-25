@@ -45,4 +45,5 @@
 /home/user/vavi-media-quicktime/src/test/java/quicktime/internal/avf/AVFMediaEngineTest.java
 /home/user/vavi-media-quicktime/src/test/java/quicktime/internal/toolbox/HeapTest.java
 /home/user/vavi-media-quicktime/src/test/java/quicktime/internal/toolbox/RenderingTest.java
+/home/user/vavi-media-quicktime/src/test/java/quicktime/std/movies/MovieControllerTest.java
 /home/user/vavi-media-quicktime/src/test/java/quicktime/std/movies/MovieTest.java

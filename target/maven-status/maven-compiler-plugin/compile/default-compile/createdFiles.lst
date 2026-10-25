@@ -130,6 +130,7 @@ quicktime/vr/QTVRMouseOverHotSpot.class
 quicktime/std/image/CodecComponent$1$1.class
 quicktime/qd/QDGraphics$1.class
 quicktime/internal/toolbox/ImageCompressionManager.class
+quicktime/internal/toolbox/MovieControllerManager$ControllerRec.class
 quicktime/std/comp/Component$1PrivelegedAction$1.class
 quicktime/std/movies/EffectsList$1$1.class
 quicktime/std/anim/Sprite.class
@@ -779,6 +780,7 @@ quicktime/std/music/AtomicInstrument$1$1.class
 quicktime/std/image/GraphicsMode.class
 quicktime/app/anim/SWCompositor$ASpriteWorld.class
 quicktime/std/music/InstSampleDesc.class
+quicktime/app/view/QTJavaJ2DCanvas.class
 quicktime/std/movies/media/MovieMedia.class
 quicktime/app/actions/NotifyListener.class
 quicktime/internal/avf/Frameworks$AVFoundation.class
@@ -955,6 +957,7 @@ quicktime/io/QTFile$1PrivelegedAction.class
 quicktime/std/sg/SGSoundChannel$1$1.class
 quicktime/std/RestrictionSet$1PrivelegedAction$1.class
 quicktime/io/AliasHandle.class
+quicktime/app/view/QTJavaJ2DCanvas$2.class
 quicktime/qd/QDDimension$1.class
 quicktime/qd3d/camera/CameraRange.class
 quicktime/app/ui/PressActionButton.class
@@ -1021,6 +1024,7 @@ com/apple/mrj/macos/carbon/Timer$2Deferrer.class
 quicktime/app/view/QTFactory$2PrivelegedAction.class
 quicktime/std/sg/SGDataSourceInfo.class
 quicktime/app/display/QTDrawable.class
+quicktime/app/view/QTJavaJ2DCanvas$1.class
 quicktime/streaming/MediaParams.class
 quicktime/app/display/QTCanvas.class
 quicktime/std/image/ICMFrameTime.class
@@ -1058,6 +1062,7 @@ quicktime/qd/QDColor$1.class
 quicktime/std/music/NoteAllocator$2.class
 quicktime/jdirect/QuickTimeVRLib.class
 quicktime/qd/text/ScrpSTElement$1PrivelegedAction.class
+quicktime/internal/toolbox/MediaHandlerManager$HandlerState.class
 quicktime/std/movies/ActionFilter.class
 quicktime/std/StdQTConstants.class
 quicktime/util/QTUtils$1.class
@@ -1071,4 +1076,5 @@ quicktime/util/QTBuild.class
 quicktime/std/comp/ComponentDescription$1PrivelegedAction$1.class
 quicktime/streaming/EditEntry.class
 quicktime/std/sg/SGTextChannel$1.class
+quicktime/app/view/QTJavaJ2DCanvas$3.class
 quicktime/std/music/NoteRequestInfo$1.class

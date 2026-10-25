@@ -142,6 +142,7 @@ public final class ComponentManager {
 
     static {
         register(clok, Bytes.fourCC("micr"), 0, "Microsecond Clock", "Microsecond clock", null);
+        register(Bytes.fourCC("play"), 0, 0, "Movie Controller", "The standard movie controller", null);
         register(clok, Bytes.fourCC("tick"), 0, "Tick Clock", "Tick clock", null);
         String[][] media = {
                 {"vide", "Apple Video Media Handler"}, {"soun", "Apple Sound Media Handler"}, {"text", "Apple Text Media Handler"},

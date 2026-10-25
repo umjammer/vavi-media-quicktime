@@ -70,6 +70,7 @@ DukeMovie/duke/ControlPanel$Action.class
 quicktime/std/movies/MovieTest$QDConstantsHolder.class
 CreatePictFile/CreatePictFile$1.class
 SoundMeter/SoundMeter$1.class
+quicktime/std/movies/MovieControllerTest.class
 TimeCallbackDemo/TimeCallbackDemo.class
 CreatePictFile/CreatePictFile.class
 TimeCallbackDemo/TimeCallbackDemo$TimeBaseTimeJumpCallBack.class

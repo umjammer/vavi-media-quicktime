@@ -620,7 +620,7 @@ public class MovieController extends Component implements QuickTimeLib {
      */
     public final boolean getLoopIsPalindrome() throws StdQTException {
         byte[] arrayOfByte = new byte[1];
-        doAction((short) 22, arrayOfByte);
+        doAction((short) 24, arrayOfByte);
         return arrayOfByte[0] == 1;
     }
 
