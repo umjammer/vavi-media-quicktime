@@ -695,20 +695,26 @@ final class MovieAtoms {
 
     /** @return the 'moov' atom of the movie */
     static byte[] write(MovieRec movie) {
-        return write(movie, false);
+        return write(movie, false, null);
+    }
+
+    static byte[] write(MovieRec movie, boolean iso) {
+        return write(movie, iso, null);
     }
 
     /**
      * @param iso true for the ISO base media file format (MPEG-4, 3GPP): handlers have no component type,
      *            names are C strings and self references are 'url ' entries
+     * @param target the file the movie atom is written into, null for a handle.
+     *            self references to other files become alias records
      * @return the 'moov' atom of the movie
      */
-    static byte[] write(MovieRec movie, boolean iso) {
+    static byte[] write(MovieRec movie, boolean iso, String target) {
         Out o = new Out();
         o.begin(moov);
         writeMvhd(o, movie);
         for (TrackRec t : movie.tracks) {
-            writeTrak(o, movie, t, iso);
+            writeTrak(o, movie, t, iso, target);
         }
         if (!movie.userData.items.isEmpty()) {
             o.atom(udta, movie.userData.toBytes());
@@ -735,7 +741,7 @@ final class MovieAtoms {
         o.end();
     }
 
-    private static void writeTrak(Out o, MovieRec movie, TrackRec t, boolean iso) {
+    private static void writeTrak(Out o, MovieRec movie, TrackRec t, boolean iso, String target) {
         o.begin(trak);
         long duration = t.duration();
         boolean v1 = duration > 0xffff_ffffL;
@@ -783,7 +789,7 @@ final class MovieAtoms {
             o.begin(load).i32(t.preloadTime).i32(t.preloadDuration).i32(t.preloadFlags).i32(t.defaultHints).end();
         }
         if (t.media != null) {
-            writeMdia(o, t.media, iso);
+            writeMdia(o, t.media, iso, target);
         }
         if (!t.userData.items.isEmpty()) {
             o.atom(udta, t.userData.toBytes());
@@ -791,7 +797,7 @@ final class MovieAtoms {
         o.end();
     }
 
-    private static void writeMdia(Out o, MediaRec m, boolean iso) {
+    private static void writeMdia(Out o, MediaRec m, boolean iso, String target) {
         o.begin(mdia);
         long duration = m.duration();
         boolean v1 = duration > 0xffff_ffffL;
@@ -827,7 +833,11 @@ final class MovieAtoms {
         }
         o.begin(dinf).fullBegin(dref, 0, 0).i32(m.dataRefs.size());
         for (DataRefRec d : m.dataRefs) {
-            if (iso && (d.flags & DataRefRec.selfReference) != 0) {
+            boolean self = (d.flags & DataRefRec.selfReference) != 0;
+            if (self && d.selfPath != null && !d.selfPath.equals(target)) {
+                // the data is in another file than the one written
+                o.fullBegin(DataRefRec.alis, 0, 0).bytes(FileManager.newAliasRecord(d.selfPath)).end();
+            } else if (iso && self) {
                 o.fullBegin(DataRefRec.url, 0, DataRefRec.selfReference).end();
             } else {
                 o.fullBegin(d.type, 0, d.flags).bytes(d.entryData()).end();

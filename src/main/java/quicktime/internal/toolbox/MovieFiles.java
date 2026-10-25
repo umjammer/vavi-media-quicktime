@@ -59,7 +59,7 @@ final class MovieFiles {
                 }
             }
         }
-        byte[] moov = MovieAtoms.write(m);
+        byte[] moov = MovieAtoms.write(m, false, path);
         try (RandomAccessFile f = new RandomAccessFile(path, "rw")) {
             if (m.path != null && m.path.equals(path) && m.moovOffset >= 0 && m.moovOffset + m.moovSize <= f.length()) {
                 long free = m.moovSize - moov.length;
@@ -253,15 +253,15 @@ final class MovieFiles {
             }
             if (moovFirst) {
                 // offsets do not change the size of the movie atom, except stco vs co64
-                byte[] probe = moovBytes(out, flags, iso);
+                byte[] probe = moovBytes(out, flags, iso, path);
                 base = ftyp.length + probe.length + mdatHeader;
                 shift(chunks, base);
-                moov = moovBytes(out, flags, iso);
+                moov = moovBytes(out, flags, iso, path);
                 if (moov.length != probe.length) {
                     shift(chunks, -base);
                     base = ftyp.length + moov.length + mdatHeader;
                     shift(chunks, base);
-                    moov = moovBytes(out, flags, iso);
+                    moov = moovBytes(out, flags, iso, path);
                 }
             } else {
                 base = ftyp.length + mdatHeader;
@@ -306,7 +306,7 @@ final class MovieFiles {
                     }
                 }
                 if (!moovFirst) {
-                    moov = moovBytes(out, flags, iso);
+                    moov = moovBytes(out, flags, iso, path);
                     f.write(moov);
                 }
                 out.moovOffset = moovFirst ? ftyp.length : f.length() - moov.length;
@@ -328,8 +328,8 @@ final class MovieFiles {
         }
     }
 
-    private static byte[] moovBytes(MovieRec m, int flags, boolean iso) {
-        byte[] moov = MovieAtoms.write(m, iso);
+    private static byte[] moovBytes(MovieRec m, int flags, boolean iso, String path) {
+        byte[] moov = MovieAtoms.write(m, iso, path);
         return (flags & flattenCompressMovieResource) != 0 ? compress(moov) : moov;
     }
 

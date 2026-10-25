@@ -112,6 +112,35 @@ class MovieTest implements StdQTConstants, quicktime.io.IOConstants {
         assertEquals(d, movie.getDuration());
     }
 
+    /** ImportExport#makeReferenceMovie */
+    @Test
+    void testReferenceMovie() throws Exception {
+        Movie movie = open(MEDIA + "jumps.mov");
+        File out = temp.resolve("ref.mov").toFile();
+        QTFile outputMovie = new QTFile(out);
+        outputMovie.createMovieFile(kMoviePlayer, createMovieFileDeleteCurFile);
+        OpenMovieFile outStream = OpenMovieFile.asWrite(outputMovie);
+        movie.addResource(outStream, movieInDataForkResID, outputMovie.getName());
+        outStream.close();
+        assertTrue(out.length() < 4096, "the data stays in the original: " + out.length());
+        Movie reopened = open(out.getPath());
+        assertEquals(movie.getDuration(), reopened.getDuration());
+        assertArrayEquals(movie.getIndTrack(1).getMedia().getSample(0, 300, 1).data.getBytes(),
+                reopened.getIndTrack(1).getMedia().getSample(0, 300, 1).data.getBytes());
+    }
+
+    /** PlayMovie#createNewMovieFromURL */
+    @Test
+    void testFromDataRef() throws Exception {
+        quicktime.std.movies.media.DataRef ref = new quicktime.std.movies.media.DataRef("file://" + new File(MEDIA + "jumps.mov").getAbsolutePath());
+        Movie movie = Movie.fromDataRef(ref, newMovieActive);
+        assertEquals(1, movie.getTrackCount());
+        MovieController mc = new MovieController(movie);
+        mc.play(1);
+        mc.idle();
+        mc.play(0);
+    }
+
     @Test
     void testText() throws Exception {
         Movie movie = open(MEDIA + "TextOnly.mov");

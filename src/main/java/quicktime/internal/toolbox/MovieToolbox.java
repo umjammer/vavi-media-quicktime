@@ -487,7 +487,7 @@ public final class MovieToolbox {
         if (f == null) {
             return err(-51);
         }
-        byte[] moov = MovieAtoms.write(movie(movie));
+        byte[] moov = MovieAtoms.write(movie(movie), false, f.path);
         if (maxSize > 0 && moov.length > maxSize) {
             return err(paramErr);
         }
