@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -48,5 +49,7 @@ public final class Decompressor extends CodecComponent implements QuickTimeLib {
         return arrayOfInt[0] == 0 ? null : new Decompressor(arrayOfInt[0]);
     }
 
-    private static native short FindCodec(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short FindCodec(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return ImageCompressionManager.FindCodec(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 }

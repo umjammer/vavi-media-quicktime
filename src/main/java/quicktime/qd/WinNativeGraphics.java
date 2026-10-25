@@ -9,6 +9,7 @@ import java.util.Vector;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.WinJNIDrawingSurface;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import sun.awt.DrawingSurfaceInfo;
@@ -129,9 +130,15 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
         return getClass().getName() + "[vector=" + hWndVector + ",hWnd=" + this.hWnd + "]";
     }
 
-    private static native void DestroyPortAssociation(int paramInt);
+    private static void DestroyPortAssociation(int paramInt) {
+        PlatformManager.DestroyPortAssociation(paramInt);
+    }
 
-    private static native int GetNativeWindowPort(int paramInt);
+    private static int GetNativeWindowPort(int paramInt) {
+        return PlatformManager.GetNativeWindowPort(paramInt);
+    }
 
-    private static native int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3);
+    private static int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3) {
+        return PlatformManager.CreatePortAssociation(paramInt1, paramInt2, paramInt3);
+    }
 }

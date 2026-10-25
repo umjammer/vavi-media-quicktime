@@ -7,6 +7,8 @@ import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.AtomManager;
+import quicktime.internal.toolbox.MusicManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -123,9 +125,15 @@ public final class AtomicInstrument extends AtomContainer implements QuickTimeLi
         return lockAndDeref(0);
     }
 
-    private static native int NAPickEditInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static int NAPickEditInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return MusicManager.NAPickEditInstrument(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native int NANewNoteChannelFromAtomicInstrument(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static int NANewNoteChannelFromAtomicInstrument(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return MusicManager.NANewNoteChannelFromAtomicInstrument(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTNewAtomContainer(int[] paramArrayOfInt);
+    private static short QTNewAtomContainer(int[] paramArrayOfInt) {
+        return AtomManager.QTNewAtomContainer(paramArrayOfInt);
+    }
 }

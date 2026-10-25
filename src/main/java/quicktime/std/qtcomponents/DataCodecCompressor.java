@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -88,7 +89,11 @@ public class DataCodecCompressor extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static native int DataCodecCompress(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int DataCodecCompress(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.DataCodecCompress(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int DataCodecGetCompressBufferSize(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int DataCodecGetCompressBufferSize(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.DataCodecGetCompressBufferSize(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }

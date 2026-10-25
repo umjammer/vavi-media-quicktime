@@ -2,6 +2,7 @@ package quicktime.std.movies;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.util.QTPointerRef;
 
@@ -71,7 +72,11 @@ public final class QTGetExternalMovieRecord extends QTPointerRef implements quic
         return new MovieController(getIntAt(16), this);
     }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native byte getByteFromPointer(int paramInt1, int paramInt2);
+    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    }
 }

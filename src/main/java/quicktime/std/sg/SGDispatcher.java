@@ -5,6 +5,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import quicktime.QTException;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -103,15 +105,17 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
         this.mMethodClosure = null;
     }
 
-    private static native short GetComponentInfo(int paramInt1,
-                                                 byte[] paramArrayOfByte,
-                                                 int paramInt2,
-                                                 int paramInt3,
-                                                 int paramInt4);
+    private static short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
+        return ComponentManager.GetComponentInfo(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
     static class SGMethodClosure extends MethodClosure {
         SGMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {

@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.io.OpenFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -350,38 +351,72 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
         return arrayOfInt[0];
     }
 
-    private static native int SCDefaultPixMapSettings(int paramInt1, int paramInt2, short paramShort);
+    private static int SCDefaultPixMapSettings(int paramInt1, int paramInt2, short paramShort) {
+        return ImageCompressionManager.SCDefaultPixMapSettings(paramInt1, paramInt2, paramShort);
+    }
 
-    private static native int SCDefaultPictHandleSettings(int paramInt1, int paramInt2, short paramShort);
+    private static int SCDefaultPictHandleSettings(int paramInt1, int paramInt2, short paramShort) {
+        return ImageCompressionManager.SCDefaultPictHandleSettings(paramInt1, paramInt2, paramShort);
+    }
 
-    private static native int SCDefaultPictFileSettings(int paramInt, short paramShort1, short paramShort2);
+    private static int SCDefaultPictFileSettings(int paramInt, short paramShort1, short paramShort2) {
+        return ImageCompressionManager.SCDefaultPictFileSettings(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native int SCRequestSequenceSettings(int paramInt);
+    private static int SCRequestSequenceSettings(int paramInt) {
+        return ImageCompressionManager.SCRequestSequenceSettings(paramInt);
+    }
 
-    private static native int SCCompressPictureFile(int paramInt, short paramShort1, short paramShort2);
+    private static int SCCompressPictureFile(int paramInt, short paramShort1, short paramShort2) {
+        return ImageCompressionManager.SCCompressPictureFile(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, int paramInt3);
+    private static int SCSetInfo(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SCSetTestImagePictHandle(int paramInt1, int paramInt2, byte[] paramArrayOfByte, short paramShort);
+    private static int SCSetTestImagePictHandle(int paramInt1, int paramInt2, byte[] paramArrayOfByte, short paramShort) {
+        return ImageCompressionManager.SCSetTestImagePictHandle(paramInt1, paramInt2, paramArrayOfByte, paramShort);
+    }
 
-    private static native int SCSetTestImagePictFile(int paramInt, short paramShort1, byte[] paramArrayOfByte, short paramShort2);
+    private static int SCSetTestImagePictFile(int paramInt, short paramShort1, byte[] paramArrayOfByte, short paramShort2) {
+        return ImageCompressionManager.SCSetTestImagePictFile(paramInt, paramShort1, paramArrayOfByte, paramShort2);
+    }
 
-    private static native int SCSetTestImagePixMap(int paramInt1, int paramInt2, byte[] paramArrayOfByte, short paramShort);
+    private static int SCSetTestImagePixMap(int paramInt1, int paramInt2, byte[] paramArrayOfByte, short paramShort) {
+        return ImageCompressionManager.SCSetTestImagePixMap(paramInt1, paramInt2, paramArrayOfByte, paramShort);
+    }
 
-    private static native int SCSetCompressFlags(int paramInt1, int paramInt2);
+    private static int SCSetCompressFlags(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SCSetCompressFlags(paramInt1, paramInt2);
+    }
 
-    private static native int SCGetCompressFlags(int paramInt, int[] paramArrayOfInt);
+    private static int SCGetCompressFlags(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetCompressFlags(paramInt, paramArrayOfInt);
+    }
 }
 

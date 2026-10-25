@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -120,18 +122,32 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         return str;
     }
 
-    private static native int FindNextComponent(int paramInt, byte[] paramArrayOfByte);
+    private static int FindNextComponent(int paramInt, byte[] paramArrayOfByte) {
+        return ComponentManager.FindNextComponent(paramInt, paramArrayOfByte);
+    }
 
-    private static native short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4);
+    private static short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
+        return ComponentManager.GetComponentInfo(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int GetHandleSize(int paramInt);
+    private static int GetHandleSize(int paramInt) {
+        return MemoryManager.GetHandleSize(paramInt);
+    }
 
-    private static native int NewHandle(int paramInt);
+    private static int NewHandle(int paramInt) {
+        return MemoryManager.NewHandle(paramInt);
+    }
 
-    private static native int NewEmptyHandle();
+    private static int NewEmptyHandle() {
+        return MemoryManager.NewEmptyHandle();
+    }
 
-    private static native void DisposeHandle(int paramInt);
+    private static void DisposeHandle(int paramInt) {
+        MemoryManager.DisposeHandle(paramInt);
+    }
 
-    private static native byte getByteFromHandle(int paramInt1, int paramInt2);
+    private static byte getByteFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
+    }
 }
 

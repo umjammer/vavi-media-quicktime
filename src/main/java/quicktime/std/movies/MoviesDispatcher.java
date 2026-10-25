@@ -3,6 +3,7 @@ package quicktime.std.movies;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
@@ -329,9 +330,13 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         this.mMethodClosure = null;
     }
 
-    private static native short getShortFromPointer(int paramInt1, int paramInt2);
+    private static short getShortFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setShortInPointer(int paramInt1, int paramInt2, short paramShort);
+    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
+        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    }
 
     static class MoviesMethodClosure extends MethodClosure {
         MoviesMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
@@ -343,9 +348,13 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         }
     }
 
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
     static class AFTimeRecord extends TimeRecord {
         AFTimeRecord(int paramInt, Object paramObject) {
@@ -353,7 +362,9 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         }
     }
 
-    private static native byte getByteFromPointer(int paramInt1, int paramInt2);
+    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    }
 
     static class AFStringHandle extends StringHandle {
         AFStringHandle(int paramInt, Object paramObject, boolean paramBoolean, MoviesDispatcher param1) {
@@ -365,13 +376,15 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         }
     }
 
-    private static native void setByteInPointer(int paramInt1, int paramInt2, byte paramByte);
+    private static void setByteInPointer(int paramInt1, int paramInt2, byte paramByte) {
+        MemoryManager.setByteInPointer(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  byte[] paramArrayOfByte,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native short PtrToHand(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+    private static short PtrToHand(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
+        return MemoryManager.PtrToHand(paramInt1, paramArrayOfInt, paramInt2);
+    }
 }

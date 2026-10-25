@@ -8,6 +8,8 @@ import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.io.AliasHandle;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
@@ -498,44 +500,84 @@ public final class MovieImporter extends Component implements QuickTimeLib {
         this.progUPP = null;
     }
 
-    private static native int IsScrapMovie(int paramInt);
+    private static int IsScrapMovie(int paramInt) {
+        return MovieToolbox.IsScrapMovie(paramInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native short GetMovieImporterForDataRef(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short GetMovieImporterForDataRef(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMovieImporterForDataRef(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native int MovieImportSetSampleDuration(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieImportSetSampleDuration(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieImportSetSampleDuration(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieImportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieImportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieImportSetSampleDescription(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieImportSetMediaFile(int paramInt1, int paramInt2);
+    private static int MovieImportSetMediaFile(int paramInt1, int paramInt2) {
+        return ComponentManager.MovieImportSetMediaFile(paramInt1, paramInt2);
+    }
 
-    private static native int MovieImportSetDimensions(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieImportSetDimensions(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieImportSetDimensions(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieImportSetChunkSize(int paramInt1, int paramInt2);
+    private static int MovieImportSetChunkSize(int paramInt1, int paramInt2) {
+        return ComponentManager.MovieImportSetChunkSize(paramInt1, paramInt2);
+    }
 
-    private static native int MovieImportSetProgressProc(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieImportSetProgressProc(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieImportSetProgressProc(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieImportSetAuxiliaryData(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieImportSetAuxiliaryData(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieImportSetAuxiliaryData(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieImportSetFromScrap(int paramInt, byte paramByte);
+    private static int MovieImportSetFromScrap(int paramInt, byte paramByte) {
+        return ComponentManager.MovieImportSetFromScrap(paramInt, paramByte);
+    }
 
-    private static native int MovieImportDoUserDialog(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2);
+    private static int MovieImportDoUserDialog(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2) {
+        return ComponentManager.MovieImportDoUserDialog(paramInt1, paramArrayOfByte1, paramInt2, paramArrayOfByte2);
+    }
 
-    private static native int MovieImportSetDuration(int paramInt1, int paramInt2);
+    private static int MovieImportSetDuration(int paramInt1, int paramInt2) {
+        return ComponentManager.MovieImportSetDuration(paramInt1, paramInt2);
+    }
 
-    private static native int MovieImportGetAuxiliaryDataType(int paramInt, int[] paramArrayOfInt);
+    private static int MovieImportGetAuxiliaryDataType(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieImportGetAuxiliaryDataType(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieImportValidate(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2);
+    private static int MovieImportValidate(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2) {
+        return ComponentManager.MovieImportValidate(paramInt1, paramArrayOfByte1, paramInt2, paramArrayOfByte2);
+    }
 
-    private static native int MovieImportGetFileType(int paramInt, int[] paramArrayOfInt);
+    private static int MovieImportGetFileType(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieImportGetFileType(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ComponentManager.MovieImportGetSampleDescription(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int MovieImportSetOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieImportSetOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieImportSetOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieImportSetSettingsFromAtomContainer(int paramInt1, int paramInt2);
+    private static int MovieImportSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
+        return ComponentManager.MovieImportSetSettingsFromAtomContainer(paramInt1, paramInt2);
+    }
 
-    private static native int MovieImportSetNewMovieFlags(int paramInt1, int paramInt2);
+    private static int MovieImportSetNewMovieFlags(int paramInt1, int paramInt2) {
+        return ComponentManager.MovieImportSetNewMovieFlags(paramInt1, paramInt2);
+    }
 }
 

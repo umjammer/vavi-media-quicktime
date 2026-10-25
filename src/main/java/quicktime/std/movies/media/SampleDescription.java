@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -160,10 +162,16 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
         return getClass().getName() + "[format=" + QTUtils.fromOSType(getDataFormat()) + "]";
     }
 
-    private static native int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ComponentManager.MovieImportGetSampleDescription(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void SetHandleSize(int paramInt1, int paramInt2);
+    private static void SetHandleSize(int paramInt1, int paramInt2) {
+        MemoryManager.SetHandleSize(paramInt1, paramInt2);
+    }
 
-    private static native short MemError();
+    private static short MemError() {
+        return MemoryManager.MemError();
+    }
 }
 

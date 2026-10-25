@@ -4,6 +4,10 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -188,21 +192,37 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
         return super.toString() + "[Bounds=" + getBounds() + "]";
     }
 
-    private static native int GraphicsExportGetInputPixmap(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInputPixmap(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetInputPixmap(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GetGWorldPixMap(int paramInt);
+    private static int GetGWorldPixMap(int paramInt) {
+        return QuickDrawManager.GetGWorldPixMap(paramInt);
+    }
 
-    private static native byte LockPixels(int paramInt);
+    private static byte LockPixels(int paramInt) {
+        return QuickDrawManager.LockPixels(paramInt);
+    }
 
-    private static native void UnlockPixels(int paramInt);
+    private static void UnlockPixels(int paramInt) {
+        QuickDrawManager.UnlockPixels(paramInt);
+    }
 
-    private static native int GetTrackMatte(int paramInt);
+    private static int GetTrackMatte(int paramInt) {
+        return MovieToolbox.GetTrackMatte(paramInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int getIntFromHandle(int paramInt1, int paramInt2);
+    private static int getIntFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native int GetPixBounds(int paramInt, byte[] paramArrayOfByte);
+    private static int GetPixBounds(int paramInt, byte[] paramArrayOfByte) {
+        return QuickDrawManager.GetPixBounds(paramInt, paramArrayOfByte);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/PixMap

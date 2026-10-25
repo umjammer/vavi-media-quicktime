@@ -3,6 +3,8 @@ package quicktime.qd;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -220,29 +222,55 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
         StdQTException.checkError(GDSetScale(_ID(), QTUtils.X2Fix(paramInt1), (short) paramInt2));
     }
 
-    private static native int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SequenceGrabberManager.SGGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GetGDevice();
+    private static int GetGDevice() {
+        return QuickDrawManager.GetGDevice();
+    }
 
-    private static native int GetDeviceList();
+    private static int GetDeviceList() {
+        return QuickDrawManager.GetDeviceList();
+    }
 
-    private static native int GetMainDevice();
+    private static int GetMainDevice() {
+        return QuickDrawManager.GetMainDevice();
+    }
 
-    private static native int GetMaxDevice(byte[] paramArrayOfByte);
+    private static int GetMaxDevice(byte[] paramArrayOfByte) {
+        return QuickDrawManager.GetMaxDevice(paramArrayOfByte);
+    }
 
-    private static native void InitGDevice(short paramShort, int paramInt1, int paramInt2);
+    private static void InitGDevice(short paramShort, int paramInt1, int paramInt2) {
+        QuickDrawManager.InitGDevice(paramShort, paramInt1, paramInt2);
+    }
 
-    private static native void SetDeviceAttribute(int paramInt, short paramShort, byte paramByte);
+    private static void SetDeviceAttribute(int paramInt, short paramShort, byte paramByte) {
+        QuickDrawManager.SetDeviceAttribute(paramInt, paramShort, paramByte);
+    }
 
-    private static native void SetGDevice(int paramInt);
+    private static void SetGDevice(int paramInt) {
+        QuickDrawManager.SetGDevice(paramInt);
+    }
 
-    private static native int GetNextDevice(int paramInt);
+    private static int GetNextDevice(int paramInt) {
+        return QuickDrawManager.GetNextDevice(paramInt);
+    }
 
-    private static native int TestDeviceAttribute(int paramInt, short paramShort);
+    private static int TestDeviceAttribute(int paramInt, short paramShort) {
+        return QuickDrawManager.TestDeviceAttribute(paramInt, paramShort);
+    }
 
-    private static native short GDHasScale(int paramInt, short paramShort, int[] paramArrayOfInt);
+    private static short GDHasScale(int paramInt, short paramShort, int[] paramArrayOfInt) {
+        return QuickDrawManager.GDHasScale(paramInt, paramShort, paramArrayOfInt);
+    }
 
-    private static native short GDGetScale(int paramInt, int[] paramArrayOfInt, short[] paramArrayOfShort);
+    private static short GDGetScale(int paramInt, int[] paramArrayOfInt, short[] paramArrayOfShort) {
+        return QuickDrawManager.GDGetScale(paramInt, paramArrayOfInt, paramArrayOfShort);
+    }
 
-    private static native short GDSetScale(int paramInt1, int paramInt2, short paramShort);
+    private static short GDSetScale(int paramInt1, int paramInt2, short paramShort) {
+        return QuickDrawManager.GDSetScale(paramInt1, paramInt2, paramShort);
+    }
 }

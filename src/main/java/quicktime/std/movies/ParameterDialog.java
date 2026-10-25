@@ -9,6 +9,10 @@ import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.EffectsManager;
+import quicktime.internal.toolbox.PlatformManager;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.Pict;
@@ -312,31 +316,59 @@ public final class ParameterDialog implements QuickTimeLib {
     private ParameterDialog() {
     }
 
-    private static native short QTCreateStandardParameterDialog(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short QTCreateStandardParameterDialog(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return EffectsManager.QTCreateStandardParameterDialog(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return StreamingManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short QTIsStandardParameterDialogEvent(byte[] paramArrayOfByte, int paramInt);
+    private static short QTIsStandardParameterDialogEvent(byte[] paramArrayOfByte, int paramInt) {
+        return EffectsManager.QTIsStandardParameterDialogEvent(paramArrayOfByte, paramInt);
+    }
 
-    private static native short QTDismissStandardParameterDialog(int paramInt);
+    private static short QTDismissStandardParameterDialog(int paramInt) {
+        return EffectsManager.QTDismissStandardParameterDialog(paramInt);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTGetEffectSpeed(int paramInt, int[] paramArrayOfInt);
+    private static short QTGetEffectSpeed(int paramInt, int[] paramArrayOfInt) {
+        return EffectsManager.QTGetEffectSpeed(paramInt, paramArrayOfInt);
+    }
 
-    private static native boolean GetNextEvent(short paramShort, byte[] paramArrayOfByte);
+    private static boolean GetNextEvent(short paramShort, byte[] paramArrayOfByte) {
+        return PlatformManager.GetNextEvent(paramShort, paramArrayOfByte);
+    }
 
-    private static native void BeginUpdate(int paramInt);
+    private static void BeginUpdate(int paramInt) {
+        QuickDrawManager.BeginUpdate(paramInt);
+    }
 
-    private static native void EndUpdate(int paramInt);
+    private static void EndUpdate(int paramInt) {
+        QuickDrawManager.EndUpdate(paramInt);
+    }
 
-    private static native void SetPort(int paramInt);
+    private static void SetPort(int paramInt) {
+        QuickDrawManager.SetPort(paramInt);
+    }
 
-    private static native void MacSetPort(int paramInt);
+    private static void MacSetPort(int paramInt) {
+        QuickDrawManager.MacSetPort(paramInt);
+    }
 
-    private static native void InvalRect(short[] paramArrayOfShort);
+    private static void InvalRect(short[] paramArrayOfShort) {
+        QuickDrawManager.InvalRect(paramArrayOfShort);
+    }
 }

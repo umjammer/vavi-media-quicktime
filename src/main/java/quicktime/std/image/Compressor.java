@@ -3,6 +3,8 @@ package quicktime.std.image;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -66,9 +68,13 @@ public final class Compressor extends CodecComponent implements QuickTimeLib {
         return localCompressor;
     }
 
-    private static native short FindCodec(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3);
+    private static short FindCodec(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
+        return ImageCompressionManager.FindCodec(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    }
 
-    private static native int SGGetVideoCompressor(int paramInt, short[] paramArrayOfShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4);
+    private static int SGGetVideoCompressor(int paramInt, short[] paramArrayOfShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
+        return SequenceGrabberManager.SGGetVideoCompressor(paramInt, paramArrayOfShort, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

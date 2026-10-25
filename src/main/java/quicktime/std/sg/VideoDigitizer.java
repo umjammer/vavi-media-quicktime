@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.Region;
@@ -187,24 +188,44 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static native int VDGetNumberOfInputs(int paramInt, short[] paramArrayOfShort);
+    private static int VDGetNumberOfInputs(int paramInt, short[] paramArrayOfShort) {
+        return SequenceGrabberManager.VDGetNumberOfInputs(paramInt, paramArrayOfShort);
+    }
 
-    private static native int VDSetInput(int paramInt, short paramShort);
+    private static int VDSetInput(int paramInt, short paramShort) {
+        return SequenceGrabberManager.VDSetInput(paramInt, paramShort);
+    }
 
-    private static native int VDGetInput(int paramInt, short[] paramArrayOfShort);
+    private static int VDGetInput(int paramInt, short[] paramArrayOfShort) {
+        return SequenceGrabberManager.VDGetInput(paramInt, paramArrayOfShort);
+    }
 
-    private static native int VDSetClipRgn(int paramInt1, int paramInt2);
+    private static int VDSetClipRgn(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.VDSetClipRgn(paramInt1, paramInt2);
+    }
 
-    private static native int VDClearClipRgn(int paramInt1, int paramInt2);
+    private static int VDClearClipRgn(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.VDClearClipRgn(paramInt1, paramInt2);
+    }
 
-    private static native int VDSetClipState(int paramInt, short paramShort);
+    private static int VDSetClipState(int paramInt, short paramShort) {
+        return SequenceGrabberManager.VDSetClipState(paramInt, paramShort);
+    }
 
-    private static native int VDGetClipState(int paramInt, short[] paramArrayOfShort);
+    private static int VDGetClipState(int paramInt, short[] paramArrayOfShort) {
+        return SequenceGrabberManager.VDGetClipState(paramInt, paramArrayOfShort);
+    }
 
-    private static native int VDGetDigitizerInfo(int paramInt, byte[] paramArrayOfByte);
+    private static int VDGetDigitizerInfo(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.VDGetDigitizerInfo(paramInt, paramArrayOfByte);
+    }
 
-    private static native int VDGetInputFormat(int paramInt, short paramShort, short[] paramArrayOfShort);
+    private static int VDGetInputFormat(int paramInt, short paramShort, short[] paramArrayOfShort) {
+        return SequenceGrabberManager.VDGetInputFormat(paramInt, paramShort, paramArrayOfShort);
+    }
 
-    private static native int VDSetInputStandard(int paramInt, short paramShort);
+    private static int VDSetInputStandard(int paramInt, short paramShort) {
+        return SequenceGrabberManager.VDSetInputStandard(paramInt, paramShort);
+    }
 }
 

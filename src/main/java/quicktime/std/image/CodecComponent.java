@@ -2,6 +2,7 @@ package quicktime.std.image;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.comp.ComponentIdentifier;
@@ -62,5 +63,7 @@ public class CodecComponent extends ComponentIdentifier implements QuickTimeLib 
         super(paramInt, new Object());
     }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 }

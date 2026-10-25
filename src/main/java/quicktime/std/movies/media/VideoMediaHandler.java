@@ -2,6 +2,7 @@ package quicktime.std.movies.media;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -63,10 +64,16 @@ public class VideoMediaHandler extends VisualMediaHandler implements QuickTimeLi
         return arrayOfInt[0];
     }
 
-    private static native int VideoMediaResetStatistics(int paramInt);
+    private static int VideoMediaResetStatistics(int paramInt) {
+        return MediaHandlerManager.VideoMediaResetStatistics(paramInt);
+    }
 
-    private static native int VideoMediaGetStatistics(int paramInt);
+    private static int VideoMediaGetStatistics(int paramInt) {
+        return MediaHandlerManager.VideoMediaGetStatistics(paramInt);
+    }
 
-    private static native int VideoMediaGetStallCount(int paramInt, int[] paramArrayOfInt);
+    private static int VideoMediaGetStallCount(int paramInt, int[] paramArrayOfInt) {
+        return MediaHandlerManager.VideoMediaGetStallCount(paramInt, paramArrayOfInt);
+    }
 }
 

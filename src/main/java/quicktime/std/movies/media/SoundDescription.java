@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -202,8 +203,12 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         return QTHandle.fromSoundDescription(this, paramInt);
     }
 
-    private static native short AddSoundDescriptionExtension(int paramInt1, int paramInt2, int paramInt3);
+    private static short AddSoundDescriptionExtension(int paramInt1, int paramInt2, int paramInt3) {
+        return SoundManager.AddSoundDescriptionExtension(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short RemoveSoundDescriptionExtension(int paramInt1, int paramInt2);
+    private static short RemoveSoundDescriptionExtension(int paramInt1, int paramInt2) {
+        return SoundManager.RemoveSoundDescriptionExtension(paramInt1, paramInt2);
+    }
 }
 

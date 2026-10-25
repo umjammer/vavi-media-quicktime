@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
@@ -102,13 +104,23 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
         return localMatrix;
     }
 
-    private static native int SGSetChannelBounds(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetChannelBounds(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetChannelBounds(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGGetChannelBounds(int paramInt, byte[] paramArrayOfByte);
+    private static int SGGetChannelBounds(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGGetChannelBounds(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSetChannelClip(int paramInt1, int paramInt2);
+    private static int SGSetChannelClip(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetChannelClip(paramInt1, paramInt2);
+    }
 
-    private static native int SGSetChannelMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return MatrixManager.SGSetChannelMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGGetChannelMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static int SGGetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return MatrixManager.SGGetChannelMatrix(paramInt, paramArrayOfByte);
+    }
 }

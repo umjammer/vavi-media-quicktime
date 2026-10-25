@@ -2,6 +2,7 @@ package quicktime.util;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 
@@ -171,10 +172,16 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         return getClass().getName();
     }
 
-    private static native byte getByteFromArray(int[] paramArrayOfInt, int paramInt);
+    private static byte getByteFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getByteFromArray(paramArrayOfInt, paramInt);
+    }
 
-    private static native short getShortFromArray(int[] paramArrayOfInt, int paramInt);
+    private static short getShortFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfInt, paramInt);
+    }
 
-    private static native int getIntFromArray(int[] paramArrayOfInt, int paramInt);
+    private static int getIntFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
+    }
 }
 

@@ -7,6 +7,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MusicManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -312,27 +313,51 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
         StdQTException.checkError(NALoseDefaultMIDIInput(_ID()));
     }
 
-    private static native int NAGetIndNoteChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int NAGetIndNoteChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return MusicManager.NAGetIndNoteChannel(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int NATask(int paramInt);
+    private static int NATask(int paramInt) {
+        return MusicManager.NATask(paramInt);
+    }
 
-    private static native int NAPickArrangement(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte2);
+    private static int NAPickArrangement(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte2) {
+        return MusicManager.NAPickArrangement(paramInt1, paramInt2, paramArrayOfByte1, paramInt3, paramInt4, paramInt5, paramArrayOfByte2);
+    }
 
-    private static native int NACopyrightDialog(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, int paramInt3, int paramInt4);
+    private static int NACopyrightDialog(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, int paramInt3, int paramInt4) {
+        return MusicManager.NACopyrightDialog(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4, paramInt3, paramInt4);
+    }
 
-    private static native int NAGetRegisteredMusicDevice(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2);
+    private static int NAGetRegisteredMusicDevice(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
+        return MusicManager.NAGetRegisteredMusicDevice(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
+    }
 
-    private static native int NARegisterMusicDevice(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int NARegisterMusicDevice(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return MusicManager.NARegisterMusicDevice(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int NAUnregisterMusicDevice(int paramInt1, int paramInt2);
+    private static int NAUnregisterMusicDevice(int paramInt1, int paramInt2) {
+        return MusicManager.NAUnregisterMusicDevice(paramInt1, paramInt2);
+    }
 
-    private static native int NAGetDefaultMIDIInput(int paramInt, byte[] paramArrayOfByte);
+    private static int NAGetDefaultMIDIInput(int paramInt, byte[] paramArrayOfByte) {
+        return MusicManager.NAGetDefaultMIDIInput(paramInt, paramArrayOfByte);
+    }
 
-    private static native int NASetDefaultMIDIInput(int paramInt, byte[] paramArrayOfByte);
+    private static int NASetDefaultMIDIInput(int paramInt, byte[] paramArrayOfByte) {
+        return MusicManager.NASetDefaultMIDIInput(paramInt, paramArrayOfByte);
+    }
 
-    private static native int NASaveMusicConfiguration(int paramInt);
+    private static int NASaveMusicConfiguration(int paramInt) {
+        return MusicManager.NASaveMusicConfiguration(paramInt);
+    }
 
-    private static native int NAGetMIDIPorts(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int NAGetMIDIPorts(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return MusicManager.NAGetMIDIPorts(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int NALoseDefaultMIDIInput(int paramInt);
+    private static int NALoseDefaultMIDIInput(int paramInt) {
+        return MusicManager.NALoseDefaultMIDIInput(paramInt);
+    }
 }

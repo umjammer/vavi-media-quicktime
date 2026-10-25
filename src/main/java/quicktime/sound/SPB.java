@@ -3,6 +3,8 @@ package quicktime.sound;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTPointerRef;
@@ -306,21 +308,39 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
         SoundException.checkError(i);
     }
 
-    private static native short getShortFromPointer(int paramInt1, int paramInt2);
+    private static short getShortFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void setShortInPointer(int paramInt1, int paramInt2, short paramShort);
+    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
+        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    }
 
-    private static native short SPBRecord(int paramInt, byte paramByte);
+    private static short SPBRecord(int paramInt, byte paramByte) {
+        return SoundManager.SPBRecord(paramInt, paramByte);
+    }
 
-    private static native short SPBPauseRecording(int paramInt);
+    private static short SPBPauseRecording(int paramInt) {
+        return SoundManager.SPBPauseRecording(paramInt);
+    }
 
-    private static native short SPBResumeRecording(int paramInt);
+    private static short SPBResumeRecording(int paramInt) {
+        return SoundManager.SPBResumeRecording(paramInt);
+    }
 
-    private static native short SPBStopRecording(int paramInt);
+    private static short SPBStopRecording(int paramInt) {
+        return SoundManager.SPBStopRecording(paramInt);
+    }
 
-    private static native short SPBGetRecordingStatus(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4);
+    private static short SPBGetRecordingStatus(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
+        return SoundManager.SPBGetRecordingStatus(paramInt, paramArrayOfShort1, paramArrayOfShort2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    }
 }

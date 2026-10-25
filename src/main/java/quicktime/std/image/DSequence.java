@@ -5,6 +5,9 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.PixMap;
 import quicktime.qd.QDColor;
@@ -554,71 +557,137 @@ public final class DSequence extends CDSequence {
     private void setDataProc(Object paramObject, int paramInt) {
     }
 
-    private static native short DecompressSequenceBegin(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt4, short paramShort2, int paramInt5, int paramInt6);
+    private static short DecompressSequenceBegin(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt4, short paramShort2, int paramInt5, int paramInt6) {
+        return ImageCompressionManager.DecompressSequenceBegin(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt4, paramShort2, paramInt5, paramInt6);
+    }
 
-    private static native short DecompressSequenceBeginS(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt6, short paramShort2, int paramInt7, int paramInt8);
+    private static short DecompressSequenceBeginS(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt6, short paramShort2, int paramInt7, int paramInt8) {
+        return ImageCompressionManager.DecompressSequenceBeginS(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt6, paramShort2, paramInt7, paramInt8);
+    }
 
-    private static native short DecompressSequenceBeginS(int[] paramArrayOfInt, int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, short paramShort1, int paramInt5, short paramShort2, int paramInt6, int paramInt7);
+    private static short DecompressSequenceBeginS(int[] paramArrayOfInt, int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, short paramShort1, int paramInt5, short paramShort2, int paramInt6, int paramInt7) {
+        return ImageCompressionManager.DecompressSequenceBeginS(paramArrayOfInt, paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramInt4, paramArrayOfByte2, paramArrayOfByte3, paramShort1, paramInt5, paramShort2, paramInt6, paramInt7);
+    }
 
-    private static native short DecompressSequenceBeginS(int[] paramArrayOfInt1, int paramInt1, int[] paramArrayOfInt2, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt5, short paramShort2, int paramInt6, int paramInt7);
+    private static short DecompressSequenceBeginS(int[] paramArrayOfInt1, int paramInt1, int[] paramArrayOfInt2, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt5, short paramShort2, int paramInt6, int paramInt7) {
+        return ImageCompressionManager.DecompressSequenceBeginS(paramArrayOfInt1, paramInt1, paramArrayOfInt2, paramInt2, paramInt3, paramInt4, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt5, paramShort2, paramInt6, paramInt7);
+    }
 
-    private static native short DecompressSequenceFrameS(int paramInt1, int paramInt2, int paramInt3, short paramShort, short[] paramArrayOfShort, int paramInt4);
+    private static short DecompressSequenceFrameS(int paramInt1, int paramInt2, int paramInt3, short paramShort, short[] paramArrayOfShort, int paramInt4) {
+        return ImageCompressionManager.DecompressSequenceFrameS(paramInt1, paramInt2, paramInt3, paramShort, paramArrayOfShort, paramInt4);
+    }
 
-    private static native short DecompressSequenceFrameS(int paramInt1, byte[] paramArrayOfByte, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3);
+    private static short DecompressSequenceFrameS(int paramInt1, byte[] paramArrayOfByte, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3) {
+        return ImageCompressionManager.DecompressSequenceFrameS(paramInt1, paramArrayOfByte, paramInt2, paramShort, paramArrayOfShort, paramInt3);
+    }
 
-    private static native short DecompressSequenceFrameS(int paramInt1, int[] paramArrayOfInt, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3);
+    private static short DecompressSequenceFrameS(int paramInt1, int[] paramArrayOfInt, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3) {
+        return ImageCompressionManager.DecompressSequenceFrameS(paramInt1, paramArrayOfInt, paramInt2, paramShort, paramArrayOfShort, paramInt3);
+    }
 
-    private static native short DecompressSequenceFrame(int paramInt1, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3);
+    private static short DecompressSequenceFrame(int paramInt1, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3) {
+        return ImageCompressionManager.DecompressSequenceFrame(paramInt1, paramInt2, paramShort, paramArrayOfShort, paramInt3);
+    }
 
-    private static native short DecompressSequenceFrame(int paramInt1, byte[] paramArrayOfByte, short paramShort, short[] paramArrayOfShort, int paramInt2);
+    private static short DecompressSequenceFrame(int paramInt1, byte[] paramArrayOfByte, short paramShort, short[] paramArrayOfShort, int paramInt2) {
+        return ImageCompressionManager.DecompressSequenceFrame(paramInt1, paramArrayOfByte, paramShort, paramArrayOfShort, paramInt2);
+    }
 
-    private static native short DecompressSequenceFrame(int paramInt1, int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int paramInt2);
+    private static short DecompressSequenceFrame(int paramInt1, int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int paramInt2) {
+        return ImageCompressionManager.DecompressSequenceFrame(paramInt1, paramArrayOfInt, paramShort, paramArrayOfShort, paramInt2);
+    }
 
-    private static native short DecompressSequenceFrameWhen(int paramInt1, int paramInt2, int paramInt3, short paramShort, short[] paramArrayOfShort, int paramInt4, byte[] paramArrayOfByte);
+    private static short DecompressSequenceFrameWhen(int paramInt1, int paramInt2, int paramInt3, short paramShort, short[] paramArrayOfShort, int paramInt4, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.DecompressSequenceFrameWhen(paramInt1, paramInt2, paramInt3, paramShort, paramArrayOfShort, paramInt4, paramArrayOfByte);
+    }
 
-    private static native short DecompressSequenceFrameWhen(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3, byte[] paramArrayOfByte2);
+    private static short DecompressSequenceFrameWhen(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3, byte[] paramArrayOfByte2) {
+        return ImageCompressionManager.DecompressSequenceFrameWhen(paramInt1, paramArrayOfByte1, paramInt2, paramShort, paramArrayOfShort, paramInt3, paramArrayOfByte2);
+    }
 
-    private static native short DecompressSequenceFrameWhen(int paramInt1, int[] paramArrayOfInt, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3, byte[] paramArrayOfByte);
+    private static short DecompressSequenceFrameWhen(int paramInt1, int[] paramArrayOfInt, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.DecompressSequenceFrameWhen(paramInt1, paramArrayOfInt, paramInt2, paramShort, paramArrayOfShort, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short SetDSequenceTransferMode(int paramInt, short paramShort, byte[] paramArrayOfByte);
+    private static short SetDSequenceTransferMode(int paramInt, short paramShort, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SetDSequenceTransferMode(paramInt, paramShort, paramArrayOfByte);
+    }
 
-    private static native short SetDSequenceSrcRect(int paramInt, byte[] paramArrayOfByte);
+    private static short SetDSequenceSrcRect(int paramInt, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SetDSequenceSrcRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static short SetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return MatrixManager.SetDSequenceMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SetDSequenceMask(int paramInt1, int paramInt2);
+    private static short SetDSequenceMask(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SetDSequenceMask(paramInt1, paramInt2);
+    }
 
-    private static native short SetDSequenceMatte(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SetDSequenceMatte(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SetDSequenceMatte(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SetDSequenceAccuracy(int paramInt1, int paramInt2);
+    private static short SetDSequenceAccuracy(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SetDSequenceAccuracy(paramInt1, paramInt2);
+    }
 
-    private static native short GetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static short GetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return MatrixManager.GetDSequenceMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SetDSequenceFlags(int paramInt1, int paramInt2, int paramInt3);
+    private static short SetDSequenceFlags(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.SetDSequenceFlags(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short PtInDSequenceData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte);
+    private static short PtInDSequenceData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.PtInDSequenceData(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    }
 
-    private static native short PtInDSequenceData(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2);
+    private static short PtInDSequenceData(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2) {
+        return ImageCompressionManager.PtInDSequenceData(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2);
+    }
 
-    private static native short PtInDSequenceData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static short PtInDSequenceData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.PtInDSequenceData(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short CDSequenceFlush(int paramInt);
+    private static short CDSequenceFlush(int paramInt) {
+        return ImageCompressionManager.CDSequenceFlush(paramInt);
+    }
 
-    private static native short CDSequenceInvalidate(int paramInt1, int paramInt2);
+    private static short CDSequenceInvalidate(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.CDSequenceInvalidate(paramInt1, paramInt2);
+    }
 
-    private static native short ICMShieldSequenceCursor(int paramInt);
+    private static short ICMShieldSequenceCursor(int paramInt) {
+        return ImageCompressionManager.ICMShieldSequenceCursor(paramInt);
+    }
 
-    private static native short HitTestDSequenceData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt, int paramInt5);
+    private static short HitTestDSequenceData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt, int paramInt5) {
+        return ImageCompressionManager.HitTestDSequenceData(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt, paramInt5);
+    }
 
-    private static native short HitTestDSequenceData(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int paramInt4);
+    private static short HitTestDSequenceData(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int paramInt4) {
+        return ImageCompressionManager.HitTestDSequenceData(paramInt1, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2, paramInt4);
+    }
 
-    private static native short HitTestDSequenceData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4);
+    private static short HitTestDSequenceData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4) {
+        return ImageCompressionManager.HitTestDSequenceData(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt, paramInt4);
+    }
 
-    private static native short SetDSequenceTimeCode(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static short SetDSequenceTimeCode(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return ImageCompressionManager.SetDSequenceTimeCode(paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

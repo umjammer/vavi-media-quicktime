@@ -3,6 +3,7 @@ package quicktime.qd;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 
@@ -79,7 +80,11 @@ public final class SetGWorld implements QuickTimeLib {
         }
     }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 }

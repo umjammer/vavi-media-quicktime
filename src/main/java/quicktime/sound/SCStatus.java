@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
@@ -149,10 +150,16 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         return getClass().getName() + "[startTime=" + getStartTime() + ",endTime=" + getEndTime() + ",currentTime" + getCurrentTime() + ",channelBusy" + getChannelBusy() + ",channelPaused" + getChannelPaused() + "]";
     }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native byte getByteFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static byte getByteFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getByteFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 }
 

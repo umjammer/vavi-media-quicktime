@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.SoundLib;
@@ -364,24 +365,44 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
         return arrayOfInt;
     }
 
-    private static native short SndNewChannel(int[] paramArrayOfInt, short paramShort, int paramInt1, int paramInt2);
+    private static short SndNewChannel(int[] paramArrayOfInt, short paramShort, int paramInt1, int paramInt2) {
+        return SoundManager.SndNewChannel(paramArrayOfInt, paramShort, paramInt1, paramInt2);
+    }
 
-    private static native short SndPlay(int paramInt1, int paramInt2, byte paramByte);
+    private static short SndPlay(int paramInt1, int paramInt2, byte paramByte) {
+        return SoundManager.SndPlay(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native short SndChannelStatus(int paramInt, short paramShort, byte[] paramArrayOfByte);
+    private static short SndChannelStatus(int paramInt, short paramShort, byte[] paramArrayOfByte) {
+        return SoundManager.SndChannelStatus(paramInt, paramShort, paramArrayOfByte);
+    }
 
-    private static native short SndDoCommand(int paramInt1, int paramInt2, byte paramByte);
+    private static short SndDoCommand(int paramInt1, int paramInt2, byte paramByte) {
+        return SoundManager.SndDoCommand(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native short SndDoImmediate(int paramInt1, int paramInt2);
+    private static short SndDoImmediate(int paramInt1, int paramInt2) {
+        return SoundManager.SndDoImmediate(paramInt1, paramInt2);
+    }
 
-    private static native short SndSetInfo(int paramInt1, int paramInt2, byte paramByte);
+    private static short SndSetInfo(int paramInt1, int paramInt2, byte paramByte) {
+        return SoundManager.SndSetInfo(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native short SndSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SndSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SoundManager.SndSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SndSetInfo(int paramInt1, int paramInt2, int paramInt3);
+    private static short SndSetInfo(int paramInt1, int paramInt2, int paramInt3) {
+        return SoundManager.SndSetInfo(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SndGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SndGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SndGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short SndGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }
 

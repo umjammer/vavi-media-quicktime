@@ -7,6 +7,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MusicManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -399,45 +400,85 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
         StdQTException.checkError(NASetNoteChannelSoundLocalization(QTObject.ID(this.na), _ID(), QTObject.ID(paramSoundLocalization)));
     }
 
-    private static native int NANewNoteChannel(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int NANewNoteChannel(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return MusicManager.NANewNoteChannel(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int NAGetNoteChannelInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int NAGetNoteChannelInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return MusicManager.NAGetNoteChannelInfo(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int NAPrerollNoteChannel(int paramInt1, int paramInt2);
+    private static int NAPrerollNoteChannel(int paramInt1, int paramInt2) {
+        return MusicManager.NAPrerollNoteChannel(paramInt1, paramInt2);
+    }
 
-    private static native int NAUnrollNoteChannel(int paramInt1, int paramInt2);
+    private static int NAUnrollNoteChannel(int paramInt1, int paramInt2) {
+        return MusicManager.NAUnrollNoteChannel(paramInt1, paramInt2);
+    }
 
-    private static native int NAResetNoteChannel(int paramInt1, int paramInt2);
+    private static int NAResetNoteChannel(int paramInt1, int paramInt2) {
+        return MusicManager.NAResetNoteChannel(paramInt1, paramInt2);
+    }
 
-    private static native int NASetNoteChannelVolume(int paramInt1, int paramInt2, int paramInt3);
+    private static int NASetNoteChannelVolume(int paramInt1, int paramInt2, int paramInt3) {
+        return MusicManager.NASetNoteChannelVolume(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int NAPlayNote(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int NAPlayNote(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MusicManager.NAPlayNote(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int NAGetController(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static int NAGetController(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return MusicManager.NAGetController(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native int NASetController(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int NASetController(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MusicManager.NASetController(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int NAGetKnob(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static int NAGetKnob(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return MusicManager.NAGetKnob(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native int NASetKnob(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int NASetKnob(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MusicManager.NASetKnob(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int NAFindNoteChannelTone(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int NAFindNoteChannelTone(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return MusicManager.NAFindNoteChannelTone(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int NASetAtomicInstrument(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int NASetAtomicInstrument(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MusicManager.NASetAtomicInstrument(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int NASetInstrumentNumber(int paramInt1, int paramInt2, int paramInt3);
+    private static int NASetInstrumentNumber(int paramInt1, int paramInt2, int paramInt3) {
+        return MusicManager.NASetInstrumentNumber(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int NAGetNoteRequest(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int NAGetNoteRequest(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.NAGetNoteRequest(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int NAPickEditInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static int NAPickEditInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return MusicManager.NAPickEditInstrument(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native int NASendMIDI(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int NASendMIDI(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.NASendMIDI(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int NASetNoteChannelSoundLocalization(int paramInt1, int paramInt2, int paramInt3);
+    private static int NASetNoteChannelSoundLocalization(int paramInt1, int paramInt2, int paramInt3) {
+        return MusicManager.NASetNoteChannelSoundLocalization(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int NASetNoteChannelBalance(int paramInt1, int paramInt2, int paramInt3);
+    private static int NASetNoteChannelBalance(int paramInt1, int paramInt2, int paramInt3) {
+        return MusicManager.NASetNoteChannelBalance(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int NAGetRegisteredMusicDevice(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt);
+    private static int NAGetRegisteredMusicDevice(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt) {
+        return MusicManager.NAGetRegisteredMusicDevice(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music

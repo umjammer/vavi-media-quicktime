@@ -6,6 +6,9 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -590,84 +593,164 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
     }
 
-    private static native int SCCompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort);
+    private static int SCCompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCCompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfShort);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int GetHandleSize(int paramInt);
+    private static int GetHandleSize(int paramInt) {
+        return MemoryManager.GetHandleSize(paramInt);
+    }
 
-    private static native void HLock(int paramInt);
+    private static void HLock(int paramInt) {
+        MemoryManager.HLock(paramInt);
+    }
 
-    private static native void HLockHi(int paramInt);
+    private static void HLockHi(int paramInt) {
+        MemoryManager.HLockHi(paramInt);
+    }
 
-    private static native void MoveHHi(int paramInt);
+    private static void MoveHHi(int paramInt) {
+        MemoryManager.MoveHHi(paramInt);
+    }
 
-    private static native void HUnlock(int paramInt);
+    private static void HUnlock(int paramInt) {
+        MemoryManager.HUnlock(paramInt);
+    }
 
-    private static native short MemError();
+    private static short MemError() {
+        return MemoryManager.MemError();
+    }
 
-    private static native int NewHandleClear(int paramInt);
+    private static int NewHandleClear(int paramInt) {
+        return MemoryManager.NewHandleClear(paramInt);
+    }
 
-    private static native int NewHandle(int paramInt);
+    private static int NewHandle(int paramInt) {
+        return MemoryManager.NewHandle(paramInt);
+    }
 
-    private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
+    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, short[] paramArrayOfShort, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, short[] paramArrayOfShort, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfShort, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, char[] paramArrayOfChar, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, char[] paramArrayOfChar, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfChar, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfInt, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfFloat, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, double[] paramArrayOfDouble, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, double[] paramArrayOfDouble, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfDouble, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(short[] paramArrayOfShort, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(short[] paramArrayOfShort, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfShort, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(char[] paramArrayOfChar, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(char[] paramArrayOfChar, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfChar, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(float[] paramArrayOfFloat, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(float[] paramArrayOfFloat, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfFloat, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(long[] paramArrayOfLong, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(long[] paramArrayOfLong, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfLong, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyArrayToPointer(double[] paramArrayOfDouble, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(double[] paramArrayOfDouble, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfDouble, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native byte getByteFromHandle(int paramInt1, int paramInt2);
+    private static byte getByteFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native short getShortFromHandle(int paramInt1, int paramInt2);
+    private static short getShortFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromHandle(int paramInt1, int paramInt2);
+    private static int getIntFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native long getLongFromHandle(int paramInt1, int paramInt2);
+    private static long getLongFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getLongFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native float getFloatFromHandle(int paramInt1, int paramInt2);
+    private static float getFloatFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getFloatFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native double getDoubleFromHandle(int paramInt1, int paramInt2);
+    private static double getDoubleFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getDoubleFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native void setByteInHandle(int paramInt1, int paramInt2, byte paramByte);
+    private static void setByteInHandle(int paramInt1, int paramInt2, byte paramByte) {
+        MemoryManager.setByteInHandle(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native void setShortInHandle(int paramInt1, int paramInt2, short paramShort);
+    private static void setShortInHandle(int paramInt1, int paramInt2, short paramShort) {
+        MemoryManager.setShortInHandle(paramInt1, paramInt2, paramShort);
+    }
 
-    private static native void setIntInHandle(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInHandle(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInHandle(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void setLongInHandle(int paramInt1, int paramInt2, long paramLong);
+    private static void setLongInHandle(int paramInt1, int paramInt2, long paramLong) {
+        MemoryManager.setLongInHandle(paramInt1, paramInt2, paramLong);
+    }
 
-    private static native void setFloatInHandle(int paramInt1, int paramInt2, float paramFloat);
+    private static void setFloatInHandle(int paramInt1, int paramInt2, float paramFloat) {
+        MemoryManager.setFloatInHandle(paramInt1, paramInt2, paramFloat);
+    }
 
-    private static native void setDoubleInHandle(int paramInt1, int paramInt2, double paramDouble);
+    private static void setDoubleInHandle(int paramInt1, int paramInt2, double paramDouble) {
+        MemoryManager.setDoubleInHandle(paramInt1, paramInt2, paramDouble);
+    }
 }
 

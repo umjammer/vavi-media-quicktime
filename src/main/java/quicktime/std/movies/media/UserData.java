@@ -4,6 +4,12 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MediaHandlerManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -405,68 +411,132 @@ public final class UserData extends QTObject implements QuickTimeLib {
         StdQTException.checkError(CopyUserData(QTObject.ID(paramUserData1), QTObject.ID(paramUserData2), paramInt));
     }
 
-    private static native void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native int NewHandle(int paramInt);
+    private static int NewHandle(int paramInt) {
+        return MemoryManager.NewHandle(paramInt);
+    }
 
-    private static native int GetHandleSize(int paramInt);
+    private static int GetHandleSize(int paramInt) {
+        return MemoryManager.GetHandleSize(paramInt);
+    }
 
-    private static native void DisposeHandle(int paramInt);
+    private static void DisposeHandle(int paramInt) {
+        MemoryManager.DisposeHandle(paramInt);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void HLock(int paramInt);
+    private static void HLock(int paramInt) {
+        MemoryManager.HLock(paramInt);
+    }
 
-    private static native int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ComponentManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetMetaData(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GetMovieUserData(int paramInt);
+    private static int GetMovieUserData(int paramInt) {
+        return MovieToolbox.GetMovieUserData(paramInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int SGGetSettings(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+    private static int SGGetSettings(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
+        return SequenceGrabberManager.SGGetSettings(paramInt1, paramArrayOfInt, paramInt2);
+    }
 
-    private static native int SGGetChannelSettings(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3);
+    private static int SGGetChannelSettings(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
+        return SequenceGrabberManager.SGGetChannelSettings(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    }
 
-    private static native int GetTrackUserData(int paramInt);
+    private static int GetTrackUserData(int paramInt) {
+        return MovieToolbox.GetTrackUserData(paramInt);
+    }
 
-    private static native int GetMediaUserData(int paramInt);
+    private static int GetMediaUserData(int paramInt) {
+        return MovieToolbox.GetMediaUserData(paramInt);
+    }
 
-    private static native short NewUserData(int[] paramArrayOfInt);
+    private static short NewUserData(int[] paramArrayOfInt) {
+        return MovieToolbox.NewUserData(paramArrayOfInt);
+    }
 
-    private static native short NewUserDataFromHandle(int paramInt, int[] paramArrayOfInt);
+    private static short NewUserDataFromHandle(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.NewUserDataFromHandle(paramInt, paramArrayOfInt);
+    }
 
-    private static native short PutUserDataIntoHandle(int paramInt1, int paramInt2);
+    private static short PutUserDataIntoHandle(int paramInt1, int paramInt2) {
+        return MovieToolbox.PutUserDataIntoHandle(paramInt1, paramInt2);
+    }
 
-    private static native short GetUserData(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short GetUserData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.GetUserData(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short AddUserData(int paramInt1, int paramInt2, int paramInt3);
+    private static short AddUserData(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.AddUserData(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short RemoveUserData(int paramInt1, int paramInt2, int paramInt3);
+    private static short RemoveUserData(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.RemoveUserData(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short CountUserDataType(int paramInt1, int paramInt2);
+    private static short CountUserDataType(int paramInt1, int paramInt2) {
+        return MovieToolbox.CountUserDataType(paramInt1, paramInt2);
+    }
 
-    private static native int GetNextUserDataType(int paramInt1, int paramInt2);
+    private static int GetNextUserDataType(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetNextUserDataType(paramInt1, paramInt2);
+    }
 
-    private static native short GetUserDataItem(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short GetUserDataItem(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.GetUserDataItem(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short SetUserDataItem(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short SetUserDataItem(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.SetUserDataItem(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short AddUserDataText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort);
+    private static short AddUserDataText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort) {
+        return MovieToolbox.AddUserDataText(paramInt1, paramInt2, paramInt3, paramInt4, paramShort);
+    }
 
-    private static native short GetUserDataText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort);
+    private static short GetUserDataText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort) {
+        return MovieToolbox.GetUserDataText(paramInt1, paramInt2, paramInt3, paramInt4, paramShort);
+    }
 
-    private static native short RemoveUserDataText(int paramInt1, int paramInt2, int paramInt3, short paramShort);
+    private static short RemoveUserDataText(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
+        return MovieToolbox.RemoveUserDataText(paramInt1, paramInt2, paramInt3, paramShort);
+    }
 
-    private static native int MediaSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MediaSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MediaGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte);
+    private static int MediaGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    }
 
-    private static native int MediaGetTrackOpaque(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaGetTrackOpaque(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetTrackOpaque(paramInt, paramArrayOfByte);
+    }
 
-    private static native short CopyUserData(int paramInt1, int paramInt2, int paramInt3);
+    private static short CopyUserData(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.CopyUserData(paramInt1, paramInt2, paramInt3);
+    }
 }
 

@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.util.QTPointerRef;
@@ -183,8 +184,12 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
         return getClass().getName() + "[cmd=" + getCmd() + ",param1=" + getParam1() + ",param2=" + getParam2() + "]";
     }
 
-    private static native short getShortFromPointer(int paramInt1, int paramInt2);
+    private static short getShortFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 }
 

@@ -6,6 +6,7 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -168,13 +169,23 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         OffsetPoly(_ID(), (short) paramInt1, (short) paramInt2);
     }
 
-    private static native int OpenPoly();
+    private static int OpenPoly() {
+        return QuickDrawManager.OpenPoly();
+    }
 
-    private static native void ClosePoly();
+    private static void ClosePoly() {
+        QuickDrawManager.ClosePoly();
+    }
 
-    private static native void OffsetPoly(int paramInt, short paramShort1, short paramShort2);
+    private static void OffsetPoly(int paramInt, short paramShort1, short paramShort2) {
+        QuickDrawManager.OffsetPoly(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 }

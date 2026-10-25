@@ -4,6 +4,12 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.FileManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -354,40 +360,76 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
         return new QTHandle(makeAndCopyHandle(), null, false);
     }
 
-    private static native short GetSoundDescriptionExtension(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+    private static short GetSoundDescriptionExtension(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
+        return SoundManager.GetSoundDescriptionExtension(paramInt1, paramArrayOfInt, paramInt2);
+    }
 
-    private static native short GetImageDescriptionExtension(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3);
+    private static short GetImageDescriptionExtension(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.GetImageDescriptionExtension(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportGetDataHandle(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetDataHandle(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetDataHandle(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return FileManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int TCGetTimeCodeAtTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2);
+    private static int TCGetTimeCodeAtTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
+        return ComponentManager.TCGetTimeCodeAtTime(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
+    }
 
-    private static native int TCGetCurrentTimeCode(int paramInt, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2);
+    private static int TCGetCurrentTimeCode(int paramInt, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
+        return ComponentManager.TCGetCurrentTimeCode(paramInt, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
+    }
 
-    private static native int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ComponentManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short GetTrackSoundLocalizationSettings(int paramInt, int[] paramArrayOfInt);
+    private static short GetTrackSoundLocalizationSettings(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetTrackSoundLocalizationSettings(paramInt, paramArrayOfInt);
+    }
 
-    private static native void ReserveMem(int paramInt);
+    private static void ReserveMem(int paramInt) {
+        MemoryManager.ReserveMem(paramInt);
+    }
 
-    private static native short MemError();
+    private static short MemError() {
+        return MemoryManager.MemError();
+    }
 
-    private static native int NewHandleClear(int paramInt);
+    private static int NewHandleClear(int paramInt) {
+        return MemoryManager.NewHandleClear(paramInt);
+    }
 
-    private static native short PtrToHand(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+    private static short PtrToHand(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
+        return MemoryManager.PtrToHand(paramInt1, paramArrayOfInt, paramInt2);
+    }
 
-    private static native void SetHandleSize(int paramInt1, int paramInt2);
+    private static void SetHandleSize(int paramInt1, int paramInt2) {
+        MemoryManager.SetHandleSize(paramInt1, paramInt2);
+    }
 
-    private static native short HandAndHand(int paramInt1, int paramInt2);
+    private static short HandAndHand(int paramInt1, int paramInt2) {
+        return MemoryManager.HandAndHand(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetInputHandle(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInputHandle(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetInputHandle(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportGetOutputHandle(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetOutputHandle(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetOutputHandle(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportGetSettingsAsText(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetSettingsAsText(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetSettingsAsText(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }
 

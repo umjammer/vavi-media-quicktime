@@ -5,6 +5,14 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieControllerManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.PlatformManager;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -1653,182 +1661,360 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return super.toString() + "[PortRect=" + getPortRect() + ",isOffscreen=" + isOffscreen() + "]";
     }
 
-    private static native int GraphicsExportGetInputGWorld(int paramInt, int[] paramArrayOfInt);
-
-    private static native short QTGetPixelSize(int paramInt);
-
-    private static native int GraphicsImportGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native short GetMoviesError();
-
-    private static native int MCGetControllerPort(int paramInt);
-
-    private static native int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native short GetCSequencePrevBuffer(int paramInt, int[] paramArrayOfInt);
-
-    private static native short GetDSequenceImageBuffer(int paramInt, int[] paramArrayOfInt);
-
-    private static native short GetDSequenceScreenBuffer(int paramInt, int[] paramArrayOfInt);
-
-    private static native int GetNativeWindowPort(int paramInt);
-
-    private static native int GetGWorldPixMap(int paramInt);
-
-    private static native byte LockPixels(int paramInt);
-
-    private static native short QTNewGWorld(int[] paramArrayOfInt, int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native int SCNewGWorld(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, int paramInt2);
-
-    private static native short NewImageGWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2);
-
-    private static native void GetBackColor(byte[] paramArrayOfByte);
-
-    private static native void RGBBackColor(byte[] paramArrayOfByte);
-
-    private static native void EraseRect(byte[] paramArrayOfByte);
-
-    private static native void FrameRect(byte[] paramArrayOfByte);
-
-    private static native void MacFrameRect(byte[] paramArrayOfByte);
-
-    private static native void EraseRgn(int paramInt);
-
-    private static native void GetForeColor(byte[] paramArrayOfByte);
-
-    private static native void RGBForeColor(byte[] paramArrayOfByte);
-
-    private static native void PaintRect(byte[] paramArrayOfByte);
-
-    private static native void MacPaintRgn(int paramInt);
-
-    private static native void MacFrameRgn(int paramInt);
-
-    private static native void GetPort(int[] paramArrayOfInt);
-
-    private static native void SetGWorld(int paramInt1, int paramInt2);
-
-    private static native void PaintRgn(int paramInt);
-
-    private static native void FrameRgn(int paramInt);
-
-    private static native void CopyRgn(int paramInt1, int paramInt2);
-
-    private static native void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4);
-
-    private static native void OffsetRgn(int paramInt, short paramShort1, short paramShort2);
-
-    private static native void UnionRgn(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void XorRgn(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native byte EqualRgn(int paramInt1, int paramInt2);
-
-    private static native void SectRgn(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void GetClip(int paramInt);
-
-    private static native void SetClip(int paramInt);
-
-    private static native void ClipRect(byte[] paramArrayOfByte);
-
-    private static native void ClipRect(int paramInt);
-
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native void Move(short paramShort1, short paramShort2);
-
-    private static native void MoveTo(short paramShort1, short paramShort2);
-
-    private static native void MacLineTo(short paramShort1, short paramShort2);
-
-    private static native void LineTo(short paramShort1, short paramShort2);
-
-    private static native void Line(short paramShort1, short paramShort2);
-
-    private static native void SetCPixel(short paramShort1, short paramShort2, byte[] paramArrayOfByte);
-
-    private static native void GetCPixel(short paramShort1, short paramShort2, byte[] paramArrayOfByte);
-
-    private static native void PenSize(short paramShort1, short paramShort2);
-
-    private static native void PenNormal();
-
-    private static native void FrameArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void PaintArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void EraseArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void InvertArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void FrameRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void PaintRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void EraseRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void InvertRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void FrameOval(byte[] paramArrayOfByte);
-
-    private static native void PaintOval(byte[] paramArrayOfByte);
-
-    private static native void EraseOval(byte[] paramArrayOfByte);
-
-    private static native void InvertOval(byte[] paramArrayOfByte);
-
-    private static native void FramePoly(int paramInt);
-
-    private static native void PaintPoly(int paramInt);
-
-    private static native void ErasePoly(int paramInt);
-
-    private static native void InvertPoly(int paramInt);
-
-    private static native short getShortFromPointer(int paramInt1, int paramInt2);
-
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
-
-    private static native void TextFont(short paramShort);
-
-    private static native void TextFace(short paramShort);
-
-    private static native void TextMode(short paramShort);
-
-    private static native void TextSize(short paramShort);
-
-    private static native void DrawChar(short paramShort);
-
-    private static native void MacDrawText(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void DrawText(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native short CharWidth(short paramShort);
-
-    private static native short TextWidth(byte[] paramArrayOfByte, short paramShort1, short paramShort2);
-
-    private static native void MeasureText(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt);
-
-    private static native void StdText(short paramShort, byte[] paramArrayOfByte, int paramInt1, int paramInt2);
-
-    private static native short StdTxMeas(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort);
-
-    private static native void GetFontInfo(short[] paramArrayOfShort);
-
-    private static native byte IsPortOffscreen(int paramInt);
-
-    private static native int GetPortBounds(int paramInt, byte[] paramArrayOfByte);
-
-    private static native int GetPortClipRegion(int paramInt1, int paramInt2);
-
-    private static native int GetPortVisibleRegion(int paramInt1, int paramInt2);
-
-    private static native short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetInputGWorld(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetInputGWorld(paramInt, paramArrayOfInt);
+    }
+
+    private static short QTGetPixelSize(int paramInt) {
+        return ImageCompressionManager.QTGetPixelSize(paramInt);
+    }
+
+    private static int GraphicsImportGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.GraphicsImportGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
+
+    private static int MCGetControllerPort(int paramInt) {
+        return MovieControllerManager.MCGetControllerPort(paramInt);
+    }
+
+    private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SequenceGrabberManager.SGGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static short GetCSequencePrevBuffer(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCSequencePrevBuffer(paramInt, paramArrayOfInt);
+    }
+
+    private static short GetDSequenceImageBuffer(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetDSequenceImageBuffer(paramInt, paramArrayOfInt);
+    }
+
+    private static short GetDSequenceScreenBuffer(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetDSequenceScreenBuffer(paramInt, paramArrayOfInt);
+    }
+
+    private static int GetNativeWindowPort(int paramInt) {
+        return PlatformManager.GetNativeWindowPort(paramInt);
+    }
+
+    private static int GetGWorldPixMap(int paramInt) {
+        return QuickDrawManager.GetGWorldPixMap(paramInt);
+    }
+
+    private static byte LockPixels(int paramInt) {
+        return QuickDrawManager.LockPixels(paramInt);
+    }
+
+    private static short QTNewGWorld(int[] paramArrayOfInt, int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
+        return QuickDrawManager.QTNewGWorld(paramArrayOfInt, paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static int SCNewGWorld(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, int paramInt2) {
+        return ImageCompressionManager.SCNewGWorld(paramInt1, paramArrayOfInt, paramArrayOfByte, paramInt2);
+    }
+
+    private static short NewImageGWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2) {
+        return QuickDrawManager.NewImageGWorld(paramArrayOfInt, paramInt1, paramInt2);
+    }
+
+    private static void GetBackColor(byte[] paramArrayOfByte) {
+        QuickDrawManager.GetBackColor(paramArrayOfByte);
+    }
+
+    private static void RGBBackColor(byte[] paramArrayOfByte) {
+        QuickDrawManager.RGBBackColor(paramArrayOfByte);
+    }
+
+    private static void EraseRect(byte[] paramArrayOfByte) {
+        QuickDrawManager.EraseRect(paramArrayOfByte);
+    }
+
+    private static void FrameRect(byte[] paramArrayOfByte) {
+        QuickDrawManager.FrameRect(paramArrayOfByte);
+    }
+
+    private static void MacFrameRect(byte[] paramArrayOfByte) {
+        QuickDrawManager.MacFrameRect(paramArrayOfByte);
+    }
+
+    private static void EraseRgn(int paramInt) {
+        QuickDrawManager.EraseRgn(paramInt);
+    }
+
+    private static void GetForeColor(byte[] paramArrayOfByte) {
+        QuickDrawManager.GetForeColor(paramArrayOfByte);
+    }
+
+    private static void RGBForeColor(byte[] paramArrayOfByte) {
+        QuickDrawManager.RGBForeColor(paramArrayOfByte);
+    }
+
+    private static void PaintRect(byte[] paramArrayOfByte) {
+        QuickDrawManager.PaintRect(paramArrayOfByte);
+    }
+
+    private static void MacPaintRgn(int paramInt) {
+        QuickDrawManager.MacPaintRgn(paramInt);
+    }
+
+    private static void MacFrameRgn(int paramInt) {
+        QuickDrawManager.MacFrameRgn(paramInt);
+    }
+
+    private static void GetPort(int[] paramArrayOfInt) {
+        QuickDrawManager.GetPort(paramArrayOfInt);
+    }
+
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
+
+    private static void PaintRgn(int paramInt) {
+        QuickDrawManager.PaintRgn(paramInt);
+    }
+
+    private static void FrameRgn(int paramInt) {
+        QuickDrawManager.FrameRgn(paramInt);
+    }
+
+    private static void CopyRgn(int paramInt1, int paramInt2) {
+        QuickDrawManager.CopyRgn(paramInt1, paramInt2);
+    }
+
+    private static void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
+        QuickDrawManager.SetRectRgn(paramInt, paramShort1, paramShort2, paramShort3, paramShort4);
+    }
+
+    private static void OffsetRgn(int paramInt, short paramShort1, short paramShort2) {
+        QuickDrawManager.OffsetRgn(paramInt, paramShort1, paramShort2);
+    }
+
+    private static void UnionRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.UnionRgn(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void XorRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.XorRgn(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static byte EqualRgn(int paramInt1, int paramInt2) {
+        return QuickDrawManager.EqualRgn(paramInt1, paramInt2);
+    }
+
+    private static void SectRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.SectRgn(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void GetClip(int paramInt) {
+        QuickDrawManager.GetClip(paramInt);
+    }
+
+    private static void SetClip(int paramInt) {
+        QuickDrawManager.SetClip(paramInt);
+    }
+
+    private static void ClipRect(byte[] paramArrayOfByte) {
+        QuickDrawManager.ClipRect(paramArrayOfByte);
+    }
+
+    private static void ClipRect(int paramInt) {
+        QuickDrawManager.ClipRect(paramInt);
+    }
+
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static void Move(short paramShort1, short paramShort2) {
+        QuickDrawManager.Move(paramShort1, paramShort2);
+    }
+
+    private static void MoveTo(short paramShort1, short paramShort2) {
+        QuickDrawManager.MoveTo(paramShort1, paramShort2);
+    }
+
+    private static void MacLineTo(short paramShort1, short paramShort2) {
+        QuickDrawManager.MacLineTo(paramShort1, paramShort2);
+    }
+
+    private static void LineTo(short paramShort1, short paramShort2) {
+        QuickDrawManager.LineTo(paramShort1, paramShort2);
+    }
+
+    private static void Line(short paramShort1, short paramShort2) {
+        QuickDrawManager.Line(paramShort1, paramShort2);
+    }
+
+    private static void SetCPixel(short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
+        QuickDrawManager.SetCPixel(paramShort1, paramShort2, paramArrayOfByte);
+    }
+
+    private static void GetCPixel(short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
+        QuickDrawManager.GetCPixel(paramShort1, paramShort2, paramArrayOfByte);
+    }
+
+    private static void PenSize(short paramShort1, short paramShort2) {
+        QuickDrawManager.PenSize(paramShort1, paramShort2);
+    }
+
+    private static void PenNormal() {
+        QuickDrawManager.PenNormal();
+    }
+
+    private static void FrameArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.FrameArc(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void PaintArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.PaintArc(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void EraseArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.EraseArc(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void InvertArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.InvertArc(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void FrameRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.FrameRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void PaintRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.PaintRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void EraseRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.EraseRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void InvertRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.InvertRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void FrameOval(byte[] paramArrayOfByte) {
+        QuickDrawManager.FrameOval(paramArrayOfByte);
+    }
+
+    private static void PaintOval(byte[] paramArrayOfByte) {
+        QuickDrawManager.PaintOval(paramArrayOfByte);
+    }
+
+    private static void EraseOval(byte[] paramArrayOfByte) {
+        QuickDrawManager.EraseOval(paramArrayOfByte);
+    }
+
+    private static void InvertOval(byte[] paramArrayOfByte) {
+        QuickDrawManager.InvertOval(paramArrayOfByte);
+    }
+
+    private static void FramePoly(int paramInt) {
+        QuickDrawManager.FramePoly(paramInt);
+    }
+
+    private static void PaintPoly(int paramInt) {
+        QuickDrawManager.PaintPoly(paramInt);
+    }
+
+    private static void ErasePoly(int paramInt) {
+        QuickDrawManager.ErasePoly(paramInt);
+    }
+
+    private static void InvertPoly(int paramInt) {
+        QuickDrawManager.InvertPoly(paramInt);
+    }
+
+    private static short getShortFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    }
+
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
+
+    private static void TextFont(short paramShort) {
+        QuickDrawManager.TextFont(paramShort);
+    }
+
+    private static void TextFace(short paramShort) {
+        QuickDrawManager.TextFace(paramShort);
+    }
+
+    private static void TextMode(short paramShort) {
+        QuickDrawManager.TextMode(paramShort);
+    }
+
+    private static void TextSize(short paramShort) {
+        QuickDrawManager.TextSize(paramShort);
+    }
+
+    private static void DrawChar(short paramShort) {
+        QuickDrawManager.DrawChar(paramShort);
+    }
+
+    private static void MacDrawText(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.MacDrawText(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void DrawText(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        QuickDrawManager.DrawText(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static short CharWidth(short paramShort) {
+        return QuickDrawManager.CharWidth(paramShort);
+    }
+
+    private static short TextWidth(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
+        return QuickDrawManager.TextWidth(paramArrayOfByte, paramShort1, paramShort2);
+    }
+
+    private static void MeasureText(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        QuickDrawManager.MeasureText(paramShort, paramArrayOfByte, paramArrayOfInt);
+    }
+
+    private static void StdText(short paramShort, byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        QuickDrawManager.StdText(paramShort, paramArrayOfByte, paramInt1, paramInt2);
+    }
+
+    private static short StdTxMeas(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort) {
+        return QuickDrawManager.StdTxMeas(paramShort, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfShort);
+    }
+
+    private static void GetFontInfo(short[] paramArrayOfShort) {
+        QuickDrawManager.GetFontInfo(paramArrayOfShort);
+    }
+
+    private static byte IsPortOffscreen(int paramInt) {
+        return QuickDrawManager.IsPortOffscreen(paramInt);
+    }
+
+    private static int GetPortBounds(int paramInt, byte[] paramArrayOfByte) {
+        return QuickDrawManager.GetPortBounds(paramInt, paramArrayOfByte);
+    }
+
+    private static int GetPortClipRegion(int paramInt1, int paramInt2) {
+        return QuickDrawManager.GetPortClipRegion(paramInt1, paramInt2);
+    }
+
+    private static int GetPortVisibleRegion(int paramInt1, int paramInt2) {
+        return QuickDrawManager.GetPortVisibleRegion(paramInt1, paramInt2);
+    }
+
+    private static short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return StreamingManager.QTSPresGetGWorld(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 

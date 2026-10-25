@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -114,8 +115,12 @@ public final class MusicDescription extends SampleDescription implements Interfa
         paramMusicData.unlock();
     }
 
-    private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
+    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 }
 

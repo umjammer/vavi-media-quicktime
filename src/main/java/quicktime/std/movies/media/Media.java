@@ -6,6 +6,7 @@ import java.security.PrivilegedAction;
 import java.util.Hashtable;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -909,104 +910,204 @@ public abstract class Media extends QTObject implements QuickTimeLib {
 
     abstract MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException;
 
-    private static native int NewTrackMedia(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static int NewTrackMedia(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.NewTrackMedia(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native void GetMediaHandlerDescription(int paramInt, int[] paramArrayOfInt1, byte[] paramArrayOfByte, int[] paramArrayOfInt2);
+    private static void GetMediaHandlerDescription(int paramInt, int[] paramArrayOfInt1, byte[] paramArrayOfByte, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMediaHandlerDescription(paramInt, paramArrayOfInt1, paramArrayOfByte, paramArrayOfInt2);
+    }
 
-    private static native int GetTrackMedia(int paramInt);
+    private static int GetTrackMedia(int paramInt) {
+        return MovieToolbox.GetTrackMedia(paramInt);
+    }
 
-    private static native int GetMediaHandler(int paramInt);
+    private static int GetMediaHandler(int paramInt) {
+        return MovieToolbox.GetMediaHandler(paramInt);
+    }
 
-    private static native void GetMediaSampleDescription(int paramInt1, int paramInt2, int paramInt3);
+    private static void GetMediaSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.GetMediaSampleDescription(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SetMediaSampleDescription(int paramInt1, int paramInt2, int paramInt3);
+    private static short SetMediaSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.SetMediaSampleDescription(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GetMediaDataHandler(int paramInt, short paramShort);
+    private static int GetMediaDataHandler(int paramInt, short paramShort) {
+        return MovieToolbox.GetMediaDataHandler(paramInt, paramShort);
+    }
 
-    private static native short SetMediaDataHandler(int paramInt1, short paramShort, int paramInt2);
+    private static short SetMediaDataHandler(int paramInt1, short paramShort, int paramInt2) {
+        return MovieToolbox.SetMediaDataHandler(paramInt1, paramShort, paramInt2);
+    }
 
-    private static native short SetMediaHandler(int paramInt1, int paramInt2);
+    private static short SetMediaHandler(int paramInt1, int paramInt2) {
+        return MovieToolbox.SetMediaHandler(paramInt1, paramInt2);
+    }
 
-    private static native int GetMediaCreationTime(int paramInt);
+    private static int GetMediaCreationTime(int paramInt) {
+        return MovieToolbox.GetMediaCreationTime(paramInt);
+    }
 
-    private static native int GetMediaModificationTime(int paramInt);
+    private static int GetMediaModificationTime(int paramInt) {
+        return MovieToolbox.GetMediaModificationTime(paramInt);
+    }
 
-    private static native int GetMediaTimeScale(int paramInt);
+    private static int GetMediaTimeScale(int paramInt) {
+        return MovieToolbox.GetMediaTimeScale(paramInt);
+    }
 
-    private static native void SetMediaTimeScale(int paramInt1, int paramInt2);
+    private static void SetMediaTimeScale(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMediaTimeScale(paramInt1, paramInt2);
+    }
 
-    private static native int GetMediaDuration(int paramInt);
+    private static int GetMediaDuration(int paramInt) {
+        return MovieToolbox.GetMediaDuration(paramInt);
+    }
 
-    private static native short GetMediaLanguage(int paramInt);
+    private static short GetMediaLanguage(int paramInt) {
+        return MovieToolbox.GetMediaLanguage(paramInt);
+    }
 
-    private static native void SetMediaLanguage(int paramInt, short paramShort);
+    private static void SetMediaLanguage(int paramInt, short paramShort) {
+        MovieToolbox.SetMediaLanguage(paramInt, paramShort);
+    }
 
-    private static native short GetMediaQuality(int paramInt);
+    private static short GetMediaQuality(int paramInt) {
+        return MovieToolbox.GetMediaQuality(paramInt);
+    }
 
-    private static native void SetMediaQuality(int paramInt, short paramShort);
+    private static void SetMediaQuality(int paramInt, short paramShort) {
+        MovieToolbox.SetMediaQuality(paramInt, paramShort);
+    }
 
-    private static native short SetMediaInputMap(int paramInt1, int paramInt2);
+    private static short SetMediaInputMap(int paramInt1, int paramInt2) {
+        return MovieToolbox.SetMediaInputMap(paramInt1, paramInt2);
+    }
 
-    private static native short BeginMediaEdits(int paramInt);
+    private static short BeginMediaEdits(int paramInt) {
+        return MovieToolbox.BeginMediaEdits(paramInt);
+    }
 
-    private static native short EndMediaEdits(int paramInt);
+    private static short EndMediaEdits(int paramInt) {
+        return MovieToolbox.EndMediaEdits(paramInt);
+    }
 
-    private static native short SetMediaDefaultDataRefIndex(int paramInt, short paramShort);
+    private static short SetMediaDefaultDataRefIndex(int paramInt, short paramShort) {
+        return MovieToolbox.SetMediaDefaultDataRefIndex(paramInt, paramShort);
+    }
 
-    private static native void GetMediaDataHandlerDescription(int paramInt, short paramShort, int[] paramArrayOfInt1, byte[] paramArrayOfByte, int[] paramArrayOfInt2);
+    private static void GetMediaDataHandlerDescription(int paramInt, short paramShort, int[] paramArrayOfInt1, byte[] paramArrayOfByte, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMediaDataHandlerDescription(paramInt, paramShort, paramArrayOfInt1, paramArrayOfByte, paramArrayOfInt2);
+    }
 
-    private static native int GetMediaSampleDescriptionCount(int paramInt);
+    private static int GetMediaSampleDescriptionCount(int paramInt) {
+        return MovieToolbox.GetMediaSampleDescriptionCount(paramInt);
+    }
 
-    private static native int GetMediaSampleCount(int paramInt);
+    private static int GetMediaSampleCount(int paramInt) {
+        return MovieToolbox.GetMediaSampleCount(paramInt);
+    }
 
-    private static native int GetMediaSyncSampleCount(int paramInt);
+    private static int GetMediaSyncSampleCount(int paramInt) {
+        return MovieToolbox.GetMediaSyncSampleCount(paramInt);
+    }
 
-    private static native void SampleNumToMediaTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void SampleNumToMediaTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.SampleNumToMediaTime(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void MediaTimeToSampleNum(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static void MediaTimeToSampleNum(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        MovieToolbox.MediaTimeToSampleNum(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 
-    private static native short AddMediaSample(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, short paramShort, int[] paramArrayOfInt);
+    private static short AddMediaSample(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, short paramShort, int[] paramArrayOfInt) {
+        return MovieToolbox.AddMediaSample(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramShort, paramArrayOfInt);
+    }
 
-    private static native short GetMediaSample(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int paramInt5, int[] paramArrayOfInt4, int paramInt6, int[] paramArrayOfInt5, short[] paramArrayOfShort);
+    private static short GetMediaSample(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int paramInt5, int[] paramArrayOfInt4, int paramInt6, int[] paramArrayOfInt5, short[] paramArrayOfShort) {
+        return MovieToolbox.GetMediaSample(paramInt1, paramInt2, paramInt3, paramArrayOfInt1, paramInt4, paramArrayOfInt2, paramArrayOfInt3, paramInt5, paramArrayOfInt4, paramInt6, paramArrayOfInt5, paramArrayOfShort);
+    }
 
-    private static native short AddMediaSampleReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, short paramShort, int[] paramArrayOfInt);
+    private static short AddMediaSampleReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, short paramShort, int[] paramArrayOfInt) {
+        return MovieToolbox.AddMediaSampleReference(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramShort, paramArrayOfInt);
+    }
 
-    private static native short GetMediaSampleReference(int paramInt1, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int paramInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4, int paramInt3, int[] paramArrayOfInt5, int paramInt4, int[] paramArrayOfInt6, short[] paramArrayOfShort);
+    private static short GetMediaSampleReference(int paramInt1, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int paramInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4, int paramInt3, int[] paramArrayOfInt5, int paramInt4, int[] paramArrayOfInt6, short[] paramArrayOfShort) {
+        return MovieToolbox.GetMediaSampleReference(paramInt1, paramArrayOfInt1, paramArrayOfInt2, paramInt2, paramArrayOfInt3, paramArrayOfInt4, paramInt3, paramArrayOfInt5, paramInt4, paramArrayOfInt6, paramArrayOfShort);
+    }
 
-    private static native short AddMediaSampleReferences(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt);
+    private static short AddMediaSampleReferences(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return MovieToolbox.AddMediaSampleReferences(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    }
 
-    private static native short GetMediaSampleReferences(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int paramInt3, int[] paramArrayOfInt2, int paramInt4, int[] paramArrayOfInt3, int paramInt5);
+    private static short GetMediaSampleReferences(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int paramInt3, int[] paramArrayOfInt2, int paramInt4, int[] paramArrayOfInt3, int paramInt5) {
+        return MovieToolbox.GetMediaSampleReferences(paramInt1, paramInt2, paramArrayOfInt1, paramInt3, paramArrayOfInt2, paramInt4, paramArrayOfInt3, paramInt5);
+    }
 
-    private static native short SetMediaPreferredChunkSize(int paramInt1, int paramInt2);
+    private static short SetMediaPreferredChunkSize(int paramInt1, int paramInt2) {
+        return MovieToolbox.SetMediaPreferredChunkSize(paramInt1, paramInt2);
+    }
 
-    private static native short GetMediaPreferredChunkSize(int paramInt, int[] paramArrayOfInt);
+    private static short GetMediaPreferredChunkSize(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMediaPreferredChunkSize(paramInt, paramArrayOfInt);
+    }
 
-    private static native short SetMediaShadowSync(int paramInt1, int paramInt2, int paramInt3);
+    private static short SetMediaShadowSync(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.SetMediaShadowSync(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short GetMediaShadowSync(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short GetMediaShadowSync(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMediaShadowSync(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native void GetMediaNextInterestingTime(int paramInt1, short paramShort, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetMediaNextInterestingTime(int paramInt1, short paramShort, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMediaNextInterestingTime(paramInt1, paramShort, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GetMediaDataSize(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetMediaDataSize(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.GetMediaDataSize(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SetMediaDataRef(int paramInt1, short paramShort, int paramInt2, int paramInt3);
+    private static short SetMediaDataRef(int paramInt1, short paramShort, int paramInt2, int paramInt3) {
+        return MovieToolbox.SetMediaDataRef(paramInt1, paramShort, paramInt2, paramInt3);
+    }
 
-    private static native short SetMediaDataRefAttributes(int paramInt1, short paramShort, int paramInt2);
+    private static short SetMediaDataRefAttributes(int paramInt1, short paramShort, int paramInt2) {
+        return MovieToolbox.SetMediaDataRefAttributes(paramInt1, paramShort, paramInt2);
+    }
 
-    private static native short AddMediaDataRef(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3);
+    private static short AddMediaDataRef(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
+        return MovieToolbox.AddMediaDataRef(paramInt1, paramArrayOfShort, paramInt2, paramInt3);
+    }
 
-    private static native short GetMediaDataRefCount(int paramInt, short[] paramArrayOfShort);
+    private static short GetMediaDataRefCount(int paramInt, short[] paramArrayOfShort) {
+        return MovieToolbox.GetMediaDataRefCount(paramInt, paramArrayOfShort);
+    }
 
-    private static native void SetMediaPlayHints(int paramInt1, int paramInt2, int paramInt3);
+    private static void SetMediaPlayHints(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMediaPlayHints(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void GetMediaPlayHints(int paramInt, int[] paramArrayOfInt);
+    private static void GetMediaPlayHints(int paramInt, int[] paramArrayOfInt) {
+        MovieToolbox.GetMediaPlayHints(paramInt, paramArrayOfInt);
+    }
 
-    private static native short SetMediaPropertyAtom(int paramInt1, int paramInt2);
+    private static short SetMediaPropertyAtom(int paramInt1, int paramInt2) {
+        return MovieToolbox.SetMediaPropertyAtom(paramInt1, paramInt2);
+    }
 
-    private static native short LoadMediaIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short LoadMediaIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.LoadMediaIntoRam(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short CopyMediaUserData(int paramInt1, int paramInt2, int paramInt3);
+    private static short CopyMediaUserData(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.CopyMediaUserData(paramInt1, paramInt2, paramInt3);
+    }
 }
 

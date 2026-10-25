@@ -10,6 +10,12 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -476,55 +482,105 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         }
     }
 
-    private static native int GetGWorldPixMap(int paramInt);
+    private static int GetGWorldPixMap(int paramInt) {
+        return QuickDrawManager.GetGWorldPixMap(paramInt);
+    }
 
-    private static native byte LockPixels(int paramInt);
+    private static byte LockPixels(int paramInt) {
+        return QuickDrawManager.LockPixels(paramInt);
+    }
 
-    private static native short MakeThumbnailFromPixMap(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3);
+    private static short MakeThumbnailFromPixMap(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.MakeThumbnailFromPixMap(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3);
+    }
 
-    private static native void UnlockPixels(int paramInt);
+    private static void UnlockPixels(int paramInt) {
+        QuickDrawManager.UnlockPixels(paramInt);
+    }
 
-    private static native int GetTrackPict(int paramInt1, int paramInt2);
+    private static int GetTrackPict(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetTrackPict(paramInt1, paramInt2);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int GetMoviePict(int paramInt1, int paramInt2);
+    private static int GetMoviePict(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetMoviePict(paramInt1, paramInt2);
+    }
 
-    private static native int GetMoviePosterPict(int paramInt);
+    private static int GetMoviePosterPict(int paramInt) {
+        return MovieToolbox.GetMoviePosterPict(paramInt);
+    }
 
-    private static native int SGGrabPict(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, short paramShort, int paramInt2);
+    private static int SGGrabPict(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, short paramShort, int paramInt2) {
+        return SequenceGrabberManager.SGGrabPict(paramInt1, paramArrayOfInt, paramArrayOfByte, paramShort, paramInt2);
+    }
 
-    private static native int GraphicsImportGetAsPicture(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetAsPicture(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetAsPicture(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SCCompressPicture(int paramInt1, int paramInt2, int paramInt3);
+    private static int SCCompressPicture(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.SCCompressPicture(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int OpenCPicture(byte[] paramArrayOfByte);
+    private static int OpenCPicture(byte[] paramArrayOfByte) {
+        return QuickDrawManager.OpenCPicture(paramArrayOfByte);
+    }
 
-    private static native short QDError();
+    private static short QDError() {
+        return QuickDrawManager.QDError();
+    }
 
-    private static native void ClosePicture();
+    private static void ClosePicture() {
+        QuickDrawManager.ClosePicture();
+    }
 
-    private static native short CompressPicture(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short CompressPicture(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return ImageCompressionManager.CompressPicture(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short FCompressPicture(int paramInt1, int paramInt2, short paramShort1, int paramInt3, int paramInt4, short paramShort2, short paramShort3, int paramInt5, int paramInt6, int paramInt7);
+    private static short FCompressPicture(int paramInt1, int paramInt2, short paramShort1, int paramInt3, int paramInt4, short paramShort2, short paramShort3, int paramInt5, int paramInt6, int paramInt7) {
+        return ImageCompressionManager.FCompressPicture(paramInt1, paramInt2, paramShort1, paramInt3, paramInt4, paramShort2, paramShort3, paramInt5, paramInt6, paramInt7);
+    }
 
-    private static native void DrawPicture(int paramInt, byte[] paramArrayOfByte);
+    private static void DrawPicture(int paramInt, byte[] paramArrayOfByte) {
+        QuickDrawManager.DrawPicture(paramInt, paramArrayOfByte);
+    }
 
-    private static native short DrawTrimmedPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2, short paramShort, int paramInt3);
+    private static short DrawTrimmedPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2, short paramShort, int paramInt3) {
+        return QuickDrawManager.DrawTrimmedPicture(paramInt1, paramArrayOfByte, paramInt2, paramShort, paramInt3);
+    }
 
-    private static native short MakeThumbnailFromPicture(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short MakeThumbnailFromPicture(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return ImageCompressionManager.MakeThumbnailFromPicture(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int GraphicsExportGetInputPicture(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInputPicture(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetInputPicture(paramInt, paramArrayOfInt);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort);
+    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native short QTSPresGetPicture(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTSPresGetPicture(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetPicture(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/Pict.

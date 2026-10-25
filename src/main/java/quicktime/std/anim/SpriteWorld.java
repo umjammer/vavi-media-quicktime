@@ -4,6 +4,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
@@ -217,23 +220,43 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
         }
     }
 
-    private static native short NewSpriteWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3);
+    private static short NewSpriteWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
+        return SpriteManager.NewSpriteWorld(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte, paramInt3);
+    }
 
-    private static native short SetSpriteWorldClip(int paramInt1, int paramInt2);
+    private static short SetSpriteWorldClip(int paramInt1, int paramInt2) {
+        return SpriteManager.SetSpriteWorldClip(paramInt1, paramInt2);
+    }
 
-    private static native short SetSpriteWorldGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SetSpriteWorldGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.SetSpriteWorldGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SetSpriteWorldMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static short SetSpriteWorldMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return MatrixManager.SetSpriteWorldMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SpriteWorldIdle(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short SpriteWorldIdle(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteWorldIdle(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short InvalidateSpriteWorld(int paramInt, byte[] paramArrayOfByte);
+    private static short InvalidateSpriteWorld(int paramInt, byte[] paramArrayOfByte) {
+        return SpriteManager.InvalidateSpriteWorld(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SpriteWorldHitTest(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short SpriteWorldHitTest(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteWorldHitTest(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short SetSpriteWorldFlags(int paramInt1, int paramInt2, int paramInt3);
+    private static short SetSpriteWorldFlags(int paramInt1, int paramInt2, int paramInt3) {
+        return SpriteManager.SetSpriteWorldFlags(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void DisposeAllSprites(int paramInt);
+    private static void DisposeAllSprites(int paramInt) {
+        SpriteManager.DisposeAllSprites(paramInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 }

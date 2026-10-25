@@ -4,22 +4,37 @@ package quicktime;
 import java.awt.Component;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.PlatformManager;
 
 
 final class WinNativeHelper {
-    static native int getCompHWnd(Component paramComponent);
+    static int getCompHWnd(Component paramComponent) {
+        return PlatformManager.getCompHWnd(paramComponent);
+    }
 
-    static native int getDrawingSurfaceHWnd(Component paramComponent, int paramInt);
+    static int getDrawingSurfaceHWnd(Component paramComponent, int paramInt) {
+        return PlatformManager.getDrawingSurfaceHWnd(paramComponent, paramInt);
+    }
 
-    static native int getDrawingSurface(Component paramComponent);
+    static int getDrawingSurface(Component paramComponent) {
+        return PlatformManager.getDrawingSurface(paramComponent);
+    }
 
-    static native int lockDrawingSurface(Component paramComponent, int paramInt);
+    static int lockDrawingSurface(Component paramComponent, int paramInt) {
+        return PlatformManager.lockDrawingSurface(paramComponent, paramInt);
+    }
 
-    static native void unlockDrawingSurface(Component paramComponent, int paramInt);
+    static void unlockDrawingSurface(Component paramComponent, int paramInt) {
+        PlatformManager.unlockDrawingSurface(paramComponent, paramInt);
+    }
 
-    static native void getBounds(Component paramComponent, int paramInt, int[] paramArrayOfInt);
+    static void getBounds(Component paramComponent, int paramInt, int[] paramArrayOfInt) {
+        PlatformManager.getBounds(paramComponent, paramInt, paramArrayOfInt);
+    }
 
-    static native void freeDrawingSurface(Component paramComponent, int paramInt);
+    static void freeDrawingSurface(Component paramComponent, int paramInt) {
+        PlatformManager.freeDrawingSurface(paramComponent, paramInt);
+    }
 
     static {
         if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {

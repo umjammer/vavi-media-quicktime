@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.std.clocks.TimeBase;
@@ -259,13 +260,21 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
         return getClass().getName();
     }
 
-    private static native void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong);
+    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
+        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native long getLongFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static long getLongFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

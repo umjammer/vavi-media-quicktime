@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MediaHandlerManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
@@ -135,18 +137,32 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
         StdQTException.checkError(i);
     }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native int TextMediaAddTextSample(int paramInt1, int paramInt2, int paramInt3, short paramShort1, short paramShort2, short paramShort3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort4, byte[] paramArrayOfByte3, int paramInt4, int paramInt5, short paramShort5, short paramShort6, byte[] paramArrayOfByte4, int paramInt6, int[] paramArrayOfInt);
+    private static int TextMediaAddTextSample(int paramInt1, int paramInt2, int paramInt3, short paramShort1, short paramShort2, short paramShort3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort4, byte[] paramArrayOfByte3, int paramInt4, int paramInt5, short paramShort5, short paramShort6, byte[] paramArrayOfByte4, int paramInt6, int[] paramArrayOfInt) {
+        return MediaHandlerManager.TextMediaAddTextSample(paramInt1, paramInt2, paramInt3, paramShort1, paramShort2, paramShort3, paramArrayOfByte1, paramArrayOfByte2, paramShort4, paramArrayOfByte3, paramInt4, paramInt5, paramShort5, paramShort6, paramArrayOfByte4, paramInt6, paramArrayOfInt);
+    }
 
-    private static native int TextMediaAddHiliteSample(int paramInt1, short paramShort1, short paramShort2, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt);
+    private static int TextMediaAddHiliteSample(int paramInt1, short paramShort1, short paramShort2, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.TextMediaAddHiliteSample(paramInt1, paramShort1, paramShort2, paramArrayOfByte, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int TextMediaFindNextText(int paramInt1, int paramInt2, int paramInt3, short paramShort, int paramInt4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static int TextMediaFindNextText(int paramInt1, int paramInt2, int paramInt3, short paramShort, int paramInt4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MediaHandlerManager.TextMediaFindNextText(paramInt1, paramInt2, paramInt3, paramShort, paramInt4, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 
-    private static native int TextMediaHiliteTextSample(int paramInt1, int paramInt2, short paramShort1, short paramShort2, byte[] paramArrayOfByte);
+    private static int TextMediaHiliteTextSample(int paramInt1, int paramInt2, short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.TextMediaHiliteTextSample(paramInt1, paramInt2, paramShort1, paramShort2, paramArrayOfByte);
+    }
 
-    private static native int TextMediaSetTextSampleData(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+    private static int TextMediaSetTextSampleData(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
+        return MediaHandlerManager.TextMediaSetTextSampleData(paramInt1, paramArrayOfInt, paramInt2);
+    }
 }
 

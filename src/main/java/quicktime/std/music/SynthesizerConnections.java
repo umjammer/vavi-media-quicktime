@@ -7,6 +7,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -212,13 +213,21 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
         return new SynthesizerConnections(this.bytes);
     }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort);
+    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music

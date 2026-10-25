@@ -3,6 +3,8 @@ package quicktime.std.qtcomponents;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -167,30 +169,56 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
         return arrayOfInt2;
     }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, int paramInt3);
+    private static int SCSetInfo(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void DisposeHandle(int paramInt);
+    private static void DisposeHandle(int paramInt) {
+        MemoryManager.DisposeHandle(paramInt);
+    }
 
-    private static native int NewHandle(int paramInt);
+    private static int NewHandle(int paramInt) {
+        return MemoryManager.NewHandle(paramInt);
+    }
 
-    private static native int GetHandleSize(int paramInt);
+    private static int GetHandleSize(int paramInt) {
+        return MemoryManager.GetHandleSize(paramInt);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfInt, paramInt3, paramInt4);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 }
 

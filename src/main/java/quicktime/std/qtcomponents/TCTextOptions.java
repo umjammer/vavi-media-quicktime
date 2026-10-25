@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.QDColor;
@@ -143,8 +144,12 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
         System.arraycopy(paramQDColor.getRGBColor(), 0, getBytes(), 14, 6);
     }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort);
+    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    }
 }
 

@@ -3,6 +3,7 @@ package quicktime.std.music;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.MusicManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -212,27 +213,49 @@ public final class MusicComponent extends Component implements QuickTimeLib {
         return localKnobDescription;
     }
 
-    private static native int MusicGetDescription(int paramInt, byte[] paramArrayOfByte);
+    private static int MusicGetDescription(int paramInt, byte[] paramArrayOfByte) {
+        return MusicManager.MusicGetDescription(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MusicGetPartAtomicInstrument(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3);
+    private static int MusicGetPartAtomicInstrument(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
+        return MusicManager.MusicGetPartAtomicInstrument(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    }
 
-    private static native int MusicGetPartName(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MusicGetPartName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.MusicGetPartName(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MusicSetPartName(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MusicSetPartName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.MusicSetPartName(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MusicGetKnob(int paramInt1, int paramInt2);
+    private static int MusicGetKnob(int paramInt1, int paramInt2) {
+        return MusicManager.MusicGetKnob(paramInt1, paramInt2);
+    }
 
-    private static native int MusicSetKnob(int paramInt1, int paramInt2, int paramInt3);
+    private static int MusicSetKnob(int paramInt1, int paramInt2, int paramInt3) {
+        return MusicManager.MusicSetKnob(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MusicGetMasterTune(int paramInt);
+    private static int MusicGetMasterTune(int paramInt) {
+        return MusicManager.MusicGetMasterTune(paramInt);
+    }
 
-    private static native int MusicSetMasterTune(int paramInt1, int paramInt2);
+    private static int MusicSetMasterTune(int paramInt1, int paramInt2) {
+        return MusicManager.MusicSetMasterTune(paramInt1, paramInt2);
+    }
 
-    private static native int MusicGetInstrumentKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MusicGetInstrumentKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.MusicGetInstrumentKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MusicGetDrumKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MusicGetDrumKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.MusicGetDrumKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MusicGetKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MusicGetKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.MusicGetKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music

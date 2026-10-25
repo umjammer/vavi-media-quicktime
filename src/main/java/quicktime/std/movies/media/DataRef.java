@@ -7,6 +7,10 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.io.AliasHandle;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
@@ -322,20 +326,36 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
         return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
     }
 
-    private static native short GetMediaDataRef(int paramInt, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static short GetMediaDataRef(int paramInt, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MovieToolbox.GetMediaDataRef(paramInt, paramShort, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 
-    private static native short GetMovieDefaultDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short GetMovieDefaultDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return MovieToolbox.GetMovieDefaultDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int SGGetDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static int SGGetDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return SequenceGrabberManager.SGGetDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 
-    private static native int GraphicsExportGetInputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetInputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.GraphicsExportGetInputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsExportGetOutputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetOutputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.GraphicsExportGetOutputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GetDataHandler(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetDataHandler(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.GetDataHandler(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SGGetOutputDataReference(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int SGGetOutputDataReference(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SequenceGrabberManager.SGGetOutputDataReference(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short GetMovieAnchorDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static short GetMovieAnchorDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MovieToolbox.GetMovieAnchorDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 }
 

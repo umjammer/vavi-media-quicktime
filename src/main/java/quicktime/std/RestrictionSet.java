@@ -3,6 +3,7 @@ package quicktime.std;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.movies.Movie;
@@ -104,11 +105,19 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static native short QTGetMovieRestrictions(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTGetMovieRestrictions(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return PlatformManager.QTGetMovieRestrictions(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTGetSupportedRestrictions(int paramInt, int[] paramArrayOfInt);
+    private static short QTGetSupportedRestrictions(int paramInt, int[] paramArrayOfInt) {
+        return PlatformManager.QTGetSupportedRestrictions(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTRestrictionsGetInfo(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTRestrictionsGetInfo(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return PlatformManager.QTRestrictionsGetInfo(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTRestrictionsGetItem(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTRestrictionsGetItem(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return PlatformManager.QTRestrictionsGetItem(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }

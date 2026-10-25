@@ -5,6 +5,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.util.QTPointerRef;
@@ -82,7 +83,11 @@ public final class Stream extends QTObject implements QTStreamingLib {
         return new Presentation(QTSGetStreamPresentation(_ID()), this);
     }
 
-    private static native short QTSPresNewStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static short QTSPresNewStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return StreamingManager.QTSPresNewStream(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native int QTSGetStreamPresentation(int paramInt);
+    private static int QTSGetStreamPresentation(int paramInt) {
+        return StreamingManager.QTSGetStreamPresentation(paramInt);
+    }
 }

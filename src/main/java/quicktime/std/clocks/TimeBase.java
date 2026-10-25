@@ -4,6 +4,12 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ClockManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.MusicManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -492,62 +498,120 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
         }
     }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int GetCallBackTimeBase(int paramInt);
+    private static int GetCallBackTimeBase(int paramInt) {
+        return ClockManager.GetCallBackTimeBase(paramInt);
+    }
 
-    private static native int GetMovieTimeBase(int paramInt);
+    private static int GetMovieTimeBase(int paramInt) {
+        return MovieToolbox.GetMovieTimeBase(paramInt);
+    }
 
-    private static native int TuneGetTimeBase(int paramInt, int[] paramArrayOfInt);
+    private static int TuneGetTimeBase(int paramInt, int[] paramArrayOfInt) {
+        return MusicManager.TuneGetTimeBase(paramInt, paramArrayOfInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native short MemError();
+    private static short MemError() {
+        return MemoryManager.MemError();
+    }
 
-    private static native int NewTimeBase();
+    private static int NewTimeBase() {
+        return ClockManager.NewTimeBase();
+    }
 
-    private static native int GetTimeBaseTime(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTimeBaseTime(int paramInt1, int paramInt2, int paramInt3) {
+        return ClockManager.GetTimeBaseTime(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void SetTimeBaseTime(int paramInt1, int paramInt2);
+    private static void SetTimeBaseTime(int paramInt1, int paramInt2) {
+        ClockManager.SetTimeBaseTime(paramInt1, paramInt2);
+    }
 
-    private static native void SetTimeBaseValue(int paramInt1, int paramInt2, int paramInt3);
+    private static void SetTimeBaseValue(int paramInt1, int paramInt2, int paramInt3) {
+        ClockManager.SetTimeBaseValue(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GetTimeBaseRate(int paramInt);
+    private static int GetTimeBaseRate(int paramInt) {
+        return ClockManager.GetTimeBaseRate(paramInt);
+    }
 
-    private static native void SetTimeBaseRate(int paramInt1, int paramInt2);
+    private static void SetTimeBaseRate(int paramInt1, int paramInt2) {
+        ClockManager.SetTimeBaseRate(paramInt1, paramInt2);
+    }
 
-    private static native int GetTimeBaseEffectiveRate(int paramInt);
+    private static int GetTimeBaseEffectiveRate(int paramInt) {
+        return ClockManager.GetTimeBaseEffectiveRate(paramInt);
+    }
 
-    private static native int GetTimeBaseStartTime(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTimeBaseStartTime(int paramInt1, int paramInt2, int paramInt3) {
+        return ClockManager.GetTimeBaseStartTime(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void SetTimeBaseStartTime(int paramInt1, int paramInt2);
+    private static void SetTimeBaseStartTime(int paramInt1, int paramInt2) {
+        ClockManager.SetTimeBaseStartTime(paramInt1, paramInt2);
+    }
 
-    private static native int GetTimeBaseStopTime(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTimeBaseStopTime(int paramInt1, int paramInt2, int paramInt3) {
+        return ClockManager.GetTimeBaseStopTime(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void SetTimeBaseStopTime(int paramInt1, int paramInt2);
+    private static void SetTimeBaseStopTime(int paramInt1, int paramInt2) {
+        ClockManager.SetTimeBaseStopTime(paramInt1, paramInt2);
+    }
 
-    private static native int GetTimeBaseFlags(int paramInt);
+    private static int GetTimeBaseFlags(int paramInt) {
+        return ClockManager.GetTimeBaseFlags(paramInt);
+    }
 
-    private static native void SetTimeBaseFlags(int paramInt1, int paramInt2);
+    private static void SetTimeBaseFlags(int paramInt1, int paramInt2) {
+        ClockManager.SetTimeBaseFlags(paramInt1, paramInt2);
+    }
 
-    private static native int GetTimeBaseStatus(int paramInt1, int paramInt2);
+    private static int GetTimeBaseStatus(int paramInt1, int paramInt2) {
+        return ClockManager.GetTimeBaseStatus(paramInt1, paramInt2);
+    }
 
-    private static native void SetTimeBaseZero(int paramInt1, int paramInt2);
+    private static void SetTimeBaseZero(int paramInt1, int paramInt2) {
+        ClockManager.SetTimeBaseZero(paramInt1, paramInt2);
+    }
 
-    private static native void SetTimeBaseMasterTimeBase(int paramInt1, int paramInt2, int paramInt3);
+    private static void SetTimeBaseMasterTimeBase(int paramInt1, int paramInt2, int paramInt3) {
+        ClockManager.SetTimeBaseMasterTimeBase(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GetTimeBaseMasterTimeBase(int paramInt);
+    private static int GetTimeBaseMasterTimeBase(int paramInt) {
+        return ClockManager.GetTimeBaseMasterTimeBase(paramInt);
+    }
 
-    private static native void SetTimeBaseMasterClock(int paramInt1, int paramInt2, int paramInt3);
+    private static void SetTimeBaseMasterClock(int paramInt1, int paramInt2, int paramInt3) {
+        ClockManager.SetTimeBaseMasterClock(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GetTimeBaseMasterClock(int paramInt);
+    private static int GetTimeBaseMasterClock(int paramInt) {
+        return ClockManager.GetTimeBaseMasterClock(paramInt);
+    }
 
-    private static native int SGGetTimeBase(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetTimeBase(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetTimeBase(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTSPresGetTimeBase(int paramInt, int[] paramArrayOfInt);
+    private static short QTSPresGetTimeBase(int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetTimeBase(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTGetWallClockTimeBase(int[] paramArrayOfInt);
+    private static short QTGetWallClockTimeBase(int[] paramArrayOfInt) {
+        return ClockManager.QTGetWallClockTimeBase(paramArrayOfInt);
+    }
 }
 

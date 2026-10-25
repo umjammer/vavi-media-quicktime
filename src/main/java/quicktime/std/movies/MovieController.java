@@ -8,6 +8,10 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ClockManager;
+import quicktime.internal.toolbox.MovieControllerManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.ColorTable;
@@ -1472,94 +1476,184 @@ public class MovieController extends Component implements QuickTimeLib {
         }
     }
 
-    private static native void QDFlushPortBuffer(int paramInt1, int paramInt2);
+    private static void QDFlushPortBuffer(int paramInt1, int paramInt2) {
+        QuickDrawManager.QDFlushPortBuffer(paramInt1, paramInt2);
+    }
 
-    private static native int MCNewAttachedController(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int MCNewAttachedController(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieControllerManager.MCNewAttachedController(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int NewMovieController(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int NewMovieController(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return MovieControllerManager.NewMovieController(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int MCIdle(int paramInt);
+    private static int MCIdle(int paramInt) {
+        return MovieControllerManager.MCIdle(paramInt);
+    }
 
-    private static native int MCSetActionFilterWithRefCon(int paramInt1, int paramInt2, int paramInt3);
+    private static int MCSetActionFilterWithRefCon(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieControllerManager.MCSetActionFilterWithRefCon(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MCRemoveMovie(int paramInt);
+    private static int MCRemoveMovie(int paramInt) {
+        return MovieControllerManager.MCRemoveMovie(paramInt);
+    }
 
-    private static native int MCSetMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int MCSetMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieControllerManager.MCSetMovie(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int MCGetIndMovie(int paramInt, short paramShort);
+    private static int MCGetIndMovie(int paramInt, short paramShort) {
+        return MovieControllerManager.MCGetIndMovie(paramInt, paramShort);
+    }
 
-    private static native int MCGetControllerPort(int paramInt);
+    private static int MCGetControllerPort(int paramInt) {
+        return MovieControllerManager.MCGetControllerPort(paramInt);
+    }
 
-    private static native int MCClick(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static int MCClick(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieControllerManager.MCClick(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native int TickCount();
+    private static int TickCount() {
+        return ClockManager.TickCount();
+    }
 
-    private static native int MCKey(int paramInt1, byte paramByte, int paramInt2);
+    private static int MCKey(int paramInt1, byte paramByte, int paramInt2) {
+        return MovieControllerManager.MCKey(paramInt1, paramByte, paramInt2);
+    }
 
-    private static native int MCDoAction(int paramInt, short paramShort, int[] paramArrayOfInt);
+    private static int MCDoAction(int paramInt, short paramShort, int[] paramArrayOfInt) {
+        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramArrayOfInt);
+    }
 
-    private static native int MCDoAction(int paramInt1, short paramShort, int paramInt2);
+    private static int MCDoAction(int paramInt1, short paramShort, int paramInt2) {
+        return MovieControllerManager.MCDoAction(paramInt1, paramShort, paramInt2);
+    }
 
-    private static native int MCDoAction(int paramInt, short paramShort, short[] paramArrayOfShort);
+    private static int MCDoAction(int paramInt, short paramShort, short[] paramArrayOfShort) {
+        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramArrayOfShort);
+    }
 
-    private static native int MCDoAction(int paramInt, short paramShort1, short paramShort2);
+    private static int MCDoAction(int paramInt, short paramShort1, short paramShort2) {
+        return MovieControllerManager.MCDoAction(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native int MCDoAction(int paramInt, short paramShort, byte paramByte);
+    private static int MCDoAction(int paramInt, short paramShort, byte paramByte) {
+        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramByte);
+    }
 
-    private static native int MCDoAction(int paramInt, short paramShort, byte[] paramArrayOfByte);
+    private static int MCDoAction(int paramInt, short paramShort, byte[] paramArrayOfByte) {
+        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramArrayOfByte);
+    }
 
-    private static native int MCSetControllerAttached(int paramInt, byte paramByte);
+    private static int MCSetControllerAttached(int paramInt, byte paramByte) {
+        return MovieControllerManager.MCSetControllerAttached(paramInt, paramByte);
+    }
 
-    private static native int MCIsControllerAttached(int paramInt);
+    private static int MCIsControllerAttached(int paramInt) {
+        return MovieControllerManager.MCIsControllerAttached(paramInt);
+    }
 
-    private static native int MCSetControllerBoundsRect(int paramInt, byte[] paramArrayOfByte);
+    private static int MCSetControllerBoundsRect(int paramInt, byte[] paramArrayOfByte) {
+        return MovieControllerManager.MCSetControllerBoundsRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MCGetControllerBoundsRect(int paramInt, byte[] paramArrayOfByte);
+    private static int MCGetControllerBoundsRect(int paramInt, byte[] paramArrayOfByte) {
+        return MovieControllerManager.MCGetControllerBoundsRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MCSetControllerPort(int paramInt1, int paramInt2);
+    private static int MCSetControllerPort(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCSetControllerPort(paramInt1, paramInt2);
+    }
 
-    private static native int MCSetVisible(int paramInt, byte paramByte);
+    private static int MCSetVisible(int paramInt, byte paramByte) {
+        return MovieControllerManager.MCSetVisible(paramInt, paramByte);
+    }
 
-    private static native int MCGetVisible(int paramInt);
+    private static int MCGetVisible(int paramInt) {
+        return MovieControllerManager.MCGetVisible(paramInt);
+    }
 
-    private static native int MCMovieChanged(int paramInt1, int paramInt2);
+    private static int MCMovieChanged(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCMovieChanged(paramInt1, paramInt2);
+    }
 
-    private static native int MCSetDuration(int paramInt1, int paramInt2);
+    private static int MCSetDuration(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCSetDuration(paramInt1, paramInt2);
+    }
 
-    private static native int MCGetCurrentTime(int paramInt, int[] paramArrayOfInt);
+    private static int MCGetCurrentTime(int paramInt, int[] paramArrayOfInt) {
+        return MovieControllerManager.MCGetCurrentTime(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MCActivate(int paramInt1, int paramInt2, byte paramByte);
+    private static int MCActivate(int paramInt1, int paramInt2, byte paramByte) {
+        return MovieControllerManager.MCActivate(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native int MCEnableEditing(int paramInt, byte paramByte);
+    private static int MCEnableEditing(int paramInt, byte paramByte) {
+        return MovieControllerManager.MCEnableEditing(paramInt, paramByte);
+    }
 
-    private static native int MCIsEditingEnabled(int paramInt);
+    private static int MCIsEditingEnabled(int paramInt) {
+        return MovieControllerManager.MCIsEditingEnabled(paramInt);
+    }
 
-    private static native int MCCopy(int paramInt);
+    private static int MCCopy(int paramInt) {
+        return MovieControllerManager.MCCopy(paramInt);
+    }
 
-    private static native int MCCut(int paramInt);
+    private static int MCCut(int paramInt) {
+        return MovieControllerManager.MCCut(paramInt);
+    }
 
-    private static native int MCPaste(int paramInt1, int paramInt2);
+    private static int MCPaste(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCPaste(paramInt1, paramInt2);
+    }
 
-    private static native int MCClear(int paramInt);
+    private static int MCClear(int paramInt) {
+        return MovieControllerManager.MCClear(paramInt);
+    }
 
-    private static native int MCUndo(int paramInt);
+    private static int MCUndo(int paramInt) {
+        return MovieControllerManager.MCUndo(paramInt);
+    }
 
-    private static native int MCPositionController(int paramInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt2);
+    private static int MCPositionController(int paramInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt2) {
+        return MovieControllerManager.MCPositionController(paramInt1, paramArrayOfByte1, paramArrayOfByte2, paramInt2);
+    }
 
-    private static native int MCGetControllerInfo(int paramInt, int[] paramArrayOfInt);
+    private static int MCGetControllerInfo(int paramInt, int[] paramArrayOfInt) {
+        return MovieControllerManager.MCGetControllerInfo(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MCSetClip(int paramInt1, int paramInt2, int paramInt3);
+    private static int MCSetClip(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieControllerManager.MCSetClip(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MCPtInController(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MCPtInController(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MovieControllerManager.MCPtInController(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MCInvalidate(int paramInt1, int paramInt2, int paramInt3);
+    private static int MCInvalidate(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieControllerManager.MCInvalidate(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MCDraw(int paramInt1, int paramInt2);
+    private static int MCDraw(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCDraw(paramInt1, paramInt2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 

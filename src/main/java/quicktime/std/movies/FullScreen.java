@@ -5,6 +5,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.GDevice;
@@ -247,8 +248,12 @@ public final class FullScreen implements QuickTimeLib {
         super.finalize();
     }
 
-    private static native short BeginFullScreen(int[] paramArrayOfInt, int paramInt1, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int paramInt2, int paramInt3, int paramInt4);
+    private static short BeginFullScreen(int[] paramArrayOfInt, int paramInt1, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int paramInt2, int paramInt3, int paramInt4) {
+        return PlatformManager.BeginFullScreen(paramArrayOfInt, paramInt1, paramArrayOfShort1, paramArrayOfShort2, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short EndFullScreen(int paramInt1, int paramInt2);
+    private static short EndFullScreen(int paramInt1, int paramInt2) {
+        return PlatformManager.EndFullScreen(paramInt1, paramInt2);
+    }
 }
 

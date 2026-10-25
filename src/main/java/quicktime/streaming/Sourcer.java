@@ -5,6 +5,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.std.comp.Component;
@@ -270,21 +271,37 @@ public class Sourcer extends Component implements QTStreamingLib {
         return arrayOfInt[0];
     }
 
-    public static native int QTSSourcerInitialize(int paramInt1, int paramInt2);
+    public static int QTSSourcerInitialize(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSSourcerInitialize(paramInt1, paramInt2);
+    }
 
-    public static native int QTSSourcerSetInfo(int paramInt1, int paramInt2, int paramInt3);
+    public static int QTSSourcerSetInfo(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSSourcerSetInfo(paramInt1, paramInt2, paramInt3);
+    }
 
-    public static native int QTSSourcerGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    public static int QTSSourcerGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSSourcerGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    public static native int QTSSourcerIdle(int paramInt1, long paramLong, int paramInt2, int[] paramArrayOfInt);
+    public static int QTSSourcerIdle(int paramInt1, long paramLong, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSSourcerIdle(paramInt1, paramLong, paramInt2, paramArrayOfInt);
+    }
 
-    public static native int QTSSourcerSetEnable(int paramInt1, byte paramByte, int paramInt2);
+    public static int QTSSourcerSetEnable(int paramInt1, byte paramByte, int paramInt2) {
+        return StreamingManager.QTSSourcerSetEnable(paramInt1, paramByte, paramInt2);
+    }
 
-    public static native int QTSSourcerGetEnable(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    public static int QTSSourcerGetEnable(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return StreamingManager.QTSSourcerGetEnable(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    public static native int QTSSourcerSetTimeScale(int paramInt1, int paramInt2);
+    public static int QTSSourcerSetTimeScale(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSSourcerSetTimeScale(paramInt1, paramInt2);
+    }
 
-    public static native int QTSSourcerGetTimeScale(int paramInt, int[] paramArrayOfInt);
+    public static int QTSSourcerGetTimeScale(int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSSourcerGetTimeScale(paramInt, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming

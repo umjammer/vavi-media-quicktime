@@ -5,6 +5,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ClockManager;
 import quicktime.jdirect.QTNative;
 
 
@@ -195,11 +196,17 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
         notifyAll();
     }
 
-    private static native int GetTimeBaseEffectiveRate(int paramInt);
+    private static int GetTimeBaseEffectiveRate(int paramInt) {
+        return ClockManager.GetTimeBaseEffectiveRate(paramInt);
+    }
 
-    private static native int GetTimeBaseTime(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTimeBaseTime(int paramInt1, int paramInt2, int paramInt3) {
+        return ClockManager.GetTimeBaseTime(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GetCallBackTimeBase(int paramInt);
+    private static int GetCallBackTimeBase(int paramInt) {
+        return ClockManager.GetCallBackTimeBase(paramInt);
+    }
 
     static class CBMethodClosure extends quicktime.jdirect.MethodClosure {
         CBMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {

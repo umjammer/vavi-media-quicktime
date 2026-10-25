@@ -4,6 +4,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.PixMap;
@@ -241,14 +244,24 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
         this.rowBytes = paramInt;
     }
 
-    private static native int GetPixBaseAddr(int paramInt);
+    private static int GetPixBaseAddr(int paramInt) {
+        return QuickDrawManager.GetPixBaseAddr(paramInt);
+    }
 
-    private static native short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short getShortFromHandle(int paramInt1, int paramInt2);
+    private static short getShortFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromHandle(int paramInt1, int paramInt2);
+    private static int getIntFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 }
 

@@ -2,6 +2,7 @@ package quicktime.sound;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.SoundLib;
@@ -179,6 +180,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
         return getClass().getName() + "[recordSize=" + getRecordSize() + ",format=" + QTUtils.fromOSType(getFormat()) + ",compressionID=" + getCompressionID() + ",samplesPerPacket=" + getSamplesPerPacket() + ",bytesPerPacket=" + getBytesPerPacket() + ",bytesPerFrame=" + getBytesPerFrame() + ",bytesPerSample=" + getBytesPerSample() + "]";
     }
 
-    private static native short GetCompressionInfo(short paramShort1, int paramInt, short paramShort2, short paramShort3, byte[] paramArrayOfByte);
+    private static short GetCompressionInfo(short paramShort1, int paramInt, short paramShort2, short paramShort3, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.GetCompressionInfo(paramShort1, paramInt, paramShort2, paramShort3, paramArrayOfByte);
+    }
 }
 

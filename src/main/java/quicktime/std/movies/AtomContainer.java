@@ -9,6 +9,14 @@ import java.util.List;
 import java.util.Map;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.AtomManager;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MediaHandlerManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.StreamingManager;
+import quicktime.internal.toolbox.VRManager;
 import quicktime.jdirect.QTNative;
 import quicktime.std.StdQTException;
 import quicktime.std.image.GraphicsExporter;
@@ -901,103 +909,201 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
         return new Atom(i);
     }
 
-    private static native int GraphicsExportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportCanUseCompressor(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int GraphicsExportCanUseCompressor(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportCanUseCompressor(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportGetMIMETypeList(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsExportGetMIMETypeList(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTVRGetVRWorld(int paramInt, int[] paramArrayOfInt);
+    private static short QTVRGetVRWorld(int paramInt, int[] paramArrayOfInt) {
+        return VRManager.QTVRGetVRWorld(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTVRGetNodeInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTVRGetNodeInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return VRManager.QTVRGetNodeInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetMIMETypeList(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetMIMETypeList(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetExportImageTypeList(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetExportImageTypeList(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetExportImageTypeList(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetExportSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetExportSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetExportSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+    }
 
-    private static native short GetMediaInputMap(int paramInt, int[] paramArrayOfInt);
+    private static short GetMediaInputMap(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMediaInputMap(paramInt, paramArrayOfInt);
+    }
 
-    private static native short GetMediaPropertyAtom(int paramInt, int[] paramArrayOfInt);
+    private static short GetMediaPropertyAtom(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMediaPropertyAtom(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieExportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt);
+    private static int MovieExportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieExportGetSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieImportGetMIMETypeList(int paramInt, int[] paramArrayOfInt);
+    private static int MovieImportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieImportGetMIMETypeList(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieImportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt);
+    private static int MovieImportGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieImportGetSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+    }
 
-    private static native int Media3DGetNamedObjectList(int paramInt, int[] paramArrayOfInt);
+    private static int Media3DGetNamedObjectList(int paramInt, int[] paramArrayOfInt) {
+        return MediaHandlerManager.Media3DGetNamedObjectList(paramInt, paramArrayOfInt);
+    }
 
-    private static native int Media3DGetRendererList(int paramInt, int[] paramArrayOfInt);
+    private static int Media3DGetRendererList(int paramInt, int[] paramArrayOfInt) {
+        return MediaHandlerManager.Media3DGetRendererList(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SCGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt);
+    private static int SCGetSettingsAsAtomContainer(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetSettingsAsAtomContainer(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTNewAtomContainer(int[] paramArrayOfInt);
+    private static short QTNewAtomContainer(int[] paramArrayOfInt) {
+        return AtomManager.QTNewAtomContainer(paramArrayOfInt);
+    }
 
-    private static native short QTGetAtomDataPtr(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTGetAtomDataPtr(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return AtomManager.QTGetAtomDataPtr(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int QTGetNextChildType(int paramInt1, int paramInt2, int paramInt3);
+    private static int QTGetNextChildType(int paramInt1, int paramInt2, int paramInt3) {
+        return AtomManager.QTGetNextChildType(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native short QTCountChildrenOfType(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTCountChildrenOfType(int paramInt1, int paramInt2, int paramInt3) {
+        return AtomManager.QTCountChildrenOfType(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int QTFindChildByIndex(int paramInt1, int paramInt2, int paramInt3, short paramShort, int[] paramArrayOfInt);
+    private static int QTFindChildByIndex(int paramInt1, int paramInt2, int paramInt3, short paramShort, int[] paramArrayOfInt) {
+        return AtomManager.QTFindChildByIndex(paramInt1, paramInt2, paramInt3, paramShort, paramArrayOfInt);
+    }
 
-    private static native int QTFindChildByID(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short[] paramArrayOfShort);
+    private static int QTFindChildByID(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short[] paramArrayOfShort) {
+        return AtomManager.QTFindChildByID(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfShort);
+    }
 
-    private static native short QTNextChildAnyType(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short QTNextChildAnyType(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return AtomManager.QTNextChildAnyType(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSetAtomData(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSetAtomData(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return StreamingManager.QTSetAtomData(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort);
+    private static short QTSetAtomData(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort) {
+        return StreamingManager.QTSetAtomData(paramInt1, paramInt2, paramInt3, paramArrayOfShort);
+    }
 
-    private static native short QTCopyAtomDataToHandle(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTCopyAtomDataToHandle(int paramInt1, int paramInt2, int paramInt3) {
+        return AtomManager.QTCopyAtomDataToHandle(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short QTCopyAtomDataToPtr(int paramInt1, int paramInt2, byte paramByte, int paramInt3, int paramInt4, int[] paramArrayOfInt);
+    private static short QTCopyAtomDataToPtr(int paramInt1, int paramInt2, byte paramByte, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return AtomManager.QTCopyAtomDataToPtr(paramInt1, paramInt2, paramByte, paramInt3, paramInt4, paramArrayOfInt);
+    }
 
-    private static native short QTCopyAtomDataToPtr(int paramInt1, int paramInt2, byte paramByte, int paramInt3, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static short QTCopyAtomDataToPtr(int paramInt1, int paramInt2, byte paramByte, int paramInt3, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return AtomManager.QTCopyAtomDataToPtr(paramInt1, paramInt2, paramByte, paramInt3, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native short QTGetAtomTypeAndID(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTGetAtomTypeAndID(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return AtomManager.QTGetAtomTypeAndID(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTCopyAtom(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTCopyAtom(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return AtomManager.QTCopyAtom(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short QTLockContainer(int paramInt);
+    private static short QTLockContainer(int paramInt) {
+        return AtomManager.QTLockContainer(paramInt);
+    }
 
-    private static native short QTUnlockContainer(int paramInt);
+    private static short QTUnlockContainer(int paramInt) {
+        return AtomManager.QTUnlockContainer(paramInt);
+    }
 
-    private static native short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return AtomManager.QTInsertChild(paramInt1, paramInt2, paramInt3, paramInt4, paramShort, paramInt5, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, int paramInt6, int[] paramArrayOfInt);
+    private static short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, int paramInt6, int[] paramArrayOfInt) {
+        return AtomManager.QTInsertChild(paramInt1, paramInt2, paramInt3, paramInt4, paramShort, paramInt5, paramInt6, paramArrayOfInt);
+    }
 
-    private static native short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return AtomManager.QTInsertChild(paramInt1, paramInt2, paramInt3, paramInt4, paramShort, paramInt5, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, short[] paramArrayOfShort, int[] paramArrayOfInt);
+    private static short QTInsertChild(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort, int paramInt5, short[] paramArrayOfShort, int[] paramArrayOfInt) {
+        return AtomManager.QTInsertChild(paramInt1, paramInt2, paramInt3, paramInt4, paramShort, paramInt5, paramArrayOfShort, paramArrayOfInt);
+    }
 
-    private static native short QTInsertChildren(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTInsertChildren(int paramInt1, int paramInt2, int paramInt3) {
+        return AtomManager.QTInsertChildren(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short QTRemoveAtom(int paramInt1, int paramInt2);
+    private static short QTRemoveAtom(int paramInt1, int paramInt2) {
+        return AtomManager.QTRemoveAtom(paramInt1, paramInt2);
+    }
 
-    private static native short QTRemoveChildren(int paramInt1, int paramInt2);
+    private static short QTRemoveChildren(int paramInt1, int paramInt2) {
+        return AtomManager.QTRemoveChildren(paramInt1, paramInt2);
+    }
 
-    private static native short QTReplaceAtom(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTReplaceAtom(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return AtomManager.QTReplaceAtom(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSwapAtoms(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSwapAtoms(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSwapAtoms(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short QTSetAtomID(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSetAtomID(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSetAtomID(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short ITextAddString(int paramInt1, int paramInt2, short paramShort, byte[] paramArrayOfByte);
+    private static short ITextAddString(int paramInt1, int paramInt2, short paramShort, byte[] paramArrayOfByte) {
+        return QuickDrawManager.ITextAddString(paramInt1, paramInt2, paramShort, paramArrayOfByte);
+    }
 
-    private static native short ITextRemoveString(int paramInt1, int paramInt2, short paramShort, int paramInt3);
+    private static short ITextRemoveString(int paramInt1, int paramInt2, short paramShort, int paramInt3) {
+        return QuickDrawManager.ITextRemoveString(paramInt1, paramInt2, paramShort, paramInt3);
+    }
 
-    private static native short ITextGetString(int paramInt1, int paramInt2, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte);
+    private static short ITextGetString(int paramInt1, int paramInt2, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte) {
+        return QuickDrawManager.ITextGetString(paramInt1, paramInt2, paramShort, paramArrayOfShort, paramArrayOfByte);
+    }
 
-    private static native int QTGetAtomParent(int paramInt1, int paramInt2);
+    private static int QTGetAtomParent(int paramInt1, int paramInt2) {
+        return AtomManager.QTGetAtomParent(paramInt1, paramInt2);
+    }
 
     @Override
     protected void _dispose() throws QTException {

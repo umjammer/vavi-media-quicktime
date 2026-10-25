@@ -5,6 +5,9 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -558,48 +561,92 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         return super.toString();
     }
 
-    private static native int SGGetSoundInputDriver(int paramInt);
+    private static int SGGetSoundInputDriver(int paramInt) {
+        return SequenceGrabberManager.SGGetSoundInputDriver(paramInt);
+    }
 
-    private static native short SPBOpenDevice(byte[] paramArrayOfByte, short paramShort, int[] paramArrayOfInt);
+    private static short SPBOpenDevice(byte[] paramArrayOfByte, short paramShort, int[] paramArrayOfInt) {
+        return SoundManager.SPBOpenDevice(paramArrayOfByte, paramShort, paramArrayOfInt);
+    }
 
-    private static native short SPBGetDeviceInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short SPBSetDeviceInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short SPBSetDeviceInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SoundManager.SPBSetDeviceInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short SPBGetDeviceInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native short SPBSetDeviceInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static short SPBSetDeviceInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return SoundManager.SPBSetDeviceInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native short SPBGetDeviceInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SPBGetDeviceInfo(int paramInt1, int paramInt2, int paramInt3);
+    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, int paramInt3) {
+        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SPBMillisecondsToBytes(int paramInt, int[] paramArrayOfInt);
+    private static short SPBMillisecondsToBytes(int paramInt, int[] paramArrayOfInt) {
+        return SoundManager.SPBMillisecondsToBytes(paramInt, paramArrayOfInt);
+    }
 
-    private static native short SPBBytesToMilliseconds(int paramInt, int[] paramArrayOfInt);
+    private static short SPBBytesToMilliseconds(int paramInt, int[] paramArrayOfInt) {
+        return SoundManager.SPBBytesToMilliseconds(paramInt, paramArrayOfInt);
+    }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native byte getByteFromHandle(int paramInt1, int paramInt2);
+    private static byte getByteFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native short getShortFromPointer(int paramInt1, int paramInt2);
+    private static short getShortFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromHandle(int paramInt1, int paramInt2);
+    private static int getIntFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native void DisposeHandle(int paramInt);
+    private static void DisposeHandle(int paramInt) {
+        MemoryManager.DisposeHandle(paramInt);
+    }
 
-    private static native short getShortFromHandle(int paramInt1, int paramInt2);
+    private static short getShortFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    }
 
-    private static native short SPBGetIndexedDevice(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static short SPBGetIndexedDevice(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return SoundManager.SPBGetIndexedDevice(paramShort, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int NewPtr(int paramInt);
+    private static int NewPtr(int paramInt) {
+        return MemoryManager.NewPtr(paramInt);
+    }
 
-    private static native void DisposePtr(int paramInt);
+    private static void DisposePtr(int paramInt) {
+        MemoryManager.DisposePtr(paramInt);
+    }
 }
 

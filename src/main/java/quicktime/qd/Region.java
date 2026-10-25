@@ -6,6 +6,13 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieControllerManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -738,109 +745,213 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
         return super.toString() + "[rgnBBox=" + getRgnBBox() + "]";
     }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void OpenRgn();
+    private static void OpenRgn() {
+        QuickDrawManager.OpenRgn();
+    }
 
-    private static native void CloseRgn(int paramInt);
+    private static void CloseRgn(int paramInt) {
+        QuickDrawManager.CloseRgn(paramInt);
+    }
 
-    private static native int NewRgn();
+    private static int NewRgn() {
+        return QuickDrawManager.NewRgn();
+    }
 
-    private static native short MemError();
+    private static short MemError() {
+        return MemoryManager.MemError();
+    }
 
-    private static native void SectRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static void SectRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.SectRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportGetClip(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetClip(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetClip(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetDefaultClip(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetDefaultClip(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GraphicsImportGetDefaultClip(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GetMovieDisplayClipRgn(int paramInt);
+    private static int GetMovieDisplayClipRgn(int paramInt) {
+        return MovieToolbox.GetMovieDisplayClipRgn(paramInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int GetMovieDisplayBoundsRgn(int paramInt);
+    private static int GetMovieDisplayBoundsRgn(int paramInt) {
+        return MovieToolbox.GetMovieDisplayBoundsRgn(paramInt);
+    }
 
-    private static native int GetMovieClipRgn(int paramInt);
+    private static int GetMovieClipRgn(int paramInt) {
+        return MovieToolbox.GetMovieClipRgn(paramInt);
+    }
 
-    private static native int GetMovieBoundsRgn(int paramInt);
+    private static int GetMovieBoundsRgn(int paramInt) {
+        return MovieToolbox.GetMovieBoundsRgn(paramInt);
+    }
 
-    private static native int GetMovieSegmentDisplayBoundsRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetMovieSegmentDisplayBoundsRgn(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.GetMovieSegmentDisplayBoundsRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MCGetControllerBoundsRgn(int paramInt);
+    private static int MCGetControllerBoundsRgn(int paramInt) {
+        return MovieControllerManager.MCGetControllerBoundsRgn(paramInt);
+    }
 
-    private static native int MCGetWindowRgn(int paramInt1, int paramInt2);
+    private static int MCGetWindowRgn(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCGetWindowRgn(paramInt1, paramInt2);
+    }
 
-    private static native int MCGetClip(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int MCGetClip(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return MovieControllerManager.MCGetClip(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int MCDrawBadge(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int MCDrawBadge(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MovieControllerManager.MCDrawBadge(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int GetTrackClipRgn(int paramInt);
+    private static int GetTrackClipRgn(int paramInt) {
+        return MovieToolbox.GetTrackClipRgn(paramInt);
+    }
 
-    private static native int GetTrackDisplayBoundsRgn(int paramInt);
+    private static int GetTrackDisplayBoundsRgn(int paramInt) {
+        return MovieToolbox.GetTrackDisplayBoundsRgn(paramInt);
+    }
 
-    private static native int GetTrackMovieBoundsRgn(int paramInt);
+    private static int GetTrackMovieBoundsRgn(int paramInt) {
+        return MovieToolbox.GetTrackMovieBoundsRgn(paramInt);
+    }
 
-    private static native int GetTrackBoundsRgn(int paramInt);
+    private static int GetTrackBoundsRgn(int paramInt) {
+        return MovieToolbox.GetTrackBoundsRgn(paramInt);
+    }
 
-    private static native int GetTrackSegmentDisplayBoundsRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTrackSegmentDisplayBoundsRgn(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.GetTrackSegmentDisplayBoundsRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SGGetChannelClip(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetChannelClip(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetChannelClip(paramInt, paramArrayOfInt);
+    }
 
-    private static native short BitMapToRegion(int paramInt1, int paramInt2);
+    private static short BitMapToRegion(int paramInt1, int paramInt2) {
+        return QuickDrawManager.BitMapToRegion(paramInt1, paramInt2);
+    }
 
-    private static native void RectRgn(int paramInt, byte[] paramArrayOfByte);
+    private static void RectRgn(int paramInt, byte[] paramArrayOfByte) {
+        QuickDrawManager.RectRgn(paramInt, paramArrayOfByte);
+    }
 
-    private static native void MacCopyRgn(int paramInt1, int paramInt2);
+    private static void MacCopyRgn(int paramInt1, int paramInt2) {
+        QuickDrawManager.MacCopyRgn(paramInt1, paramInt2);
+    }
 
-    private static native void SetEmptyRgn(int paramInt);
+    private static void SetEmptyRgn(int paramInt) {
+        QuickDrawManager.SetEmptyRgn(paramInt);
+    }
 
-    private static native void MacSetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4);
+    private static void MacSetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
+        QuickDrawManager.MacSetRectRgn(paramInt, paramShort1, paramShort2, paramShort3, paramShort4);
+    }
 
-    private static native void MacOffsetRgn(int paramInt, short paramShort1, short paramShort2);
+    private static void MacOffsetRgn(int paramInt, short paramShort1, short paramShort2) {
+        QuickDrawManager.MacOffsetRgn(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native void InsetRgn(int paramInt, short paramShort1, short paramShort2);
+    private static void InsetRgn(int paramInt, short paramShort1, short paramShort2) {
+        QuickDrawManager.InsetRgn(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native void DisposeRgn(int paramInt);
+    private static void DisposeRgn(int paramInt) {
+        QuickDrawManager.DisposeRgn(paramInt);
+    }
 
-    private static native void MacUnionRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static void MacUnionRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.MacUnionRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void DiffRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static void DiffRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.DiffRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void MacXorRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static void MacXorRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.MacXorRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native byte RectInRgn(byte[] paramArrayOfByte, int paramInt);
+    private static byte RectInRgn(byte[] paramArrayOfByte, int paramInt) {
+        return QuickDrawManager.RectInRgn(paramArrayOfByte, paramInt);
+    }
 
-    private static native byte MacEqualRgn(int paramInt1, int paramInt2);
+    private static byte MacEqualRgn(int paramInt1, int paramInt2) {
+        return QuickDrawManager.MacEqualRgn(paramInt1, paramInt2);
+    }
 
-    private static native byte EmptyRgn(int paramInt);
+    private static byte EmptyRgn(int paramInt) {
+        return QuickDrawManager.EmptyRgn(paramInt);
+    }
 
-    private static native void MapRgn(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static void MapRgn(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        QuickDrawManager.MapRgn(paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native byte PtInRgn(int paramInt1, int paramInt2);
+    private static byte PtInRgn(int paramInt1, int paramInt2) {
+        return QuickDrawManager.PtInRgn(paramInt1, paramInt2);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void PaintRgn(int paramInt);
+    private static void PaintRgn(int paramInt) {
+        QuickDrawManager.PaintRgn(paramInt);
+    }
 
-    private static native void CopyRgn(int paramInt1, int paramInt2);
+    private static void CopyRgn(int paramInt1, int paramInt2) {
+        QuickDrawManager.CopyRgn(paramInt1, paramInt2);
+    }
 
-    private static native void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4);
+    private static void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
+        QuickDrawManager.SetRectRgn(paramInt, paramShort1, paramShort2, paramShort3, paramShort4);
+    }
 
-    private static native void OffsetRgn(int paramInt, short paramShort1, short paramShort2);
+    private static void OffsetRgn(int paramInt, short paramShort1, short paramShort2) {
+        QuickDrawManager.OffsetRgn(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native void UnionRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static void UnionRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.UnionRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void XorRgn(int paramInt1, int paramInt2, int paramInt3);
+    private static void XorRgn(int paramInt1, int paramInt2, int paramInt3) {
+        QuickDrawManager.XorRgn(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native byte EqualRgn(int paramInt1, int paramInt2);
+    private static byte EqualRgn(int paramInt1, int paramInt2) {
+        return QuickDrawManager.EqualRgn(paramInt1, paramInt2);
+    }
 
-    private static native byte GetRegionBounds(int paramInt, byte[] paramArrayOfByte);
+    private static byte GetRegionBounds(int paramInt, byte[] paramArrayOfByte) {
+        return QuickDrawManager.GetRegionBounds(paramInt, paramArrayOfByte);
+    }
 
-    private static native byte IsRegionRectangular(int paramInt);
+    private static byte IsRegionRectangular(int paramInt) {
+        return QuickDrawManager.IsRegionRectangular(paramInt);
+    }
 
-    private static native short QTSPresGetClip(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTSPresGetClip(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetClip(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/Region

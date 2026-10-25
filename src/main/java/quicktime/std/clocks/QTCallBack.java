@@ -5,6 +5,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ClockManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -205,12 +206,20 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
      */
     public abstract void execute();
 
-    private static native short CallMeWhen(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static short CallMeWhen(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return ClockManager.CallMeWhen(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native short GetCallBackType(int paramInt);
+    private static short GetCallBackType(int paramInt) {
+        return ClockManager.GetCallBackType(paramInt);
+    }
 
-    private static native void CancelCallBack(int paramInt);
+    private static void CancelCallBack(int paramInt) {
+        ClockManager.CancelCallBack(paramInt);
+    }
 
-    private static native int NewCallBack(int paramInt, short paramShort);
+    private static int NewCallBack(int paramInt, short paramShort) {
+        return ClockManager.NewCallBack(paramInt, paramShort);
+    }
 }
 

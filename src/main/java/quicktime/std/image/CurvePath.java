@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDPoint;
@@ -63,7 +64,11 @@ public final class CurvePath extends QTHandle implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static native int CurveNewPath(int paramInt, int[] paramArrayOfInt);
+    private static int CurveNewPath(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.CurveNewPath(paramInt, paramArrayOfInt);
+    }
 
-    private static native int CurveInsertPointIntoPath(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, byte paramByte);
+    private static int CurveInsertPointIntoPath(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, byte paramByte) {
+        return ImageCompressionManager.CurveInsertPointIntoPath(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramByte);
+    }
 }

@@ -2,6 +2,7 @@ package quicktime.std.movies;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.EffectsManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -45,5 +46,7 @@ public final class EffectsList extends AtomContainer implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static native short QTGetEffectsList(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3);
+    private static short QTGetEffectsList(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3) {
+        return EffectsManager.QTGetEffectsList(paramArrayOfInt, paramInt1, paramInt2, paramInt3);
+    }
 }

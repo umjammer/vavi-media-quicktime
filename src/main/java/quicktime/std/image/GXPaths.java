@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDPoint;
@@ -180,19 +181,33 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
         return new NearestPointInfo(arrayOfInt1[0], arrayOfInt2[0], QTUtils.Fix2X(arrayOfInt3[0]));
     }
 
-    private static native int CurveCountPointsInPath(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt);
+    private static int CurveCountPointsInPath(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.CurveCountPointsInPath(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int CurveSetPathPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte paramByte);
+    private static int CurveSetPathPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte paramByte) {
+        return ImageCompressionManager.CurveSetPathPoint(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramByte);
+    }
 
-    private static native int CurveGetLength(int paramInt1, byte[] paramArrayOfByte, int paramInt2, long[] paramArrayOfLong);
+    private static int CurveGetLength(int paramInt1, byte[] paramArrayOfByte, int paramInt2, long[] paramArrayOfLong) {
+        return ImageCompressionManager.CurveGetLength(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfLong);
+    }
 
-    private static native int CurveGetPathPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int CurveGetPathPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return ImageCompressionManager.CurveGetPathPoint(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int CurveLengthToPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int CurveLengthToPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return ImageCompressionManager.CurveLengthToPoint(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int CurveGetNearestPathPoint(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static int CurveGetNearestPathPoint(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return ImageCompressionManager.CurveGetNearestPathPoint(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 
-    private static native int CurvePathPointToLength(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int[] paramArrayOfInt);
+    private static int CurvePathPointToLength(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.CurvePathPointToLength(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

@@ -5,6 +5,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import javax.swing.SwingUtilities;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.QTNative;
 
@@ -12,20 +13,25 @@ import quicktime.jdirect.QTNative;
 class HIToolBoxFunctions implements InterfaceLib {
     private static Object linkage;
 
-    static native int SetEventLoopTimerNextFireTime(int paramInt, double paramDouble);
+    static int SetEventLoopTimerNextFireTime(int paramInt, double paramDouble) {
+        return PlatformManager.SetEventLoopTimerNextFireTime(paramInt, paramDouble);
+    }
 
-    static native int RemoveEventLoopTimer(int paramInt);
+    static int RemoveEventLoopTimer(int paramInt) {
+        return PlatformManager.RemoveEventLoopTimer(paramInt);
+    }
 
-    static native void _UseMainRunLoopForCurrentThread();
+    static void _UseMainRunLoopForCurrentThread() {
+        PlatformManager._UseMainRunLoopForCurrentThread();
+    }
 
-    static native int GetMainEventLoop();
+    static int GetMainEventLoop() {
+        return PlatformManager.GetMainEventLoop();
+    }
 
-    static native int InstallEventLoopTimer(int paramInt1,
-                                            double paramDouble1,
-                                            double paramDouble2,
-                                            int paramInt2,
-                                            int paramInt3,
-                                            int[] paramArrayOfInt);
+    static int InstallEventLoopTimer(int paramInt1, double paramDouble1, double paramDouble2, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return PlatformManager.InstallEventLoopTimer(paramInt1, paramDouble1, paramDouble2, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
     static {
         class PrivelegedAction {

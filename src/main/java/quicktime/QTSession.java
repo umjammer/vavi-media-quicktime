@@ -8,6 +8,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Vector;
 import quicktime.app.time.TaskThread;
+import quicktime.internal.toolbox.PlatformManager;
+import quicktime.internal.toolbox.QD3DManager;
+import quicktime.internal.toolbox.VRManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -857,9 +860,13 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     static void setJavaThreadHook() {
     }
 
-    private static native void DestroyPortAssociation(int paramInt);
+    private static void DestroyPortAssociation(int paramInt) {
+        PlatformManager.DestroyPortAssociation(paramInt);
+    }
 
-    private static native int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3);
+    private static int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3) {
+        return PlatformManager.CreatePortAssociation(paramInt1, paramInt2, paramInt3);
+    }
 
     private static short InitializeQTML(int paramInt) {
         return 0;
@@ -875,17 +882,29 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     private static void ExitMovies() {
     }
 
-    private static native short Gestalt(int paramInt, int[] paramArrayOfInt);
+    private static short Gestalt(int paramInt, int[] paramArrayOfInt) {
+        return PlatformManager.Gestalt(paramInt, paramArrayOfInt);
+    }
 
-    private static native short InitializeQTVR();
+    private static short InitializeQTVR() {
+        return VRManager.InitializeQTVR();
+    }
 
-    private static native short TerminateQTVR();
+    private static short TerminateQTVR() {
+        return VRManager.TerminateQTVR();
+    }
 
-    private static native int Q3Initialize();
+    private static int Q3Initialize() {
+        return QD3DManager.Q3Initialize();
+    }
 
-    private static native int Q3Exit();
+    private static int Q3Exit() {
+        return QD3DManager.Q3Exit();
+    }
 
-    private static native void SetJavaThreadCallbackProc();
+    private static void SetJavaThreadCallbackProc() {
+        PlatformManager.SetJavaThreadCallbackProc();
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/QTSession

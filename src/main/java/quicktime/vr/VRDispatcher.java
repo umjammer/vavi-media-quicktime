@@ -3,6 +3,7 @@ package quicktime.vr;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -138,9 +139,13 @@ final class VRDispatcher implements PrimitivesLib {
         this.mMethodClosure = null;
     }
 
-    private static native void setByteInPointer(int paramInt1, int paramInt2, byte paramByte);
+    private static void setByteInPointer(int paramInt1, int paramInt2, byte paramByte) {
+        MemoryManager.setByteInPointer(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
     static class VRMethodClosure extends MethodClosure {
         VRMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {

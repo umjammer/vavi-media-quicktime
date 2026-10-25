@@ -5,6 +5,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import quicktime.QTException;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 
 
@@ -207,7 +208,9 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
         this.mMethodClosure = null;
     }
 
-    private static native byte getByteFromPointer(int paramInt1, int paramInt2);
+    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    }
 
     static class XMLMethodClosure extends quicktime.jdirect.MethodClosure {
         XMLMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
@@ -219,13 +222,13 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
         }
     }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  byte[] paramArrayOfByte,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 }
 
 
