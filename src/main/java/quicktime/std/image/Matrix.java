@@ -8,6 +8,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDPoint;
@@ -554,49 +556,93 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         return EqualMatrix(getBytes(), paramMatrix.getBytes()) != 0;
     }
 
-    private static native short QuadToQuadMatrix(int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte);
+    private static short QuadToQuadMatrix(int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte) {
+        return MatrixManager.QuadToQuadMatrix(paramArrayOfInt1, paramArrayOfInt2, paramArrayOfByte);
+    }
 
-    private static native short GetMatrixType(byte[] paramArrayOfByte);
+    private static short GetMatrixType(byte[] paramArrayOfByte) {
+        return MatrixManager.GetMatrixType(paramArrayOfByte);
+    }
 
-    private static native void SetIdentityMatrix(byte[] paramArrayOfByte);
+    private static void SetIdentityMatrix(byte[] paramArrayOfByte) {
+        MatrixManager.SetIdentityMatrix(paramArrayOfByte);
+    }
 
-    private static native void TranslateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void TranslateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MatrixManager.TranslateMatrix(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native void RotateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3);
+    private static void RotateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3) {
+        MatrixManager.RotateMatrix(paramArrayOfByte, paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void ScaleMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void ScaleMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MatrixManager.ScaleMatrix(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void SkewMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void SkewMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MatrixManager.SkewMatrix(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native byte InverseMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static byte InverseMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return MatrixManager.InverseMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native void ConcatMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static void ConcatMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        MatrixManager.ConcatMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native short TransformFixedPoints(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt);
+    private static short TransformFixedPoints(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
+        return MatrixManager.TransformFixedPoints(paramArrayOfByte, paramArrayOfInt, paramInt);
+    }
 
-    private static native short TransformPoints(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt);
+    private static short TransformPoints(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
+        return MatrixManager.TransformPoints(paramArrayOfByte, paramArrayOfInt, paramInt);
+    }
 
-    private static native byte TransformFixedRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt);
+    private static byte TransformFixedRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
+        return MatrixManager.TransformFixedRect(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    }
 
-    private static native byte TransformFixedRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt);
+    private static byte TransformFixedRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt) {
+        return MatrixManager.TransformFixedRect(paramArrayOfByte1, paramArrayOfByte2, paramInt);
+    }
 
-    private static native byte TransformRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt);
+    private static byte TransformRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
+        return MatrixManager.TransformRect(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    }
 
-    private static native byte TransformRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt);
+    private static byte TransformRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt) {
+        return MatrixManager.TransformRect(paramArrayOfByte1, paramArrayOfByte2, paramInt);
+    }
 
-    private static native short TransformRgn(byte[] paramArrayOfByte, int paramInt);
+    private static short TransformRgn(byte[] paramArrayOfByte, int paramInt) {
+        return MatrixManager.TransformRgn(paramArrayOfByte, paramInt);
+    }
 
-    private static native void RectMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static void RectMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        MatrixManager.RectMatrix(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native void MapMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static void MapMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        MatrixManager.MapMatrix(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native void CopyMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static void CopyMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        MatrixManager.CopyMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native byte EqualMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static byte EqualMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return MatrixManager.EqualMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

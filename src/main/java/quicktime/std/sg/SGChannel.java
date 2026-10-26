@@ -7,6 +7,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -296,34 +297,64 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     abstract SampleDescription makeDescription() throws QTException;
 
-    private static native int SGSetChannelDevice(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetChannelDevice(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetChannelDevice(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGNewChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SGNewChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGNewChannel(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SGSettingsDialog(int paramInt1, int paramInt2, short paramShort, int[] paramArrayOfInt, int paramInt3, int paramInt4, int paramInt5);
+    private static int SGSettingsDialog(int paramInt1, int paramInt2, short paramShort, int[] paramArrayOfInt, int paramInt3, int paramInt4, int paramInt5) {
+        return SequenceGrabberManager.SGSettingsDialog(paramInt1, paramInt2, paramShort, paramArrayOfInt, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native int SGChannelSetDataSourceName(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int SGChannelSetDataSourceName(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return SequenceGrabberManager.SGChannelSetDataSourceName(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native int SGChannelGetDataSourceName(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int SGChannelGetDataSourceName(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGChannelGetDataSourceName(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int SGSetChannelSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int SGSetChannelSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return SequenceGrabberManager.SGSetChannelSettings(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int SGInitChannel(int paramInt1, int paramInt2);
+    private static int SGInitChannel(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGInitChannel(paramInt1, paramInt2);
+    }
 
-    private static native int SGSetChannelUsage(int paramInt1, int paramInt2);
+    private static int SGSetChannelUsage(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetChannelUsage(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetChannelUsage(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetChannelUsage(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetChannelUsage(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGSetChannelPlayFlags(int paramInt1, int paramInt2);
+    private static int SGSetChannelPlayFlags(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetChannelPlayFlags(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetChannelPlayFlags(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetChannelPlayFlags(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetChannelPlayFlags(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGGetChannelDeviceList(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SGGetChannelDeviceList(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetChannelDeviceList(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SGGetChannelSampleDescription(int paramInt1, int paramInt2);
+    private static int SGGetChannelSampleDescription(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGGetChannelSampleDescription(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetChannelTimeScale(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetChannelTimeScale(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetChannelTimeScale(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGDisposeChannel(int paramInt1, int paramInt2);
+    private static int SGDisposeChannel(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGDisposeChannel(paramInt1, paramInt2);
+    }
 }
 

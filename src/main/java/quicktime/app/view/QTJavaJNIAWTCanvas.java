@@ -5,10 +5,13 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import quicktime.QTSession;
+import quicktime.internal.toolbox.PlatformManager;
 
 
 final class QTJavaJNIAWTCanvas {
-    static native void RemoveNewContext(Object paramObject);
+    static void RemoveNewContext(Object paramObject) {
+        PlatformManager.RemoveNewContext(paramObject);
+    }
 
     static {
         class PrivelegedAction {

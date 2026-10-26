@@ -3,6 +3,7 @@ package quicktime.sound;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.io.OpenFile;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.QTNative;
@@ -86,8 +87,12 @@ public final class SndInfo implements SoundLib, InterfaceLib {
         this.dataOffset = paramInt2;
     }
 
-    private static native short ParseAIFFHeader(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short ParseAIFFHeader(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SoundManager.ParseAIFFHeader(paramShort, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short SetupAIFFHeader(short paramShort1, short paramShort2, int paramInt1, short paramShort3, int paramInt2, int paramInt3, int paramInt4);
+    private static short SetupAIFFHeader(short paramShort1, short paramShort2, int paramInt1, short paramShort3, int paramInt2, int paramInt3, int paramInt4) {
+        return SoundManager.SetupAIFFHeader(paramShort1, paramShort2, paramInt1, paramShort3, paramInt2, paramInt3, paramInt4);
+    }
 }
 

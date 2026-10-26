@@ -5,6 +5,9 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -834,103 +837,201 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static native int GraphicsExportGetInputGraphicsImporter(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInputGraphicsImporter(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetInputGraphicsImporter(paramInt, paramArrayOfInt);
+    }
 
-    private static native short GetGraphicsImporterForFile(byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static short GetGraphicsImporterForFile(byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GetGraphicsImporterForFile(paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native short GetGraphicsImporterForFileWithFlags(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt);
+    private static short GetGraphicsImporterForFileWithFlags(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
+        return GraphicsImportManager.GetGraphicsImporterForFileWithFlags(paramArrayOfByte, paramArrayOfInt, paramInt);
+    }
 
-    private static native short GetGraphicsImporterForDataRef(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short GetGraphicsImporterForDataRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GetGraphicsImporterForDataRef(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short GetGraphicsImporterForDataRefWithFlags(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3);
+    private static short GetGraphicsImporterForDataRefWithFlags(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
+        return GraphicsImportManager.GetGraphicsImporterForDataRefWithFlags(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    }
 
-    private static native int GraphicsImportSetDataReference(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsImportSetDataReference(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportSetDataReference(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportGetDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsImportGetDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsImportSetDataFile(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportSetDataFile(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetDataFile(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportSetDataHandle(int paramInt1, int paramInt2);
+    private static int GraphicsImportSetDataHandle(int paramInt1, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSetDataHandle(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsImportGetDataOffsetAndSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsImportGetDataOffsetAndSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetDataOffsetAndSize(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsImportReadData(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int GraphicsImportReadData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int GraphicsImportReadData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3);
+    private static int GraphicsImportReadData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportReadData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3);
+    private static int GraphicsImportReadData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportSetClip(int paramInt1, int paramInt2);
+    private static int GraphicsImportSetClip(int paramInt1, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSetClip(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsImportSetSourceRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportSetSourceRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetSourceRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetSourceRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetSourceRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetSourceRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetNaturalBounds(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetNaturalBounds(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetNaturalBounds(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportDraw(int paramInt);
+    private static int GraphicsImportDraw(int paramInt) {
+        return GraphicsImportManager.GraphicsImportDraw(paramInt);
+    }
 
-    private static native int GraphicsImportSetMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportSetMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportSetBoundsRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportSetBoundsRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetBoundsRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetBoundsRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetBoundsRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetBoundsRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportSaveAsPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int GraphicsImportSaveAsPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSaveAsPicture(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native int GraphicsImportSaveAsQuickTimeImageFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int GraphicsImportSaveAsQuickTimeImageFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSaveAsQuickTimeImageFile(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native int GraphicsImportSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int GraphicsImportSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportSetQuality(int paramInt1, int paramInt2);
+    private static int GraphicsImportSetQuality(int paramInt1, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSetQuality(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsImportGetQuality(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetQuality(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetQuality(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsImportSetGWorld(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsImportSetGWorld(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportSetGWorld(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportValidate(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportValidate(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportValidate(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportDoesDrawAllPixels(int paramInt, short[] paramArrayOfShort);
+    private static int GraphicsImportDoesDrawAllPixels(int paramInt, short[] paramArrayOfShort) {
+        return GraphicsImportManager.GraphicsImportDoesDrawAllPixels(paramInt, paramArrayOfShort);
+    }
 
-    private static native int GraphicsImportGetMetaData(int paramInt1, int paramInt2);
+    private static int GraphicsImportGetMetaData(int paramInt1, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportGetMetaData(paramInt1, paramInt2);
+    }
 
-    private static native short GraphicsImportExportImageFile(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, short paramShort);
+    private static short GraphicsImportExportImageFile(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, short paramShort) {
+        return GraphicsImportManager.GraphicsImportExportImageFile(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramShort);
+    }
 
-    private static native int GraphicsImportSetExportSettingsFromAtomContainer(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportSetExportSettingsFromAtomContainer(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportSetExportSettingsFromAtomContainer(paramInt, paramArrayOfInt);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsImportSetDataReferenceOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsImportSetDataReferenceOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportSetDataReferenceOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsImportGetDataReferenceOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsImportGetDataReferenceOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetDataReferenceOffsetAndLimit(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsImportGetImageCount(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetImageCount(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetImageCount(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportSetImageIndex(int paramInt1, int paramInt2);
+    private static int GraphicsImportSetImageIndex(int paramInt1, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSetImageIndex(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsImportGetImageIndex(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetImageIndex(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetImageIndex(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsImportGetDefaultMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetDefaultMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDefaultMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetDefaultGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetDefaultGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDefaultGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetDefaultSourceRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetDefaultSourceRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDefaultSourceRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportSetDestRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportSetDestRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetDestRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportGetDestRect(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetDestRect(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDestRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportSetFlags(int paramInt1, int paramInt2);
+    private static int GraphicsImportSetFlags(int paramInt1, int paramInt2) {
+        return GraphicsImportManager.GraphicsImportSetFlags(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsImportGetFlags(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsImportGetFlags(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetFlags(paramInt, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

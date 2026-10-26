@@ -3,6 +3,7 @@ package quicktime.std.movies.media;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
@@ -217,7 +218,9 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
         StdQTException.checkError(i);
     }
 
-    private static native int FlashMediaSetPan(int paramInt, short paramShort1, short paramShort2);
+    private static int FlashMediaSetPan(int paramInt, short paramShort1, short paramShort2) {
+        return MediaHandlerManager.FlashMediaSetPan(paramInt, paramShort1, paramShort2);
+    }
 
     class myStringHandle extends StringHandle {
 
@@ -226,26 +229,48 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
         }
     }
 
-    private static native int FlashMediaSetZoom(int paramInt, short paramShort);
+    private static int FlashMediaSetZoom(int paramInt, short paramShort) {
+        return MediaHandlerManager.FlashMediaSetZoom(paramInt, paramShort);
+    }
 
-    private static native int FlashMediaSetZoomRect(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static int FlashMediaSetZoomRect(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MediaHandlerManager.FlashMediaSetZoomRect(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native int FlashMediaGetRefConBounds(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4);
+    private static int FlashMediaGetRefConBounds(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
+        return MediaHandlerManager.FlashMediaGetRefConBounds(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    }
 
-    private static native int FlashMediaGetRefConID(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int FlashMediaGetRefConID(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.FlashMediaGetRefConID(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int FlashMediaIDToRefCon(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int FlashMediaIDToRefCon(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.FlashMediaIDToRefCon(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int FlashMediaGetDisplayedFrameNumber(int paramInt, int[] paramArrayOfInt);
+    private static int FlashMediaGetDisplayedFrameNumber(int paramInt, int[] paramArrayOfInt) {
+        return MediaHandlerManager.FlashMediaGetDisplayedFrameNumber(paramInt, paramArrayOfInt);
+    }
 
-    private static native int FlashMediaFrameNumberToMovieTime(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int FlashMediaFrameNumberToMovieTime(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.FlashMediaFrameNumberToMovieTime(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int FlashMediaFrameLabelToMovieTime(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int FlashMediaFrameLabelToMovieTime(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.FlashMediaFrameLabelToMovieTime(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int FlashMediaGetFlashVariable(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt);
+    private static int FlashMediaGetFlashVariable(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.FlashMediaGetFlashVariable(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    }
 
-    private static native int FlashMediaSetFlashVariable(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte paramByte);
+    private static int FlashMediaSetFlashVariable(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte paramByte) {
+        return MediaHandlerManager.FlashMediaSetFlashVariable(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramByte);
+    }
 
-    private static native int FlashMediaGetSupportedSwfVersion(int paramInt, byte[] paramArrayOfByte);
+    private static int FlashMediaGetSupportedSwfVersion(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.FlashMediaGetSupportedSwfVersion(paramInt, paramArrayOfByte);
+    }
 }
 

@@ -5,11 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import com.apple.mrj.macos.toolbox.FSSpec;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.FileManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -476,92 +481,19 @@ public final class QTFile extends File implements QuickTimeLib {
     }
 
     private static byte[] path2Spec(String paramString, boolean paramBoolean) throws QTIOException {
-        if (QTSession.isCurrentOS(4)) {
-            if (QTSession.getJavaVersion() >= 65540) {
-                Object localObject1 = new byte[255];
-                byte[] arrayOfByte1 = new byte[255];
-                try {
-                    byte[] arrayOfByte3 = new byte[80];
-                    byte[] arrayOfByte5 = new byte[80];
-                    File localFile = new File(paramString);
-                    Object localObject3;
-                    Object localObject2;
-                    int i;
-                    Object localObject4;
-                    if (localFile.exists()) {
-                        localObject3 = new int[1];
-                        int[] arrayOfInt = new int[1];
-                        byte[] arrayOfByte6;
-                        if ((QTSession.isCurrentOS(4)) && (EndianOrder.isNativeLittleEndian())) {
-                            localObject2 = localFile.getAbsolutePath().getBytes("UTF-16LE");
-                            arrayOfByte6 = new byte[((byte[]) localObject2).length];
-                            System.arraycopy(localObject2, 0, arrayOfByte6, 0, ((byte[]) localObject2).length);
-                        } else {
-                            localObject2 = localFile.getAbsolutePath().getBytes("UTF-16");
-                            arrayOfByte6 = new byte[((byte[]) localObject2).length - 2];
-                            System.arraycopy(localObject2, 2, arrayOfByte6, 0, ((byte[]) localObject2).length - 2);
-                        }
-                        i = QTNewDataReferenceFromFullPathUnicode(arrayOfByte6, localFile.getAbsolutePath().length(), -1, 0, (int[]) localObject3, arrayOfInt);
-                        if (debug)
-                            System.err.println(localFile.getAbsolutePath() + " " + i + " outDataRefType[0] " + arrayOfInt[0]);
-                        if (arrayOfInt[0] == 1634494835) {
-                            localObject4 = makeFSSpec();
-                            byte[] arrayOfByte7 = { 0 };
-                            int i1 = ResolveAlias(null, ((byte[]) localObject3)[0], (byte[]) localObject1, arrayOfByte7);
-                        }
-                    } else {
-                        i = FSPathMakeRef(QTUtils.String2CString(localFile.getParent()), arrayOfByte5, null);
-                        if (i == 0) {
-                            int j = FSGetCatalogInfo(arrayOfByte5, 0, 0, 0, arrayOfByte1, 0);
-                            localObject2 = new File(paramString).getAbsolutePath();
-                            int k = ((String) localObject2).lastIndexOf(File.separator);
-                            localObject3 = ((String) localObject2).substring(0, k);
-                            int m = ((String) localObject3).lastIndexOf(File.separator);
-                            localObject4 = ':' + ((String) localObject2).substring(m + 1, k) + ':' + ((String) localObject2).substring(k + 1, ((String) localObject2).length());
-                            if (debug) {
-                                System.err.println(j + " partialPath = " + (String) localObject4);
-                            }
-                            int n = FSMakeFSSpec(getShortFromArray(arrayOfByte1, 0), getIntFromArray(arrayOfByte1, 2), QTUtils.String2PString((String) localObject4, ((String) localObject4).length()), (byte[]) localObject1);
-                        }
-                    }
-                } catch (Throwable localThrowable2) {
-                    localThrowable2.printStackTrace();
-                    throw new QTIOException(localThrowable2.getMessage());
-                }
-                return (byte[]) localObject1;
-            }
-            FSSpec fsSpec;
-            try {
-                fsSpec = new FSSpec(new File(paramString));
-            } catch (Throwable localThrowable1) {
-                throw new QTIOException(localThrowable1.getMessage());
-            }
-            return fsSpec.getBytes();
+        File file = new File(paramString).getAbsoluteFile();
+        if (paramBoolean && !file.exists()) {
+            throw new QTIOException(-43, paramString);
         }
-        Object localObject1 = pathName2QT(paramString);
-        byte[] arrayOfByte2 = QTUtils.String2PString((String) localObject1, 255);
-        byte[] arrayOfByte4 = makeFSSpec(arrayOfByte2, paramBoolean);
-        try {
-            QTUtils.checkFreeMemory();
-        } catch (UtilException localUtilException) {
-            throw new QTIOException(-108, paramString);
-        }
-        return arrayOfByte4;
+        return FileManager.pathToSpec(file.getPath());
     }
 
     private static String spec2Path(byte[] paramArrayOfByte) throws QTIOException {
-        String str;
-        if (QTSession.isCurrentOS(1)) {
-            try {
-                QTUtils.checkFreeMemory();
-            } catch (UtilException localUtilException) {
-                throw new QTIOException(-108, "");
-            }
-            str = MacFSSpec_getFullName(paramArrayOfByte);
-        } else {
-            str = QTUtils.PString2String(paramArrayOfByte, 6);
+        String path = FileManager.specToPath(paramArrayOfByte);
+        if (path == null) {
+            throw new QTIOException(-43, QTUtils.PString2String(paramArrayOfByte, 6));
         }
-        return str;
+        return path;
     }
 
     private static final byte[] makeFSSpec(byte[] paramArrayOfByte, boolean paramBoolean) throws QTIOException {
@@ -731,13 +663,21 @@ public final class QTFile extends File implements QuickTimeLib {
             return new String(arrayOfByte);
         }
 
-        private static native void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+        private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+            MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+        }
 
-        private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
+        private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+            MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+        }
 
-        private static native void setByteInPointer(int paramInt1, int paramInt2, byte paramByte);
+        private static void setByteInPointer(int paramInt1, int paramInt2, byte paramByte) {
+            MemoryManager.setByteInPointer(paramInt1, paramInt2, paramByte);
+        }
 
-        private static native byte getByteFromPointer(int paramInt1, int paramInt2);
+        private static byte getByteFromPointer(int paramInt1, int paramInt2) {
+            return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+        }
     }
 
     private static String MacFSSpec_getFullName(byte[] paramArrayOfByte) throws QTIOException {
@@ -779,49 +719,95 @@ public final class QTFile extends File implements QuickTimeLib {
         return new String(arrayOfByte);
     }
 
-    private static native short QTNewDataReferenceFromFullPathUnicode(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTNewDataReferenceFromFullPathUnicode(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return FileManager.QTNewDataReferenceFromFullPathUnicode(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native int NewPtrClear(int paramInt);
+    private static int NewPtrClear(int paramInt) {
+        return MemoryManager.NewPtrClear(paramInt);
+    }
 
-    private static native void DisposePtr(int paramInt);
+    private static void DisposePtr(int paramInt) {
+        MemoryManager.DisposePtr(paramInt);
+    }
 
-    private static native short FSMakeFSSpec(short paramShort, int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static short FSMakeFSSpec(short paramShort, int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return FileManager.FSMakeFSSpec(paramShort, paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native short PBGetCatInfoSync(byte[] paramArrayOfByte);
+    private static short PBGetCatInfoSync(byte[] paramArrayOfByte) {
+        return FileManager.PBGetCatInfoSync(paramArrayOfByte);
+    }
 
-    private static native short ResolveAlias(byte[] paramArrayOfByte1, int paramInt, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static short ResolveAlias(byte[] paramArrayOfByte1, int paramInt, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return FileManager.ResolveAlias(paramArrayOfByte1, paramInt, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native short ResolveAliasFile(byte[] paramArrayOfByte1, byte paramByte, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static short ResolveAliasFile(byte[] paramArrayOfByte1, byte paramByte, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return FileManager.ResolveAliasFile(paramArrayOfByte1, paramByte, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native short FSPathMakeRef(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static short FSPathMakeRef(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return FileManager.FSPathMakeRef(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int FSGetCatalogInfo(byte[] paramArrayOfByte1, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int paramInt4);
+    private static int FSGetCatalogInfo(byte[] paramArrayOfByte1, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int paramInt4) {
+        return FileManager.FSGetCatalogInfo(paramArrayOfByte1, paramInt1, paramInt2, paramInt3, paramArrayOfByte2, paramInt4);
+    }
 
-    private static native short FSMakeFSRefUnicode(byte[] paramArrayOfByte1, int paramInt1, byte[] paramArrayOfByte2, int paramInt2, byte[] paramArrayOfByte3);
+    private static short FSMakeFSRefUnicode(byte[] paramArrayOfByte1, int paramInt1, byte[] paramArrayOfByte2, int paramInt2, byte[] paramArrayOfByte3) {
+        return FileManager.FSMakeFSRefUnicode(paramArrayOfByte1, paramInt1, paramArrayOfByte2, paramInt2, paramArrayOfByte3);
+    }
 
-    private static native int GraphicsImportGetDataFile(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsImportGetDataFile(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDataFile(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportGetInputFile(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportGetInputFile(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportGetInputFile(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportGetOutputFile(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportGetOutputFile(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportGetOutputFile(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsImportDoExportImageFileDialog(int paramInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt2, int[] paramArrayOfInt, byte[] paramArrayOfByte3, short[] paramArrayOfShort);
+    private static int GraphicsImportDoExportImageFileDialog(int paramInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt2, int[] paramArrayOfInt, byte[] paramArrayOfByte3, short[] paramArrayOfShort) {
+        return GraphicsImportManager.GraphicsImportDoExportImageFileDialog(paramInt1, paramArrayOfByte1, paramArrayOfByte2, paramInt2, paramArrayOfInt, paramArrayOfByte3, paramArrayOfShort);
+    }
 
-    private static native int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetDataOutput(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native short ConvertFileToMovieFile(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt1, short paramShort, short[] paramArrayOfShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short ConvertFileToMovieFile(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt1, short paramShort, short[] paramArrayOfShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.ConvertFileToMovieFile(paramArrayOfByte1, paramArrayOfByte2, paramInt1, paramShort, paramArrayOfShort, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native void StandardGetFilePreview(int paramInt, short paramShort, int[] paramArrayOfInt, byte[] paramArrayOfByte);
+    private static void StandardGetFilePreview(int paramInt, short paramShort, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        FileManager.StandardGetFilePreview(paramInt, paramShort, paramArrayOfInt, paramArrayOfByte);
+    }
 
-    private static native short DeleteMovieFile(byte[] paramArrayOfByte);
+    private static short DeleteMovieFile(byte[] paramArrayOfByte) {
+        return MovieToolbox.DeleteMovieFile(paramArrayOfByte);
+    }
 
-    private static native short CreateMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, short[] paramArrayOfShort, int[] paramArrayOfInt);
+    private static short CreateMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, short[] paramArrayOfShort, int[] paramArrayOfInt) {
+        return MovieToolbox.CreateMovieFile(paramArrayOfByte, paramInt1, paramShort, paramInt2, paramArrayOfShort, paramArrayOfInt);
+    }
 
-    private static native short CreateShortcutMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4);
+    private static short CreateShortcutMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.CreateShortcutMovieFile(paramArrayOfByte, paramInt1, paramShort, paramInt2, paramInt3, paramInt4);
+    }
 }

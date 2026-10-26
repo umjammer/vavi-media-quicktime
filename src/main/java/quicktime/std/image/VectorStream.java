@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.QDColor;
 import quicktime.qd.QDPoint;
@@ -181,21 +183,37 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
         return AtomData.fromVectorStream(this.c, this, paramInt);
     }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native int CurveCreateVectorStream(int paramInt, int[] paramArrayOfInt);
+    private static int CurveCreateVectorStream(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.CurveCreateVectorStream(paramInt, paramArrayOfInt);
+    }
 
-    private static native int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return ImageCompressionManager.CurveAddAtomToVectorStream(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4);
+    private static int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4) {
+        return ImageCompressionManager.CurveAddAtomToVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfInt, paramInt4);
+    }
 
-    private static native int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, int paramInt4);
+    private static int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, int paramInt4) {
+        return ImageCompressionManager.CurveAddAtomToVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramInt4);
+    }
 
-    private static native int CurveAddPathAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3);
+    private static int CurveAddPathAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.CurveAddPathAtomToVectorStream(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int CurveAddZeroAtomToVectorStream(int paramInt1, int paramInt2);
+    private static int CurveAddZeroAtomToVectorStream(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.CurveAddZeroAtomToVectorStream(paramInt1, paramInt2);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

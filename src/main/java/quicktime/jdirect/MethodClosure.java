@@ -2,6 +2,7 @@ package quicktime.jdirect;
 
 import com.apple.mrj.jdirect.MethodClosureUPP;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.PlatformManager;
 
 public class MethodClosure {
 
@@ -44,7 +45,11 @@ public class MethodClosure {
         }
     }
 
-    private static native int NewMethodClosure(Object paramObject, String paramString1, String paramString2);
+    private static int NewMethodClosure(Object paramObject, String paramString1, String paramString2) {
+        return PlatformManager.NewMethodClosure(paramObject, paramString1, paramString2);
+    }
 
-    private static native void DisposeMethodClosure(int paramInt);
+    private static void DisposeMethodClosure(int paramInt) {
+        PlatformManager.DisposeMethodClosure(paramInt);
+    }
 }

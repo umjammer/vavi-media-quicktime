@@ -5,6 +5,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.ColorTable;
@@ -393,37 +395,69 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
     private void setFlushProc(Object paramObject, int paramInt) {
     }
 
-    private static native short CompressSequenceBegin(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, short paramShort2, int paramInt9);
+    private static short CompressSequenceBegin(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, short paramShort2, int paramInt9) {
+        return ImageCompressionManager.CompressSequenceBegin(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramShort2, paramInt9);
+    }
 
-    private static native short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, byte[] paramArrayOfByte2, int[] paramArrayOfInt, byte[] paramArrayOfByte3, int paramInt3);
+    private static short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, byte[] paramArrayOfByte2, int[] paramArrayOfInt, byte[] paramArrayOfByte3, int paramInt3) {
+        return ImageCompressionManager.CompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte1, paramShort, paramArrayOfByte2, paramArrayOfInt, paramArrayOfByte3, paramInt3);
+    }
 
-    private static native short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, int paramInt3, int[] paramArrayOfInt, byte[] paramArrayOfByte2, int paramInt4);
+    private static short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, int paramInt3, int[] paramArrayOfInt, byte[] paramArrayOfByte2, int paramInt4) {
+        return ImageCompressionManager.CompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte1, paramShort, paramInt3, paramArrayOfInt, paramArrayOfByte2, paramInt4);
+    }
 
-    private static native short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte2, int paramInt3);
+    private static short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte2, int paramInt3) {
+        return ImageCompressionManager.CompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte1, paramShort, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfByte2, paramInt3);
+    }
 
-    private static native short GetCSequenceMaxCompressionSize(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short GetCSequenceMaxCompressionSize(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCSequenceMaxCompressionSize(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short SetCSequenceQuality(int paramInt1, int paramInt2, int paramInt3);
+    private static short SetCSequenceQuality(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.SetCSequenceQuality(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SetCSequenceKeyFrameRate(int paramInt1, int paramInt2);
+    private static short SetCSequenceKeyFrameRate(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SetCSequenceKeyFrameRate(paramInt1, paramInt2);
+    }
 
-    private static native short GetCSequenceKeyFrameRate(int paramInt, int[] paramArrayOfInt);
+    private static short GetCSequenceKeyFrameRate(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCSequenceKeyFrameRate(paramInt, paramArrayOfInt);
+    }
 
-    private static native short SetCSequenceFrameNumber(int paramInt1, int paramInt2);
+    private static short SetCSequenceFrameNumber(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SetCSequenceFrameNumber(paramInt1, paramInt2);
+    }
 
-    private static native short GetCSequenceFrameNumber(int paramInt, int[] paramArrayOfInt);
+    private static short GetCSequenceFrameNumber(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCSequenceFrameNumber(paramInt, paramArrayOfInt);
+    }
 
-    private static native short SetCSequencePrev(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SetCSequencePrev(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SetCSequencePrev(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SetCSequenceDataRateParams(int paramInt, byte[] paramArrayOfByte);
+    private static short SetCSequenceDataRateParams(int paramInt, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SetCSequenceDataRateParams(paramInt, paramArrayOfByte);
+    }
 
-    private static native short GetCSequenceDataRateParams(int paramInt, byte[] paramArrayOfByte);
+    private static short GetCSequenceDataRateParams(int paramInt, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.GetCSequenceDataRateParams(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SetCSequencePreferredPacketSize(int paramInt1, int paramInt2);
+    private static short SetCSequencePreferredPacketSize(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SetCSequencePreferredPacketSize(paramInt1, paramInt2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

@@ -3,6 +3,7 @@ package quicktime.std.sg;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.sound.SPBDevice;
@@ -159,20 +160,36 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static native int SGSetSoundInputParameters(int paramInt1, short paramShort1, short paramShort2, int paramInt2);
+    private static int SGSetSoundInputParameters(int paramInt1, short paramShort1, short paramShort2, int paramInt2) {
+        return SequenceGrabberManager.SGSetSoundInputParameters(paramInt1, paramShort1, paramShort2, paramInt2);
+    }
 
-    private static native int SGGetSoundInputParameters(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int[] paramArrayOfInt);
+    private static int SGGetSoundInputParameters(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetSoundInputParameters(paramInt, paramArrayOfShort1, paramArrayOfShort2, paramArrayOfInt);
+    }
 
-    private static native int SGSetSoundInputRate(int paramInt1, int paramInt2);
+    private static int SGSetSoundInputRate(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetSoundInputRate(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetSoundInputRate(int paramInt);
+    private static int SGGetSoundInputRate(int paramInt) {
+        return SequenceGrabberManager.SGGetSoundInputRate(paramInt);
+    }
 
-    private static native int SGSetSoundInputDriver(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetSoundInputDriver(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetSoundInputDriver(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSoundInputDriverChanged(int paramInt);
+    private static int SGSoundInputDriverChanged(int paramInt) {
+        return SequenceGrabberManager.SGSoundInputDriverChanged(paramInt);
+    }
 
-    private static native int SGSetSoundRecordChunkSize(int paramInt1, int paramInt2);
+    private static int SGSetSoundRecordChunkSize(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetSoundRecordChunkSize(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetSoundRecordChunkSize(int paramInt);
+    private static int SGGetSoundRecordChunkSize(int paramInt) {
+        return SequenceGrabberManager.SGGetSoundRecordChunkSize(paramInt);
+    }
 }
 

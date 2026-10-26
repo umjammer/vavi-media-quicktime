@@ -7,6 +7,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -141,22 +142,40 @@ public class CompressionDialog extends Component implements QuickTimeLib {
         StdQTException.checkError(SCSetSettingsFromAtomContainer(_ID(), QTObject.ID(paramAtomContainer)));
     }
 
-    private static native int SCRequestImageSettings(int paramInt);
+    private static int SCRequestImageSettings(int paramInt) {
+        return ImageCompressionManager.SCRequestImageSettings(paramInt);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, int paramInt3);
+    private static int SCSetInfo(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SCSetSettingsFromAtomContainer(int paramInt1, int paramInt2);
+    private static int SCSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
+        return ImageCompressionManager.SCSetSettingsFromAtomContainer(paramInt1, paramInt2);
+    }
 }
 

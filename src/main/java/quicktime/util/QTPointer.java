@@ -5,6 +5,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.sound.SoundComponentData;
@@ -149,6 +151,7 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
     public void setSize(int paramInt) throws UtilException {
         SetPtrSize(_ID(), paramInt);
         UtilException.checkError(MemError());
+        setSizeField(paramInt);
     }
 
     /**
@@ -161,16 +164,28 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
         BlockMove(QTObject.ID(paramQTPointerRef) + 0, _ID() + i, paramQTPointerRef.getSize());
     }
 
-    private static native int GraphicsExportGetInputPtr(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetInputPtr(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsExportManager.GraphicsExportGetInputPtr(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
+    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void SetPtrSize(int paramInt1, int paramInt2);
+    private static void SetPtrSize(int paramInt1, int paramInt2) {
+        MemoryManager.SetPtrSize(paramInt1, paramInt2);
+    }
 
-    private static native short MemError();
+    private static short MemError() {
+        return MemoryManager.MemError();
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(int[] paramArrayOfInt, int paramInt);
+    private static int getIntFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
+    }
 }
 

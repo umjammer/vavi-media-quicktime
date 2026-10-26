@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.XMLParserManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -771,36 +772,68 @@ public final class XMLParser extends Component implements QuickTimeLib {
         return QTUtils.PString2String(arrayOfByte, 0);
     }
 
-    private static native short XMLParseDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt);
+    private static short XMLParseDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return XMLParserManager.XMLParseDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    }
 
-    private static native short XMLParseFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt);
+    private static short XMLParseFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt) {
+        return XMLParserManager.XMLParseFile(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short XMLParseGetDetailedParseError(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte);
+    private static short XMLParseGetDetailedParseError(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return XMLParserManager.XMLParseGetDetailedParseError(paramInt, paramArrayOfInt, paramArrayOfByte);
+    }
 
-    private static native short XMLParseAddElement(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt, int paramInt3);
+    private static short XMLParseAddElement(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
+        return XMLParserManager.XMLParseAddElement(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfInt, paramInt3);
+    }
 
-    private static native short XMLParseAddAttribute(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static short XMLParseAddAttribute(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return XMLParserManager.XMLParseAddAttribute(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native short XMLParseAddAttributeAndValue(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, int[] paramArrayOfInt, int paramInt4, byte[] paramArrayOfByte2);
+    private static short XMLParseAddAttributeAndValue(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, int[] paramArrayOfInt, int paramInt4, byte[] paramArrayOfByte2) {
+        return XMLParserManager.XMLParseAddAttributeAndValue(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfInt, paramInt4, paramArrayOfByte2);
+    }
 
-    private static native short XMLParseAddAttributeValueKind(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte);
+    private static short XMLParseAddAttributeValueKind(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
+        return XMLParserManager.XMLParseAddAttributeValueKind(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    }
 
-    private static native short XMLParseAddNameSpace(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static short XMLParseAddNameSpace(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return XMLParserManager.XMLParseAddNameSpace(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native short XMLParseSetOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3);
+    private static short XMLParseSetOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
+        return XMLParserManager.XMLParseSetOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short XMLParseSetStartDocumentHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetStartDocumentHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetStartDocumentHandler(paramInt1, paramInt2);
+    }
 
-    private static native short XMLParseSetEndDocumentHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetEndDocumentHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetEndDocumentHandler(paramInt1, paramInt2);
+    }
 
-    private static native short XMLParseSetStartElementHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetStartElementHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetStartElementHandler(paramInt1, paramInt2);
+    }
 
-    private static native short XMLParseSetEndElementHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetEndElementHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetEndElementHandler(paramInt1, paramInt2);
+    }
 
-    private static native short XMLParseSetCharDataHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetCharDataHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetCharDataHandler(paramInt1, paramInt2);
+    }
 
-    private static native short XMLParseSetPreprocessInstructionHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetPreprocessInstructionHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetPreprocessInstructionHandler(paramInt1, paramInt2);
+    }
 
-    private static native short XMLParseSetCommentHandler(int paramInt1, int paramInt2);
+    private static short XMLParseSetCommentHandler(int paramInt1, int paramInt2) {
+        return XMLParserManager.XMLParseSetCommentHandler(paramInt1, paramInt2);
+    }
 }
 

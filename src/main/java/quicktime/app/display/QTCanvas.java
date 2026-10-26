@@ -17,6 +17,7 @@ import quicktime.QTSession;
 import quicktime.QTUnknownOSException;
 import quicktime.app.image.ImageDrawer;
 import quicktime.app.players.QTPlayer;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.qd.NativeGraphics;
 import quicktime.qd.NativeGraphicsException;
 import quicktime.qd.QDGraphics;
@@ -1384,5 +1385,7 @@ public class QTCanvas extends Canvas {
         }
     }
 
-    private static native void RemoveContext(Object paramObject);
+    private static void RemoveContext(Object paramObject) {
+        PlatformManager.RemoveContext(paramObject);
+    }
 }

@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.util.EndianDescriptor;
@@ -348,12 +349,20 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return new QDPoint(this.x, this.y, this.floatPt);
     }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native float getFloatFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static float getFloatFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getFloatFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native void setFloatInArray(byte[] paramArrayOfByte, int paramInt, float paramFloat);
+    private static void setFloatInArray(byte[] paramArrayOfByte, int paramInt, float paramFloat) {
+        MemoryManager.setFloatInArray(paramArrayOfByte, paramInt, paramFloat);
+    }
 }
 

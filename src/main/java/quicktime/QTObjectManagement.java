@@ -7,6 +7,19 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import quicktime.internal.toolbox.AtomManager;
+import quicktime.internal.toolbox.ClockManager;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieControllerManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.MusicManager;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.SoundManager;
+import quicktime.internal.toolbox.SpriteManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.ColorTable;
 import quicktime.qd.Polygon;
@@ -309,7 +322,7 @@ final class QTObjectManagement implements
             } else {
                 disposeSessionObject(paramInt, paramString);
             }
-        } catch (UnsatisfiedLinkError ignored) {
+        } catch (UnsatisfiedLinkError | UnsupportedOperationException ignored) {
         }
     }
 
@@ -382,59 +395,109 @@ final class QTObjectManagement implements
             }
 
             QTException.checkError(i);
-        } catch (UnsatisfiedLinkError ignored) {
+        } catch (UnsatisfiedLinkError | UnsupportedOperationException ignored) {
         }
     }
 
-    private static native short QTDisposeAtomContainer(int paramInt);
+    private static short QTDisposeAtomContainer(int paramInt) {
+        return AtomManager.QTDisposeAtomContainer(paramInt);
+    }
 
-    private static native void DisposeCTable(int paramInt);
+    private static void DisposeCTable(int paramInt) {
+        QuickDrawManager.DisposeCTable(paramInt);
+    }
 
-    private static native void DisposeHandle(int paramInt);
+    private static void DisposeHandle(int paramInt) {
+        MemoryManager.DisposeHandle(paramInt);
+    }
 
-    private static native void DisposeRgn(int paramInt);
+    private static void DisposeRgn(int paramInt) {
+        QuickDrawManager.DisposeRgn(paramInt);
+    }
 
-    private static native short DisposeCodecNameList(int paramInt);
+    private static short DisposeCodecNameList(int paramInt) {
+        return ImageCompressionManager.DisposeCodecNameList(paramInt);
+    }
 
-    private static native void DisposeMatte(int paramInt);
+    private static void DisposeMatte(int paramInt) {
+        QuickDrawManager.DisposeMatte(paramInt);
+    }
 
-    private static native void DisposePtr(int paramInt);
+    private static void DisposePtr(int paramInt) {
+        MemoryManager.DisposePtr(paramInt);
+    }
 
-    private static native short DisposeMovieEditState(int paramInt);
+    private static short DisposeMovieEditState(int paramInt) {
+        return MovieToolbox.DisposeMovieEditState(paramInt);
+    }
 
-    private static native void DisposeTimeBase(int paramInt);
+    private static void DisposeTimeBase(int paramInt) {
+        ClockManager.DisposeTimeBase(paramInt);
+    }
 
-    private static native short DisposeTrackEditState(int paramInt);
+    private static short DisposeTrackEditState(int paramInt) {
+        return MovieToolbox.DisposeTrackEditState(paramInt);
+    }
 
-    private static native short DisposeUserData(int paramInt);
+    private static short DisposeUserData(int paramInt) {
+        return MovieToolbox.DisposeUserData(paramInt);
+    }
 
-    private static native void DisposeMovieController(int paramInt);
+    private static void DisposeMovieController(int paramInt) {
+        MovieControllerManager.DisposeMovieController(paramInt);
+    }
 
-    private static native void DisposeMovie(int paramInt);
+    private static void DisposeMovie(int paramInt) {
+        MovieToolbox.DisposeMovie(paramInt);
+    }
 
-    private static native short CloseComponent(int paramInt);
+    private static short CloseComponent(int paramInt) {
+        return ComponentManager.CloseComponent(paramInt);
+    }
 
-    private static native short CDSequenceEnd(int paramInt);
+    private static short CDSequenceEnd(int paramInt) {
+        return ImageCompressionManager.CDSequenceEnd(paramInt);
+    }
 
-    private static native void DisposeSpriteWorld(int paramInt);
+    private static void DisposeSpriteWorld(int paramInt) {
+        SpriteManager.DisposeSpriteWorld(paramInt);
+    }
 
-    private static native void KillPicture(int paramInt);
+    private static void KillPicture(int paramInt) {
+        QuickDrawManager.KillPicture(paramInt);
+    }
 
-    private static native void KillPoly(int paramInt);
+    private static void KillPoly(int paramInt) {
+        QuickDrawManager.KillPoly(paramInt);
+    }
 
-    private static native void DisposeGWorld(int paramInt);
+    private static void DisposeGWorld(int paramInt) {
+        QuickDrawManager.DisposeGWorld(paramInt);
+    }
 
-    private static native short SPBCloseDevice(int paramInt);
+    private static short SPBCloseDevice(int paramInt) {
+        return SoundManager.SPBCloseDevice(paramInt);
+    }
 
-    private static native short SndDisposeChannel(int paramInt, byte paramByte);
+    private static short SndDisposeChannel(int paramInt, byte paramByte) {
+        return SoundManager.SndDisposeChannel(paramInt, paramByte);
+    }
 
-    private static native int NADisposeNoteChannel(int paramInt1, int paramInt2);
+    private static int NADisposeNoteChannel(int paramInt1, int paramInt2) {
+        return MusicManager.NADisposeNoteChannel(paramInt1, paramInt2);
+    }
 
-    private static native int SGDisposeDeviceList(int paramInt1, int paramInt2);
+    private static int SGDisposeDeviceList(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGDisposeDeviceList(paramInt1, paramInt2);
+    }
 
-    private static native short QTSDisposePresentation(int paramInt1, int paramInt2);
+    private static short QTSDisposePresentation(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSDisposePresentation(paramInt1, paramInt2);
+    }
 
-    private static native short QTSDisposeStream(int paramInt1, int paramInt2);
+    private static short QTSDisposeStream(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSDisposeStream(paramInt1, paramInt2);
+    }
 }
 
 

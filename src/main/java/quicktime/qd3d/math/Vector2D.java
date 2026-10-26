@@ -7,6 +7,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.QD3DManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -210,17 +211,31 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
         return new Vector2D(getBytes());
     }
 
-    private static native int Q3Vector2D_Scale(byte[] paramArrayOfByte1, float paramFloat, byte[] paramArrayOfByte2);
+    private static int Q3Vector2D_Scale(byte[] paramArrayOfByte1, float paramFloat, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Vector2D_Scale(paramArrayOfByte1, paramFloat, paramArrayOfByte2);
+    }
 
-    private static native float Q3Vector2D_Length(byte[] paramArrayOfByte);
+    private static float Q3Vector2D_Length(byte[] paramArrayOfByte) {
+        return QD3DManager.Q3Vector2D_Length(paramArrayOfByte);
+    }
 
-    private static native int Q3Vector2D_Normalize(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Vector2D_Normalize(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Vector2D_Normalize(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Vector2D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Vector2D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Vector2D_Add(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int Q3Vector2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Vector2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Vector2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native float Q3Vector2D_Cross(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static float Q3Vector2D_Cross(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Vector2D_Cross(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native float Q3Vector2D_Dot(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static float Q3Vector2D_Dot(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Vector2D_Dot(paramArrayOfByte1, paramArrayOfByte2);
+    }
 }

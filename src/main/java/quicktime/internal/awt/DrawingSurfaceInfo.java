@@ -4,7 +4,7 @@
  * Programmed by Naohide Sano
  */
 
-package sun.awt;
+package quicktime.internal.awt;
 
 import java.awt.Component;
 

@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MediaHandlerManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
@@ -168,22 +170,40 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
         StdQTException.checkError(i);
     }
 
-    private static native int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, int paramInt3) {
+        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieMediaGetCurrentTrackProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static int MovieMediaGetCurrentTrackProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return MediaHandlerManager.MovieMediaGetCurrentTrackProperty(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native int MovieMediaGetChildMovieDataReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte, int paramInt5, int paramInt6);
+    private static int MovieMediaGetChildMovieDataReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte, int paramInt5, int paramInt6) {
+        return MediaHandlerManager.MovieMediaGetChildMovieDataReference(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte, paramInt5, paramInt6);
+    }
 
-    private static native int MovieMediaSetChildMovieDataReference(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static int MovieMediaSetChildMovieDataReference(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MovieMediaSetChildMovieDataReference(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native int MovieMediaLoadChildMovieFromDataReference(int paramInt1, int paramInt2);
+    private static int MovieMediaLoadChildMovieFromDataReference(int paramInt1, int paramInt2) {
+        return MediaHandlerManager.MovieMediaLoadChildMovieFromDataReference(paramInt1, paramInt2);
+    }
 
-    private static native void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 }
 

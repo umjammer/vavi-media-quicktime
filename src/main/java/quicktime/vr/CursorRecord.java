@@ -2,6 +2,7 @@ package quicktime.vr;
 
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTHandle;
@@ -98,8 +99,12 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
         setIntAt(4, i);
     }
 
-    private static native void setIntInHandle(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInHandle(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInHandle(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int getIntFromHandle(int paramInt1, int paramInt2);
+    private static int getIntFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    }
 }
 

@@ -5,6 +5,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
@@ -837,107 +839,209 @@ public final class Presentation extends QTObject implements QTStreamingLib {
         return new Sourcer(arrayOfInt[0]);
     }
 
-    private static native short QTSNewPresentation(int paramInt, int[] paramArrayOfInt);
+    private static short QTSNewPresentation(int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSNewPresentation(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTSNewPresentationFromData(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int[] paramArrayOfInt);
+    private static short QTSNewPresentationFromData(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int[] paramArrayOfInt) {
+        return StreamingManager.QTSNewPresentationFromData(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTSNewPresentationFromFile(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt);
+    private static short QTSNewPresentationFromFile(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSNewPresentationFromFile(paramArrayOfByte, paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTSNewPresentationFromDataRef(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short QTSNewPresentationFromDataRef(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return StreamingManager.QTSNewPresentationFromDataRef(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTSPresExport(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short QTSPresExport(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresExport(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short QTSPresSetFlags(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSPresSetFlags(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSPresSetFlags(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short QTSPresGetFlags(int paramInt, int[] paramArrayOfInt);
+    private static short QTSPresGetFlags(int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetFlags(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTSPresGetTimeScale(int paramInt, int[] paramArrayOfInt);
+    private static short QTSPresGetTimeScale(int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetTimeScale(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTSPresSetInfo(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static short QTSPresSetInfo(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresSetInfo(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short QTSPresGetInfo(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static short QTSPresGetInfo(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresGetInfo(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short QTSPresGetInfo(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short QTSPresGetInfo(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetInfo(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short QTSPresHasCharacteristic(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static short QTSPresHasCharacteristic(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresHasCharacteristic(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short QTSPresSetNotificationProc(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTSPresSetNotificationProc(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresSetNotificationProc(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short QTSPresGetNotificationProc(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTSPresGetNotificationProc(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetNotificationProc(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short QTSPresPreview(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4);
+    private static short QTSPresPreview(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresPreview(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresPreroll(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short QTSPresPreroll(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return StreamingManager.QTSPresPreroll(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short QTSPresPreroll64(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4);
+    private static short QTSPresPreroll64(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresPreroll64(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresStart(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSPresStart(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSPresStart(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void QTSPresIdle(int paramInt1, int paramInt2);
+    private static void QTSPresIdle(int paramInt1, int paramInt2) {
+        StreamingManager.QTSPresIdle(paramInt1, paramInt2);
+    }
 
-    private static native short QTSPresInvalidateRegion(int paramInt1, int paramInt2);
+    private static short QTSPresInvalidateRegion(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSPresInvalidateRegion(paramInt1, paramInt2);
+    }
 
-    private static native short QTSPresSkipTo(int paramInt1, int paramInt2);
+    private static short QTSPresSkipTo(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSPresSkipTo(paramInt1, paramInt2);
+    }
 
-    private static native short QTSPresSkipTo64(int paramInt, long[] paramArrayOfLong);
+    private static short QTSPresSkipTo64(int paramInt, long[] paramArrayOfLong) {
+        return StreamingManager.QTSPresSkipTo64(paramInt, paramArrayOfLong);
+    }
 
-    private static native short QTSPresStop(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSPresStop(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSPresStop(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int QTSPresGetNumStreams(int paramInt);
+    private static int QTSPresGetNumStreams(int paramInt) {
+        return StreamingManager.QTSPresGetNumStreams(paramInt);
+    }
 
-    private static native int QTSPresGetIndStream(int paramInt1, int paramInt2);
+    private static int QTSPresGetIndStream(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSPresGetIndStream(paramInt1, paramInt2);
+    }
 
-    private static native short QTSPresSetPreferredRate(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSPresSetPreferredRate(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSPresSetPreferredRate(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short QTSPresGetPreferredRate(int paramInt, int[] paramArrayOfInt);
+    private static short QTSPresGetPreferredRate(int paramInt, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetPreferredRate(paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTSPresSetEnable(int paramInt1, int paramInt2, byte paramByte);
+    private static short QTSPresSetEnable(int paramInt1, int paramInt2, byte paramByte) {
+        return StreamingManager.QTSPresSetEnable(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native short QTSPresGetEnable(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short QTSPresGetEnable(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresGetEnable(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short QTSPresSetPresenting(int paramInt1, int paramInt2, byte paramByte);
+    private static short QTSPresSetPresenting(int paramInt1, int paramInt2, byte paramByte) {
+        return StreamingManager.QTSPresSetPresenting(paramInt1, paramInt2, paramByte);
+    }
 
-    private static native short QTSPresGetPresenting(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short QTSPresGetPresenting(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresGetPresenting(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short QTSPresSetActiveSegment(int paramInt1, int paramInt2, long[] paramArrayOfLong1, long[] paramArrayOfLong2);
+    private static short QTSPresSetActiveSegment(int paramInt1, int paramInt2, long[] paramArrayOfLong1, long[] paramArrayOfLong2) {
+        return StreamingManager.QTSPresSetActiveSegment(paramInt1, paramInt2, paramArrayOfLong1, paramArrayOfLong2);
+    }
 
-    private static native short QTSPresGetActiveSegment(int paramInt1, int paramInt2, long[] paramArrayOfLong1, long[] paramArrayOfLong2);
+    private static short QTSPresGetActiveSegment(int paramInt1, int paramInt2, long[] paramArrayOfLong1, long[] paramArrayOfLong2) {
+        return StreamingManager.QTSPresGetActiveSegment(paramInt1, paramInt2, paramArrayOfLong1, paramArrayOfLong2);
+    }
 
-    private static native short QTSPresSetPlayHints(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTSPresSetPlayHints(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresSetPlayHints(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresGetPlayHints(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTSPresGetPlayHints(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetPlayHints(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short QTSPresSetGWorld(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTSPresSetGWorld(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresSetGWorld(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return StreamingManager.QTSPresGetGWorld(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTSPresSetClip(int paramInt1, int paramInt2, int paramInt3);
+    private static short QTSPresSetClip(int paramInt1, int paramInt2, int paramInt3) {
+        return StreamingManager.QTSPresSetClip(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short QTSPresGetClip(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short QTSPresGetClip(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetClip(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short QTSPresSetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short QTSPresSetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MatrixManager.QTSPresSetMatrix(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short QTSPresGetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short QTSPresGetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MatrixManager.QTSPresGetMatrix(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short QTSPresSetDimensions(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTSPresSetDimensions(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresSetDimensions(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresGetDimensions(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short QTSPresGetDimensions(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return StreamingManager.QTSPresGetDimensions(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short QTSPresSetGraphicsMode(int paramInt1, int paramInt2, short paramShort, byte[] paramArrayOfByte);
+    private static short QTSPresSetGraphicsMode(int paramInt1, int paramInt2, short paramShort, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresSetGraphicsMode(paramInt1, paramInt2, paramShort, paramArrayOfByte);
+    }
 
-    private static native short QTSPresGetGraphicsMode(int paramInt1, int paramInt2, short[] paramArrayOfShort, byte[] paramArrayOfByte);
+    private static short QTSPresGetGraphicsMode(int paramInt1, int paramInt2, short[] paramArrayOfShort, byte[] paramArrayOfByte) {
+        return StreamingManager.QTSPresGetGraphicsMode(paramInt1, paramInt2, paramArrayOfShort, paramArrayOfByte);
+    }
 
-    private static native short QTSPresSetVolumes(int paramInt1, int paramInt2, short paramShort1, short paramShort2);
+    private static short QTSPresSetVolumes(int paramInt1, int paramInt2, short paramShort1, short paramShort2) {
+        return StreamingManager.QTSPresSetVolumes(paramInt1, paramInt2, paramShort1, paramShort2);
+    }
 
-    private static native short QTSPresGetVolumes(int paramInt1, int paramInt2, short[] paramArrayOfShort1, short[] paramArrayOfShort2);
+    private static short QTSPresGetVolumes(int paramInt1, int paramInt2, short[] paramArrayOfShort1, short[] paramArrayOfShort2) {
+        return StreamingManager.QTSPresGetVolumes(paramInt1, paramInt2, paramArrayOfShort1, paramArrayOfShort2);
+    }
 
-    private static native short QTSPresAddSourcer(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTSPresAddSourcer(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresAddSourcer(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresRemoveSourcer(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short QTSPresRemoveSourcer(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return StreamingManager.QTSPresRemoveSourcer(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native short QTSPresGetNumSourcers(int paramInt1, int paramInt2);
+    private static short QTSPresGetNumSourcers(int paramInt1, int paramInt2) {
+        return StreamingManager.QTSPresGetNumSourcers(paramInt1, paramInt2);
+    }
 
-    private static native short QTSPresGetIndSourcer(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short QTSPresGetIndSourcer(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return StreamingManager.QTSPresGetIndSourcer(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming

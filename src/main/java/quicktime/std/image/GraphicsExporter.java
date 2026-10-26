@@ -8,6 +8,8 @@ import quicktime.Errors;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -1069,119 +1071,233 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
         return new QDDimension(arrayOfInt1[0], arrayOfInt2[0]);
     }
 
-    private static native int GraphicsExportSetExifEnabled(int paramInt, byte paramByte);
+    private static int GraphicsExportSetExifEnabled(int paramInt, byte paramByte) {
+        return GraphicsExportManager.GraphicsExportSetExifEnabled(paramInt, paramByte);
+    }
 
-    private static native int GraphicsExportGetExifEnabled(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportGetExifEnabled(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportGetExifEnabled(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportSetThumbnailEnabled(int paramInt1, byte paramByte, int paramInt2, int paramInt3);
+    private static int GraphicsExportSetThumbnailEnabled(int paramInt1, byte paramByte, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportSetThumbnailEnabled(paramInt1, paramByte, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportGetThumbnailEnabled(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetThumbnailEnabled(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsExportManager.GraphicsExportGetThumbnailEnabled(paramInt, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsExportDoExport(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportDoExport(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportDoExport(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportSetInputDataReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int GraphicsExportSetInputDataReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return GraphicsExportManager.GraphicsExportSetInputDataReference(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int GraphicsExportSetInputFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int GraphicsExportSetInputFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetInputFile(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native int GraphicsExportSetInputHandle(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsExportSetInputHandle(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportSetInputHandle(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportSetInputPtr(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int GraphicsExportSetInputPtr(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return GraphicsExportManager.GraphicsExportSetInputPtr(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int GraphicsExportSetInputGraphicsImporter(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetInputGraphicsImporter(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetInputGraphicsImporter(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportSetInputPicture(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetInputPicture(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetInputPicture(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportSetInputGWorld(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetInputGWorld(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetInputGWorld(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportSetInputPixmap(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetInputPixmap(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetInputPixmap(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportSetOutputDataReference(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsExportSetOutputDataReference(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportSetOutputDataReference(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportSetOutputFile(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportSetOutputFile(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportSetOutputFile(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportSetOutputHandle(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetOutputHandle(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetOutputHandle(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportSetOutputOffsetAndMaxSize(int paramInt1, int paramInt2, int paramInt3, byte paramByte);
+    private static int GraphicsExportSetOutputOffsetAndMaxSize(int paramInt1, int paramInt2, int paramInt3, byte paramByte) {
+        return GraphicsExportManager.GraphicsExportSetOutputOffsetAndMaxSize(paramInt1, paramInt2, paramInt3, paramByte);
+    }
 
-    private static native int GraphicsExportGetOutputOffsetAndMaxSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte);
+    private static int GraphicsExportGetOutputOffsetAndMaxSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportGetOutputOffsetAndMaxSize(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportSetOutputFileTypeAndCreator(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsExportSetOutputFileTypeAndCreator(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportSetOutputFileTypeAndCreator(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportGetOutputFileTypeAndCreator(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetOutputFileTypeAndCreator(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsExportManager.GraphicsExportGetOutputFileTypeAndCreator(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsExportMayExporterReadInputData(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportMayExporterReadInputData(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportMayExporterReadInputData(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportGetInputDataSize(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInputDataSize(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetInputDataSize(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportReadInputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3);
+    private static int GraphicsExportReadInputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportReadInputData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportGetInputImageDimensions(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportGetInputImageDimensions(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportGetInputImageDimensions(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportGetInputImageDepth(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInputImageDepth(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetInputImageDepth(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportDrawInputImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int GraphicsExportDrawInputImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return GraphicsExportManager.GraphicsExportDrawInputImage(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int GraphicsExportSetInputOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsExportSetInputOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportSetInputOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportGetInputOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetInputOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsExportManager.GraphicsExportGetInputOffsetAndLimit(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsExportRequestSettings(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsExportRequestSettings(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportRequestSettings(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportSetSettingsFromAtomContainer(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportSetSettingsFromAtomContainer(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportSetSettingsFromAtomContainer(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportGetDefaultFileTypeAndCreator(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetDefaultFileTypeAndCreator(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsExportManager.GraphicsExportGetDefaultFileTypeAndCreator(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsExportGetDefaultFileNameExtension(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetDefaultFileNameExtension(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetDefaultFileNameExtension(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportGetMIMETypeList(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetMIMETypeList(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportCanTranscode(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportCanTranscode(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportCanTranscode(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportDoTranscode(int paramInt);
+    private static int GraphicsExportDoTranscode(int paramInt) {
+        return GraphicsExportManager.GraphicsExportDoTranscode(paramInt);
+    }
 
-    private static native int GraphicsExportCanUseCompressor(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int GraphicsExportCanUseCompressor(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportCanUseCompressor(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportDoStandaloneExport(int paramInt);
+    private static int GraphicsExportDoStandaloneExport(int paramInt) {
+        return GraphicsExportManager.GraphicsExportDoStandaloneExport(paramInt);
+    }
 
-    private static native int GraphicsExportSetDontRecompress(int paramInt, byte paramByte);
+    private static int GraphicsExportSetDontRecompress(int paramInt, byte paramByte) {
+        return GraphicsExportManager.GraphicsExportSetDontRecompress(paramInt, paramByte);
+    }
 
-    private static native int GraphicsExportGetDontRecompress(int paramInt, byte[] paramArrayOfByte);
+    private static int GraphicsExportGetDontRecompress(int paramInt, byte[] paramArrayOfByte) {
+        return GraphicsExportManager.GraphicsExportGetDontRecompress(paramInt, paramArrayOfByte);
+    }
 
-    private static native int GraphicsExportSetInterlaceStyle(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetInterlaceStyle(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetInterlaceStyle(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetInterlaceStyle(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetInterlaceStyle(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetInterlaceStyle(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportSetMetaData(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetMetaData(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetMetaData(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetMetaData(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportSetTargetDataSize(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetTargetDataSize(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetTargetDataSize(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetTargetDataSize(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetTargetDataSize(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetTargetDataSize(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportSetCompressionMethod(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetCompressionMethod(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetCompressionMethod(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetCompressionMethod(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetCompressionMethod(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetCompressionMethod(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportSetCompressionQuality(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetCompressionQuality(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetCompressionQuality(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetCompressionQuality(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetCompressionQuality(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetCompressionQuality(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportSetResolution(int paramInt1, int paramInt2, int paramInt3);
+    private static int GraphicsExportSetResolution(int paramInt1, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportSetResolution(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GraphicsExportGetResolution(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int GraphicsExportGetResolution(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsExportManager.GraphicsExportGetResolution(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int GraphicsExportSetDepth(int paramInt1, int paramInt2);
+    private static int GraphicsExportSetDepth(int paramInt1, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportSetDepth(paramInt1, paramInt2);
+    }
 
-    private static native int GraphicsExportGetDepth(int paramInt, int[] paramArrayOfInt);
+    private static int GraphicsExportGetDepth(int paramInt, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetDepth(paramInt, paramArrayOfInt);
+    }
 
-    private static native int GraphicsExportWriteOutputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int GraphicsExportWriteOutputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return GraphicsExportManager.GraphicsExportWriteOutputData(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native int GraphicsExportReadOutputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3);
+    private static int GraphicsExportReadOutputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
+        return GraphicsExportManager.GraphicsExportReadOutputData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

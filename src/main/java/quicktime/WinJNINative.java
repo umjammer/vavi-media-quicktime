@@ -3,16 +3,25 @@ package quicktime;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.PlatformManager;
 
 
 final class WinJNINative {
-    static native int DoSecurityInit();
+    static int DoSecurityInit() {
+        return PlatformManager.DoSecurityInit();
+    }
 
-    static native void DestroyPortAssociations();
+    static void DestroyPortAssociations() {
+        PlatformManager.DestroyPortAssociations();
+    }
 
-    static native void DestroyHWnd(int paramInt);
+    static void DestroyHWnd(int paramInt) {
+        PlatformManager.DestroyHWnd(paramInt);
+    }
 
-    static native int GetHWND();
+    static int GetHWND() {
+        return PlatformManager.GetHWND();
+    }
 
     static {
         if (QTSession.isCurrentOS(2)) {

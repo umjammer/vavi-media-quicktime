@@ -3,6 +3,7 @@ package quicktime.sound;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 
@@ -37,5 +38,7 @@ public final class Sound implements QuickTimeLib {
         SoundException.checkError(SndPlay(0, QTObject.ID(paramSndHandle), (byte) 0));
     }
 
-    private static native short SndPlay(int paramInt1, int paramInt2, byte paramByte);
+    private static short SndPlay(int paramInt1, int paramInt2, byte paramByte) {
+        return SoundManager.SndPlay(paramInt1, paramInt2, paramByte);
+    }
 }

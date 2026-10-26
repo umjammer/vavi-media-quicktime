@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.QTNative;
 import quicktime.std.clocks.TimeRecord;
@@ -257,6 +258,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
         return getClass().getName() + "[" + "data:" + this.ref + ",numChannels:" + getNumChannels() + ",sampleRate:" + getSampleRate() + ",sampleSize:" + getSampleSize() + ",sampleFormat:" + QTUtils.fromOSType(getFormat()) + ",compressionID:" + getCompressionID() + "]";
     }
 
-    private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
+    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    }
 }
 

@@ -9,6 +9,11 @@ import java.util.Hashtable;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
+import quicktime.internal.toolbox.VRManager;
 import quicktime.io.OpenFile;
 import quicktime.io.OpenMovieFile;
 import quicktime.io.QTFile;
@@ -74,14 +79,6 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     private static final int[] savedPort = { 0 };
 
     private static final int[] savedDevice = { 0 };
-
-    private static int nextMovieId = 1;
-
-    private QTFile file;
-
-    public QTFile getFile() {
-        return this.file;
-    }
 
     /**
      * The moviesTask method services all of the currently active movies.
@@ -204,10 +201,30 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param {@link quicktime.QTException}
      */
     public static Movie fromFile(OpenMovieFile paramOpenMovieFile, int paramInt, MovieInfo paramMovieInfo) throws QTException {
-        int id = nextMovieId++;
-        Movie movie = new Movie(id, null);
-        movie.file = paramOpenMovieFile != null ? paramOpenMovieFile.getFile() : null;
-        return movie;
+        int[] arrayOfInt = new int[1];
+        short s = (short) QTObject.ID(paramOpenMovieFile);
+        short[] arrayOfShort = new short[1];
+        byte[] arrayOfByte1 = new byte[255];
+        byte[] arrayOfByte2 = new byte[1];
+        int i = 0;
+        synchronized (QTNative.globalsLock) {
+            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
+                GetGWorld(savedPort, savedDevice);
+            SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
+            i = NewMovieFromFile(arrayOfInt, s, arrayOfShort, arrayOfByte1, (short) paramInt, arrayOfByte2);
+            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
+                SetGWorld(savedPort[0], savedDevice[0]);
+        }
+        StdQTException.checkError(i);
+        if (arrayOfInt[0] == 0) {
+            throw new StdQTException(63526);
+        }
+        if (paramMovieInfo != null) {
+            paramMovieInfo.setMovieInfo(arrayOfShort[0], arrayOfByte2[0] == 1, new String(arrayOfByte1, 1, arrayOfByte1.length - 1));
+        }
+        Object x = new Movie(arrayOfInt[0], null);
+        ((Movie) x).init();
+        return (Movie) x;
     }
 
     /**
@@ -583,10 +600,23 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         StdQTException.checkError(i);
     }
 
-    private boolean active;
-
+    /**
+     * This method allows your application to activate and deactivate a movie.
+     * QuickTime::SetMovieActive()
+     * @param active Activates or deactivates the movie. Set this parameter to true to activate the movie; set this parameter to false to deactivate the movie.
+     * @param {@link quicktime.std.StdQTException}
+     */
     public void setActive(boolean paramBoolean) throws StdQTException {
-        this.active = paramBoolean;
+        if (QTSession.isCurrentOS(4)) {
+            synchronized (QTNative.globalsLock) {
+                byte b2 = (byte) (paramBoolean ? 1 : 0);
+                SetMovieActive(_ID(), b2);
+                StdQTException.checkError(GetMoviesError());
+            }
+        }
+        byte b1 = (byte) (paramBoolean ? 1 : 0);
+        SetMovieActive(_ID(), b1);
+        StdQTException.checkError(GetMoviesError());
     }
 
     /**
@@ -1797,20 +1827,20 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return {@link quicktime.QTException}
      */
     public Movie flattenData(int paramInt1, QTFile paramQTFile, int paramInt2, int paramInt3, int paramInt4) throws QTException {
-        try {
-            if (this.file != null && paramQTFile != null) {
-                if (paramQTFile.getParentFile() != null && !paramQTFile.getParentFile().exists()) {
-                    paramQTFile.getParentFile().mkdirs();
-                }
-                java.nio.file.Files.copy(this.file.toPath(), paramQTFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            }
-            int id = nextMovieId++;
-            Movie m = new Movie(id, null);
-            m.file = paramQTFile;
-            return m;
-        } catch (java.io.IOException e) {
-            throw new QTIOException(e.getMessage());
+        int i = 0;
+        synchronized (QTNative.globalsLock) {
+            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
+                GetGWorld(savedPort, savedDevice);
+            int[] arrayOfInt1 = { 0 };
+            int[] arrayOfInt2 = { 0 };
+            GetMovieGWorld(_ID(), arrayOfInt1, arrayOfInt2);
+            SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
+            i = FlattenMovieData(_ID(), paramInt1, paramQTFile.getFSSpec(false, 512), paramInt2, (short) paramInt3, paramInt4);
+            if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
+                SetGWorld(savedPort[0], savedDevice[0]);
         }
+        StdQTException.checkError(GetMoviesError());
+        return i != 0 ? new Movie(i, null) : null;
     }
 
     /**
@@ -2179,17 +2209,29 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return {@link quicktime.std.StdQTException}
      */
     public int convertToFile(final Track onlyTrack, QTFile paramQTFile, final int fileType, final int creator, final int scriptTag, final int flags, final MovieExporter userComp) throws QTException, StdQTException {
-        try {
-            if (this.file != null && paramQTFile != null) {
-                if (paramQTFile.getParentFile() != null && !paramQTFile.getParentFile().exists()) {
-                    paramQTFile.getParentFile().mkdirs();
+        final short[] resID_native = new short[1];
+        final byte[] fsspec = paramQTFile.getFSSpec(false, 512);
+        int i1;
+        if (QTSession.isCurrentOS(4)) {
+            i1 = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+
+                int res1;
+
+                public Object invoke() {
+                    synchronized (QTNative.globalsLock) {
+                        this.res1 = Movie.ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), fsspec, fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
+                    }
+                    return this.res1;
                 }
-                java.nio.file.Files.copy(this.file.toPath(), paramQTFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            }
-            return 0;
-        } catch (java.io.IOException e) {
-            throw new quicktime.io.QTIOException(e.getMessage());
+            })).intValue();
+            StdQTException.checkError(i1);
+            return resID_native[0];
         }
+        synchronized (QTNative.globalsLock) {
+            i1 = ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), paramQTFile.getFSSpec(false, 512), fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
+        }
+        StdQTException.checkError(i1);
+        return resID_native[0];
     }
 
     /**
@@ -2455,268 +2497,532 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         return arrayOfInt3[0] == 1;
     }
 
-    private static native void MoviesTask(int paramInt1, int paramInt2);
-
-    private static native short GetMoviesError();
-
-    private static native short CreateMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, short[] paramArrayOfShort, int[] paramArrayOfInt);
-
-    private static native int SGGetMovie(int paramInt);
-
-    private static native int NewMovieFromScrap(int paramInt);
-
-    private static native short NewMovieFromFile(int[] paramArrayOfInt, short paramShort1, short[] paramArrayOfShort, byte[] paramArrayOfByte1, short paramShort2, byte[] paramArrayOfByte2);
-
-    private static native short NewMovieFromHandle(int[] paramArrayOfInt, int paramInt, short paramShort, byte[] paramArrayOfByte);
-
-    private static native short NewMovieFromDataFork(int[] paramArrayOfInt, short paramShort1, int paramInt, short paramShort2, byte[] paramArrayOfByte);
-
-    private static native short NewMovieFromDataRef(int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int paramInt1, int paramInt2);
-
-    private static native int NewMovie(int paramInt);
-
-    private static native short AddMovieResource(int paramInt, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte);
-
-    private static native short UpdateMovieResource(int paramInt, short paramShort1, short paramShort2, byte[] paramArrayOfByte);
-
-    private static native short RemoveMovieResource(short paramShort1, short paramShort2);
-
-    private static native short PrerollMovie(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short LoadMovieIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native void SetMovieActive(int paramInt, byte paramByte);
-
-    private static native byte GetMovieActive(int paramInt);
-
-    private static native void StartMovie(int paramInt);
-
-    private static native void StopMovie(int paramInt);
-
-    private static native void GoToBeginningOfMovie(int paramInt);
-
-    private static native void GoToEndOfMovie(int paramInt);
-
-    private static native byte IsMovieDone(int paramInt);
-
-    private static native byte GetMoviePreviewMode(int paramInt);
-
-    private static native void SetMoviePreviewMode(int paramInt, byte paramByte);
-
-    private static native void ShowMoviePoster(int paramInt);
-
-    private static native void PlayMoviePreview(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void SetMovieGWorld(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void GetMovieNaturalBoundsRect(int paramInt, byte[] paramArrayOfByte);
-
-    private static native int GetNextTrackForCompositing(int paramInt1, int paramInt2);
-
-    private static native int GetPrevTrackForCompositing(int paramInt1, int paramInt2);
-
-    private static native short UpdateMovie(int paramInt);
-
-    private static native short InvalidateMovieRegion(int paramInt1, int paramInt2);
-
-    private static native void GetMovieBox(int paramInt, byte[] paramArrayOfByte);
-
-    private static native void SetMovieBox(int paramInt, byte[] paramArrayOfByte);
-
-    private static native void SetMovieDisplayClipRgn(int paramInt1, int paramInt2);
-
-    private static native void SetMovieClipRgn(int paramInt1, int paramInt2);
-
-    private static native short PutMovieIntoHandle(int paramInt1, int paramInt2);
-
-    private static native short PutMovieIntoDataFork(int paramInt1, short paramShort, int paramInt2, int paramInt3);
-
-    private static native int GetMovieCreationTime(int paramInt);
-
-    private static native int GetMovieModificationTime(int paramInt);
-
-    private static native int GetMovieTimeScale(int paramInt);
-
-    private static native void SetMovieTimeScale(int paramInt1, int paramInt2);
-
-    private static native int GetMovieDuration(int paramInt);
-
-    private static native int GetMovieRate(int paramInt);
-
-    private static native void SetMovieRate(int paramInt1, int paramInt2);
-
-    private static native int GetMoviePreferredRate(int paramInt);
-
-    private static native void SetMoviePreferredRate(int paramInt1, int paramInt2);
-
-    private static native short GetMoviePreferredVolume(int paramInt);
-
-    private static native void SetMoviePreferredVolume(int paramInt, short paramShort);
-
-    private static native short GetMovieVolume(int paramInt);
-
-    private static native void SetMovieVolume(int paramInt, short paramShort);
-
-    private static native void GetMovieMatrix(int paramInt, byte[] paramArrayOfByte);
-
-    private static native void SetMovieMatrix(int paramInt, byte[] paramArrayOfByte);
-
-    private static native void GetMoviePreviewTime(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native void SetMoviePreviewTime(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native int GetMoviePosterTime(int paramInt);
-
-    private static native void SetMoviePosterTime(int paramInt1, int paramInt2);
-
-    private static native void GetMovieSelection(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native void SetMovieSelection(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void SetMovieActiveSegment(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void GetMovieActiveSegment(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native int GetMovieTime(int paramInt1, int paramInt2);
-
-    private static native void SetMovieTime(int paramInt1, int paramInt2);
-
-    private static native void SetMovieTimeValue(int paramInt1, int paramInt2);
-
-    private static native int GetMovieTrackCount(int paramInt);
-
-    private static native int GetMovieTrack(int paramInt1, int paramInt2);
-
-    private static native int GetMovieIndTrack(int paramInt1, int paramInt2);
-
-    private static native int GetMovieIndTrackType(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native int GetTrackMovie(int paramInt);
-
-    private static native void DisposeMovieTrack(int paramInt);
-
-    private static native void SetAutoTrackAlternatesEnabled(int paramInt, byte paramByte);
-
-    private static native void SelectMovieAlternates(int paramInt);
-
-    private static native void GetMovieNextInterestingTime(int paramInt1, short paramShort1, short paramShort2, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
-
-    private static native short InsertEmptyMovieSegment(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short InsertMovieSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
-
-    private static native short DeleteMovieSegment(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short ScaleMovieSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native int CutMovieSelection(int paramInt);
-
-    private static native int CopyMovieSelection(int paramInt);
-
-    private static native void PasteMovieSelection(int paramInt1, int paramInt2);
-
-    private static native void AddMovieSelection(int paramInt1, int paramInt2);
-
-    private static native void ClearMovieSelection(int paramInt);
-
-    private static native short PasteHandleIntoMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
-
-    private static native short PutMovieIntoTypedHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8);
-
-    private static native short CopyMovieSettings(int paramInt1, int paramInt2);
-
-    private static native short AddEmptyTrackToMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt);
-
-    private static native int NewMovieEditState(int paramInt);
-
-    private static native short UseMovieEditState(int paramInt1, int paramInt2);
-
-    private static native int GetMovieDataSize(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native byte PtInMovie(int paramInt1, int paramInt2);
-
-    private static native void SetMovieLanguage(int paramInt1, int paramInt2);
-
-    private static native byte HasMovieChanged(int paramInt);
-
-    private static native void ClearMovieChanged(int paramInt);
-
-    private static native short SetMovieDefaultDataRef(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short SetMovieColorTable(int paramInt1, int paramInt2);
-
-    private static native void FlattenMovie(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, int paramInt3, short paramShort, int paramInt4, short[] paramArrayOfShort, byte[] paramArrayOfByte2);
-
-    private static native int FlattenMovieData(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, short paramShort, int paramInt4);
-
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
-
-    private static native void SetMovieProgressProc(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void GetMovieProgressProc(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native short MovieSearchText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
-
-    private static native void GetPosterBox(int paramInt, byte[] paramArrayOfByte);
-
-    private static native void SetPosterBox(int paramInt, byte[] paramArrayOfByte);
-
-    private static native int GetMovieStatus(int paramInt, int[] paramArrayOfInt);
-
-    private static native void ShowMovieInformation(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short PutMovieOnScrap(int paramInt1, int paramInt2);
-
-    private static native void SetMoviePlayHints(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void SetMovieMasterTimeBase(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void SetMovieMasterClock(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short ConvertMovieToFile(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, short paramShort, short[] paramArrayOfShort, int paramInt5, int paramInt6);
-
-    private static native int QTVRGetQTVRTrack(int paramInt1, int paramInt2);
-
-    private static native short QTMovieNeedsTimeTable(int paramInt, byte[] paramArrayOfByte);
-
-    private static native short GetMaxLoadedTimeInMovie(int paramInt, int[] paramArrayOfInt);
-
-    private static native short PrePrerollMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
-
-    private static native void AbortPrePrerollMovie(int paramInt, short paramShort);
-
-    private static native void SetMovieDrawingCompleteProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native short AddMovieExecuteWiredActionsProc(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short RemoveMovieExecuteWiredActionsProc(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short MovieExecuteWiredActions(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void SetGWorld(int paramInt1, int paramInt2);
-
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
-
-    private static native short CopyMovieUserData(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native void ChooseMovieClock(int paramInt1, int paramInt2);
-
-    private static native short NewMovieForDataRefFromHandle(int[] paramArrayOfInt, int paramInt1, short paramShort, byte[] paramArrayOfByte, int paramInt2, int paramInt3);
-
-    private static native short PutMovieForDataRefIntoHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native int FlattenMovieDataToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort, int paramInt6);
-
-    private static native short QTGetTimeUntilNextTask(int[] paramArrayOfInt, int paramInt);
-
-    private static native short QTInstallNextTaskNeededSoonerCallback(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
-
-    private static native short QTUninstallNextTaskNeededSoonerCallback(int paramInt1, int paramInt2);
-
-    private static native short SetMovieAnchorDataRef(int paramInt1, int paramInt2, int paramInt3);
-
-    private static native short GetMovieAnchorDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static void MoviesTask(int paramInt1, int paramInt2) {
+        MovieToolbox.MoviesTask(paramInt1, paramInt2);
+    }
+
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
+
+    private static short CreateMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, short[] paramArrayOfShort, int[] paramArrayOfInt) {
+        return MovieToolbox.CreateMovieFile(paramArrayOfByte, paramInt1, paramShort, paramInt2, paramArrayOfShort, paramArrayOfInt);
+    }
+
+    private static int SGGetMovie(int paramInt) {
+        return SequenceGrabberManager.SGGetMovie(paramInt);
+    }
+
+    private static int NewMovieFromScrap(int paramInt) {
+        return MovieToolbox.NewMovieFromScrap(paramInt);
+    }
+
+    private static short NewMovieFromFile(int[] paramArrayOfInt, short paramShort1, short[] paramArrayOfShort, byte[] paramArrayOfByte1, short paramShort2, byte[] paramArrayOfByte2) {
+        return MovieToolbox.NewMovieFromFile(paramArrayOfInt, paramShort1, paramArrayOfShort, paramArrayOfByte1, paramShort2, paramArrayOfByte2);
+    }
+
+    private static short NewMovieFromHandle(int[] paramArrayOfInt, int paramInt, short paramShort, byte[] paramArrayOfByte) {
+        return MovieToolbox.NewMovieFromHandle(paramArrayOfInt, paramInt, paramShort, paramArrayOfByte);
+    }
+
+    private static short NewMovieFromDataFork(int[] paramArrayOfInt, short paramShort1, int paramInt, short paramShort2, byte[] paramArrayOfByte) {
+        return MovieToolbox.NewMovieFromDataFork(paramArrayOfInt, paramShort1, paramInt, paramShort2, paramArrayOfByte);
+    }
+
+    private static short NewMovieFromDataRef(int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int paramInt1, int paramInt2) {
+        return MovieToolbox.NewMovieFromDataRef(paramArrayOfInt, paramShort, paramArrayOfShort, paramInt1, paramInt2);
+    }
+
+    private static int NewMovie(int paramInt) {
+        return MovieToolbox.NewMovie(paramInt);
+    }
+
+    private static short AddMovieResource(int paramInt, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte) {
+        return MovieToolbox.AddMovieResource(paramInt, paramShort, paramArrayOfShort, paramArrayOfByte);
+    }
+
+    private static short UpdateMovieResource(int paramInt, short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
+        return MovieToolbox.UpdateMovieResource(paramInt, paramShort1, paramShort2, paramArrayOfByte);
+    }
+
+    private static short RemoveMovieResource(short paramShort1, short paramShort2) {
+        return MovieToolbox.RemoveMovieResource(paramShort1, paramShort2);
+    }
+
+    private static short PrerollMovie(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.PrerollMovie(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short LoadMovieIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.LoadMovieIntoRam(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static void SetMovieActive(int paramInt, byte paramByte) {
+        MovieToolbox.SetMovieActive(paramInt, paramByte);
+    }
+
+    private static byte GetMovieActive(int paramInt) {
+        return MovieToolbox.GetMovieActive(paramInt);
+    }
+
+    private static void StartMovie(int paramInt) {
+        MovieToolbox.StartMovie(paramInt);
+    }
+
+    private static void StopMovie(int paramInt) {
+        MovieToolbox.StopMovie(paramInt);
+    }
+
+    private static void GoToBeginningOfMovie(int paramInt) {
+        MovieToolbox.GoToBeginningOfMovie(paramInt);
+    }
+
+    private static void GoToEndOfMovie(int paramInt) {
+        MovieToolbox.GoToEndOfMovie(paramInt);
+    }
+
+    private static byte IsMovieDone(int paramInt) {
+        return MovieToolbox.IsMovieDone(paramInt);
+    }
+
+    private static byte GetMoviePreviewMode(int paramInt) {
+        return MovieToolbox.GetMoviePreviewMode(paramInt);
+    }
+
+    private static void SetMoviePreviewMode(int paramInt, byte paramByte) {
+        MovieToolbox.SetMoviePreviewMode(paramInt, paramByte);
+    }
+
+    private static void ShowMoviePoster(int paramInt) {
+        MovieToolbox.ShowMoviePoster(paramInt);
+    }
+
+    private static void PlayMoviePreview(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.PlayMoviePreview(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void SetMovieGWorld(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMovieGWorld(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void GetMovieNaturalBoundsRect(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.GetMovieNaturalBoundsRect(paramInt, paramArrayOfByte);
+    }
+
+    private static int GetNextTrackForCompositing(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetNextTrackForCompositing(paramInt1, paramInt2);
+    }
+
+    private static int GetPrevTrackForCompositing(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetPrevTrackForCompositing(paramInt1, paramInt2);
+    }
+
+    private static short UpdateMovie(int paramInt) {
+        return MovieToolbox.UpdateMovie(paramInt);
+    }
+
+    private static short InvalidateMovieRegion(int paramInt1, int paramInt2) {
+        return MovieToolbox.InvalidateMovieRegion(paramInt1, paramInt2);
+    }
+
+    private static void GetMovieBox(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.GetMovieBox(paramInt, paramArrayOfByte);
+    }
+
+    private static void SetMovieBox(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.SetMovieBox(paramInt, paramArrayOfByte);
+    }
+
+    private static void SetMovieDisplayClipRgn(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieDisplayClipRgn(paramInt1, paramInt2);
+    }
+
+    private static void SetMovieClipRgn(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieClipRgn(paramInt1, paramInt2);
+    }
+
+    private static short PutMovieIntoHandle(int paramInt1, int paramInt2) {
+        return MovieToolbox.PutMovieIntoHandle(paramInt1, paramInt2);
+    }
+
+    private static short PutMovieIntoDataFork(int paramInt1, short paramShort, int paramInt2, int paramInt3) {
+        return MovieToolbox.PutMovieIntoDataFork(paramInt1, paramShort, paramInt2, paramInt3);
+    }
+
+    private static int GetMovieCreationTime(int paramInt) {
+        return MovieToolbox.GetMovieCreationTime(paramInt);
+    }
+
+    private static int GetMovieModificationTime(int paramInt) {
+        return MovieToolbox.GetMovieModificationTime(paramInt);
+    }
+
+    private static int GetMovieTimeScale(int paramInt) {
+        return MovieToolbox.GetMovieTimeScale(paramInt);
+    }
+
+    private static void SetMovieTimeScale(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieTimeScale(paramInt1, paramInt2);
+    }
+
+    private static int GetMovieDuration(int paramInt) {
+        return MovieToolbox.GetMovieDuration(paramInt);
+    }
+
+    private static int GetMovieRate(int paramInt) {
+        return MovieToolbox.GetMovieRate(paramInt);
+    }
+
+    private static void SetMovieRate(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieRate(paramInt1, paramInt2);
+    }
+
+    private static int GetMoviePreferredRate(int paramInt) {
+        return MovieToolbox.GetMoviePreferredRate(paramInt);
+    }
+
+    private static void SetMoviePreferredRate(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMoviePreferredRate(paramInt1, paramInt2);
+    }
+
+    private static short GetMoviePreferredVolume(int paramInt) {
+        return MovieToolbox.GetMoviePreferredVolume(paramInt);
+    }
+
+    private static void SetMoviePreferredVolume(int paramInt, short paramShort) {
+        MovieToolbox.SetMoviePreferredVolume(paramInt, paramShort);
+    }
+
+    private static short GetMovieVolume(int paramInt) {
+        return MovieToolbox.GetMovieVolume(paramInt);
+    }
+
+    private static void SetMovieVolume(int paramInt, short paramShort) {
+        MovieToolbox.SetMovieVolume(paramInt, paramShort);
+    }
+
+    private static void GetMovieMatrix(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.GetMovieMatrix(paramInt, paramArrayOfByte);
+    }
+
+    private static void SetMovieMatrix(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.SetMovieMatrix(paramInt, paramArrayOfByte);
+    }
+
+    private static void GetMoviePreviewTime(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMoviePreviewTime(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static void SetMoviePreviewTime(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMoviePreviewTime(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static int GetMoviePosterTime(int paramInt) {
+        return MovieToolbox.GetMoviePosterTime(paramInt);
+    }
+
+    private static void SetMoviePosterTime(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMoviePosterTime(paramInt1, paramInt2);
+    }
+
+    private static void GetMovieSelection(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieSelection(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static void SetMovieSelection(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMovieSelection(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void SetMovieActiveSegment(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMovieActiveSegment(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void GetMovieActiveSegment(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieActiveSegment(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static int GetMovieTime(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetMovieTime(paramInt1, paramInt2);
+    }
+
+    private static void SetMovieTime(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieTime(paramInt1, paramInt2);
+    }
+
+    private static void SetMovieTimeValue(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieTimeValue(paramInt1, paramInt2);
+    }
+
+    private static int GetMovieTrackCount(int paramInt) {
+        return MovieToolbox.GetMovieTrackCount(paramInt);
+    }
+
+    private static int GetMovieTrack(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetMovieTrack(paramInt1, paramInt2);
+    }
+
+    private static int GetMovieIndTrack(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetMovieIndTrack(paramInt1, paramInt2);
+    }
+
+    private static int GetMovieIndTrackType(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.GetMovieIndTrackType(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static int GetTrackMovie(int paramInt) {
+        return MovieToolbox.GetTrackMovie(paramInt);
+    }
+
+    private static void DisposeMovieTrack(int paramInt) {
+        MovieToolbox.DisposeMovieTrack(paramInt);
+    }
+
+    private static void SetAutoTrackAlternatesEnabled(int paramInt, byte paramByte) {
+        MovieToolbox.SetAutoTrackAlternatesEnabled(paramInt, paramByte);
+    }
+
+    private static void SelectMovieAlternates(int paramInt) {
+        MovieToolbox.SelectMovieAlternates(paramInt);
+    }
+
+    private static void GetMovieNextInterestingTime(int paramInt1, short paramShort1, short paramShort2, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        MovieToolbox.GetMovieNextInterestingTime(paramInt1, paramShort1, paramShort2, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2, paramArrayOfInt3);
+    }
+
+    private static short InsertEmptyMovieSegment(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.InsertEmptyMovieSegment(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short InsertMovieSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.InsertMovieSegment(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
+
+    private static short DeleteMovieSegment(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.DeleteMovieSegment(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short ScaleMovieSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.ScaleMovieSegment(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static int CutMovieSelection(int paramInt) {
+        return MovieToolbox.CutMovieSelection(paramInt);
+    }
+
+    private static int CopyMovieSelection(int paramInt) {
+        return MovieToolbox.CopyMovieSelection(paramInt);
+    }
+
+    private static void PasteMovieSelection(int paramInt1, int paramInt2) {
+        MovieToolbox.PasteMovieSelection(paramInt1, paramInt2);
+    }
+
+    private static void AddMovieSelection(int paramInt1, int paramInt2) {
+        MovieToolbox.AddMovieSelection(paramInt1, paramInt2);
+    }
+
+    private static void ClearMovieSelection(int paramInt) {
+        MovieToolbox.ClearMovieSelection(paramInt);
+    }
+
+    private static short PasteHandleIntoMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.PasteHandleIntoMovie(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
+
+    private static short PutMovieIntoTypedHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
+        return MovieToolbox.PutMovieIntoTypedHandle(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    }
+
+    private static short CopyMovieSettings(int paramInt1, int paramInt2) {
+        return MovieToolbox.CopyMovieSettings(paramInt1, paramInt2);
+    }
+
+    private static short AddEmptyTrackToMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return MovieToolbox.AddEmptyTrackToMovie(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    }
+
+    private static int NewMovieEditState(int paramInt) {
+        return MovieToolbox.NewMovieEditState(paramInt);
+    }
+
+    private static short UseMovieEditState(int paramInt1, int paramInt2) {
+        return MovieToolbox.UseMovieEditState(paramInt1, paramInt2);
+    }
+
+    private static int GetMovieDataSize(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.GetMovieDataSize(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static byte PtInMovie(int paramInt1, int paramInt2) {
+        return MovieToolbox.PtInMovie(paramInt1, paramInt2);
+    }
+
+    private static void SetMovieLanguage(int paramInt1, int paramInt2) {
+        MovieToolbox.SetMovieLanguage(paramInt1, paramInt2);
+    }
+
+    private static byte HasMovieChanged(int paramInt) {
+        return MovieToolbox.HasMovieChanged(paramInt);
+    }
+
+    private static void ClearMovieChanged(int paramInt) {
+        MovieToolbox.ClearMovieChanged(paramInt);
+    }
+
+    private static short SetMovieDefaultDataRef(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.SetMovieDefaultDataRef(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short SetMovieColorTable(int paramInt1, int paramInt2) {
+        return MovieToolbox.SetMovieColorTable(paramInt1, paramInt2);
+    }
+
+    private static void FlattenMovie(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, int paramInt3, short paramShort, int paramInt4, short[] paramArrayOfShort, byte[] paramArrayOfByte2) {
+        MovieToolbox.FlattenMovie(paramInt1, paramInt2, paramArrayOfByte1, paramInt3, paramShort, paramInt4, paramArrayOfShort, paramArrayOfByte2);
+    }
+
+    private static int FlattenMovieData(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, short paramShort, int paramInt4) {
+        return MovieToolbox.FlattenMovieData(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramShort, paramInt4);
+    }
+
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
+
+    private static void SetMovieProgressProc(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMovieProgressProc(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void GetMovieProgressProc(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieProgressProc(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static short MovieSearchText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MovieToolbox.MovieSearchText(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
+
+    private static void GetPosterBox(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.GetPosterBox(paramInt, paramArrayOfByte);
+    }
+
+    private static void SetPosterBox(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.SetPosterBox(paramInt, paramArrayOfByte);
+    }
+
+    private static int GetMovieStatus(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMovieStatus(paramInt, paramArrayOfInt);
+    }
+
+    private static void ShowMovieInformation(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.ShowMovieInformation(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short PutMovieOnScrap(int paramInt1, int paramInt2) {
+        return MovieToolbox.PutMovieOnScrap(paramInt1, paramInt2);
+    }
+
+    private static void SetMoviePlayHints(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMoviePlayHints(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void SetMovieMasterTimeBase(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMovieMasterTimeBase(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void SetMovieMasterClock(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetMovieMasterClock(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short ConvertMovieToFile(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, short paramShort, short[] paramArrayOfShort, int paramInt5, int paramInt6) {
+        return MovieToolbox.ConvertMovieToFile(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4, paramShort, paramArrayOfShort, paramInt5, paramInt6);
+    }
+
+    private static int QTVRGetQTVRTrack(int paramInt1, int paramInt2) {
+        return VRManager.QTVRGetQTVRTrack(paramInt1, paramInt2);
+    }
+
+    private static short QTMovieNeedsTimeTable(int paramInt, byte[] paramArrayOfByte) {
+        return MovieToolbox.QTMovieNeedsTimeTable(paramInt, paramArrayOfByte);
+    }
+
+    private static short GetMaxLoadedTimeInMovie(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMaxLoadedTimeInMovie(paramInt, paramArrayOfInt);
+    }
+
+    private static short PrePrerollMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.PrePrerollMovie(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
+
+    private static void AbortPrePrerollMovie(int paramInt, short paramShort) {
+        MovieToolbox.AbortPrePrerollMovie(paramInt, paramShort);
+    }
+
+    private static void SetMovieDrawingCompleteProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MovieToolbox.SetMovieDrawingCompleteProc(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static short AddMovieExecuteWiredActionsProc(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.AddMovieExecuteWiredActionsProc(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short RemoveMovieExecuteWiredActionsProc(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.RemoveMovieExecuteWiredActionsProc(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short MovieExecuteWiredActions(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.MovieExecuteWiredActions(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
+
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
+
+    private static short CopyMovieUserData(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.CopyMovieUserData(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static void ChooseMovieClock(int paramInt1, int paramInt2) {
+        MovieToolbox.ChooseMovieClock(paramInt1, paramInt2);
+    }
+
+    private static short NewMovieForDataRefFromHandle(int[] paramArrayOfInt, int paramInt1, short paramShort, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
+        return MovieToolbox.NewMovieForDataRefFromHandle(paramArrayOfInt, paramInt1, paramShort, paramArrayOfByte, paramInt2, paramInt3);
+    }
+
+    private static short PutMovieForDataRefIntoHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.PutMovieForDataRefIntoHandle(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static int FlattenMovieDataToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort, int paramInt6) {
+        return MovieToolbox.FlattenMovieDataToDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort, paramInt6);
+    }
+
+    private static short QTGetTimeUntilNextTask(int[] paramArrayOfInt, int paramInt) {
+        return MovieToolbox.QTGetTimeUntilNextTask(paramArrayOfInt, paramInt);
+    }
+
+    private static short QTInstallNextTaskNeededSoonerCallback(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.QTInstallNextTaskNeededSoonerCallback(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
+
+    private static short QTUninstallNextTaskNeededSoonerCallback(int paramInt1, int paramInt2) {
+        return MovieToolbox.QTUninstallNextTaskNeededSoonerCallback(paramInt1, paramInt2);
+    }
+
+    private static short SetMovieAnchorDataRef(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.SetMovieAnchorDataRef(paramInt1, paramInt2, paramInt3);
+    }
+
+    private static short GetMovieAnchorDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MovieToolbox.GetMovieAnchorDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 }
 

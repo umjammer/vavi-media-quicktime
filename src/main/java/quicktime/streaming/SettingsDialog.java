@@ -7,6 +7,7 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.StreamingManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.std.StdQTException;
@@ -68,5 +69,7 @@ public class SettingsDialog implements QTStreamingLib {
         }
     }
 
-    private static native short QTSPresSettingsDialog(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short QTSPresSettingsDialog(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return StreamingManager.QTSPresSettingsDialog(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 }

@@ -5,6 +5,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
+import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -1033,120 +1035,236 @@ public final class Track extends QTObject implements QuickTimeLib {
         return super.toString() + "[ID=unable to obtain track ID]";
     }
 
-    private static native int GetMediaTrack(int paramInt);
+    private static int GetMediaTrack(int paramInt) {
+        return MovieToolbox.GetMediaTrack(paramInt);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int MovieImportFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int paramInt5, int[] paramArrayOfInt3);
+    private static int MovieImportFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int paramInt5, int[] paramArrayOfInt3) {
+        return ComponentManager.MovieImportFile(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt1, paramInt4, paramArrayOfInt2, paramInt5, paramArrayOfInt3);
+    }
 
-    private static native int MovieImportHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int paramInt5, int[] paramArrayOfInt2, int paramInt6, int[] paramArrayOfInt3);
+    private static int MovieImportHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int paramInt5, int[] paramArrayOfInt2, int paramInt6, int[] paramArrayOfInt3) {
+        return ComponentManager.MovieImportHandle(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt1, paramInt5, paramArrayOfInt2, paramInt6, paramArrayOfInt3);
+    }
 
-    private static native int MovieImportDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int paramInt6, int[] paramArrayOfInt2, int paramInt7, int[] paramArrayOfInt3);
+    private static int MovieImportDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int paramInt6, int[] paramArrayOfInt2, int paramInt7, int[] paramArrayOfInt3) {
+        return ComponentManager.MovieImportDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt1, paramInt6, paramArrayOfInt2, paramInt7, paramArrayOfInt3);
+    }
 
-    private static native int NewMovieTrack(int paramInt1, int paramInt2, int paramInt3, short paramShort);
+    private static int NewMovieTrack(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
+        return MovieToolbox.NewMovieTrack(paramInt1, paramInt2, paramInt3, paramShort);
+    }
 
-    private static native int GetTrackMedia(int paramInt);
+    private static int GetTrackMedia(int paramInt) {
+        return MovieToolbox.GetTrackMedia(paramInt);
+    }
 
-    private static native void DisposeTrackMedia(int paramInt);
+    private static void DisposeTrackMedia(int paramInt) {
+        MovieToolbox.DisposeTrackMedia(paramInt);
+    }
 
-    private static native void SetTrackGWorld(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static void SetTrackGWorld(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        MovieToolbox.SetTrackGWorld(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native void SetTrackClipRgn(int paramInt1, int paramInt2);
+    private static void SetTrackClipRgn(int paramInt1, int paramInt2) {
+        MovieToolbox.SetTrackClipRgn(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackID(int paramInt);
+    private static int GetTrackID(int paramInt) {
+        return MovieToolbox.GetTrackID(paramInt);
+    }
 
-    private static native int GetTrackCreationTime(int paramInt);
+    private static int GetTrackCreationTime(int paramInt) {
+        return MovieToolbox.GetTrackCreationTime(paramInt);
+    }
 
-    private static native int GetTrackModificationTime(int paramInt);
+    private static int GetTrackModificationTime(int paramInt) {
+        return MovieToolbox.GetTrackModificationTime(paramInt);
+    }
 
-    private static native byte GetTrackEnabled(int paramInt);
+    private static byte GetTrackEnabled(int paramInt) {
+        return MovieToolbox.GetTrackEnabled(paramInt);
+    }
 
-    private static native void SetTrackEnabled(int paramInt, byte paramByte);
+    private static void SetTrackEnabled(int paramInt, byte paramByte) {
+        MovieToolbox.SetTrackEnabled(paramInt, paramByte);
+    }
 
-    private static native int GetTrackUsage(int paramInt);
+    private static int GetTrackUsage(int paramInt) {
+        return MovieToolbox.GetTrackUsage(paramInt);
+    }
 
-    private static native void SetTrackUsage(int paramInt1, int paramInt2);
+    private static void SetTrackUsage(int paramInt1, int paramInt2) {
+        MovieToolbox.SetTrackUsage(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackDuration(int paramInt);
+    private static int GetTrackDuration(int paramInt) {
+        return MovieToolbox.GetTrackDuration(paramInt);
+    }
 
-    private static native int GetTrackOffset(int paramInt);
+    private static int GetTrackOffset(int paramInt) {
+        return MovieToolbox.GetTrackOffset(paramInt);
+    }
 
-    private static native void SetTrackOffset(int paramInt1, int paramInt2);
+    private static void SetTrackOffset(int paramInt1, int paramInt2) {
+        MovieToolbox.SetTrackOffset(paramInt1, paramInt2);
+    }
 
-    private static native short GetTrackLayer(int paramInt);
+    private static short GetTrackLayer(int paramInt) {
+        return MovieToolbox.GetTrackLayer(paramInt);
+    }
 
-    private static native void SetTrackLayer(int paramInt, short paramShort);
+    private static void SetTrackLayer(int paramInt, short paramShort) {
+        MovieToolbox.SetTrackLayer(paramInt, paramShort);
+    }
 
-    private static native int GetTrackAlternate(int paramInt);
+    private static int GetTrackAlternate(int paramInt) {
+        return MovieToolbox.GetTrackAlternate(paramInt);
+    }
 
-    private static native void SetTrackAlternate(int paramInt1, int paramInt2);
+    private static void SetTrackAlternate(int paramInt1, int paramInt2) {
+        MovieToolbox.SetTrackAlternate(paramInt1, paramInt2);
+    }
 
-    private static native short GetTrackVolume(int paramInt);
+    private static short GetTrackVolume(int paramInt) {
+        return MovieToolbox.GetTrackVolume(paramInt);
+    }
 
-    private static native void SetTrackVolume(int paramInt, short paramShort);
+    private static void SetTrackVolume(int paramInt, short paramShort) {
+        MovieToolbox.SetTrackVolume(paramInt, paramShort);
+    }
 
-    private static native void GetTrackMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static void GetTrackMatrix(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.GetTrackMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native void SetTrackMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static void SetTrackMatrix(int paramInt, byte[] paramArrayOfByte) {
+        MovieToolbox.SetTrackMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native void GetTrackDimensions(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetTrackDimensions(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetTrackDimensions(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void SetTrackDimensions(int paramInt1, int paramInt2, int paramInt3);
+    private static void SetTrackDimensions(int paramInt1, int paramInt2, int paramInt3) {
+        MovieToolbox.SetTrackDimensions(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short GetTrackDisplayMatrix(int paramInt, byte[] paramArrayOfByte);
+    private static short GetTrackDisplayMatrix(int paramInt, byte[] paramArrayOfByte) {
+        return MovieToolbox.GetTrackDisplayMatrix(paramInt, paramArrayOfByte);
+    }
 
-    private static native short SetTrackSoundLocalizationSettings(int paramInt1, int paramInt2);
+    private static short SetTrackSoundLocalizationSettings(int paramInt1, int paramInt2) {
+        return MovieToolbox.SetTrackSoundLocalizationSettings(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackMovie(int paramInt);
+    private static int GetTrackMovie(int paramInt) {
+        return MovieToolbox.GetTrackMovie(paramInt);
+    }
 
-    private static native void GetTrackNextInterestingTime(int paramInt1, short paramShort, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetTrackNextInterestingTime(int paramInt1, short paramShort, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetTrackNextInterestingTime(paramInt1, paramShort, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short InsertMediaIntoTrack(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short InsertMediaIntoTrack(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.InsertMediaIntoTrack(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short InsertEmptyTrackSegment(int paramInt1, int paramInt2, int paramInt3);
+    private static short InsertEmptyTrackSegment(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.InsertEmptyTrackSegment(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short DeleteTrackSegment(int paramInt1, int paramInt2, int paramInt3);
+    private static short DeleteTrackSegment(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.DeleteTrackSegment(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short ScaleTrackSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short ScaleTrackSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.ScaleTrackSegment(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int NewTrackEditState(int paramInt);
+    private static int NewTrackEditState(int paramInt) {
+        return MovieToolbox.NewTrackEditState(paramInt);
+    }
 
-    private static native short UseTrackEditState(int paramInt1, int paramInt2);
+    private static short UseTrackEditState(int paramInt1, int paramInt2) {
+        return MovieToolbox.UseTrackEditState(paramInt1, paramInt2);
+    }
 
-    private static native short AddTrackReference(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short AddTrackReference(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return MovieToolbox.AddTrackReference(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short DeleteTrackReference(int paramInt1, int paramInt2, int paramInt3);
+    private static short DeleteTrackReference(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.DeleteTrackReference(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SetTrackReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short SetTrackReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.SetTrackReference(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int GetTrackReference(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTrackReference(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.GetTrackReference(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int GetNextTrackReferenceType(int paramInt1, int paramInt2);
+    private static int GetNextTrackReferenceType(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetNextTrackReferenceType(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackReferenceCount(int paramInt1, int paramInt2);
+    private static int GetTrackReferenceCount(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetTrackReferenceCount(paramInt1, paramInt2);
+    }
 
-    private static native int TrackTimeToMediaTime(int paramInt1, int paramInt2);
+    private static int TrackTimeToMediaTime(int paramInt1, int paramInt2) {
+        return MovieToolbox.TrackTimeToMediaTime(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackEditRate(int paramInt1, int paramInt2);
+    private static int GetTrackEditRate(int paramInt1, int paramInt2) {
+        return MovieToolbox.GetTrackEditRate(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackDataSize(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetTrackDataSize(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.GetTrackDataSize(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native byte PtInTrack(int paramInt1, int paramInt2);
+    private static byte PtInTrack(int paramInt1, int paramInt2) {
+        return MovieToolbox.PtInTrack(paramInt1, paramInt2);
+    }
 
-    private static native int GetTrackStatus(int paramInt);
+    private static int GetTrackStatus(int paramInt) {
+        return MovieToolbox.GetTrackStatus(paramInt);
+    }
 
-    private static native void SetTrackLoadSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static void SetTrackLoadSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        MovieToolbox.SetTrackLoadSettings(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native void GetTrackLoadSettings(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4);
+    private static void GetTrackLoadSettings(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
+        MovieToolbox.GetTrackLoadSettings(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    }
 
-    private static native short InsertTrackSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short InsertTrackSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return MovieToolbox.InsertTrackSegment(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short CopyTrackSettings(int paramInt1, int paramInt2);
+    private static short CopyTrackSettings(int paramInt1, int paramInt2) {
+        return MovieToolbox.CopyTrackSettings(paramInt1, paramInt2);
+    }
 
-    private static native short LoadTrackIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static short LoadTrackIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieToolbox.LoadTrackIntoRam(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native void SetTrackMatte(int paramInt1, int paramInt2);
+    private static void SetTrackMatte(int paramInt1, int paramInt2) {
+        MovieToolbox.SetTrackMatte(paramInt1, paramInt2);
+    }
 
-    private static native short CopyTrackUserData(int paramInt1, int paramInt2, int paramInt3);
+    private static short CopyTrackUserData(int paramInt1, int paramInt2, int paramInt3) {
+        return MovieToolbox.CopyTrackUserData(paramInt1, paramInt2, paramInt3);
+    }
 }
 

@@ -3,6 +3,7 @@ package quicktime.std.qtcomponents;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.std.movies.media.SampleDescription;
@@ -105,5 +106,7 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
         return getClass().getName() + "[format=" + QTUtils.fromOSType(getDataFormat()) + getTimeCodeDef() + "]";
     }
 
-    private static native void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 }

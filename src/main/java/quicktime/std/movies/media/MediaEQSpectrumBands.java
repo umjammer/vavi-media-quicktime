@@ -2,6 +2,7 @@ package quicktime.std.movies.media;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -89,11 +90,19 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
         super.finalize();
     }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int NewPtrClear(int paramInt);
+    private static int NewPtrClear(int paramInt) {
+        return MemoryManager.NewPtrClear(paramInt);
+    }
 
-    private static native void DisposePtr(int paramInt);
+    private static void DisposePtr(int paramInt) {
+        MemoryManager.DisposePtr(paramInt);
+    }
 }

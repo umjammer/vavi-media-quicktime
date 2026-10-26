@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.QD3DManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -112,17 +113,29 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
         return QDPoint.fromArray(arrayOfByte, -8);
     }
 
-    private static native int Q3Point2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Point2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Point2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native float Q3Point2D_Distance(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static float Q3Point2D_Distance(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Point2D_Distance(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native float Q3Point2D_DistanceSquared(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static float Q3Point2D_DistanceSquared(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Point2D_DistanceSquared(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Point2D_RRatio(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat1, float paramFloat2, byte[] paramArrayOfByte3);
+    private static int Q3Point2D_RRatio(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat1, float paramFloat2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Point2D_RRatio(paramArrayOfByte1, paramArrayOfByte2, paramFloat1, paramFloat2, paramArrayOfByte3);
+    }
 
-    private static native int Q3Point2D_Vector2D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Point2D_Vector2D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Point2D_Vector2D_Add(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int Q3Point2D_Vector2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Point2D_Vector2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Point2D_Vector2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/math

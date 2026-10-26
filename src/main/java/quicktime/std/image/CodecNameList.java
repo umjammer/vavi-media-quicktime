@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -73,5 +74,7 @@ public final class CodecNameList extends QTPointerRef implements QuickTimeLib {
         return getShortAt(0);
     }
 
-    private static native short GetCodecNameList(int[] paramArrayOfInt, short paramShort);
+    private static short GetCodecNameList(int[] paramArrayOfInt, short paramShort) {
+        return ImageCompressionManager.GetCodecNameList(paramArrayOfInt, paramShort);
+    }
 }

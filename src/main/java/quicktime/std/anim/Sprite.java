@@ -5,6 +5,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDDimension;
@@ -412,33 +414,63 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
         }
     }
 
-    private static native short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte paramByte, short paramShort);
+    private static short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte paramByte, short paramShort) {
+        return SpriteManager.NewSprite(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramByte, paramShort);
+    }
 
-    private static native short NewSprite(int[] paramArrayOfInt1, int paramInt1, int paramInt2, int[] paramArrayOfInt2, byte[] paramArrayOfByte, byte paramByte, short paramShort);
+    private static short NewSprite(int[] paramArrayOfInt1, int paramInt1, int paramInt2, int[] paramArrayOfInt2, byte[] paramArrayOfByte, byte paramByte, short paramShort) {
+        return SpriteManager.NewSprite(paramArrayOfInt1, paramInt1, paramInt2, paramArrayOfInt2, paramArrayOfByte, paramByte, paramShort);
+    }
 
-    private static native short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, byte paramByte, short paramShort);
+    private static short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, byte paramByte, short paramShort) {
+        return SpriteManager.NewSprite(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramByte, paramShort);
+    }
 
-    private static native void InvalidateSprite(int paramInt);
+    private static void InvalidateSprite(int paramInt) {
+        SpriteManager.InvalidateSprite(paramInt);
+    }
 
-    private static native short SpriteHitTest(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static short SpriteHitTest(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteHitTest(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native short GetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static short GetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short GetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short GetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native short SetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static short SetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native short SetSpriteProperty(int paramInt1, int paramInt2, short paramShort);
+    private static short SetSpriteProperty(int paramInt1, int paramInt2, short paramShort) {
+        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramShort);
+    }
 
-    private static native short SetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short SetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native short SetSpriteProperty(int paramInt1, int paramInt2, int paramInt3);
+    private static short SetSpriteProperty(int paramInt1, int paramInt2, int paramInt3) {
+        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short SetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short SetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native void DisposeSprite(int paramInt);
+    private static void DisposeSprite(int paramInt) {
+        SpriteManager.DisposeSprite(paramInt);
+    }
 
-    private static native short getShortFromHandle(int paramInt1, int paramInt2);
+    private static short getShortFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    }
 }

@@ -4,6 +4,7 @@ package quicktime.streaming;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -133,7 +134,9 @@ final class StreamDispatcher implements PrimitivesLib {
         this.mMethodClosure = null;
     }
 
-    private static native byte getIntFromPointer(int paramInt1, int paramInt2);
+    private static byte getIntFromPointer(int paramInt1, int paramInt2) {
+        return (byte) MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
     static class StreamNotifyClosure extends MethodClosure {
         StreamNotifyClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
@@ -145,13 +148,15 @@ final class StreamDispatcher implements PrimitivesLib {
         }
     }
 
-    private static native void copyPointerToArray(int paramInt1,
-                                                  int paramInt2,
-                                                  byte[] paramArrayOfByte,
-                                                  int paramInt3,
-                                                  int paramInt4);
+    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
+        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    }
 
-    private static native long getLongFromPointer(int paramInt1, int paramInt2);
+    private static long getLongFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getLongFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native byte getByteFromPointer(int paramInt1, int paramInt2);
+    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    }
 }

@@ -8,6 +8,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Vector;
 import quicktime.app.time.TaskThread;
+import quicktime.internal.toolbox.PlatformManager;
+import quicktime.internal.toolbox.QD3DManager;
+import quicktime.internal.toolbox.VRManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
@@ -21,9 +24,9 @@ import quicktime.qd.QDRect;
 import quicktime.qd3d.QD3DException;
 import quicktime.util.QTBuild;
 import quicktime.util.QTUtils;
-import sun.awt.DrawingSurface;
-import sun.awt.DrawingSurfaceInfo;
-import sun.awt.Win32DrawingSurface;
+import quicktime.internal.awt.DrawingSurface;
+import quicktime.internal.awt.DrawingSurfaceInfo;
+import quicktime.internal.awt.Win32DrawingSurface;
 
 /**
  * This class will check if QT is present and provides calls for enterMovies.
@@ -217,22 +220,12 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * is running.
      * @param osName the osName of the system that you want to find out if you are running on.
      * @return true if the current OS is the one as passed in or false if not.
+     *         Since the QuickTime toolbox is emulated, this is always {@link #kMacOSX}.
      */
     public static boolean isCurrentOS(int paramInt) {
-        if (osConstant <= 0) {
-            if (osConstant == -1) {
-                return false;
-            }
-            String str = System.getProperty("os.name");
-            if ((str.regionMatches(false, 0, "Darwin", 0, 6)) || (str.regionMatches(false, 0, "Mac OS X", 0, 8))) {
-                osConstant = 4;
-            } else if (str.regionMatches(false, 0, "Mac", 0, 3)) {
-                osConstant = 1;
-            } else if (str.regionMatches(false, 0, "Win", 0, 3)) {
-                osConstant = 2;
-            } else {
-                osConstant = -1;
-            }
+        // the toolbox is emulated in Java (quicktime.internal.toolbox), every host behaves like Mac OS X
+        if (osConstant == 0) {
+            osConstant = kMacOSX;
         }
         return (paramInt & osConstant) != 0;
     }
@@ -583,6 +576,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         } else if (initDone == 1) {
             removeAllCanvases();
             TaskThread.killAllThreads();
+            quicktime.internal.toolbox.MovieAccess.terminate();
             QTUtils.reclaimMemory();
             synchronized (terminationLock()) {
                 QTObject.qtIsNOTInitialized = true;
@@ -843,6 +837,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @see terminate
      */
     public static void close() {
+        terminate();
     }
 
     /**
@@ -857,9 +852,13 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     static void setJavaThreadHook() {
     }
 
-    private static native void DestroyPortAssociation(int paramInt);
+    private static void DestroyPortAssociation(int paramInt) {
+        PlatformManager.DestroyPortAssociation(paramInt);
+    }
 
-    private static native int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3);
+    private static int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3) {
+        return PlatformManager.CreatePortAssociation(paramInt1, paramInt2, paramInt3);
+    }
 
     private static short InitializeQTML(int paramInt) {
         return 0;
@@ -875,17 +874,29 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     private static void ExitMovies() {
     }
 
-    private static native short Gestalt(int paramInt, int[] paramArrayOfInt);
+    private static short Gestalt(int paramInt, int[] paramArrayOfInt) {
+        return PlatformManager.Gestalt(paramInt, paramArrayOfInt);
+    }
 
-    private static native short InitializeQTVR();
+    private static short InitializeQTVR() {
+        return VRManager.InitializeQTVR();
+    }
 
-    private static native short TerminateQTVR();
+    private static short TerminateQTVR() {
+        return VRManager.TerminateQTVR();
+    }
 
-    private static native int Q3Initialize();
+    private static int Q3Initialize() {
+        return QD3DManager.Q3Initialize();
+    }
 
-    private static native int Q3Exit();
+    private static int Q3Exit() {
+        return QD3DManager.Q3Exit();
+    }
 
-    private static native void SetJavaThreadCallbackProc();
+    private static void SetJavaThreadCallbackProc() {
+        PlatformManager.SetJavaThreadCallbackProc();
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/QTSession

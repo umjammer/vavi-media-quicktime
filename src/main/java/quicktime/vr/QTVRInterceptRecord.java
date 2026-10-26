@@ -3,6 +3,7 @@ package quicktime.vr;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.QDPoint;
@@ -252,11 +253,19 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
         return str;
     }
 
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setFloatInPointer(int paramInt1, int paramInt2, float paramFloat);
+    private static void setFloatInPointer(int paramInt1, int paramInt2, float paramFloat) {
+        MemoryManager.setFloatInPointer(paramInt1, paramInt2, paramFloat);
+    }
 
-    private static native float getFloatFromPointer(int paramInt1, int paramInt2);
+    private static float getFloatFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getFloatFromPointer(paramInt1, paramInt2);
+    }
 }

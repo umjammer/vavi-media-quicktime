@@ -5,6 +5,11 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.GraphicsExportManager;
+import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.ColorTable;
@@ -586,35 +591,65 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
         return getClass().getName() + "[cType=" + QTUtils.fromOSType(getCType()) + ",temporalQuality=" + getTemporalQuality() + ",spatialQulity=" + getSpatialQuality() + ",width=" + getWidth() + ",height=" + getHeight() + ",dataSize=" + getDataSize() + ",frameCount=" + getFrameCount() + ",name=" + s + ",depth=" + getDepth() + "]";
     }
 
-    private static native int GraphicsExportDoUseCompressor(int i, int j, int[] ai);
+    private static int GraphicsExportDoUseCompressor(int i, int j, int[] ai) {
+        return GraphicsExportManager.GraphicsExportDoUseCompressor(i, j, ai);
+    }
 
-    private static native int GraphicsExportGetInputImageDescription(int i, int[] ai);
+    private static int GraphicsExportGetInputImageDescription(int i, int[] ai) {
+        return GraphicsExportManager.GraphicsExportGetInputImageDescription(i, ai);
+    }
 
-    private static native int GraphicsImportGetImageDescription(int i, int[] ai);
+    private static int GraphicsImportGetImageDescription(int i, int[] ai) {
+        return GraphicsImportManager.GraphicsImportGetImageDescription(i, ai);
+    }
 
-    private static native short GetSpriteProperty(int i, int j, int[] ai);
+    private static short GetSpriteProperty(int i, int j, int[] ai) {
+        return SpriteManager.GetSpriteProperty(i, j, ai);
+    }
 
-    private static native int SCCompressImage(int i, int j, byte[] abyte0, int[] ai, int[] ai1);
+    private static int SCCompressImage(int i, int j, byte[] abyte0, int[] ai, int[] ai1) {
+        return ImageCompressionManager.SCCompressImage(i, j, abyte0, ai, ai1);
+    }
 
-    private static native short MakeImageDescriptionForPixMap(int i, int[] ai);
+    private static short MakeImageDescriptionForPixMap(int i, int[] ai) {
+        return ImageCompressionManager.MakeImageDescriptionForPixMap(i, ai);
+    }
 
-    private static native short SetImageDescriptionCTable(int i, int j);
+    private static short SetImageDescriptionCTable(int i, int j) {
+        return ImageCompressionManager.SetImageDescriptionCTable(i, j);
+    }
 
-    private static native short GetImageDescriptionExtension(int i, int[] ai, int j, int k);
+    private static short GetImageDescriptionExtension(int i, int[] ai, int j, int k) {
+        return ImageCompressionManager.GetImageDescriptionExtension(i, ai, j, k);
+    }
 
-    private static native short AddImageDescriptionExtension(int i, int j, int k);
+    private static short AddImageDescriptionExtension(int i, int j, int k) {
+        return ImageCompressionManager.AddImageDescriptionExtension(i, j, k);
+    }
 
-    private static native short RemoveImageDescriptionExtension(int i, int j, int k);
+    private static short RemoveImageDescriptionExtension(int i, int j, int k) {
+        return ImageCompressionManager.RemoveImageDescriptionExtension(i, j, k);
+    }
 
-    private static native short CountImageDescriptionExtensionType(int i, int j, int[] ai);
+    private static short CountImageDescriptionExtensionType(int i, int j, int[] ai) {
+        return ImageCompressionManager.CountImageDescriptionExtensionType(i, j, ai);
+    }
 
-    private static native short GetNextImageDescriptionExtensionType(int i, int[] ai);
+    private static short GetNextImageDescriptionExtensionType(int i, int[] ai) {
+        return ImageCompressionManager.GetNextImageDescriptionExtensionType(i, ai);
+    }
 
-    private static native short MakeImageDescriptionForEffect(int i, int[] ai);
+    private static short MakeImageDescriptionForEffect(int i, int[] ai) {
+        return ImageCompressionManager.MakeImageDescriptionForEffect(i, ai);
+    }
 
-    private static native void SetGWorld(int i, int j);
+    private static void SetGWorld(int i, int j) {
+        QuickDrawManager.SetGWorld(i, j);
+    }
 
-    private static native void GetGWorld(int[] ai, int[] ai1);
+    private static void GetGWorld(int[] ai, int[] ai1) {
+        QuickDrawManager.GetGWorld(ai, ai1);
+    }
 
     static {
         class PrivelegedAction {

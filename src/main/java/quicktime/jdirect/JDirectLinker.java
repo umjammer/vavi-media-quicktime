@@ -7,6 +7,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Vector;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.PlatformManager;
 
 public class JDirectLinker {
 
@@ -125,9 +126,13 @@ public class JDirectLinker {
 
     private static native void linkNativeMethod(Class<?> paramClass, String paramString1, String paramString2, int paramInt, int[] paramArrayOfInt) throws UnsatisfiedLinkError;
 
-    private static native int loadNativeLibrary(String paramString);
+    private static int loadNativeLibrary(String paramString) {
+        return PlatformManager.loadNativeLibrary(paramString);
+    }
 
-    private static native void unloadNativeLibrary(int paramInt);
+    private static void unloadNativeLibrary(int paramInt) {
+        PlatformManager.unloadNativeLibrary(paramInt);
+    }
 
     private static MethodSpec[] getNativeMethods(Class<?> paramClass) {
         Vector<MethodSpec> localVector = new Vector<>();

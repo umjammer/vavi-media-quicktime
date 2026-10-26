@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.Rectangle;
 
 /**
- * This class is the equivalent of sun.awt.DrawingSurface in 1.3. From 1.4 onwards the DrawingSurface
+ * This class is the equivalent of quicktime.internal.awt.DrawingSurface in 1.3. From 1.4 onwards the DrawingSurface
  * of awt component cannot be accessed via java awt classes. This class makes calls to the native
  * WinNativeHelper library using JNI , that returns the DrawingSurface for the component .
  * This implementation is just for Windows operating system.
@@ -62,7 +62,7 @@ public class WinJNIDrawingSurface {
     }
 
     /**
-     * This is the equivalent of sun.awt.DrawingSurface.getHWnd()
+     * This is the equivalent of quicktime.internal.awt.DrawingSurface.getHWnd()
      * @return hwnd the drawing surface hwnd
      */
     public int getHWnd() {

@@ -20,6 +20,7 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.qd.QDGraphics;
 import quicktime.qd.QDPoint;
@@ -726,25 +727,45 @@ label0:
         }
     }
 
-    private static native void initGlobalLock(Object paramObject);
+    private static void initGlobalLock(Object paramObject) {
+        PlatformManager.initGlobalLock(paramObject);
+    }
 
-    private static native void initGlobalOffScreen(Object paramObject);
+    private static void initGlobalOffScreen(Object paramObject) {
+        PlatformManager.initGlobalOffScreen(paramObject);
+    }
 
-    private native void setFullScreen(byte paramByte);
+    private void setFullScreen(byte paramByte) {
+        PlatformManager.setFullScreen(paramByte);
+    }
 
-    private native void setMovie(int paramInt, Object paramObject);
+    private void setMovie(int paramInt, Object paramObject) {
+        PlatformManager.setMovie(paramInt, paramObject);
+    }
 
-    private native void setMovieController(int paramInt, Object paramObject);
+    private void setMovieController(int paramInt, Object paramObject) {
+        PlatformManager.setMovieController(paramInt, paramObject);
+    }
 
-    private native int createNSViewNative(float paramFloat1, float paramFloat2, Object paramObject1, Object paramObject2);
+    private int createNSViewNative(float paramFloat1, float paramFloat2, Object paramObject1, Object paramObject2) {
+        return PlatformManager.createNSViewNative(paramFloat1, paramFloat2, paramObject1, paramObject2);
+    }
 
-    private native int createImageNSViewNative(int paramInt1, int paramInt2, Object paramObject);
+    private int createImageNSViewNative(int paramInt1, int paramInt2, Object paramObject) {
+        return PlatformManager.createImageNSViewNative(paramInt1, paramInt2, paramObject);
+    }
 
-    private native int createSequenceGrabberNSView(int paramInt1, int paramInt2, Object paramObject);
+    private int createSequenceGrabberNSView(int paramInt1, int paramInt2, Object paramObject) {
+        return PlatformManager.createSequenceGrabberNSView(paramInt1, paramInt2, paramObject);
+    }
 
-    private native Object getMovieController(int paramInt);
+    private Object getMovieController(int paramInt) {
+        return PlatformManager.getMovieController(paramInt);
+    }
 
-    private native void removeMovie(int paramInt);
+    private void removeMovie(int paramInt) {
+        PlatformManager.removeMovie(paramInt);
+    }
 
     public void keyReleased(KeyEvent paramKeyEvent) {
     }

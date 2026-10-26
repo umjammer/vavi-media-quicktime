@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.jdirect.SoundLib;
@@ -214,12 +216,20 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
         return new SndInfo(localSoundComponentData, arrayOfInt1[0], arrayOfInt2[0]);
     }
 
-    private static native short SetupSndHeader(int paramInt1, short paramShort1, int paramInt2, short paramShort2, int paramInt3, short paramShort3, int paramInt4, short[] paramArrayOfShort);
+    private static short SetupSndHeader(int paramInt1, short paramShort1, int paramInt2, short paramShort2, int paramInt3, short paramShort3, int paramInt4, short[] paramArrayOfShort) {
+        return SoundManager.SetupSndHeader(paramInt1, paramShort1, paramInt2, paramShort2, paramInt3, paramShort3, paramInt4, paramArrayOfShort);
+    }
 
-    private static native short GetSoundHeaderOffset(int paramInt, int[] paramArrayOfInt);
+    private static short GetSoundHeaderOffset(int paramInt, int[] paramArrayOfInt) {
+        return SoundManager.GetSoundHeaderOffset(paramInt, paramArrayOfInt);
+    }
 
-    private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
+    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short ParseSndHeader(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short ParseSndHeader(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SoundManager.ParseSndHeader(paramInt, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 

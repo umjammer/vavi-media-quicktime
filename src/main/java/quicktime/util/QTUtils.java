@@ -5,6 +5,7 @@ import java.security.PrivilegedAction;
 import java.util.Enumeration;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 
@@ -131,14 +132,14 @@ public final class QTUtils implements QuickTimeLib {
      * Convert a 16.16 Unsigned Fixed format to a float
      */
     public static int X2UFix(float paramFloat) {
-        return (int) (paramFloat * 65536.0F) & 0xFFFFFFFF;
+        return (int) (long) (paramFloat * 65536.0D);
     }
 
     /**
      * Convert a 16.16 Unsigned Fixed format to a float
      */
     public static float UFix2X(int paramInt) {
-        return (float) ((paramInt & 0xFFFFFFFF) / 65536.0D);
+        return (float) ((paramInt & 0xFFFFFFFFL) / 65536.0D);
     }
 
     /**
@@ -187,7 +188,7 @@ public final class QTUtils implements QuickTimeLib {
      * converts an unsigned int to long.
      */
     public static long UInt2Long(int paramInt) {
-        return paramInt & 0xFFFFFFFF;
+        return paramInt & 0xFFFFFFFFL;
     }
 
     /**
@@ -589,58 +590,112 @@ public final class QTUtils implements QuickTimeLib {
         }
     }
 
-    private static native void BlockMove(int paramInt1, int paramInt2, int paramInt3);
+    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int NewHandle(int paramInt);
+    private static int NewHandle(int paramInt) {
+        return MemoryManager.NewHandle(paramInt);
+    }
 
-    private static native void DisposeHandle(int paramInt);
+    private static void DisposeHandle(int paramInt) {
+        MemoryManager.DisposeHandle(paramInt);
+    }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native short getShortFromArray(int[] paramArrayOfInt, int paramInt);
+    private static short getShortFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfInt, paramInt);
+    }
 
-    private static native short getShortFromArray(float[] paramArrayOfFloat, int paramInt);
+    private static short getShortFromArray(float[] paramArrayOfFloat, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfFloat, paramInt);
+    }
 
-    private static native short getShortFromPointer(int paramInt1, int paramInt2);
+    private static short getShortFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort);
+    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    }
 
-    private static native void setShortInArray(int[] paramArrayOfInt, int paramInt, short paramShort);
+    private static void setShortInArray(int[] paramArrayOfInt, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfInt, paramInt, paramShort);
+    }
 
-    private static native void setShortInArray(float[] paramArrayOfFloat, int paramInt, short paramShort);
+    private static void setShortInArray(float[] paramArrayOfFloat, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfFloat, paramInt, paramShort);
+    }
 
-    private static native void setShortInPointer(int paramInt1, int paramInt2, short paramShort);
+    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
+        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native int getIntFromArray(int[] paramArrayOfInt, int paramInt);
+    private static int getIntFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
+    }
 
-    private static native int getIntFromArray(float[] paramArrayOfFloat, int paramInt);
+    private static int getIntFromArray(float[] paramArrayOfFloat, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfFloat, paramInt);
+    }
 
-    private static native int getIntFromPointer(int paramInt1, int paramInt2);
+    private static int getIntFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native void setIntInArray(int[] paramArrayOfInt, int paramInt1, int paramInt2);
+    private static void setIntInArray(int[] paramArrayOfInt, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfInt, paramInt1, paramInt2);
+    }
 
-    private static native void setIntInArray(float[] paramArrayOfFloat, int paramInt1, int paramInt2);
+    private static void setIntInArray(float[] paramArrayOfFloat, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfFloat, paramInt1, paramInt2);
+    }
 
-    private static native void setIntInPointer(int paramInt1, int paramInt2, int paramInt3);
+    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
+        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native long getLongFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static long getLongFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native long getLongFromArray(int[] paramArrayOfInt, int paramInt);
+    private static long getLongFromArray(int[] paramArrayOfInt, int paramInt) {
+        return MemoryManager.getLongFromArray(paramArrayOfInt, paramInt);
+    }
 
-    private static native long getLongFromArray(float[] paramArrayOfFloat, int paramInt);
+    private static long getLongFromArray(float[] paramArrayOfFloat, int paramInt) {
+        return MemoryManager.getLongFromArray(paramArrayOfFloat, paramInt);
+    }
 
-    private static native long getLongFromPointer(int paramInt1, int paramInt2);
+    private static long getLongFromPointer(int paramInt1, int paramInt2) {
+        return MemoryManager.getLongFromPointer(paramInt1, paramInt2);
+    }
 
-    private static native void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong);
+    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
+        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    }
 
-    private static native void setLongInArray(int[] paramArrayOfInt, int paramInt, long paramLong);
+    private static void setLongInArray(int[] paramArrayOfInt, int paramInt, long paramLong) {
+        MemoryManager.setLongInArray(paramArrayOfInt, paramInt, paramLong);
+    }
 
-    private static native void setLongInArray(float[] paramArrayOfFloat, int paramInt, long paramLong);
+    private static void setLongInArray(float[] paramArrayOfFloat, int paramInt, long paramLong) {
+        MemoryManager.setLongInArray(paramArrayOfFloat, paramInt, paramLong);
+    }
 
-    private static native void setLongInPointer(int paramInt1, int paramInt2, long paramLong);
+    private static void setLongInPointer(int paramInt1, int paramInt2, long paramLong) {
+        MemoryManager.setLongInPointer(paramInt1, paramInt2, paramLong);
+    }
 }
 

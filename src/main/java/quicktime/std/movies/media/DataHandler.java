@@ -3,6 +3,7 @@ package quicktime.std.movies.media;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ComponentManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -52,7 +53,11 @@ public final class DataHandler extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static native int GetDataHandler(int paramInt1, int paramInt2, int paramInt3);
+    private static int GetDataHandler(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.GetDataHandler(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short OpenAComponent(int paramInt, int[] paramArrayOfInt);
+    private static short OpenAComponent(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.OpenAComponent(paramInt, paramArrayOfInt);
+    }
 }

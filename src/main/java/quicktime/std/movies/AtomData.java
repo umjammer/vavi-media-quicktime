@@ -3,6 +3,7 @@ package quicktime.std.movies;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -50,14 +51,6 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
         StdQTException.checkError(i);
         paramVectorStream.unlock();
         return new AtomData(arrayOfInt2[0], arrayOfInt1[0], paramCurve);
-    }
-
-    private static int nextDataId = 1;
-    private byte[] data;
-
-    public AtomData(byte[] data) {
-        super(nextDataId++, data != null ? data.length : 0, null);
-        this.data = data != null ? data : new byte[0];
     }
 
     AtomData(int paramInt1, int paramInt2, Object paramObject) {
@@ -154,17 +147,6 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
         return getPStringAt(paramInt);
     }
 
-    public byte[] getBytes() {
-        if (this.data != null) {
-            return this.data;
-        }
-        return getBytes(0, getSize());
-    }
-
-    public int getSize() {
-        return this.data != null ? this.data.length : super.getSize();
-    }
-
     /**
      * Returns the byte values at the given position(offset) within the	object's memory area.
      * @param offset the given number of bytes to locate the struct.
@@ -174,14 +156,6 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
     public byte[] getBytes(int paramInt1, int paramInt2) throws IndexOutOfBoundsException {
-        if (this.data != null) {
-            checkOffset(paramInt1);
-            int i = getSize() - paramInt1;
-            int j = i > paramInt2 ? paramInt2 : paramInt2 == 0 ? i : i;
-            byte[] arrayOfByte = new byte[j];
-            System.arraycopy(this.data, paramInt1, arrayOfByte, 0, j);
-            return arrayOfByte;
-        }
         checkOffset(paramInt1);
         int i = getSize() - paramInt1;
         int j = i > paramInt2 ? paramInt2 : paramInt2 == 0 ? i : i;
@@ -195,6 +169,8 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
             throw new IndexOutOfBoundsException();
     }
 
-    private static native int CurveGetAtomDataFromVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int CurveGetAtomDataFromVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.CurveGetAtomDataFromVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 

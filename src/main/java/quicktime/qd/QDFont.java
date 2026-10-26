@@ -2,6 +2,7 @@ package quicktime.qd;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.QTUtils;
@@ -52,7 +53,11 @@ public final class QDFont implements QuickTimeLib {
         return arrayOfShort[0];
     }
 
-    private static native void GetFontName(short paramShort, byte[] paramArrayOfByte);
+    private static void GetFontName(short paramShort, byte[] paramArrayOfByte) {
+        QuickDrawManager.GetFontName(paramShort, paramArrayOfByte);
+    }
 
-    private static native void GetFNum(byte[] paramArrayOfByte, short[] paramArrayOfShort);
+    private static void GetFNum(byte[] paramArrayOfByte, short[] paramArrayOfShort) {
+        QuickDrawManager.GetFNum(paramArrayOfByte, paramArrayOfShort);
+    }
 }

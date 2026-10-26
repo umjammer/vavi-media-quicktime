@@ -4,6 +4,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -130,11 +133,19 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
         return super.toString() + "[ctSeed=" + getCtSeed() + ",ctFlags=0x" + Integer.toHexString(getShortAt(4)) + ",numEntries=" + getCtSize() + "]";
     }
 
-    private static native short GetImageDescriptionCTable(int paramInt, int[] paramArrayOfInt);
+    private static short GetImageDescriptionCTable(int paramInt, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetImageDescriptionCTable(paramInt, paramArrayOfInt);
+    }
 
-    private static native short GetMovieColorTable(int paramInt, int[] paramArrayOfInt);
+    private static short GetMovieColorTable(int paramInt, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMovieColorTable(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int getIntFromHandle(int paramInt1, int paramInt2);
+    private static int getIntFromHandle(int paramInt1, int paramInt2) {
+        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    }
 }

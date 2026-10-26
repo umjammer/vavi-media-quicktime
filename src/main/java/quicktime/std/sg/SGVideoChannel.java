@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
@@ -219,26 +220,48 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
         return QTUtils.Fix2X(arrayOfInt[0]);
     }
 
-    private static native int SGSetVideoCompressorType(int paramInt1, int paramInt2);
+    private static int SGSetVideoCompressorType(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetVideoCompressorType(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetVideoCompressorType(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetVideoCompressorType(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetVideoCompressorType(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGSetVideoCompressor(int paramInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static int SGSetVideoCompressor(int paramInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return SequenceGrabberManager.SGSetVideoCompressor(paramInt1, paramShort, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native int SGGetVideoDigitizerComponent(int paramInt);
+    private static int SGGetVideoDigitizerComponent(int paramInt) {
+        return SequenceGrabberManager.SGGetVideoDigitizerComponent(paramInt);
+    }
 
-    private static native int SGSetVideoDigitizerComponent(int paramInt1, int paramInt2);
+    private static int SGSetVideoDigitizerComponent(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetVideoDigitizerComponent(paramInt1, paramInt2);
+    }
 
-    private static native int SGVideoDigitizerChanged(int paramInt);
+    private static int SGVideoDigitizerChanged(int paramInt) {
+        return SequenceGrabberManager.SGVideoDigitizerChanged(paramInt);
+    }
 
-    private static native int SGSetVideoRect(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetVideoRect(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetVideoRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGGetVideoRect(int paramInt, byte[] paramArrayOfByte);
+    private static int SGGetVideoRect(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGGetVideoRect(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGGetSrcVideoBounds(int paramInt, byte[] paramArrayOfByte);
+    private static int SGGetSrcVideoBounds(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGGetSrcVideoBounds(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSetFrameRate(int paramInt1, int paramInt2);
+    private static int SGSetFrameRate(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetFrameRate(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetFrameRate(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetFrameRate(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetFrameRate(paramInt, paramArrayOfInt);
+    }
 }
 

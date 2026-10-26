@@ -8,6 +8,7 @@ import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ComponentManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -72,8 +73,6 @@ public final class MovieExporter extends Component implements QuickTimeLib {
         setProgressProc(null);
     }
 
-    private AtomContainer settings;
-
     /**
      * This method establishes a MovieProgress object for the MovieExporter
      * that will be called for you by the Movie Toolbox whenever it
@@ -83,6 +82,18 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @param {@link quicktime.std.StdQTException}
      */
     public void setProgressProc(MovieProgress paramMovieProgress) throws StdQTException {
+        int i = 0;
+        if (this.progUPP != null)
+            this.progUPP.cleanupMethodClosure();
+        if (paramMovieProgress != null) {
+            this.progUPP = new QTCompDispatcher(paramMovieProgress);
+        } else {
+            this.progUPP = new QTCompDispatcher(this);
+        }
+        synchronized (QTNative.globalsLock) {
+            i = MovieExportSetProgressProc(_ID(), this.progUPP.ID(), 0);
+        }
+        StdQTException.checkError(i);
     }
 
     /**
@@ -178,7 +189,32 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return {@link quicktime.std.StdQTException}
      */
     public boolean doUserDialog(Movie paramMovie, Track paramTrack, int paramInt1, int paramInt2) throws StdQTException {
-        return false;
+        final byte[] arrayOfByte = new byte[1];
+        final Movie localMovie = paramMovie;
+        final Track localTrack = paramTrack;
+        final int i = paramInt1;
+        final int j = paramInt2;
+        final int k = _ID();
+        int m = 0;
+        if (QTSession.isCurrentOS(4)) {
+            m = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+
+                public Object invoke() {
+                    int l = 0;
+                    synchronized (QTNative.globalsLock) {
+                        l = MovieExporter.MovieExportDoUserDialog(k, QTObject.ID(localMovie), QTObject.ID(localTrack), i, j, arrayOfByte);
+                    }
+                    return l;
+                }
+            })).intValue();
+            StdQTException.checkError(m);
+        } else {
+            synchronized (QTNative.globalsLock) {
+                m = MovieExportDoUserDialog(_ID(), QTObject.ID(paramMovie), QTObject.ID(paramTrack), paramInt1, paramInt2, arrayOfByte);
+                StdQTException.checkError(m);
+            }
+        }
+        return arrayOfByte[0] != 0;
     }
 
     /**
@@ -218,7 +254,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return {@link quicktime.std.StdQTException}
      */
     public AtomContainer getExportSettingsFromAtomContainer() throws StdQTException {
-        return this.settings != null ? this.settings : AtomContainer.fromMovieExporter(this);
+        return AtomContainer.fromMovieExporter(this);
     }
 
     /**
@@ -226,7 +262,8 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * QuickTime::MovieExportSetSettingsFromAtomContainer
      */
     public void setExportSettingsFromAtomContainer(AtomContainer paramAtomContainer) throws StdQTException {
-        this.settings = paramAtomContainer;
+        int i = MovieExportSetSettingsFromAtomContainer(_ID(), QTObject.ID(paramAtomContainer));
+        StdQTException.checkError(i);
     }
 
     /**
@@ -284,30 +321,56 @@ public final class MovieExporter extends Component implements QuickTimeLib {
         this.progUPP = null;
     }
 
-    private static native int MovieExportToHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static int MovieExportToHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return ComponentManager.MovieExportToHandle(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native int MovieExportToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7);
+    private static int MovieExportToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7) {
+        return ComponentManager.MovieExportToDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7);
+    }
 
-    private static native int MovieExportGetAuxiliaryData(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int MovieExportGetAuxiliaryData(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return ComponentManager.MovieExportGetAuxiliaryData(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int MovieExportSetProgressProc(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieExportSetProgressProc(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieExportSetProgressProc(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieExportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3);
+    private static int MovieExportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
+        return ComponentManager.MovieExportSetSampleDescription(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int MovieExportDoUserDialog(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte);
+    private static int MovieExportDoUserDialog(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte) {
+        return ComponentManager.MovieExportDoUserDialog(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfByte);
+    }
 
-    private static native int MovieExportGetCreatorType(int paramInt, int[] paramArrayOfInt);
+    private static int MovieExportGetCreatorType(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieExportGetCreatorType(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieExportValidate(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static int MovieExportValidate(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return ComponentManager.MovieExportValidate(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native int MovieExportSetSettingsFromAtomContainer(int paramInt1, int paramInt2);
+    private static int MovieExportSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
+        return ComponentManager.MovieExportSetSettingsFromAtomContainer(paramInt1, paramInt2);
+    }
 
-    private static native int MovieExportGetFileNameExtension(int paramInt, int[] paramArrayOfInt);
+    private static int MovieExportGetFileNameExtension(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieExportGetFileNameExtension(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieExportGetShortFileTypeString(int paramInt, byte[] paramArrayOfByte);
+    private static int MovieExportGetShortFileTypeString(int paramInt, byte[] paramArrayOfByte) {
+        return ComponentManager.MovieExportGetShortFileTypeString(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MovieExportGetSourceMediaType(int paramInt, int[] paramArrayOfInt);
+    private static int MovieExportGetSourceMediaType(int paramInt, int[] paramArrayOfInt) {
+        return ComponentManager.MovieExportGetSourceMediaType(paramInt, paramArrayOfInt);
+    }
 
-    private static native int MovieExportToFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static int MovieExportToFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return ComponentManager.MovieExportToFile(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 }
 

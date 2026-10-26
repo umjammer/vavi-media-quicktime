@@ -3,6 +3,7 @@ package quicktime.std.sg;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
@@ -139,18 +140,32 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static native int SGSetFontName(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetFontName(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetFontName(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSetFontSize(int paramInt, short paramShort);
+    private static int SGSetFontSize(int paramInt, short paramShort) {
+        return SequenceGrabberManager.SGSetFontSize(paramInt, paramShort);
+    }
 
-    private static native int SGSetTextForeColor(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetTextForeColor(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetTextForeColor(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSetTextBackColor(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetTextBackColor(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetTextBackColor(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSetJustification(int paramInt, short paramShort);
+    private static int SGSetJustification(int paramInt, short paramShort) {
+        return SequenceGrabberManager.SGSetJustification(paramInt, paramShort);
+    }
 
-    private static native int SGGetTextReturnToSpaceValue(int paramInt, short[] paramArrayOfShort);
+    private static int SGGetTextReturnToSpaceValue(int paramInt, short[] paramArrayOfShort) {
+        return SequenceGrabberManager.SGGetTextReturnToSpaceValue(paramInt, paramArrayOfShort);
+    }
 
-    private static native int SGSetTextReturnToSpaceValue(int paramInt, short paramShort);
+    private static int SGSetTextReturnToSpaceValue(int paramInt, short paramShort) {
+        return SequenceGrabberManager.SGSetTextReturnToSpaceValue(paramInt, paramShort);
+    }
 }
 

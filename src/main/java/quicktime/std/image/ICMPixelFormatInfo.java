@@ -7,6 +7,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -127,17 +129,29 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
         return getClass().getName() + "[formatFlags=" + getFormatFlags() + "]";
     }
 
-    private static native short ICMSetPixelFormatInfo(int paramInt, byte[] paramArrayOfByte);
+    private static short ICMSetPixelFormatInfo(int paramInt, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.ICMSetPixelFormatInfo(paramInt, paramArrayOfByte);
+    }
 
-    private static native short ICMGetPixelFormatInfo(int paramInt, byte[] paramArrayOfByte);
+    private static short ICMGetPixelFormatInfo(int paramInt, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.ICMGetPixelFormatInfo(paramInt, paramArrayOfByte);
+    }
 
-    private static native void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort);
+    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
+        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    }
 
-    private static native int getIntFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    }
 
-    private static native short getShortFromArray(byte[] paramArrayOfByte, int paramInt);
+    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
+        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

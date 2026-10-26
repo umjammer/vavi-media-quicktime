@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
@@ -113,18 +114,32 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
         return new QTPointer(arrayOfByte);
     }
 
-    private static native int MediaHitTestForTargetRefCon(int paramInt1, long paramLong, int paramInt2, int[] paramArrayOfInt);
+    private static int MediaHitTestForTargetRefCon(int paramInt1, long paramLong, int paramInt2, int[] paramArrayOfInt) {
+        return MediaHandlerManager.MediaHitTestForTargetRefCon(paramInt1, paramLong, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int MediaHitTestTargetRefCon(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte);
+    private static int MediaHitTestTargetRefCon(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaHitTestTargetRefCon(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    }
 
-    private static native int MediaSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int MediaSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int MediaGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte);
+    private static int MediaGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    }
 
-    private static native int MediaGetTrackOpaque(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaGetTrackOpaque(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetTrackOpaque(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MediaSetPublicInfo(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int MediaSetPublicInfo(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MediaHandlerManager.MediaSetPublicInfo(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int MediaGetPublicInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int MediaGetPublicInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return MediaHandlerManager.MediaGetPublicInfo(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
+    }
 }
 

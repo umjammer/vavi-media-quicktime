@@ -7,6 +7,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MatrixManager;
+import quicktime.internal.toolbox.QD3DManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -356,39 +358,73 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
         return copy();
     }
 
-    private static native int Q3Quaternion_Copy(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Quaternion_Copy(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Quaternion_Copy(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Quaternion_SetIdentity(byte[] paramArrayOfByte);
+    private static int Q3Quaternion_SetIdentity(byte[] paramArrayOfByte) {
+        return QD3DManager.Q3Quaternion_SetIdentity(paramArrayOfByte);
+    }
 
-    private static native int Q3Quaternion_IsIdentity(byte[] paramArrayOfByte);
+    private static int Q3Quaternion_IsIdentity(byte[] paramArrayOfByte) {
+        return QD3DManager.Q3Quaternion_IsIdentity(paramArrayOfByte);
+    }
 
-    private static native int Q3Quaternion_Invert(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Quaternion_Invert(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Quaternion_Invert(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Quaternion_Multiply(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Quaternion_Multiply(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Quaternion_Multiply(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int Q3Quaternion_Normalize(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Quaternion_Normalize(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Quaternion_Normalize(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native float Q3Quaternion_Dot(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static float Q3Quaternion_Dot(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Quaternion_Dot(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Quaternion_SetRotateAboutAxis(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat);
+    private static int Q3Quaternion_SetRotateAboutAxis(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat) {
+        return QD3DManager.Q3Quaternion_SetRotateAboutAxis(paramArrayOfByte1, paramArrayOfByte2, paramFloat);
+    }
 
-    private static native int Q3Quaternion_SetRotate_X(byte[] paramArrayOfByte, float paramFloat);
+    private static int Q3Quaternion_SetRotate_X(byte[] paramArrayOfByte, float paramFloat) {
+        return QD3DManager.Q3Quaternion_SetRotate_X(paramArrayOfByte, paramFloat);
+    }
 
-    private static native int Q3Quaternion_SetRotate_Y(byte[] paramArrayOfByte, float paramFloat);
+    private static int Q3Quaternion_SetRotate_Y(byte[] paramArrayOfByte, float paramFloat) {
+        return QD3DManager.Q3Quaternion_SetRotate_Y(paramArrayOfByte, paramFloat);
+    }
 
-    private static native int Q3Quaternion_SetRotate_Z(byte[] paramArrayOfByte, float paramFloat);
+    private static int Q3Quaternion_SetRotate_Z(byte[] paramArrayOfByte, float paramFloat) {
+        return QD3DManager.Q3Quaternion_SetRotate_Z(paramArrayOfByte, paramFloat);
+    }
 
-    private static native int Q3Quaternion_SetRotate_XYZ(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2, float paramFloat3);
+    private static int Q3Quaternion_SetRotate_XYZ(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2, float paramFloat3) {
+        return QD3DManager.Q3Quaternion_SetRotate_XYZ(paramArrayOfByte, paramFloat1, paramFloat2, paramFloat3);
+    }
 
-    private static native int Q3Quaternion_SetMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Quaternion_SetMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return MatrixManager.Q3Quaternion_SetMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Quaternion_SetRotateVectorToVector(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Quaternion_SetRotateVectorToVector(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Quaternion_SetRotateVectorToVector(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int Q3Quaternion_MatchReflection(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Quaternion_MatchReflection(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Quaternion_MatchReflection(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native int Q3Quaternion_InterpolateFast(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat, byte[] paramArrayOfByte3);
+    private static int Q3Quaternion_InterpolateFast(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Quaternion_InterpolateFast(paramArrayOfByte1, paramArrayOfByte2, paramFloat, paramArrayOfByte3);
+    }
 
-    private static native int Q3Quaternion_InterpolateLinear(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat, byte[] paramArrayOfByte3);
+    private static int Q3Quaternion_InterpolateLinear(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Quaternion_InterpolateLinear(paramArrayOfByte1, paramArrayOfByte2, paramFloat, paramArrayOfByte3);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/math

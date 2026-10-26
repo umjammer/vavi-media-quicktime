@@ -5,6 +5,9 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.QuickDrawManager;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
@@ -457,9 +460,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
             synchronized (QTNative.globalsLock) {
                 i = SGSetDataOutput(_ID(), null, paramInt);
             }
-        }
-        synchronized (QTNative.globalsLock) {
-            i = SGSetDataOutput(_ID(), paramQTFile.getFSSpec(false, 256), paramInt);
+        } else {
+            synchronized (QTNative.globalsLock) {
+                i = SGSetDataOutput(_ID(), paramQTFile.getFSSpec(false, 256), paramInt);
+            }
         }
         StdQTException.checkError(i);
     }
@@ -695,64 +699,124 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
         }
     }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native int SGInitialize(int paramInt);
+    private static int SGInitialize(int paramInt) {
+        return SequenceGrabberManager.SGInitialize(paramInt);
+    }
 
-    private static native int SGSetGWorld(int paramInt1, int paramInt2, int paramInt3);
+    private static int SGSetGWorld(int paramInt1, int paramInt2, int paramInt3) {
+        return SequenceGrabberManager.SGSetGWorld(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SGWriteExtendedMovieData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte, int paramInt5);
+    private static int SGWriteExtendedMovieData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte, int paramInt5) {
+        return SequenceGrabberManager.SGWriteExtendedMovieData(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte, paramInt5);
+    }
 
-    private static native int SGStartPreview(int paramInt);
+    private static int SGStartPreview(int paramInt) {
+        return SequenceGrabberManager.SGStartPreview(paramInt);
+    }
 
-    private static native int SGStartRecord(int paramInt);
+    private static int SGStartRecord(int paramInt) {
+        return SequenceGrabberManager.SGStartRecord(paramInt);
+    }
 
-    private static native int SGIdle(int paramInt);
+    private static int SGIdle(int paramInt) {
+        return SequenceGrabberManager.SGIdle(paramInt);
+    }
 
-    private static native int SGUpdate(int paramInt1, int paramInt2);
+    private static int SGUpdate(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGUpdate(paramInt1, paramInt2);
+    }
 
-    private static native int SGStop(int paramInt);
+    private static int SGStop(int paramInt) {
+        return SequenceGrabberManager.SGStop(paramInt);
+    }
 
-    private static native int SGPause(int paramInt, byte paramByte);
+    private static int SGPause(int paramInt, byte paramByte) {
+        return SequenceGrabberManager.SGPause(paramInt, paramByte);
+    }
 
-    private static native int SGGetPause(int paramInt, byte[] paramArrayOfByte);
+    private static int SGGetPause(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGGetPause(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGPrepare(int paramInt, byte paramByte1, byte paramByte2);
+    private static int SGPrepare(int paramInt, byte paramByte1, byte paramByte2) {
+        return SequenceGrabberManager.SGPrepare(paramInt, paramByte1, paramByte2);
+    }
 
-    private static native int SGRelease(int paramInt);
+    private static int SGRelease(int paramInt) {
+        return SequenceGrabberManager.SGRelease(paramInt);
+    }
 
-    private static native int SGSetSettings(int paramInt1, int paramInt2, int paramInt3);
+    private static int SGSetSettings(int paramInt1, int paramInt2, int paramInt3) {
+        return SequenceGrabberManager.SGSetSettings(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native int SGSetDataOutput(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static int SGSetDataOutput(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return SequenceGrabberManager.SGSetDataOutput(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetDataOutput(paramInt, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int SGSetDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int SGSetDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return SequenceGrabberManager.SGSetDataRef(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int SGGetDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3);
+    private static int SGGetDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return SequenceGrabberManager.SGGetDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    }
 
-    private static native int SGSetMaximumRecordTime(int paramInt1, int paramInt2);
+    private static int SGSetMaximumRecordTime(int paramInt1, int paramInt2) {
+        return SequenceGrabberManager.SGSetMaximumRecordTime(paramInt1, paramInt2);
+    }
 
-    private static native int SGGetMaximumRecordTime(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetMaximumRecordTime(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetMaximumRecordTime(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGGetStorageSpaceRemaining(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetStorageSpaceRemaining(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetStorageSpaceRemaining(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGGetTimeRemaining(int paramInt, int[] paramArrayOfInt);
+    private static int SGGetTimeRemaining(int paramInt, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetTimeRemaining(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SGGetMode(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int SGGetMode(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return SequenceGrabberManager.SGGetMode(paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SequenceGrabberManager.SGGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int SGGrabPict(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, short paramShort, int paramInt2);
+    private static int SGGrabPict(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, short paramShort, int paramInt2) {
+        return SequenceGrabberManager.SGGrabPict(paramInt1, paramArrayOfInt, paramArrayOfByte, paramShort, paramInt2);
+    }
 
-    private static native int SGGetIndChannel(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt);
+    private static int SGGetIndChannel(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt) {
+        return SequenceGrabberManager.SGGetIndChannel(paramInt1, paramShort, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SGGetIndChannel(int paramInt, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static int SGGetIndChannel(int paramInt, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return SequenceGrabberManager.SGGetIndChannel(paramInt, paramShort, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native int SGSetDataProc(int paramInt1, int paramInt2, int paramInt3);
+    private static int SGSetDataProc(int paramInt1, int paramInt2, int paramInt3) {
+        return SequenceGrabberManager.SGSetDataProc(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong);
+    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
+        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    }
 }
 

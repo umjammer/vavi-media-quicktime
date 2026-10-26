@@ -1,15 +1,14 @@
 package quicktime.internal.jdirect;
 
 
+/**
+ * Native method linker. Nothing to link, the QuickTime toolbox is emulated in Java.
+ */
 public class Linker {
 
     /**
-     * @param paramClass
+     * @param clazz the class whose native methods would be linked
      */
-    public Linker(Class<?> paramClass) {
-        // TODO Auto-generated constructor stub
+    public Linker(Class<?> clazz) {
     }
-
 }
-
-/* */

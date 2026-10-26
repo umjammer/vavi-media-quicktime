@@ -5,6 +5,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDGraphics;
@@ -93,12 +95,20 @@ public final class SCSequence implements QuickTimeLib {
         super.finalize();
     }
 
-    private static native int SCCompressSequenceBegin(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt);
+    private static int SCCompressSequenceBegin(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
+        return ImageCompressionManager.SCCompressSequenceBegin(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
+    }
 
-    private static native int SCCompressSequenceEnd(int paramInt);
+    private static int SCCompressSequenceEnd(int paramInt) {
+        return ImageCompressionManager.SCCompressSequenceEnd(paramInt);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 }
 

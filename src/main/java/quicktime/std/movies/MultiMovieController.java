@@ -6,6 +6,8 @@ import java.util.Vector;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MovieControllerManager;
+import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDGraphics;
@@ -184,17 +186,31 @@ public final class MultiMovieController extends MovieController implements Quick
         super.removeMovie();
     }
 
-    private static native int MCMovieChanged(int paramInt1, int paramInt2);
+    private static int MCMovieChanged(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCMovieChanged(paramInt1, paramInt2);
+    }
 
-    private static native int MCRemoveMovie(int paramInt);
+    private static int MCRemoveMovie(int paramInt) {
+        return MovieControllerManager.MCRemoveMovie(paramInt);
+    }
 
-    private static native int MCSetMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int MCSetMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return MovieControllerManager.MCSetMovie(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int MCGetIndMovie(int paramInt, short paramShort);
+    private static int MCGetIndMovie(int paramInt, short paramShort) {
+        return MovieControllerManager.MCGetIndMovie(paramInt, paramShort);
+    }
 
-    private static native short GetMoviesError();
+    private static short GetMoviesError() {
+        return MovieToolbox.GetMoviesError();
+    }
 
-    private static native int MCRemoveAllMovies(int paramInt);
+    private static int MCRemoveAllMovies(int paramInt) {
+        return MovieControllerManager.MCRemoveAllMovies(paramInt);
+    }
 
-    private static native int MCRemoveAMovie(int paramInt1, int paramInt2);
+    private static int MCRemoveAMovie(int paramInt1, int paramInt2) {
+        return MovieControllerManager.MCRemoveAMovie(paramInt1, paramInt2);
+    }
 }

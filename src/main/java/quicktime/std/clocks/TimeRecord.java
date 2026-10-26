@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ClockManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.QTPointerRef;
@@ -140,11 +141,19 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
         return super.toString() + "[value=" + getValue() + ",scale=" + getScale() + "]";
     }
 
-    private static native void ConvertTime(int paramInt1, int paramInt2);
+    private static void ConvertTime(int paramInt1, int paramInt2) {
+        ClockManager.ConvertTime(paramInt1, paramInt2);
+    }
 
-    private static native void ConvertTimeScale(int paramInt1, int paramInt2);
+    private static void ConvertTimeScale(int paramInt1, int paramInt2) {
+        ClockManager.ConvertTimeScale(paramInt1, paramInt2);
+    }
 
-    private static native void AddTime(int paramInt1, int paramInt2);
+    private static void AddTime(int paramInt1, int paramInt2) {
+        ClockManager.AddTime(paramInt1, paramInt2);
+    }
 
-    private static native void SubtractTime(int paramInt1, int paramInt2);
+    private static void SubtractTime(int paramInt1, int paramInt2) {
+        ClockManager.SubtractTime(paramInt1, paramInt2);
+    }
 }

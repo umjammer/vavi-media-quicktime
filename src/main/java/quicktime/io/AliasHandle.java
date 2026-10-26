@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.FileManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.movies.media.DataRef;
@@ -105,8 +106,12 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
         return QTFile.resolveAlias(this);
     }
 
-    private static native short QTNewAlias(byte[] paramArrayOfByte, int[] paramArrayOfInt, byte paramByte);
+    private static short QTNewAlias(byte[] paramArrayOfByte, int[] paramArrayOfInt, byte paramByte) {
+        return FileManager.QTNewAlias(paramArrayOfByte, paramArrayOfInt, paramByte);
+    }
 
-    private static native short NewAlias(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt);
+    private static short NewAlias(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
+        return FileManager.NewAlias(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    }
 }
 

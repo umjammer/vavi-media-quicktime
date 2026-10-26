@@ -2,6 +2,7 @@ package quicktime.std.movies.media;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -155,24 +156,44 @@ public class MPEGMediaHandler extends VideoMediaHandler implements QuickTimeLib,
         return arrayOfInt;
     }
 
-    private static native int MediaGetSoundBalance(int paramInt, short[] paramArrayOfShort);
+    private static int MediaGetSoundBalance(int paramInt, short[] paramArrayOfShort) {
+        return MediaHandlerManager.MediaGetSoundBalance(paramInt, paramArrayOfShort);
+    }
 
-    private static native int MediaSetSoundBalance(int paramInt, short paramShort);
+    private static int MediaSetSoundBalance(int paramInt, short paramShort) {
+        return MediaHandlerManager.MediaSetSoundBalance(paramInt, paramShort);
+    }
 
-    private static native int MediaGetSoundLevelMeteringEnabled(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaGetSoundLevelMeteringEnabled(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetSoundLevelMeteringEnabled(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MediaSetSoundLevelMeteringEnabled(int paramInt, byte paramByte);
+    private static int MediaSetSoundLevelMeteringEnabled(int paramInt, byte paramByte) {
+        return MediaHandlerManager.MediaSetSoundLevelMeteringEnabled(paramInt, paramByte);
+    }
 
-    private static native int MediaGetSoundEqualizerBands(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaGetSoundEqualizerBands(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetSoundEqualizerBands(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MediaSetSoundEqualizerBands(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaSetSoundEqualizerBands(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaSetSoundEqualizerBands(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MediaSetSoundBassAndTreble(int paramInt, short paramShort1, short paramShort2);
+    private static int MediaSetSoundBassAndTreble(int paramInt, short paramShort1, short paramShort2) {
+        return MediaHandlerManager.MediaSetSoundBassAndTreble(paramInt, paramShort1, paramShort2);
+    }
 
-    private static native int MediaGetSoundBassAndTreble(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2);
+    private static int MediaGetSoundBassAndTreble(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2) {
+        return MediaHandlerManager.MediaGetSoundBassAndTreble(paramInt, paramArrayOfShort1, paramArrayOfShort2);
+    }
 
-    private static native int MediaGetSoundLevelMeterInfo(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaGetSoundLevelMeterInfo(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetSoundLevelMeterInfo(paramInt, paramArrayOfByte);
+    }
 
-    private static native int MediaGetSoundEqualizerBandLevels(int paramInt, byte[] paramArrayOfByte);
+    private static int MediaGetSoundEqualizerBandLevels(int paramInt, byte[] paramArrayOfByte) {
+        return MediaHandlerManager.MediaGetSoundEqualizerBandLevels(paramInt, paramArrayOfByte);
+    }
 }
 

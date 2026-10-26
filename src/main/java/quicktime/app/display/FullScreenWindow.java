@@ -7,6 +7,7 @@ import java.awt.Window;
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.qd.GDevice;
 import quicktime.qd.QDRect;
@@ -313,6 +314,8 @@ public class FullScreenWindow extends Window {
 
     private static final class QTM implements InterfaceLib {
 
-        private static native void DrawMenuBar();
+        private static void DrawMenuBar() {
+            PlatformManager.DrawMenuBar();
+        }
     }
 }

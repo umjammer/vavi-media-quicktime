@@ -1,33 +1,33 @@
 package quicktime.internal.jdirect;
 
+import quicktime.internal.toolbox.Closures;
 
+
+/**
+ * A Java method bound to a procedure pointer the emulated QuickTime toolbox can call back.
+ *
+ * @see Closures
+ */
 public class MethodClosure {
 
-    /**
-     * @param paramObject
-     * @param paramString1
-     * @param paramString2
-     */
-    public MethodClosure(Object paramObject, String paramString1, String paramString2) {
-        // TODO Auto-generated constructor stub
-    }
+    private int proc;
 
     /**
-     * 
+     * @param target the object receiving the callback
+     * @param methodName the name of the callback method
+     * @param descriptor the JNI descriptor of the callback method
      */
+    public MethodClosure(Object target, String methodName, String descriptor) {
+        this.proc = Closures.newClosure(target, methodName, descriptor);
+    }
+
     public void dispose() {
-        // TODO Auto-generated method stub
-        
+        Closures.dispose(proc);
+        proc = 0;
     }
 
-    /**
-     * @return
-     */
+    /** @return the procedure pointer */
     public int getProc() {
-        // TODO Auto-generated method stub
-        return 0;
+        return proc;
     }
-
 }
-
-/* */

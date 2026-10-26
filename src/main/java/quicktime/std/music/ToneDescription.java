@@ -10,6 +10,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.MusicManager;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -236,9 +238,15 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
         return new ToneDescription(getBytes());
     }
 
-    private static native int NAStuffToneDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int NAStuffToneDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return MusicManager.NAStuffToneDescription(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int NAPickInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static int NAPickInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return MusicManager.NAPickInstrument(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native int GetMainEventLoop();
+    private static int GetMainEventLoop() {
+        return PlatformManager.GetMainEventLoop();
+    }
 }

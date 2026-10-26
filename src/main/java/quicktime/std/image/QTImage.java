@@ -5,6 +5,8 @@ import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.ImageCompressionManager;
+import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.ColorTable;
@@ -465,81 +467,157 @@ public class QTImage implements QuickTimeLib {
         return QTUtils.Fix2X(arrayOfInt[0]);
     }
 
-    private static native void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native void SetGWorld(int paramInt1, int paramInt2);
+    private static void SetGWorld(int paramInt1, int paramInt2) {
+        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    }
 
-    private static native short CompressImage(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int paramInt5);
+    private static short CompressImage(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+        return ImageCompressionManager.CompressImage(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramInt5);
+    }
 
-    private static native short CompressImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte2);
+    private static short CompressImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte2) {
+        return ImageCompressionManager.CompressImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramInt4, paramArrayOfByte2);
+    }
 
-    private static native short CompressImage(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt);
+    private static short CompressImage(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return ImageCompressionManager.CompressImage(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    }
 
-    private static native short FCompressImage(int paramInt1, byte[] paramArrayOfByte, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int paramInt10);
+    private static short FCompressImage(int paramInt1, byte[] paramArrayOfByte, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int paramInt10) {
+        return ImageCompressionManager.FCompressImage(paramInt1, paramArrayOfByte, paramShort1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort2, paramInt6, paramInt7, paramInt8, paramInt9, paramInt10);
+    }
 
-    private static native short FCompressImage(int paramInt1, byte[] paramArrayOfByte1, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, byte[] paramArrayOfByte2);
+    private static short FCompressImage(int paramInt1, byte[] paramArrayOfByte1, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, byte[] paramArrayOfByte2) {
+        return ImageCompressionManager.FCompressImage(paramInt1, paramArrayOfByte1, paramShort1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort2, paramInt6, paramInt7, paramInt8, paramInt9, paramArrayOfByte2);
+    }
 
-    private static native short FCompressImage(int paramInt1, byte[] paramArrayOfByte, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int[] paramArrayOfInt);
+    private static short FCompressImage(int paramInt1, byte[] paramArrayOfByte, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int[] paramArrayOfInt) {
+        return ImageCompressionManager.FCompressImage(paramInt1, paramArrayOfByte, paramShort1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort2, paramInt6, paramInt7, paramInt8, paramInt9, paramArrayOfInt);
+    }
 
-    private static native short ConvertImage(int paramInt1, byte[] paramArrayOfByte1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte2);
+    private static short ConvertImage(int paramInt1, byte[] paramArrayOfByte1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte2) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfByte1, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfByte2);
+    }
 
-    private static native short ConvertImage(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int[] paramArrayOfInt);
+    private static short ConvertImage(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int[] paramArrayOfInt) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfInt);
+    }
 
-    private static native short ConvertImage(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8);
+    private static short ConvertImage(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    }
 
-    private static native short ConvertImage(int paramInt1, int[] paramArrayOfInt, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte);
+    private static short ConvertImage(int paramInt1, int[] paramArrayOfInt, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfInt, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfByte);
+    }
 
-    private static native short ConvertImage(int paramInt1, int[] paramArrayOfInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int[] paramArrayOfInt2);
+    private static short ConvertImage(int paramInt1, int[] paramArrayOfInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfInt1, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfInt2);
+    }
 
-    private static native short ConvertImage(int paramInt1, int[] paramArrayOfInt, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8);
+    private static short ConvertImage(int paramInt1, int[] paramArrayOfInt, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfInt, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    }
 
-    private static native short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, byte[] paramArrayOfByte);
+    private static short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramInt2, paramShort, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramArrayOfByte);
+    }
 
-    private static native short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, int[] paramArrayOfInt);
+    private static short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, int[] paramArrayOfInt) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramInt2, paramShort, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramArrayOfInt);
+    }
 
-    private static native short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, int paramInt9);
+    private static short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, int paramInt9) {
+        return ImageCompressionManager.ConvertImage(paramInt1, paramInt2, paramShort, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramInt9);
+    }
 
-    private static native short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte1, int paramInt5, int paramInt6, byte[] paramArrayOfByte2, int paramInt7);
+    private static short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte1, int paramInt5, int paramInt6, byte[] paramArrayOfByte2, int paramInt7) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte1, paramInt5, paramInt6, paramArrayOfByte2, paramInt7);
+    }
 
-    private static native short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt, int paramInt5, int paramInt6, byte[] paramArrayOfByte, int paramInt7);
+    private static short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt, int paramInt5, int paramInt6, byte[] paramArrayOfByte, int paramInt7) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt, paramInt5, paramInt6, paramArrayOfByte, paramInt7);
+    }
 
-    private static native short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte, int paramInt8);
+    private static short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte, int paramInt8) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfByte, paramInt8);
+    }
 
-    private static native short TrimImage(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, int paramInt4, int paramInt5, byte[] paramArrayOfByte2, int paramInt6);
+    private static short TrimImage(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, int paramInt4, int paramInt5, byte[] paramArrayOfByte2, int paramInt6) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramArrayOfByte1, paramInt4, paramInt5, paramArrayOfByte2, paramInt6);
+    }
 
-    private static native short TrimImage(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int paramInt4, int paramInt5, byte[] paramArrayOfByte, int paramInt6);
+    private static short TrimImage(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int paramInt4, int paramInt5, byte[] paramArrayOfByte, int paramInt6) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2, paramInt4, paramInt5, paramArrayOfByte, paramInt6);
+    }
 
-    private static native short TrimImage(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, byte[] paramArrayOfByte, int paramInt7);
+    private static short TrimImage(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, byte[] paramArrayOfByte, int paramInt7) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramArrayOfByte, paramInt7);
+    }
 
-    private static native short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int paramInt4, int paramInt5, byte[] paramArrayOfByte3, int paramInt6);
+    private static short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int paramInt4, int paramInt5, byte[] paramArrayOfByte3, int paramInt6) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramInt4, paramInt5, paramArrayOfByte3, paramInt6);
+    }
 
-    private static native short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4, int paramInt5, byte[] paramArrayOfByte2, int paramInt6);
+    private static short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4, int paramInt5, byte[] paramArrayOfByte2, int paramInt6) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfInt, paramInt4, paramInt5, paramArrayOfByte2, paramInt6);
+    }
 
-    private static native short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, byte[] paramArrayOfByte2, int paramInt7);
+    private static short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, byte[] paramArrayOfByte2, int paramInt7) {
+        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramArrayOfByte2, paramInt7);
+    }
 
-    private static native short DecompressImage(byte[] paramArrayOfByte1, int paramInt1, int paramInt2, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, short paramShort, int paramInt3);
+    private static short DecompressImage(byte[] paramArrayOfByte1, int paramInt1, int paramInt2, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, short paramShort, int paramInt3) {
+        return ImageCompressionManager.DecompressImage(paramArrayOfByte1, paramInt1, paramInt2, paramArrayOfByte2, paramArrayOfByte3, paramShort, paramInt3);
+    }
 
-    private static native short DecompressImage(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt3);
+    private static short DecompressImage(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt3) {
+        return ImageCompressionManager.DecompressImage(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramShort, paramInt3);
+    }
 
-    private static native short DecompressImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt4);
+    private static short DecompressImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt4) {
+        return ImageCompressionManager.DecompressImage(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2, paramShort, paramInt4);
+    }
 
-    private static native short FDecompressImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt4, int paramInt5, byte[] paramArrayOfByte3, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int paramInt10);
+    private static short FDecompressImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt4, int paramInt5, byte[] paramArrayOfByte3, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int paramInt10) {
+        return ImageCompressionManager.FDecompressImage(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2, paramShort, paramInt4, paramInt5, paramArrayOfByte3, paramInt6, paramInt7, paramInt8, paramInt9, paramInt10);
+    }
 
-    private static native short GetMaxCompressionSize(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt);
+    private static short GetMaxCompressionSize(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetMaxCompressionSize(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    }
 
-    private static native short GetCompressedImageSize(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short GetCompressedImageSize(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCompressedImageSize(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native short GetCompressedImageSize(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2);
+    private static short GetCompressedImageSize(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.GetCompressedImageSize(paramInt1, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2);
+    }
 
-    private static native short GetCompressedImageSize(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt);
+    private static short GetCompressedImageSize(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCompressedImageSize(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    }
 
-    private static native short GetCompressionTime(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt);
+    private static short GetCompressionTime(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetCompressionTime(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt);
+    }
 
-    private static native short GetSimilarity(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2, int[] paramArrayOfInt);
+    private static short GetSimilarity(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetSimilarity(paramInt1, paramArrayOfByte1, paramInt2, paramArrayOfByte2, paramArrayOfInt);
+    }
 
-    private static native short GetSimilarity(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2);
+    private static short GetSimilarity(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return ImageCompressionManager.GetSimilarity(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    }
 
-    private static native short GetSimilarity(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static short GetSimilarity(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return ImageCompressionManager.GetSimilarity(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

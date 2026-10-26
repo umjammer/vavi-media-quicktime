@@ -48,6 +48,10 @@ public final class QTFactory {
      * @return {@link quicktime.QTException}
      */
     public static QTComponent makeQTComponent(final Movie mov) throws QTException {
+        if (QTSession.isCurrentOS(4)) {
+            // the toolbox is emulated, components draw with Java 2D
+            return new QTJavaJ2DCanvas(mov);
+        }
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
             class PrivelegedAction {
 
@@ -82,6 +86,9 @@ public final class QTFactory {
      * @return {@link quicktime.QTException}
      */
     public static QTComponent makeQTComponent(final MovieController controller) throws QTException {
+        if (QTSession.isCurrentOS(4)) {
+            return new QTJavaJ2DCanvas(controller);
+        }
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
             class PrivelegedAction {
 
@@ -118,6 +125,9 @@ public final class QTFactory {
      * @return {@link quicktime.QTException}
      */
     public static QTComponent makeQTComponent(final GraphicsImporter gi) throws QTException {
+        if (QTSession.isCurrentOS(4)) {
+            return new QTJavaJ2DCanvas(gi);
+        }
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
             class PrivelegedAction {
 

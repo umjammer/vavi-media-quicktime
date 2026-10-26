@@ -7,6 +7,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+import quicktime.internal.toolbox.QD3DManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
@@ -359,25 +360,45 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         return copy();
     }
 
-    private static native int Q3Matrix3x3_Copy(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Matrix3x3_Copy(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Matrix3x3_Copy(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Matrix3x3_SetIdentity(byte[] paramArrayOfByte);
+    private static int Q3Matrix3x3_SetIdentity(byte[] paramArrayOfByte) {
+        return QD3DManager.Q3Matrix3x3_SetIdentity(paramArrayOfByte);
+    }
 
-    private static native int Q3Matrix3x3_Transpose(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Matrix3x3_Transpose(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Matrix3x3_Transpose(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Matrix3x3_Invert(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Matrix3x3_Invert(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Matrix3x3_Invert(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Matrix3x3_Adjoint(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2);
+    private static int Q3Matrix3x3_Adjoint(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+        return QD3DManager.Q3Matrix3x3_Adjoint(paramArrayOfByte1, paramArrayOfByte2);
+    }
 
-    private static native int Q3Matrix3x3_Multiply(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3);
+    private static int Q3Matrix3x3_Multiply(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
+        return QD3DManager.Q3Matrix3x3_Multiply(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    }
 
-    private static native float Q3Matrix3x3_Determinant(byte[] paramArrayOfByte);
+    private static float Q3Matrix3x3_Determinant(byte[] paramArrayOfByte) {
+        return QD3DManager.Q3Matrix3x3_Determinant(paramArrayOfByte);
+    }
 
-    private static native int Q3Matrix3x3_SetTranslate(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2);
+    private static int Q3Matrix3x3_SetTranslate(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2) {
+        return QD3DManager.Q3Matrix3x3_SetTranslate(paramArrayOfByte, paramFloat1, paramFloat2);
+    }
 
-    private static native int Q3Matrix3x3_SetScale(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2);
+    private static int Q3Matrix3x3_SetScale(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2) {
+        return QD3DManager.Q3Matrix3x3_SetScale(paramArrayOfByte, paramFloat1, paramFloat2);
+    }
 
-    private static native int Q3Matrix3x3_SetRotateAboutPoint(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat);
+    private static int Q3Matrix3x3_SetRotateAboutPoint(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat) {
+        return QD3DManager.Q3Matrix3x3_SetRotateAboutPoint(paramArrayOfByte1, paramArrayOfByte2, paramFloat);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/math

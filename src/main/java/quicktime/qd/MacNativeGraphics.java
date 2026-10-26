@@ -1,8 +1,8 @@
 
 package quicktime.qd;
 
-import sun.awt.DrawingSurfaceInfo;
-import sun.awt.MacDrawingSurface;
+import quicktime.internal.awt.DrawingSurfaceInfo;
+import quicktime.internal.awt.MacDrawingSurface;
 
 
 final class MacNativeGraphics extends NativeGraphics {

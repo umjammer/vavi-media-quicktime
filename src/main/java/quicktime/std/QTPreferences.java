@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.movies.AtomContainer;
@@ -144,13 +145,23 @@ public final class QTPreferences implements QuickTimeLib {
         StdQTException.checkError(SetQuickTimePreference(paramInt, QTObject.ID(paramAtomContainer)));
     }
 
-    private static native short QTGetAccessKeys(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt);
+    private static short QTGetAccessKeys(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt) {
+        return PlatformManager.QTGetAccessKeys(paramArrayOfByte, paramInt, paramArrayOfInt);
+    }
 
-    private static native short QTRegisterAccessKey(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static short QTRegisterAccessKey(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        return PlatformManager.QTRegisterAccessKey(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native short QTUnregisterAccessKey(byte[] paramArrayOfByte, int paramInt1, int paramInt2);
+    private static short QTUnregisterAccessKey(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
+        return PlatformManager.QTUnregisterAccessKey(paramArrayOfByte, paramInt1, paramInt2);
+    }
 
-    private static native short GetQuickTimePreference(int paramInt, int[] paramArrayOfInt);
+    private static short GetQuickTimePreference(int paramInt, int[] paramArrayOfInt) {
+        return PlatformManager.GetQuickTimePreference(paramInt, paramArrayOfInt);
+    }
 
-    private static native short SetQuickTimePreference(int paramInt1, int paramInt2);
+    private static short SetQuickTimePreference(int paramInt1, int paramInt2) {
+        return PlatformManager.SetQuickTimePreference(paramInt1, paramInt2);
+    }
 }

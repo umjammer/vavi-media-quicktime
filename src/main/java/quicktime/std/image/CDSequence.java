@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ClockManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDGraphics;
@@ -88,9 +90,15 @@ public class CDSequence extends QTObject implements QuickTimeLib {
         return arrayOfByte[0] != 0;
     }
 
-    private static native short CDSequenceSetTimeBase(int paramInt1, int paramInt2);
+    private static short CDSequenceSetTimeBase(int paramInt1, int paramInt2) {
+        return ClockManager.CDSequenceSetTimeBase(paramInt1, paramInt2);
+    }
 
-    private static native short CDSequenceBusy(int paramInt);
+    private static short CDSequenceBusy(int paramInt) {
+        return ImageCompressionManager.CDSequenceBusy(paramInt);
+    }
 
-    private static native short CDSequenceEquivalentImageDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static short CDSequenceEquivalentImageDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.CDSequenceEquivalentImageDescription(paramInt1, paramInt2, paramArrayOfByte);
+    }
 }

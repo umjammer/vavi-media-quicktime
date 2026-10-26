@@ -4,6 +4,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ClockManager;
+import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.jdirect.SoundLib;
@@ -74,7 +76,11 @@ public final class Clock extends Component implements QuickTimeLib, SoundLib {
         return new Clock(arrayOfInt[0], paramSndChannel);
     }
 
-    private static native short SndGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static short SndGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int ClockGetTime(int paramInt1, int paramInt2);
+    private static int ClockGetTime(int paramInt1, int paramInt2) {
+        return ClockManager.ClockGetTime(paramInt1, paramInt2);
+    }
 }

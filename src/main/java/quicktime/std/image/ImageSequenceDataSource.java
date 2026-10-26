@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -122,19 +123,33 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
         this.isValid = false;
     }
 
-    private static native short CDSequenceNewDataSource(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6);
+    private static short CDSequenceNewDataSource(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
+        return ImageCompressionManager.CDSequenceNewDataSource(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
+    }
 
-    private static native short CDSequenceGetDataSource(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3);
+    private static short CDSequenceGetDataSource(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.CDSequenceGetDataSource(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
+    }
 
-    private static native short CDSequenceChangedSourceData(int paramInt);
+    private static short CDSequenceChangedSourceData(int paramInt) {
+        return ImageCompressionManager.CDSequenceChangedSourceData(paramInt);
+    }
 
-    private static native short CDSequenceSetSourceData(int paramInt1, byte[] paramArrayOfByte, int paramInt2);
+    private static short CDSequenceSetSourceData(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
+        return ImageCompressionManager.CDSequenceSetSourceData(paramInt1, paramArrayOfByte, paramInt2);
+    }
 
-    private static native short CDSequenceSetSourceData(int paramInt1, int[] paramArrayOfInt, int paramInt2);
+    private static short CDSequenceSetSourceData(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
+        return ImageCompressionManager.CDSequenceSetSourceData(paramInt1, paramArrayOfInt, paramInt2);
+    }
 
-    private static native short CDSequenceSetSourceData(int paramInt1, int paramInt2, int paramInt3);
+    private static short CDSequenceSetSourceData(int paramInt1, int paramInt2, int paramInt3) {
+        return ImageCompressionManager.CDSequenceSetSourceData(paramInt1, paramInt2, paramInt3);
+    }
 
-    private static native short CDSequenceDisposeDataSource(int paramInt);
+    private static short CDSequenceDisposeDataSource(int paramInt) {
+        return ImageCompressionManager.CDSequenceDisposeDataSource(paramInt);
+    }
 }
 /* Location:
  * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image

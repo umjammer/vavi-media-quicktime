@@ -2,6 +2,7 @@ package quicktime.std.sg;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -61,7 +62,11 @@ public abstract class AudioChannel extends SGChannel implements QuickTimeLib {
         return QTUtils.ShortFix2X(arrayOfShort[0]);
     }
 
-    private static native int SGSetChannelVolume(int paramInt, short paramShort);
+    private static int SGSetChannelVolume(int paramInt, short paramShort) {
+        return SequenceGrabberManager.SGSetChannelVolume(paramInt, paramShort);
+    }
 
-    private static native int SGGetChannelVolume(int paramInt, short[] paramArrayOfShort);
+    private static int SGGetChannelVolume(int paramInt, short[] paramArrayOfShort) {
+        return SequenceGrabberManager.SGGetChannelVolume(paramInt, paramArrayOfShort);
+    }
 }

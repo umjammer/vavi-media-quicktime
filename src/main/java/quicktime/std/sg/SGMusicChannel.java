@@ -3,6 +3,7 @@ package quicktime.std.sg;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
+import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
@@ -83,7 +84,11 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static native int SGGetInstrument(int paramInt, byte[] paramArrayOfByte);
+    private static int SGGetInstrument(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGGetInstrument(paramInt, paramArrayOfByte);
+    }
 
-    private static native int SGSetInstrument(int paramInt, byte[] paramArrayOfByte);
+    private static int SGSetInstrument(int paramInt, byte[] paramArrayOfByte) {
+        return SequenceGrabberManager.SGSetInstrument(paramInt, paramArrayOfByte);
+    }
 }

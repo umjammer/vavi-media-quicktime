@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
+import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDPoint;
@@ -428,54 +429,104 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
         StdQTException.checkError(i);
     }
 
-    private static native int SpriteMediaDisposeImage(int paramInt1, int paramInt2);
+    private static int SpriteMediaDisposeImage(int paramInt1, int paramInt2) {
+        return SpriteManager.SpriteMediaDisposeImage(paramInt1, paramInt2);
+    }
 
-    private static native int SpriteMediaNewImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int SpriteMediaNewImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return SpriteManager.SpriteMediaNewImage(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaSetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int paramInt4);
+    private static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+        return SpriteManager.SpriteMediaSetSpriteProperty(paramInt1, paramInt2, paramInt3, paramInt4);
+    }
 
-    private static native int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short paramShort);
+    private static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
+        return SpriteManager.SpriteMediaSetSpriteProperty(paramInt1, paramInt2, paramInt3, paramShort);
+    }
 
-    private static native int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte);
+    private static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaGetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteMediaGetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort);
+    private static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort) {
+        return SpriteManager.SpriteMediaGetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfShort);
+    }
 
-    private static native int SpriteMediaHitTestAllSprites(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt);
+    private static int SpriteMediaHitTestAllSprites(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteMediaHitTestAllSprites(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    }
 
-    private static native int SpriteMediaHitTestOneSprite(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte);
+    private static int SpriteMediaHitTestOneSprite(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaHitTestOneSprite(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaCountSprites(int paramInt, short[] paramArrayOfShort);
+    private static int SpriteMediaCountSprites(int paramInt, short[] paramArrayOfShort) {
+        return SpriteManager.SpriteMediaCountSprites(paramInt, paramArrayOfShort);
+    }
 
-    private static native int SpriteMediaCountImages(int paramInt, short[] paramArrayOfShort);
+    private static int SpriteMediaCountImages(int paramInt, short[] paramArrayOfShort) {
+        return SpriteManager.SpriteMediaCountImages(paramInt, paramArrayOfShort);
+    }
 
-    private static native int SpriteMediaGetIndImageDescription(int paramInt1, short paramShort, int paramInt2);
+    private static int SpriteMediaGetIndImageDescription(int paramInt1, short paramShort, int paramInt2) {
+        return SpriteManager.SpriteMediaGetIndImageDescription(paramInt1, paramShort, paramInt2);
+    }
 
-    private static native int SpriteMediaGetDisplayedSampleNumber(int paramInt, int[] paramArrayOfInt);
+    private static int SpriteMediaGetDisplayedSampleNumber(int paramInt, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteMediaGetDisplayedSampleNumber(paramInt, paramArrayOfInt);
+    }
 
-    private static native int SpriteMediaGetSpriteName(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SpriteMediaGetSpriteName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaGetSpriteName(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaGetImageName(int paramInt, short paramShort, byte[] paramArrayOfByte);
+    private static int SpriteMediaGetImageName(int paramInt, short paramShort, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaGetImageName(paramInt, paramShort, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaSpriteIndexToID(int paramInt, short paramShort, int[] paramArrayOfInt);
+    private static int SpriteMediaSpriteIndexToID(int paramInt, short paramShort, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteMediaSpriteIndexToID(paramInt, paramShort, paramArrayOfInt);
+    }
 
-    private static native int SpriteMediaSpriteIDToIndex(int paramInt1, int paramInt2, short[] paramArrayOfShort);
+    private static int SpriteMediaSpriteIDToIndex(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+        return SpriteManager.SpriteMediaSpriteIDToIndex(paramInt1, paramInt2, paramArrayOfShort);
+    }
 
-    private static native int SpriteMediaSetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat);
+    private static int SpriteMediaSetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
+        return SpriteManager.SpriteMediaSetActionVariable(paramInt1, paramInt2, paramArrayOfFloat);
+    }
 
-    private static native int SpriteMediaGetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat);
+    private static int SpriteMediaGetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
+        return SpriteManager.SpriteMediaGetActionVariable(paramInt1, paramInt2, paramArrayOfFloat);
+    }
 
-    private static native int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, byte[] paramArrayOfByte);
+    private static int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaGetIndImageProperty(paramInt1, paramShort, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt);
+    private static int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteMediaGetIndImageProperty(paramInt1, paramShort, paramInt2, paramArrayOfInt);
+    }
 
-    private static native int SpriteMediaSetActionVariableToString(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SpriteMediaSetActionVariableToString(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaSetActionVariableToString(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, byte[] paramArrayOfByte);
+    private static int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+        return SpriteManager.SpriteMediaGetActionVariableAsString(paramInt1, paramInt2, paramArrayOfByte);
+    }
 
-    private static native int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, int[] paramArrayOfInt);
+    private static int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+        return SpriteManager.SpriteMediaGetActionVariableAsString(paramInt1, paramInt2, paramArrayOfInt);
+    }
 }
 
