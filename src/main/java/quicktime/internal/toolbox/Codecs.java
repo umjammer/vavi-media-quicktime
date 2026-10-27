@@ -1115,7 +1115,7 @@ final class Codecs {
                 return img;
             }
             int[] px = pixels(img);
-            int length = Math.clamp(Bytes.getInt(data, 0) & 0x00ff_ffff, 4, data.length);
+            int length = Math.min(data.length, Math.max(4, Bytes.getInt(data, 0) & 0x00ff_ffff));
             if (length < data.length && (data[0] & 0xff) != 0xe1) {
                 length = data.length;
             }

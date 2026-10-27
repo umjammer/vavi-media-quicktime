@@ -10,6 +10,7 @@ import org.rococoa.ObjCBlock;
 import org.rococoa.ObjCBlocks.BlockLiteral;
 import org.rococoa.ObjCClass;
 import org.rococoa.Rococoa;
+import org.rococoa.cocoa.foundation.NSArray;
 import org.rococoa.cocoa.foundation.NSError;
 import org.rococoa.cocoa.foundation.NSObject;
 import org.rococoa.cocoa.foundation.NSURL;
@@ -61,6 +62,9 @@ public abstract class AVAssetExportSession extends NSObject {
     }
 
     public abstract void setOutputURL(NSURL url);
+
+    /** the output file types of the preset and the asset */
+    public abstract NSArray supportedFileTypes();
 
     public abstract void setOutputFileType(String fileType);
 

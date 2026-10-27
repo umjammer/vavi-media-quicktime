@@ -222,6 +222,10 @@ public class AVFMediaEngine extends MediaEngine {
         if (session == null) {
             return false;
         }
+        // an unsupported type throws an Objective-C exception, which aborts the vm
+        if (session.supportedFileTypes().stream().noneMatch(t -> fileType.equals(t.toString()))) {
+            return false;
+        }
         File out = new File(path);
         if (out.exists() && !out.delete()) {
             throw new IOException("cannot replace " + path);

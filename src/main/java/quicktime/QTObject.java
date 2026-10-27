@@ -48,10 +48,10 @@ public abstract class QTObject {
 
     private transient Object ref = null;
 
-    protected static final int sessionAllocated = QTSession.sessionID;
+    protected final transient int sessionAllocated = QTSession.sessionID;
 
     protected final int _ID() {
-        if ((qtIsNOTInitialized) || (this.nativeRep == 0) || (this.sessionAllocated != QTSession.sessionID)) {
+        if (qtIsNOTInitialized || this.nativeRep == 0 || sessionAllocated != QTSession.sessionID) {
             String str = getClass().getName();
             if (qtIsNOTInitialized)
                 throw new QTNullPointerException("QuickTime MUST be initialized:" + str);
@@ -63,14 +63,13 @@ public abstract class QTObject {
     }
 
     protected boolean stillValid() {
-        return (QTObjectManagement.isMember(this.nativeRep)) && (this.sessionAllocated == QTSession.sessionID);
+        return (QTObjectManagement.isMember(this.nativeRep)) && (sessionAllocated == QTSession.sessionID);
     }
 
-    @Override
-    protected final void finalize() throws Throwable {
+    private void disposeNative() throws Throwable {
         try {
             synchronized (this) {
-                if ((QTSession.isInitialized()) && (this.nativeRep != 0) && (this.ref == null) && (this.sessionAllocated == QTSession.sessionID)) {
+                if (QTSession.isInitialized() && this.nativeRep != 0 && this.ref == null && (sessionAllocated == QTSession.sessionID)) {
                     if (QTObjectManagement.isMember(this.nativeRep)) {
                         _dispose();
                         synchronized (QTNative.globalsLock) {
@@ -82,7 +81,6 @@ public abstract class QTObject {
             }
         } finally {
             this.nativeRep = 0;
-            super.finalize();
         }
     }
 
@@ -93,7 +91,7 @@ public abstract class QTObject {
      */
     public void disposeQTObject() throws QTException {
         try {
-            finalize();
+            disposeNative();
         } catch (Throwable localThrowable) {
             throw new QTException(localThrowable.toString());
         }

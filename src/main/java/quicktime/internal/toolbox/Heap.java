@@ -48,7 +48,7 @@ public final class Heap {
 
         void ensure(int newSize) {
             if (newSize > data.length) {
-                byte[] d = new byte[Math.clamp(capacity, newSize, data.length * 2)];
+                byte[] d = new byte[Math.max(newSize, Math.min(capacity, data.length * 2))];
                 System.arraycopy(data, 0, d, 0, size);
                 data = d;
             }

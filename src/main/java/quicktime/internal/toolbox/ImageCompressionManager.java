@@ -635,7 +635,7 @@ public final class ImageCompressionManager {
     /** @return offsets of the extension atoms */
     static List<int[]> extensions(byte[] d) {
         List<int[]> l = new ArrayList<>();
-        int end = Math.clamp(Bytes.getInt(d, 0), Codecs.DESCRIPTION_SIZE, d.length);
+        int end = Math.min(d.length, Math.max(Codecs.DESCRIPTION_SIZE, Bytes.getInt(d, 0)));
         int p = extensionsStart(d);
         while (p + 8 <= end) {
             int size = Bytes.getInt(d, p);
@@ -660,7 +660,7 @@ public final class ImageCompressionManager {
     }
 
     static byte[] addExtension(byte[] d, int type, byte[] data) {
-        int size = Math.clamp(d.length, Codecs.DESCRIPTION_SIZE, Bytes.getInt(d, 0));
+        int size = Math.max(Codecs.DESCRIPTION_SIZE, Math.min(d.length, Bytes.getInt(d, 0)));
         byte[] n = Arrays.copyOf(d, size + 8 + data.length);
         Bytes.putInt(n, size, 8 + data.length);
         Bytes.putInt(n, size + 4, type);

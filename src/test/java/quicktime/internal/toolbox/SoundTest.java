@@ -90,9 +90,14 @@ class SoundTest {
     Function<AudioFormat, TargetDataLine> savedSources;
     Capture capture;
 
+    MediaEngine savedEngine;
+
     @BeforeEach
     void setUp() throws Exception {
         QTSession.open();
+        // the movie sound is mixed by SoundPlayer, not by AVFoundation
+        savedEngine = MediaEngine.get();
+        MediaEngine.set(new MediaEngine.NullEngine());
         savedSinks = SoundPlayer.sinks;
         savedSources = SoundManager.sources;
         capture = new Capture();
@@ -102,6 +107,7 @@ class SoundTest {
     @AfterEach
     void tearDown() {
         QTSession.close();
+        MediaEngine.set(savedEngine);
         SoundPlayer.sinks = savedSinks;
         SoundManager.sources = savedSources;
     }

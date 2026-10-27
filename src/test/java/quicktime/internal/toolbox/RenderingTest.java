@@ -40,14 +40,20 @@ class RenderingTest implements StdQTConstants {
     @TempDir
     Path temp;
 
+    MediaEngine savedEngine;
+
     @BeforeEach
     void setUp() throws Exception {
         QTSession.open();
+        // frames are decoded by Java, AVFoundation would color match them
+        savedEngine = MediaEngine.get();
+        MediaEngine.set(new MediaEngine.NullEngine());
     }
 
     @AfterEach
     void tearDown() {
         QTSession.close();
+        MediaEngine.set(savedEngine);
     }
 
     @Test

@@ -7,6 +7,7 @@
 package quicktime.internal.toolbox;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -137,11 +138,39 @@ final class Exporters {
             } else if (fileType == TEXT) {
                 return writeText(part, path);
             }
-            return MediaEngine.get().export(part, path, fileType, f -> progress.progress(1, 12, (int) (f * 0x10000)));
+            int err = MediaEngine.get().export(part, path, fileType, f -> progress.progress(1, 12, (int) (f * 0x10000)));
+            if (err == MovieToolbox.featureUnsupported && brands != null && fileType != mpg4) {
+                // e.g. AVFoundation does not write 3GPP any more, its MPEG-4 is rewrapped
+                err = viaMpeg4(part, path, fileType, brands, progress);
+            }
+            return err;
         } finally {
             if (part != null) {
                 part.dispose();
             }
+        }
+    }
+
+    /** encodes MPEG-4 with the media engine and rewraps it in the file type, @return an OSErr */
+    private static int viaMpeg4(MovieRec part, String path, int fileType, int[] brands, MovieFiles.Progress progress) throws IOException {
+        File temp = File.createTempFile("qtexport", ".mp4");
+        try {
+            int err = MediaEngine.get().export(part, temp.getPath(), mpg4, f -> progress.progress(1, 12, (int) (f * 0x10000)));
+            if (err != 0) {
+                return err;
+            }
+            MovieRec m = MovieAtoms.readFile(temp.getPath());
+            if (m == null) {
+                return MovieToolbox.featureUnsupported;
+            }
+            if (!toIso(m, fileType == M4A, fileType == _3gpp || fileType == _3gp2)) {
+                m.dispose();
+                return MovieToolbox.featureUnsupported;
+            }
+            MovieFiles.flatten(m, path, MovieFiles.flattenForceMovieResourceBeforeMovieData, brands, true, progress).dispose();
+            return 0;
+        } finally {
+            temp.delete();
         }
     }
 
@@ -293,7 +322,7 @@ final class Exporters {
     private static void putSample(byte[] b, int o, double s, int bits, boolean bigEndian, boolean signed) {
         int bytes = bits / 8;
         long max = (1L << (bits - 1)) - 1;
-        long v = Math.clamp(max, -max - 1, Math.round(s * (max + 1)));
+        long v = Math.max(-max - 1, Math.min(max, Math.round(s * (max + 1))));
         if (!signed) {
             v += max + 1;
         }

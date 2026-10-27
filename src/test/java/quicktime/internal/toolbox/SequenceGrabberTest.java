@@ -131,6 +131,7 @@ class SequenceGrabberTest implements StdQTConstants {
         File file = temp.resolve("grab.mov").toFile();
         SequenceGrabber sg = new SequenceGrabber();
         SGVideoChannel video = new SGVideoChannel(sg);
+        video.setDevice("Test Pattern");
         video.setBounds(new QDRect(160, 120));
         video.setUsage(seqGrabRecord);
         video.setCompressorType(kAnimationCodecType);
@@ -170,6 +171,7 @@ class SequenceGrabberTest implements StdQTConstants {
     void testDataProc() throws Exception {
         SequenceGrabber sg = new SequenceGrabber();
         SGVideoChannel video = new SGVideoChannel(sg);
+        video.setDevice("Test Pattern");
         video.setBounds(new QDRect(64, 48));
         video.setUsage(seqGrabRecord);
         QDGraphics g = new QDGraphics(new QDRect(64, 48));

@@ -2630,7 +2630,7 @@ public final class MovieToolbox {
                 m.dataRefs.add(DataRefRec.forHandle(Heap.newHandle(0)));
             }
         }
-        return Math.clamp(m.defaultDataRefIndex, 1, m.dataRefs.size());
+        return Math.min(Math.max(1, m.defaultDataRefIndex), m.dataRefs.size());
     }
 
     /** @return the description index for the sample description handle */
@@ -2735,7 +2735,7 @@ public final class MovieToolbox {
             n = Math.min(left, maxNumberOfSamples);
         } else if (m.isSound()) {
             // a chunk of up to a second
-            n = Math.clamp(m.timeScale / Math.max(1, run.duration), 1, left);
+            n = Math.min(left, Math.max(1, m.timeScale / Math.max(1, run.duration)));
         } else {
             n = 1;
         }

@@ -1,13 +1,11 @@
 package quicktime.qd;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieControllerManager;
 import quicktime.internal.toolbox.MovieToolbox;
@@ -48,8 +46,6 @@ import quicktime.util.QTUtils;
  */
 public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTStreamingLib {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -84,16 +80,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     private static final int kFontInfoSz = 4;
 
     static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDGraphics.class));
-            }
-        }.establish();
         try {
             scratch = new QDGraphics(kDefaultPixelFormat, new QDRect(1, 1), null, GDevice.getMain(), 2);
             validScratch = new QDGraphics(kDefaultPixelFormat, new QDRect(1, 1), null, GDevice.getMain(), 2);
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
+            throw new ExceptionInInitializerError(e);
         }
     }
 
@@ -105,11 +96,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.GraphicsExporter#getInputGWorld()
      */
-    public static QDGraphics fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
+    public static QDGraphics fromGraphicsExporter(GraphicsExporter ge) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = GraphicsExportGetInputGWorld(QTObject.ID(paramGraphicsExporter), arrayOfInt);
+        int i = GraphicsExportGetInputGWorld(QTObject.ID(ge), arrayOfInt);
         StdQTException.checkError(i);
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], paramGraphicsExporter);
+        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], ge);
     }
 
     /**

@@ -360,7 +360,7 @@ public final class MovieControllerManager {
                     }
                 }
             }
-            t = next[0] >= 0 ? next[0] : Math.clamp(m.duration(), 0, t + (steps > 0 ? 1 : -1) * Math.max(1, m.timeScale / 10));
+            t = next[0] >= 0 ? next[0] : Math.max(0, Math.min(m.duration(), t + (steps > 0 ? 1 : -1) * Math.max(1, m.timeScale / 10)));
         }
         m.timeBase.setTime(t, m.timeScale);
         m.timeBase.fireTimeJump();
@@ -584,7 +584,7 @@ public final class MovieControllerManager {
             act(mc, mcActionPlay, playing ? 0 : c.movie.preferredRate, (byte) 0, (short) 0, null, null, null, 0);
         } else {
             long d = c.movie.duration();
-            long t = Math.clamp(d, 0, (h - s[0]) * d / Math.max(1, s[2] - s[0]));
+            long t = Math.max(0, Math.min(d, (h - s[0]) * d / Math.max(1, s[2] - s[0])));
             c.movie.timeBase.setTime(t, c.movie.timeScale);
             c.movie.timeBase.fireTimeJump();
             MediaEngine.get().sync(c.movie);
