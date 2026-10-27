@@ -24,12 +24,7 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(MediaEQSpectrumBands.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MediaEQSpectrumBands.class));
             }
         }.establish();
     }
@@ -73,18 +68,19 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
      * @return a String represenation of this object
      */
     public String toString() {
-        String str = getClass().getName() + "[count=" + getCount();
+        StringBuilder str = new StringBuilder(getClass().getName() + "[count=" + getCount());
         if (getCount() > 0) {
-            str = str + ",frequencies=[";
-            for (int i = 0; i < getCount() - 1; i++) str = str + getFrequency(i) + ",";
-            str = str + getFrequency(getCount() - 1);
-            str = str + "]]";
+            str.append(",frequencies=[");
+            for (int i = 0; i < getCount() - 1; i++) str.append(getFrequency(i)).append(",");
+            str.append(getFrequency(getCount() - 1));
+            str.append("]]");
         } else {
-            str = str + "]";
+            str.append("]");
         }
-        return str;
+        return str.toString();
     }
 
+    @Override
     protected void finalize() throws Throwable {
         DisposePtr(getIntAt(2));
         super.finalize();

@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.qd.QDPoint;
@@ -13,7 +15,8 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
 
     private static final int kNativeSize = 72;
 
-    static final long serialVersionUID = 2642915607141217566L;
+    @Serial
+    private static final long serialVersionUID = 2642915607141217566L;
 
     private static EndianDescriptor ed;
 
@@ -32,10 +35,12 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
         super(paramArrayOfByte, kNativeSize);
     }
 
+    @Override
     protected int getNativeSize() {
         return 72;
     }
 
+    @Override
     protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRLinkHotSpot localQTVRLinkHotSpot = new QTVRLinkHotSpot();
@@ -43,6 +48,7 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
         System.arraycopy(localQTVRLinkHotSpot.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Override
     protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRLinkHotSpot localQTVRLinkHotSpot = (QTVRLinkHotSpot) clone();
         paramObjectOutputStream.write(localQTVRLinkHotSpot.getBytes());
@@ -51,6 +57,7 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         try {
             return new QTVRLinkHotSpot(this.bytes);

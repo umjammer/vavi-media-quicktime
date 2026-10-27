@@ -27,12 +27,12 @@ import quicktime.std.image.GraphicsImporter;
  */
 public class ImageFileDemo extends Frame implements StdQTConstants {
 
-    public static void main(String args[]) {
+    static void main(String[] args) {
         try {
             QTSession.open();
 
             int[] fileTypes = {
-                kQTFileTypeGIF, kQTFileTypeJPEG, kQTFileTypePicture
+                    kQTFileTypeGIF, kQTFileTypeJPEG, kQTFileTypePicture
             };
             QTFile qtf = QTFile.standardGetFilePreview(fileTypes);
 
@@ -56,11 +56,13 @@ public class ImageFileDemo extends Frame implements StdQTConstants {
         add((Component) qtComponent, "Center");
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }

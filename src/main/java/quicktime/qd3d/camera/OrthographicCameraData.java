@@ -32,12 +32,7 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(OrthographicCameraData.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(OrthographicCameraData.class));
             }
         }
         new PrivelegedAction().establish();
@@ -130,6 +125,7 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new OrthographicCameraData(this.bytes);
     }

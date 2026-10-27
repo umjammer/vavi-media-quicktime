@@ -13,7 +13,7 @@ import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * QTTransistions are visual effects that are applied to a two images, transitioning from
  * the source image to the destination image. Upon completion of the transition the source and
  * destination images are swapped, so you can also transition back to the original source image
@@ -43,8 +43,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTTransition with default settings of a time-specified duration of 2000 msecs,
      * an effect fps of 20, a redraw setting as kMultiFrame and an initialSize of 0, 0.
      */
@@ -53,7 +53,7 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Creates a QTTransition with default settings of a time-specified duration of 2000 msecs,
      * an effect fps of 20, a redraw setting as kMultiFrame and the specified initialSize.
@@ -63,8 +63,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTTransition with default settings of a time-specified duration of 2000 msecs,
      * an effect fps of 20, a redraw setting as kMultiFrame and the specified initialSize.
      */
@@ -74,7 +74,7 @@ public class QTTransition extends QTFilter {
         this.currentFrame = 0;
     }
 
-    private int srcB = QTUtils.toOSType("srcB");
+    private final int srcB = QTUtils.toOSType("srcB");
 
     private int mEffectDuration = 2000;
 
@@ -91,41 +91,42 @@ public class QTTransition extends QTFilter {
     QTEffectPresenter thePresenter;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will take the incoming parameters and use this as the control parameters for the
      * effect. The container will be locked for the duration of the effect object's life or until
      * another effect is set.
      * @param effectParams the parameters that determine the effect that is run
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setEffect(AtomContainer paramAtomContainer) throws QTException {
-        if (paramAtomContainer == null) {
+    @Override
+    public void setEffect(AtomContainer effectParams) throws QTException {
+        if (effectParams == null) {
             this.effectSamplePtr = null;
             if (this.effectSample != null)
                 this.effectSample.unlock();
             this.effectSample = null;
             return;
         }
-        this.effectSample = paramAtomContainer;
+        this.effectSample = effectParams;
         Atom localAtom1 = Atom.kParentIsContainer;
         int i = this.effectSample.countChildrenOfType(localAtom1, 1936876320);
         for (int j = 0; j < i; j++) {
-            Object localObject = this.effectSample.findChildByIndex_Atom(localAtom1, 1936876320, 1);
-            this.effectSample.removeAtom((Atom) localObject);
+            Atom localObject = this.effectSample.findChildByIndex_Atom(localAtom1, 1936876320, 1);
+            this.effectSample.removeAtom(localObject);
         }
         this.effectSample.insertChild(localAtom1, 1936876320, 1, 0, EndianOrder.flipNativeToBigEndian32(this.srcA));
         this.effectSample.insertChild(localAtom1, 1936876320, 2, 0, EndianOrder.flipNativeToBigEndian32(this.srcB));
         Atom localAtom2 = this.effectSample.findChildByID_Atom(localAtom1, 2003329396, 1);
         this.effectSample.lock();
-        Object localObject = this.effectSample.getAtomData(localAtom2);
-        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(((AtomData) localObject).getInt(0)));
+        AtomData localObject = this.effectSample.getAtomData(localAtom2);
+        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(localObject.getInt(0)));
         this.effectSamplePtr = RawEncodedImage.fromQTPointer(this.effectSample.toQTPointer());
         setUpSequence();
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Sets the destination image of the Transition - the image that the transition will transition to. * @deprecated since QTJava 6.1
      */
     public void setDestinationImage(ImageSpec paramImageSpec) throws QTException {
@@ -141,7 +142,7 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the current destination image * @deprecated since QTJava 6.1
      */
     public ImageSpec getDestinationImage() {
@@ -149,15 +150,16 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by a number of other methods to create
      * the DSequence that is used to render the QTEffect.
      * When called the method will create a new DSequence if the required
      * state has been established to enable the creation of the DSequence.
      * @return true if a new DSequence was created, otherwise false.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected synchronized boolean setUpSequence() throws QTException {
         if ((super.setUpSequence()) && (this.drawDestListener != null)) {
             this.drawDestListener.prepareSequence(this.srcB);
@@ -167,8 +169,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will run the currently selected effect on the visual rectangle that is defined by the display
      * bounds of this object.
      * After the effect is run the destination image of the transition is now the visible image in the effect's display space
@@ -182,8 +184,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This swaps the source and destination images.
      */
     public void swapImages() throws QTException {
@@ -196,11 +198,11 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Sets the maximum number of frames that an effect can run for.* @deprecated since QTJava 6.1
      */
     public synchronized void setFrames(int paramInt) throws QTException {
-        this.mNumberOfFrames = (paramInt < 1 ? 1 : paramInt);
+        this.mNumberOfFrames = (Math.max(paramInt, 1));
         this.mEffectDuration = ((int) (this.mNumberOfFrames / getFramesPerSecond() * 1000.0F + 0.5D));
         if (this.mEffectDuration < 1)
             this.mEffectDuration = 1;
@@ -212,8 +214,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the maximum frames per second that the effect will attempt to render
      */
     public void setFramesPerSecond(int paramInt) throws QTException {
@@ -229,8 +231,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current frames per second that the effect draws in
      * if the effect is rendered using the time constraint
      * @return the fps of the effect
@@ -240,8 +242,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This sets the current frame of the effect. A value of zero means to draw the source image of
      * the transition.
      * @param frame the frame to be rendered
@@ -253,14 +255,14 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the duration of the effect when it is run if the effect is run in time mode
      * @param time the time in milliseconds for the effect to run for in time mode
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void setTime(int paramInt) throws QTException {
-        this.mEffectDuration = (paramInt < 1 ? 1 : paramInt);
+        this.mEffectDuration = (Math.max(paramInt, 1));
         this.mNumberOfFrames = ((int) (this.mEffectDuration / 1000.0D * getFramesPerSecond() + 0.5D));
         if (this.mNumberOfFrames < 1)
             this.mNumberOfFrames = 1;
@@ -272,8 +274,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the time that an effect will run for in milliseconds
      * @return milliseconds
      */
@@ -282,8 +284,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If true then the effect will run in the time alloted.
      * If false then the effect will run for the specified frames.
      * @param flag a boolean
@@ -293,8 +295,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the effect is running for a specified duration or
      * false if the effect is running for a specified number of frames
      * @return true if the doEffect method runs the effect in time mode, false if in frame mode.
@@ -306,7 +308,7 @@ public class QTTransition extends QTFilter {
     /**
      * @deprecated
      */
-    private final void _doEffect() throws QTException {
+    private void _doEffect() throws QTException {
         if (this.effectSequence == null) {
             return;
         }
@@ -386,8 +388,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set this to true if you wish to profile the actual running of the effect, or false to not collect.
      * Once profiling your application can determine the amount of time it took to render a transition
      * and how many frames were actually rendered. These values are generated and reset from each call
@@ -399,8 +401,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current profiling status.
      * @return a boolean indicating the profiling status of the transition
      */
@@ -409,8 +411,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If profiling this returns the number of frames that were rendered in the last time
      * that the doTransition() method was called. If profiling is disabled
      * this method returns 0.
@@ -423,8 +425,8 @@ public class QTTransition extends QTFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If profiling this returns the total time it took to run the doTransition method.
      * If profiling is disabled this method returns 0.
      * @return an int
@@ -448,8 +450,3 @@ public class QTTransition extends QTFilter {
         }
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /QTTransition.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

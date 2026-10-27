@@ -1,7 +1,7 @@
 package quicktime.app.spaces;
 
 /**
- * Deprecated.
+ * @deprecated
  * A ListenerController is a controller that is generally invoked
  * or made active by events or notificiations from some source
  * object. For example the MouseController is a ListenerController
@@ -17,6 +17,6 @@ package quicktime.app.spaces;
  * removedFrom methods of the Listener interface are called on
  * controllers of this type.
  */
-public abstract interface ListenerController extends Controller, Listener {
+public interface ListenerController extends Controller, Listener {
 }
 

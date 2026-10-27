@@ -1,15 +1,19 @@
 
 package com.apple.mrj.macos.carbon;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+
+
 public class Timer implements Runnable, EventLoopTimerInterface {
 
-    private static final boolean DEBUG = false;
+    private static final Logger logger = System.getLogger(Timer.class.getName());
 
     private EventLoopTimerClosureUPP fProc;
 
     private int fRef;
 
-    private double fInterval;
+    private final double fInterval;
 
     private Runnable fTarget;
 
@@ -24,12 +28,13 @@ public class Timer implements Runnable, EventLoopTimerInterface {
         }
     }
 
-    public static void startOneShot(final Runnable target) {
+    public static void startOneShot(Runnable target) {
         if (target == null) {
             throw new IllegalArgumentException();
         } else {
             class Deferrer extends Timer {
 
+                @Override
                 public void run() {
                     target.run();
                     stop();
@@ -43,16 +48,16 @@ public class Timer implements Runnable, EventLoopTimerInterface {
 
             Deferrer deferrer = new Deferrer();
             deferrer.start(0.0D);
-            return;
         }
     }
 
-    public static void startOneShotAndBlock(final Runnable target) {
+    public static void startOneShotAndBlock(Runnable target) {
         if (target == null)
             throw new IllegalArgumentException();
-        final Object sync = new Object();
+        Object sync = new Object();
         class Deferrer extends Timer {
 
+            @Override
             public void run() {
                 try {
                     target.run();
@@ -73,7 +78,7 @@ public class Timer implements Runnable, EventLoopTimerInterface {
             deferrer.start(0.0D);
             try {
                 sync.wait();
-            } catch (InterruptedException e) {
+            } catch (InterruptedException _) {
             }
             deferrer.stop();
             deferrer.dispose();
@@ -88,10 +93,6 @@ public class Timer implements Runnable, EventLoopTimerInterface {
         }
     }
 
-    public void finalize() {
-        dispose();
-    }
-
     public void setTarget(Runnable runnable) {
         fTarget = runnable == null ? this : runnable;
     }
@@ -101,7 +102,7 @@ public class Timer implements Runnable, EventLoopTimerInterface {
     }
 
     public void start(double d) {
-        int ai[] = new int[1];
+        int[] ai = new int[1];
         if (fRef != 0) {
             HIToolBoxFunctions.SetEventLoopTimerNextFireTime(fRef, d);
         } else {
@@ -124,15 +125,15 @@ public class Timer implements Runnable, EventLoopTimerInterface {
         }
     }
 
+    @Override
     public void run() {
     }
 
     public void EventLoopTimer(int i, int j) {
         try {
             fTarget.run();
-        } catch (Throwable throwable) {
-            System.err.println("A Buckyball Timer threw an exception:");
-            throwable.printStackTrace();
+        } catch (Throwable t) {
+            logger.log(Level.DEBUG, "A Buckyball Timer threw an exception:", t);
         }
     }
 }

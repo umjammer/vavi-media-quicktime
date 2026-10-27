@@ -5,177 +5,177 @@ package quicktime.std;
  * ALL constants except for constants that start with an acronym, such as MPEG, ...
  * start with a small letter (not a capital one)
  */
-public abstract interface StdQTConstants6 {
+public interface StdQTConstants6 {
 
     /**
      * QT6 supported codec types
      */
-    public static final int kSorenson3CodecType = 1398165811;
+    int kSorenson3CodecType = 1398165811;
 
     /**
      * QT6 supported codec types
      */
-    public static final int kMPEG4VisualCodecType = 1836070006;
+    int kMPEG4VisualCodecType = 1836070006;
 
     /**
      * QuickTime 5.1 supported media type
      */
-    public static final int skinMediaType = 1936419182;
+    int skinMediaType = 1936419182;
 
-    public static final int kCharacteristicHasNoDuration = 1852798057;
+    int kCharacteristicHasNoDuration = 1852798057;
 
-    public static final int kCharacteristicHasSkinData = 1936419182;
-
-    /**
-     * New action constants
-     */
-    public static final int kActionMovieGotoNextChapter = 1039;
+    int kCharacteristicHasSkinData = 1936419182;
 
     /**
      * New action constants
      */
-    public static final int kActionMovieGotoPreviousChapter = 1040;
+    int kActionMovieGotoNextChapter = 1039;
 
     /**
      * New action constants
      */
-    public static final int kActionMovieGotoFirstChapter = 1041;
+    int kActionMovieGotoPreviousChapter = 1040;
 
     /**
      * New action constants
      */
-    public static final int kActionMovieGotoLastChapter = 1042;
+    int kActionMovieGotoFirstChapter = 1041;
 
     /**
      * New action constants
      */
-    public static final int kActionMovieGotoChapterByIndex = 1043;
+    int kActionMovieGotoLastChapter = 1042;
 
     /**
      * New action constants
      */
-    public static final int kActionSpriteSetCanBeHitTested = 3094;
+    int kActionMovieGotoChapterByIndex = 1043;
 
     /**
      * New action constants
      */
-    public static final int kActionQTVRSetViewState = 4109;
+    int kActionSpriteSetCanBeHitTested = 3094;
 
     /**
      * New action constants
      */
-    public static final int kActionSetRandomSeed = 6164;
+    int kActionQTVRSetViewState = 4109;
 
     /**
      * New action constants
      */
-    public static final int kActionSpriteTrackSetAllSpritesHitTestingMode = 7181;
+    int kActionSetRandomSeed = 6164;
 
     /**
      * New action constants
      */
-    public static final int kActionSpriteTrackNewImage = 7182;
+    int kActionSpriteTrackSetAllSpritesHitTestingMode = 7181;
 
     /**
      * New action constants
      */
-    public static final int kActionSpriteTrackDisposeImage = 7183;
+    int kActionSpriteTrackNewImage = 7182;
 
-    public static final int kOperandMovieChapterCount = 1038;
+    /**
+     * New action constants
+     */
+    int kActionSpriteTrackDisposeImage = 7183;
 
-    public static final int kOperandMovieChapterIndex = 1039;
+    int kOperandMovieChapterCount = 1038;
 
-    public static final int kOperandMovieChapterName = 1040;
+    int kOperandMovieChapterIndex = 1039;
 
-    public static final int kOperandMovieChapterNameByIndex = 1041;
+    int kOperandMovieChapterName = 1040;
 
-    public static final int kOperandMovieChapterIndexByName = 1042;
+    int kOperandMovieChapterNameByIndex = 1041;
 
-    public static final int kOperandSpriteCanBeHitTested = 3105;
+    int kOperandMovieChapterIndexByName = 1042;
 
-    public static final int kOperandSpriteTrackAllSpritesHitTestingMode = 3106;
+    int kOperandSpriteCanBeHitTested = 3105;
 
-    public static final int kOperandQTVRViewStateCount = 4103;
+    int kOperandSpriteTrackAllSpritesHitTestingMode = 3106;
 
-    public static final int kOperandQTVRViewState = 4104;
+    int kOperandQTVRViewStateCount = 4103;
+
+    int kOperandQTVRViewState = 4104;
 
     /**
      * QuickTime 5 action range
      */
-    public static final int kLastMovieAction5_1 = 1043;
+    int kLastMovieAction5_1 = 1043;
 
     /**
      * QuickTime 5 action range
      */
-    public static final int kLastSpriteAction5_1 = 3094;
+    int kLastSpriteAction5_1 = 3094;
 
     /**
      * QuickTime 5 action range
      */
-    public static final int kLastQTVRAction5_1 = 4109;
+    int kLastQTVRAction5_1 = 4109;
 
     /**
      * QuickTime 5 action range
      */
-    public static final int kLastSystemAction5_1 = 6164;
+    int kLastSystemAction5_1 = 6164;
 
     /**
      * QuickTime 5 action range
      */
-    public static final int kLastSpriteTrackAction5_1 = 7183;
+    int kLastSpriteTrackAction5_1 = 7183;
 
     /**
      * User Data Copying Constants
      */
-    public static final int kQTCopyUserDataReplace = 1919970403;
+    int kQTCopyUserDataReplace = 1919970403;
 
     /**
      * User Data Copying Constants
      */
-    public static final int kQTCopyUserDataMerge = 1835361639;
+    int kQTCopyUserDataMerge = 1835361639;
 
     /**
      * Flash track properties
      */
-    public static final int kFlashTrackPropertyAcceptAllClicks = 1668049259;
+    int kFlashTrackPropertyAcceptAllClicks = 1668049259;
 
     /**
      * Content Restrictions
      */
-    public static final int kQTRestrictionClassSave = 1935767141;
+    int kQTRestrictionClassSave = 1935767141;
 
     /**
      * Content Restrictions
      */
-    public static final int kQTRestrictionSaveDontAddMovieResource = 1;
+    int kQTRestrictionSaveDontAddMovieResource = 1;
 
     /**
      * Content Restrictions
      */
-    public static final int kQTRestrictionSaveDontFlatten = 2;
+    int kQTRestrictionSaveDontFlatten = 2;
 
     /**
      * Content Restrictions
      */
-    public static final int kQTRestrictionSaveDontExport = 4;
+    int kQTRestrictionSaveDontExport = 4;
 
     /**
      * Content Restrictions
      */
-    public static final int kQTRestrictionSaveDontExtract = 8;
+    int kQTRestrictionSaveDontExtract = 8;
 
-    public static final int kQTRestrictionClassEdit = 1701079412;
+    int kQTRestrictionClassEdit = 1701079412;
 
-    public static final int kQTRestrictionEditDontCopy = 1;
+    int kQTRestrictionEditDontCopy = 1;
 
-    public static final int kQTRestrictionEditDontCut = 2;
+    int kQTRestrictionEditDontCut = 2;
 
-    public static final int kQTRestrictionEditDontPaste = 4;
+    int kQTRestrictionEditDontPaste = 4;
 
-    public static final int kQTRestrictionEditDontClear = 8;
+    int kQTRestrictionEditDontClear = 8;
 
-    public static final int kQTRestrictionEditDontModify = 16;
+    int kQTRestrictionEditDontModify = 16;
 
-    public static final int kQTRestrictionEditDontExtract = 32;
+    int kQTRestrictionEditDontExtract = 32;
 }
 

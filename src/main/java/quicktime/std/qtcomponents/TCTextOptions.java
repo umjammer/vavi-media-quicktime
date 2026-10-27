@@ -3,6 +3,7 @@ package quicktime.std.qtcomponents;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -18,18 +19,14 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     private static final int kNativeSize = 20;
 
-    static final long serialVersionUID = -7109590438601877043L;
+    @Serial
+    private static final long serialVersionUID = -7109590438601877043L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TCTextOptions.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(TCTextOptions.class));
             }
         }.establish();
     }
@@ -41,6 +38,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
         super(20);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[20];
         paramObjectInputStream.read(getBytes());
@@ -51,6 +49,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[20];
         for (int i = 0; i < 20; i += 2) {

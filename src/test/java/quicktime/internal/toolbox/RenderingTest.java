@@ -59,7 +59,7 @@ class RenderingTest implements StdQTConstants {
         assertNotNull(pict);
         BufferedImage image = PictCodec.decode(pict.getBytes());
         assertNotNull(image);
-        assertEquals((int) box.getWidth(), image.getWidth());
+        assertEquals(box.getWidth(), image.getWidth());
         BufferedImage original = javax.imageio.ImageIO.read(new File(MEDIA + "qt3logo.jpg"));
         int x = original.getWidth() / 2, y = original.getHeight() / 2;
         assertEquals(original.getRGB(x, y) & 0xffffff, image.getRGB(x, y) & 0xffffff);

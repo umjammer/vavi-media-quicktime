@@ -12,7 +12,7 @@ public final class QTVRMedia extends GenericMedia {
 
     /**
      * This constructor creates a media struct for the specified Track object.
-     * QuickTime::NewTrackMedia()
+     * @see "QuickTime::NewTrackMedia()"
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
@@ -23,7 +23,7 @@ public final class QTVRMedia extends GenericMedia {
 
     /**
      * This constructor creates a media struct for the specified Track object.
-     * QuickTime::NewTrackMedia()
+     * @see "QuickTime::NewTrackMedia()"
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
@@ -35,10 +35,12 @@ public final class QTVRMedia extends GenericMedia {
         GenericMedia.addMediaType(1903457906, "quicktime.std.movies.media.QTVRMedia");
     }
 
+    @Override
     protected SampleDescription makeDescription() throws QTException {
         return new QTVRSampleDescription();
     }
 
+    @Override
     protected MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new QTVRMediaHandler(paramInt, paramObject);
     }

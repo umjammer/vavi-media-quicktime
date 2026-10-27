@@ -22,13 +22,13 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
         }
     }
 
-    private static TaskThread idleTasker = new TaskThread("Default Pres Tasker", 20);
+    private static final TaskThread idleTasker = new TaskThread("Default Pres Tasker", 20);
 
-    private Presentation pres;
+    private final Presentation pres;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This constructor creates an PresentationDrawer object from a Presentation component.
      * @param pres the Presentation object to present
      */
@@ -38,8 +38,8 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns the PresentationDrawer's Presentation that is displayed by this drawable.
      * @return an Presentation
      */
@@ -48,33 +48,35 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDGraphics getGWorld() throws QTException {
         return this.pres.getGWorld();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param gWorld a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
         this.pres.setGWorld(paramQDGraphics);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
@@ -87,13 +89,14 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the intial size of the Presentation
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         QDDimension localQDDimension = this.pres.getDimensions(null);
         Matrix localMatrix = this.pres.getMatrix(null);
@@ -101,36 +104,39 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Matrix getMatrix() throws QTException {
         return this.pres.getMatrix(null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      * @param matrix the new display Matrix
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
         this.pres.setMatrix(null, paramMatrix);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the display bounds for the Presentation
      * @param bounds the new size and location.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void setDisplayBounds(QDRect paramQDRect) throws QTException {
         QDRect localQDRect = getDisplayBounds();
         Matrix localMatrix = new Matrix();
@@ -143,13 +149,14 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setLocation(int paramInt1, int paramInt2) throws QTException {
         QDRect localQDRect = getDisplayBounds();
         localQDRect.setX(paramInt1);
@@ -158,61 +165,66 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current display location and size of the Presentation.
      *
      * @return the boundary of the client
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDRect getDisplayBounds() throws QTException {
         return new QDRect(this.pres.getDimensions(null));
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public final synchronized void redraw(Region paramRegion) throws QTException {
         this.pres.invalidateRegion(paramRegion);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns a region that defines the current clipping region for the object.
      * @return the clipping region
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Region getClip() throws QTException {
         return this.pres.getClip(null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets a region that will define the clipping region for the object
      * @param reg the new clipping region
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setClip(Region paramRegion) throws QTException {
         this.pres.setClip(null, paramRegion);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method performs idle processing for the Presentation and will be automatically
      * called if this object is added to the TaskThread object.
      * @see quicktime.util.TaskThread
      */
+    @Override
     public final synchronized void task() throws QTException {
         this.pres.idle(null);
     }
@@ -225,26 +237,28 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest.
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void addedTo(Object paramObject) {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest.
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void removedFrom(Object paramObject) {
     }
 }

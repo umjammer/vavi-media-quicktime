@@ -3,6 +3,7 @@ package quicktime.std.qtcomponents;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
@@ -22,18 +23,14 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      */
     public static final int kNativeSize = 14;
 
-    static final long serialVersionUID = -5046382978690696504L;
+    @Serial
+    private static final long serialVersionUID = -5046382978690696504L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SpatialSettings.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SpatialSettings.class));
             }
         }.establish();
     }
@@ -65,6 +62,7 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[14];
         paramObjectInputStream.read(this.bytes);
@@ -79,6 +77,7 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
         setIntInArray(this.bytes, 0, m);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[14];
         int i = getShortFromArray(getBytes(), 0);

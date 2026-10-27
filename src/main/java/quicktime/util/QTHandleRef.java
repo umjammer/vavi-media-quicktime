@@ -44,12 +44,7 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTHandleRef.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTHandleRef.class));
             }
         }.establish();
     }
@@ -57,12 +52,12 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
     /**
      * Compresses a frame that is sourced by a PixMap from the supplied QDGraphics, returning
      * the compressed data.
-     * QuickTime::SCCompressSequenceFrame()
+     * @see "QuickTime::SCCompressSequenceFrame()"
      * @param src the PixMap's source QDGraphics.
      * @param srcRect you can specify to compress just a part of the pix map by specifying
      *  a rectangle - or pass in null to compress the entire pix map.
      * @return an image data object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static SCInfo fromSCSequence(SCSequence paramSCSequence, QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
         if (paramQDGraphics == null) {
@@ -92,8 +87,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     /**
      * Retrieves all of the settings for a dialog.
-     * QuickTime::SCRequestImageSettings()
-     * @see {@link quicktime.std.qtcomponents.CompressionDialog#getInfoState()}
+     * @see "QuickTime::SCRequestImageSettings()"
+     * @see quicktime.std.qtcomponents.CompressionDialog#getInfoState()
      */
     public static QTHandleRef fromCompressionDialogState(CompressionDialog paramCompressionDialog) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -128,7 +123,7 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     /**
      * This method returns the size (number of bytes) of the handle
-     * QuickTime::GetHandleSize
+     * @see "QuickTime::GetHandleSize"
      * @return the size of the handle
      */
     public int getSize() {
@@ -413,7 +408,7 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
 
     /**
      * Moves the relocatable block to the top of the heap and locks it.
-     * QuickTime::HLockHi
+     * @see "QuickTime::HLockHi"
      */
     public void lockHigh() {
         HLockHi(_ID());
@@ -423,7 +418,7 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
     /**
      * Move the handle to high memory. Typically you call this before locking a small
      * handle that is going to be locked for a short period of time.
-     * QuickTime::MoveHHi
+     * @see "QuickTime::MoveHHi"
      */
     public final void moveHigh() {
         MoveHHi(_ID());

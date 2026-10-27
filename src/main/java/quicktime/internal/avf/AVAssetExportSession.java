@@ -81,5 +81,4 @@ public abstract class AVAssetExportSession extends NSObject {
     public interface CompletionHandler extends ObjCBlock {
         void complete(BlockLiteral block);
     }
-
 }

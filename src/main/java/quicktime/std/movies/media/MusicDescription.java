@@ -29,12 +29,7 @@ public final class MusicDescription extends SampleDescription implements Interfa
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(MusicDescription.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MusicDescription.class));
             }
         }.establish();
     }
@@ -70,6 +65,7 @@ public final class MusicDescription extends SampleDescription implements Interfa
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new MusicDescription(makeAndCopyHandle());
     }

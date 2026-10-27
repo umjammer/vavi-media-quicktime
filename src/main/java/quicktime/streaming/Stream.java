@@ -17,7 +17,7 @@ public final class Stream extends QTObject implements QTStreamingLib {
 
     private static Object linkage;
 
-    private static Object owner = new Object();
+    private static final Object owner = new Object();
 
     static {
         if (QTSession.hasSecurityRestrictions()) {
@@ -29,12 +29,7 @@ public final class Stream extends QTObject implements QTStreamingLib {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Stream.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Stream.class));
             }
         }
         new PrivelegedAction().establish();
@@ -46,7 +41,7 @@ public final class Stream extends QTObject implements QTStreamingLib {
 
     /**
      * Create a new stream object
-     * QuickTime::QTSPresNewStream
+     * @see "QuickTime::QTSPresNewStream"
      * @param pres supervising Presentation object
      * @param dataType OSType specifying type of stream data
      * @param data data
@@ -57,7 +52,7 @@ public final class Stream extends QTObject implements QTStreamingLib {
 
     /**
      * Create a new stream object
-     * QuickTime::QTSPresNewStream
+     * @see "QuickTime::QTSPresNewStream"
      * @param pres supervising Presentation object
      * @param dataType OSType specifying type of stream data
      * @param data data
@@ -76,8 +71,8 @@ public final class Stream extends QTObject implements QTStreamingLib {
     /**
      * Retrieves the presentation object this stream is associated with
      * @return Presentation the presentation object
-     *  QuickTime::QTSGetStreamPresentation
-     * @return {@link quicktime.QTException}
+     * @see " QuickTime::QTSGetStreamPresentation"
+     * @throws quicktime.QTException
      */
     public Presentation getPresentation() throws QTException {
         return new Presentation(QTSGetStreamPresentation(_ID()), this);

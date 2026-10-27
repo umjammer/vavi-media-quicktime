@@ -9,7 +9,7 @@ import quicktime.app.event.QTMouseEvent;
 import quicktime.app.image.Transformable;
 
 /**
- * Deprecated.
+ * @deprecated
  * The DragAction is a drag adapter that delegates the role of responding to a
  * mouse drag event to the TransformMatrix transformer. It is a utility class
  * that assumes that the mousePressed method will select a Transformable target
@@ -29,8 +29,8 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a DragAction object.
      * @param transformer this is the object that will apply the matrix transformations in reponse
      *  to a mouseDragged event.
@@ -40,8 +40,8 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method retreives the current actor that is attached to the action
      */
     public Actionable getActionable() {
@@ -49,8 +49,8 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the actionable object of the action.
      */
     public void setActionable(Actionable paramActionable) {
@@ -58,8 +58,8 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the actionable object of the action.
      */
     public void setTransformer(TransformMatrix paramTransformMatrix) {
@@ -67,8 +67,8 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method retreives the current actor that is attached to the action
      */
     public TransformMatrix getTransformer() {
@@ -76,12 +76,13 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Initializes the currently set TransformMatrix object to the current coordinates of
      * the mouse event.
      * @param event the mouse event that triggers the drag action
      */
+    @Override
     public void mousePressed(QTMouseEvent paramQTMouseEvent) {
         try {
             this.transformer.initialize((QTDisplaySpace) paramQTMouseEvent.getSource(), (Transformable) paramQTMouseEvent.getTarget(), paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
@@ -91,12 +92,13 @@ public class DragAction extends DragAdapter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Responds to the mouseDragged event by calling the transformTarget (int x, int y) method
      * on the set TransformMatrix object.
      * @param event the mouse event that triggers the drag action
      */
+    @Override
     public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
         try {
             if ((this.transformer.transformTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY())) && (this.actor != null))

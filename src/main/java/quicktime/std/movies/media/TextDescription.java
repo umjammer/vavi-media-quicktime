@@ -63,6 +63,7 @@ public final class TextDescription extends SampleDescription {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new TextDescription(makeAndCopyHandle());
     }

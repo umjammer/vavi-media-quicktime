@@ -23,24 +23,19 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      */
     public static final int kNativeSize = 38;
 
-    private SPBDevice device;
+    private final SPBDevice device;
 
     private QTPointerRef buffer;
 
     private SoundRunner runner;
 
-    private quicktime.util.QTPointer realObject;
+    private final quicktime.util.QTPointer realObject;
 
     static {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SPB.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SPB.class));
             }
         }
         new PrivelegedAction().establish();
@@ -177,9 +172,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * After recording the buffer contains the recorded bytes, the count how many
      * bytes were recorded, the milliseconds how many milliseconds of sound were
      * recorded based on the current settings of the device.
-     * QuickTime::SPBRecord
+     * @see "QuickTime::SPBRecord"
      * @param flag if true record asynchronously, if false records synchronously.
-     * @param {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public void record(boolean paramBoolean) throws SoundException {
         int i = 0;
@@ -194,7 +189,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Pause recording from a sound input device.
-     * QuickTime::SPBPauseRecording
+     * @see "QuickTime::SPBPauseRecording"
      */
     public void pauseRecording() throws SoundException {
         SoundException.checkError(SPBPauseRecording(getIntFromPointer(QTObject.ID(this.realObject), 0)));
@@ -202,7 +197,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Pause recording from a sound input device.
-     * QuickTime::SPBResumeRecording
+     * @see "QuickTime::SPBResumeRecording"
      */
     public void resumeRecording() throws SoundException {
         SoundException.checkError(SPBResumeRecording(getIntFromPointer(QTObject.ID(this.realObject), 0)));
@@ -212,7 +207,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * End a recording from a sound input device. If you call the checkError
      * instance method you will get an abortErr exception which indicates
      * that the recording was stopped by calling this method.
-     * QuickTime::SPBStopRecording
+     * @see "QuickTime::SPBStopRecording"
      */
     public void stopRecording() throws SoundException {
         SoundException.checkError(SPBStopRecording(getIntFromPointer(QTObject.ID(this.realObject), 0)));
@@ -224,7 +219,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * When a recording terminates without an error, this call false.
      * When an error occurs during recording or the recording has been terminated
      * by a call to the SPBStopRecording function (abortErr), this call throws an exception.
-     * QuickTime::SPBGetRecordingStatus
+     * @see "QuickTime::SPBGetRecordingStatus"
      */
     public boolean isRecording() throws SoundException {
         getRecordingStatus();
@@ -238,9 +233,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
     /**
      * The level of the meter.
      * While the input device is recording, this call returns the level.
-     * QuickTime::SPBGetRecordingStatus
+     * @see "QuickTime::SPBGetRecordingStatus"
      * @return the current meter level
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public short meterLevel() throws SoundException {
         getRecordingStatus();
@@ -249,9 +244,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of samples to record.
-     * QuickTime::SPBGetRecordingStatus
+     * @see "QuickTime::SPBGetRecordingStatus"
      * @return the total number of samples to record
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public int totalSamplesToRecord() throws SoundException {
         getRecordingStatus();
@@ -260,9 +255,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of samples recorded.
-     * QuickTime::SPBGetRecordingStatus
+     * @see "QuickTime::SPBGetRecordingStatus"
      * @return the total number of samples recorded
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public int numberOfSamplesRecorded() throws SoundException {
         getRecordingStatus();
@@ -271,9 +266,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of msecs to record.
-     * QuickTime::SPBGetRecordingStatus
+     * @see "QuickTime::SPBGetRecordingStatus"
      * @return the total number of msecs to record
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public int totalMsecsToRecord() throws SoundException {
         getRecordingStatus();
@@ -282,28 +277,28 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of msecs recorded.
-     * QuickTime::SPBGetRecordingStatus
+     * @see "QuickTime::SPBGetRecordingStatus"
      * @return the total number of msecs recorded
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public int numberOfMsecsRecorded() throws SoundException {
         getRecordingStatus();
         return this.numberOfMsecsRecordedVal[0];
     }
 
-    private short[] recordingStatus = { 0 };
+    private final short[] recordingStatus = { 0 };
 
-    private short[] meterLevelValue = { 0 };
+    private final short[] meterLevelValue = { 0 };
 
-    private int[] totalSamplesToRecordVal = { 0 };
+    private final int[] totalSamplesToRecordVal = { 0 };
 
-    private int[] numberOfSamplesRecordedVal = { 0 };
+    private final int[] numberOfSamplesRecordedVal = { 0 };
 
-    private int[] totalMsecsToRecordVal = { 0 };
+    private final int[] totalMsecsToRecordVal = { 0 };
 
-    private int[] numberOfMsecsRecordedVal = { 0 };
+    private final int[] numberOfMsecsRecordedVal = { 0 };
 
-    private final void getRecordingStatus() throws SoundException {
+    private void getRecordingStatus() throws SoundException {
         int i = SPBGetRecordingStatus(getIntFromPointer(QTObject.ID(this.realObject), 0), this.recordingStatus, this.meterLevelValue, this.totalSamplesToRecordVal, this.numberOfSamplesRecordedVal, this.totalMsecsToRecordVal, this.numberOfMsecsRecordedVal);
         SoundException.checkError(i);
     }

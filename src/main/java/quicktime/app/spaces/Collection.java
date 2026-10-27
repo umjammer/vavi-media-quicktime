@@ -1,99 +1,109 @@
 package quicktime.app.spaces;
 
 import java.util.Enumeration;
+
 import quicktime.QTException;
 
+
 /**
- * Deprecated.
- * This interface provide an uniform means of dealing with a collection
+ * This interface provide a uniform means of dealing with a collection
  * of Objects in QTJava. Particular implementations of this interface provide
  * both their own storage mechanism and semantics about the default position
  * and characteristics of the addMember method.
- *
+ * <p>
  * The isAppropriate method returns true if the object argument conforms to the
  * type of object that the Collection is a collector of. The addMember
  * implementation will call isAppropriate and returns true if the object is an
  * appropriate member (and is therefore added to the collection).
- *
- * The individual collection classes explain the customisations and restrictions
+ * <p>
+ * The individual collection classes explain the customizations and restrictions
  * on membership they enforce.
- *
+ * <p>
  * The type of object that a collection contains is statically determined by
  * the isAppropriate () method. The DynamicCollection extension of Collection
- * provides a mechanism for dynamically customising the membership requirments
+ * provides a mechanism for dynamically customizing the membership requirements
  * for individual collections.
- * @see {@link quicktime.app.spaces.DynamicCollection}
+ *
+ * @see quicktime.app.spaces.DynamicCollection
+ * @deprecated
  */
-public abstract interface Collection {
+public interface Collection {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Adds an object to the collection. Returns true if the object is
      * appropriate member of the collection (and thus added) and false if not.
+     *
      * @param member the object that should be added as a member to the collection
      * @return a boolean.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract boolean addMember(Object paramObject) throws QTException;
+    boolean addMember(Object member) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Returns true if the provided object is a member of the collection.
+     *
      * @param member the object to test for membership
      * @return a boolean
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract boolean hasMember(Object paramObject);
+    boolean hasMember(Object member);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Returns true if the provided object is an appropriate candidate for
      * membership in a collection. The provided QTJava collections use this method
      * to ensure a minimal requirement of Class or Interface instanceof tests to
      * ensure the type of object that can be added to a collection. Some collections
      * can have a protocol that allows an application to further refine and tighten
      * the type of object that is allowed within an individual collection.
+     *
      * @param object the object to test
      * @return true if the supplied object is appropriate for this collection, or false if not
-     * @see {@link quicktime.app.spaces.DynamicCollection},
-     * {@link quicktime.app.spaces.Protocol}
+     * @see quicktime.app.spaces.DynamicCollection
+     * @see quicktime.app.spaces.Protocol
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract boolean isAppropriate(Object paramObject);
+    boolean isAppropriate(Object object);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Returns true if the collection contains no members, or false if
      * it has one or more members.
+     *
      * @return a boolean
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract boolean isEmpty();
+    boolean isEmpty();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Returns an enumeration to iterate over the current members of a collection.
+     *
      * @return an enumeration
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract Enumeration members();
+    Enumeration members();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * If the object is a member of the collection it is removed.
+     *
      * @param member the object to remove from the collection
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract void removeMember(Object paramObject) throws QTException;
+    void removeMember(Object member) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Returns the number of members in the collection, ie. the collection's size.
+     *
      * @return the size of the collection.
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public abstract int size();
+    int size();
 }
 

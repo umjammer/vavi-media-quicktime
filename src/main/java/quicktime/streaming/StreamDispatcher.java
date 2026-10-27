@@ -14,24 +14,20 @@ import quicktime.util.QTUtils;
 final class StreamDispatcher implements PrimitivesLib {
     private static Object linkage;
 
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private StreamNotifyClosure mMethodClosure;
 
-    private StreamNotifyProc notifyExecute;
+    private final StreamNotifyProc notifyExecute;
 
     static {
         class PrivelegedAction {
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(StreamDispatcher.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(StreamDispatcher.class));
             }
         }
         new PrivelegedAction().establish();

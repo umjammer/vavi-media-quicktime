@@ -12,7 +12,7 @@ import quicktime.qd.QDRect;
 import quicktime.std.image.Matrix;
 
 /**
- * Deprecated.
+ * @deprecated
  * The Dragger is a particular type of MouseResponder that performs the action
  * of moving the Dragger's target (a Transformable object) according to the
  * drag movements of the mouse.
@@ -39,54 +39,54 @@ import quicktime.std.image.Matrix;
  * qtmc.addQTMouseListener(new DragAction (new TranslateMatrix()));
  * drawer.addController (qtmc);
  *
- * @see {@link quicktime.app.event.QTMouseController}
+ * @see quicktime.app.event.QTMouseController
  */
 public class Dragger extends MouseResponder {
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainNone = 0;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainLeft = 1;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainRight = 16;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainTop = 256;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainBottom = 4096;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainHorizontal = 17;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainVertical = 4352;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Use these as constraint flags to restrict dragging operations* @deprecated since QTJava 6.1
      */
     public static final int kConstrainAll = 4369;
@@ -98,8 +98,8 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a Dragger object
      * @param modifierKeyMask - if specified will determine which modifier keys must
      *  be depressed for the action to be invoked. The modifierTestConditions is set
@@ -110,8 +110,8 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a Dragger object with specified modifier keys and test conditions under
      * which those modifier keys are matched.
      * @param modifierKeyMask - if specified will determine which modifier keys must
@@ -123,8 +123,8 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set some parameters that will create DragActions.
      * @param modifierKeyMask - if specified will determine which modifier keys must
      *  be depressed for the action to be invoked.
@@ -138,34 +138,34 @@ public class Dragger extends MouseResponder {
     private int constrained = 4369;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The actor that will be invoked (if set) when the dragger
      * reaches a constraining condition
      */
     protected Actionable actor;
 
     /**
-     * Deprecated.
+     * @deprecated
      * This is the Transformable target of the Dragger action * @deprecated since QTJava 6.1
      */
     protected Transformable target;
 
     /**
-     * Deprecated.
+     * @deprecated
      * This is the QTDrawable space within which the Dragger's target is enclosed and contained* @deprecated since QTJava 6.1
      */
     protected QTDrawable space;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The number of pixels on the horizontal axis that an object can be dragged beyond the bounds
      * if the dragging action is unconstrained. The default is one * @deprecated since QTJava 6.1
      */
     protected int xBufferIfUnConstrained = 1;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The number of pixels on the vertical axis that an object can be dragged beyond the bounds
      * if the dragging action is unconstrained. The default is one * @deprecated since QTJava 6.1
      */
@@ -182,19 +182,20 @@ public class Dragger extends MouseResponder {
     private Matrix origTargetMatrix;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the containing Space of a target of a MouseResponder.
      * For a Dragger this space must be a QTDrawable.
      * @param o the containing space of the potential targets of the Dragger.
      */
+    @Override
     protected void setTargetSpace(Object paramObject) {
         this.space = ((QTDrawable) paramObject);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the actionable object of the action.
      */
     public void setActionable(Actionable paramActionable) {
@@ -202,8 +203,8 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method retreives the current actor that is attached to the action
      */
     public Actionable getActionable() {
@@ -211,42 +212,45 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The Dragger knows how to drag objects of type Transformable around.
      * Thus this method returns true if the incoming object implements the Transformable interface.
      * @param object the object to test
      * @return a boolean
      */
+    @Override
     public boolean isAppropriate(Object paramObject) {
         return paramObject instanceof Transformable;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the target of the Dragger. Generally this will be some kind of Transformable object
      * that the user has clicked on and the MouseController has extracted. This becomes
      * the active Target of the Dragger for the duration of the mouseDrag event.
      * @param t the Transformable target
      */
+    @Override
     protected void setTarget(Object paramObject) {
         this.target = ((Transformable) paramObject);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When the MouseController detects that the drag operation is completed it notifies
      * the Dragger to remove its target as the user no longer is dragging.
      */
+    @Override
     protected void removeTarget() {
         this.target = null;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Using the constrain constants dragging can be constrained in any direction.
      * @param flag constraint flag
      */
@@ -255,7 +259,7 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the current constraint setting * @deprecated since QTJava 6.1
      */
     public int getConstrained() {
@@ -263,8 +267,8 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the MouseController when the mouse is first pressed down on
      * a valid Transformable object within the space it is controlling.
      * For efficiency it is assumed that the overall characteristics of the enclosing space
@@ -273,6 +277,7 @@ public class Dragger extends MouseResponder {
      * matrix can and will change as a result of the drag operation.
      * @param event the mouse down event that may begin the drag action
      */
+    @Override
     public void mousePressed(MouseEvent paramMouseEvent) {
         try {
             QDRect localQDRect = this.space.getDisplayBounds();
@@ -295,13 +300,14 @@ public class Dragger extends MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will allow the user to drag the transformable object around.
      * This method also does constraints testing based on the current state
      * of the constraints.
      * @param event the mouse drag event that triggered the drag action.
      */
+    @Override
     public void mouseDragged(MouseEvent paramMouseEvent) {
         try {
             int i = 0;

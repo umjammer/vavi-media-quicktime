@@ -35,11 +35,12 @@ import quicktime.util.QTUtils;
 
 
 public class SoundMemRecord extends Frame {
-    private static int kOSType = 1 << 1;
 
-    private static int sndBufferSize = 327680;
+    private static final int kOSType = 1 << 1;
 
-    public static void main(String args[]) {
+    private static final int sndBufferSize = 327680;
+
+    static void main(String[] args) {
         System.out.println("Make sure you have connected an Input device or have a built in audio input device.");
         SoundMemRecord sr = new SoundMemRecord("Sound Recording");
         sr.setVisible(true);
@@ -69,7 +70,7 @@ public class SoundMemRecord extends Frame {
             sndDevice.setPlayThruOnOff(0);
             sndHndl = new SndHandle(sndDevice.getNumberChannels(), sndDevice.getSampleRate(), sndDevice.getSampleSize(), sndDevice.getCompressionType(), 60);
             sndHndl.appendSoundBuffer(sndBufferSize); // this is the size of
-                                                        // our sound buffer
+            // our sound buffer
 
             // Set up recording to reuse object for multiple recordings
             // we hold onto this variable so that it isn't finalized before we
@@ -87,6 +88,7 @@ public class SoundMemRecord extends Frame {
 
                 final SPBDevice device = sndDevice;
 
+                @Override
                 public void execute(SPB paramBlock) {
                     System.out.println("FinishedRecording");
                     try {
@@ -106,133 +108,128 @@ public class SoundMemRecord extends Frame {
 
         setLayout(new GridLayout(1, 3, 2, 2));
 
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    System.out.println("StartRecording");
-                    recorder.record(true);
-                } catch (QTException ee) {
-                    ee.printStackTrace();
-                }
+        startButton.addActionListener(event -> {
+            try {
+                System.out.println("StartRecording");
+                recorder.record(true);
+            } catch (QTException ee) {
+                ee.printStackTrace();
             }
         });
         add(startButton);
 
-        playRecordedButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    if (sndHndl != null) {
-                        // As with all other callbacks the application is
-                        // reponsible for
-                        // disposing of the callback - in this case that means
-                        // disposing the sound channel.
-                        // So if using a callback the last thing you should do
-                        // is install a callback command on the channel and
-                        // dispose it when that guy fires
-                        // see SoundAction ....
-                        SndChannel sndChan1 = new SndChannel(new SoundCallBack() {
-                            SndHandle theSnd = sndHndl;
+        playRecordedButton.addActionListener(event -> {
+            try {
+                if (sndHndl != null) {
+                    // As with all other callbacks the application is
+                    // reponsible for
+                    // disposing of the callback - in this case that means
+                    // disposing the sound channel.
+                    // So if using a callback the last thing you should do
+                    // is install a callback command on the channel and
+                    // dispose it when that guy fires
+                    // see SoundAction ....
+                    SndChannel sndChan1 = new SndChannel(new SoundCallBack() {
+                        SndHandle theSnd = sndHndl;
 
-                            public void execute(SndChannel sc) {
-                                try {
-                                    System.out.println("In Execute:" + sc);
-                                    if (theSnd != null) {
-                                        SndInfo info = theSnd.parseSndHeader();
-                                        SoundComponentData data = info.sndData;
+                        @Override
+                        public void execute(SndChannel sc) {
+                            try {
+                                System.out.println("In Execute:" + sc);
+                                if (theSnd != null) {
+                                    SndInfo info = theSnd.parseSndHeader();
+                                    SoundComponentData data = info.sndData;
 
-                                        // shows use of buffer command
-                                        // this call will LOCK the handle - it
-                                        // must stay locked whilst the buffer
-                                        // command is active
-                                        QTPointerRef sndData = theSnd.getSoundData();
-                                        ExtScheduledSoundHeader buffer = new ExtScheduledSoundHeader(sndData,// data.getBuffer(),
-                                                                                                     data.getNumChannels(),
-                                                                                                     data.getSampleRate(),
-                                                                                                     data.getSampleSize(),
-                                                                                                     data.getFormat());
-                                        SndCommand bufferCmd = new SndCommand(SoundConstants.bufferCmd);
-                                        bufferCmd.setBuffer(buffer);
-                                        sc.doCommand(bufferCmd);
+                                    // shows use of buffer command
+                                    // this call will LOCK the handle - it
+                                    // must stay locked whilst the buffer
+                                    // command is active
+                                    QTPointerRef sndData = theSnd.getSoundData();
+                                    ExtScheduledSoundHeader buffer = new ExtScheduledSoundHeader(sndData,// data.getBuffer(),
+                                            data.getNumChannels(),
+                                            data.getSampleRate(),
+                                            data.getSampleSize(),
+                                            data.getFormat());
+                                    SndCommand bufferCmd = new SndCommand(SoundConstants.bufferCmd);
+                                    bufferCmd.setBuffer(buffer);
+                                    sc.doCommand(bufferCmd);
 
-                                        theSnd = null;
-                                        // reschedule callback to dispose the
-                                        // SndChannel
-                                        // do it this way so that we don't have
-                                        // to wait
-                                        // until the sound is finished playing
-                                        sc.doCommand(new SndCommand(SoundConstants.callBackCmd));
-                                        System.out.println("Replay the sound just for fun:" + sc);
-                                    } else {
-                                        System.out.println("Finished Playing:" + sc);
-                                        sc.disposeQTObject();// finished with
-                                                                // SndChannel so
-                                                                // we MUST
-                                                                // dispose it
-                                    }
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                    theSnd = null;
+                                    // reschedule callback to dispose the
+                                    // SndChannel
+                                    // do it this way so that we don't have
+                                    // to wait
+                                    // until the sound is finished playing
+                                    sc.doCommand(new SndCommand(SoundConstants.callBackCmd));
+                                    System.out.println("Replay the sound just for fun:" + sc);
+                                } else {
+                                    System.out.println("Finished Playing:" + sc);
+                                    sc.disposeQTObject();// finished with
+                                    // SndChannel so
+                                    // we MUST
+                                    // dispose it
                                 }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        });
-                        // this plays asynchronously
-                        // we issue a callback on the SndChannel which will
-                        // fire AFTER the snd play has completed
-                        sndChan1.play(sndHndl);
-                        sndChan1.doCommand(new SndCommand(SoundConstants.callBackCmd));
-                        System.out.println("finished scheduling play and callback:" + sndChan1);
-                    }
-                } catch (Exception ee) {
-                    ee.printStackTrace();
+                        }
+                    });
+                    // this plays asynchronously
+                    // we issue a callback on the SndChannel which will
+                    // fire AFTER the snd play has completed
+                    sndChan1.play(sndHndl);
+                    sndChan1.doCommand(new SndCommand(SoundConstants.callBackCmd));
+                    System.out.println("finished scheduling play and callback:" + sndChan1);
                 }
+            } catch (Exception ee) {
+                ee.printStackTrace();
             }
         });
         add(playRecordedButton);
 
-        playMyDataButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    System.out.println("Play constructed data");
-                    Thread.yield(); // make sure we get print feedback!!!
+        playMyDataButton.addActionListener(event -> {
+            try {
+                System.out.println("Play constructed data");
+                Thread.yield(); // make sure we get print feedback!!!
 
-                    // CONSTRUCT a Sound in memory and play it
-                    // use this constructor then do setup header with data size
-                    SndHandle tempSndHndl = new SndHandle();
+                // CONSTRUCT a Sound in memory and play it
+                // use this constructor then do setup header with data size
+                SndHandle tempSndHndl = new SndHandle();
 
-                    byte[] media = new byte[64000];
-                    short val = -32768;
+                byte[] media = new byte[64000];
+                short val = -32768;
 
-                    for (int i = 0; i < media.length; i += 2) {
-                        if (val > 32750)
-                            val = -32768;
-                        val += 16;
-                        media[i] = (byte) ((val | 0xFF00) >>> 8);
-                        media[i + 1] = (byte) val;
-                    }
-
-                    // MUST do this first
-                    tempSndHndl.setupHeader(1, 11050, 16, SoundConstants.k16BitBigEndianFormat, 0, media.length);
-
-                    // either way works
-                    if (false) {
-                        // allocates the extra memory for the sound buffer in
-                        // the SndHandle
-                        tempSndHndl.appendSoundBuffer(media.length);
-                        QTPointerRef qtpr = tempSndHndl.getSoundData();
-                        qtpr.copyFromArray(0, media, 0, media.length);
-                    } else {
-                        QTPointerRef qtpr = new QTPointer(media.length, true);
-                        qtpr.copyFromArray(0, media, 0, media.length);
-                        // sets the data directly
-                        tempSndHndl.setSoundData(qtpr);
-                    }
-
-                    Sound.play(tempSndHndl);
-
-                    System.out.println("Finished Playing");
-                } catch (Exception ee) {
-                    ee.printStackTrace();
+                for (int i = 0; i < media.length; i += 2) {
+                    if (val > 32750)
+                        val = -32768;
+                    val = (short) (val + 16);
+                    media[i] = (byte) ((val | 0xFF00) >>> 8);
+                    media[i + 1] = (byte) val;
                 }
+
+                // MUST do this first
+                tempSndHndl.setupHeader(1, 11050, 16, SoundConstants.k16BitBigEndianFormat, 0, media.length);
+
+                // either way works
+                if (false) {
+                    // allocates the extra memory for the sound buffer in
+                    // the SndHandle
+                    tempSndHndl.appendSoundBuffer(media.length);
+                    QTPointerRef qtpr = tempSndHndl.getSoundData();
+                    qtpr.copyFromArray(0, media, 0, media.length);
+                } else {
+                    QTPointerRef qtpr = new QTPointer(media.length, true);
+                    qtpr.copyFromArray(0, media, 0, media.length);
+                    // sets the data directly
+                    tempSndHndl.setSoundData(qtpr);
+                }
+
+                Sound.play(tempSndHndl);
+
+                System.out.println("Finished Playing");
+            } catch (Exception ee) {
+                ee.printStackTrace();
             }
         });
         add(playMyDataButton);
@@ -240,13 +237,15 @@ public class SoundMemRecord extends Frame {
         pack();
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 recorder.removeCompletionProc(); // clean this up as we
-                                                    // installed it
+                // installed it
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -295,11 +294,11 @@ public class SoundMemRecord extends Frame {
         System.out.println(array[array.length - 1] + "]");
     }
 
-    private Button startButton = new Button("Record");
+    private final Button startButton = new Button("Record");
 
-    private Button playRecordedButton = new Button("Play Recorded Data");
+    private final Button playRecordedButton = new Button("Play Recorded Data");
 
-    private Button playMyDataButton = new Button("Play My Data");
+    private final Button playMyDataButton = new Button("Play My Data");
 
-    private boolean recording = false;
+    private final boolean recording = false;
 }

@@ -28,7 +28,7 @@ public class QDException extends QTException {
      * This method will throw an exception if the incoming err argument is
      * a non-zero value.
      * @param err the result or error code if non-zero an exception is thrown
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public static void checkError(int paramInt) throws QDException {
         if ((paramInt < 0) && (QTException.isDrawingError(paramInt) < 0))

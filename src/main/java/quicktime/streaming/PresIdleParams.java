@@ -37,7 +37,7 @@ public final class PresIdleParams extends QTPointerRef {
     /**
      * This method sets the stream of the params object
      * @param s the stream of the params
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setStream(Stream paramStream) throws QTException {
         setIntAt(0, QTObject.ID(paramStream));
@@ -46,7 +46,7 @@ public final class PresIdleParams extends QTPointerRef {
 
     /**
      * @return the stream of the params
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Stream getStream() throws QTException {
         return this.stream;
@@ -55,7 +55,7 @@ public final class PresIdleParams extends QTPointerRef {
     /**
      * This method sets the movie time to display of the params object
      * @param time the time of the params
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setMovieTimeToDisplay(long paramLong) throws QTException {
         setLongAt(4, paramLong);
@@ -64,7 +64,7 @@ public final class PresIdleParams extends QTPointerRef {
     /**
      * This method sets the input flags of the prarms object
      * @param flags input flags
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setFlagsIn(int paramInt) throws QTException {
         setIntAt(12, paramInt);
@@ -73,14 +73,9 @@ public final class PresIdleParams extends QTPointerRef {
     /**
      * This method gets the output flags of the params object
      * @return flags
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int getFlagsOut() throws QTException {
         return getIntAt(16);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /PresIdleParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

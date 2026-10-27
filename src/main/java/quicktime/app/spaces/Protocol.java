@@ -6,7 +6,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * A Protocol is a collection of classes that are used to test
  * an object against. The passProtocol (Object o) method
  * uses the Class.instanceOf method on each of the classes
@@ -22,7 +22,7 @@ import quicktime.QTSession;
  * Protocol's passProtocol method. Only if it passes this test is the
  * object allowed to be added to the Collection. This test is
  * encapsulated in the DynamicCollection's isAppropriate method.
- * @see {@link quicktime.app.spaces.DynamicCollection}
+ * @see quicktime.app.spaces.DynamicCollection
  */
 public class Protocol implements Collection {
 
@@ -45,8 +45,8 @@ public class Protocol implements Collection {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a Protocol from the supplied class. These default class cannot be
      * removed from this Protocol once created.
      */
@@ -55,13 +55,13 @@ public class Protocol implements Collection {
             this.protocolsVec.addElement(paramClass);
     }
 
-    private Vector protocolsVec = new Vector();
+    private final Vector protocolsVec = new Vector();
 
     private int defaultProtocolLimit = 0;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an Enumeration that enables you to examine the default classes for
      * this Protocol.
      * @return an Enumeration
@@ -76,92 +76,99 @@ public class Protocol implements Collection {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an Enumeration to iterate over all of the members of the Protocol object.
      * @return an Enumeration
      */
+    @Override
     public Enumeration members() {
         return this.protocolsVec.elements();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the Protocol has no members, otherwise false
      * @return a boolean
      */
+    @Override
     public boolean isEmpty() {
         return this.protocolsVec.isEmpty();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the supplied class object is a member of this Protocol.
      * @param object the object to test for membership
      * @return a boolean
      */
-    public boolean hasMember(Object paramObject) {
-        return this.protocolsVec.contains(paramObject);
+    @Override
+    public boolean hasMember(Object member) {
+        return this.protocolsVec.contains(member);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the number of class objects that are in this Protocol.
      * @return an int
      */
+    @Override
     public int size() {
         return this.protocolsVec.size();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Adds a class object to this Protocol. The application can later remove any class objects
      * that are added to a Protocol in this manner
      * @param member the object that should be added as a member to the collection
      * @return true if the class object was successfully added (or is already a member)
      */
-    public boolean addMember(Object paramObject) {
-        if (!isAppropriate(paramObject))
+    @Override
+    public boolean addMember(Object member) {
+        if (!isAppropriate(member))
             return false;
-        if (!hasMember(paramObject))
-            this.protocolsVec.addElement(paramObject);
+        if (!hasMember(member))
+            this.protocolsVec.addElement(member);
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes a class object that was previously added to this Protocol. The application cannot
      * remove class objects that are part of the default protocol of this Protocol.
      * @param member the object to remove from the collection
      */
-    public void removeMember(Object paramObject) {
-        int i = this.protocolsVec.indexOf(paramObject);
+    @Override
+    public void removeMember(Object member) {
+        int i = this.protocolsVec.indexOf(member);
         if (i >= this.defaultProtocolLimit) {
-            this.protocolsVec.removeElement(paramObject);
+            this.protocolsVec.removeElement(member);
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if this object is an instance of the Class class.
      * @param object the object to test
      * @return a boolean
-     * @see {@link quicktime.app.spaces.DynamicCollection},
+     * @see quicktime.app.spaces.DynamicCollection,
      * {@link quicktime.app.spaces.Protocol}
      */
-    public boolean isAppropriate(Object paramObject) {
-        return paramObject instanceof Class;
+    @Override
+    public boolean isAppropriate(Object object) {
+        return object instanceof Class;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the object is an instance of ALL of the class object members of the Protocol.
      * If the object is not an instance of any one of the member class objects the method returns false.
      * @param object the Object to test

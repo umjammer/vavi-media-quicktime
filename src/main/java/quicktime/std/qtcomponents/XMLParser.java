@@ -1,12 +1,9 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.XMLParserManager;
 import quicktime.io.QTFile;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
 import quicktime.std.StdQTException;
@@ -14,12 +11,11 @@ import quicktime.std.comp.Component;
 import quicktime.std.movies.media.DataRef;
 import quicktime.util.QTUtils;
 
+
 /**
  * The XMLParser corresponds to the QuickTime XMLParse component, type 'pars' subtype 'xml '
  */
 public final class XMLParser extends Component implements QuickTimeLib {
-
-    private static Object linkage;
 
     private XMLDispatcher startDocUPP;
 
@@ -35,38 +31,24 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     private XMLDispatcher preprocessorUPP;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(XMLParser.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     public XMLParser() throws QTException {
         super(1885434483, 2020437024);
     }
 
     /**
      * parses the XML file pointed to by dataRef, returning a XMLParseTree parse tree
-     * QuickTime::XMLParseDataRef
+     * @see "QuickTime::XMLParseDataRef"
      * @param allowUppercase to set StdQTConstants5.xmlParseFlagAllowUppercase flag
      * @param allowUnquotedAttributeValues to set StdQTConstants5.xmlParseFlagAllowUnquotedAttributeValues flag
      * @return XMLParseTree
-     * @return {@link quicktime.std.StdQTException}
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
-    public XMLDoc parse(DataRef paramDataRef, boolean paramBoolean1, boolean paramBoolean2) throws StdQTException, QTException {
+    public XMLDoc parse(DataRef paramDataRef, boolean allowUppercase, boolean allowUnquotedAttributeValues) throws StdQTException, QTException {
         int i = 0;
-        if (paramBoolean1)
+        if (allowUppercase)
             i |= 0x1;
-        if (paramBoolean2)
+        if (allowUnquotedAttributeValues)
             i |= 0x2;
         int[] arrayOfInt = { 0 };
         int j = XMLParseDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), i, arrayOfInt);
@@ -76,39 +58,39 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Parses the XML file pointed to by file, returning a XMLDoc parse tree
-     * QuickTime::XMLParseFile
+     * @see "QuickTime::XMLParseFile"
      * @param file open for read
      * @param allowUppercase to set StdQTConstants5.xmlParseFlagAllowUppercase flag
      * @param allowUnquotedAttributeValues to set StdQTConstants5.xmlParseFlagAllowUnquotedAttributeValues flag
      * @return XMLDoc
-     * @return {@link quicktime.std.StdQTException}
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
-    public XMLDoc parse(QTFile paramQTFile, boolean paramBoolean1, boolean paramBoolean2) throws StdQTException, QTException {
+    public XMLDoc parse(QTFile file, boolean allowUppercase, boolean allowUnquotedAttributeValues) throws StdQTException, QTException {
         int i = 0;
-        if (paramBoolean1)
+        if (allowUppercase)
             i |= 0x1;
-        if (paramBoolean2)
+        if (allowUnquotedAttributeValues)
             i |= 0x2;
         int[] arrayOfInt = { 0 };
-        int j = XMLParseFile(_ID(), paramQTFile.getFSSpec(true, 256), i, arrayOfInt);
+        int j = XMLParseFile(_ID(), file.getFSSpec(true, 256), i, arrayOfInt);
         StdQTException.checkError(j);
         return new XMLDoc(arrayOfInt[0], this);
     }
 
     /**
      * Parses the XML file pointed to by dataRef, using event-based parsing. Does not return a parse tree
-     * QuickTime::XMLParseDataRef
+     * @see "QuickTime::XMLParseDataRef"
      * @param allowUppercase to set StdQTConstants5.xmlParseFlagAllowUppercase flag
      * @param allowUnquotedAttributeValues to set StdQTConstants5.xmlParseFlagAllowUnquotedAttributeValues flag
-     * @param {@link quicktime.std.StdQTException}
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
-    public void eventParse(DataRef paramDataRef, boolean paramBoolean1, boolean paramBoolean2) throws StdQTException, QTException {
+    public void eventParse(DataRef paramDataRef, boolean allowUppercase, boolean allowUnquotedAttributeValues) throws StdQTException, QTException {
         int i = 4;
-        if (paramBoolean1)
+        if (allowUppercase)
             i |= 0x1;
-        if (paramBoolean2)
+        if (allowUnquotedAttributeValues)
             i |= 0x2;
         int j = XMLParseDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), i, null);
         StdQTException.checkError(j);
@@ -116,55 +98,54 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Parses the XML file pointed to by file, using event-based parsing. Does not return a parse tree
-     * QuickTime::XMLParseFile
+     * @see "QuickTime::XMLParseFile"
      * @param file open for read
      * @param allowUppercase to set StdQTConstants5.xmlParseFlagAllowUppercase flag
      * @param allowUnquotedAttributeValues to set StdQTConstants5.xmlParseFlagAllowUnquotedAttributeValues flag
-     * @param {@link quicktime.std.StdQTException}
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
-    public void eventParse(QTFile paramQTFile, boolean paramBoolean1, boolean paramBoolean2) throws StdQTException, QTException {
+    public void eventParse(QTFile file, boolean allowUppercase, boolean allowUnquotedAttributeValues) throws StdQTException, QTException {
         int i = 4;
-        if (paramBoolean1)
+        if (allowUppercase)
             i |= 0x1;
-        if (paramBoolean2)
+        if (allowUnquotedAttributeValues)
             i |= 0x2;
-        int j = XMLParseFile(_ID(), paramQTFile.getFSSpec(true, 256), i, null);
+        int j = XMLParseFile(_ID(), file.getFSSpec(true, 256), i, null);
         StdQTException.checkError(j);
     }
 
     /**
      * tell the parser of an element to be recognized in the specified namespace
-     * QuickTime::XMLParseAddElement
+     * @see "QuickTime::XMLParseAddElement"
      * @param elementName name
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param elementID tokenized identifier, zero or unique identifier
      * @param elementFlags flags
      * @return tokenized element identifier  if elementID non zero, is elementID else generated unique non zero element identifier
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int addElement(String paramString, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int[] arrayOfInt = { paramInt2 };
-        int i = XMLParseAddElement(_ID(), QTUtils.String2CString(paramString), paramInt1, arrayOfInt, paramInt3);
+    public int addElement(String elementName, int nameSpaceID, int elementID, int elementFlags) throws StdQTException {
+        int[] arrayOfInt = { elementID };
+        int i = XMLParseAddElement(_ID(), QTUtils.String2CString(elementName), nameSpaceID, arrayOfInt, elementFlags);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
 
     /**
      * tell the parser of an attribute for the specified element in the specified namespace
-     * QuickTime::XMLParseAddAttribute
+     * @see "QuickTime::XMLParseAddAttribute"
      * @param elementID non zero unique tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @return attribute identifier token  if attributeID non zero, is elementID else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttribute(int paramInt1, int paramInt2, String paramString, int paramInt3) throws StdQTException {
-        if (paramInt1 == 0)
+    public int addAttribute(int elementID, int nameSpaceID, String attributeName, int paramInt3) throws StdQTException {
+        if (elementID == 0)
             throw new StdQTException(-50);
         int[] arrayOfInt = { paramInt3 };
-        int i = XMLParseAddAttribute(_ID(), paramInt1, paramInt2, QTUtils.String2CString(paramString), arrayOfInt);
+        int i = XMLParseAddAttribute(_ID(), elementID, nameSpaceID, QTUtils.String2CString(attributeName), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -172,158 +153,144 @@ public final class XMLParser extends Component implements QuickTimeLib {
     /**
      * tell the parser that the particular attribute of an element may have an additional kind of value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero unique tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeValueKind -
      * @param attributeValueKindInfo -
-     * @throws on zero elementID
-     * @throws on zero attributeID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID, throws on zero attributeID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) throws StdQTException {
-        if (paramInt1 == 0)
+    public void addAttributeValueKind(int elementID, int attributeID, int attributeValueKind, byte[] attributeValueKindInfo) throws StdQTException {
+        if (elementID == 0)
             throw new StdQTException(-50);
-        if (paramInt2 == 0)
+        if (attributeID == 0)
             throw new StdQTException(-50);
-        int i = XMLParseAddAttributeValueKind(_ID(), paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+        int i = XMLParseAddAttributeValueKind(_ID(), elementID, attributeID, attributeValueKind, attributeValueKindInfo);
         StdQTException.checkError(i);
     }
 
     /**
      * tell the parser of an enumerated attribute, of type attributeValueKindCharString, for the specified element
-     * QuickTime::XMLParseAddAttributeAndValue
+     * @see "QuickTime::XMLParseAddAttributeAndValue"
      * @param elementID non zero tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeStringValue String
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, String paramString) throws StdQTException {
-        addAttributeValueKind(paramInt1, paramInt2, 0, QTUtils.String2CString(paramString));
+    public void addAttributeValueKind(int elementID, int attributeID, String attributeStringValue) throws StdQTException {
+        addAttributeValueKind(elementID, attributeID, 0, QTUtils.String2CString(attributeStringValue));
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindInteger value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero unique tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeValue int
-     * @throws on zero elementID
-     * @throws on zero attributeID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID, throws on zero attributeID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
+    public void addAttributeValueKind(int elementID, int attributeID, int attributeValue) throws StdQTException {
         byte[] arrayOfByte = { 0, 0, 0, 0 };
-        for (int i = 0; i < 4; paramInt3 >>= 8) {
-            arrayOfByte[i] = ((byte) (paramInt3 & 0xFF));
+        for (int i = 0; i < 4; attributeValue >>= 8) {
+            arrayOfByte[i] = ((byte) (attributeValue & 0xFF));
             i++;
         }
-        addAttributeValueKind(paramInt1, paramInt2, 1, arrayOfByte);
+        addAttributeValueKind(elementID, attributeID, 1, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindPercent value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero unique tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
-     * @throws on zero elementID
-     * @throws on zero attributeID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID, throws on zero attributeID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, float paramFloat) throws StdQTException {
+    public void addAttributeValueKind(int elementID, int attributeID, float paramFloat) throws StdQTException {
         int i = (int) paramFloat;
         byte[] arrayOfByte = { 0, 0, 0, 0 };
         for (int j = 0; j < 4; i >>= 8) {
             arrayOfByte[j] = ((byte) (i & 0xFF));
             j++;
         }
-        addAttributeValueKind(paramInt1, paramInt2, 2, arrayOfByte);
+        addAttributeValueKind(elementID, attributeID, 2, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindBoolean value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero unique tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
-     * @throws on zero elementID
-     * @throws on zero attributeID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID, throws on zero attributeID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, boolean paramBoolean) throws StdQTException {
+    public void addAttributeValueKind(int elementID, int attributeID, boolean paramBoolean) throws StdQTException {
         byte[] arrayOfByte = { (byte) (paramBoolean ? 1 : 0) };
-        addAttributeValueKind(paramInt1, paramInt2, 4, arrayOfByte);
+        addAttributeValueKind(elementID, attributeID, 4, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindOnOff value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero unique tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
-     * @throws on zero elementID
-     * @throws on zero attributeID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID, throws on zero attributeID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, byte paramByte) throws StdQTException {
+    public void addAttributeValueKind(int elementID, int attributeID, byte paramByte) throws StdQTException {
         byte[] arrayOfByte = { (byte) (paramByte != 0 ? 1 : 0) };
-        addAttributeValueKind(paramInt1, paramInt2, 8, arrayOfByte);
+        addAttributeValueKind(elementID, attributeID, 8, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindColor value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero unique tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeColorValue qd.QDColor
-     * @throws on zero elementID
-     * @throws on zero attributeID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID, throws on zero attributeID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, QDColor paramQDColor) throws StdQTException {
-        addAttributeValueKind(paramInt1, paramInt2, 16, paramQDColor.getRGBColor());
+    public void addAttributeValueKind(int elementID, int attributeID, QDColor attributeColorValue) throws StdQTException {
+        addAttributeValueKind(elementID, attributeID, 16, attributeColorValue.getRGBColor());
     }
 
     /**
      * tell the parser of an enumerated attribute, of type attributeValueKindEnum or attributeValueKindCaseSensEnum, for the specified element
-     * QuickTime::XMLParseAddAttributeAndValue
+     * @see "QuickTime::XMLParseAddAttributeAndValue"
      * @param elementID non zero tokenized element identifier
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeList String[] of attributes
-     * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     *  attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public void addAttributeValueKind(int paramInt1, int paramInt2, String[] paramArrayOfString, boolean paramBoolean) throws StdQTException {
-        int i = paramArrayOfString.length;
+    public void addAttributeValueKind(int elementID, int attributeID, String[] attributeList, boolean paramBoolean) throws StdQTException {
+        int i = attributeList.length;
         int j = 0;
-        for (int k = 0; k < i; k++) {
-            j += paramArrayOfString[k].length();
+        for (String string : attributeList) {
+            j += string.length();
             j++;
         }
         j++;
         byte[] arrayOfByte = new byte[j];
         int m = 0;
-        for (int n = 0; n < i; n++) {
-            j = paramArrayOfString[n].length();
+        for (String s : attributeList) {
+            j = s.length();
             for (int i1 = 0; i1 < j; i1++) {
-                arrayOfByte[(m++)] = ((byte) paramArrayOfString[n].charAt(i1));
+                arrayOfByte[(m++)] = ((byte) s.charAt(i1));
             }
             arrayOfByte[(m++)] = 0;
         }
         arrayOfByte[m] = 0;
         int n = paramBoolean ? 64 : 32;
-        addAttributeValueKind(paramInt1, paramInt2, n, arrayOfByte);
+        addAttributeValueKind(elementID, attributeID, n, arrayOfByte);
     }
 
     /**
      * tell the parser of an attribute, which may have a particular type of value, for the specified element
-     * QuickTime::XMLParseAddAttributeAndValue
+     * @see "QuickTime::XMLParseAddAttributeAndValue"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
@@ -331,182 +298,173 @@ public final class XMLParser extends Component implements QuickTimeLib {
      * @param attributeValueKind -
      * @param attributeValueKindInfo -
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, int paramInt4, byte[] paramArrayOfByte) throws StdQTException {
-        if (paramInt1 == 0)
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, int attributeValueKind, byte[] attributeValueKindInfo) throws StdQTException {
+        if (elementID == 0)
             throw new StdQTException(-50);
-        int[] arrayOfInt = { paramInt3 };
-        int i = XMLParseAddAttributeAndValue(_ID(), paramInt1, paramInt2, QTUtils.String2CString(paramString), arrayOfInt, paramInt4, paramArrayOfByte);
+        int[] arrayOfInt = { attributeID };
+        int i = XMLParseAddAttributeAndValue(_ID(), elementID, nameSpaceID, QTUtils.String2CString(attributeName), arrayOfInt, attributeValueKind, attributeValueKindInfo);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
 
     /**
      * tell the parser of an attribute, of type attributeValueKindCharString, for the specified element
-     * QuickTime::XMLParseAddAttributeAndValue
+     * @see "QuickTime::XMLParseAddAttributeAndValue"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeValue String
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString1, int paramInt3, String paramString2) throws StdQTException {
-        return addAttributeAndValue(paramInt1, paramInt2, paramString1, paramInt3, 0, QTUtils.String2CString(paramString2));
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, String attributeValue) throws StdQTException {
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, 0, QTUtils.String2CString(attributeValue));
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindInteger value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, int paramInt4) throws StdQTException {
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, int paramInt4) throws StdQTException {
         byte[] arrayOfByte = { 0, 0, 0, 0 };
         for (int i = 0; i < 4; paramInt4 >>= 8) {
             arrayOfByte[i] = ((byte) (paramInt4 & 0xFF));
             i++;
         }
-        return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, 1, arrayOfByte);
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, 1, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindPercent value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, float paramFloat) throws StdQTException {
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, float paramFloat) throws StdQTException {
         int i = (int) paramFloat;
         byte[] arrayOfByte = { 0, 0, 0, 0 };
         for (int j = 0; j < 4; i >>= 8) {
             arrayOfByte[j] = ((byte) (i & 0xFF));
             j++;
         }
-        return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, 2, arrayOfByte);
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, 2, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindBoolean value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, boolean paramBoolean) throws StdQTException {
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, boolean paramBoolean) throws StdQTException {
         byte[] arrayOfByte = { (byte) (paramBoolean ? 1 : 0) };
-        return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, 4, arrayOfByte);
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, 4, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindOnOff value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, byte paramByte) throws StdQTException {
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, byte paramByte) throws StdQTException {
         byte[] arrayOfByte = { (byte) (paramByte != 0 ? 1 : 0) };
-        return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, 8, arrayOfByte);
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, 8, arrayOfByte);
     }
 
     /**
      * tell the parser that the particular attribute of an element may have an additional attributeValueKindColor value,
      * as specified by attributeValueKind and attributeValueKindInfo
-     * QuickTime::XMLParseAddAttributeValueKind
+     * @see "QuickTime::XMLParseAddAttributeValueKind"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeColorValue qd.QDColor
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, QDColor paramQDColor) throws StdQTException {
-        return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, 16, paramQDColor.getRGBColor());
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, QDColor attributeColorValue) throws StdQTException {
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, 16, attributeColorValue.getRGBColor());
     }
 
     /**
      * tell the parser of an enumerated attribute, of type attributeValueKindEnum or attributeValueKindCaseSensEnum, for the specified element
-     * QuickTime::XMLParseAddAttributeAndValue
+     * @see "QuickTime::XMLParseAddAttributeAndValue"
      * @param elementID non zero tokenized element identifier
      * @param nameSpaceID tokenized identifier, can be nameSpaceIDNone
      * @param attributeName name
      * @param attributeID non zero unique tokenized attribute identifier
      * @param attributeList String[] of attributes
      * @return attribute identifier token  if attributeID non zero else generated unique non zero attribute identifier
-     * @throws on zero elementID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero elementID
      */
-    public int addAttributeAndValue(int paramInt1, int paramInt2, String paramString, int paramInt3, String[] paramArrayOfString, boolean paramBoolean) throws StdQTException {
-        int i = paramArrayOfString.length;
+    public int addAttributeAndValue(int elementID, int nameSpaceID, String attributeName, int attributeID, String[] attributeList, boolean paramBoolean) throws StdQTException {
+        int i = attributeList.length;
         int j = 0;
-        for (int k = 0; k < i; k++) {
-            j += paramArrayOfString[k].length();
+        for (String string : attributeList) {
+            j += string.length();
             j++;
         }
         j++;
         byte[] arrayOfByte = new byte[j];
         int m = 0;
-        for (int n = 0; n < i; n++) {
-            j = paramArrayOfString[n].length();
+        for (String s : attributeList) {
+            j = s.length();
             for (int i1 = 0; i1 < j; i1++) {
-                arrayOfByte[(m++)] = ((byte) paramArrayOfString[n].charAt(i1));
+                arrayOfByte[(m++)] = ((byte) s.charAt(i1));
             }
             arrayOfByte[(m++)] = 0;
         }
         arrayOfByte[m] = 0;
         int n = paramBoolean ? 64 : 32;
-        return addAttributeAndValue(paramInt1, paramInt2, paramString, paramInt3, n, arrayOfByte);
+        return addAttributeAndValue(elementID, nameSpaceID, attributeName, attributeID, n, arrayOfByte);
     }
 
     /**
      * tell the parser of a namespace to be recognized
-     * QuickTime::XMLParseAddNameSpace
+     * @see "QuickTime::XMLParseAddNameSpace"
      * @param nameSpaceID non zero tokenized namespace identifier
-     * @throws on zero nameSpaceID
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on zero nameSpaceID
      */
-    public void addNameSpace(int paramInt, String paramString) throws StdQTException {
-        if (paramInt == 0)
+    public void addNameSpace(int nameSpaceID, String paramString) throws StdQTException {
+        if (nameSpaceID == 0)
             throw new StdQTException(-50);
-        int[] arrayOfInt = { paramInt };
+        int[] arrayOfInt = { nameSpaceID };
         int i = XMLParseAddNameSpace(_ID(), QTUtils.String2CString(paramString), arrayOfInt);
         StdQTException.checkError(i);
     }
 
     /**
      * tell the parser of an identified namespace to be recognized
-     * QuickTime::XMLParseAddNameSpace
+     * @see "QuickTime::XMLParseAddNameSpace"
      * @return generated non zero tokenized name space identifier
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int addNameSpace(String paramString) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -517,7 +475,7 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * specify the offset and limit for reading from the dataref to be used when parsing
-     * QuickTime::XMLParseSetOffsetAndLimit
+     * @see "QuickTime::XMLParseSetOffsetAndLimit"
      */
     public void setOffsetAndLimit(int paramInt1, int paramInt2) throws StdQTException {
         int i = XMLParseSetOffsetAndLimit(_ID(), paramInt1, paramInt2);
@@ -526,26 +484,26 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Set the callback handler for start document events
-     * QuickTime::XMLParseSetStartDocumentHandler
+     * @see "QuickTime::XMLParseSetStartDocumentHandler"
      * @param proc implements XMLStartDocProc
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setStartDocumentHandler(XMLStartDocProc paramXMLStartDocProc) throws StdQTException {
-        if (paramXMLStartDocProc == null) {
+    public void setStartDocumentHandler(XMLStartDocProc proc) throws StdQTException {
+        if (proc == null) {
             removeStartDocumentHandler();
             return;
         }
         if (this.startDocUPP != null) {
             removeStartDocumentHandler();
         }
-        this.startDocUPP = new XMLDispatcher(paramXMLStartDocProc);
+        this.startDocUPP = new XMLDispatcher(proc);
         int i = XMLParseSetStartDocumentHandler(_ID(), this.startDocUPP.ID());
         StdQTException.checkError(i);
     }
 
     /**
      * Remove the currently registered callback handler for start document events
-     * QuickTime::XMLParseSetStartDocumentHandler
+     * @see "QuickTime::XMLParseSetStartDocumentHandler"
      */
     public void removeStartDocumentHandler() throws StdQTException {
         int i = XMLParseSetStartDocumentHandler(_ID(), 0);
@@ -558,26 +516,26 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Set the callback handler for end document events
-     * QuickTime::XMLParseSetEndDocumentHandler
+     * @see "QuickTime::XMLParseSetEndDocumentHandler"
      * @param proc implements XMLEndDocProc
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setEndDocumentHandler(XMLEndDocProc paramXMLEndDocProc) throws StdQTException {
-        if (paramXMLEndDocProc == null) {
+    public void setEndDocumentHandler(XMLEndDocProc proc) throws StdQTException {
+        if (proc == null) {
             removeEndDocumentHandler();
             return;
         }
         if (this.endDocUPP != null) {
             removeEndDocumentHandler();
         }
-        this.endDocUPP = new XMLDispatcher(paramXMLEndDocProc);
+        this.endDocUPP = new XMLDispatcher(proc);
         int i = XMLParseSetEndDocumentHandler(_ID(), this.endDocUPP.ID());
         StdQTException.checkError(i);
     }
 
     /**
      * Remove the currently registered callback handler for end document events
-     * QuickTime::XMLParseSetEndDocumentHandler
+     * @see "QuickTime::XMLParseSetEndDocumentHandler"
      */
     public void removeEndDocumentHandler() throws StdQTException {
         int i = XMLParseSetEndDocumentHandler(_ID(), 0);
@@ -590,26 +548,26 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * set the start element handler UPP for event parsing
-     * QuickTime::XMLParseSetStartElementHandler
+     * @see "QuickTime::XMLParseSetStartElementHandler"
      * @param proc implements XMLStartElementProc
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setStartElementHandler(XMLStartElementProc paramXMLStartElementProc) throws StdQTException {
-        if (paramXMLStartElementProc == null) {
+    public void setStartElementHandler(XMLStartElementProc proc) throws StdQTException {
+        if (proc == null) {
             removeStartElementHandler();
             return;
         }
         if (this.startElementUPP != null) {
             removeStartElementHandler();
         }
-        this.startElementUPP = new XMLDispatcher(paramXMLStartElementProc);
+        this.startElementUPP = new XMLDispatcher(proc);
         int i = XMLParseSetStartElementHandler(_ID(), this.startElementUPP.ID());
         StdQTException.checkError(i);
     }
 
     /**
      * Remove the currently registered start element proc.
-     * QuickTime::XMLParseSetStartElementHandler
+     * @see "QuickTime::XMLParseSetStartElementHandler"
      */
     public void removeStartElementHandler() throws StdQTException {
         int i = XMLParseSetStartElementHandler(_ID(), 0);
@@ -622,26 +580,26 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * set the end element handler UPP for event parsing
-     * QuickTime::XMLParseSetEndElementHandler
+     * @see "QuickTime::XMLParseSetEndElementHandler"
      * @param proc implements XMLEndElementProc
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setEndElementHandler(XMLEndElementProc paramXMLEndElementProc) throws StdQTException {
-        if (paramXMLEndElementProc == null) {
+    public void setEndElementHandler(XMLEndElementProc proc) throws StdQTException {
+        if (proc == null) {
             removeEndElementHandler();
             return;
         }
         if (this.endElementUPP != null) {
             removeEndElementHandler();
         }
-        this.endElementUPP = new XMLDispatcher(paramXMLEndElementProc);
+        this.endElementUPP = new XMLDispatcher(proc);
         int i = XMLParseSetEndElementHandler(_ID(), this.endElementUPP.ID());
         StdQTException.checkError(i);
     }
 
     /**
      * Remove the currently registered end element proc.
-     * QuickTime::XMLParseSetEndElementHandler
+     * @see "QuickTime::XMLParseSetEndElementHandler"
      */
     public void removeEndElementHandler() throws StdQTException {
         int i = XMLParseSetEndElementHandler(_ID(), 0);
@@ -654,7 +612,7 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Set the callback handler for comment events
-     * QuickTime::XMLParseSetCommentHandler
+     * @see "QuickTime::XMLParseSetCommentHandler"
      */
     public void setCommentHandler(XMLCommentProc paramXMLCommentProc) throws StdQTException {
         if (paramXMLCommentProc == null) {
@@ -671,7 +629,7 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Remove the currently registered callback handler for comment events
-     * QuickTime::XMLParseSetCommentHandler
+     * @see "QuickTime::XMLParseSetCommentHandler"
      */
     public void removeCommentHandler() throws StdQTException {
         int i = XMLParseSetCommentHandler(_ID(), 0);
@@ -684,26 +642,26 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Set the callback handler for character data events
-     * QuickTime::XMLParseSetCharDataHandler
+     * @see "QuickTime::XMLParseSetCharDataHandler"
      * @param proc implements XMLCharDataProc
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setCharDataHandler(XMLCharDataProc paramXMLCharDataProc) throws StdQTException {
-        if (paramXMLCharDataProc == null) {
+    public void setCharDataHandler(XMLCharDataProc proc) throws StdQTException {
+        if (proc == null) {
             removeCharDataHandler();
             return;
         }
         if (this.charDataUPP != null) {
             removeCharDataHandler();
         }
-        this.charDataUPP = new XMLDispatcher(paramXMLCharDataProc);
+        this.charDataUPP = new XMLDispatcher(proc);
         int i = XMLParseSetCharDataHandler(_ID(), this.charDataUPP.ID());
         StdQTException.checkError(i);
     }
 
     /**
      * Remove the currently registered callback handler for character data events.
-     * QuickTime::XMLParseSetCharDataHandler
+     * @see "QuickTime::XMLParseSetCharDataHandler"
      */
     public void removeCharDataHandler() throws StdQTException {
         int i = XMLParseSetCharDataHandler(_ID(), 0);
@@ -716,26 +674,26 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Set the callback handler for preprocessor instruction events
-     * QuickTime::XMLParseSetPreprocessInstructionHandler
+     * @see "QuickTime::XMLParseSetPreprocessInstructionHandler"
      * @param proc implements XMLPreprocessorProc
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setPreprocessorHandler(XMLPreprocessorProc paramXMLPreprocessorProc) throws StdQTException {
-        if (paramXMLPreprocessorProc == null) {
+    public void setPreprocessorHandler(XMLPreprocessorProc proc) throws StdQTException {
+        if (proc == null) {
             removePreprocessorHandler();
             return;
         }
         if (this.preprocessorUPP != null) {
             removePreprocessorHandler();
         }
-        this.preprocessorUPP = new XMLDispatcher(paramXMLPreprocessorProc);
+        this.preprocessorUPP = new XMLDispatcher(proc);
         int i = XMLParseSetPreprocessInstructionHandler(_ID(), this.preprocessorUPP.ID());
         StdQTException.checkError(i);
     }
 
     /**
      * Remove the currently registered callback handler for preprocessor instruction events
-     * QuickTime::XMLParseSetPreprocessInstructionHandler
+     * @see "QuickTime::XMLParseSetPreprocessInstructionHandler"
      */
     public void removePreprocessorHandler() throws StdQTException {
         int i = XMLParseSetPreprocessInstructionHandler(_ID(), 0);
@@ -748,9 +706,9 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Returns the line number the error if a file failed to parse properly
-     * QuickTime::XMLParseGetDetailedParseError
+     * @see "QuickTime::XMLParseGetDetailedParseError"
      * @return line number of the error
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getParseErrorLine() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -761,9 +719,9 @@ public final class XMLParser extends Component implements QuickTimeLib {
 
     /**
      * Returns a more detailed description of the error if a file failed to parse properly
-     * QuickTime::XMLParseGetDetailedParseError
+     * @see "QuickTime::XMLParseGetDetailedParseError"
      * @return description of error
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public String getParseErrorDescription() throws StdQTException {
         byte[] arrayOfByte = new byte[256];

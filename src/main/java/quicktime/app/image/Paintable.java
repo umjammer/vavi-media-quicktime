@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 /**
- * Deprecated.
+ * @deprecated
  * The Paintable interface allows for implementors of this interface to paint
  * in the QTCanvas (via the QTImageDrawer).
  *
@@ -13,11 +13,11 @@ import java.awt.Rectangle;
  * call, with the rendered image being drawn by QuickTime.
  * @see quicktime.app.display.QTImageDrawer
  */
-public abstract interface Paintable {
+public interface Paintable {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The Container object (QTImageDrawer) of the Paintable tells the paintable object the size of its available
      * drawing surface. Any drawing done outside of these bounds (originating at 0,0) will
      * be clipped. You should not call this method directly - it will be called by the QTImageDrawer
@@ -28,11 +28,11 @@ public abstract interface Paintable {
      * @param drawer the QTImageDrawer that is notifiying the Paintable object that its size has changed.
      * @param d the new size of the offscreen image that the painter can paint into.
      */
-    public abstract void newSizeNotified(QTImageDrawer paramQTImageDrawer, Dimension paramDimension);
+    void newSizeNotified(QTImageDrawer paramQTImageDrawer, Dimension paramDimension);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Paint on the graphics. The image that is painted on this graphics is rendered by
      * QuickTime. You can supply an array of Rectangles that tell the parent which parts
      * of the image were changed by this call. Only the pixels that are within these
@@ -44,10 +44,5 @@ public abstract interface Paintable {
      * Intelligent usage of this can improve drawing performance.
      * @param g the graphics to paint on.
      */
-    public abstract Rectangle[] paint(Graphics paramGraphics);
+    Rectangle[] paint(Graphics paramGraphics);
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /Paintable.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -100,7 +100,7 @@ public final class SourcerTrackParams extends QTPointer {
     /**
      * Sets the track of the track params object
      * @param track track (should not be null)
-     * @param {@link quicktime.QTRuntimeException}
+     * @throws quicktime.QTRuntimeException
      */
     public void setTrack(Track paramTrack) throws QTRuntimeException {
         if (paramTrack != null) {
@@ -181,8 +181,3 @@ public final class SourcerTrackParams extends QTPointer {
         return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",track=" + getTrack() + ",trackStartOffset" + getTrackStartOffset() + ",duration" + getDuration() + ",loopParams" + getLoopParams() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /SourcerTrackParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -1,44 +1,26 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ClockManager;
 import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDGraphics;
 import quicktime.std.StdQTException;
 import quicktime.std.clocks.TimeBase;
 
+
 /**
  * This class defines methods which are used during compression and decompression of
  * image sequences.
- * @see {@link quicktime.std.image.CSequence},
+ * @see quicktime.std.image.CSequence,
  * {@link quicktime.std.image.DSequence}
  */
 public class CDSequence extends QTObject implements QuickTimeLib {
 
-    private static Object linkage;
-
     ImageDescription mImageDescription;
 
     protected QDGraphics cdPort;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CDSequence.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     CDSequence(int paramInt, QDGraphics paramQDGraphics) throws QTException {
         super(paramInt);
@@ -55,20 +37,20 @@ public class CDSequence extends QTObject implements QuickTimeLib {
 
     /**
      * Set the time base for the CDSequence object.
-     * QuickTime::CDSequenceSetTimeBase
+     * @see "QuickTime::CDSequenceSetTimeBase"
      * @param base the TimeBase for the sequence
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setTimeBase(TimeBase paramTimeBase) throws StdQTException {
-        StdQTException.checkError(CDSequenceSetTimeBase(_ID(), QTObject.ID(paramTimeBase)));
+    public final void setTimeBase(TimeBase base) throws StdQTException {
+        StdQTException.checkError(CDSequenceSetTimeBase(_ID(), QTObject.ID(base)));
     }
 
     /**
      * Your application may call this method to check the status of an asynchronous
      * compression or decompression operation.
-     * QuickTime::CDSequenceBusy
+     * @see "QuickTime::CDSequenceBusy"
      * @return true if an asynchronous operation is in progress, false otherwise
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public boolean busy() throws StdQTException {
         int i = CDSequenceBusy(_ID());
@@ -79,14 +61,14 @@ public class CDSequence extends QTObject implements QuickTimeLib {
 
     /**
      * Reports whether two image descriptions are the same.
-     * QuickTime::CDSequenceEquivalentImageDescription
+     * @see "QuickTime::CDSequenceEquivalentImageDescription"
      * @param newDesc an ImageDescription object that describes a compressed image
      * @return true if the descriptions are equivalent, false otherwise
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final boolean equivalentImageDescription(ImageDescription paramImageDescription) throws StdQTException {
+    public final boolean equivalentImageDescription(ImageDescription newDesc) throws StdQTException {
         byte[] arrayOfByte = new byte[1];
-        StdQTException.checkError(CDSequenceEquivalentImageDescription(_ID(), QTObject.ID(paramImageDescription), arrayOfByte));
+        StdQTException.checkError(CDSequenceEquivalentImageDescription(_ID(), QTObject.ID(newDesc), arrayOfByte));
         return arrayOfByte[0] != 0;
     }
 

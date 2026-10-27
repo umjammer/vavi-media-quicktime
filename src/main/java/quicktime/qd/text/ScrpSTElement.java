@@ -3,6 +3,7 @@ package quicktime.qd.text;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -30,18 +31,14 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     private static EndianDescriptor ed;
 
+    @Serial
     private static final long serialVersionUID = 939259602280929910L;
 
     static {
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ScrpSTElement.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ScrpSTElement.class));
             }
         }
         new PrivelegedAction().establish();
@@ -81,6 +78,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[20];
         byte[] arrayOfByte = new byte[20];
@@ -95,6 +93,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         setShortInArray(this.bytes, 18, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, 18)));
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[20];
         setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
@@ -111,6 +110,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new ScrpSTElement(getBytes());
     }

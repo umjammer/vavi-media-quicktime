@@ -2,12 +2,16 @@
 package quicktime;
 
 import java.awt.Component;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+
 import quicktime.internal.toolbox.PlatformManager;
 
 
 final class WinNativeHelper {
+
+    private static final Logger logger = System.getLogger(WinNativeHelper.class.getName());
+
     static int getCompHWnd(Component paramComponent) {
         return PlatformManager.getCompHWnd(paramComponent);
     }
@@ -39,22 +43,11 @@ final class WinNativeHelper {
     static {
         if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
 
-            class PrivelegedAction {
-                void establish() {
-                    AccessController.doPrivileged(new PrivilegedAction<Void>() {
-                        public Void run() {
-                            try {
-                                System.loadLibrary("QTJava");
-                            } catch (Exception localException) {
-                                System.err.println("WinNativeHelper :System.loadLibrary failed ");
-                                localException.printStackTrace();
-                            }
-                            return null;
-                        }
-                    });
-                }
+            try {
+                System.loadLibrary("QTJava");
+            } catch (Exception e) {
+                logger.log(Level.ERROR, "WinNativeHelper :System.loadLibrary failed ", e);
             }
-            new PrivelegedAction().establish();
         }
     }
 }

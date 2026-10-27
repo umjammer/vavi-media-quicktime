@@ -1,55 +1,37 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.comp.Component;
 import quicktime.std.comp.ComponentIdentifier;
 import quicktime.util.QTPointerRef;
 
+
 /**
  * Compresses data using the specified compressor
  */
 public class DataCodecCompressor extends Component implements QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(DataCodecCompressor.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Opens the specified data codec compressor component, 'dcom', with the given subType.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      * @param subType the compressor type that will be used to compress the data
      */
-    public DataCodecCompressor(int paramInt) throws QTException {
-        super(1684238189, paramInt);
+    public DataCodecCompressor(int subType) throws QTException {
+        super(1684238189, subType);
     }
 
     /**
      * Given a component identifier it opens the specified component. The component type
      * must be 'dcom' or an exception will be thrown as it is not a DataCodecCompressor.
-     * QuickTime::OpenAComponent
+     * @see "QuickTime::OpenAComponent"
      * @param comp the component identifier to open
      */
-    public DataCodecCompressor(ComponentIdentifier paramComponentIdentifier) throws QTException {
-        super(paramComponentIdentifier, 1684238189);
+    public DataCodecCompressor(ComponentIdentifier comp) throws QTException {
+        super(comp, 1684238189);
     }
 
     /**
@@ -61,16 +43,16 @@ public class DataCodecCompressor extends Component implements QuickTimeLib {
      * that is the same size as the uncompressed data may not be large enough: in
      * some cases, the size of the compressed data can be larger than the size of the
      * decompressed data.
-     * QuickTime::DataCodecCompress
+     * @see "QuickTime::DataCodecCompress"
      * @param srcData Contains a pointer to the data to be compressed.
      * @param dstData Contains a pointer to the buffer in which to store the compressed data.
      * @return a DataCodecInfo that contains information about the compression.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public DataCodecInfo compress(QTPointerRef paramQTPointerRef1, QTPointerRef paramQTPointerRef2) throws StdQTException {
+    public DataCodecInfo compress(QTPointerRef srcData, QTPointerRef dstData) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        int i = DataCodecCompress(_ID(), QTObject.ID(paramQTPointerRef1), paramQTPointerRef1.getSize(), QTObject.ID(paramQTPointerRef2), paramQTPointerRef2.getSize(), arrayOfInt1, arrayOfInt2);
+        int i = DataCodecCompress(_ID(), QTObject.ID(srcData), srcData.getSize(), QTObject.ID(dstData), dstData.getSize(), arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(i);
         return new DataCodecInfo(arrayOfInt1[0], arrayOfInt2[0]);
     }
@@ -78,14 +60,14 @@ public class DataCodecCompressor extends Component implements QuickTimeLib {
     /**
      * Returns the estimated maximum size of compressing the specified size bytes
      * using this compressor.
-     * QuickTime::DataCodecGetCompressBufferSize
+     * @see "QuickTime::DataCodecGetCompressBufferSize"
      * @param srcSize the size of the buffer that will be compressed.
      * @return the size of the buffer you should allocate to contain the specified srcSize data
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int getCompressBufferSize(int paramInt) throws StdQTException {
+    public int getCompressBufferSize(int srcSize) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(DataCodecGetCompressBufferSize(_ID(), paramInt, arrayOfInt));
+        StdQTException.checkError(DataCodecGetCompressBufferSize(_ID(), srcSize, arrayOfInt));
         return arrayOfInt[0];
     }
 

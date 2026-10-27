@@ -19,14 +19,14 @@ public class QTException extends Exception {
             if (paramInt == -108) {
                 return "memFullErr";
             }
-            Class localClass = ClassLoader.getSystemClassLoader().loadClass("quicktime.Errors");
+            Class<?> localClass = ClassLoader.getSystemClassLoader().loadClass("quicktime.Errors");
             Field[] arrayOfField = localClass.getFields();
-            for (int i = 0; i < arrayOfField.length; i++) {
-                if (arrayOfField[i].getInt(null) == paramInt)
-                    return arrayOfField[i].getName();
+            for (Field field : arrayOfField) {
+                if (field.getInt(null) == paramInt)
+                    return field.getName();
             }
         } catch (Exception localException) {
-            return "Exception generated: " + localException.toString();
+            return "Exception generated: " + localException;
         }
         return "Unknown Error Code";
     }
@@ -45,14 +45,14 @@ public class QTException extends Exception {
      * @param val the error number
      */
     public QTException(int paramInt) {
-        this(new Integer(paramInt).toString());
+        this(Integer.valueOf(paramInt).toString());
     }
 
     /**
      * This method will throw an exception if the incoming err argument is
      * a non-zero value.
      * @param err the result or error code if non-zero an exception is thrown
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void checkError(int paramInt) throws QTException {
         if ((paramInt < 0) && (isDrawingError(paramInt) < 0)) {
@@ -70,21 +70,13 @@ public class QTException extends Exception {
      * codecOffscreenFailedErr
      */
     public static int isDrawingError(int paramInt) {
-        switch(paramInt) {
-            case -8988:
-            case -8985:
-            case -8984:
-            case -8983:
-            case -8982:
-            case -8981:
-            case -8980:
-            case -8976:
-                return 0;
-        }
-        return paramInt;
+        return switch (paramInt) {
+            case -8988, -8985, -8984, -8983, -8982, -8981, -8980, -8976 -> 0;
+            default -> paramInt;
+        };
     }
 
-    private int eCode = 0;
+    private final int eCode = 0;
 
     /**
      * Return the error code that generated the exception. If there was no QT error code number known
@@ -109,7 +101,7 @@ public class QTException extends Exception {
      * Print current build information and current exception details.
      */
     public String toString() {
-        String str = Integer.toString(this.eCode) + "=" + errorCodeToString();
+        String str = this.eCode + "=" + errorCodeToString();
         return getClass().getName() + QTBuild.info() + "," + str + ",QT.vers:" + Integer.toHexString(QTSession.getQTVersion());
     }
 }

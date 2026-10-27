@@ -22,12 +22,12 @@ import quicktime.std.movies.MoviePrePreroll;
  * QuickTime movie. The MoviePlayer
  * object works with the QTComponent to be displayed in a Java AWT Container.
  *
- * @see {@link quicktime.app.view.QTComponent},
+ * @see quicktime.app.view.QTComponent,
  * {@link quicktime.std.movies.Movie}
  */
 public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
 
-    private Movie mMovie;
+    private final Movie mMovie;
 
     private Vector listenerList;
 
@@ -56,6 +56,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void addedTo(Object paramObject) {
     }
 
@@ -66,14 +67,16 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void removedFrom(Object paramObject) {
     }
 
     /**
      * QTComponent calls this method to get the destination QDGraphics of its movie.
      * @return a QDGraphics object or null
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public QDGraphics getGWorld() throws StdQTException {
         return this.mMovie.getGWorld();
     }
@@ -85,8 +88,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * If a movie is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public synchronized void setGWorld(QDGraphics paramQDGraphics) throws StdQTException {
         if (getGWorld().equals(paramQDGraphics))
             return;
@@ -102,7 +106,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
@@ -117,8 +121,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the original size.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         QDRect localQDRect = this.mMovie.getNaturalBoundsRect();
         return new QDDimension(localQDRect.getWidth(), localQDRect.getHeight());
@@ -128,8 +133,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * This will return the client's current display transformations
      *
      * @return the display transformations of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public Matrix getMatrix() throws StdQTException {
         return this.mMovie.getMatrix();
     }
@@ -138,6 +144,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      */
+    @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
         this.mMovie.setMatrix(paramMatrix);
         this.mMovie.task(0);
@@ -150,8 +157,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * using the invalidRgn. Otherwise this will be null in which case the
      * movie should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the movie should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public final void redraw(Region paramRegion) throws QTException {
         if (paramRegion != null) {
             this.mMovie.invalidateRegion(paramRegion);
@@ -165,8 +173,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * this movie to set the boundary of the movie.
      *
      * @param bounds a QDRect object describing the boundary
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
         this.mMovie.setBounds(paramQDRect);
     }
@@ -175,8 +184,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * A convenience method to set the position of a Presentable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setLocation(int paramInt1, int paramInt2) throws QTException {
         QDRect localQDRect = getDisplayBounds();
         localQDRect.setX(paramInt1);
@@ -189,8 +199,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * this movie to set the boundary of the movie.
      *
      * @return the display boundary of the client
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public QDRect getDisplayBounds() throws StdQTException {
         return this.mMovie.getBounds();
     }
@@ -198,8 +209,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * This method allows you to set a MoviePlayer's clipping region.
      * @param theClip a Region that defines the player's clipping region.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setClip(Region paramRegion) throws QTException {
         this.mMovie.setDisplayClipRgn(paramRegion);
     }
@@ -207,8 +219,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * This method allows you to obtain information describing a MoviePlayer's clipping regions.
      * @return the clipping region of the entire MoviePlayer object
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Region getClip() throws QTException {
         return this.mMovie.getDisplayClipRgn();
     }
@@ -219,7 +232,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * determined by the implementor of the interface, typically the scale value
      * will determine what a "real" time of 1 second is.
      * @param time the new time value
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setTime(int paramInt) throws StdQTException {
         this.mMovie.setTimeValue(paramInt);
@@ -228,7 +241,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Returns the current time value of the object.
      * @return the current time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getTime() throws StdQTException {
         return this.mMovie.getTime();
@@ -239,7 +252,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * the player has no media, or does not know the duration of its media
      * it can return the constant kDurationUnknown.
      * @return the media duration.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getDuration() throws StdQTException {
         return this.mMovie.getDuration();
@@ -248,8 +261,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Returns the TimeBase of the media attached to the player.
      * @return the players TimeBase.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public TimeBase getTimeBase() throws QTException {
         return this.mMovie.getTimeBase();
     }
@@ -259,8 +273,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * mean that the player is stopped, a positive value that the player
      * is playing forwards, a negative value that the player is playing backwards.
      * @param rate the new playback rate.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public void setRate(float paramFloat) throws StdQTException {
         synchronized (this) {
             this.lastRate = paramFloat;
@@ -275,12 +290,13 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
 
     class PrerollCallback implements MoviePrePreroll {
 
-        private float r;
+        private final float r;
 
         PrerollCallback(float paramFloat) {
             this.r = paramFloat;
         }
 
+        @Override
         public void execute(Movie paramMovie, int paramInt) {
             synchronized (MoviePlayer.this) {
                 if (MoviePlayer.this.lastRate == 0.0F) {
@@ -301,6 +317,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
 
     class MovieComplete implements MovieDrawingComplete {
 
+        @Override
         public int execute(Movie paramMovie) {
             synchronized (MoviePlayer.this) {
                 for (int i = 0; i < MoviePlayer.this.listenerList.size(); i++) ((DrawingListener) MoviePlayer.this.listenerList.elementAt(i)).drawingComplete(MoviePlayer.this);
@@ -312,6 +329,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Registers an object as a listener of the MoviePlayer. The object will receive notification when the MoviePlayer draws a frame
      */
+    @Override
     public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList == null) {
             this.listenerList = new Vector();
@@ -333,6 +351,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Removes an object that is a listener of the MoviePlayer. The object will no longer receive notification when the MoviePlayer draws a frame
      */
+    @Override
     public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList != null) {
             this.listenerList.removeElement(paramDrawingListener);
@@ -350,8 +369,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Returns the current rate of the player.
      * @return the playback rate
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public float getRate() throws StdQTException {
         return this.mMovie.getRate();
     }
@@ -359,7 +379,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Returns the time scale of the player - how many ticks per second.
      * @return the current scale.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int getScale() throws QTException {
         return this.mMovie.getTimeScale();
@@ -368,7 +388,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Returns the volume setting (0 is silent, 1 is unity gain).
      * @return a float
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public float getVolume() throws QTException {
         float f = this.mMovie.getVolume();
@@ -378,7 +398,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Sets the volume.
      * @param val the new volume
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setVolume(float paramFloat) throws QTException {
         float f = Math.abs(paramFloat);
@@ -392,12 +412,13 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     /**
      * Returns the current mute status.
      * @return a boolean
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean isMuted() throws QTException {
         return this.mMovie.getVolume() < 0.0F;
     }
 
+    @Override
     public boolean isSingleFrame() {
         return false;
     }
@@ -406,7 +427,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * Allows the muting of the specific channel. When unmuted the AudioSpec object will return
      * to its current volume setting.
      * @param flag turn muting on - true or off - false.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setMuted(boolean paramBoolean) throws QTException {
         float f = Math.abs(this.mMovie.getVolume());

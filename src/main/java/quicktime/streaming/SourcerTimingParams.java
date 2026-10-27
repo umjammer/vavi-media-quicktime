@@ -206,8 +206,3 @@ public final class SourcerTimingParams extends QTPointer {
         return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",timeScale=" + getTimeScale() + ",presentationStartTime" + getPresentationStartTime() + ",presentationEndTime " + getPresentationEndTime() + ",presentationCurrTime," + getPresentationCurrentTime() + ",localStartTime," + getLocalStartTime() + ",localEndtime," + getLocalEndTime() + "localCurrTime," + getLocalCurrentTime() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /SourcerTimingParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

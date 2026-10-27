@@ -10,15 +10,15 @@ import quicktime.util.StringHandle;
  * An application should subclass this class over-riding the method(s) that
  * it is interested in. Actions associated with methods not over-ridden will
  * return false, indicating to the Movie toolbox that it should handle the action.
- * @see {@link quicktime.std.clocks.QTCallBack}
+ * @see quicktime.std.clocks.QTCallBack
  */
 public abstract class ActionFilter {
 
     /**
      * This method should be overridden to handle the following actions:
-     * mcActionIdle	ID = 1
-     * mcActionActivate	ID = 3
-     * mcActionDeactivate	ID = 4
+     * mcActionIdle ID = 1
+     * mcActionActivate ID = 3
+     * mcActionDeactivate ID = 4
      * mcActionDraw ID = 2 (The Graphics object of the controller can be retrieved from the controller if required)
      * mcActionSetColorTable (The ColorTable object of the movie can be retrieved from the movie)
      * mcActionForceTimeTableUpdate ID = 61
@@ -33,7 +33,7 @@ public abstract class ActionFilter {
      * @param action the id of the action that invoked this method
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt) {
+    public boolean execute(MovieController mc, int action) {
         return false;
     }
 
@@ -49,7 +49,7 @@ public abstract class ActionFilter {
      *  MovieToolbox to return the current value then return false.
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, float paramFloat) {
+    public boolean execute(MovieController mc, int action, float value) {
         return false;
     }
 
@@ -81,7 +81,7 @@ public abstract class ActionFilter {
      * @param value the value that is associated with that action
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, boolean paramBoolean) {
+    public boolean execute(MovieController mc, int action, boolean value) {
         return false;
     }
 
@@ -94,7 +94,7 @@ public abstract class ActionFilter {
      * @param rect the QDRect that defines the bounds of the movie
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, QDRect paramQDRect) {
+    public boolean execute(MovieController mc, QDRect rect) {
         return false;
     }
 
@@ -109,7 +109,7 @@ public abstract class ActionFilter {
      * @param value the value that is associated with that action
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt1, int paramInt2) {
+    public boolean execute(MovieController mc, int action, int value) {
         return false;
     }
 
@@ -125,7 +125,7 @@ public abstract class ActionFilter {
      * @param action the id of the action that invoked this method
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, TimeRecord paramTimeRecord) {
+    public boolean execute(MovieController mc, int paramInt, TimeRecord action) {
         return false;
     }
 
@@ -166,7 +166,7 @@ public abstract class ActionFilter {
      * @param es a ResolvedQTEventSpec associated with the action
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, ResolvedQTEventSpec paramResolvedQTEventSpec) {
+    public boolean execute(MovieController mc, int action, ResolvedQTEventSpec es) {
         return false;
     }
 
@@ -180,7 +180,7 @@ public abstract class ActionFilter {
      * @param atom the atom
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, AtomContainer paramAtomContainer, Atom paramAtom) {
+    public boolean execute(MovieController mc, int action, AtomContainer container, Atom atom) {
         return false;
     }
 
@@ -195,7 +195,7 @@ public abstract class ActionFilter {
      * @param string The String returned by the movie controller
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, StringHandle paramStringHandle) {
+    public boolean execute(MovieController mc, int action, StringHandle string) {
         return false;
     }
 
@@ -209,7 +209,7 @@ public abstract class ActionFilter {
      * @param string The String returned by the movie controller
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt1, int paramInt2, StringHandle paramStringHandle) {
+    public boolean execute(MovieController mc, int action, int stringTypeFlags, StringHandle string) {
         return false;
     }
 
@@ -222,7 +222,7 @@ public abstract class ActionFilter {
      * @param point the Point in local coordinates
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, QDPoint paramQDPoint) {
+    public boolean execute(MovieController mc, int action, QDPoint point) {
         return false;
     }
 
@@ -234,7 +234,7 @@ public abstract class ActionFilter {
      * @param action the id of the action that invoked this method
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, QTGetExternalMovieRecord paramQTGetExternalMovieRecord) {
+    public boolean execute(MovieController mc, int action, QTGetExternalMovieRecord paramQTGetExternalMovieRecord) {
         return false;
     }
 
@@ -248,7 +248,7 @@ public abstract class ActionFilter {
      * @param str the String
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController paramMovieController, int paramInt, TimeRecord paramTimeRecord, String paramString) {
+    public boolean execute(MovieController mc, int action, TimeRecord tr, String str) {
         return false;
     }
 }

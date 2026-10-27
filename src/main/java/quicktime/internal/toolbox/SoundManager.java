@@ -401,14 +401,14 @@ public final class SoundManager {
         void rest(double seconds) throws InterruptedException {
             long until = System.nanoTime() + (long) (seconds * 1e9);
             while (System.nanoTime() < until && !quiet && !disposed) {
-                Thread.sleep(Math.max(1, Math.min(10, (until - System.nanoTime()) / 1_000_000)));
+                Thread.sleep(Math.clamp((until - System.nanoTime()) / 1_000_000, 1, 10));
             }
             current += seconds;
         }
     }
 
     private static int clamp(float v) {
-        return Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
+        return Math.clamp(Math.round(v * 32767), -32768, 32767);
     }
 
     /** an output without a device, taking the time the sound would take */
@@ -573,7 +573,7 @@ public final class SoundManager {
                 case versionCmd -> Bytes.putInt(cmd, 4, 0x0003_0000);
                 case volumeCmd -> c.volume = param2;
                 case getVolumeCmd -> Heap.putInt(param2, c.volume);
-                case ampCmd -> c.amplitude = Math.max(0, Math.min(255, param1));
+                case ampCmd -> c.amplitude = Math.clamp(param1, 0, 255);
                 case getAmpCmd -> Heap.putShort(param2, (short) c.amplitude);
                 case rateMultiplierCmd -> c.rateMultiplier = (param2 & 0xffff_ffffL) / 65536.0;
                 case getRateMultiplierCmd -> Heap.putInt(param2, (int) Math.round(c.rateMultiplier * 65536));
@@ -1062,7 +1062,7 @@ public final class SoundManager {
     /** extensions are atoms after the base, the 'wave' atom's children are searched too */
     public static short GetSoundDescriptionExtension(int desc, int[] extension, int idType) {
         byte[] d = Heap.handleBytes(desc);
-        int end = Math.min(d.length, Math.max(baseSize(d), Bytes.getInt(d, 0)));
+        int end = Math.clamp(baseSize(d), Bytes.getInt(d, 0), d.length);
         for (MovieAtoms.Atom a : MovieAtoms.atoms(d, baseSize(d), end)) {
             if (a.type() == idType) {
                 extension[0] = Heap.newHandle(Arrays.copyOfRange(d, a.data(), a.end()));
@@ -1084,7 +1084,7 @@ public final class SoundManager {
     public static short AddSoundDescriptionExtension(int desc, int extension, int idType) {
         byte[] d = Heap.handleBytes(desc);
         byte[] e = Heap.handleBytes(extension);
-        int size = Math.max(baseSize(d), Math.min(d.length, Bytes.getInt(d, 0)));
+        int size = Math.clamp(d.length, baseSize(d), Bytes.getInt(d, 0));
         byte[] n = Arrays.copyOf(d, size + 8 + e.length);
         Bytes.putInt(n, size, 8 + e.length);
         Bytes.putInt(n, size + 4, idType);
@@ -1097,7 +1097,7 @@ public final class SoundManager {
     public static short RemoveSoundDescriptionExtension(int desc, int idType) {
         byte[] d = Heap.handleBytes(desc);
         int base = baseSize(d);
-        int end = Math.min(d.length, Math.max(base, Bytes.getInt(d, 0)));
+        int end = Math.clamp(base, Bytes.getInt(d, 0), d.length);
         java.io.ByteArrayOutputStream os = new java.io.ByteArrayOutputStream();
         os.write(d, 0, base);
         boolean removed = false;
@@ -1477,7 +1477,7 @@ public final class SoundManager {
                         continue;
                     }
                     long need = ulawOut ? (total - done) * (frame / d.channels) : total - done;
-                    int n = line.read(in, 0, (int) Math.min(in.length, Math.max(frame, need - need % frame)));
+                    int n = line.read(in, 0, (int) Math.clamp(frame, need - need % frame, in.length));
                     if (n <= 0) {
                         break;
                     }

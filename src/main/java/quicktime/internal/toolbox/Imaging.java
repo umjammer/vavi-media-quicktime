@@ -353,7 +353,7 @@ final class Imaging {
 
     private static float opWeight(byte[] opColor) {
         int r = Bytes.getShort(opColor, 0) & 0xffff, gr = Bytes.getShort(opColor, 2) & 0xffff, b = Bytes.getShort(opColor, 4) & 0xffff;
-        return Math.max(0f, Math.min(1f, (r + gr + b) / (3f * 65535f)));
+        return Math.clamp((r + gr + b) / (3f * 65535f), 0f, 1f);
     }
 
     static int rgb(byte[] opColor) {

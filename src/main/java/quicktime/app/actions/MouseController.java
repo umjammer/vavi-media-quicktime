@@ -14,7 +14,7 @@ import quicktime.app.spaces.ListenerController;
 import quicktime.app.spaces.Space;
 
 /**
- * Deprecated.
+ * @deprecated
  * The MouseController marshals mouse events that occur within the space it is
  * attached to and activates its MouseResponder if the received
  * events are of interest to that responder. Thus the MouseController delegates
@@ -44,15 +44,15 @@ import quicktime.app.spaces.Space;
  * level Space will be addedTo some kind of Component and the Space itself propogates this to its
  * contained members and controllers so the application will generally have no need to call these
  * methods explicitly.
- * @see {@link quicktime.app.event.QTMouseController}
+ * @see quicktime.app.event.QTMouseController
  */
 public abstract class MouseController implements ListenerController, Collection, MouseListener, MouseMotionListener {
 
     private boolean wholespace;
 
-    private Vector table;
+    private final Vector table;
 
-    private MouseResponder responder;
+    private final MouseResponder responder;
 
     private Object mouseMoveCurrentTarget;
 
@@ -61,12 +61,12 @@ public abstract class MouseController implements ListenerController, Collection,
     private Object currentTargetInDrag;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     protected int xLocationOffset;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     protected int yLocationOffset;
 
@@ -77,8 +77,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a mouse controller with its responder.
      * @param mr the responder that will become active to respond to mouse events
      * @param wholespace sets the value of the wholespace flag
@@ -93,35 +93,37 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the space when a Controller is being addedTo the Space s.
      * If the Controller is not an appropriate controller for that kind of Space this
      * method can throw an exception and the controller won't be added to the Space.
      * @param s the Space being added to
      * @see setTargetSpace()
      */
+    @Override
     public final void addedToSpace(Space paramSpace) {
         setTargetSpace(paramSpace);
         this.responder.setTargetSpace(paramSpace);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Called by the Space when a Controller is being removed
      * from a Space. This is only called by the Space on controllers that have
      * previously been added, thus the space they are being removed from
      * is the space they were added to. Sets the targetSpace to null.
      */
+    @Override
     public void removedFromSpace() {
         setTargetSpace(null);
         this.responder.setTargetSpace(null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the MouseResponder that is attached to the MouseController.
      * @return a MouseResponder
      */
@@ -130,8 +132,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest. The MouseController expects that
@@ -141,6 +143,7 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void addedTo(Object paramObject) {
         if ((paramObject instanceof Component)) {
             if (this.responder.isInterested(51))
@@ -152,8 +155,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest. The MouseController expects that
@@ -163,6 +166,7 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void removedFrom(Object paramObject) {
         if ((paramObject instanceof Component)) {
             ((Component) paramObject).removeMouseListener(this);
@@ -171,8 +175,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the wholespace flag.
      * @return a boolean
      */
@@ -181,8 +185,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the new value of the wholespace flag.
      * @param flag if true all objects in the controller's space are potentially controllable.
      */
@@ -191,8 +195,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If wholespace is set to false, then only objects that are explicitly added
      * to the controller will be controlled by it.
      * Use this method to add these objects to the controller.
@@ -201,17 +205,18 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param member the new member object that will be controlled.
      * @return a boolean indicating whether the object was added or not.
      */
-    public boolean addMember(Object paramObject) {
-        if (!isAppropriate(paramObject))
+    @Override
+    public boolean addMember(Object member) {
+        if (!isAppropriate(member))
             return false;
-        if (!hasMember(paramObject))
-            this.table.addElement(paramObject);
+        if (!hasMember(member))
+            this.table.addElement(member);
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the provided object is an appropriate candidate for
      * membership in a collection. The provided QTJava collections use this method
      * to ensure a minimal requirement of Class or Interface instanceof tests to
@@ -220,26 +225,28 @@ public abstract class MouseController implements ListenerController, Collection,
      * the type of object that is allowed within an individual collection.
      * @param object the object to test
      * @return true if the supplied object is appropriate for this collection, or false if not
-     * @see {@link quicktime.app.spaces.DynamicCollection},
+     * @see quicktime.app.spaces.DynamicCollection,
      * {@link quicktime.app.spaces.Protocol}
      */
-    public boolean isAppropriate(Object paramObject) {
-        return this.responder.isAppropriate(paramObject);
+    @Override
+    public boolean isAppropriate(Object object) {
+        return this.responder.isAppropriate(object);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes a member from the collection of objects that the controller controls
      * @param member the object that will be removed from the controller.
      */
-    public void removeMember(Object paramObject) {
-        this.table.removeElement(paramObject);
+    @Override
+    public void removeMember(Object member) {
+        this.table.removeElement(member);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an enumeration of all members of this controller. If wholespace is set to
      * true then this Enumeration may return an empty collection as the default behaviour
      * of the MouseController is that if wholespace is true any object in the space is
@@ -247,13 +254,14 @@ public abstract class MouseController implements ListenerController, Collection,
      * Controller.
      * @return an Enumeration
      */
+    @Override
     public Enumeration members() {
         return this.table.elements();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the controller's collection of controllable objects is empty.
      * If wholespace is true this does not mean that the controller is not capable of
      * controlling object in its Space as the default behaviour
@@ -262,23 +270,25 @@ public abstract class MouseController implements ListenerController, Collection,
      * Controller.
      * @return a boolean
      */
+    @Override
     public boolean isEmpty() {
         return this.table.isEmpty();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the number of members that have been explicitly added to the Controller.
      * @return an int
      */
+    @Override
     public int size() {
         return this.table.size();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the member has been explicitly added to this controller.
      * As the default behaviour
      * of the MouseController is that if wholespace is true any object in the space is
@@ -289,17 +299,19 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param object the object to test for membership
      * @return a boolean
      */
-    public boolean hasMember(Object paramObject) {
-        return paramObject == null ? false : this.table.contains(paramObject);
+    @Override
+    public boolean hasMember(Object member) {
+        return member == null ? false : this.table.contains(member);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mouseEntered events it will
      * be activated when the user's mouse enters the QTCanvas space.
      * @param e the mouse event
      */
+    @Override
     public void mouseEntered(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(16, paramMouseEvent.getModifiers())) {
             boolean bool = this.responder.isActive();
@@ -315,12 +327,13 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mouseExited events it will
      * be deactivated after the user's mouse exits the QTCanvas space.
      * @param e the mouse event
      */
+    @Override
     public void mouseExited(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(32, paramMouseEvent.getModifiers())) {
             boolean bool = this.responder.isActive();
@@ -340,8 +353,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used to setup translation values for x and y of an event to
      * translate the event into the local coordinate space of a member's display Space.
      * In the case of a DirectGroup the translation is (0, 0), in the case of a
@@ -356,12 +369,13 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mousePressed events it will
      * be activated when the user presses the mouse within the display space.
      * @param e the mouse event
      */
+    @Override
     public void mousePressed(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(2, paramMouseEvent.getModifiers())) {
             setTranslation();
@@ -374,12 +388,13 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mouseReleased events it will
      * be activated when the user releases the mouse within the display space.
      * @param e the mouse event
      */
+    @Override
     public void mouseReleased(MouseEvent paramMouseEvent) {
         if ((this.responder.isInterested(2, paramMouseEvent.getModifiers())) && (this.responder.isActive())) {
             setTranslation();
@@ -397,12 +412,13 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mouseClick events it will
      * be activated when the user clicks.
      * @param e the mouse event
      */
+    @Override
     public void mouseClicked(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(1, paramMouseEvent.getModifiers())) {
             setTranslation();
@@ -416,12 +432,13 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mouseMoved events it will
      * be activated when the user's mouse moves within the display space.
      * @param e the mouse event
      */
+    @Override
     public void mouseMoved(MouseEvent paramMouseEvent) {
         if (!this.responder.isInterested(72, paramMouseEvent.getModifiers())) {
             return;
@@ -479,12 +496,13 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the responder is interested in mouseDragged events it will
      * be activated when the user drags the mouse within the display space.
      * @param e the mouse event
      */
+    @Override
     public void mouseDragged(MouseEvent paramMouseEvent) {
         if ((this.responder.isInterested(4)) && (this.responder.isActive())) {
             setTranslation();
@@ -496,7 +514,7 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     protected void doDragTarget(MouseEvent paramMouseEvent) {
         if (this.responder.isInterested(64, paramMouseEvent.getModifiers())) {
@@ -533,8 +551,8 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A method that is called whenever the MouseController deactivates its responder.
      * A subclass should use this method to deactivate a responder (either explicitly or calling super.deactivateResponder).
      * For example a user may have
@@ -547,16 +565,16 @@ public abstract class MouseController implements ListenerController, Collection,
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the Space which the MouseController has been attached to.
      * @return the current space.
      */
     public abstract Space getSpace();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is defined by the subclass to ensure that the incoming Space is an
      * appropriate kind of space for the MouseController to be attached too. If not
      * a ClassCastException is generally thrown, and the MouseController will not
@@ -566,20 +584,20 @@ public abstract class MouseController implements ListenerController, Collection,
     protected abstract void setTargetSpace(Space paramSpace);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called when a MouseController has received a mouse press, click, drag,
      * event in its space. This method returns a Transformable object if it finds
      * such an object at the location of the event.
      * @param event a mouse down event
      * @return a transformable object that is located at the event coordinates or null
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected abstract Object getSelected(MouseEvent paramMouseEvent) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A notification method that is called whenever the MouseController activates its responder.
      */
     protected void responderActivated() {

@@ -6,7 +6,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is used by the ImageUtil.createSequence call. It is used to
  * filter the contents of a directory and return true to those files that
  * match the pattern that this expects. After the files are selected the
@@ -38,8 +38,8 @@ public class FileFilter implements FilenameFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create the filter with the flag set (if true - the default) which will test
      * the suffix and prefix or if false it will test the prefix only
      */
@@ -48,8 +48,8 @@ public class FileFilter implements FilenameFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create the filter with the default setting of testing both prefix and suffix
      */
     public FileFilter() {
@@ -57,30 +57,30 @@ public class FileFilter implements FilenameFilter {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * The prefix of the file to be matched. The value is set by the extractPrefixAndSuffix
      * method. It should always have a value - even if it is just an empty string.* @deprecated since QTJava 6.1
      */
     protected String prefix = "";
 
     /**
-     * Deprecated.
+     * @deprecated
      * The suffix of the file to be matched. The value is set by the extractPrefixAndSuffix
      * method.* @deprecated since QTJava 6.1
      */
     protected String suffix = "";
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If true (the default) then both the suffix and prefix are used to match the filename.
      * If false then only the prefix is matched.
      */
     protected boolean testSuffix;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * It dissects the incoming fName (the name of a file) into a
      * prefix which are all the characters of the fileName that precede
      * the last occurance of a number in the filename and a suffix
@@ -108,12 +108,12 @@ public class FileFilter implements FilenameFilter {
             }
         }
         this.prefix = paramString.substring(0, j);
-        this.suffix = paramString.substring(i, paramString.length());
+        this.suffix = paramString.substring(i);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method tests the frameNumber portion of the filename. If this
      * string does NOT have a number it will throw a NumberFormatException.
      * It returns the resulting number.
@@ -127,8 +127,8 @@ public class FileFilter implements FilenameFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used by the createSequence call to filter the files found
      * in the supplied directory. It returns true if the filename matches the
      * conditions (prefix and suffix are found in the file and between these there
@@ -137,6 +137,7 @@ public class FileFilter implements FilenameFilter {
      * @param fName the name of a file found within this directory
      * @return true if the file matches the conditions otherwise false
      */
+    @Override
     public boolean accept(File paramFile, String paramString) {
         boolean bool = false;
         if ((paramString.startsWith(this.prefix)) && ((!this.testSuffix) || (paramString.endsWith(this.suffix)))) {
@@ -151,8 +152,8 @@ public class FileFilter implements FilenameFilter {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called after the directory has been filtered. The incoming array
      * contains both the file list (files found within the directory that have been accepted
      * as a match) and the order of the files in this list is the order that the files will
@@ -167,8 +168,3 @@ public class FileFilter implements FilenameFilter {
         return paramArrayOfString;
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /FileFilter.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -36,19 +36,11 @@ class HIToolBoxFunctions implements InterfaceLib {
     static {
         class PrivelegedAction {
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(HIToolBoxFunctions.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(HIToolBoxFunctions.class));
             }
         }
 
         new PrivelegedAction().establish();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                System.load("/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon");
-            }
-        });
+        SwingUtilities.invokeLater(() -> System.load("/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon"));
     }
 }

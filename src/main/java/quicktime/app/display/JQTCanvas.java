@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import javax.swing.JComponent;
 import quicktime.QTException;
 import quicktime.QTSession;
@@ -15,25 +17,28 @@ import vavi.awt.image.MacDirectColorModel;
 
 
 /**
- * Deprecated.
  * This is a Lightweight version of the JQTCanvas class designed for use with Swing
  * Because it is strictly lightweight, and has no native peer, you can only have client classes
  * that do not use a controller such as the Compositor class and MoviePlayer. QuickTime cannot
  * render controllers in an offscreen buffer.
+ * @deprecated
  */
+@Deprecated
 public class JQTCanvas extends JComponent implements DrawingListener {
 
+    private static final Logger logger = System.getLogger(JQTCanvas.class.getName());
+
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client should maintain the aspect size of its original dimensions
      * but grow bigger by integral increments (2x, 3x, 4x, etc.)
      */
     public static final int kIntegralResize = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client should revert to its initially specified size. The client
      * can be made smaller (using an aspect setting) but can be no larger than its initial size. The JQTCanvas
      * takes this initial size as the best viewing size for its client.
@@ -41,16 +46,16 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     public static final int kInitialSize = 2;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client can be resized to any size >= the minimum and <=
      * the maximum.
      */
     public static final int kFreeResize = 3;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client can be resized to any size which preserves the
      * initial aspect ratio.
      */
@@ -63,51 +68,51 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client can be resized to any size which is a factor of
      * 2 of the initial size.
      */
     public static final int kPerformanceResize = 5;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag to allow the client's horizontal aspect to be any size, but the vertical
      * axis will be the intial size of smaller. This is a good setting for QT VR content.
      */
     public static final int kHorizontalResize = 6;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag to allow the client's vertical aspect to be any size, but the horizontal
      * axis will be the intial size of smaller.
      */
     public static final int kVerticalResize = 7;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag specify that the client cannot be resized
      */
     public static final int kInitialSizeNoResize = 8;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static boolean flashScaling = false;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static boolean useMacOSXAcceleration = true;
 
     transient QTDrawable client;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Default Constructor for JQTCanvas
      */
     public JQTCanvas() {
@@ -115,7 +120,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public JQTCanvas(int paramInt, float paramFloat1, float paramFloat2) {
         this.resizeFlag = paramInt;
@@ -143,14 +148,12 @@ public class JQTCanvas extends JComponent implements DrawingListener {
 
     private transient boolean inited = false;
 
-    private boolean debug = false;
-
-    private boolean paintlock = false;
+    private final boolean paintlock = false;
 
     java.awt.image.DirectColorModel colorModel = new java.awt.image.DirectColorModel(32, 16711680, 65280, 255, 0);
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public QTImageProducer ip;
 
@@ -165,10 +168,11 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     private ComponentListener clientListener;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is invoked by Swing to draw this component
      */
+    @Override
     public void paint(java.awt.Graphics paramGraphics) {
         if ((!this.inited) && (this.client != null)) {
             this.client.addedTo(this);
@@ -183,14 +187,14 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public void setFlashScaling(boolean paramBoolean) {
         flashScaling = paramBoolean;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public boolean isFlashScaling() {
         return flashScaling;
@@ -203,8 +207,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Associates a new client, a Drawable object, with this JQTCanvas.
      * The flag determines if awt will perform a layout and how the client will be integrated
      * with the canvas. If the flag is false then the new client will take on the current size and
@@ -222,15 +226,15 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      *  into the existing state (display size, etc) of the canvas, disregarding any resize that might
      *  have occured to honour the layout flag setting with respect to the different size of the new client.
      *  Keep in mind that only controllerless clients are valid
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setClient(QTDrawable paramQTDrawable, boolean paramBoolean) throws QTException {
-        doSetClient(paramQTDrawable, paramQTDrawable != null ? paramQTDrawable.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), paramBoolean);
+    public void setClient(QTDrawable paramQTDrawable, boolean layoutFlag) throws QTException {
+        doSetClient(paramQTDrawable, paramQTDrawable != null ? paramQTDrawable.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), layoutFlag);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Associates a new client, a Drawable object, with this JQTCanvas. It will use existing
      * alignment and resize restrictions.
      *
@@ -240,15 +244,15 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      * QTException or subclass - there was a problem within QuickTime itself in dealing with this client
      * @param initialBounds the best size of the client
      *  Keep in mind that only controllerless clients are valid
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void setClient(QTDrawable paramQTDrawable, QDRect paramQDRect) throws QTException {
-        doSetClient(paramQTDrawable, paramQDRect, getMinimumSize(), getMaximumSize(), true);
+    public synchronized void setClient(QTDrawable paramQTDrawable, QDRect initialBounds) throws QTException {
+        doSetClient(paramQTDrawable, initialBounds, getMinimumSize(), getMaximumSize(), true);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes the current client, a drawable object, from the canvas.
      */
     public final void removeClient() {
@@ -296,7 +300,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
                     boolean bool = false;
                     this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                 } else {
-                    this.pixels = new int[((RawEncodedImage) localSWCompositor.getImage()).getRowBytes() / 4 * paramQDRect.getHeight()];
+                    this.pixels = new int[localSWCompositor.getImage().getRowBytes() / 4 * paramQDRect.getHeight()];
                     this.image = imageFromEncodedImage((RawEncodedImage) localSWCompositor.getImage(), localSWCompositor.getDescription().getBounds());
                 }
                 prepareImage(this.image, this);
@@ -314,8 +318,9 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
+    @Override
     public java.awt.Image createImage(java.awt.image.ImageProducer paramImageProducer) {
         if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
             boolean bool = false;
@@ -330,36 +335,35 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Moves and resizes this component. The new location of the top-left corner is specified by x and y,
      * and the new size is specified by width and height.
      * @param x the new x-coordinate of this component
      * @param y the new y-coordinate of this component
      * @param width the new width of this component
      * @param height the new height of this component
-     * @see {@link quicktime.app.display.JQTCanvas#setBounds(java.awt.Rectangle)}
+     * @see quicktime.app.display.JQTCanvas#setBounds(java.awt.Rectangle)
      */
-    public void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        if (this.debug) {
-            System.out.println("setBounds( " + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
-        }
-        Dimension localDimension = setCurrentWidthHeight(paramInt3, paramInt4);
+    @Override
+    public void setBounds(int x, int y, int width, int height) {
+        logger.log(Level.DEBUG, "setBounds( " + x + ", " + y + ", " + width + ", " + height + ")");
+        Dimension localDimension = setCurrentWidthHeight(width, height);
         if (flashScaling) {
             setPreferredSize(localDimension);
-            this.initialWidth = paramInt3;
-            this.initialHeight = paramInt4;
+            this.initialWidth = width;
+            this.initialHeight = height;
             try {
                 if (((this.client instanceof SWCompositor)) || ((this.client instanceof quicktime.app.anim.Compositor))) {
                     SWCompositor localSWCompositor = (SWCompositor) this.client;
-                    this.gwBounds = new QDRect(getX(), getY(), paramInt3, paramInt4);
+                    this.gwBounds = new QDRect(getX(), getY(), width, height);
                     this.gw = new quicktime.qd.QDGraphics(this.gwBounds);
                     localSWCompositor.setGWorld(this.gw);
                     if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                         boolean bool = false;
                         this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                     } else {
-                        this.pixels = new int[((RawEncodedImage) localSWCompositor.getImage()).getRowBytes() / 4 * this.gwBounds.getHeight()];
+                        this.pixels = new int[localSWCompositor.getImage().getRowBytes() / 4 * this.gwBounds.getHeight()];
                         this.image = imageFromEncodedImage((RawEncodedImage) localSWCompositor.getImage(), this.gwBounds);
                     }
                     prepareImage(this.image, this);
@@ -374,79 +378,75 @@ public class JQTCanvas extends JComponent implements DrawingListener {
             }
             repaint();
         }
-        int i = paramInt3 - this.currentWidth;
+        int i = width - this.currentWidth;
         if (i < 0) {
             i = 0;
         }
-        int j = paramInt4 - this.currentHeight;
+        int j = height - this.currentHeight;
         if (j < 0)
             j = 0;
-        this.currentX = (paramInt1 + (int) (getAlignmentX() * i));
-        this.currentY = (paramInt2 + (int) (getAlignmentY() * j));
-        if (this.debug) {
-            System.out.println("setBounds(" + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
-            System.out.println("Alignment x: " + getAlignmentX() + ", y: " + getAlignmentY());
-            System.out.println("widthDiff: " + i);
-            System.out.println("heightDiff: " + j);
-            System.out.println("currentX:" + this.currentX);
-            System.out.println("currentY:" + this.currentY);
-        }
+        this.currentX = (x + (int) (getAlignmentX() * i));
+        this.currentY = (y + (int) (getAlignmentY() * j));
+        logger.log(Level.DEBUG, "setBounds(" + x + ", " + y + ", " + width + ", " + height + ")");
+        logger.log(Level.DEBUG, "Alignment x: " + getAlignmentX() + ", y: " + getAlignmentY());
+        logger.log(Level.DEBUG, "widthDiff: " + i);
+        logger.log(Level.DEBUG, "heightDiff: " + j);
+        logger.log(Level.DEBUG, "currentX:" + this.currentX);
+        logger.log(Level.DEBUG, "currentY:" + this.currentY);
         super.reshape(this.currentX, this.currentY, localDimension.width, localDimension.height);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Moves and resizes this component to conform to the new bounding rectangle r.
      * This component's new position is specified by r.x and r.y, and its new size
      * is specified by r.width and r.height
      */
+    @Override
     public void setBounds(Rectangle paramRectangle) {
-        if (this.debug)
-            System.out.println("setBounds( " + paramRectangle + ")");
+        logger.log(Level.DEBUG, "setBounds( " + paramRectangle + ")");
         setBounds(paramRectangle.x, paramRectangle.y, paramRectangle.width, paramRectangle.height);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Resizes the JQTCanvas object to the specified parameters.
      * @param dim a Dimension object with the new width and height
      */
-    public void setSize(Dimension paramDimension) {
-        if (this.debug) {
-            System.out.println("setSize( " + paramDimension + ")");
-        }
-        setSize(paramDimension.width, paramDimension.height);
+    @Override
+    public void setSize(Dimension dim) {
+        logger.log(Level.DEBUG, "setSize( " + dim + ")");
+        setSize(dim.width, dim.height);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Resizes the JQTCanvas object, as well as the associated Drawable object.
      * @param width the width, in pixels, to make this component
      * @param height the height, in pixels, to make this component
      */
-    public void setSize(int paramInt1, int paramInt2) {
-        if (this.debug)
-            System.out.println("setSize( " + paramInt1 + ", " + paramInt2 + ")");
-        setBounds(this.currentX, this.currentY, paramInt1, paramInt2);
+    @Override
+    public void setSize(int width, int height) {
+        logger.log(Level.DEBUG, "setSize( " + width + ", " + height + ")");
+        setBounds(this.currentX, this.currentY, width, height);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>As of JDK version 1.1,
      * replaced by setBounds(int, int, int, int).</I>
      */
+    @Override
     public final void reshape(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        if (this.debug)
-            System.out.println("reshape( " + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
+        logger.log(Level.DEBUG, "reshape( " + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
         setBounds(paramInt1, paramInt2, paramInt3, paramInt4);
     }
 
-    private final void doParentLayout() {
-        if (this.debug)
-            System.out.println("doParentLayout()");
+    private void doParentLayout() {
+        logger.log(Level.DEBUG, "doParentLayout()");
         java.awt.Container localContainer = getParent();
         if (localContainer != null) {
             invalidate();
@@ -457,8 +457,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     private Dimension setCurrentWidthHeight(int width, int height) {
-        if (this.debug)
-            System.out.println("setCurrentWidthHeight( " + width + ", " + height + "), flag " + getResizeFlag());
+        logger.log(Level.DEBUG, "setCurrentWidthHeight( " + width + ", " + height + "), flag " + getResizeFlag());
         Dimension min = getMinimumSize();
         Dimension max = getMaximumSize();
         int w1 = min.width;
@@ -652,8 +651,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
         } else if (paramInt2 > m) {
             paramInt2 = m;
         }
-        float f1 = paramInt1 / (this.initialWidth < 1 ? 1 : this.initialWidth);
-        float f2 = paramInt2 / (this.initialHeight < 1 ? 1 : this.initialHeight);
+        float f1 = paramInt1 / (Math.max(this.initialWidth, 1));
+        float f2 = paramInt2 / (Math.max(this.initialHeight, 1));
         int n;
         int i1;
         if (f1 < f2) {
@@ -667,7 +666,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public void setAlignment(float paramFloat1, float paramFloat2) {
         setAlignmentX(paramFloat1);
@@ -675,20 +674,20 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Reset the resize flag and re-layout the component.
      * @param rFlag the new value for the resizeFlag
      */
-    public void setResizeFlag(int paramInt) {
-        this.resizeFlag = paramInt;
+    public void setResizeFlag(int rFlag) {
+        this.resizeFlag = rFlag;
         Rectangle localRectangle = getBounds();
         doParentLayout();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the resize flag being used.
      * @return the resize flag value
      */
@@ -697,21 +696,22 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Called when a client is finished drawing and the canvas needs to be updated
      * @param drawable the drawable which drawing has just been completed upon
      * @return an error code or zero if no error
      * @see <A href="../../../quicktime/app/display/package-summary.html">quicktime.app.display</A>
      */
-    public void drawingComplete(QTDrawable paramQTDrawable) {
-        if (((paramQTDrawable instanceof SWCompositor)) || ((paramQTDrawable instanceof quicktime.app.anim.Compositor))) {
+    @Override
+    public void drawingComplete(QTDrawable drawable) {
+        if (((drawable instanceof SWCompositor)) || ((drawable instanceof quicktime.app.anim.Compositor))) {
             try {
                 if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                     boolean bool = false;
                     this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                 } else {
-                    this.image = imageFromEncodedImage((RawEncodedImage) ((SWCompositor) paramQTDrawable).getImage(), ((SWCompositor) paramQTDrawable).getDescription().getBounds());
+                    this.image = imageFromEncodedImage((RawEncodedImage) ((SWCompositor) drawable).getImage(), ((SWCompositor) drawable).getDescription().getBounds());
                 }
             } catch (QTException localQTException1) {
                 localQTException1.printStackTrace();
@@ -731,8 +731,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A ComponentListener and ComponentEvent are used to listen to these types
      * of events that occur to the QTCanvas' client - ie. when the QTCanvas' client
      * is resized, moved, shown or hidden. These events generally occur in conjunction
@@ -750,12 +750,12 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      *
      * public void removeQTClientListener(java.awt.event.ComponentListener
      * e)
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a previously registered ComponentListener that is listening
      * to events that occur with the QTCanvas' QTDrawable client.
      * @param e the ComponentListener
-     * @see addQTClientListener
+     * @see #addQTClientListener
      * <HR/>
      * <A/>
      * <TABLE>
@@ -801,8 +801,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      * </TABLE>
      * <HR/>
      */
-    public void addQTClientListener(ComponentListener paramComponentListener) {
-        this.clientListener = java.awt.AWTEventMulticaster.add(this.clientListener, paramComponentListener);
+    public void addQTClientListener(ComponentListener e) {
+        this.clientListener = java.awt.AWTEventMulticaster.add(this.clientListener, e);
     }
 
     /**

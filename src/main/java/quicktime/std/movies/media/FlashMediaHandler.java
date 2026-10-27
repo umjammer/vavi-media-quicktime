@@ -1,10 +1,7 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MediaHandlerManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTException;
@@ -12,28 +9,13 @@ import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
 import quicktime.util.StringHandle;
 
+
 /**
  * This media handler allows a SWF file to be treated as a track within a QuickTime movie. Because a QuickTime movie may contain any
  * number of tracks, multiple SWF tracks may be added to the same movie. The Flash Media Handler also provides support for an
  * optimized case using the alpha channel graphics mode, which allows a Flash track to be composited cleanly over other tracks.
  */
 public final class FlashMediaHandler extends VisualMediaHandler implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(FlashMediaHandler.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     FlashMediaHandler(int paramInt, Object paramObject) {
         super(paramInt, paramObject);
@@ -43,55 +25,55 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * Pan by a percentage.Negative xPercent pans left, positive xPercent pans right.
      * Negative yPercent pans to bottom, positive yPercent pans to top.
      * The Zoom Rectangle must be less than the full size of the Flash track for panning to be possible.
-     * QuickTime::FlashMediaSetPan()
+     * @see "QuickTime::FlashMediaSetPan()"
      * @param xPercent left / right pan percent
      * @param yPercent top / bottom pan percent
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setPan(short paramShort1, short paramShort2) throws StdQTException {
-        int i = FlashMediaSetPan(_ID(), paramShort1, paramShort2);
+    public void setPan(short xPercent, short yPercent) throws StdQTException {
+        int i = FlashMediaSetPan(_ID(), xPercent, yPercent);
         StdQTException.checkError(i);
     }
 
     /**
      * Zoom in or out by a percentage. Use a number less than 100 to zoom in, and greater than 100 to zoom out.
-     * QuickTime::FlashMediaSetZoom()
+     * @see "QuickTime::FlashMediaSetZoom()"
      * @param factor the zoom percentage factor.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setZoom(short paramShort) throws StdQTException {
-        int i = FlashMediaSetZoom(_ID(), paramShort);
+    public void setZoom(short factor) throws StdQTException {
+        int i = FlashMediaSetZoom(_ID(), factor);
         StdQTException.checkError(i);
     }
 
     /**
      * Zoom in on a specified sub rectangle, this becomes the "Zoom Rectangle".
-     * QuickTime::FlashMediaSetZoomRect()
+     * @see "QuickTime::FlashMediaSetZoomRect()"
      * @param left the left corner
      * @param top the top corner
      * @param right the right corner
      * @param bottom the bottom corner
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setZoomRect(int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws StdQTException {
-        int i = FlashMediaSetZoomRect(_ID(), paramInt1, paramInt2, paramInt3, paramInt4);
+    public void setZoomRect(int left, int top, int right, int bottom) throws StdQTException {
+        int i = FlashMediaSetZoomRect(_ID(), left, top, right, bottom);
         StdQTException.checkError(i);
     }
 
     /**
      * You can use mediaHitTestForTargetRefCon() to hit test a flash track and get a refCon for a button or symbol that was hit.
      * A RefCon represents a flash button or symbol at runtime.
-     * QuickTime::FlashMediaGetRefConBounds()
+     * @see "QuickTime::FlashMediaGetRefConBounds()"
      * @param refCon the runtime symbol.
      * @return the bounding rectangle for the given refCon
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public QDRect getRefConBounds(int paramInt) throws StdQTException {
+    public QDRect getRefConBounds(int refCon) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         int[] arrayOfInt3 = { 0 };
         int[] arrayOfInt4 = { 0 };
-        int i = FlashMediaGetRefConBounds(_ID(), paramInt, arrayOfInt1, arrayOfInt2, arrayOfInt3, arrayOfInt4);
+        int i = FlashMediaGetRefConBounds(_ID(), refCon, arrayOfInt1, arrayOfInt2, arrayOfInt3, arrayOfInt4);
         StdQTException.checkError(i);
         return new QDRect(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0] - arrayOfInt1[0], arrayOfInt4[0] - arrayOfInt2[0]);
     }
@@ -99,14 +81,14 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
     /**
      * A RefCon represents a flash button or symbol at runtime. The ID represents the button or symbols ID in the .swf file.
      * Converts a Refcon to an ID.
-     * QuickTime::FlashMediaGetRefConID()
+     * @see "QuickTime::FlashMediaGetRefConID()"
      * @param refCon the runtime symbol.
      * @return refConID the symbols ID.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int getRefConID(int paramInt) throws StdQTException {
+    public int getRefConID(int refCon) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = FlashMediaGetRefConID(_ID(), paramInt, arrayOfInt);
+        int i = FlashMediaGetRefConID(_ID(), refCon, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -114,23 +96,23 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
     /**
      * A RefCon represents a flash button or symbol at runtime. The ID represents the button or symbols ID in the .swf file.
      * Convert an ID to a RefCon.
-     * QuickTime::FlashMediaIDToRefCon()
+     * @see "QuickTime::FlashMediaIDToRefCon()"
      * @param refConID the symbols ID.
      * @return refCon the symbol.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int idToRefCon(int paramInt) throws StdQTException {
+    public int idToRefCon(int refConID) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = FlashMediaIDToRefCon(_ID(), paramInt, arrayOfInt);
+        int i = FlashMediaIDToRefCon(_ID(), refConID, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
 
     /**
      * Get the currently displayed Flash Frame number.
-     * QuickTime::FlashMediaGetDisplayedFrameNumber()
+     * @see "QuickTime::FlashMediaGetDisplayedFrameNumber()"
      * @return flashFrameNumber the flash frame number.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getDisplayedFrameNumber() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -141,43 +123,43 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
 
     /**
      * Given a Flash Frame Number, get the corresponding movieTime.
-     * QuickTime::FlashMediaFrameNumberToMovieTime()
+     * @see "QuickTime::FlashMediaFrameNumberToMovieTime()"
      * @param flashFrameNumber the flash frame number.
      * @return movieTime the corresponding movieTime.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int frameNumberToMovieTime(int paramInt) throws StdQTException {
+    public int frameNumberToMovieTime(int flashFrameNumber) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = FlashMediaFrameNumberToMovieTime(_ID(), paramInt, arrayOfInt);
+        int i = FlashMediaFrameNumberToMovieTime(_ID(), flashFrameNumber, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
 
     /**
      * Given a Flash frame's label, get the corresponding movieTime.
-     * QuickTime::FlashMediaFrameLabelToMovieTime()
+     * @see "QuickTime::FlashMediaFrameLabelToMovieTime()"
      * @param theLabel the flash frame's label.
      * @return movieTime the corresponding movie time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int frameLabelToMovieTime(QTPointerRef paramQTPointerRef) throws StdQTException {
+    public int frameLabelToMovieTime(QTPointerRef theLabel) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = FlashMediaFrameLabelToMovieTime(_ID(), QTObject.ID(paramQTPointerRef), arrayOfInt);
+        int i = FlashMediaFrameLabelToMovieTime(_ID(), QTObject.ID(theLabel), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
 
     /**
      * Gets the value of a specified Flash action variable
-     * QuickTime::FlashMediaGetFlashVariable()
+     * @see "QuickTime::FlashMediaGetFlashVariable()"
      * @param path Specifies the path to the flash button to which the variable is attached
      * @param name Specifies the name of the flash variable
      * @return the vallue of the action variable
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public String getFlashVariable(String paramString1, String paramString2) throws StdQTException {
+    public String getFlashVariable(String path, String name) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = FlashMediaGetFlashVariable(_ID(), QTUtils.String2CString(paramString1), QTUtils.String2CString(paramString2), arrayOfInt);
+        int i = FlashMediaGetFlashVariable(_ID(), QTUtils.String2CString(path), QTUtils.String2CString(name), arrayOfInt);
         StdQTException.checkError(i);
         myStringHandle localmyStringHandle = new myStringHandle(arrayOfInt[0], this);
         try {
@@ -190,31 +172,31 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
 
     /**
      * Gets the SwfVersion support by the Media handler
-     * QuickTime::FlashMediaGetSupportedSwfVersion()
+     * @see "QuickTime::FlashMediaGetSupportedSwfVersion()"
      * @return the supported version
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public String getSupportedSwfVersion() throws StdQTException {
         byte[] arrayOfByte = { 0 };
         int i = FlashMediaGetSupportedSwfVersion(_ID(), arrayOfByte);
         StdQTException.checkError(i);
         if (arrayOfByte.length == 1) {
-            return new Byte(arrayOfByte[0]).toString();
+            return Byte.valueOf(arrayOfByte[0]).toString();
         }
         return QTUtils.CString2String(arrayOfByte, 0);
     }
 
     /**
      * Sets the specified Flash action variable to a value
-     * QuickTime::FlashMediaSetFlashVariable()
+     * @see "QuickTime::FlashMediaSetFlashVariable()"
      * @param path Specifies the path to the flash button to which the variable is attached
      * @param name Specifies the name of the flash variable
      * @param value Specifies the new value of the flash variable
      * @param updateFocus Pass TRUE if the focus is to be changed
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setFlashVariable(String paramString1, String paramString2, String paramString3, boolean paramBoolean) throws StdQTException {
-        int i = FlashMediaSetFlashVariable(_ID(), QTUtils.String2CString(paramString1), QTUtils.String2CString(paramString2), QTUtils.String2CString(paramString3), (byte) (paramBoolean == true ? 1 : 0));
+    public void setFlashVariable(String path, String name, String value, boolean updateFocus) throws StdQTException {
+        int i = FlashMediaSetFlashVariable(_ID(), QTUtils.String2CString(path), QTUtils.String2CString(name), QTUtils.String2CString(value), (byte) (updateFocus == true ? 1 : 0));
         StdQTException.checkError(i);
     }
 
@@ -222,7 +204,7 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
         return MediaHandlerManager.FlashMediaSetPan(paramInt, paramShort1, paramShort2);
     }
 
-    class myStringHandle extends StringHandle {
+    static class myStringHandle extends StringHandle {
 
         protected myStringHandle(int paramInt, Object paramObject) {
             super(paramInt, paramObject, 1);

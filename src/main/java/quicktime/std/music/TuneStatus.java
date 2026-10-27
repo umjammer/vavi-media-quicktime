@@ -3,46 +3,32 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.Serial;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
+
 /**
  * Presents information on the currently playing tune.
- * QuickTime::TuneGetStatus
+ * @see "QuickTime::TuneGetStatus"
  */
 public final class TuneStatus extends QTByteObject implements PrimitivesLib {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 32;
 
+    @Serial
     private static final long serialVersionUID = 7818564353002743338L;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TuneStatus.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     TuneStatus() {
-        super(32);
+        super(kNativeSize);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[32];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         for (int i = 0; i < 12; i += 4) {
             setIntInArray(this.bytes, i, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, i)));
@@ -53,8 +39,9 @@ public final class TuneStatus extends QTByteObject implements PrimitivesLib {
         setIntInArray(this.bytes, 16, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, 16)));
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[32];
+        byte[] arrayOfByte = new byte[kNativeSize];
         for (int i = 0; i < 12; i += 4) {
             setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
@@ -123,8 +110,3 @@ public final class TuneStatus extends QTByteObject implements PrimitivesLib {
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /TuneStatus.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

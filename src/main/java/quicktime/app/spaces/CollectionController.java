@@ -1,7 +1,7 @@
 package quicktime.app.spaces;
 
 /**
- * Deprecated.
+ * @deprecated
  * Provides a generic interface for objects that want to control collections
  * of objects and have these objects added to the controller when
  * the objects are added to the space.
@@ -29,16 +29,16 @@ package quicktime.app.spaces;
  * The CollectionController extends Collection which is how the Space
  * adds and removes the members from the controller.
  */
-public abstract interface CollectionController extends Controller, Collection {
+public interface CollectionController extends Controller, Collection {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the wholespace flag.
      * @return true if any member of the Space is a candidate for being controlled
      *  by this controller. If false then objects must be explicitly added to
      *  the space.
      */
-    public abstract boolean isWholespace();
+    boolean isWholespace();
 }
 

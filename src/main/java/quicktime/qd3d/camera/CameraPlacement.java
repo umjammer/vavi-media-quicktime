@@ -3,18 +3,16 @@ package quicktime.qd3d.camera;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import quicktime.QTRuntimeException;
-import quicktime.QTSession;
+import java.io.Serial;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.qd3d.math.Point3D;
 import quicktime.qd3d.math.Vector3D;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
+
 
 /**
  * CameraPlacement contains information for the camera's range.
@@ -25,38 +23,19 @@ import quicktime.util.QTByteObject;
  */
 public final class CameraPlacement extends QTByteObject implements PrimitivesLib {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 36;
 
+    @Serial
     private static final long serialVersionUID = -2481353228250322010L;
-
-    static {
-        if (QTSession.isCurrentOS(4)) {
-            throw new QTRuntimeException("Unsupported OS");
-        }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CameraPlacement.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     /**
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -73,17 +52,18 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
      * @param pointOfInterest The camera placement's point of interest.
      * @param upVector The camera placement's upVector.
      */
-    public CameraPlacement(Point3D paramPoint3D1, Point3D paramPoint3D2, Vector3D paramVector3D) {
+    public CameraPlacement(Point3D cameraLocation, Point3D pointOfInterest, Vector3D upVector) {
         this();
-        setCameraLocation(paramPoint3D1);
-        setPointOfInterest(paramPoint3D2);
-        setUpVector(paramVector3D);
+        setCameraLocation(cameraLocation);
+        setPointOfInterest(pointOfInterest);
+        setUpVector(upVector);
     }
 
     private CameraPlacement(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[36];
         byte[] arrayOfByte = new byte[36];
@@ -95,6 +75,7 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = getBytes();
         for (int i = 0; i < 36; i += 4) {
@@ -160,6 +141,7 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new CameraPlacement(this.bytes);
     }

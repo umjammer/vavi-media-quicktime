@@ -26,49 +26,49 @@ package quicktime.util;
  * then the get methods are probably not very useful as you will not be looking at
  * pixel values.
  *
- * @see {@link quicktime.std.image.ImageDescription},
+ * @see quicktime.std.image.ImageDescription,
  * {@link quicktime.util.ByteEncodedImage},
  * {@link quicktime.util.IntEncodedImage},
  * {@link quicktime.util.RawEncodedImage}
  */
-public abstract interface EncodedImage {
+public interface EncodedImage {
 
     /**
      * This value is returned by an EncodedImage class from the getRowBytes() method
      * if the encoded image does not know how many bytes per row or the
      * data does not contain any extra byte data beyond the image encoding
      */
-    public static final int kRowBytesUnknown = -1;
+    int kRowBytesUnknown = -1;
 
     /**
      * Returns the size in bytes of the EncodedImage data.
      * The offset is specified in bytes into the encoded image object.
      */
-    public abstract int getSize();
+    int getSize();
 
     /**
      * Returns the byte at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
-    public abstract byte getByte(int paramInt);
+    byte getByte(int paramInt);
 
     /**
      * Returns the short at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
-    public abstract short getShort(int paramInt);
+    short getShort(int paramInt);
 
     /**
      * Returns the int at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
-    public abstract int getInt(int paramInt);
+    int getInt(int paramInt);
 
     /**
      * Returns either kRowBytesUnknown or the number of bytes per row
      * that the encoded image data is comprised of. This number will
      * at least be as big as width*pixelSize, and maybe larger.
      */
-    public abstract int getRowBytes();
+    int getRowBytes();
 }
 

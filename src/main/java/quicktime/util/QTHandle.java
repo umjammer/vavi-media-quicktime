@@ -36,22 +36,17 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTHandle.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTHandle.class));
             }
         }.establish();
     }
 
     /**
      * Determines the data handle that is the source for input images to graphics export component
-     * QuickTime::GraphicsExportGetSettingsAsText
+     * @see "QuickTime::GraphicsExportGetSettingsAsText"
      * @return The handle to a QuickTime data handle.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getInputHandle()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getInputHandle()
      */
     public static QTHandle fromGraphicsExporterText(GraphicsExporter paramGraphicsExporter) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -62,10 +57,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Determines the data handle that is the source for input images to graphics export component
-     * QuickTime::GraphicsExportGetInputHandle
+     * @see "QuickTime::GraphicsExportGetInputHandle"
      * @return The handle to a QuickTime data handle.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getInputHandle()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getInputHandle()
      */
     public static QTHandle fromGraphicsExporterInput(GraphicsExporter paramGraphicsExporter) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -76,10 +71,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Determines the data handle that is the source for input images to graphics export component
-     * QuickTime::GraphicsExportGetOutputHandle
+     * @see "QuickTime::GraphicsExportGetOutputHandle"
      * @return The handle to a QuickTime data handle.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getOutputHandle()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getOutputHandle()
      */
     public static QTHandle fromGraphicsExporterOutput(GraphicsExporter paramGraphicsExporter) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -90,11 +85,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Retrieve application specific info from a Sound Description object
-     * QuickTime::GetSoundDescriptionExtension
+     * @see "QuickTime::GetSoundDescriptionExtension"
      * @param idType an OSType identifying the information for removal
      * @return a dataref to the Extension
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.media.SoundDescription#getExtension(int)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.media.SoundDescription#getExtension(int)
      */
     public static QTHandle fromSoundDescription(SoundDescription paramSoundDescription, int paramInt) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -105,11 +100,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Retrieve application specific info from a ImageDescription object
-     * QuickTime::GetImageDescriptionExtension
+     * @see "QuickTime::GetImageDescriptionExtension"
      * @param idType an OSType identifying the information for removal
      * @return a dataref to the Extension
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.ImageDescription#getExtension(int, int)}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.ImageDescription#getExtension(int, int)
      */
     public static QTHandle fromImageDescription(ImageDescription paramImageDescription, int paramInt1, int paramInt2) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -119,10 +114,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Determines the data reference that the graphics resides in.
-     * QuickTime::GraphicsImportGetDataHandle
+     * @see "QuickTime::GraphicsImportGetDataHandle"
      * @return The handle to a QuickTime data reference.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getDataHandle()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsImporter#getDataHandle()
      */
     public static QTHandle fromGraphicsImporterData(GraphicsImporter paramGraphicsImporter) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -133,10 +128,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Determines the aliased data reference.
-     * QuickTime::GraphicsImportGetAliasedDataReference
+     * @see "QuickTime::GraphicsImportGetAliasedDataReference"
      * @return The handle to the aliased data reference
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getAliasedDataReference()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsImporter#getAliasedDataReference()
      */
     public static QTHandle fromGraphicsImporterAlias(GraphicsImporter paramGraphicsImporter) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -148,11 +143,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Determines the time code from the time code handler.
-     * QuickTime::TCGetTimeCodeAtTime()
+     * @see "QuickTime::TCGetTimeCodeAtTime()"
      * @param mediaTime The time value of the media at which to retrieve the time code information.
      * @return The information object containing the time code, its definition, and data.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.qtcomponents.TimeCoder#getAtTime(int)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.qtcomponents.TimeCoder#getAtTime(int)
      */
     public static TimeCodeInfo fromTimeCoderTime(TimeCoder paramTimeCoder, int paramInt) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -174,10 +169,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Determines the time code from the time code handler at the current time value.
-     * QuickTime::TCGetCurrentTimeCode()
+     * @see "QuickTime::TCGetCurrentTimeCode()"
      * @return The information object containing the time code, its definition, and data.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.qtcomponents.TimeCoder#getCurrent()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.qtcomponents.TimeCoder#getCurrent()
      */
     public static TimeCodeInfo fromTimeCoderCurrent(TimeCoder paramTimeCoder) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -200,11 +195,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Allows you to retrieve the source information from the time code media sample.
-     * QuickTime::TCGetSourceRef()
+     * @see "QuickTime::TCGetSourceRef()"
      * @param tcd the description that describes the time code reference to be changed
      * @return the source information that is found in the sample reference
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.qtcomponents.TimeCoder#getSourceRef(quicktime.std.qtcomponents.TimeCodeDescription)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.qtcomponents.TimeCoder#getSourceRef(quicktime.std.qtcomponents.TimeCodeDescription)
      */
     public static QTHandle fromTimeCoderSource(TimeCoder paramTimeCoder, TimeCodeDescription paramTimeCodeDescription) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -214,10 +209,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * This method returns the sound localization settings for the track.
-     * QuickTime::GetTrackSoundLocalizationSettings()
+     * @see "QuickTime::GetTrackSoundLocalizationSettings()"
      * @return the sound localization settings for the track.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.Track#getSoundLocalizationSettings()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.Track#getSoundLocalizationSettings()
      */
     public static QTHandle fromTrack(Track paramTrack) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -230,7 +225,7 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * Returns EncodedImage data as a QTHandle. This will copy the data.
      * @param image the encoded image data
      * @return the encoded image data as a Handle
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static QTHandle fromEncodedImage(EncodedImage paramEncodedImage) throws QTException {
         if ((paramEncodedImage instanceof ByteEncodedImage))
@@ -250,9 +245,9 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
     /**
      * Use reserve memory before you allocate a handle that you intend to keep locked
      * for long periods of time.
-     * QuickTime::ReserveMem
+     * @see "QuickTime::ReserveMem"
      * @param size the size of the handle you will allocate in the new Handle(size...) call
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void reserveMemory(int paramInt) throws UtilException {
         ReserveMem(paramInt);
@@ -268,8 +263,8 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Allocate a handle for general use.
-     * QuickTime::NewHandle
-     * QuickTime::NewHandleClear
+     * @see "QuickTime::NewHandle"
+     * @see "QuickTime::NewHandleClear"
      * @param size the size of the handle to create.
      * @param clear clear the handle upon creation.
      */
@@ -291,7 +286,7 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * The contents of the pointer will be copied into the handle. This will copy
      * size bytes from the pointer + offset. It will bounds check the size to be not
      * greater than the size of the pointer.
-     * QuickTime::PtrToHand
+     * @see "QuickTime::PtrToHand"
      * @param ptr the pointer to copy.
      * @param offset you can specify an offset within the pointer from which to copy the data
      * @param size the amount of bytes to copy
@@ -325,9 +320,9 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Resizes the handle to the specified size.
-     * QuickTime::SetHandleSize
+     * @see "QuickTime::SetHandleSize"
      * @param size the new size of the handle.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public void setSize(int paramInt) throws UtilException {
         SetHandleSize(_ID(), paramInt);
@@ -338,7 +333,7 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * Concatenates the supplied handle to this handle, resize the size of this handle
      * to accomodate the second handle's data. Subclasses should overide this is a straight
      * concatenation of the two handles are insufficient to preserve state.
-     * QuickTime::HandAndHand
+     * @see "QuickTime::HandAndHand"
      */
     public void concatenate(QTHandleRef paramQTHandleRef) throws UtilException {
         paramQTHandleRef.doLock();
@@ -357,6 +352,7 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new QTHandle(makeAndCopyHandle(), null, false);
     }

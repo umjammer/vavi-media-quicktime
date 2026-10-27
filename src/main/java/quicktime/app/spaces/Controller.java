@@ -1,7 +1,7 @@
 package quicktime.app.spaces;
 
 /**
- * Deprecated.
+ * @deprecated
  * A Controller is an object that exerts some control over members of
  * a Space. The Controller interface defines a minimal requirement for
  * all Controllers - that is they are notified whenever they are added or
@@ -21,28 +21,28 @@ package quicktime.app.spaces;
  * they require. The provided controller interfaces should provide a comprehensive
  * set of requirements for describing the interaction between controllers and
  * spaces.
- * @see {@link quicktime.app.spaces.Space}
+ * @see quicktime.app.spaces.Space
  */
-public abstract interface Controller {
+public interface Controller {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the Space when a Controller is being addedTo the Space s.
      * If the Controller is not an appropriate controller for that kind of Space this
      * method can throw an exception and the controller won't be added to the Space.
      * @param s the Space being added to
      */
-    public abstract void addedToSpace(Space paramSpace);
+    void addedToSpace(Space paramSpace);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Called by the Space when a Controller is being removed
      * from a Space. This is only called by the Space on controllers that have
      * previously been added, thus the space they are being removed from
      * is the space they were added to.
      */
-    public abstract void removedFromSpace();
+    void removedFromSpace();
 }
 

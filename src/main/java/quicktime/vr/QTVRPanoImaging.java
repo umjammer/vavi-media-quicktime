@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
@@ -12,7 +14,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
 
     private static final int kNativeSize = 56;
 
-    static final long serialVersionUID = 8351228396821852032L;
+    @Serial
+    private static final long serialVersionUID = 8351228396821852032L;
 
     private static EndianDescriptor ed;
 
@@ -31,10 +34,12 @@ public final class QTVRPanoImaging extends QTVRAtom {
         super(paramArrayOfByte, kNativeSize);
     }
 
+    @Override
     protected int getNativeSize() {
         return kNativeSize;
     }
 
+    @Override
     protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRPanoImaging localQTVRPanoImaging = new QTVRPanoImaging();
@@ -42,6 +47,7 @@ public final class QTVRPanoImaging extends QTVRAtom {
         System.arraycopy(localQTVRPanoImaging.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Override
     protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRPanoImaging localQTVRPanoImaging = (QTVRPanoImaging) clone();
         paramObjectOutputStream.write(localQTVRPanoImaging.getBytes());
@@ -50,6 +56,7 @@ public final class QTVRPanoImaging extends QTVRAtom {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         try {
             return new QTVRPanoImaging(this.bytes);
@@ -89,7 +96,7 @@ public final class QTVRPanoImaging extends QTVRAtom {
 
     /**
      * Valid bits are
-     * kQTVRValidCorrection   			 = 1L << 0,
+     * kQTVRValidCorrection       = 1L << 0,
      * kQTVRValidQuality             = 1L << 1,
      * kQTVRValidDirectDraw          = 1L << 2,
      * kQTVRValidFirstExtraProperty  = 1L << 3
@@ -100,7 +107,7 @@ public final class QTVRPanoImaging extends QTVRAtom {
 
     /**
      * Valid bits are
-     * kQTVRValidCorrection   			 = 1L << 0,
+     * kQTVRValidCorrection       = 1L << 0,
      * kQTVRValidQuality             = 1L << 1,
      * kQTVRValidDirectDraw          = 1L << 2,
      * kQTVRValidFirstExtraProperty  = 1L << 3

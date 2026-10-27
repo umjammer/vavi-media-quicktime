@@ -1,68 +1,49 @@
 package quicktime.std.comp;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTUtils;
+
 
 /**
  * Representation of the ComponentIdentifier.
  */
 public class ComponentIdentifier extends QTObject implements QuickTimeLib {
 
-    private static Object linkage;
-
     private ComponentDescription cacheInfo;
 
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ComponentIdentifier.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     /**
      * Determine the next Component as specified. Will return null if it cannot find a
      * component that matches the specifications.
-     * QuickTime::FindNextComponent
+     * @see "QuickTime::FindNextComponent"
      * @param desc describes the search parameters.
      * @return a component identifier or zero if none found.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static final ComponentIdentifier find(ComponentDescription paramComponentDescription) throws QTException {
-        return find(null, paramComponentDescription);
+    public static ComponentIdentifier find(ComponentDescription desc) throws QTException {
+        return find(null, desc);
     }
 
     /**
      * Determine the next Component as specified. Will return null if it cannot find a
      * component that matches the specifications.
-     * QuickTime::FindNextComponent
+     * @see "QuickTime::FindNextComponent"
      * @param comp a previously found component
      * @param desc describes the search parameters.
      * @return a component identifier or zero if none found.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static final ComponentIdentifier find(ComponentIdentifier paramComponentIdentifier, ComponentDescription paramComponentDescription) throws QTException {
+    public static ComponentIdentifier find(ComponentIdentifier comp, ComponentDescription desc) throws QTException {
         int i = 0;
-        if (paramComponentIdentifier == null)
-            i = FindNextComponent(0, paramComponentDescription.getBytes());
+        if (comp == null)
+            i = FindNextComponent(0, desc.getBytes());
         else {
-            i = FindNextComponent(QTObject.ID(paramComponentIdentifier), paramComponentDescription.getBytes());
+            i = FindNextComponent(QTObject.ID(comp), desc.getBytes());
         }
         return i == 0 ? null : new ComponentIdentifier(i);
     }
@@ -77,9 +58,9 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
 
     /**
      * Returns all of the registration information for a component.
-     * QuickTime::GetComponentInfo
+     * @see "QuickTime::GetComponentInfo"
      * @return information about the specified component.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final ComponentDescription getInfo() throws StdQTException {
         if (this.cacheInfo == null) {
@@ -116,8 +97,13 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
     public String toString() {
         String str = super.toString();
         try {
-            str = str + "[type=" + QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getType())) + ",subType=" + QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getSubType())) + "]";
-        } catch (QTException localQTException) {
+            str = str +
+                    "[type=" +
+                    QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getType())) +
+                    ",subType=" +
+                    QTUtils.fromOSType(EndianOrder.flipNativeToBigEndian32(getInfo().getSubType())) +
+                    "]";
+        } catch (QTException _) {
         }
         return str;
     }

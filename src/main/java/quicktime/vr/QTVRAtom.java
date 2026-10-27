@@ -65,6 +65,7 @@ public abstract class QTVRAtom extends QTByteObject implements Cloneable {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public abstract Object clone();
 }
 

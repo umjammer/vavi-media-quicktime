@@ -293,7 +293,7 @@ final class Exporters {
     private static void putSample(byte[] b, int o, double s, int bits, boolean bigEndian, boolean signed) {
         int bytes = bits / 8;
         long max = (1L << (bits - 1)) - 1;
-        long v = Math.max(-max - 1, Math.min(max, Math.round(s * (max + 1))));
+        long v = Math.clamp(max, -max - 1, Math.round(s * (max + 1)));
         if (!signed) {
             v += max + 1;
         }
@@ -340,7 +340,7 @@ final class Exporters {
             }
         }
         int channels = dec.channels;
-        int outBits = in.isFloat ? 16 : Math.min(32, Math.max(8, in.bits));
+        int outBits = in.isFloat ? 16 : Math.clamp(in.bits, 8, 32);
         int outFrame = channels * outBits / 8;
         // frames in the media time scale, which is the sample rate for sound
         long frames = 0;

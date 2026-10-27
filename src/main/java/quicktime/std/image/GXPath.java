@@ -65,8 +65,3 @@ public final class GXPath extends QTByteObject {
         System.arraycopy(paramQDPoint.getGXPoint(), 0, getBytes(), i, 8);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /GXPath.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

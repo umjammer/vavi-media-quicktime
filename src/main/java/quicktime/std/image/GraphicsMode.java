@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -26,18 +27,14 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
      */
     public static final int kNativeSize = 10;
 
+    @Serial
     private static final long serialVersionUID = -7245842945216323992L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(GraphicsMode.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(GraphicsMode.class));
             }
         }.establish();
     }
@@ -64,6 +61,7 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[10];
         paramObjectInputStream.read(this.bytes);
@@ -76,6 +74,7 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         int i = getGraphicsMode();
         byte[] arrayOfByte = new byte[10];
@@ -144,6 +143,7 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
     /**
      * Return a copy of the GraphicsMode object.
      */
+    @Override
     public Object clone() {
         return new GraphicsMode(getBytes());
     }
@@ -164,8 +164,3 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
         return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /GraphicsMode.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

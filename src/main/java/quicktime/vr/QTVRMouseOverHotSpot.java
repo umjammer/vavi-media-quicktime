@@ -3,9 +3,9 @@ package quicktime.vr;
 /**
  * This interface is defined by an application to receive notification of
  * mouse over events when the mouse is over a hot-spot in a VR movie
- * @see {@link quicktime.vr.QTVRInstance}
+ * @see quicktime.vr.QTVRInstance
  */
-public abstract interface QTVRMouseOverHotSpot {
+public interface QTVRMouseOverHotSpot {
 
     /**
      * This method is called by MoviesTask when a user is over a hot spot
@@ -15,8 +15,8 @@ public abstract interface QTVRMouseOverHotSpot {
      * @param flags indicate whether the mouse is entering, in or exiting the
      *  hot spot
      * @return an error code or zero if no error
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @see quicktime.std.clocks.QTCallBack
      */
-    public abstract int execute(QTVRInstance paramQTVRInstance, int paramInt1, int paramInt2);
+    int execute(QTVRInstance paramQTVRInstance, int paramInt1, int paramInt2);
 }
 

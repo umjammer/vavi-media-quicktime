@@ -19,6 +19,7 @@ import quicktime.io.QTFile;
 
 
 public class FileMenu {
+
     PlayMovie myPlayMovie;
 
     public FileMenu(PlayMovie src) {
@@ -37,29 +38,25 @@ public class FileMenu {
         menuBar.add(fileMenu);
         myPlayMovie.setMenuBar(menuBar);
 
-        openMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                myPlayMovie.stopPlayer();
+        openMenuItem.addActionListener(event -> {
+            myPlayMovie.stopPlayer();
 
-                // creat a movie through the file-open dialog of QT
-                try {
-                    QTFile qtf = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
-                    myPlayMovie.createNewMovieFromURL("file://" + qtf.getPath());
-                } catch (QTException e) {
-                    if (e.errorCode() != Errors.userCanceledErr)
-                        e.printStackTrace();
-                }
+            // creat a movie through the file-open dialog of QT
+            try {
+                QTFile qtf = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
+                myPlayMovie.createNewMovieFromURL("file://" + qtf.getPath());
+            } catch (QTException e) {
+                if (e.errorCode() != Errors.userCanceledErr)
+                    e.printStackTrace();
             }
         });
-        urlMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                myPlayMovie.stopPlayer();
+        urlMenuItem.addActionListener(event -> {
+            myPlayMovie.stopPlayer();
 
-                // creat a movie through the file-open dialog of QT
-                Open_URL d = new Open_URL(myPlayMovie);
-                d.pack();
-                d.setVisible(true);
-            }
+            // creat a movie through the file-open dialog of QT
+            Open_URL d = new Open_URL(myPlayMovie);
+            d.pack();
+            d.setVisible(true);
         });
     }
 }

@@ -35,12 +35,7 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTPointerRef.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTPointerRef.class));
             }
         }.establish();
     }
@@ -100,9 +95,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the byte array to start copying to
      * @param length the number of bytes to copy
      */
-    public final void copyToArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 1, paramInt2, paramArrayOfByte.length);
-        getBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
+    public final void copyToArray(int ptrOffset, byte[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 1, destOffset, destArray.length);
+        getBytesAt(ptrOffset, length, destArray, destOffset);
     }
 
     /**
@@ -113,9 +108,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the short array to start copying to
      * @param length the number of shorts to copy
      */
-    public final void copyToArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfShort.length);
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfShort, paramInt2 * 2, paramInt3 * 2);
+    public final void copyToArray(int ptrOffset, short[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, destOffset, destArray.length);
+        copyPointerToArray(_ID(), ptrOffset, destArray, destOffset * 2, length * 2);
     }
 
     /**
@@ -126,9 +121,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the char array to start copying to
      * @param length the number of chars to copy
      */
-    public final void copyToArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfChar.length);
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfChar, paramInt2 * 2, paramInt3 * 2);
+    public final void copyToArray(int ptrOffset, char[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, destOffset, destArray.length);
+        copyPointerToArray(_ID(), ptrOffset, destArray, destOffset * 2, length * 2);
     }
 
     /**
@@ -139,9 +134,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the int array to start copying to
      * @param length the number of ints to copy
      */
-    public final void copyToArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfInt.length);
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfInt, paramInt2 * 4, paramInt3 * 4);
+    public final void copyToArray(int ptrOffset, int[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, destOffset, destArray.length);
+        copyPointerToArray(_ID(), ptrOffset, destArray, destOffset * 4, length * 4);
     }
 
     /**
@@ -152,9 +147,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the float array to start copying to
      * @param length the number of floats to copy
      */
-    public final void copyToArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfFloat.length);
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfFloat, paramInt2 * 4, paramInt3 * 4);
+    public final void copyToArray(int ptrOffset, float[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, destOffset, destArray.length);
+        copyPointerToArray(_ID(), ptrOffset, destArray, destOffset * 4, length * 4);
     }
 
     /**
@@ -165,9 +160,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the long array to start copying to
      * @param length the number of longs to copy
      */
-    public final void copyToArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfLong.length);
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfLong, paramInt2 * 8, paramInt3 * 8);
+    public final void copyToArray(int ptrOffset, long[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, destOffset, destArray.length);
+        copyPointerToArray(_ID(), ptrOffset, destArray, destOffset * 8, length * 8);
     }
 
     /**
@@ -178,9 +173,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param destOffset the offset within the double array to start copying to
      * @param length the number of doubles to copy
      */
-    public final void copyToArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfDouble.length);
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfDouble, paramInt2 * 8, paramInt3 * 8);
+    public final void copyToArray(int ptrOffset, double[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, destOffset, destArray.length);
+        copyPointerToArray(_ID(), ptrOffset, destArray, destOffset * 8, length * 8);
     }
 
     /**
@@ -191,9 +186,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the byte [] to start copying from
      * @param length how many elements of the byte array to copy
      */
-    public final void copyFromArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 1, paramInt2, paramArrayOfByte.length);
-        setBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
+    public final void copyFromArray(int ptrOffset, byte[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 1, srcOffset, srcArray.length);
+        setBytesAt(ptrOffset, length, srcArray, srcOffset);
     }
 
     /**
@@ -204,9 +199,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the short [] to start copying from
      * @param length how many elements of the short array to copy
      */
-    public final void copyFromArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfShort.length);
-        copyArrayToPointer(paramArrayOfShort, paramInt2 * 2, _ID(), paramInt1, paramInt3 * 2);
+    public final void copyFromArray(int ptrOffset, short[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 2, _ID(), ptrOffset, length * 2);
     }
 
     /**
@@ -217,9 +212,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the char [] to start copying from
      * @param length how many elements of the char array to copy
      */
-    public final void copyFromArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 2, paramInt2, paramArrayOfChar.length);
-        copyArrayToPointer(paramArrayOfChar, paramInt2 * 2, _ID(), paramInt1, paramInt3 * 2);
+    public final void copyFromArray(int ptrOffset, char[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 2, _ID(), ptrOffset, length * 2);
     }
 
     /**
@@ -230,9 +225,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the int [] to start copying from
      * @param length how many elements of the int array to copy
      */
-    public final void copyFromArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfInt.length);
-        copyArrayToPointer(paramArrayOfInt, paramInt2 * 4, _ID(), paramInt1, paramInt3 * 4);
+    public final void copyFromArray(int ptrOffset, int[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 4, _ID(), ptrOffset, length * 4);
     }
 
     /**
@@ -243,9 +238,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the float [] to start copying from
      * @param length how many elements of the float array to copy
      */
-    public final void copyFromArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 4, paramInt2, paramArrayOfFloat.length);
-        copyArrayToPointer(paramArrayOfFloat, paramInt2 * 4, _ID(), paramInt1, paramInt3 * 4);
+    public final void copyFromArray(int ptrOffset, float[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 4, _ID(), ptrOffset, length * 4);
     }
 
     /**
@@ -256,9 +251,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the long [] to start copying from
      * @param length how many elements of the long array to copy
      */
-    public final void copyFromArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfLong.length);
-        copyArrayToPointer(paramArrayOfLong, paramInt2 * 8, _ID(), paramInt1, paramInt3 * 8);
+    public final void copyFromArray(int ptrOffset, long[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 8, _ID(), ptrOffset, length * 8);
     }
 
     /**
@@ -269,9 +264,9 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @param srcOffset the nth index within the double [] to start copying from
      * @param length how many elements of the double array to copy
      */
-    public final void copyFromArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, this.size, paramInt3, 8, paramInt2, paramArrayOfDouble.length);
-        copyArrayToPointer(paramArrayOfDouble, paramInt2 * 8, _ID(), paramInt1, paramInt3 * 8);
+    public final void copyFromArray(int ptrOffset, double[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 8, _ID(), ptrOffset, length * 8);
     }
 
     /**

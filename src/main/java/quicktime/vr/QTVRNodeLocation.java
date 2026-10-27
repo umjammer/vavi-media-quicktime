@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
@@ -15,7 +17,8 @@ public final class QTVRNodeLocation extends QTVRAtom {
 
     private static EndianDescriptor ed;
 
-    static final long serialVersionUID = -2055560448381571608L;
+    @Serial
+    private static final long serialVersionUID = -2055560448381571608L;
 
     /**
      * Creates a QTVRNodeLocation object containing no data
@@ -31,6 +34,7 @@ public final class QTVRNodeLocation extends QTVRAtom {
         super(paramArrayOfByte, kNativeSize);
     }
 
+    @Override
     protected int getNativeSize() {
         return kNativeSize;
     }
@@ -50,6 +54,7 @@ public final class QTVRNodeLocation extends QTVRAtom {
         return ed;
     }
 
+    @Override
     protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRNodeLocation localQTVRNodeLocation = new QTVRNodeLocation();
@@ -57,6 +62,7 @@ public final class QTVRNodeLocation extends QTVRAtom {
         System.arraycopy(localQTVRNodeLocation.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Override
     protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRNodeLocation localQTVRNodeLocation = (QTVRNodeLocation) clone();
         paramObjectOutputStream.write(localQTVRNodeLocation.getBytes());
@@ -65,6 +71,7 @@ public final class QTVRNodeLocation extends QTVRAtom {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         try {
             return new QTVRNodeLocation(this.bytes);

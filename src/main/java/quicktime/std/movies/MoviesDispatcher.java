@@ -17,11 +17,11 @@ import quicktime.util.StringHandle;
 final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
     private static Object linkage;
 
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private MoviesMethodClosure mMethodClosure;
 
@@ -44,11 +44,7 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
     static {
         class PrivelegedAction {
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(MoviesDispatcher.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MoviesDispatcher.class));
             }
         }
         new PrivelegedAction().establish();

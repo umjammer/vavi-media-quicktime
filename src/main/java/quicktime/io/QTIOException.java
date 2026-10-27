@@ -7,7 +7,7 @@ import quicktime.QTException;
  */
 public class QTIOException extends QTException {
 
-    private String path;
+    private final String path;
 
     /**
      * Creates an exception with a string representation.
@@ -31,7 +31,7 @@ public class QTIOException extends QTException {
      * This method will throw an exception if the incoming err argument is
      * a non-zero value.
      * @param err the result or error code if non-zero an exception is thrown
-     * @param {@link quicktime.io.QTIOException}
+     * @throws quicktime.io.QTIOException
      */
     public static void checkError(int paramInt, String paramString) throws QTIOException {
         if (paramInt < 0) {

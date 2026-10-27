@@ -2,8 +2,6 @@ package quicktime.std.qtcomponents;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
 import com.apple.mrj.macos.carbon.CarbonEventClient;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -15,28 +13,13 @@ import quicktime.std.comp.Component;
 import quicktime.std.movies.AtomContainer;
 import quicktime.util.QTHandleRef;
 
+
 /**
  * This class represents the standard compression dialog.
  */
 public class CompressionDialog extends Component implements QuickTimeLib {
 
-    private static Object linkage;
-
     int res;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CompressionDialog.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     CompressionDialog(int paramInt) throws QTException {
         super(1935893609, paramInt);
@@ -44,19 +27,16 @@ public class CompressionDialog extends Component implements QuickTimeLib {
 
     /**
      * Displays the standard dialog box to the user for a single image or for sound.
-     * QuickTime::SCRequestImageSettings()
+     * @see "QuickTime::SCRequestImageSettings()"
      */
     public void requestSettings() throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
-            this.res = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                public Object invoke() {
-                    synchronized (QTNative.globalsLock) {
-                        CompressionDialog.this.res = CompressionDialog.SCRequestImageSettings(_ID());
-                    }
-                    return CompressionDialog.this.res;
+            this.res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                synchronized (QTNative.globalsLock) {
+                    CompressionDialog.this.res = CompressionDialog.SCRequestImageSettings(_ID());
                 }
-            })).intValue();
+                return CompressionDialog.this.res;
+            });
             if (this.res == 1)
                 throw new StdQTException(-128);
             StdQTException.checkError(this.res);
@@ -72,7 +52,7 @@ public class CompressionDialog extends Component implements QuickTimeLib {
 
     /**
      * Retrieves all of the settings for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      */
     public QTHandleRef getInfoState() throws QTException {
         return QTHandleRef.fromCompressionDialogState(this);
@@ -80,7 +60,7 @@ public class CompressionDialog extends Component implements QuickTimeLib {
 
     /**
      * Sets all of the settings for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      */
     public void setInfoState(QTHandleRef paramQTHandleRef) throws StdQTException {
         int[] arrayOfInt = { QTObject.ID(paramQTHandleRef) };
@@ -89,20 +69,20 @@ public class CompressionDialog extends Component implements QuickTimeLib {
 
     /**
      * Sets the current preferences for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      * @param flags the preference flags
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setInfoPreferences(int paramInt) throws StdQTException {
-        int[] arrayOfInt = { paramInt };
+    public void setInfoPreferences(int flags) throws StdQTException {
+        int[] arrayOfInt = { flags };
         StdQTException.checkError(SCSetInfo(_ID(), 1886545254, arrayOfInt));
     }
 
     /**
      * Retrieves the current preferences for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the preference flags
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getInfoPreferences() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -114,18 +94,18 @@ public class CompressionDialog extends Component implements QuickTimeLib {
      * Retrieves the current configuration from the dialog
      * QuickTime__SCGetSettingsFromAtomContainer()
      * @return the settings
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public AtomContainer getSettings() throws StdQTException {
         return AtomContainer.fromCompressionDialog(this);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I/>
      * Sets the current configuration for a dialog.
-     * QuickTime::SCSetSettingsFromAtomContainer()
-     * @see setSettings
+     * @see "QuickTime::SCSetSettingsFromAtomContainer()"
+     * @see #setSettings
      */
     @Deprecated
     public void setInfoState(AtomContainer paramAtomContainer) throws StdQTException {
@@ -134,12 +114,12 @@ public class CompressionDialog extends Component implements QuickTimeLib {
 
     /**
      * Sets the current configuration for a dialog.
-     * QuickTime::SCSetSettingsFromAtomContainer()
+     * @see "QuickTime::SCSetSettingsFromAtomContainer()"
      * @param settings -
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setSettings(AtomContainer paramAtomContainer) throws StdQTException {
-        StdQTException.checkError(SCSetSettingsFromAtomContainer(_ID(), QTObject.ID(paramAtomContainer)));
+    public void setSettings(AtomContainer settings) throws StdQTException {
+        StdQTException.checkError(SCSetSettingsFromAtomContainer(_ID(), QTObject.ID(settings)));
     }
 
     private static int SCRequestImageSettings(int paramInt) {

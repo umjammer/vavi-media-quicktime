@@ -18,23 +18,18 @@ public final class Sound implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Sound.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Sound.class));
             }
         }.establish();
     }
 
     /**
      * Plays a sound from memory.
-     * QuickTime::SndPlay
+     * @see "QuickTime::SndPlay"
      * @param sndHdl the handle that has the sound data in it
-     * @param {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
-    public static final void play(SndHandle paramSndHandle) throws SoundException {
+    public static void play(SndHandle paramSndHandle) throws SoundException {
         SoundException.checkError(SndPlay(0, QTObject.ID(paramSndHandle), (byte) 0));
     }
 

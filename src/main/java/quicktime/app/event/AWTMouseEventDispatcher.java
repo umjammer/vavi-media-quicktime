@@ -9,10 +9,10 @@ import quicktime.QTSession;
 import quicktime.app.spaces.Space;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is used to dispatch events to a QTMouseController when the source of events is some kind
  * of java.awt.Component.
- * @see {@link quicktime.app.event.EventDispatcher}
+ * @see quicktime.app.event.EventDispatcher
  */
 public class AWTMouseEventDispatcher extends EventDispatcher implements MouseListener, MouseMotionListener {
 
@@ -27,19 +27,19 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     private boolean addedButtonForTarget;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The space that is the source of the QTMouseEvent that is broadcast to the QTMouseController* @deprecated since QTJava 6.1
      */
     protected Space space;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The controller that will dispatch the events to any of its registered listeners* @deprecated since QTJava 6.1
      */
     protected QTMouseController cont;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The java.awt.Component which the space has been added to.* @deprecated since QTJava 6.1
      */
     protected Component comp;
@@ -51,8 +51,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates an AWTMouseEventDispatcher for the specified QTMouseController.
      * @param cont the controller which will distribute the events. This controller is attached to
      *  some kind of quicktime.app.display.QTDisplaySpace object.
@@ -62,10 +62,10 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      *  has been attached to and will become the source of events - ie. the space within which the controllers
      *  events occur - for the controller
      */
-    public AWTMouseEventDispatcher(QTMouseController paramQTMouseController, Space paramSpace, Object paramObject) {
-        this.comp = ((Component) paramObject);
-        this.cont = paramQTMouseController;
-        this.space = paramSpace;
+    public AWTMouseEventDispatcher(QTMouseController cont, Space interest, Object space) {
+        this.comp = ((Component) space);
+        this.cont = cont;
+        this.space = interest;
     }
 
     private boolean hasMouseListener = false;
@@ -73,9 +73,10 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     private boolean hasMMotionListener = false;
 
     /**
-     * Deprecated.
+     * @deprecated
      * When the ListenerController is addedTo its source of interest this method is called.* @deprecated since QTJava 6.1
      */
+    @Override
     protected void addedTo() {
         if (this.theEvent == null) {
             this.theEvent = new QTMouseEvent(this.space);
@@ -83,9 +84,10 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * When the ListenerController is removedFrom its source of interest this method is called.* @deprecated since QTJava 6.1
      */
+    @Override
     protected void removedFrom() {
         this.comp.removeMouseListener(this);
         this.comp.removeMouseMotionListener(this);
@@ -136,111 +138,126 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
         this.hasMMotionListener = false;
     }
 
+    @Override
     void addMouseButtonListener() {
         addAWTMouseListener();
     }
 
+    @Override
     void removeMouseButtonListener() {
         removeAWTMouseListener();
     }
 
+    @Override
     void addMouseMoveListener() {
         addAllAWTMouseListeners();
     }
 
+    @Override
     void removeMouseMoveListener() {
         removeAWTMouseListener();
         removeAWTMouseMotionListener();
     }
 
+    @Override
     void addMouseEnterExitListener() {
         addAllAWTMouseListeners();
     }
 
+    @Override
     void removeMouseEnterExitListener() {
         removeAWTMouseListener();
         removeAWTMouseMotionListener();
     }
 
+    @Override
     void addMouseTargetListener() {
         addAllAWTMouseListeners();
     }
 
+    @Override
     void removeMouseTargetListener() {
         removeAWTMouseListener();
         removeAWTMouseMotionListener();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been clicked on a component.
      */
+    @Override
     public void mouseClicked(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(500, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseClicked(this.theEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when a mouse button has been pressed on a component.
      */
+    @Override
     public void mousePressed(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(501, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mousePressed(this.theEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when a mouse button has been released on a component.
      */
+    @Override
     public void mouseReleased(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(502, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseReleased(this.theEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse enters a component.
      */
+    @Override
     public void mouseEntered(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(504, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseEntered(this.theEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse exits a component.
      */
+    @Override
     public void mouseExited(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(505, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseExited(this.theEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when a mouse button is pressed on a component and then
      * dragged.  Mouse drag events will continue to be delivered to
      * the component where the first originated until the mouse button is
      * released (regardless of whether the mouse position is within the
      * bounds of the component).
      */
+    @Override
     public void mouseDragged(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(506, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseDragged(this.theEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse button has been moved on a component
      * (with no buttons no down).
      */
+    @Override
     public void mouseMoved(MouseEvent paramMouseEvent) {
         this.theEvent.initialiseEventProfile(503, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
         this.cont.mouseMoved(this.theEvent);

@@ -28,7 +28,7 @@ import quicktime.std.movies.Movie;
 
 public class KeyBoardController extends Frame implements StdQTConstants, QDConstants {
 
-    public static void main(String args[]) {
+    static void main(String[] args) {
         try {
             QTSession.open();
 
@@ -43,7 +43,7 @@ public class KeyBoardController extends Frame implements StdQTConstants, QDConst
 
     }
 
-    private Movie moov;
+    private final Movie moov;
 
     private float savedRate = 1;
 
@@ -51,11 +51,13 @@ public class KeyBoardController extends Frame implements StdQTConstants, QDConst
         super(title);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -69,40 +71,43 @@ public class KeyBoardController extends Frame implements StdQTConstants, QDConst
         add("Center", (Component) qtComponent);
 
         addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 try {
                     switch (e.getKeyCode()) {
-                    case KeyEvent.VK_SPACE:
-                        if (moov.getRate() != 0)
-                            moov.setRate(0);
-                        else
-                            moov.setRate(savedRate);
-                        break;
-                    case KeyEvent.VK_UP:
-                        moov.setTimeValue(moov.getDuration());
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        moov.setTimeValue(0);
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        moov.setRate(-1);
-                        savedRate = -1;
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        moov.setRate(1);
-                        savedRate = 1;
-                        break;
-                    default:
-                        break;
+                        case KeyEvent.VK_SPACE:
+                            if (moov.getRate() != 0)
+                                moov.setRate(0);
+                            else
+                                moov.setRate(savedRate);
+                            break;
+                        case KeyEvent.VK_UP:
+                            moov.setTimeValue(moov.getDuration());
+                            break;
+                        case KeyEvent.VK_DOWN:
+                            moov.setTimeValue(0);
+                            break;
+                        case KeyEvent.VK_LEFT:
+                            moov.setRate(-1);
+                            savedRate = -1;
+                            break;
+                        case KeyEvent.VK_RIGHT:
+                            moov.setRate(1);
+                            savedRate = 1;
+                            break;
+                        default:
+                            break;
                     }
                 } catch (QTException ee) {
                     throw new QTRuntimeException(ee);
                 }
             }
 
+            @Override
             public void keyReleased(KeyEvent e) {
             }
 
+            @Override
             public void keyTyped(KeyEvent e) {
             }
 

@@ -30,6 +30,7 @@ public class MethodClosure {
         }
     }
 
+    @Override
     protected final void finalize() throws Throwable {
         if (this.closure != 0) {
             if (QTSession.isCurrentOS(1)) {

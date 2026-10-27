@@ -3,6 +3,7 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
@@ -30,18 +31,14 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
 
     private QTPointer spec;
 
+    @Serial
     private static final long serialVersionUID = -2499879404792104283L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SynthesizerConnections.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SynthesizerConnections.class));
             }
         }.establish();
     }
@@ -72,6 +69,7 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         int i = paramObjectInputStream.readInt();
         this.bytes = new byte[i];
@@ -81,6 +79,7 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = getBytes();
         int i = getSize();
@@ -96,7 +95,7 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
      * a sound bank file (DLS or SF2) that will be used to supply
      * sample information to a soft-synth music component.
      * @param soundBankFile the file
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setSoundBankFile(QTFile paramQTFile) throws QTException {
         byte[] arrayOfByte = paramQTFile.getFSSpec(true, 256);
@@ -109,7 +108,7 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
      * a sound bank file (DLS or SF2) that will be used to supply
      * sample information to a soft-synth music component (or null if none set).
      * @return the file
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTFile getSoundBankFile() throws QTException {
         return QTFile.fromSynthesizerConnections(this);
@@ -209,6 +208,7 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Return a copy of this object.
      */
+    @Override
     public Object clone() {
         return new SynthesizerConnections(this.bytes);
     }
@@ -229,8 +229,3 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /SynthesizerConnections.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

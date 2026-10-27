@@ -6,7 +6,7 @@ import quicktime.QTSession;
 import quicktime.std.image.Matrix;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class applies a matrix translation on the Transformable target.
  */
 public class TranslateMatrix extends TransformMatrix {
@@ -22,8 +22,8 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a TranslateMatrix object. This constructor is used when
      * this class is used to translate the matrix of the target in reponse
      * to specific positioning relative to some origin. Typically used in a Drag operation.
@@ -33,8 +33,8 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a TranslateMatrix object. This constructor is used when
      * this class is used to translate the matrix of the target by some
      * specified delta each time the transformMatrix method is called.
@@ -49,7 +49,7 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return the current deltaX value* @deprecated since QTJava 6.1
      */
     public float getDeltaX() {
@@ -57,7 +57,7 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @param x the new delta x to apply when the doTransformation(Matrix) method is called. * @deprecated since QTJava 6.1
      */
     public void setDeltaX(float paramFloat) {
@@ -65,7 +65,7 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return the current deltaY value* @deprecated since QTJava 6.1
      */
     public float getDeltaY() {
@@ -73,7 +73,7 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @param y the new delta y to apply when the doTransformation(Matrix) method is called. * @deprecated since QTJava 6.1
      */
     public void setDeltaY(float paramFloat) {
@@ -81,8 +81,8 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Applies the specified delta values to the incoming matrix.
      * @param theMatrix The incoming matrix is the original matrix of the target when the TransformMatrix
      *  was last initialized.
@@ -90,29 +90,32 @@ public class TranslateMatrix extends TransformMatrix {
      *  was last initialized.
      * @param deltaY the delta on the y-axis from the x value when the TransformMatrix
      *  was last initialized.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected void doTransformation(Matrix paramMatrix, int paramInt1, int paramInt2) throws QTException {
         paramMatrix.translate(paramInt1, paramInt2);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Applies the preset delta values to the incoming matrix.
      * @param theMatrix The incoming matrix is the current matrix of the target.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected void doTransformation(Matrix paramMatrix) throws QTException {
         paramMatrix.translate(this.deltaX, this.deltaY);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Flips the delta values to achieve a "Bounce" type action when a constraining condition is reached.
      * @param whichSide specifies which side of the enclosing bounds the target hit.
      */
+    @Override
     protected void boundsReached(int paramInt) {
         if ((paramInt & 0x11) != 0) {
             this.deltaX = (-this.deltaX);
@@ -122,12 +125,13 @@ public class TranslateMatrix extends TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Flips the delta values to ensure that a MatrixAction usage of this class will
      * translate correctly when the rate at which the matrix action is invoked changes
      * direction.
      */
+    @Override
     public void flipTransformationSettings() {
         this.deltaX = (-this.deltaX);
         this.deltaY = (-this.deltaY);

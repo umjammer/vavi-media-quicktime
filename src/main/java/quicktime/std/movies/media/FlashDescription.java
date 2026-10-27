@@ -48,6 +48,7 @@ public final class FlashDescription extends SampleDescription {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new FlashDescription(makeAndCopyHandle());
     }

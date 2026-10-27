@@ -167,8 +167,3 @@ public final class ExportParams extends QTByteObject {
         return getClass().getName() + "[version=" + getVersion() + ",exportType=" + QTUtils.fromOSType(getExportType()) + ",destinationContainerType" + QTUtils.fromOSType(getDestinationContainerType()) + ",destinationContainerData" + getDestinationContainerData() + ",desintationContainerExtras" + getDestinationContainerExtras() + ",flagsIn" + getFlagsIn() + ",flagsOut" + getFlagsOut() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /ExportParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

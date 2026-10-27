@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -45,12 +46,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QDRect.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDRect.class));
             }
         }.establish();
     }
@@ -69,7 +65,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Returns the EndianDescriptor for FixedRect Rect.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorFixedRect() {
+    public static EndianDescriptor getEndianDescriptorFixedRect() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -77,7 +73,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Returns the EndianDescriptor for QDRect Rect.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorRect() {
+    public static EndianDescriptor getEndianDescriptorRect() {
         return EndianDescriptor.flipAll16;
     }
 
@@ -180,7 +176,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Constructs a QDRect with an origin specified and 0 width and height.
      * @param origin the origin point of the QDRect
@@ -199,7 +195,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Constructs a QDRect with an origin of 0,0 and specified size.
      * @param size the size of the QDRect.
@@ -210,7 +206,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Constructs a QDRect with an origin of 0,0 and specified size.
      * NOTE: This method is deprecated. There is no direct method replacement
@@ -230,7 +226,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Constructs a QDRect with an origin and size specified.
      * @param origin the origin point of the QDRect
@@ -251,8 +247,10 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
 
     private transient byte[] fixedRect = null;
 
+    @Serial
     private static final long serialVersionUID = -5173727297383918112L;
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
         byte[] arrayOfByte = new byte[24];
@@ -266,6 +264,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte1 = new byte[24];
         for (int i = 0; i < 8; i += 2) {
@@ -635,12 +634,12 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0</I>
      * Adds a point to the QDRect. This results in the smallest
      * QDRect that contains both the existing rectangle and the new point.
      * @param pt the Point to add
-     * @see {@link quicktime.qd.QDRect#add(quicktime.qd.QDPoint)}
+     * @see quicktime.qd.QDRect#add(quicktime.qd.QDPoint)
      */
     public void add(Point paramPoint) {
         add(paramPoint.x, paramPoint.y);
@@ -705,8 +704,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
-        if ((paramObject instanceof QDRect)) {
-            QDRect localQDRect = (QDRect) paramObject;
+        if ((paramObject instanceof QDRect localQDRect)) {
             return (localQDRect.getXF() == getXF()) && (localQDRect.getYF() == getYF()) && (localQDRect.getRightF() == getRightF()) && (localQDRect.getBottomF() == getBottomF());
         }
         return false;
@@ -723,6 +721,7 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Return a copy of the QDRect
      * @return a QDRect
      */
+    @Override
     public Object clone() {
         return copy();
     }
@@ -835,8 +834,3 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/QDRect
- * .class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -9,7 +9,7 @@ import quicktime.util.QTHandleRef;
  */
 public class SGDeviceList extends QTHandleRef {
 
-    private SequenceGrabber sg;
+    private final SequenceGrabber sg;
 
     SGDeviceList(int paramInt, Object paramObject, SequenceGrabber paramSequenceGrabber) {
         super(paramInt, paramObject, false, QTObject.ID(paramSequenceGrabber));
@@ -34,7 +34,7 @@ public class SGDeviceList extends QTHandleRef {
      * Returns the device name at the specified (0-based) index.
      * @param whichOne the device of this list to retrieve the name
      * @return the specified Device's name
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public SGDeviceName getDeviceName(int paramInt) throws StdQTException {
         if ((paramInt < 0) || (paramInt >= getShortAt(0)))

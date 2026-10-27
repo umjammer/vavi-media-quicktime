@@ -40,6 +40,7 @@ public class SampleReferenceVector extends QTVector {
         return localSampleReference;
     }
 
+    @Override
     protected QTPointerRef makeElement() {
         SampleReference localSampleReference = null;
         try {

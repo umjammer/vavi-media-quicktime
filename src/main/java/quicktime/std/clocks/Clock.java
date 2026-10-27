@@ -1,18 +1,16 @@
 package quicktime.std.clocks;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ClockManager;
 import quicktime.internal.toolbox.SoundManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.jdirect.SoundLib;
 import quicktime.sound.SndChannel;
 import quicktime.sound.SoundException;
 import quicktime.std.StdQTException;
 import quicktime.std.comp.Component;
+
 
 /**
  * The Clock implements methods for a corresponding QuickTime component.
@@ -23,25 +21,9 @@ import quicktime.std.comp.Component;
  */
 public final class Clock extends Component implements QuickTimeLib, SoundLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Clock.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Opens the specified component,'clok', with the given subType.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      */
     public Clock(int paramInt) throws QTException {
         super(1668050795, paramInt);
@@ -53,9 +35,9 @@ public final class Clock extends Component implements QuickTimeLib, SoundLib {
 
     /**
      * Allows your application to obtain the current time according to the specified clock.
-     * QuickTime::ClockGetTime
+     * @see "QuickTime::ClockGetTime"
      * @return The time value that contains the current time from the specified time base in specified time scale
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public TimeRecord getTime() throws QTException {
         TimeRecord localTimeRecord = new TimeRecord();
@@ -66,9 +48,9 @@ public final class Clock extends Component implements QuickTimeLib, SoundLib {
 
     /**
      * Returns the clock of the SndChannel.
-     * QuickTime::SndSetInfo
+     * @see "QuickTime::SndSetInfo"
      * @return the clock
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public static Clock fromSndChannel(SndChannel paramSndChannel) throws SoundException {
         int[] arrayOfInt = { 0 };

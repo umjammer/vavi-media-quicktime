@@ -1,34 +1,16 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.comp.Component;
+
 
 /**
  * The DataHandler class implements the corresponding data structure of the Movie Toolbox.
  */
 public final class DataHandler extends Component implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(DataHandler.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     DataHandler(int paramInt, Object paramObject) {
         super(paramInt, paramObject);
@@ -36,12 +18,12 @@ public final class DataHandler extends Component implements QuickTimeLib {
 
     /**
      * This constructor creates a DataHandler object for the specified data reference.
-     * QuickTime::GetDataHandler()
+     * @see "QuickTime::GetDataHandler()"
      * @param dataRef Specifies the data reference.
      * @param flags Specifies the control flags for this method.
      */
-    public DataHandler(DataRef paramDataRef, int paramInt) throws StdQTException {
-        this(allocate(paramDataRef, paramInt), null);
+    public DataHandler(DataRef dataRef, int flags) throws StdQTException {
+        this(allocate(dataRef, flags), null);
     }
 
     private static int allocate(DataRef paramDataRef, int paramInt) throws StdQTException {

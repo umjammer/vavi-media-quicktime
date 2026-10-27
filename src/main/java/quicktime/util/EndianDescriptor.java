@@ -77,7 +77,7 @@ public class EndianDescriptor {
      */
     public static final EndianDescriptor flipAll64 = new EndianDescriptor(256);
 
-    private int flag;
+    private final int flag;
 
     private Vector<EndianFlipSpec> vec;
 
@@ -178,30 +178,30 @@ public class EndianDescriptor {
      * @return a String
      */
     public String toString() {
-        String str = getClass().getName() + "[flipFlag=";
+        StringBuilder str = new StringBuilder(getClass().getName() + "[flipFlag=");
         switch(this.flag) {
             case 0:
-                str = str + "kFlipSpecifiedFields";
+                str.append("kFlipSpecifiedFields");
                 break;
             case 1:
-                str = str + "kFlipAllFields16";
+                str.append("kFlipAllFields16");
                 break;
             case 16:
-                str = str + "kFlipAllFields32";
+                str.append("kFlipAllFields32");
                 break;
             case 256:
-                str = str + "kFlipAllFields64";
+                str.append("kFlipAllFields64");
                 break;
             case 4096:
-                str = str + "kFlipNoFields";
+                str.append("kFlipNoFields");
         }
         if (this.flag == 0) {
-            str = str + "[";
+            str.append("[");
             Enumeration<EndianFlipSpec> e = flipSpecs();
-            while (e.hasMoreElements()) str = str + e.nextElement() + ",";
-            str = str + "]";
+            while (e.hasMoreElements()) str.append(e.nextElement()).append(",");
+            str.append("]");
         }
-        str = str + "]";
-        return str;
+        str.append("]");
+        return str.toString();
     }
 }

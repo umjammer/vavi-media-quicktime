@@ -11,7 +11,7 @@ import quicktime.app.time.Timer;
 import quicktime.std.clocks.TimeBase;
 
 /**
- * Deprecated.
+ * @deprecated
  * SimpleSpace provides a default reference implementation of the Space interface.
  * The following actions are taken by the SimpleSpace class when members or controllers
  * are added to the Space.
@@ -62,8 +62,8 @@ public abstract class SimpleSpace implements Space {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Called by classes that extend the SimpleSpace. The sub class must pass in
      * a Protocol object that defines the protocol (ie. the Class type of member objects)
      * that the sub-class Space knows how to deal with. This ensure that members of a Space
@@ -76,13 +76,13 @@ public abstract class SimpleSpace implements Space {
      * ,
      * {@link quicktime.app.time.Timer}
      */
-    protected SimpleSpace(Protocol paramProtocol) throws QTException {
-        this.prots = paramProtocol;
+    protected SimpleSpace(Protocol protocols) throws QTException {
+        this.prots = protocols;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Called by classes that extend the SimpleSpace. The sub class must pass in
      * a Protocol object that defines the protocol (ie. the Class type of member objects)
      * that the sub-class Space knows how to deal with. This ensure that members of a Space
@@ -96,31 +96,31 @@ public abstract class SimpleSpace implements Space {
      * ,
      * {@link quicktime.app.time.Timer}
      */
-    protected SimpleSpace(Protocol paramProtocol, int paramInt1, int paramInt2) throws QTException {
-        this.prots = paramProtocol;
-        this.timer = new Timer(paramInt1, paramInt2, this);
+    protected SimpleSpace(Protocol protocols, int scale, int period) throws QTException {
+        this.prots = protocols;
+        this.timer = new Timer(scale, period, this);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * This vector is used to collect the Controllers that are added to the Space* @deprecated since QTJava 6.1
      */
     protected Vector controllersVec = new Vector();
 
     /**
-     * Deprecated.
+     * @deprecated
      * This vector is used to collect any Spaces that are added as members to this Space* @deprecated since QTJava 6.1
      */
     protected Vector containedSpaces = new Vector();
 
     /**
-     * Deprecated.
+     * @deprecated
      * This TickleList is used to collect any ticklish controllers that are added to the Space* @deprecated since QTJava 6.1
      */
     protected TickleList ticklers = new TickleList();
 
     /**
-     * Deprecated.
+     * @deprecated
      * This is the Timer that both provides a TimeBase for the Space and tickles the Space
      * based on the scale and period of the Timer* @deprecated since QTJava 6.1
      */
@@ -128,20 +128,19 @@ public abstract class SimpleSpace implements Space {
 
     private Object listenerSource;
 
-    private Protocol prots;
+    private final Protocol prots;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked by the timer when a time condition of its time base has changed.
      */
+    @Override
     public void timeChanged(int paramInt) throws QTException {
         this.ticklers.timeChanged(paramInt);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * The Timer invokes the tickle method when the invocation constraints of
      * the Timer are reached. If the sub-class Space has its own tickle requirements
      * then it should overide the tickle method, however to ensure that any ticklish
@@ -150,98 +149,107 @@ public abstract class SimpleSpace implements Space {
      * @param time the time that the Timer invoked the tickle method.
      * @return true if the Ticklish object should receive a consequent tickle, or false
      *  if the Ticklish object should not be tickled again.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public boolean tickle(float paramFloat, int paramInt) throws QTException {
-        return !this.ticklers.isEmpty() ? this.ticklers.tickle(paramFloat, paramInt) : false;
+    @Override
+    public boolean tickle(float er, int time) throws QTException {
+        return !this.ticklers.isEmpty() ? this.ticklers.tickle(er, time) : false;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Returns an Enumeration of all of the Controllers that implement the Ticklish interface
      * (TicklishControllers) that have been added to the Space. These controllers are tickled
      * each time the Space itself is tickled by its Timer.
+     * @deprecated
+     * @since QTJava 6.1
      * @return an Enumeration of Ticklish objects
      */
+    @Override
     public Enumeration tickleList() {
         return this.ticklers.members();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * This object is the source for all of the members and controllers of the Space that
      * implement the Listener interface. All such members and controllers will have the same
      * source as the parent space when it is addedTo a Listener source. If the parent Space
      * has not been added to a Listener source this returns null.
+     * @deprecated
+     * @since QTJava 6.1
      * @return the Listener source object
      */
+    @Override
     public Object getSource() {
         return this.listenerSource;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Protocol object that defines if a member is an appropriate member of
      * the Space.
      * @return a Protocol object.
      */
+    @Override
     public Protocol getProtocol() {
         return this.prots;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the Object object is an appropriate member of the Space. To be an
      * appropriate member the object must pass the passProtocol method of the Protocol
      * object of the Space.
      * @param object the Object to test
      * @return true if the object passes the current protocol of the Protocol object of the Space.
-     * @see {@link quicktime.app.spaces.DynamicCollection},
+     * @see quicktime.app.spaces.DynamicCollection,
      * {@link quicktime.app.spaces.Protocol}
      */
-    public boolean isAppropriate(Object paramObject) {
-        return getProtocol().passProtocol(paramObject);
+    @Override
+    public boolean isAppropriate(Object object) {
+        return getProtocol().passProtocol(object);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the specified QTDrawable is a member of this Group.
      * @param object the object to test for membership
      * @return a boolean
      */
-    public synchronized boolean hasMember(Object paramObject) {
-        if (!isAppropriate(paramObject))
+    @Override
+    public synchronized boolean hasMember(Object object) {
+        if (!isAppropriate(object))
             return false;
         Enumeration localEnumeration = members();
         while (localEnumeration.hasMoreElements()) {
-            if (localEnumeration.nextElement().equals(paramObject))
+            if (localEnumeration.nextElement().equals(object))
                 return true;
         }
         return false;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by some kind of container object when the Listener
      * is added to the object that is the source of the interest.
      * @param interest the object that is to be the source of interest for the
      *  the Listener object.
      */
-    public synchronized void addedTo(Object paramObject) {
+    @Override
+    public synchronized void addedTo(Object interest) {
         if (this.listenerSource != null)
             removedFrom(this.listenerSource);
-        this.listenerSource = paramObject;
+        this.listenerSource = interest;
         if (this.listenerSource != null) {
             Enumeration localEnumeration = this.containedSpaces.elements();
             Object localObject;
             while (localEnumeration.hasMoreElements()) {
-                localObject = (Space) localEnumeration.nextElement();
+                localObject = localEnumeration.nextElement();
                 ((Space) localObject).addedTo(this.listenerSource);
             }
             localEnumeration = members();
@@ -253,7 +261,7 @@ public abstract class SimpleSpace implements Space {
             }
             localEnumeration = controllers();
             while (localEnumeration.hasMoreElements()) {
-                localObject = (Controller) localEnumeration.nextElement();
+                localObject = localEnumeration.nextElement();
                 if ((localObject instanceof ListenerController)) {
                     ((ListenerController) localObject).addedTo(this.listenerSource);
                 }
@@ -262,30 +270,31 @@ public abstract class SimpleSpace implements Space {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the Listener object
      * is removed from the object that is the source of the interest.
      * @param interest the object that is to be the source of interest for the
      *  the Listener object.
      */
-    public synchronized void removedFrom(Object paramObject) {
+    @Override
+    public synchronized void removedFrom(Object interest) {
         if (this.listenerSource != null) {
-            if (paramObject != this.listenerSource) {
+            if (interest != this.listenerSource) {
                 QTRuntimeException.handleOrThrow(new QTRuntimeException(new QTRuntimeException("Remove from object Space has no interest in")), this, "removedFrom");
                 return;
             }
             Enumeration localEnumeration = controllers();
             Object localObject;
             while (localEnumeration.hasMoreElements()) {
-                localObject = (Controller) localEnumeration.nextElement();
+                localObject = localEnumeration.nextElement();
                 if ((localObject instanceof ListenerController)) {
                     ((ListenerController) localObject).removedFrom(this.listenerSource);
                 }
             }
             localEnumeration = this.containedSpaces.elements();
             while (localEnumeration.hasMoreElements()) {
-                localObject = (Space) localEnumeration.nextElement();
+                localObject = localEnumeration.nextElement();
                 ((Space) localObject).removedFrom(this.listenerSource);
             }
             localEnumeration = members();
@@ -299,178 +308,180 @@ public abstract class SimpleSpace implements Space {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used by the application to add a Controller to
      * the Space. A Controller will control members of a Space.
      * @param c the Controller to add to the Space.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void addController(Controller paramController) throws QTException {
-        if (paramController == null)
+    @Override
+    public synchronized void addController(Controller c) throws QTException {
+        if (c == null)
             return;
-        if (this.controllersVec.contains(paramController))
+        if (this.controllersVec.contains(c))
             return;
-        paramController.addedToSpace(this);
-        this.controllersVec.addElement(paramController);
+        c.addedToSpace(this);
+        this.controllersVec.addElement(c);
         Object localObject1;
         Object localObject2;
-        if ((paramController instanceof TimeableController)) {
-            localObject1 = ((Timeable) paramController).getTimeBase();
+        if ((c instanceof TimeableController)) {
+            localObject1 = ((Timeable) c).getTimeBase();
             localObject2 = this.timer.getTimeBase();
             ((TimeBase) localObject1).setMasterTimeBase((TimeBase) localObject2, null);
         }
-        if (((paramController instanceof ListenerController)) && (this.listenerSource != null)) {
-            ((ListenerController) paramController).addedTo(this.listenerSource);
+        if (((c instanceof ListenerController)) && (this.listenerSource != null)) {
+            ((ListenerController) c).addedTo(this.listenerSource);
         }
-        if ((paramController instanceof CollectionController)) {
-            localObject1 = (CollectionController) paramController;
+        if ((c instanceof CollectionController)) {
+            localObject1 = c;
             if (((CollectionController) localObject1).isWholespace()) {
                 localObject2 = members();
-                while (((Enumeration) localObject2).hasMoreElements()) ((CollectionController) localObject1).addMember(((Enumeration) localObject2).nextElement());
+                while (((Enumeration<?>) localObject2).hasMoreElements()) ((CollectionController) localObject1).addMember(((Enumeration<?>) localObject2).nextElement());
             }
         }
-        if ((paramController instanceof TicklishController)) {
-            this.ticklers.addMember(paramController);
+        if ((c instanceof TicklishController)) {
+            this.ticklers.addMember(c);
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes a controller that was previously added to the Space.
      * @param c the Controller to remove from the Space.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void removeController(Controller paramController) throws QTException {
-        if (paramController == null)
+    @Override
+    public synchronized void removeController(Controller c) throws QTException {
+        if (c == null)
             return;
-        if (!this.controllersVec.contains(paramController))
+        if (!this.controllersVec.contains(c))
             return;
-        this.controllersVec.removeElement(paramController);
-        paramController.removedFromSpace();
+        this.controllersVec.removeElement(c);
+        c.removedFromSpace();
         Object localObject;
-        if ((paramController instanceof TimeableController)) {
-            localObject = ((Timeable) paramController).getTimeBase();
+        if ((c instanceof TimeableController)) {
+            localObject = ((Timeable) c).getTimeBase();
             ((TimeBase) localObject).setMasterTimeBase(null, null);
         }
-        if (((paramController instanceof ListenerController)) && (this.listenerSource != null)) {
-            ((ListenerController) paramController).removedFrom(this.listenerSource);
+        if (((c instanceof ListenerController)) && (this.listenerSource != null)) {
+            ((ListenerController) c).removedFrom(this.listenerSource);
         }
-        if ((paramController instanceof CollectionController)) {
-            localObject = (CollectionController) paramController;
+        if ((c instanceof CollectionController)) {
+            localObject = c;
             Enumeration localEnumeration = members();
             while (localEnumeration.hasMoreElements()) ((CollectionController) localObject).removeMember(localEnumeration.nextElement());
         }
-        if ((paramController instanceof TicklishController)) {
-            this.ticklers.removeMember(paramController);
+        if ((c instanceof TicklishController)) {
+            this.ticklers.removeMember(c);
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an Enumeration of all Controllers that are currently
      * attached to the Space.
      * @return an Enumeration
      */
+    @Override
     public Enumeration controllers() {
         return this.controllersVec.elements();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Timer of the Space. This Timer provids a TimeBase for the Space and
      * if active will tickle and send timeChanged calls to the TicklishControllers that
      * are attached to the Space.
      * @return a Timer
      */
+    @Override
     public Timer getTimer() {
         return this.timer;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When the sub-class defines the addMember method and has added the member
      * to its collection it should call memberAdded to ensure that the member
      * roles as defined within the Space are correctly established.
      * @param member the object that has been added to the Space.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    protected synchronized void memberAdded(Object paramObject) throws QTException {
+    protected synchronized void memberAdded(Object member) throws QTException {
         Object localObject2;
         Object localObject3;
-        if ((paramObject instanceof Space)) {
-            Object localObject1 = (Space) paramObject;
-            localObject2 = ((Space) localObject1).getTimer().getTimeBase();
+        if ((member instanceof Space localObject1)) {
+            localObject2 = localObject1.getTimer().getTimeBase();
             localObject3 = this.timer.getTimeBase();
             ((TimeBase) localObject2).setMasterTimeBase((TimeBase) localObject3, null);
-            this.containedSpaces.addElement(paramObject);
+            this.containedSpaces.addElement(member);
             if (this.listenerSource != null)
-                ((Space) localObject1).addedTo(this.listenerSource);
+                localObject1.addedTo(this.listenerSource);
         } else {
-            if ((paramObject instanceof Timeable)) {
-                Object localObject1 = ((Timeable) paramObject).getTimeBase();
+            if ((member instanceof Timeable)) {
+                TimeBase localObject1 = ((Timeable) member).getTimeBase();
                 localObject2 = this.timer.getTimeBase();
-                ((TimeBase) localObject1).setMasterTimeBase((TimeBase) localObject2, null);
+                localObject1.setMasterTimeBase((TimeBase) localObject2, null);
             }
-            if (((paramObject instanceof Listener)) && (this.listenerSource != null)) {
-                ((Listener) paramObject).addedTo(this.listenerSource);
+            if (((member instanceof Listener)) && (this.listenerSource != null)) {
+                ((Listener) member).addedTo(this.listenerSource);
             }
         }
         Object localObject1 = controllers();
-        while (((Enumeration) localObject1).hasMoreElements()) {
-            localObject2 = ((Enumeration) localObject1).nextElement();
+        while (((Enumeration<?>) localObject1).hasMoreElements()) {
+            localObject2 = ((Enumeration<?>) localObject1).nextElement();
             if ((localObject2 instanceof CollectionController)) {
-                localObject3 = (CollectionController) localObject2;
+                localObject3 = localObject2;
                 if (((CollectionController) localObject3).isWholespace()) {
-                    ((CollectionController) localObject3).addMember(paramObject);
+                    ((CollectionController) localObject3).addMember(member);
                 }
             }
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When the sub-class defines the removeMember method and has removed the member
      * from its collection it should call memberRemoved to ensure that the member
      * roles as defined within the Space are correctly maintained.
      * @param member the object that has been added to the Space.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    protected synchronized void memberRemoved(Object paramObject) throws QTException {
+    protected synchronized void memberRemoved(Object member) throws QTException {
         Object localObject2;
-        if ((paramObject instanceof Space)) {
-            Object localObject1 = (Space) paramObject;
-            localObject2 = ((Space) localObject1).getTimer().getTimeBase();
+        if ((member instanceof Space localObject1)) {
+            localObject2 = localObject1.getTimer().getTimeBase();
             ((TimeBase) localObject2).setMasterTimeBase(null, null);
-            this.containedSpaces.removeElement(paramObject);
+            this.containedSpaces.removeElement(member);
             if (this.listenerSource != null)
-                ((Space) localObject1).removedFrom(this.listenerSource);
+                localObject1.removedFrom(this.listenerSource);
         } else {
-            if ((paramObject instanceof Timeable)) {
-                Object localObject1 = ((Timeable) paramObject).getTimeBase();
-                ((TimeBase) localObject1).setMasterTimeBase(null, null);
+            if ((member instanceof Timeable)) {
+                TimeBase localObject1 = ((Timeable) member).getTimeBase();
+                localObject1.setMasterTimeBase(null, null);
             }
-            if (((paramObject instanceof Listener)) && (this.listenerSource != null)) {
-                ((Listener) paramObject).removedFrom(this.listenerSource);
+            if (((member instanceof Listener)) && (this.listenerSource != null)) {
+                ((Listener) member).removedFrom(this.listenerSource);
             }
         }
         Object localObject1 = controllers();
-        while (((Enumeration) localObject1).hasMoreElements()) {
-            localObject2 = ((Enumeration) localObject1).nextElement();
+        while (((Enumeration<?>) localObject1).hasMoreElements()) {
+            localObject2 = ((Enumeration<?>) localObject1).nextElement();
             if ((localObject2 instanceof CollectionController)) {
-                ((CollectionController) localObject2).removeMember(paramObject);
+                ((CollectionController) localObject2).removeMember(member);
             }
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will remove all of the controllers that are currently attached
      * to the Space.
      */
@@ -482,8 +493,8 @@ public abstract class SimpleSpace implements Space {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will remove all of the members that are currently contained
      * by the space.
      */
@@ -495,9 +506,10 @@ public abstract class SimpleSpace implements Space {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * java.lang.Throwable
      */
+    @Override
     protected void finalize() throws Throwable {
         synchronized (QTSession.terminationLock()) {
             if (QTSession.isInitialized()) {
@@ -509,22 +521,24 @@ public abstract class SimpleSpace implements Space {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Adds an object to the collection. Returns true if the object is
      * appropriate member of the collection (and thus added) and false if not.
      * @param member the object that should be added as a member to the collection
      * @return a boolean.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract boolean addMember(Object paramObject) throws QTException;
+    @Override
+    public abstract boolean addMember(Object member) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the object is a member of the collection it is removed.
      * @param member the object to remove from the collection
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void removeMember(Object paramObject) throws QTException;
+    @Override
+    public abstract void removeMember(Object member) throws QTException;
 }

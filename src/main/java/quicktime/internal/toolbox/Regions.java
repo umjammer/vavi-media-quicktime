@@ -12,6 +12,7 @@ import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -194,7 +195,7 @@ final class Regions {
         int[][] result = new int[r.height][];
         for (int y = 0; y < r.height; y++) {
             List<int[]> row = rows.get(y);
-            row.sort((a, b) -> Integer.compare(a[0], b[0]));
+            row.sort(Comparator.comparingInt(a -> a[0]));
             List<Integer> xs = new ArrayList<>();
             for (int[] s : row) {
                 if (!xs.isEmpty() && s[0] <= xs.getLast()) {

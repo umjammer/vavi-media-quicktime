@@ -1,12 +1,10 @@
 package quicktime.qd3d.camera;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
+
 
 /**
  * A perspective camera specified in terms of an arbitrary view plane.
@@ -24,8 +22,6 @@ import quicktime.jdirect.QTNative;
  */
 public final class ViewPlaneCameraData extends CameraData implements PrimitivesLib {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -35,18 +31,6 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ViewPlaneCameraData.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
@@ -65,14 +49,14 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
      * @param centerXOnViewPlane -
      * @param centerYOnViewPlane -
      */
-    public ViewPlaneCameraData(CameraData paramCameraData, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
+    public ViewPlaneCameraData(CameraData cameraData, float viewPlane, float halfWidthAtViewPlane, float halfHeightAtViewPlane, float centerXOnViewPlane, float centerYOnViewPlane) {
         this();
-        setCameraBytes(paramCameraData);
-        setViewPlane(paramFloat1);
-        setHalfWidth(paramFloat2);
-        setHalfHeight(paramFloat3);
-        setCenterX(paramFloat4);
-        setCenterY(paramFloat5);
+        setCameraBytes(cameraData);
+        setViewPlane(viewPlane);
+        setHalfWidth(halfWidthAtViewPlane);
+        setHalfHeight(halfHeightAtViewPlane);
+        setCenterX(centerXOnViewPlane);
+        setCenterY(centerYOnViewPlane);
     }
 
     private ViewPlaneCameraData(byte[] paramArrayOfByte) {
@@ -152,6 +136,7 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new ViewPlaneCameraData(this.bytes);
     }

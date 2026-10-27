@@ -17,12 +17,7 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SoundMediaHandler.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SoundMediaHandler.class));
             }
         }.establish();
     }
@@ -33,10 +28,11 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
 
     /**
      * Returns the balance of a sound media. Range from -1.0 (Left) to 0 (Equal) to 1.0 (Right).
-     * QuickTime::MediaGetSoundBalance()
+     * @see "QuickTime::MediaGetSoundBalance()"
      * @return the balance value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final float getBalance() throws StdQTException {
         short[] arrayOfShort = new short[1];
         StdQTException.checkError(MediaGetSoundBalance(_ID(), arrayOfShort));
@@ -45,20 +41,22 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
 
     /**
      * Sets the balance of a sound media. Range from -1.0 (Left) to 0 (Equal) to 1.0 (Right).
-     * QuickTime::MediaSetSoundBalance()
+     * @see "QuickTime::MediaSetSoundBalance()"
      * @param balance the new balance value.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final void setBalance(float paramFloat) throws StdQTException {
         StdQTException.checkError(MediaSetSoundBalance(_ID(), (short) (int) (paramFloat * 128.0F)));
     }
 
     /**
      * Gets Sound Level Meter state (Not Documented).
-     * QuickTime::MediaGetSoundLevelMeteringEnabled
+     * @see "QuickTime::MediaGetSoundLevelMeteringEnabled"
      * @return the balance value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final boolean getSoundLevelMeteringEnabled() throws StdQTException {
         byte[] arrayOfByte = { 0 };
         StdQTException.checkError(MediaGetSoundLevelMeteringEnabled(_ID(), arrayOfByte));
@@ -67,20 +65,22 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
 
     /**
      * Enables Sound Level Meter (Not Documented).
-     * QuickTime::MediaSetSoundLevelMeteringEnabled
+     * @see "QuickTime::MediaSetSoundLevelMeteringEnabled"
      * @param enabled true if enabled
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final void setSoundLevelMeteringEnabled(boolean paramBoolean) throws StdQTException {
         StdQTException.checkError(MediaSetSoundLevelMeteringEnabled(_ID(), (byte) (paramBoolean ? 1 : 0)));
     }
 
     /**
      * Gets Sound Level Meter state (Not Documented).
-     * QuickTime::MediaGetSoundLevelMeterInfo
+     * @see "QuickTime::MediaGetSoundLevelMeterInfo"
      * @return LevelMeterInfo object
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final LevelMeterInfo getSoundLevelMeterInfo() throws StdQTException {
         byte[] arrayOfByte = new byte[4];
         int i = MediaGetSoundLevelMeterInfo(_ID(), arrayOfByte);
@@ -91,10 +91,11 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
     /**
      * Pass in the count of bands you expect to get back, it would return the the actual value of bands available
      * with the freq. (Not Documented).
-     * QuickTime::MediaGetSoundEqualizerBands
+     * @see "QuickTime::MediaGetSoundEqualizerBands"
      * @return MediaEQSpectrumBandsRecord object
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final MediaEQSpectrumBands getSoundEqualizerBands(int paramInt) throws StdQTException {
         MediaEQSpectrumBands localMediaEQSpectrumBands = new MediaEQSpectrumBands(paramInt);
         StdQTException.checkError(MediaGetSoundEqualizerBands(_ID(), localMediaEQSpectrumBands.getBytes()));
@@ -104,10 +105,11 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
     /**
      * Pass in the count of bands you expect to get back, it would return the the actual value of bands available
      * with array of freq. (Not Documented).
-     * QuickTime::MediaSetSoundEqualizerBands
+     * @see "QuickTime::MediaSetSoundEqualizerBands"
      * @return MediaEQSpectrumBandsRecord object
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final void setSoundEqualizerBands(MediaEQSpectrumBands paramMediaEQSpectrumBands) throws StdQTException {
         StdQTException.checkError(MediaSetSoundEqualizerBands(_ID(), paramMediaEQSpectrumBands.getBytes()));
     }
@@ -115,11 +117,12 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
     /**
      * Sets  Sound Bass and Treble (Not Documented).
      * Range is -1 to 1 where 0 is unity gain, 256 is maximum boost, -256 is maximum attenuation.
-     * QuickTime::MediaSetSoundBassAndTreble
+     * @see "QuickTime::MediaSetSoundBassAndTreble"
      * @param bass the sound bass
      * @param treble the sound treble
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final void setSoundBassAndTreble(int paramInt1, int paramInt2) throws StdQTException {
         StdQTException.checkError(MediaSetSoundBassAndTreble(_ID(), (short) paramInt1, (short) paramInt2));
     }
@@ -127,10 +130,11 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
     /**
      * Gets  Sound Bass and Treble (Not Documented).
      * Range is -1 to 1 where 0 is unity gain, 256 is maximum boost, -256 is maximum attenuation.
-     * QuickTime::MediaGetSoundBassAndTreble
+     * @see "QuickTime::MediaGetSoundBassAndTreble"
      * @return an array on length 2, containing 1st element as bass and 2nd element as treble.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final int[] getSoundBassAndTreble() throws StdQTException {
         short[] arrayOfShort1 = { 0 };
         short[] arrayOfShort2 = { 0 };
@@ -143,10 +147,11 @@ public class SoundMediaHandler extends MediaHandler implements QuickTimeLib, Aud
      * Gets SoundEqualizer BandLevels . the levels is equal to the bands count ( from the getSoundEqualizerBands)
      * you pass in the expected count of levels and it would return the array of levels of count length having
      * band levels.(Not Documented)
-     * QuickTime::MediaGetSoundEqualizerBandLevels
+     * @see "QuickTime::MediaGetSoundEqualizerBandLevels"
      * @return bandLevels
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final int[] getSoundEqualizerBandLevels(int paramInt) throws StdQTException {
         byte[] arrayOfByte = new byte[paramInt];
         synchronized (QTNative.globalsLock) {

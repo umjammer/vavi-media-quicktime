@@ -27,12 +27,7 @@ public final class QTPreferences implements QuickTimeLib {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTPreferences.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTPreferences.class));
             }
         }
         new PrivelegedAction().establish();
@@ -40,10 +35,10 @@ public final class QTPreferences implements QuickTimeLib {
 
     /**
      * This method returns all the application and system access keys of a specified access key type.
-     * QuickTime::QTGetAccessKeys
+     * @see "QuickTime::QTGetAccessKeys"
      * @param keyType the type of access keys to return.
      * @return The AtomContainer contains atoms of type kAccessKeyAtomType at the top level.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static AtomContainer getAccessKeys(String paramString) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -57,11 +52,11 @@ public final class QTPreferences implements QuickTimeLib {
      * To register a system access key, set flags parameter to kAccessKeySystemFlag (1).
      * To register an application access key, set flags parameter to 0.
      * If the access key has already been registered, no error is returned, and the request is simply ignored
-     * QuickTime::QTRegisterAccessKey
+     * @see "QuickTime::QTRegisterAccessKey"
      * @param keyType the type of access keys to be registered.
      * @param flags flag specifying the operation of this method.
      * @param accessKey the key to be registered.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void registerAccessKey(String paramString1, int paramInt, String paramString2) throws QTException {
         QTHandle localQTHandle = new QTHandle(paramString2.length(), false);
@@ -75,11 +70,11 @@ public final class QTPreferences implements QuickTimeLib {
      * To register a system access key, set flags parameter to kAccessKeySystemFlag (1).
      * To register an application access key, set flags parameter to 0.
      * If the access key has already been registered, no error is returned, and the request is simply ignored
-     * QuickTime::QTRegisterAccessKey
+     * @see "QuickTime::QTRegisterAccessKey"
      * @param keyType the type of access keys to be registered.
      * @param flags flag specifying the operation of this method.
      * @param accessKey the key to be registered.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void registerAccessKey(String paramString, int paramInt, QTHandleRef paramQTHandleRef) throws QTException {
         int i = QTRegisterAccessKey(QTUtils.String2PString(paramString, 255), paramInt, QTObject.ID(paramQTHandleRef));
@@ -90,11 +85,11 @@ public final class QTPreferences implements QuickTimeLib {
      * This method removes an access key.
      * To remove a system access key, set flags parameter to kAccessKeySystemFlag (1).
      * To remove an application access key, set flags parameter to 0.
-     * QuickTime::QTUnregisterAccessKey
+     * @see "QuickTime::QTUnregisterAccessKey"
      * @param keyType the type of the access key to be removed.
      * @param flags flag specifying the operation of this method.
      * @param accessKey the key to be removed.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void unregisterAccessKey(String paramString1, int paramInt, String paramString2) throws QTException {
         QTHandle localQTHandle = new QTHandle(paramString2.length(), false);
@@ -107,11 +102,11 @@ public final class QTPreferences implements QuickTimeLib {
      * This method removes an access key.
      * To remove a system access key, set flags parameter to kAccessKeySystemFlag (1).
      * To remove an application access key, set flags parameter to 0.
-     * QuickTime::QTUnregisterAccessKey
+     * @see "QuickTime::QTUnregisterAccessKey"
      * @param keyType the type of the access key to be removed.
      * @param flags flag specifying the operation of this method.
      * @param accessKey the key to be removed.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void unregisterAccessKey(String paramString, int paramInt, QTHandleRef paramQTHandleRef) throws QTException {
         int i = QTUnregisterAccessKey(QTUtils.String2PString(paramString, 255), paramInt, QTObject.ID(paramQTHandleRef));
@@ -120,10 +115,10 @@ public final class QTPreferences implements QuickTimeLib {
 
     /**
      * This method retrieves the preference value associated with a specific preference type.
-     * QuickTime::GetQuickTimePreference
+     * @see "QuickTime::GetQuickTimePreference"
      * @param preferenceType the type of the preference to be retrieved.
      * @return the atom container encapsulating the specific preference
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static AtomContainer getPreference(int paramInt) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -136,10 +131,10 @@ public final class QTPreferences implements QuickTimeLib {
 
     /**
      * This method sets the preference value associated with a specific preference type.
-     * QuickTime::SetQuickTimePreference
+     * @see "QuickTime::SetQuickTimePreference"
      * @param preferenceType the type of the preference to be retrieved.
      * @param prefAtom the atom container encapsulating the values of the specified preference
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void setPreference(int paramInt, AtomContainer paramAtomContainer) throws QTException {
         StdQTException.checkError(SetQuickTimePreference(paramInt, QTObject.ID(paramAtomContainer)));

@@ -231,7 +231,7 @@ final class SoundPlayer {
                 continue;
             }
             float v = movieVolume * t.volume / 256f;
-            float balance = Math.max(-1, Math.min(1, t.media.balance / 256f));
+            float balance = Math.clamp(t.media.balance / 256f, -1, 1);
             float gl = v * Math.min(1, 1 - balance), gr = v * Math.min(1, 1 + balance);
             for (int i = 0; i < CHUNK; i++) {
                 left[i] += s[i * 2] * gl;
@@ -245,7 +245,7 @@ final class SoundPlayer {
     }
 
     private static void put(byte[] b, int o, float v) {
-        int s = Math.max(-32768, Math.min(32767, Math.round(v * 32767)));
+        int s = Math.clamp(Math.round(v * 32767), -32768, 32767);
         b[o] = (byte) s;
         b[o + 1] = (byte) (s >> 8);
     }

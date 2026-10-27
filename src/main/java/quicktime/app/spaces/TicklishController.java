@@ -3,7 +3,7 @@ package quicktime.app.spaces;
 import quicktime.app.time.Ticklish;
 
 /**
- * Deprecated.
+ * @deprecated
  * A TicklishController is a controller that requires tickling by the
  * Space's Timer whenever the Space itself is tickled.
  * A TicklishController when added to a Space will be added to its
@@ -13,8 +13,8 @@ import quicktime.app.time.Ticklish;
  * Whenever a Space is tickled the TicklishController is also tickled.
  * A TimeableController on the other hand can have it own independent sense
  * of time and provide its own timing information for the objects it controls.
- * @see {@link quicktime.app.spaces.TimeableController}
+ * @see quicktime.app.spaces.TimeableController
  */
-public abstract interface TicklishController extends Ticklish, Controller {
+public interface TicklishController extends Ticklish, Controller {
 }
 

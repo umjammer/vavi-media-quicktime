@@ -3,6 +3,7 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -19,18 +20,14 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
 
     private static final int kNativeSize = 132;
 
-    static final long serialVersionUID = -3131954178923067174L;
+    @Serial
+    private static final long serialVersionUID = -3131954178923067174L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SynthesizerDescription.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SynthesizerDescription.class));
             }
         }.establish();
     }
@@ -43,6 +40,7 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[132];
         byte[] arrayOfByte = new byte[132];
@@ -58,6 +56,7 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[132];
         int i = getIntFromArray(getBytes(), 0);
@@ -191,7 +190,7 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
         return doMask(paramInt, 116);
     }
 
-    private final boolean doMask(int paramInt1, int paramInt2) {
+    private boolean doMask(int paramInt1, int paramInt2) {
         int i = paramInt1 < 116 ? 64 : paramInt1 < 100 ? 32 : paramInt1 < 84 ? 0 : 96;
         int j = paramInt1 == 0 ? 0 : 1 << --paramInt1 - i;
         return (j & getIntAt(paramInt2 + i / 32)) != 0;
@@ -207,6 +206,7 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
     /**
      * Return a copy of the current class.
      */
+    @Override
     public Object clone() {
         return new SynthesizerDescription(this.bytes);
     }
@@ -227,8 +227,3 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /SynthesizerDescription.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

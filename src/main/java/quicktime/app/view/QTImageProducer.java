@@ -44,7 +44,7 @@ public class QTImageProducer implements ImageProducer {
 
     private static final boolean debug = false;
 
-    private static long msecs = 0L;
+    private static final long msecs = 0L;
 
     private static final boolean profile = false;
 
@@ -52,15 +52,15 @@ public class QTImageProducer implements ImageProducer {
         return ((paramPresentable instanceof Timeable)) || (!paramPresentable.isSingleFrame());
     }
 
-    private Dimension size;
+    private final Dimension size;
 
-    private int rowInts;
+    private final int rowInts;
 
     private QDGraphics gw;
 
     private PixMap pm;
 
-    private int[] pixels;
+    private final int[] pixels;
 
     private Presentable qtSource;
 
@@ -115,15 +115,15 @@ public class QTImageProducer implements ImageProducer {
         return this.gw;
     }
 
-    private ColorModel cm = new DirectColorModel(32, 16711680, 65280, 255, 0);
+    private final ColorModel cm = new DirectColorModel(32, 16711680, 65280, 255, 0);
 
-    private Hashtable props = new Hashtable();
+    private final Hashtable props = new Hashtable();
 
-    private Vector consumers = new Vector();
+    private final Vector consumers = new Vector();
 
     private boolean doesRedraw;
 
-    private boolean singleFrame;
+    private final boolean singleFrame;
 
     /**
      * Returns true if the client only has a single frame to render and thus
@@ -142,8 +142,9 @@ public class QTImageProducer implements ImageProducer {
      * using the ImageConsumer interface immediately, or when the
      * next available image reconstruction is triggered by a call
      * to the startProduction method.
-     * @see {@link quicktime.app.view.QTImageProducer#startProduction(java.awt.image.ImageConsumer)}
+     * @see quicktime.app.view.QTImageProducer#startProduction(java.awt.image.ImageConsumer)
      */
+    @Override
     public synchronized void addConsumer(ImageConsumer paramImageConsumer) {
         if (isConsumer(paramImageConsumer)) {
             return;
@@ -179,6 +180,7 @@ public class QTImageProducer implements ImageProducer {
      * is currently registered with this ImageProducer as one
      * of its consumers.
      */
+    @Override
     public synchronized boolean isConsumer(ImageConsumer paramImageConsumer) {
         return this.consumers.contains(paramImageConsumer);
     }
@@ -191,6 +193,7 @@ public class QTImageProducer implements ImageProducer {
      * The ImageProducer should stop sending data to this
      * consumer as soon as is feasible.
      */
+    @Override
     public synchronized void removeConsumer(ImageConsumer paramImageConsumer) {
         this.consumers.removeElement(paramImageConsumer);
     }
@@ -203,8 +206,9 @@ public class QTImageProducer implements ImageProducer {
      * been registered with the producer.  This method differs
      * from the addConsumer method in that a reproduction of
      * the image data should be triggered as soon as possible.
-     * @see {@link quicktime.app.view.QTImageProducer#addConsumer(java.awt.image.ImageConsumer)}
+     * @see quicktime.app.view.QTImageProducer#addConsumer(java.awt.image.ImageConsumer)
      */
+    @Override
     public void startProduction(ImageConsumer paramImageConsumer) {
         synchronized (QTNative.globalsLock) {
             synchronized (this) {
@@ -248,11 +252,12 @@ public class QTImageProducer implements ImageProducer {
      * ImageConsumer method calls:
      *
      * ic.setHints(TOPDOWNLEFTRIGHT | < otherhints >);
-     * ic.setPixels(...);	// As many times as needed
+     * ic.setPixels(...); // As many times as needed
      * ic.imageComplete();
      *
      * @see ImageConsumer.setHints(int)
      */
+    @Override
     public void requestTopDownLeftRightResend(ImageConsumer paramImageConsumer) {
     }
 
@@ -269,7 +274,7 @@ public class QTImageProducer implements ImageProducer {
      *  are grabbed and sent to the consumers. If not null then the qtSource
      *  invalidates the region specified, which can result in a faster draw. Also only those
      *  pixels that are within the bounds of the region are sent to the consumers.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void redraw(Region paramRegion) throws QTException {
         if ((!this.consumers.isEmpty()) || (!isSingleFrame())) {
@@ -288,7 +293,7 @@ public class QTImageProducer implements ImageProducer {
      * update the registered ImageConsumers.
      * @param invalidRgn enter null to copy all pixels, or specify a region that specifies the changed pixel data,
      *  which can econimize the copying of the pixel data to only those areas that have changed.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void updateConsumers(Region paramRegion) throws QTException {
         if (!isSingleFrame())
@@ -298,11 +303,11 @@ public class QTImageProducer implements ImageProducer {
         int j;
         int k;
         if (paramRegion != null) {
-            Object localObject = paramRegion.getRgnBBox();
-            i = ((QDRect) localObject).getX();
-            j = ((QDRect) localObject).getY();
-            k = ((QDRect) localObject).getWidth();
-            m = ((QDRect) localObject).getHeight();
+            QDRect localObject = paramRegion.getRgnBBox();
+            i = localObject.getX();
+            j = localObject.getY();
+            k = localObject.getWidth();
+            m = localObject.getHeight();
         } else {
             i = 0;
             j = 0;
@@ -310,8 +315,8 @@ public class QTImageProducer implements ImageProducer {
             m = this.size.height;
         }
         Object localObject = this.consumers.elements();
-        while (((Enumeration) localObject).hasMoreElements()) {
-            ImageConsumer localImageConsumer = (ImageConsumer) ((Enumeration) localObject).nextElement();
+        while (((Enumeration<?>) localObject).hasMoreElements()) {
+            ImageConsumer localImageConsumer = (ImageConsumer) ((Enumeration<?>) localObject).nextElement();
             localImageConsumer.setPixels(i, j, k, m, this.cm, this.pixels, 0, this.rowInts);
             if (isConsumer(localImageConsumer)) {
                 localImageConsumer.imageComplete(2);

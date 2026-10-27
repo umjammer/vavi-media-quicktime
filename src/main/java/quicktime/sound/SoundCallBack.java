@@ -6,13 +6,13 @@ package quicktime.sound;
  * your SoundCallBack to be called when the sound playing in the SndChannel is done
  * playing
  */
-public abstract interface SoundCallBack {
+public interface SoundCallBack {
 
     /**
      * This method should be implemented to handle commands that are generated
      * from the doCommand calls on the SndChannel.
      * @param sc the SndChannel the callback is called from
      */
-    public abstract void execute(SndChannel paramSndChannel);
+    void execute(SndChannel paramSndChannel);
 }
 

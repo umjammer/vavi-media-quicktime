@@ -7,19 +7,17 @@
 
 package ImageProducing;
 
-import ImageProducing.ip.ControlPanel;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ImageProducing.ip.ControlPanel;
 import quicktime.QTException;
 import quicktime.QTSession;
 import quicktime.app.view.MoviePlayer;
@@ -39,7 +37,8 @@ import quicktime.std.movies.MovieDrawingComplete;
  * as the source
  */
 public class ImageProducing extends JFrame implements MovieDrawingComplete, QDConstants, StdQTConstants {
-    public static void main(String args[]) {
+
+    static void main(String[] args) {
         try {
             QTSession.open();
             QTFile f1 = new QTFile(QTFactory.findAbsolutePath("jumps.mov").getPath());
@@ -77,6 +76,7 @@ public class ImageProducing extends JFrame implements MovieDrawingComplete, QDCo
         panel.add("Center", canvas);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 try {
                     // have to remove a callback we install
@@ -87,6 +87,7 @@ public class ImageProducing extends JFrame implements MovieDrawingComplete, QDCo
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -97,6 +98,7 @@ public class ImageProducing extends JFrame implements MovieDrawingComplete, QDCo
 
     Movie myMovie;
 
+    @Override
     public int execute(Movie myMovie) {
         try {
             imgProducer.updateConsumers(null);
@@ -107,25 +109,29 @@ public class ImageProducing extends JFrame implements MovieDrawingComplete, QDCo
     }
 
     static class IPJComponent extends JComponent {
+
         IPJComponent(Dimension prefSize, QTImageProducer ip) {
             pSize = prefSize;
             img = createImage(ip);
             prepareImage(img, this);
         }
 
-        private Dimension pSize;
+        private final Dimension pSize;
 
-        private Image img;
+        private final Image img;
 
+        @Override
         public Dimension getPreferredSize() {
             return pSize;
         }
 
+        @Override
         public void paint(Graphics g) {
             g.drawImage(img, 0, 0, pSize.width, pSize.height, this);
         }
 
         // stops flicker as we have no background color to erase
+        @Override
         public void update(Graphics g) {
             paint(g);
         }

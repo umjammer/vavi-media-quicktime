@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
@@ -14,7 +16,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
 
     private static EndianDescriptor ed;
 
-    static final long serialVersionUID = -3293127487969383255L;
+    @Serial
+    private static final long serialVersionUID = -3293127487969383255L;
 
     /**
      * Creates a QTVRCubicView object containing no data
@@ -40,6 +43,7 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
         return ed;
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRCubicView localQTVRCubicView = new QTVRCubicView();
@@ -47,11 +51,13 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
         System.arraycopy(localQTVRCubicView.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRCubicView localQTVRCubicView = (QTVRCubicView) clone();
         paramObjectOutputStream.write(localQTVRCubicView.getBytes());
     }
 
+    @Override
     protected Object clone() {
         try {
             return new QTVRCubicView(this.bytes);

@@ -32,7 +32,7 @@ public class TaskThread implements Runnable {
 
     private static final int PRIORITY_NOT_SET = -1;
 
-    public static final void killAllThreads() {
+    public static void killAllThreads() {
         Enumeration e = threads.elements();
         while (e.hasMoreElements()) {
             TaskThread localTaskThread = (TaskThread) e.nextElement();
@@ -66,13 +66,13 @@ public class TaskThread implements Runnable {
         this.tName = paramString;
     }
 
-    private Vector tasks = new Vector(12, 0);
+    private final Vector tasks = new Vector(12, 0);
 
     private Thread theThread = null;
 
     private int sleepTime;
 
-    private String tName;
+    private final String tName;
 
     private int threadPriority = 5;
 
@@ -197,12 +197,7 @@ public class TaskThread implements Runnable {
                 class QTJPrivelegedAction {
 
                     Object doPrivelegedAction() {
-                        return AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                            public Object run() {
-                                return new Thread(TaskThread.this, tName);
-                            }
-                        });
+                        return AccessController.doPrivileged((PrivilegedAction<Object>) () -> new Thread(TaskThread.this, tName));
                     }
                 }
                 this.theThread = (Thread) new QTJPrivelegedAction().doPrivelegedAction();
@@ -236,7 +231,7 @@ public class TaskThread implements Runnable {
 
     private volatile boolean suspended = false;
 
-    private static Vector threads = new Vector();
+    private static final Vector threads = new Vector();
 
     /**
      * Suspends the execution of the task thread.
@@ -285,6 +280,7 @@ public class TaskThread implements Runnable {
      * Calls task on each of the task object in the internal task list. If an object's
      * task call fails it is removed from the collection.
      */
+    @Override
     public void run() {
         end: while (true) {
             synchronized (this) {
@@ -299,7 +295,7 @@ public class TaskThread implements Runnable {
             }
             if (!this.threadIsRunning)
                 break end;
-            if (this.tasks.size() > 0) {
+            if (!this.tasks.isEmpty()) {
                 synchronized (this.theThread) {
                     if (!this.threadIsRunning)
                         break end;
@@ -346,6 +342,7 @@ public class TaskThread implements Runnable {
     /**
      * java.lang.Throwable
      */
+    @Override
     protected void finalize() throws Throwable {
         removeAll();
         super.finalize();

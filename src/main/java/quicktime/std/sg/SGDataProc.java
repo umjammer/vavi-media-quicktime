@@ -7,7 +7,7 @@ import quicktime.util.QTPointerRef;
  * The sequence grabber calls your data function whenever any channel component
  * writes data to the destination movie. You may use your data function to store the digitized data in some format other than a QuickTime movie.
  */
-public abstract interface SGDataProc {
+public interface SGDataProc {
 
     /**
      * The method that is called by QuickTime to write the provided data.
@@ -27,8 +27,8 @@ public abstract interface SGDataProc {
      *  seqGrabWriteReserveDo not write any data to the output file. Instead, reserve space in the output file for the amount of data indicated by the len parameter. Set the field referred to by the offset parameter to the location of the reserved space.
      *  seqGrabWriteFillWrite the data into the location specified by the field referred to by the offset parameter. Set that field to the location of the byte following the last byte you wrote.
      * @return where you wrote the data or zero if you didn't write data.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract int execute(SGChannel paramSGChannel, QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException;
+    int execute(SGChannel paramSGChannel, QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException;
 }
 

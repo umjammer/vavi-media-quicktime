@@ -75,7 +75,7 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
     /**
      * Returns the cursor data
      * @return the handle object pointing to cursor data
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTHandle getData() throws QTException {
         int i = getIntAt(4);

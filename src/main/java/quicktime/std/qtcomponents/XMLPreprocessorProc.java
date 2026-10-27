@@ -5,7 +5,7 @@ import quicktime.QTException;
 /**
  * The XMLPreprocessorProc corresponds to the QuickTime PreprocessInstructionHandler callback
  */
-public abstract interface XMLPreprocessorProc {
+public interface XMLPreprocessorProc {
 
     /**
      * The method that is called by the XMLParser for parsing PreprocessorInstruction events.
@@ -13,8 +13,8 @@ public abstract interface XMLPreprocessorProc {
      * throw an exception with the appropriate error number.
      * @param name the element name
      * @param attributes an array of attribute-value pair strings
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void execute(String paramString, String[] paramArrayOfString) throws QTException;
+    void execute(String paramString, String[] paramArrayOfString) throws QTException;
 }
 

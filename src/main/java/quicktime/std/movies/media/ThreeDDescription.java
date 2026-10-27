@@ -10,7 +10,7 @@ import quicktime.util.EndianFlipSpec;
  */
 public final class ThreeDDescription extends SampleDescription {
 
-    private static int kThreeDDescriptionSize = 22;
+    private static final int kThreeDDescriptionSize = 22;
 
     private static EndianDescriptor ed;
 
@@ -48,6 +48,7 @@ public final class ThreeDDescription extends SampleDescription {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new ThreeDDescription(makeAndCopyHandle(), null);
     }

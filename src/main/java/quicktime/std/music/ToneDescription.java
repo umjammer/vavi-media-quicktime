@@ -1,12 +1,11 @@
 package quicktime.std.music;
 
-import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.Serial;
+
+import com.apple.mrj.macos.carbon.CarbonAccess;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -20,33 +19,19 @@ import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
 
+
 /**
  * Provides the information needed to produce a specific musical sound.
  */
 public final class ToneDescription extends QTByteObject implements QuickTimeLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 76;
 
-    static final long serialVersionUID = 2107309866399025424L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ToneDescription.class);
-                    }
-                });
-            }
-        }.establish();
-    }
+    @Serial
+    private static final long serialVersionUID = 2107309866399025424L;
 
     /**
      * Creates a ToneDescription object with no initial settings.
@@ -58,40 +43,42 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
     /**
      * Initializes the ToneDescription instance with the appropriate
      * instrument based on the specified gmNumber.
-     * QuickTime::NAStuffToneDescription
+     * @see "QuickTime::NAStuffToneDescription"
      * @param gmNumber instrument number
      */
-    public ToneDescription(int paramInt) throws QTException {
-        this(NoteAllocator.getDefault(), paramInt);
+    public ToneDescription(int gmNumber) throws QTException {
+        this(NoteAllocator.getDefault(), gmNumber);
     }
 
     /**
      * Initializes the ToneDescription instance with the appropriate
      * instrument based on the specified gmNumber.
-     * QuickTime::NAStuffToneDescription
+     * @see "QuickTime::NAStuffToneDescription"
      * @param na the NoteAllocator component instance to use
      * @param gmNumber instrument number
      */
-    public ToneDescription(NoteAllocator paramNoteAllocator, int paramInt) throws StdQTException {
+    public ToneDescription(NoteAllocator na, int gmNumber) throws StdQTException {
         this();
-        stuff(paramNoteAllocator, paramInt);
+        stuff(na, gmNumber);
     }
 
     private ToneDescription(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[76];
         paramObjectInputStream.read(getBytes());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         paramObjectOutputStream.write(getBytes());
     }
 
     /**
-     * Returns the current OSType of the described instrument's synthesiser.
+     * Returns the current OSType of the described instrument's synthesizer.
      * @return the OSType
      */
     public final int getSynthesizerType() {
@@ -99,35 +86,35 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
     }
 
     /**
-     * Sets the current OSType of the described instrument's synthesiser.
+     * Sets the current OSType of the described instrument's synthesizer.
      * @param type the OSType
      */
-    public final void setSynthesizerType(int paramInt) {
-        setIntAt(0, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public final void setSynthesizerType(int type) {
+        setIntAt(0, EndianOrder.flipNativeToBigEndian32(type));
     }
 
     /**
-     * Returns the current name of the described instrument's synthesiser.
+     * Returns the current name of the described instrument's synthesizer.
      * @return the Synthesizer name
-     * @return {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public final String getSynthesizerName() throws UtilException {
         return getPStringAt(4);
     }
 
     /**
-     * Sets the current name of the described instrument's synthesiser.
+     * Sets the current name of the described instrument's synthesizer.
      * @param name the Synthesizer name
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
-    public final void setSynthesizerName(String paramString) throws UtilException {
-        setPStringAt(4, 31, paramString);
+    public final void setSynthesizerName(String name) throws UtilException {
+        setPStringAt(4, 31, name);
     }
 
     /**
      * Returns the current name of the described instrument.
      * @return the instrumentName
-     * @return {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public final String getInstrumentName() throws UtilException {
         return getPStringAt(36);
@@ -136,10 +123,10 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
     /**
      * Sets the current name of the described instrument.
      * @param name the instrumentName
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
-    public final void setInstrumentName(String paramString) throws UtilException {
-        setPStringAt(36, 31, paramString);
+    public final void setInstrumentName(String name) throws UtilException {
+        setPStringAt(36, 31, name);
     }
 
     /**
@@ -154,12 +141,12 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Sets the current number of the described instrument.
      * @param num the instrumentNumber
      */
-    public final void setInstrumentNumber(int paramInt) {
-        setIntAt(68, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public final void setInstrumentNumber(int num) {
+        setIntAt(68, EndianOrder.flipNativeToBigEndian32(num));
     }
 
     /**
-     * Returns the current gm Number of the described instrument's synthesiser.
+     * Returns the current gm Number of the described instrument's synthesizer.
      * @return the gm Number
      */
     public final int getGMNumber() {
@@ -167,47 +154,44 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
     }
 
     /**
-     * Sets the current gm Number of the described instrument's synthesiser.
+     * Sets the current gm Number of the described instrument's synthesizer.
      * @param gmNumber the gm Number
      */
-    public final void setGMNumber(int paramInt) {
-        setIntAt(72, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public final void setGMNumber(int gmNumber) {
+        setIntAt(72, EndianOrder.flipNativeToBigEndian32(gmNumber));
     }
 
     /**
      * Initializes the calling ToneDescription instance with the details of the
      * note channel specified by the gmNumber.
-     * QuickTime::NAStuffToneDescription
+     * @see "QuickTime::NAStuffToneDescription"
      * @param na the Note Allocator component to use
      * @param gmNumber instrument number
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void stuff(NoteAllocator paramNoteAllocator, int paramInt) throws StdQTException {
-        StdQTException.checkError(NAStuffToneDescription(QTObject.ID(paramNoteAllocator), paramInt, getBytes()));
+    public final void stuff(NoteAllocator na, int gmNumber) throws StdQTException {
+        StdQTException.checkError(NAStuffToneDescription(QTObject.ID(na), gmNumber, getBytes()));
     }
 
     /**
-     * Initialises the tone description structure through providing the user with a dialog
+     * Initializes the tone description structure through providing the user with a dialog
      * that allows the user to choose the instrument.
-     * QuickTime::NAPickInstrument
+     * @see "QuickTime::NAPickInstrument"
      * @param na the Note Allocator component to use
      * @param prompt Dialog box prompt "New Instrument..."
      * @param flags flags to limit user options
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void pickInstrument(final NoteAllocator na, final String prompt, final int flags) throws StdQTException {
+    public final void pickInstrument(NoteAllocator na, String prompt, int flags) throws StdQTException {
         int i = 0;
         if (QTSession.isCurrentOS(4)) {
-            i = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                public Object invoke() {
-                    int i = 0;
-                    synchronized (QTNative.globalsLock) {
-                        i = ToneDescription.NAPickInstrument(QTObject.ID(na), 0, QTUtils.String2PString(prompt, 255), ToneDescription.this.getBytes(), flags, 0, 0, 0);
-                    }
-                    return i;
+            i = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int i1 = 0;
+                synchronized (QTNative.globalsLock) {
+                    i1 = ToneDescription.NAPickInstrument(QTObject.ID(na), 0, QTUtils.String2PString(prompt, 255), ToneDescription.this.getBytes(), flags, 0, 0, 0);
                 }
-            })).intValue();
+                return i1;
+            });
             StdQTException.checkError(i);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -226,14 +210,15 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
         String str = "";
         try {
             str = getInstrumentName();
-        } catch (UtilException localUtilException) {
+        } catch (UtilException _) {
         }
-        return getClass().getName() + "[synthType=" + QTUtils.fromOSType(getSynthesizerType()) + ",instNum=" + Integer.toString(getInstrumentNumber()) + ",gmNum=" + Integer.toString(getGMNumber()) + ",instName=" + str + "]";
+        return getClass().getName() + "[synthType=" + QTUtils.fromOSType(getSynthesizerType()) + ",instNum=" + getInstrumentNumber() + ",gmNum=" + getGMNumber() + ",instName=" + str + "]";
     }
 
     /**
      * Makes a copy of a ToneDescription object.
      */
+    @Override
     public Object clone() {
         return new ToneDescription(getBytes());
     }

@@ -1,53 +1,38 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.std.StdQTException;
 import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
 
+
 /**
+ * <pre>
  * #pragma options align=mac68k
  * struct XMLElement {
- * UInt32 							identifier;		// size 4		//	Tokenized identifier, if the element name was recognized by the parser
- * char *							name;			// size 4		//	Element name, only present if identifier == xmlIdentifierUnrecognized
- * XMLAttributePtr 			attributes;	// size 4		//	Array of attributes, terminated with an attribute with identifier == xmlIdentifierInvalid
- * XMLContentPtr 				contents;		// size 4		//	Array of contents, terminated with a content with kind == xmlIdentifierInvalid
+ *   UInt32          identifier;  // size 4  // Tokenized identifier, if the element name was recognized by the parser
+ *   char *          name;        // size 4  // Element name, only present if identifier == xmlIdentifierUnrecognized
+ *   XMLAttributePtr attributes;  // size 4  // Array of attributes, terminated with an attribute with identifier == xmlIdentifierInvalid
+ *   XMLContentPtr   contents;    // size 4  // Array of contents, terminated with a content with kind == xmlIdentifierInvalid
  * }; // sizeof (XMLElement) = 16
+ * </pre>
  */
 public final class XMLElement extends QTObject implements PrimitivesLib {
 
-    static {
-        new Object() {
+    private static final Logger logger = System.getLogger(XMLElement.class.getName());
 
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(XMLElement.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
-    private static Object owner = new Object();
-
-    private static Object linkage;
+    private static final Object owner = new Object();
 
     private static final int kXMLElementSize = 16;
-
     private static final int kIdentifierOffset = 0;
-
     private static final int kNameOffset = 4;
-
     private static final int kAttributesOffset = 8;
-
     private static final int kContentsOffset = 12;
 
     XMLElement(int paramInt) throws QTException {
@@ -60,11 +45,11 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
      * @throws quicktime.std.StdQTException
      */
     public int getIdentifier() throws StdQTException {
-        int i = getIntFromPointer(_ID(), 0);
+        int i = getIntFromPointer(_ID(), kIdentifierOffset);
         if (i != -1) {
             return i;
         }
-        System.out.println("XMLElement.getIdentifier() called but is xmlIdentifierUnrecognized");
+        logger.log(Level.DEBUG, "XMLElement.getIdentifier() called but is xmlIdentifierUnrecognized");
         throw new StdQTException(-50);
     }
 
@@ -72,35 +57,34 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
      * was identifier unrecognized by XML parser
      */
     public boolean identifierUnrecognized() {
-        int i = getIntFromPointer(_ID(), 0);
+        int i = getIntFromPointer(_ID(), kIdentifierOffset);
         return i == -1;
     }
 
     /**
      * get the name of the element if element was not recognized by the parser
-     * @throws on tokenized identifier not xmlIdentifierUnrecognized
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on tokenized identifier not xmlIdentifierUnrecognized
      * @throws quicktime.util.UtilException
      */
     public String getName() throws StdQTException, UtilException {
-        int i = getIntFromPointer(_ID(), 0);
+        int i = getIntFromPointer(_ID(), kIdentifierOffset);
         if (i == -1) {
-            int j = getIntFromPointer(_ID(), 4);
+            int j = getIntFromPointer(_ID(), kNameOffset);
             String str = getStringFromPointer(j);
             return str;
         }
-        System.out.println("XMLElement.getName() called but not xmlIdentifierUnrecognized");
+        logger.log(Level.DEBUG, "XMLElement.getName() called but not xmlIdentifierUnrecognized");
         throw new StdQTException(-50);
     }
 
     /**
      * count of number of XMLAttribute items
      * @return count of attributes
-     * @return {@link quicktime.std.StdQTException}
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
     public int countAttributes() throws StdQTException, QTException {
-        int i = getIntFromPointer(_ID(), 8);
+        int i = getIntFromPointer(_ID(), kAttributesOffset);
         if (i != 0) {
             XMLAttribute localXMLAttribute = new XMLAttribute(i);
             for (int j = 0; ; j++) {
@@ -115,14 +99,14 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     /**
      * get the attributes
      * @return array of XMLAttribute
-     * @return {@link quicktime.std.StdQTException}
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
     public XMLAttribute[] getAttributes() throws StdQTException, QTException {
         int i = countAttributes();
         if (i != 0) {
             XMLAttribute[] arrayOfXMLAttribute = new XMLAttribute[i];
-            int j = getIntFromPointer(_ID(), 8);
+            int j = getIntFromPointer(_ID(), kAttributesOffset);
             for (int k = 0; k < i; k++) {
                 arrayOfXMLAttribute[k] = new XMLAttribute(j, k);
             }
@@ -134,11 +118,11 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     /**
      * count of number of XMLContent items
      * @return count of content items
-     * @return {@link quicktime.std.StdQTException}
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
     public int countContents() throws StdQTException, QTException {
-        int i = getIntFromPointer(_ID(), 12);
+        int i = getIntFromPointer(_ID(), kContentsOffset);
         if (i != 0) {
             XMLContent localXMLContent = new XMLContent(i);
             for (int j = 0; ; j++) {
@@ -153,13 +137,13 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     /**
      * get the content items of the XMLElement
      * @return array of XMLContent
-     * @return {@link quicktime.std.StdQTException}
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException
+     * @throws quicktime.QTException
      */
     public XMLContent[] getContents() throws StdQTException, QTException {
         int i = countContents();
         if (i != 0) {
-            int j = getIntFromPointer(_ID(), 12);
+            int j = getIntFromPointer(_ID(), kContentsOffset);
             XMLContent[] arrayOfXMLContent = new XMLContent[i];
             for (int k = 0; k < i; k++) {
                 arrayOfXMLContent[k] = new XMLContent(j, k);

@@ -6,9 +6,9 @@ package quicktime.jdirect;
  * static field of type Object, that is initialized in its static
  * initializer by calling JDirectLinker.loadLibrary.
  */
-public abstract interface SoundLib extends SharedLibrary {
+public interface SoundLib extends SharedLibrary {
 
-    public static final Object libraryInstance = null;
+    Object libraryInstance = null;
 
-    public static final String JDirect_MacOSX = "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon";
+    String JDirect_MacOSX = "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon";
 }

@@ -1,9 +1,10 @@
 package quicktime.std.movies;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Enumeration;
 import java.util.Vector;
+
 import com.apple.mrj.macos.carbon.CarbonAccess;
 import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.QTException;
@@ -19,29 +20,16 @@ import quicktime.std.StdQTException;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTUtils;
 
+
 /**
  * This class creates an AtomContainer that contains the necessary
  * information for displaying a list of effects
  */
 public final class ParameterDialog implements QuickTimeLib {
 
-    private static Object linkage;
+    private static final Logger logger = System.getLogger(ParameterDialog.class.getName());
 
     private static final boolean accumulateUpdates = true;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ParameterDialog.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     private static final int[] savedPort = { 0 };
 
@@ -52,22 +40,23 @@ public final class ParameterDialog implements QuickTimeLib {
     private int dialog;
 
     private ParameterDialog(EffectsList paramEffectsList, AtomContainer paramAtomContainer, int paramInt) throws QTException {
-        final int[] arrayOfInt = { 0 };
-        final EffectsList localEffectsList = paramEffectsList;
-        final AtomContainer localAtomContainer = paramAtomContainer;
-        final int i = paramInt;
+        int[] arrayOfInt = { 0 };
+        EffectsList localEffectsList = paramEffectsList;
+        AtomContainer localAtomContainer = paramAtomContainer;
+        int i = paramInt;
         if (QTSession.isCurrentOS(4)) {
             GetGWorld(savedPort, savedDevice);
-            res = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            res = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     synchronized (QTNative.globalsLock) {
                         res = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(localEffectsList), QTObject.ID(localAtomContainer), i, arrayOfInt);
                         ParameterDialog.SetGWorld(ParameterDialog.savedPort[0], ParameterDialog.savedDevice[0]);
                     }
-                    return new Integer(ParameterDialog.res);
+                    return ParameterDialog.res;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(res);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -90,37 +79,38 @@ public final class ParameterDialog implements QuickTimeLib {
      * This call shows the dialog with the specified parameters. It shows this dialog as
      * a modal dialog. This currently does not support the featureUnsuppported result, which
      * will throw an exception. When this function is complete the
-     * QuickTime::QTCreateStandardParameterDialog
-     * QuickTime::QTIsStandardParameterDialogEvent
-     * QuickTime::QTDismissStandardParameterDialog
+     * @see "QuickTime::QTCreateStandardParameterDialog"
+     * @see "QuickTime::QTIsStandardParameterDialogEvent"
+     * @see "QuickTime::QTDismissStandardParameterDialog"
      * @param effectsList this passes to the create dialog routine the
      *  parameters that will govern the effects that are displayed
      * @param dialogOptions options of type StdQTConstants.pdOptions...
      * @return the completed atom container that contains all of the information to display the effect.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static AtomContainer showParameterDialog(final AtomContainer effectsList, final int dialogOptions) throws QTException {
-        final int[] ar = { 0 };
-        final AtomContainer parameters = new AtomContainer();
+    public static AtomContainer showParameterDialog(AtomContainer effectsList, int dialogOptions) throws QTException {
+        int[] ar = { 0 };
+        AtomContainer parameters = new AtomContainer();
         int i;
         if (QTSession.isCurrentOS(4)) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            i = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            i = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     int i = 0;
                     synchronized (QTNative.globalsLock) {
-                        System.err.println("QTCreateStandardParameterDialog " + ParameterDialog.res);
+                        logger.log(Level.DEBUG, "QTCreateStandardParameterDialog " + ParameterDialog.res);
                         i = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(effectsList), QTObject.ID(parameters), dialogOptions, ar);
                         if (i == 0) {
                             ParameterDialog.res = ParameterDialog.QTIsStandardParameterDialogEvent(null, ar[0]);
                             ParameterDialog.QTDismissStandardParameterDialog(ar[0]);
                         }
                     }
-                    return new Integer(i);
+                    return i;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(i);
             res = i;
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
@@ -152,49 +142,45 @@ public final class ParameterDialog implements QuickTimeLib {
     /**
      * This call shows the effects parameter dialog with the specified parameters.
      * It shows the effects parameter dialog as a modal dialog.
-     * QuickTime::QTCreateStandardParameterDialog
-     * QuickTime::QTStandardParameterDialogDoAction
-     * QuickTime::QTIsStandardParameterDialogEvent
-     * QuickTime::QTDismissStandardParameterDialog
+     * @see "QuickTime::QTCreateStandardParameterDialog"
+     * @see "QuickTime::QTStandardParameterDialogDoAction"
+     * @see "QuickTime::QTIsStandardParameterDialogEvent"
+     * @see "QuickTime::QTDismissStandardParameterDialog"
      * @param effectsList governs the list of effects that are displayed in the dialog
      * @param dialogOptions options of type StdQTConstants.pdOptions...
      * @param parameters any previous effects parameter AtomContainer, or null
      * @param title the title of the parameter dialog, or null
      * @param pictArray array of preview picture(s) used in the dialog, or null
      * @return the AtomContainer containing the information to display the effect
-     * @throws on userCanceledErr or if an error occurred
-     * @throws quicktime.QTException
+     * @throws quicktime.QTException throws on userCanceledErr or if an error occurred
      */
-    public static AtomContainer showParameterDialog(final EffectsList paramEffectsList, int paramInt, AtomContainer paramAtomContainer, final String title, final Pict[] pictArray) throws QTException {
-        AtomContainer localAtomContainer = null;
-        if (paramAtomContainer == null) {
+    public static AtomContainer showParameterDialog(EffectsList effectsList, int dialogOptions, AtomContainer parameters, String title, Pict[] pictArray) throws QTException {
+        AtomContainer localAtomContainer;
+        if (parameters == null) {
             localAtomContainer = new AtomContainer();
         } else {
-            localAtomContainer = paramAtomContainer.copyAtom(Atom.kParentIsContainer);
+            localAtomContainer = parameters.copyAtom(Atom.kParentIsContainer);
         }
         if (QTSession.isCurrentOS(4)) {
-            final AtomContainer x = localAtomContainer;
-            int i = paramInt;
-            final ParameterDialog dialog = new ParameterDialog(paramEffectsList, x, i);
-            res = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                public Object invoke() {
-                    synchronized (QTNative.globalsLock) {
-                        try {
-                            dialog.setDialogTitle(title);
-                            dialog.setPreviewPictures(pictArray);
-                            ParameterDialog.res = dialog.runParameterDialog();
-                        } catch (QTException localQTException) {
-                        }
+            AtomContainer x = localAtomContainer;
+            int i = dialogOptions;
+            ParameterDialog dialog = new ParameterDialog(effectsList, x, i);
+            res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                synchronized (QTNative.globalsLock) {
+                    try {
+                        dialog.setDialogTitle(title);
+                        dialog.setPreviewPictures(pictArray);
+                        ParameterDialog.res = dialog.runParameterDialog();
+                    } catch (QTException _) {
                     }
-                    return new Integer(ParameterDialog.res);
                 }
-            })).intValue();
+                return ParameterDialog.res;
+            });
             if (res == 56550)
                 return x.copyAtom(Atom.kParentIsContainer);
         } else {
             synchronized (QTNative.globalsLock) {
-                ParameterDialog dialog = new ParameterDialog(paramEffectsList, localAtomContainer, paramInt);
+                ParameterDialog dialog = new ParameterDialog(effectsList, localAtomContainer, dialogOptions);
                 dialog.setDialogTitle(title);
                 dialog.setPreviewPictures(pictArray);
                 res = dialog.runParameterDialog();
@@ -209,15 +195,15 @@ public final class ParameterDialog implements QuickTimeLib {
 
     /**
      * This call returns the speed of the effect, expressed in frames-per-second
-     * QuickTime::QTGetEffectSpeed
+     * @see "QuickTime::QTGetEffectSpeed"
      * @param parameters the AtomContainer specifying the effect
      * @return the speed of the effect in frames per second
      *  (an estimate of execution speed on a reference hardware platform)
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static int getEffectsSpeed(AtomContainer paramAtomContainer) throws QTException {
+    public static int getEffectsSpeed(AtomContainer parameters) throws QTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(QTGetEffectSpeed(QTObject.ID(paramAtomContainer), arrayOfInt));
+        StdQTException.checkError(QTGetEffectSpeed(QTObject.ID(parameters), arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -275,7 +261,7 @@ public final class ParameterDialog implements QuickTimeLib {
                                 }
                                 if (localVector != null) {
                                 }
-                                Integer localInteger = new Integer(m);
+                                Integer localInteger = m;
                                 if (!localVector.contains(localInteger)) {
                                     localVector.addElement(localInteger);
                                 }
@@ -287,11 +273,11 @@ public final class ParameterDialog implements QuickTimeLib {
         } while (j != 0);
         if (localVector != null) {
             for (Enumeration<Integer> e = localVector.elements(); e.hasMoreElements(); ) {
-                invalWindow(e.nextElement().intValue());
+                invalWindow(e.nextElement());
             }
             localVector.removeAllElements();
         }
-        System.out.println("QTDismissStandardParameterDialog " + i);
+        logger.log(Level.DEBUG, "QTDismissStandardParameterDialog " + i);
         QTDismissStandardParameterDialog(this.dialog);
         if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
             SetGWorld(savedPort[0], savedDevice[0]);

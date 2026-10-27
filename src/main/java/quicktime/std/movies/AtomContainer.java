@@ -1,14 +1,12 @@
 package quicktime.std.movies;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.AtomManager;
 import quicktime.internal.toolbox.ComponentManager;
-import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.QuickDrawManager;
@@ -30,33 +28,18 @@ import quicktime.util.QTUtils;
 import quicktime.vr.QTVRException;
 import quicktime.vr.QTVRInstance;
 
+
 /**
  * The AtomContainer corresponds to a QuickTime atom container.
  */
 public class AtomContainer extends QTHandleRef implements quicktime.jdirect.QuickTimeLib, quicktime.jdirect.QuickTimeVRLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(AtomContainer.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Retrieves the current settings from the movie export component..
-     * QuickTime::MovieExportGetSettingsAsAtomContainer
+     * @see "QuickTime::MovieExportGetSettingsAsAtomContainer"
      * @return an AtomContainer with the current settings.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getSettingsAsAtomContainer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsExporter#getSettingsAsAtomContainer()
      */
     public static AtomContainer fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -67,9 +50,9 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     /**
      * The base graphics exporter makes this call of the format-specific graphics exporter to ask whether the
      * current export operation should be done by using an image compressor.
-     * QuickTime::GraphicsExportCanUseCompressor
-     * @return true if allowed to use a compressor.
-     * @return {@link quicktime.QTException}
+     * @see "QuickTime::GraphicsExportCanUseCompressor"
+     * //@return true if allowed to use a compressor.
+     * @throws quicktime.QTException
      */
     public static quicktime.std.image.GECompressorInfo fromGraphicsExporterCompressor(GraphicsExporter paramGraphicsExporter) throws QTException {
         byte[] arrayOfByte = new byte[1];
@@ -81,10 +64,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Returns a list of MIME types supported by the graphics export component.
-     * QuickTime::GraphicsExportGetMIMETypeList
+     * @see "QuickTime::GraphicsExportGetMIMETypeList"
      * @return a QT atom container that contains a list of MIME types supported by the graphics import component.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getMIMETypeList()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsExporter#getMIMETypeList()
      */
     public static AtomContainer fromGraphicsExporterMIME(GraphicsExporter paramGraphicsExporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -96,10 +79,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * The QTVRGetVRWorld function returns an atom
      * container that contains general scene information about the QuickTime VR movie
      * specified, as well as a list of all the nodes in that movie.
-     * QuickTime::QTVRGetVRWorld
+     * @see "QuickTime::QTVRGetVRWorld"
      * @return the VRWorld AtomContainer
-     * @return {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.vr.QTVRInstance#getVRWorld()}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.vr.QTVRInstance#getVRWorld()
      */
     public static AtomContainer fromQTVRInstanceWorld(QTVRInstance paramQTVRInstance) throws QTVRException {
         int[] arrayOfInt = { 0 };
@@ -114,19 +97,19 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     /**
      * You can use the QTVRGetNodeInfo function to get the node information atom container
      * that describes a node and all the hot spots in the node.
-     * QuickTime::QTVRGetNodeInfo
+     * @see "QuickTime::QTVRGetNodeInfo"
      * @param nodeID Set this parameter to kQTVRCurrentNode to receive information
      *        about the current node
      * @return an atom container that contains information about the
      *        specified node.
-     * @return {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.vr.QTVRInstance#getNodeInfo(int)}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.vr.QTVRInstance#getNodeInfo(int)
      */
-    public static AtomContainer fromQTVRInstanceNode(QTVRInstance paramQTVRInstance, int paramInt) throws QTVRException {
+    public static AtomContainer fromQTVRInstanceNode(QTVRInstance paramQTVRInstance, int nodeID) throws QTVRException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetNodeInfo(QTObject.ID(paramQTVRInstance), paramInt, arrayOfInt);
+            i = QTVRGetNodeInfo(QTObject.ID(paramQTVRInstance), nodeID, arrayOfInt);
         }
         QTVRException.checkError(i);
         return arrayOfInt[0] != 0 ? new AtomContainer(arrayOfInt[0], null, false) : null;
@@ -142,19 +125,19 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
      * @param handle the handle to convert to an AtomContainer.
      * @return an AtomContainer
      */
-    public static AtomContainer fromQTHandle(QTHandleRef paramQTHandleRef) {
-        if (QTObject.ID(paramQTHandleRef) != 0) {
-            return new AtomContainer(QTObject.ID(paramQTHandleRef), paramQTHandleRef, paramQTHandleRef.isLocked());
+    public static AtomContainer fromQTHandle(QTHandleRef handle) {
+        if (QTObject.ID(handle) != 0) {
+            return new AtomContainer(QTObject.ID(handle), handle, handle.isLocked());
         }
         return null;
     }
 
     /**
      * Returns a list of MIME types supported by the graphics import component.
-     * QuickTime::GraphicsImportGetMIMETypeList
+     * @see "QuickTime::GraphicsImportGetMIMETypeList"
      * @return a QT atom container that contains a list of MIME types supported by the graphics import component.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getMIMETypeList()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsImporter#getMIMETypeList()
      */
     public static AtomContainer fromGraphicsImporterMIME(GraphicsImporter paramGraphicsImporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -164,10 +147,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Returns information about available export formats.
-     * QuickTime::GraphicsImportGetExportImageTypeList
+     * @see "QuickTime::GraphicsImportGetExportImageTypeList"
      * @return a QT atom container that contains a list of available export formats. supported by the graphics import component.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getExportImageTypeList()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsImporter#getExportImageTypeList()
      */
     public static AtomContainer fromGraphicsImporterExportImage(GraphicsImporter paramGraphicsImporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -177,10 +160,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Returns the Export settings as an Atom Container.
-     * QuickTime::GraphicsImportGetExportSettingsAsAtomContainer
+     * @see "QuickTime::GraphicsImportGetExportSettingsAsAtomContainer"
      * @return a QT atom container that contains Export settings.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getExportSettingsAsAtomContainer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsImporter#getExportSettingsAsAtomContainer()
      */
     public static AtomContainer fromGraphicsImporterExportSettings(GraphicsImporter paramGraphicsImporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -190,10 +173,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * This method returns you the input map of the media.
-     * QuickTime::GetMediaInputMap()
+     * @see "QuickTime::GetMediaInputMap()"
      * @return an AtomContainer object for media's input map.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.media.Media#getInputMap()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.media.Media#getInputMap()
      */
     public static AtomContainer fromMediaInput(Media paramMedia) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -203,10 +186,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Retrieves the properties from a media handler.
-     * QuickTime::GetMediaPropertyAtom()
+     * @see "QuickTime::GetMediaPropertyAtom()"
      * @return Contains the property atoms for the track associated with the media handler.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.media.Media#getPropertyAtom()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.media.Media#getPropertyAtom()
      */
     public static AtomContainer fromMediaProperty(Media paramMedia) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -215,11 +198,11 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     }
 
     /**
-     * Retrieves the current settings from the movie export component..
-     * QuickTime::MovieExportGetSettingsAsAtomContainer
+     * Retrieves the current settings from the movie export component.
+     * @see "QuickTime::MovieExportGetSettingsAsAtomContainer"
      * @return an AtomContainer with the current settings.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.qtcomponents.MovieExporter#getExportSettingsFromAtomContainer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.qtcomponents.MovieExporter#getExportSettingsFromAtomContainer()
      */
     public static AtomContainer fromMovieExporter(quicktime.std.qtcomponents.MovieExporter paramMovieExporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -229,10 +212,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Returns a list of MIME types supported by the movie import component.
-     * QuickTime::MovieImportGetMIMETypeList
+     * @see "QuickTime::MovieImportGetMIMETypeList"
      * @return an AtomContainer that contains a list of MIME types
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.qtcomponents.MovieImporter#getMIMETypeList()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.qtcomponents.MovieImporter#getMIMETypeList()
      */
     public static AtomContainer fromMovieImporterMIME(MovieImporter paramMovieImporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -241,11 +224,11 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
     }
 
     /**
-     * Retrieves the current settings from the movie import component..
-     * QuickTime::MovieImportGetSettingsAsAtomContainer
+     * Retrieves the current settings from the movie import component.
+     * @see "QuickTime::MovieImportGetSettingsAsAtomContainer"
      * @return an AtomContainer with the current settings.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.qtcomponents.MovieImporter#getImportSettingsFromAtomContainer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.qtcomponents.MovieImporter#getImportSettingsFromAtomContainer()
      */
     public static AtomContainer fromMovieImporterSettings(MovieImporter paramMovieImporter) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -255,10 +238,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * No QT Documentation.
-     * QuickTime::Media3DGetNamedObjectList()
+     * @see "QuickTime::Media3DGetNamedObjectList()"
      * @return an atom container
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.media.ThreeDMediaHandler#getNamedObjectList()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.media.ThreeDMediaHandler#getNamedObjectList()
      */
     public static AtomContainer fromThreeDMediaHandlerObject(ThreeDMediaHandler paramThreeDMediaHandler) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -268,10 +251,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * No QT Documentation.
-     * QuickTime::Media3DGetRendererList()
+     * @see "QuickTime::Media3DGetRendererList()"
      * @return an atom container
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.media.ThreeDMediaHandler#getRendererList()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.media.ThreeDMediaHandler#getRendererList()
      */
     public static AtomContainer fromThreeDMediaHandlerRenderer(ThreeDMediaHandler paramThreeDMediaHandler) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -281,10 +264,10 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Retrieves the current configuration from the dialog
-     * QuickTime::SCGetSettingsAsAtomContainer()
+     * @see "QuickTime::SCGetSettingsAsAtomContainer()"
      * @return the settings
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.qtcomponents.CompressionDialog#getSettings()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.qtcomponents.CompressionDialog#getSettings()
      */
     public static AtomContainer fromCompressionDialog(CompressionDialog paramCompressionDialog) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -298,7 +281,7 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Create a new disposable AtomContainer.
-     * QuickTime::QTNewAtomContainer
+     * @see "QuickTime::QTNewAtomContainer"
      */
     public AtomContainer() throws QTException {
         super(allocate(), null, false);
@@ -318,161 +301,161 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * Retrieves a pointer to the atom data for the specifiec leaf atom.
-     * QuickTime::QTGetAtomDataPtr
+     * @see "QuickTime::QTGetAtomDataPtr"
      * @param atom (offset) for AtomContainers this is an "atom" that acts as the offset
      * @return the actual atom data attached to the specified atom
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public AtomData getAtomData(Atom paramAtom) throws StdQTException {
+    public AtomData getAtomData(Atom atom) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
-        StdQTException.checkError(QTGetAtomDataPtr(_ID(), paramAtom.getAtom(), arrayOfInt1, arrayOfInt2));
+        StdQTException.checkError(QTGetAtomDataPtr(_ID(), atom.getAtom(), arrayOfInt1, arrayOfInt2));
         return new AtomData(arrayOfInt2[0], arrayOfInt1[0], this);
     }
 
     /**
      * Retrieves a pointer to the atom data for the specifiec leaf atom.
-     * QuickTime::QTGetAtomDataPtr
+     * @see "QuickTime::QTGetAtomDataPtr"
      * @param atom (offset) for AtomContainers this is an "atom" that acts as the offset
      * @return the size of the atom data attached to the specified atom
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int getAtomDataSize(Atom paramAtom) throws StdQTException {
+    public int getAtomDataSize(Atom atom) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
-        StdQTException.checkError(QTGetAtomDataPtr(_ID(), paramAtom.getAtom(), arrayOfInt1, arrayOfInt2));
+        StdQTException.checkError(QTGetAtomDataPtr(_ID(), atom.getAtom(), arrayOfInt1, arrayOfInt2));
         return arrayOfInt1[0];
     }
 
     /**
      * This method allows you to retrieve the next atom data type in a specified atom's child list.
-     * QuickTime::QTGetNextChildType
+     * @see "QuickTime::QTGetNextChildType"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param currentChildType Specifies an atom data type.
      * @return the found child type.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int getNextChildType(Atom paramAtom, int paramInt) throws StdQTException {
-        int i = QTGetNextChildType(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt);
+    public int getNextChildType(Atom parentAtom, int currentChildType) throws StdQTException {
+        int i = QTGetNextChildType(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, currentChildType);
         StdQTException.checkError(GetMoviesError());
         return i;
     }
 
     /**
      * This method allows you to determine the number of items of a given type in a parent atom's child list.
-     * QuickTime::QTCountChildrenOfType
+     * @see "QuickTime::QTCountChildrenOfType"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container.
      * @param childType Specifies the type.
      * @return the number fo children.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int countChildrenOfType(Atom paramAtom, int paramInt) throws StdQTException {
-        int i = QTCountChildrenOfType(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt);
+    public int countChildrenOfType(Atom parentAtom, int childType) throws StdQTException {
+        int i = QTCountChildrenOfType(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, childType);
         StdQTException.checkError(GetMoviesError());
         return i;
     }
 
     /**
      * This method allows you to search for a particular atom within an atom's child list.
-     * QuickTime::QTFindChildByIndex
+     * @see "QuickTime::QTFindChildByIndex"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container.
      * @param atomType Specifies the type of the child to be found.
      * @param index Specifies the index of a child of type atomType to be found.
      * @return the found atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom findChildByIndex_Atom(Atom paramAtom, int paramInt1, int paramInt2) throws StdQTException {
-        int i = QTFindChildByIndex(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, (short) paramInt2, null);
+    public Atom findChildByIndex_Atom(Atom parentAtom, int atomType, int index) throws StdQTException {
+        int i = QTFindChildByIndex(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, (short) index, null);
         StdQTException.checkError(GetMoviesError());
         return i != 0 ? new Atom(i) : null;
     }
 
     /**
      * This method allows you to search for a particular atom within an atom's child list.
-     * QuickTime::QTFindChildByIndex
+     * @see "QuickTime::QTFindChildByIndex"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container.
      * @param atomType Specifies the type of the child to be found.
      * @param index Specifies the index of a child of type atomType to be found.
      * @return the atom's id if it is found.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int findChildByIndex_id(Atom paramAtom, int paramInt1, int paramInt2) throws StdQTException {
+    public int findChildByIndex_id(Atom parentAtom, int atomType, int index) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        QTFindChildByIndex(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, (short) paramInt2, arrayOfInt);
+        QTFindChildByIndex(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, (short) index, arrayOfInt);
         StdQTException.checkError(GetMoviesError());
         return arrayOfInt[0];
     }
 
     /**
      * This method allows you to search for a particular atom within an atom's child list.
-     * QuickTime::QTFindChildByID
+     * @see "QuickTime::QTFindChildByID"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container.
      * @param atomType Specifies the type of the child to be found.
      * @param id Specifies the ID of a child of type atomType to be found.
      * @return the found atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom findChildByID_Atom(Atom paramAtom, int paramInt1, int paramInt2) throws StdQTException {
-        int i = QTFindChildByID(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, null);
+    public Atom findChildByID_Atom(Atom parentAtom, int atomType, int id) throws StdQTException {
+        int i = QTFindChildByID(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, null);
         StdQTException.checkError(GetMoviesError());
         return i != 0 ? new Atom(i) : null;
     }
 
     /**
      * This method allows you to search for a particular atom within an atom's child list.
-     * QuickTime::QTFindChildByID
+     * @see "QuickTime::QTFindChildByID"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container.
      * @param atomType Specifies the type of the child to be found.
      * @param id Specifies the ID of a child of type atomType to be found.
      * @return the atom's index if it is found.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int findChildByID_index(Atom paramAtom, int paramInt1, int paramInt2) throws StdQTException {
+    public int findChildByID_index(Atom parentAtom, int atomType, int id) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        QTFindChildByID(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, arrayOfShort);
+        QTFindChildByID(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, arrayOfShort);
         StdQTException.checkError(GetMoviesError());
         return arrayOfShort[0];
     }
 
     /**
      * This method allows you to retrieve all of a parent atom's children one by one, regardless of their type's and id's.
-     * QuickTime::QTNextChildAnyType
+     * @see "QuickTime::QTNextChildAnyType"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container.
      * @param currentChild Specifies the current child atom of parentAtom. Null implies the parentAtom.
      * @return the QTAtom which is used to return the next child following currentChild in parentAtom's child list.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom nextChildAnyType(Atom paramAtom1, Atom paramAtom2) throws StdQTException {
+    public Atom nextChildAnyType(Atom parentAtom, Atom currentChild) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = paramAtom1 != null ? paramAtom1.getAtom() : 0;
-        StdQTException.checkError(QTNextChildAnyType(_ID(), i, paramAtom2 != null ? paramAtom2.getAtom() : 0, arrayOfInt));
+        int i = parentAtom != null ? parentAtom.getAtom() : 0;
+        StdQTException.checkError(QTNextChildAnyType(_ID(), i, currentChild != null ? currentChild.getAtom() : 0, arrayOfInt));
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
     }
 
     /**
      * This method allows you to set a leaf atom's data.
-     * QuickTime::QTSetAtomData
+     * @see "QuickTime::QTSetAtomData"
      * @param atom Specifies the atom within this container. Use Atom.kParentIsContainer if atom is container.
      * @param data Contains the data for the atom.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomData(Atom paramAtom, QTHandleRef paramQTHandleRef) throws StdQTException {
-        QTPointerRef localQTPointerRef = paramQTHandleRef.toQTPointer();
-        int i = QTSetAtomData(_ID(), paramAtom.getAtom(), paramQTHandleRef.getSize(), QTObject.ID(localQTPointerRef));
+    public void setAtomData(Atom atom, QTHandleRef data) throws StdQTException {
+        QTPointerRef localQTPointerRef = data.toQTPointer();
+        int i = QTSetAtomData(_ID(), atom.getAtom(), data.getSize(), QTObject.ID(localQTPointerRef));
         if (!isLocked())
-            paramQTHandleRef.unlock();
+            data.unlock();
         StdQTException.checkError(i);
     }
 
     /**
      * This method allows you to set a leaf atom's data.
-     * QuickTime::QTSetAtomData
+     * @see "QuickTime::QTSetAtomData"
      * @param atom Specifies the atom within this container. Use Atom.kParentIsContainer if atom is container.
      * @param data Contains the data for the atom.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomData(Atom paramAtom, QTPointerRef paramQTPointerRef) throws StdQTException {
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), paramQTPointerRef.getSize(), QTObject.ID(paramQTPointerRef)));
+    public void setAtomData(Atom atom, QTPointerRef data) throws StdQTException {
+        StdQTException.checkError(QTSetAtomData(_ID(), atom.getAtom(), data.getSize(), QTObject.ID(data)));
     }
 
     public void setAtomData(Atom paramAtom, byte[] paramArrayOfByte) throws StdQTException {
@@ -481,174 +464,176 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * This method allows you to set a leaf atom's data.
-     * QuickTime::QTSetAtomData
+     * @see "QuickTime::QTSetAtomData"
      * @param atom Specifies the atom within this container.
      * @param data Contains the data for the atom.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomData(Atom paramAtom, QTByteObject paramQTByteObject) throws StdQTException {
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), paramQTByteObject.getSize(), paramQTByteObject.getBytes()));
+    public void setAtomData(Atom atom, QTByteObject data) throws StdQTException {
+        StdQTException.checkError(QTSetAtomData(_ID(), atom.getAtom(), data.getSize(), data.getBytes()));
     }
 
     /**
      * This method allows you to set a leaf atom's data.
-     * QuickTime::QTSetAtomData
+     * @see "QuickTime::QTSetAtomData"
      * @param atom Specifies the atom within this container.
      * @param data Contains the data for the atom. This value will be endian flipped if required.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomData(Atom paramAtom, int paramInt) throws StdQTException {
-        int[] arrayOfInt = { paramInt };
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), 4, arrayOfInt));
+    public void setAtomData(Atom atom, int data) throws StdQTException {
+        int[] arrayOfInt = { data };
+        StdQTException.checkError(QTSetAtomData(_ID(), atom.getAtom(), 4, arrayOfInt));
     }
 
     /**
      * This method allows you to set a leaf atom's data.
-     * QuickTime::QTSetAtomData
+     * @see "QuickTime::QTSetAtomData"
      * @param atom Specifies the atom within this container.
      * @param data Contains the data for the atom. This value will be endian flipped if required.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomData(Atom paramAtom, short paramShort) throws StdQTException {
-        short[] arrayOfShort = { paramShort };
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), 2, arrayOfShort));
+    public void setAtomData(Atom atom, short data) throws StdQTException {
+        short[] arrayOfShort = { data };
+        StdQTException.checkError(QTSetAtomData(_ID(), atom.getAtom(), 2, arrayOfShort));
     }
 
     /**
      * This method allows you to set a leaf atom's data.
-     * QuickTime::QTSetAtomData
+     * @see "QuickTime::QTSetAtomData"
      * @param atom Specifies the atom within this container.
      * @param data Contains the data for the atom. This value will be endian flipped if required.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomData(Atom paramAtom, byte paramByte) throws StdQTException {
-        byte[] arrayOfByte = { paramByte };
-        StdQTException.checkError(QTSetAtomData(_ID(), paramAtom.getAtom(), 1, arrayOfByte));
+    public void setAtomData(Atom atom, byte data) throws StdQTException {
+        byte[] arrayOfByte = { data };
+        StdQTException.checkError(QTSetAtomData(_ID(), atom.getAtom(), 1, arrayOfByte));
     }
 
     /**
      * This method returns a leaf atom's data.
-     * QuickTime::QTCopyAtomDataToHandle
+     * @see "QuickTime::QTCopyAtomDataToHandle"
      * @param atom Specifies the atom within this container.
      * @return A QTHandle object containing the leaf atom's data.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public QTHandle copyAtomDataToHandle(Atom paramAtom) throws QTException {
+    public QTHandle copyAtomDataToHandle(Atom atom) throws QTException {
         QTHandle localQTHandle = new QTHandle();
-        StdQTException.checkError(QTCopyAtomDataToHandle(_ID(), paramAtom.getAtom(), QTObject.ID(localQTHandle)));
+        StdQTException.checkError(QTCopyAtomDataToHandle(_ID(), atom.getAtom(), QTObject.ID(localQTHandle)));
         return localQTHandle;
     }
 
     /**
      * This method returns a leaf atom's data to the buffer pointed to by the data object.
-     * QuickTime::QTCopyAtomDataToPtr
+     * @see "QuickTime::QTCopyAtomDataToPtr"
      * @param atom Specifies the atom within this container.
      * @param sizeOrLessOK True indicates that it is OK to receive less data than specified by the size of the data Pointer.
      * @param data A QTPointer object containing the buffer for the leaf atom's data.
      * @return the actual number of bytes retrieved.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int copyAtomDataToPtr(Atom paramAtom, boolean paramBoolean, QTPointer paramQTPointer) throws StdQTException {
+    public int copyAtomDataToPtr(Atom atom, boolean sizeOrLessOK, QTPointer data) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        byte b = (byte) (paramBoolean ? 1 : 0);
-        StdQTException.checkError(QTCopyAtomDataToPtr(_ID(), paramAtom.getAtom(), b, paramQTPointer.getSize(), QTObject.ID(paramQTPointer), arrayOfInt));
+        byte b = (byte) (sizeOrLessOK ? 1 : 0);
+        StdQTException.checkError(QTCopyAtomDataToPtr(_ID(), atom.getAtom(), b, data.getSize(), QTObject.ID(data), arrayOfInt));
         return arrayOfInt[0];
     }
 
     /**
      * Copies the atom data for the specifiec leaf atom.
-     * QuickTime::QTGetAtomDataPtr
+     * @see "QuickTime::QTGetAtomDataPtr"
      * @param atom (offset) for AtomContainers this is an "atom" that acts as the offset
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public byte[] copyAtomDataToArray(Atom paramAtom) throws StdQTException {
+    public byte[] copyAtomDataToArray(Atom atom) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        StdQTException.checkError(QTGetAtomDataPtr(_ID(), paramAtom.getAtom(), arrayOfInt1, arrayOfInt2));
+        StdQTException.checkError(QTGetAtomDataPtr(_ID(), atom.getAtom(), arrayOfInt1, arrayOfInt2));
         byte[] arrayOfByte = new byte[arrayOfInt1[0]];
         int[] arrayOfInt3 = { 0 };
-        StdQTException.checkError(QTCopyAtomDataToPtr(_ID(), paramAtom.getAtom(), (byte) 0, arrayOfByte.length, arrayOfByte, arrayOfInt3));
+        StdQTException.checkError(QTCopyAtomDataToPtr(_ID(), atom.getAtom(), (byte) 0, arrayOfByte.length, arrayOfByte, arrayOfInt3));
         return arrayOfByte;
     }
 
     /**
      * This method returns the type of a given atom.
-     * QuickTime::QTGetAtomTypeAndID
+     * @see "QuickTime::QTGetAtomTypeAndID"
      * @param atom Specifies the atom within this container.
      * @return the type of a given atom
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int getAtomType(Atom paramAtom) throws StdQTException {
+    public int getAtomType(Atom atom) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTGetAtomTypeAndID(_ID(), paramAtom.getAtom(), arrayOfInt, null));
+        StdQTException.checkError(QTGetAtomTypeAndID(_ID(), atom.getAtom(), arrayOfInt, null));
         return arrayOfInt[0];
     }
 
     /**
      * This method returns the id of a given atom.
-     * QuickTime::QTGetAtomTypeAndID
+     * @see "QuickTime::QTGetAtomTypeAndID"
      * @param atom Specifies the atom within this container.
      * @return the id of a given atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int getAtomID(Atom paramAtom) throws StdQTException {
+    public int getAtomID(Atom atom) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTGetAtomTypeAndID(_ID(), paramAtom.getAtom(), null, arrayOfInt));
+        StdQTException.checkError(QTGetAtomTypeAndID(_ID(), atom.getAtom(), null, arrayOfInt));
         return arrayOfInt[0];
     }
 
     /**
      * This method allows a complete copy of an atom and all of its children to be extracted
      * from its container and be placed in an new atom data structure.
-     * QuickTime::QTCopyAtom
+     * @see "QuickTime::QTCopyAtom"
      * @param atom Specifies the atom within this container.
      * @return a new AtomContainer that contains the copy of the specifed atom..
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public AtomContainer copyAtom(Atom paramAtom) throws StdQTException {
+    public AtomContainer copyAtom(Atom atom) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTCopyAtom(_ID(), paramAtom.getAtom(), arrayOfInt));
+        StdQTException.checkError(QTCopyAtom(_ID(), atom.getAtom(), arrayOfInt));
         return new AtomContainer(arrayOfInt[0], null, false);
     }
 
+    @Override
     protected final void doLock() {
         QTLockContainer(_ID());
     }
 
+    @Override
     protected final void doUnlock() {
         QTUnlockContainer(_ID());
     }
 
     /**
      * This method creates a new empty child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @return The new atom.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3) throws QTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index) throws QTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 0, 0, arrayOfInt));
+        StdQTException.checkError(QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, 0, 0, arrayOfInt));
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
     }
 
     /**
      * This method creates a new child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @param data A QTByteObject that contains the data of the specifed atom.
      * @return The new atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, QTByteObject paramQTByteObject) throws StdQTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index, QTByteObject data) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramQTByteObject.getSize(), paramQTByteObject.getBytes(), arrayOfInt));
+        StdQTException.checkError(QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, data.getSize(), data.getBytes(), arrayOfInt));
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
     }
 
@@ -660,38 +645,38 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * This method creates a new child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @param data A QTPointerRef object contains the data of the specifed atom.
      * @return The new atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, QTPointerRef paramQTPointerRef) throws StdQTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index, QTPointerRef data) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramQTPointerRef.getSize(), QTObject.ID(paramQTPointerRef), arrayOfInt));
+        StdQTException.checkError(QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, data.getSize(), QTObject.ID(data), arrayOfInt));
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
     }
 
     /**
      * This method creates a new child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @param data A QTHandleRef object contains the data of the specifed atom.
      * @return The new atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, QTHandleRef paramQTHandleRef) throws StdQTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index, QTHandleRef data) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        QTPointerRef localQTPointerRef = paramQTHandleRef.toQTPointer();
-        int i = QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, paramQTHandleRef.getSize(), QTObject.ID(localQTPointerRef), arrayOfInt);
-        if (!paramQTHandleRef.isLocked()) {
-            paramQTHandleRef.unlock();
+        QTPointerRef localQTPointerRef = data.toQTPointer();
+        int i = QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, data.getSize(), QTObject.ID(localQTPointerRef), arrayOfInt);
+        if (!data.isLocked()) {
+            data.unlock();
         }
         StdQTException.checkError(i);
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
@@ -699,176 +684,176 @@ public class AtomContainer extends QTHandleRef implements quicktime.jdirect.Quic
 
     /**
      * This method creates a new child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @param intValue Specifies the integer data of the specified atom. This value will be endian flipped if required.
      * @return The new atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws StdQTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index, int intValue) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = { paramInt4 };
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 4, arrayOfInt2, arrayOfInt1));
+        int[] arrayOfInt2 = { intValue };
+        StdQTException.checkError(QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, 4, arrayOfInt2, arrayOfInt1));
         return arrayOfInt1[0] != 0 ? new Atom(arrayOfInt1[0]) : null;
     }
 
     /**
      * This method creates a new child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @param shortValue Specifies the integer data of the specified atom. This value will be endian flipped if required.
      * @return The new atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, short paramShort) throws StdQTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index, short shortValue) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        short[] arrayOfShort = { paramShort };
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 2, arrayOfShort, arrayOfInt));
+        short[] arrayOfShort = { shortValue };
+        StdQTException.checkError(QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, 2, arrayOfShort, arrayOfInt));
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
     }
 
     /**
      * This method creates a new child atom for parentAtom.
-     * QuickTime::QTInsertChild
+     * @see "QuickTime::QTInsertChild"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param atomType Specifies the type of the new atom which is to be inserted.
      * @param id Specifies the ID of the new atom which is to be inserted.
      * @param index Specifies the index of the new atom for its type within the parent atom's child list.
      * @return The new atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom insertChild(Atom paramAtom, int paramInt1, int paramInt2, int paramInt3, byte paramByte) throws StdQTException {
+    public Atom insertChild(Atom parentAtom, int atomType, int id, int index, byte paramByte) throws StdQTException {
         int[] arrayOfInt = new int[1];
         byte[] arrayOfByte = { paramByte };
-        StdQTException.checkError(QTInsertChild(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, paramInt1, paramInt2, (short) paramInt3, 1, arrayOfByte, arrayOfInt));
+        StdQTException.checkError(QTInsertChild(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, atomType, id, (short) index, 1, arrayOfByte, arrayOfInt));
         return arrayOfInt[0] != 0 ? new Atom(arrayOfInt[0]) : null;
     }
 
     /**
      * This method inserts all of the atoms in childrenContainer as child atoms of the atom specified by the parentAtom.
-     * QuickTime::QTInsertChildren
+     * @see "QuickTime::QTInsertChildren"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param childrenContainer Specifies the atom data structure which contains all of the children to be inserted.
-     * @throws invalidAtomContainerErr if childrenContainer is null
+     * @throws StdQTException invalidAtomContainerErr if childrenContainer is null
      * @throws quicktime.std.StdQTException
      */
-    public void insertChildren(Atom paramAtom, AtomContainer paramAtomContainer) throws StdQTException {
-        if (QTObject.ID(paramAtomContainer) == 0) {
+    public void insertChildren(Atom parentAtom, AtomContainer childrenContainer) throws StdQTException {
+        if (QTObject.ID(childrenContainer) == 0) {
             throw new StdQTException(63429);
         }
-        StdQTException.checkError(QTInsertChildren(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, QTObject.ID(paramAtomContainer)));
+        StdQTException.checkError(QTInsertChildren(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, QTObject.ID(childrenContainer)));
     }
 
     /**
      * This method removes an atom and all of its children from an atom data structure.
-     * QuickTime::QTRemoveAtom
+     * @see "QuickTime::QTRemoveAtom"
      * @param atom Specifies the atom within this atom container which is to be removed.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void removeAtom(Atom paramAtom) throws StdQTException {
-        StdQTException.checkError(QTRemoveAtom(_ID(), paramAtom.getAtom()));
+    public void removeAtom(Atom atom) throws StdQTException {
+        StdQTException.checkError(QTRemoveAtom(_ID(), atom.getAtom()));
     }
 
     /**
      * This method removes all of the children of an atom.
-     * QuickTime::QTRemoveChildren
+     * @see "QuickTime::QTRemoveChildren"
      * @param atom Specifies the atom within this atom container which is to be removed.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void removeChildren(Atom paramAtom) throws StdQTException {
-        StdQTException.checkError(QTRemoveChildren(_ID(), paramAtom.getAtom()));
+    public void removeChildren(Atom atom) throws StdQTException {
+        StdQTException.checkError(QTRemoveChildren(_ID(), atom.getAtom()));
     }
 
     /**
      * This method replaces an atom and all of its children with a different atom and all of its children.
-     * QuickTime::QTReplaceAtom
+     * @see "QuickTime::QTReplaceAtom"
      * @param targetAtom Specifies the atom within this atom container which is to be replaced.
      * @param replacementContainer Specifies the atom data structure which contains replacementAtom.
      * @param replacementAtom Specifies the atom within replacementContainer which replaces targetAtom.
-     * @throws invalidAtomContainerErr if targetAtom, replacementContainer or replacementAtom are null
+     * @throws StdQTException invalidAtomContainerErr if targetAtom, replacementContainer or replacementAtom are null
      * @throws quicktime.std.StdQTException
      */
-    public void replaceAtom(Atom paramAtom1, AtomContainer paramAtomContainer, Atom paramAtom2) throws StdQTException {
-        if (QTObject.ID(paramAtomContainer) == 0) {
+    public void replaceAtom(Atom targetAtom, AtomContainer replacementContainer, Atom replacementAtom) throws StdQTException {
+        if (QTObject.ID(replacementContainer) == 0) {
             throw new StdQTException(63429);
         }
-        StdQTException.checkError(QTReplaceAtom(_ID(), paramAtom1.getAtom(), QTObject.ID(paramAtomContainer), paramAtom2.getAtom()));
+        StdQTException.checkError(QTReplaceAtom(_ID(), targetAtom.getAtom(), QTObject.ID(replacementContainer), replacementAtom.getAtom()));
     }
 
     /**
      * This method swaps two atoms within an atomData structure.
-     * QuickTime::QTSwapAtoms
+     * @see "QuickTime::QTSwapAtoms"
      * @param atom1 Specifies an atom within this container which is to be swapped with atom2.
      * @param atom2 Specifies the atom within this container which is to be swapped with atom1.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void swapAtoms(Atom paramAtom1, Atom paramAtom2) throws StdQTException {
-        StdQTException.checkError(QTSwapAtoms(_ID(), paramAtom1.getAtom(), paramAtom2.getAtom()));
+    public void swapAtoms(Atom atom1, Atom atom2) throws StdQTException {
+        StdQTException.checkError(QTSwapAtoms(_ID(), atom1.getAtom(), atom2.getAtom()));
     }
 
     /**
      * This method allows you to change the ID of an atom.
-     * QuickTime::QTSetAtomID
+     * @see "QuickTime::QTSetAtomID"
      * @param atom Specifies an atom within this container which is to be changed.
      * @param newID Specifies the new ID for the atom.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAtomID(Atom paramAtom, int paramInt) throws StdQTException {
-        StdQTException.checkError(QTSetAtomID(_ID(), paramAtom.getAtom(), paramInt));
+    public void setAtomID(Atom atom, int newID) throws StdQTException {
+        StdQTException.checkError(QTSetAtomID(_ID(), atom.getAtom(), newID));
     }
 
     /**
      * No QT Documentation.
-     * QuickTime::ITextAddString
+     * @see "QuickTime::ITextAddString"
      * @param parentAtom Specifies the parent atom within this container. Null implies the parent atom is the container.
      * @param theRegionCode Specifies the region code. Use 0 for verUS
      * @param theString a String must be specified.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void iTextAddString(Atom paramAtom, int paramInt, String paramString) throws StdQTException {
-        StdQTException.checkError(ITextAddString(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, (short) paramInt, QTUtils.String2PString(paramString, 255)));
+    public void iTextAddString(Atom parentAtom, int theRegionCode, String theString) throws StdQTException {
+        StdQTException.checkError(ITextAddString(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, (short) theRegionCode, QTUtils.String2PString(theString, 255)));
     }
 
     /**
      * No QT Documentation.
-     * QuickTime::ITextRemoveString
+     * @see "QuickTime::ITextRemoveString"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container
      * @param theRegionCode Specifies the region code. Use 0 for verUS
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void iTextRemoveString(Atom paramAtom, int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(ITextRemoveString(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, (short) paramInt1, paramInt2));
+    public void iTextRemoveString(Atom parentAtom, int theRegionCode, int paramInt2) throws StdQTException {
+        StdQTException.checkError(ITextRemoveString(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, (short) theRegionCode, paramInt2));
     }
 
     /**
      * No QT Documentation.
-     * QuickTime::ITextGetString
+     * @see "QuickTime::ITextGetString"
      * @param parentAtom Specifies the parent atom within this container. Null implies parentAtom is the container
      * @param theRegionCode Specifies the region code. Use 0 for verUS
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public IStringInfo iTextGetString(Atom paramAtom, int paramInt) throws StdQTException {
+    public IStringInfo iTextGetString(Atom parentAtom, int theRegionCode) throws StdQTException {
         short[] arrayOfShort = new short[1];
         byte[] arrayOfByte = new byte[256];
-        StdQTException.checkError(ITextGetString(_ID(), paramAtom != null ? paramAtom.getAtom() : 0, (short) paramInt, arrayOfShort, arrayOfByte));
+        StdQTException.checkError(ITextGetString(_ID(), parentAtom != null ? parentAtom.getAtom() : 0, (short) theRegionCode, arrayOfShort, arrayOfByte));
         return new IStringInfo(QTUtils.PString2String(arrayOfByte, 0), arrayOfShort[0]);
     }
 
     /**
      * This method returns the parent atom of the specified child atom
-     * QuickTime::QTGetAtomParent
+     * @see "QuickTime::QTGetAtomParent"
      * @param childAtom Specifies the child atom within this container.
      * @return The parent atom.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Atom getParent(Atom paramAtom) throws StdQTException {
-        int i = QTGetAtomParent(_ID(), paramAtom.getAtom());
+    public Atom getParent(Atom childAtom) throws StdQTException {
+        int i = QTGetAtomParent(_ID(), childAtom.getAtom());
         if (i < 0)
             throw new StdQTException(i);
         return new Atom(i);

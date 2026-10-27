@@ -1,12 +1,10 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.SequenceGrabberManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.QTUtils;
+
 
 /**
  * Assists in importing sound into a movie.
@@ -15,22 +13,6 @@ import quicktime.util.QTUtils;
  * Refer to SGChannel in QuickTime Components
  */
 public abstract class AudioChannel extends SGChannel implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(AudioChannel.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     AudioChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
         super(paramInt, paramSequenceGrabber);
@@ -42,19 +24,19 @@ public abstract class AudioChannel extends SGChannel implements QuickTimeLib {
 
     /**
      * Allows you to set a channel's sound volume setting.
-     * QuickTime::SGSetChannelVolume
+     * @see "QuickTime::SGSetChannelVolume"
      * @param volume the new volume setting
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setVolume(float paramFloat) throws StdQTException {
-        StdQTException.checkError(SGSetChannelVolume(_ID(), QTUtils.X2ShortFix(paramFloat)));
+    public void setVolume(float volume) throws StdQTException {
+        StdQTException.checkError(SGSetChannelVolume(_ID(), QTUtils.X2ShortFix(volume)));
     }
 
     /**
      * Allows you to determine a channel's sound volume setting.
-     * QuickTime::SGGetChannelVolume
+     * @see "QuickTime::SGGetChannelVolume"
      * @return the current volume setting
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getVolume() throws StdQTException {
         short[] arrayOfShort = { 0 };

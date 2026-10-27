@@ -29,7 +29,7 @@ import quicktime.std.image.GraphicsImporter;
 /**
  * This sample code shows how to create a java.awt.Image out of some image that
  * QuickTime produces.
- * 
+ * <p>
  * The source of the QuickTime image could come from any one of: (1) An image
  * file in a format that Java doesn't directly support but QT does (2) Recording
  * the drawing actions of a QDGraphics into a Pict -> this can be written out to
@@ -38,16 +38,16 @@ import quicktime.std.image.GraphicsImporter;
  * SequenceGrabber can be used to capture just an individual frame from a video
  * source (the SGCapture shows basic usage of the SequenceGrabber and the QT
  * documentation has more details on these components)
- * 
+ * <p>
  * In this code the user is prompted to open an image file (one of 20+ formats
  * that QuickTime's GraphicsImporter can import)
- * 
+ * <p>
  * The program then uses the QTImageProducer to create a java.awt.Image which is
  * then drawn in the paint method of the Frame
  */
 public class QTtoJavaImage extends Frame {
 
-    public static void main(String args[]) {
+    static void main(String[] args) {
         try {
             QTSession.open();
             QTtoJavaImage window = new QTtoJavaImage("QT in Java");
@@ -96,11 +96,13 @@ public class QTtoJavaImage extends Frame {
         // that will close down the QTSession, dispose of the Frame
         // which will close the window - where we exit
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -111,6 +113,7 @@ public class QTtoJavaImage extends Frame {
 
     Dimension imageSize;
 
+    @Override
     public void paint(Graphics g) {
         Insets i = getInsets();
         Dimension d = getSize();
@@ -125,6 +128,7 @@ public class QTtoJavaImage extends Frame {
      * this returns the size of the image - so the pack will correctly resize
      * the frame
      */
+    @Override
     public Dimension getPreferredSize() {
         return imageSize;
     }

@@ -15,7 +15,7 @@ import quicktime.QTObject;
  */
 public final class MovieEditState extends QTObject {
 
-    private Movie m;
+    private final Movie m;
 
     MovieEditState(Movie paramMovie, int paramInt) throws QTException {
         super(paramInt);

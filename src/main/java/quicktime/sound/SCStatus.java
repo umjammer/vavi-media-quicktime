@@ -3,6 +3,7 @@ package quicktime.sound;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -27,12 +28,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SCStatus.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SCStatus.class));
             }
         }.establish();
     }
@@ -45,6 +41,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[24];
         paramObjectInputStream.read(this.bytes);
@@ -59,6 +56,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         setIntInArray(this.bytes, 20, EndianOrder.flipBigEndianToNative32(i));
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[24];
         for (int i = 0; i < 12; i += 4) {
@@ -138,6 +136,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
      * clones the current SCStatus object
      * @return the cloned object
      */
+    @Override
     public Object clone() {
         return new SCStatus(this.bytes);
     }

@@ -25,12 +25,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Point2D.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Point2D.class));
             }
         }
         new PrivelegedAction().establish();
@@ -38,7 +33,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
 
     /**
      * Returns a two-dimensional vector that is the result of subtracting the point p2 from p1.
-     * QuickDraw3D::Q3Point2D_Subtract
+     * @see "QuickDraw3D::Q3Point2D_Subtract"
      * @param p1 A two-dimensional point
      * @param p2 A two-dimensional point
      * @return a Vector2D object
@@ -51,7 +46,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
 
     /**
      * Returns the absolute value of the distance between points p1 and p2.
-     * QuickDraw3D::Q3Point2D_Distance
+     * @see "QuickDraw3D::Q3Point2D_Distance"
      * @param p1 A two-dimensional point
      * @param p2 A two-dimensional point
      * @return the distance
@@ -62,7 +57,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
 
     /**
      * Returns the square value of the distance between points p1 and p2.
-     * QuickDraw3D::Q3Point2D_DistanceSquared
+     * @see "QuickDraw3D::Q3Point2D_DistanceSquared"
      * @param p1 A two-dimensional point
      * @param p2 A two-dimensional point
      * @return the distance
@@ -75,7 +70,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * Returns the two-dimensional point that lies on the line segment between
      * the points p1 and p2 and that is at a distance from the first point determined by
      * the ratio r1/(r1 + r2).
-     * QuickDraw3D::Q3Point2D_RRatio
+     * @see "QuickDraw3D::Q3Point2D_RRatio"
      * @param p2 A two-dimensional point.
      * @param r1 A floating-point number.
      * @param r2 A floating-point number.
@@ -89,7 +84,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
 
     /**
      * Returns the result of adding a two-dimensional vector to a two-dimensional point.
-     * QuickDraw3D::Q3Point2D_Vector2D_Add
+     * @see "QuickDraw3D::Q3Point2D_Vector2D_Add"
      * @param point2D A two-dimensional point.
      * @param v a two-dimensional vector
      * @return a point that is the result of the add.
@@ -102,7 +97,7 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
 
     /**
      * Returns the result of subtracting a two-dimensional vector from a two-dimensional point.
-     * QuickDraw3D::Q3Point2D_Vector2D_Subtract
+     * @see "QuickDraw3D::Q3Point2D_Vector2D_Subtract"
      * @param point2D A two-dimensional point.
      * @param v a two-dimensional vector
      * @return a point that is the result of the add.
@@ -137,8 +132,3 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
         return QD3DManager.Q3Point2D_Vector2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/math
- * /Point2D.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.qd.QDPoint;
@@ -15,7 +17,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
 
     private static EndianDescriptor ed;
 
-    static final long serialVersionUID = 5183605583657368208L;
+    @Serial
+    private static final long serialVersionUID = 5183605583657368208L;
 
     /**
      * Creates a QTVRCubicFace object containing no data
@@ -46,6 +49,7 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
         return ed;
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRCubicFace localQTVRCubicFace = new QTVRCubicFace();
@@ -53,11 +57,13 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
         System.arraycopy(localQTVRCubicFace.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRCubicFace localQTVRCubicFace = (QTVRCubicFace) clone();
         paramObjectOutputStream.write(localQTVRCubicFace.getBytes());
     }
 
+    @Override
     protected Object clone() {
         try {
             return new QTVRCubicFace(this.bytes);

@@ -1,19 +1,15 @@
 package quicktime.sound;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
-import quicktime.jdirect.QTNative;
 import quicktime.std.clocks.TimeRecord;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
 
-public final class ExtScheduledSoundHeader extends QTPointerRef implements InterfaceLib {
 
-    private static Object linkage;
+public final class ExtScheduledSoundHeader extends QTPointerRef implements InterfaceLib {
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -22,20 +18,6 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
 
     private QTPointerRef ref;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ExtScheduledSoundHeader.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Create an ExtScheduledSoundHeader object when the sample data format is uncompressed.
      * @param data the data used by the sound header
@@ -43,8 +25,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * @param rate the sample rate of the sound data
      * @param sampleSizeBits number of bits per each sample.
      */
-    public ExtScheduledSoundHeader(QTPointerRef paramQTPointerRef, int paramInt1, float paramFloat, int paramInt2, int paramInt3) throws QTException {
-        this(paramQTPointerRef, paramInt1, paramFloat, paramQTPointerRef.getSize() / paramInt1 / (paramInt2 / 8), paramInt2, paramInt3, 0, 0);
+    public ExtScheduledSoundHeader(QTPointerRef data, int numChannels, float rate, int sampleSizeBits, int paramInt3) throws QTException {
+        this(data, numChannels, rate, data.getSize() / numChannels / (sampleSizeBits / 8), sampleSizeBits, paramInt3, 0, 0);
     }
 
     /**
@@ -58,17 +40,17 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * @param compressionID the ID of the compression component used to compress this sound
      * @param packetSize the size of each sound packet
      */
-    public ExtScheduledSoundHeader(QTPointerRef paramQTPointerRef, int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) throws QTException {
+    public ExtScheduledSoundHeader(QTPointerRef data, int numChannels, float rate, int numFrames, int format, int sampleSizeBits, int compressionID, int packetSize) throws QTException {
         super(106, true);
         common_init();
-        setSampleData(paramQTPointerRef);
-        setNumChannels(paramInt1);
-        setSampleRate(paramFloat);
-        setNumFrames(paramInt2);
-        setFormat(paramInt4);
-        setSampleSize(paramInt3);
-        setCompressionID(paramInt5);
-        setPacketSize(paramInt6);
+        setSampleData(data);
+        setNumChannels(numChannels);
+        setSampleRate(rate);
+        setNumFrames(numFrames);
+        setFormat(sampleSizeBits);
+        setSampleSize(format);
+        setCompressionID(compressionID);
+        setPacketSize(packetSize);
     }
 
     /**
@@ -84,19 +66,19 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * @param startTime a TimeRecord specifying the time the sound will start playing
      * @param extendedFlags the extended flags field
      */
-    public ExtScheduledSoundHeader(QTPointerRef paramQTPointerRef, int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, TimeRecord paramTimeRecord, int paramInt7) throws QTException {
+    public ExtScheduledSoundHeader(QTPointerRef data, int numChannels, float rate, int numFrames, int format, int sampleSizeBits, int compressionID, int packetSize, TimeRecord startTime, int extendedFlags) throws QTException {
         super(106, true);
         common_init();
-        setSampleData(paramQTPointerRef);
-        setNumChannels(paramInt1);
-        setSampleRate(paramFloat);
-        setNumFrames(paramInt2);
-        setFormat(paramInt4);
-        setSampleSize(paramInt3);
-        setCompressionID(paramInt5);
-        setPacketSize(paramInt6);
-        setStartTime(paramTimeRecord);
-        setExtendedFlags(paramInt7);
+        setSampleData(data);
+        setNumChannels(numChannels);
+        setSampleRate(rate);
+        setNumFrames(numFrames);
+        setFormat(sampleSizeBits);
+        setSampleSize(format);
+        setCompressionID(compressionID);
+        setPacketSize(packetSize);
+        setStartTime(startTime);
+        setExtendedFlags(extendedFlags);
     }
 
     private void common_init() {
@@ -123,10 +105,10 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This sets the data of the sound header. The data must be passed in as a QTPointerRef
      * @param ref the data pointer
      */
-    public void setSampleData(QTPointerRef paramQTPointerRef) {
-        this.ref = paramQTPointerRef;
-        setIntAt(0, QTObject.ID(paramQTPointerRef));
-        setIntAt(102, paramQTPointerRef.getSize());
+    public void setSampleData(QTPointerRef ref) {
+        this.ref = ref;
+        setIntAt(0, QTObject.ID(ref));
+        setIntAt(102, ref.getSize());
     }
 
     /**
@@ -141,8 +123,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This sets the number of channels used by the sound data
      * @param numChannels number of channels, 1 means mono
      */
-    public void setNumChannels(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setNumChannels(int numChannels) {
+        setIntAt(4, numChannels);
     }
 
     /**
@@ -157,8 +139,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * Sets the sample rate of the sound
      * @param rate the sample rate as a floating point number
      */
-    public void setSampleRate(float paramFloat) {
-        setIntAt(8, QTUtils.X2UFix(paramFloat));
+    public void setSampleRate(float rate) {
+        setIntAt(8, QTUtils.X2UFix(rate));
     }
 
     public int getNumFrames() {
@@ -169,8 +151,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This method sets number of frames in the sound
      * @param frames number of frames
      */
-    public void setNumFrames(int paramInt) {
-        setIntAt(22, paramInt);
+    public void setNumFrames(int frames) {
+        setIntAt(22, frames);
     }
 
     public int getFormat() {
@@ -181,16 +163,16 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This method sets format of the sound
      * @param format format of the sound
      */
-    public void setFormat(int paramInt) {
-        setIntAt(40, paramInt);
+    public void setFormat(int format) {
+        setIntAt(40, format);
     }
 
     /**
      * This sets the size of the samples in bits per channel
      * @param sampleSizeBits the number of bits per channel
      */
-    public void setSampleSize(int paramInt) {
-        setShortAt(62, (short) paramInt);
+    public void setSampleSize(int sampleSizeBits) {
+        setShortAt(62, (short) sampleSizeBits);
     }
 
     /**
@@ -208,8 +190,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This method sets id of the compression component associated with the sound
      * @param id compressor id
      */
-    public void setCompressionID(int paramInt) {
-        setShortAt(56, (short) paramInt);
+    public void setCompressionID(int id) {
+        setShortAt(56, (short) id);
     }
 
     public int getPacketSize() {
@@ -220,8 +202,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This method sets the packet size of the sound
      * @param size size of the sound packet
      */
-    public void setPacketSize(int paramInt) {
-        setShortAt(58, (short) paramInt);
+    public void setPacketSize(int size) {
+        setShortAt(58, (short) size);
     }
 
     public TimeRecord getStartTime() throws QTException {
@@ -232,8 +214,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * This method sets the time that the sound should begin playing
      * @param startTime the time the sound should play (in the future)
      */
-    public void setStartTime(TimeRecord paramTimeRecord) {
-        BlockMove(QTObject.ID(paramTimeRecord), _ID() + 78, 16);
+    public void setStartTime(TimeRecord startTime) {
+        BlockMove(QTObject.ID(startTime), _ID() + 78, 16);
     }
 
     /**
@@ -255,7 +237,14 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * @return a String representation of this object
      */
     public String toString() {
-        return getClass().getName() + "[" + "data:" + this.ref + ",numChannels:" + getNumChannels() + ",sampleRate:" + getSampleRate() + ",sampleSize:" + getSampleSize() + ",sampleFormat:" + QTUtils.fromOSType(getFormat()) + ",compressionID:" + getCompressionID() + "]";
+        return getClass().getName() + "[" +
+                "data:" + this.ref +
+                ",numChannels:" + getNumChannels() +
+                ",sampleRate:" + getSampleRate() +
+                ",sampleSize:" + getSampleSize() +
+                ",sampleFormat:" + QTUtils.fromOSType(getFormat()) +
+                ",compressionID:" + getCompressionID() +
+                "]";
     }
 
     private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {

@@ -1,7 +1,7 @@
 package quicktime.app.spaces;
 
 /**
- * Deprecated.
+ * @deprecated
  * The DynamicCollection uses the Protocol class to enable
  * the application to dynamically type members on a collection
  * by collection basis. Dynamic collections use the protocol to
@@ -23,17 +23,17 @@ package quicktime.app.spaces;
  * Changing a protocol after a member has been added to the collection will not mean that
  * existing members are removed if they do not match the new protocol, thus protocols should
  * only be specified when the collection is empty.
- * @see {@link quicktime.app.spaces.Protocol}
+ * @see quicktime.app.spaces.Protocol
  */
-public abstract interface DynamicCollection extends Collection {
+public interface DynamicCollection extends Collection {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Protocol class that is used to when testing
      * an object's appropriateness for membership of a collection.
      * @return a Protocol object.
      */
-    public abstract Protocol getProtocol();
+    Protocol getProtocol();
 }
 

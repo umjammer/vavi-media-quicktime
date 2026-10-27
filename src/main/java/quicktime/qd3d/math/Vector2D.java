@@ -3,12 +3,11 @@ package quicktime.qd3d.math;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.Serial;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.QD3DManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianDescriptor;
@@ -16,43 +15,31 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.UtilException;
 
+
 /**
  * Refer to TQ3Vector2D in QuickDraw3D
  */
 public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickDraw3DLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 8;
 
-    static final long serialVersionUID = 8942845454986567012L;
+    @Serial
+    private static final long serialVersionUID = 8942845454986567012L;
 
     static {
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Vector2D.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -78,6 +65,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
         paramObjectInputStream.read(this.bytes);
@@ -88,6 +76,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         Vector2D localVector2D = (Vector2D) clone();
         try {
@@ -130,7 +119,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * Returns a two-dimensional vector that is the result of
      * multiplying each of the components of this by the value of
      * the scalar parameter.
-     * QuickDraw3D::Q3Vector2D_Scale
+     * @see "QuickDraw3D::Q3Vector2D_Scale"
      * @param scalar A floating-point number.
      * @return a new scaled vector.
      */
@@ -142,7 +131,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
 
     /**
      * Returns the length of a two-dimensional vector.
-     * QuickDraw3D::Q3Vector2D_Length
+     * @see "QuickDraw3D::Q3Vector2D_Length"
      * @return the length of the vector.
      */
     public float length() {
@@ -151,7 +140,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
 
     /**
      * Returns the normalized form of the vector.
-     * QuickDraw3D::Q3Vector2D_Normalize
+     * @see "QuickDraw3D::Q3Vector2D_Normalize"
      * @return the normalized form of the vector
      */
     public Vector2D normalize() {
@@ -162,7 +151,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
 
     /**
      * Returns the two-dimensional vector that is the sum of the two vectors this and v2.
-     * QuickDraw3D::Q3Vector2D_Add
+     * @see "QuickDraw3D::Q3Vector2D_Add"
      * @param v2 A two-dimensional vector.
      * @return the sum of v1 and v2.
      */
@@ -174,7 +163,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
 
     /**
      * Returns the two-dimensional vector that is the result of subtracting v2 from this.
-     * QuickDraw3D::Q3Vector2D_Subtract
+     * @see "QuickDraw3D::Q3Vector2D_Subtract"
      * @param v2 A two-dimensional vector.
      * @return the result of subtracting v2 from this.
      */
@@ -186,7 +175,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
 
     /**
      * Returns the cross product of this vector and vector v2.
-     * QuickDraw3D::Q3Vector2D_Cross
+     * @see "QuickDraw3D::Q3Vector2D_Cross"
      * @param v2 A two-dimensional vector.
      * @return a float
      */
@@ -196,7 +185,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
 
     /**
      * Returns the dot product of this vector and vector v2.
-     * QuickDraw3D::Q3Vector2D_Dot
+     * @see "QuickDraw3D::Q3Vector2D_Dot"
      * @param v2 A two-dimensional vector.
      * @return a float
      */
@@ -207,6 +196,7 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new Vector2D(getBytes());
     }

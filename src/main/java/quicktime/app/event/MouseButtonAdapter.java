@@ -4,7 +4,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * A convenience adapter class for dealing with MouseButton events.
  */
 public class MouseButtonAdapter implements MouseButtonListener {
@@ -16,8 +16,8 @@ public class MouseButtonAdapter implements MouseButtonListener {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * An event is only passed on to interested listeners if those
      * listeners return true to this filter call. By default this
      * method returns true.
@@ -25,36 +25,35 @@ public class MouseButtonAdapter implements MouseButtonListener {
      * @return true if a particular listener is interested in receiving the mouse event(s)
      *  it is interested in with the given modifier state, or false if otherwise.
      */
+    @Override
     public boolean matchModifierFilter(int paramInt) {
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when a mouse button has been released where the press occured within the space.
      */
+    @Override
     public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been pressed in a space.
      */
+    @Override
     public void mousePressed(QTMouseEvent paramQTMouseEvent) {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been clicked in a space.
      */
+    @Override
     public void mouseClicked(QTMouseEvent paramQTMouseEvent) {
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /MouseButtonAdapter.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

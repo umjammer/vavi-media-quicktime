@@ -19,25 +19,20 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
 
     private static Object linkage;
 
-    private Curve comp;
+    private final Curve comp;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(GXPaths.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(GXPaths.class));
             }
         }.establish();
     }
 
     private static int howManyBytes(GXPath[] paramArrayOfGXPath) {
         int i = 0;
-        for (int j = 0; j < paramArrayOfGXPath.length; j++) i += paramArrayOfGXPath[j].getSize();
+        for (GXPath gxPath : paramArrayOfGXPath) i += gxPath.getSize();
         return i;
     }
 
@@ -52,9 +47,9 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
         super(howManyBytes(paramArrayOfGXPath) + 4);
         setIntAt(0, paramArrayOfGXPath.length);
         int i = 4;
-        for (int j = 0; j < paramArrayOfGXPath.length; j++) {
-            setBytesAt(i, paramArrayOfGXPath[j].getSize(), paramArrayOfGXPath[j].getBytes(), 0);
-            i += paramArrayOfGXPath[j].getSize();
+        for (GXPath gxPath : paramArrayOfGXPath) {
+            setBytesAt(i, gxPath.getSize(), gxPath.getBytes(), 0);
+            i += gxPath.getSize();
         }
         this.comp = paramCurve;
     }
@@ -70,10 +65,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
     /**
      * This method is used to count the points along either one of a path's contours
      * or all of its contours.
-     * QuickTime::CurveCountPointsInPath
+     * @see "QuickTime::CurveCountPointsInPath"
      * @param contourIndex the index of the contour to be counted.
      * @return the number of points in the contour or path.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int countPointsInPath(int paramInt) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -84,11 +79,11 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
 
     /**
      * This method is best for adding a single point to a path rather than large numbers of points to a path.
-     * QuickTime::CurveSetPathPoint
+     * @see "QuickTime::CurveSetPathPoint"
      * @param contourIndex Specifies the index of the path contour to which to add the point.
      * @param pointIndex Specifies the index of the point to add.
      * @param ptIsOnPath If TRUE , specifies that the new point is to be on the path.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPathPoint(int paramInt1, int paramInt2, QDPoint paramQDPoint, boolean paramBoolean) throws StdQTException {
         int i = CurveSetPathPoint(QTObject.ID(this.comp), getBytes(), paramInt1, paramInt2, paramQDPoint.getGXPoint(), (byte) (paramBoolean ? 1 : 0));
@@ -97,11 +92,11 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
 
     /**
      * This method is used to get a point from a path and to find out if the point is on the curve.
-     * QuickTime::CurveGetPathPoint
+     * @see "QuickTime::CurveGetPathPoint"
      * @param contourIndex Specifies the index of the contour from which to get the point.
      * @param pointIndex Specifies the index of the point to get.
      * @return thePoint field that is to receive the point.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public PathPointInfo getPathPoint(int paramInt1, int paramInt2) throws StdQTException {
         QDPoint localQDPoint = new QDPoint(0.0F, 0.0F);
@@ -113,11 +108,11 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
 
     /**
      * This method is used to get the point at a specified distance along a curve.
-     * QuickTime::CurveLengthToPoint
+     * @see "QuickTime::CurveLengthToPoint"
      * @param index Specifies the index of the path contour from which to get the point.
      * @param length Specifies the distance along the curve at which to find the point.
      * @return QDPoint[] array of two points containing the location (first element) and the tangent point (second element)
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDPoint[] lengthToPoint(int paramInt1, int paramInt2) throws StdQTException {
         QDPoint localQDPoint1 = new QDPoint(0.0F, 0.0F);
@@ -133,11 +128,11 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
     /**
      * This method is used to calculate the length of one of a path's contours or the
      * sum of the lengths of all of its contours.
-     * QuickTime::CurveGetLength
+     * @see "QuickTime::CurveGetLength"
      * @param index Contains the index of the contour whose length is to be calculated or, if the value is 0 ,
      *  specifies to calculate the lengths of all of the path's contours and return the sum of the lengths.
      * @return wideLength Contains the length.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public long getLength(int paramInt) throws StdQTException {
         long[] arrayOfLong = { 0L };
@@ -149,12 +144,12 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
     /**
      * This method is used to to get the length of a path between specified starting
      * and ending distances that is nearest a point.
-     * QuickTime::CurvePathPointToLength
+     * @see "QuickTime::CurvePathPointToLength"
      * @param startDist Specifies the distance along the path at which to start measuring the path's length.
      * @param endDist Specifies the distance along the path at which to stop measuring the path's length.
      * @param thePoint Contains a pointer to a point; the function measures the path closest to this point.
      * @return the length of the specified part of the path.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getPathPointToLength(int paramInt1, int paramInt2, QDPoint paramQDPoint) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -167,10 +162,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * This method is used to to find the closest point on a path to a specified point.
      * In programs where users directly manipulate curves, you can use this function
      * to determine the closest control point to a given point.
-     * QuickTime::CurveGetNearestPathPoint
+     * @see "QuickTime::CurveGetNearestPathPoint"
      * @param thePoint Contains a point for which to find the closest point on the path.
      * @return information about the specified point
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public NearestPointInfo getNearestPathPoint(QDPoint paramQDPoint) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
@@ -209,8 +204,3 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
         return ImageCompressionManager.CurvePathPointToLength(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /GXPaths.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

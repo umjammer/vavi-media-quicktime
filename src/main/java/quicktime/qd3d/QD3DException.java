@@ -28,7 +28,7 @@ public class QD3DException extends QTException {
      * This method will throw an exception if the incoming err argument is
      * a non-zero value.
      * @param err the result or error code if non-zero an exception is thrown
-     * @param {@link quicktime.qd3d.QD3DException}
+     * @throws quicktime.qd3d.QD3DException
      */
     public static void checkError(int paramInt) throws QD3DException {
         if (paramInt < 0) {

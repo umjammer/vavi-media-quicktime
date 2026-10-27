@@ -4,7 +4,7 @@ package quicktime.std.movies;
  * The MovieProgress interface can be implemented to allow you to attach a progress handler to each movie.
  * The handler will be called whenever a long operation is underway.
  */
-public abstract interface MovieProgress {
+public interface MovieProgress {
 
     /**
      * The Movie Toolbox indicates the progress of the operation to your progress function.
@@ -31,6 +31,6 @@ public abstract interface MovieProgress {
      * @param percentDone Contains a floating pointe value indicating how far the operation has progressed. Its value is always between 0.0 and 1.0. This parameter is valid only when the message field is set to movieProgressUpdatePercent.
      * @return an error code - noErr (zero) if no error has occured, otherwise a valid error code
      */
-    public abstract int execute(Movie paramMovie, int paramInt1, int paramInt2, float paramFloat);
+    int execute(Movie paramMovie, int paramInt1, int paramInt2, float paramFloat);
 }
 

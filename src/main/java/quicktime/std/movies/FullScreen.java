@@ -1,16 +1,15 @@
 package quicktime.std.movies;
 
 import java.awt.Dimension;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.PlatformManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.GDevice;
 import quicktime.qd.QDDimension;
 import quicktime.std.StdQTException;
+
 
 /**
  * The FullScreen class implements the behavior for converting a screen to full screen mode and back to normal mode.
@@ -18,25 +17,9 @@ import quicktime.std.StdQTException;
  * window for you. The QTJava API allows you to put the specified screen into full screen mode and then
  * a java window can be used to fill the screen and allow the full capabilities of Java to use the entire screen.
  * The FullScreen can be used with Signed Applets also.
- * @see quicktime.app.display.FullScreenFrame
+ * @see "quicktime.app.display.FullScreenFrame"
  */
 public final class FullScreen implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(FullScreen.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     /**
      * This constructor creates a new FullScreen object.
@@ -53,13 +36,13 @@ public final class FullScreen implements QuickTimeLib {
     private int restoreState = 0;
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0 see getSizeOfMainScreen</I>
      * Returns the current size in pixels of the main screen.
      * This method will not alter the display size of the screen.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @return the size of the main screen
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Dimension getMainScreenSize() throws StdQTException {
         QDDimension localQDDimension = getSizeOfMainScreen();
@@ -69,9 +52,9 @@ public final class FullScreen implements QuickTimeLib {
     /**
      * Returns the current size in pixels of the main screen.
      * This method will not alter the display size of the screen.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @return the size of the main screen
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDDimension getSizeOfMainScreen() throws StdQTException {
         end();
@@ -86,13 +69,13 @@ public final class FullScreen implements QuickTimeLib {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0 see getSizeOfScreen</I>
      * Returns the current size in pixels of the screen that is associated with the specified GDevice.
      * This method will not alter the display size of the screen.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @return the size of the specified screen
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Dimension getScreenSize(GDevice paramGDevice) throws StdQTException {
         QDDimension localQDDimension = getSizeOfScreen(paramGDevice);
@@ -102,9 +85,9 @@ public final class FullScreen implements QuickTimeLib {
     /**
      * Returns the current size in pixels of the screen that is associated with the specified GDevice.
      * This method will not alter the display size of the screen.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @return the size of the specified screen
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDDimension getSizeOfScreen(GDevice paramGDevice) throws StdQTException {
         end();
@@ -119,113 +102,113 @@ public final class FullScreen implements QuickTimeLib {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0 see sizeOfScreen</I>
      * Returns the closest size to the specified size for the specified screen.
      * This method will not alter the display size of the screen.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @param gd the GDevice for the desired screen or null for the main screen
      * @param width the desired width or 0 to retrieve the current width in pixels of the specified screen
      * @param height the desired height or 0 to retrieve the current height in pixels of the specified screen
      * @return the size of the specified screen
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Dimension preflightSize(GDevice paramGDevice, int paramInt1, int paramInt2) throws StdQTException {
-        QDDimension localQDDimension = getPreflightSize(paramGDevice, paramInt1, paramInt2);
+    public Dimension preflightSize(GDevice gd, int width, int height) throws StdQTException {
+        QDDimension localQDDimension = getPreflightSize(gd, width, height);
         return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
     }
 
     /**
      * Returns the closest size to the specified size for the specified screen.
      * This method will not alter the display size of the screen.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @param gd the GDevice for the desired screen or null for the main screen
      * @param width the desired width or 0 to retrieve the current width in pixels of the specified screen
      * @param height the desired height or 0 to retrieve the current height in pixels of the specified screen
      * @return the size of the specified screen
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public QDDimension getPreflightSize(GDevice paramGDevice, int paramInt1, int paramInt2) throws StdQTException {
+    public QDDimension getPreflightSize(GDevice gd, int width, int height) throws StdQTException {
         end();
         int[] arrayOfInt = new int[1];
         short[] arrayOfShort1 = new short[1];
         short[] arrayOfShort2 = new short[1];
-        arrayOfShort1[0] = ((short) paramInt1);
-        arrayOfShort2[0] = ((short) paramInt2);
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(paramGDevice), arrayOfShort1, arrayOfShort2, 0, 0, 8));
+        arrayOfShort1[0] = ((short) width);
+        arrayOfShort2[0] = ((short) height);
+        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(gd), arrayOfShort1, arrayOfShort2, 0, 0, 8));
         this.restoreState = arrayOfInt[0];
         return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0 see beginFullScreen</I>
      * This method converts the main screen to full screen mode by hiding menu bars, control strips, task bars, etc.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @param flags controls the operation of this method.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Dimension begin(int paramInt) throws StdQTException {
-        QDDimension localQDDimension = beginFullScreen(paramInt);
+    public Dimension begin(int flags) throws StdQTException {
+        QDDimension localQDDimension = beginFullScreen(flags);
         return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
     }
 
     /**
      * This method converts the main screen to full screen mode by hiding menu bars, control strips, task bars, etc.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @param flags controls the operation of this method.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public QDDimension beginFullScreen(int paramInt) throws StdQTException {
+    public QDDimension beginFullScreen(int flags) throws StdQTException {
         end();
         int[] arrayOfInt = new int[1];
         short[] arrayOfShort1 = new short[1];
         short[] arrayOfShort2 = new short[1];
         arrayOfShort1[0] = 0;
         arrayOfShort2[0] = 0;
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, 0, arrayOfShort1, arrayOfShort2, 0, 0, paramInt));
+        StdQTException.checkError(BeginFullScreen(arrayOfInt, 0, arrayOfShort1, arrayOfShort2, 0, 0, flags));
         this.restoreState = arrayOfInt[0];
         return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0 see beginFullScreen</I>
      * This method converts the main screen to full screen mode.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @param desiredWidth Specifies the resolution width to be displayed for that screen.
      * @param desiredHeight Specifies the resolution height to be displayed for that screen.
      * @param flags Controls the operation of this method.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public Dimension begin(GDevice paramGDevice, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        QDDimension localQDDimension = beginFullScreen(paramGDevice, paramInt1, paramInt2, paramInt3);
+    public Dimension begin(GDevice paramGDevice, int desiredWidth, int desiredHeight, int flags) throws StdQTException {
+        QDDimension localQDDimension = beginFullScreen(paramGDevice, desiredWidth, desiredHeight, flags);
         return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
     }
 
     /**
      * This method converts the main screen to full screen mode.
-     * QuickTime::BeginFullScreen()
+     * @see "QuickTime::BeginFullScreen()"
      * @param desiredWidth Specifies the resolution width to be displayed for that screen.
      * @param desiredHeight Specifies the resolution height to be displayed for that screen.
      * @param flags Controls the operation of this method.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public QDDimension beginFullScreen(GDevice paramGDevice, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
+    public QDDimension beginFullScreen(GDevice paramGDevice, int desiredWidth, int desiredHeight, int flags) throws StdQTException {
         end();
         int[] arrayOfInt = new int[1];
         short[] arrayOfShort1 = new short[1];
         short[] arrayOfShort2 = new short[1];
-        arrayOfShort1[0] = ((short) paramInt1);
-        arrayOfShort2[0] = ((short) paramInt2);
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(paramGDevice), arrayOfShort1, arrayOfShort2, 0, 0, paramInt3));
+        arrayOfShort1[0] = ((short) desiredWidth);
+        arrayOfShort2[0] = ((short) desiredHeight);
+        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(paramGDevice), arrayOfShort1, arrayOfShort2, 0, 0, flags));
         this.restoreState = arrayOfInt[0];
         return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
     }
 
     /**
      * This method converts the main screen from full screen mode to normal mode.
-     * QuickTime::EndFullScreen()
+     * @see "QuickTime::EndFullScreen()"
      */
     public void endFullScreen() throws StdQTException {
         end();
@@ -233,7 +216,7 @@ public final class FullScreen implements QuickTimeLib {
 
     /**
      * This method converts the main screen from full screen mode to normal mode.
-     * QuickTime::EndFullScreen()
+     * @see "QuickTime::EndFullScreen()"
      */
     public void end() throws StdQTException {
         if (this.restoreState != 0) {
@@ -243,9 +226,8 @@ public final class FullScreen implements QuickTimeLib {
         this.restoreState = 0;
     }
 
-    protected void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         end();
-        super.finalize();
     }
 
     private static short BeginFullScreen(int[] paramArrayOfInt, int paramInt1, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int paramInt2, int paramInt3, int paramInt4) {

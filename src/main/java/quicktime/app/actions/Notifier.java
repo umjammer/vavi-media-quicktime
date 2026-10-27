@@ -1,7 +1,7 @@
 package quicktime.app.actions;
 
 /**
- * Deprecated.
+ * @deprecated
  * The Notifier and NotifyListener interfaces provide a way for objects
  * to deal with some state that is not available immediately but can
  * be acquired. The Notifier represents the class that is waiting for
@@ -29,19 +29,19 @@ package quicktime.app.actions;
  * is an issue. For example a class could be defined that downloads image data through a
  * network connection. When the image data is completely retrieved this type of Notifier
  * could then notify a TwoDSprite (for instance) that its image data is now complete.
- * @see {@link quicktime.app.image.QTImageDrawer},
+ * @see quicktime.app.image.QTImageDrawer,
  * {@link quicktime.app.anim.TwoDSprite}
  */
-public abstract interface Notifier {
+public interface Notifier {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called at some point when a relationship between a Notifier
      * and a listener is required.
      * @param nl the NotifyListener that is interested in something from this Notifier
      * @return true if the Notifer is an appropriate Notifier for the Listener
      */
-    public abstract boolean addNotifyListener(NotifyListener paramNotifyListener);
+    boolean addNotifyListener(NotifyListener nl);
 }
 

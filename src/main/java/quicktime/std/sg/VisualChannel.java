@@ -1,34 +1,16 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.SequenceGrabberManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
 import quicktime.qd.Region;
 import quicktime.std.StdQTException;
 import quicktime.std.image.Matrix;
 
+
 public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(VisualChannel.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     VisualChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
         super(paramInt, paramSequenceGrabber);
@@ -40,19 +22,19 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
 
     /**
      * Allows you to specify a channel's display boundary rectangle.
-     * QuickTime::SGSetChannelBounds
+     * @see "QuickTime::SGSetChannelBounds"
      * @param bounds the new display bounds
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setBounds(QDRect paramQDRect) throws StdQTException {
-        StdQTException.checkError(SGSetChannelBounds(_ID(), paramQDRect.getRect()));
+    public void setBounds(QDRect bounds) throws StdQTException {
+        StdQTException.checkError(SGSetChannelBounds(_ID(), bounds.getRect()));
     }
 
     /**
      * Allows you to get a channel's display boundary rectangle.
-     * QuickTime::SGGetChannelBounds
+     * @see "QuickTime::SGGetChannelBounds"
      * @return the current display bounds
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDRect getBounds() throws StdQTException {
         QDRect localQDRect = new QDRect();
@@ -62,20 +44,20 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
 
     /**
      * Allows you to set a channel's clipping region.
-     * QuickTime::SGSetChannelClip
+     * @see "QuickTime::SGSetChannelClip"
      * @param theClip a new clipping region or null to clear the clipping region.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setClip(Region paramRegion) throws StdQTException {
-        int i = SGSetChannelClip(_ID(), QTObject.ID(paramRegion));
+    public void setClip(Region theClip) throws StdQTException {
+        int i = SGSetChannelClip(_ID(), QTObject.ID(theClip));
         StdQTException.checkError(i);
     }
 
     /**
      * Allows you to retrieve a channels clipping region.
-     * QuickTime::SGGetChannelClip
+     * @see "QuickTime::SGGetChannelClip"
      * @return the clipping region or null if no clip.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getClip() throws QTException {
         return Region.fromVideoChannel(this);
@@ -83,7 +65,7 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
 
     /**
      * Allows you to set a channel's display transformation matrix.
-     * QuickTime::SGSetChannelMatrix
+     * @see "QuickTime::SGSetChannelMatrix"
      */
     public void setMatrix(Matrix paramMatrix) throws StdQTException {
         int i = SGSetChannelMatrix(_ID(), paramMatrix == null ? null : paramMatrix.getBytes());
@@ -92,9 +74,9 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
 
     /**
      * Allows you to get a channel's display transformation matrix.
-     * QuickTime::SGGetChannelMatrix
+     * @see "QuickTime::SGGetChannelMatrix"
      * @return the current matrix of the channel.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Matrix getMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();

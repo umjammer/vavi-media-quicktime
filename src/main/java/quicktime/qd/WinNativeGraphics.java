@@ -1,49 +1,28 @@
 
 package quicktime.qd;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.WinJNIDrawingSurface;
-import quicktime.internal.toolbox.PlatformManager;
-import quicktime.jdirect.QTNative;
-import quicktime.jdirect.QuickTimeLib;
 import quicktime.internal.awt.DrawingSurfaceInfo;
 import quicktime.internal.awt.Win32DrawingSurface;
+import quicktime.internal.toolbox.PlatformManager;
+import quicktime.jdirect.QuickTimeLib;
 
 
 final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
-    private static Object linkage;
 
-  static {
-      class PrivelegedAction {
-          void establish()
-          {
-            AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                public Object run() {
-                    return QTNative
-                            .linkNativeMethods(WinNativeGraphics.class);
-                }
-            });
-          }
-        }
-      new PrivelegedAction().establish();
-  }
+    private static final Vector<Integer> hWndVector = new Vector<>();
 
-    private static Vector<Integer> hWndVector = new Vector<>();
-
-    private static final boolean debug = false;
-
-    private static final void _destroyPorts() {
+    private static void _destroyPorts() {
         Enumeration<Integer> e = hWndVector.elements();
         while (e.hasMoreElements()) {
             Integer localObject = e.nextElement();
 
-            DestroyPortAssociation(GetNativeWindowPort((localObject).intValue()));
+            DestroyPortAssociation(GetNativeWindowPort(localObject));
         }
         hWndVector.removeAllElements();
     }
@@ -78,7 +57,7 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
     private void createAssociation() {
         int i = 0;
         for (int j = 0; j < hWndVector.size(); j++) {
-            if (hWndVector.elementAt(j).intValue() == this.hWnd) {
+            if (hWndVector.elementAt(j) == this.hWnd) {
                 i = 1;
                 break;
             }
@@ -89,12 +68,13 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
             int j = CreatePortAssociation(this.hWnd, 0, 2);
             if (j == 0)
                 throw new QTRuntimeException("No Port for HWnd");
-            hWndVector.addElement(new Integer(this.hWnd));
+            hWndVector.addElement(this.hWnd);
         }
     }
 
     int hWnd = 0;
 
+    @Override
     public final QDGraphics getGWorld() throws NativeGraphicsException {
         return QDGraphics.fromNativeGraphics(this);
     }
@@ -107,7 +87,7 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
             }
 
             for (int i = 0; i < hWndVector.size(); i++) {
-                if (hWndVector.elementAt(i).intValue() == this.hWnd) {
+                if (hWndVector.elementAt(i) == this.hWnd) {
                     hWndVector.removeElementAt(i);
                     DestroyPortAssociation(GetNativeWindowPort(this.hWnd));
                     break;
@@ -117,10 +97,12 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
         }
     }
 
+    @Override
     int _getWindow() throws NativeGraphicsException {
         return 0;
     }
 
+    @Override
     protected void finalize() throws Throwable {
         removeContext();
         super.finalize();

@@ -16,7 +16,7 @@ import quicktime.qd.Region;
 import quicktime.std.image.ImageDescription;
 
 /**
- * Deprecated.
+ * @deprecated
  * The QTEffectPresenter is used to present typically a QTFilter or QTTransition
  * as a member of a SWCompositor. It will create an Invalidator based on whether
  * the effect is a single or multi-framed effect and the Invalidator will
@@ -33,9 +33,9 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
         }
     }
 
-    private Vector listenerList = new Vector();
+    private final Vector listenerList = new Vector();
 
-    private QDGraphics g;
+    private final QDGraphics g;
 
     private static QDRect moveToZero(QDRect paramQDRect) {
         paramQDRect.move(0, 0);
@@ -43,8 +43,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a QTEffectPresenter from the supplied effect. The effect
      * will be rendered into a default offscreen QDGraphics and the
      * pixel data of the QDGraphics buffer becomes the image data
@@ -56,8 +56,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a QTEffectPresenter from the supplied effect. The effect
      * will be rendered into the supplied offscreen QDGraphics and the
      * pixel data of the QDGraphics buffer becomes the image data
@@ -79,16 +79,17 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void redraw(Region paramRegion) throws QTException {
         if (this.ef.isRedrawing())
             this.ef.redraw(paramRegion);
@@ -104,7 +105,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
             this.pres = paramQTEffectPresenter;
         }
 
-        public boolean tickle(float paramFloat, int paramInt) throws QTException {
+        @Override
+        public boolean tickle(float er, int t) throws QTException {
             if (QTEffectPresenter.this.ef.isRedrawing()) {
                 QTEffectPresenter.this.ef.redraw(null);
                 synchronized (QTEffectPresenter.this) {
@@ -117,8 +119,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the effect that the QTEffectPresenter is presenting.
      * @return a QTEffect class
      */
@@ -127,8 +129,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the effect being presented by this Presenter is a QTTransition then
      * this call will run the transition. If not then nothing will happen.
      */
@@ -138,13 +140,13 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
         }
     }
 
-    private QTEffect ef;
+    private final QTEffect ef;
 
     TwoDSprite sprite;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -164,28 +166,31 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @return an Invalidator or null if invalidation is not required
      * @see quicktime.app.display.SWCompositor
      */
+    @Override
     public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) {
         this.sprite = paramTwoDSprite;
         return this.ef.isSingleFrame() ? null : new EFInvalidator(paramTwoDSprite, this);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
      * @param c the SWCompositor it is being removed from
      */
+    @Override
     public void removedFromCompositor(SWCompositor paramSWCompositor) {
         this.sprite = null;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Registers an object as a listener of the Compositor. The object will receive notification when the Compositor draws a frame
      */
+    @Override
     public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList.contains(paramDrawingListener))
             return;
@@ -193,18 +198,14 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes an object that is a listener of the Compositor. The object will no longer receive notification when the Compositor draws a frame
      */
+    @Override
     public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList.contains(paramDrawingListener)) {
             this.listenerList.removeElement(paramDrawingListener);
         }
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /QTEffectPresenter.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

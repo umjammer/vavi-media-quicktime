@@ -89,6 +89,7 @@ public final class NoteRequest extends NoteRequestInfo implements Cloneable {
      * Makes a copy of a NoteRequest object.
      * @return a NoteRequestInfo
      */
+    @Override
     public Object clone() {
         return new NoteRequest(getBytes());
     }

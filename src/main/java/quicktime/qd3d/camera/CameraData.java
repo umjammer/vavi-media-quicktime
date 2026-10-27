@@ -3,16 +3,14 @@ package quicktime.qd3d.camera;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import quicktime.QTRuntimeException;
-import quicktime.QTSession;
+import java.io.Serial;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
+
 
 /**
  * CameraData contains information for the camera angle and position.
@@ -23,38 +21,19 @@ import quicktime.util.QTByteObject;
  */
 public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 60;
 
+    @Serial
     private static final long serialVersionUID = 8266295306447856273L;
-
-    static {
-        if (QTSession.isCurrentOS(4)) {
-            throw new QTRuntimeException("Unsupported OS");
-        }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CameraData.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     /**
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -83,6 +62,7 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
         super(paramInt);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         int i = paramObjectInputStream.readInt();
         this.bytes = new byte[i];
@@ -94,6 +74,7 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = getBytes();
         int i = getSize();
@@ -161,6 +142,7 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new CameraData(this.bytes);
     }

@@ -57,7 +57,7 @@ class LegacyCodecTest {
     @Test
     void testCinepak() throws Exception {
         MediaRec m = media("qtvr.mov", 1);
-        assertEquals("cvid", Bytes.fourCC(Bytes.getInt(m.descriptions.get(0), 4)));
+        assertEquals("cvid", Bytes.fourCC(Bytes.getInt(m.descriptions.getFirst(), 4)));
         // the middle needs the frames from the previous key frame
         BufferedImage middle = JavaFrames.decode(m, m.duration() / 2);
         assertNotNull(middle);
@@ -71,7 +71,7 @@ class LegacyCodecTest {
     @Test
     void testGraphics() throws Exception {
         MediaRec m = media("qtvr.mov", 2);
-        assertEquals("smc ", Bytes.fourCC(Bytes.getInt(m.descriptions.get(0), 4)));
+        assertEquals("smc ", Bytes.fourCC(Bytes.getInt(m.descriptions.getFirst(), 4)));
         BufferedImage img = JavaFrames.decode(m, m.duration() * 2 / 3);
         assertNotNull(img);
         assertTrue(colors(img) >= 2, "the hot spots are drawn");
@@ -80,7 +80,7 @@ class LegacyCodecTest {
     @Test
     void testPicture() throws Exception {
         MediaRec m = media("Ships.mov", 1);
-        assertEquals("qdrw", Bytes.fourCC(Bytes.getInt(m.descriptions.get(0), 4)));
+        assertEquals("qdrw", Bytes.fourCC(Bytes.getInt(m.descriptions.getFirst(), 4)));
         BufferedImage img = JavaFrames.decode(m, 0);
         assertNotNull(img);
         assertTrue(colors(img) > 10);

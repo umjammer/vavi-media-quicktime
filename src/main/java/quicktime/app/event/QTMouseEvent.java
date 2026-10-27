@@ -6,7 +6,7 @@ import quicktime.QTSession;
 import quicktime.qd.QDPoint;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is used by QuickTime objects that have an action associated
  * with them. When those object's actions are fired they will generate
  * an action event, with those objects as the source of the event,
@@ -20,29 +20,29 @@ import quicktime.qd.QDPoint;
 public class QTMouseEvent extends EventObject {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse clicked event type.
      */
     public static final int kMouseClick = 500;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse pressed event type.
      */
     public static final int kMousePressed = 501;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse released event type.
      */
     public static final int kMouseReleased = 502;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse moved event type.
      */
     public static final int kMouseMoved = 503;
@@ -54,36 +54,36 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse entered event type.
      */
     public static final int kMouseEntered = 504;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse exited event type.
      */
     public static final int kMouseExited = 505;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse dragged event type.
      */
     public static final int kMouseDragged = 506;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse entered a target
      */
     public static final int kMouseTargetEnter = 507;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mouse exited a target
      */
     public static final int kMouseTargetExit = 508;
@@ -105,8 +105,8 @@ public class QTMouseEvent extends EventObject {
     private QDPoint cacheLocationPt;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructs an QTMouseEvent object with the specified source object.
      * @param source the object where the event originated
      */
@@ -115,8 +115,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructs an QTMouseEvent object with the specified source object.
      * @param source the object where the event originated
      * @param eventType the type of mouse event
@@ -141,7 +141,7 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return the location of the event in the space's local coordinates * @deprecated since QTJava 6.1
      */
     public QDPoint getLocation() {
@@ -151,8 +151,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the modifiers held down during this action event.
      */
     public int getModifiers() {
@@ -160,7 +160,7 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return the target or null of the event* @deprecated since QTJava 6.1
      */
     public Object getTarget() {
@@ -168,8 +168,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @param target the target of the event
      */
     public void setTarget(Object paramObject) {
@@ -177,8 +177,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the x position of the event relative to the source's enclosing space.
      */
     public int getX() {
@@ -186,8 +186,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the y position of the event relative to the source's enclosing space.
      */
     public int getY() {
@@ -195,8 +195,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the when the event happened.
      */
     public long getWhen() {
@@ -204,8 +204,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the number of clicks.
      */
     public int getClickCount() {
@@ -213,8 +213,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the type of mouse event.
      */
     public int getEventType() {
@@ -226,8 +226,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Translates the location of the event.
      * @param x the offset to the x coordinate position
      * @param y the offset to the y coordinate position
@@ -238,8 +238,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the characteristics of the MouseEvent. This will also set the target to null and consumed to false.
      * @param eventType the type of mouse event
      * @param x the x location of the event
@@ -262,8 +262,8 @@ public class QTMouseEvent extends EventObject {
     private boolean consumed = false;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTMouseEvents can be consumed by any of their listeners.
      * If the event is consumed it will not be passed on to
      * any other listeners. Calling this method indicates that
@@ -274,8 +274,8 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return true if the event is consumed.
      */
     public boolean isConsumed() {
@@ -283,43 +283,23 @@ public class QTMouseEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return a String representation of this object.
      */
     public String toString() {
-        String str1 = null;
-        switch(this.eventType) {
-            case 500:
-                str1 = "click";
-                break;
-            case 501:
-                str1 = "pressed";
-                break;
-            case 502:
-                str1 = "released";
-                break;
-            case 503:
-                str1 = "moved";
-                break;
-            case 506:
-                str1 = "dragged";
-                break;
-            case 507:
-                str1 = "targetEnter";
-                break;
-            case 508:
-                str1 = "targetExit";
-                break;
-            case 504:
-                str1 = "entered";
-                break;
-            case 505:
-                str1 = "exited";
-                break;
-            default:
-                str1 = "unknown";
-        }
+        String str1 = switch (this.eventType) {
+            case 500 -> "click";
+            case 501 -> "pressed";
+            case 502 -> "released";
+            case 503 -> "moved";
+            case 506 -> "dragged";
+            case 507 -> "targetEnter";
+            case 508 -> "targetExit";
+            case 504 -> "entered";
+            case 505 -> "exited";
+            default -> "unknown";
+        };
         String str2 = "";
         if (this.target != null) {
             str2 = ",target=" + this.target;
@@ -327,8 +307,3 @@ public class QTMouseEvent extends EventObject {
         return getClass().getName() + "[eventType=" + str1 + ",(" + this.x + "," + this.y + ")" + ",mods=" + this.modifiers + ",when=" + this.when + ",clicks=" + this.clickCount + ",consumed=" + this.consumed + ",source=" + this.source + str2 + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /QTMouseEvent.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

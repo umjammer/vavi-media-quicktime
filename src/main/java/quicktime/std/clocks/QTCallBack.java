@@ -76,18 +76,13 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
 
     static final int callBackAtDeferredTask = 16384;
 
-    private TimeBase tb;
+    private final TimeBase tb;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTCallBack.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTCallBack.class));
             }
         }.establish();
     }
@@ -136,7 +131,7 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
 
     /**
      * Cancel a callback event before it executes.
-     *  QuickTime::CancelCallBack()
+     * @see " QuickTime::CancelCallBack()"
      */
     public final void cancel() {
         synchronized (QTNative.globalsLock) {
@@ -152,7 +147,7 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
      *  method is called to allow the call back to be garbage collected.
      *  The call back can be rescheduled after this call (provided of course you also
      *  cleanup again!)
-     *  QuickTime::CancelCallBack()
+     * @see " QuickTime::CancelCallBack()"
      */
     public final void cancelAndCleanup() {
         try {
@@ -169,7 +164,7 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
 
     /**
      * Retrieve the time base of a callback event.
-     *  QuickTime::GetCallBackTimeBase()
+     * @see " QuickTime::GetCallBackTimeBase()"
      *  @return the time base of the callback.
      */
     public final TimeBase getTimeBase() {
@@ -178,7 +173,7 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
 
     /**
      * Retrieve a callback's event type.
-     *  QuickTime::GetCallBackType()
+     * @see " QuickTime::GetCallBackType()"
      *  @return the callback's type.
      */
     public final int getType() {
@@ -195,7 +190,7 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
     /**
      * Registers the callback. It will use the state of the subclass to set the parameters
      *  that control the callbacks activation. As a method on QTCallBack it does nothing.
-     *  QuickTime::CallMeWhen
+     * @see " QuickTime::CallMeWhen"
      *  @param cb CallBack interface who's execute method will be called when the callback becomes active.
      */
     public abstract void callMeWhen() throws StdQTException;

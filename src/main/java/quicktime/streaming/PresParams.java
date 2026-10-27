@@ -160,8 +160,3 @@ public final class PresParams extends QTPointerRef {
         return getClass().getName() + "[version=" + getVersion() + ",editList=" + getEditList() + ",flags=" + getFlags() + ",timeScale" + getTimeScale() + ",mediaParams=" + getMediaParams() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /PresParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

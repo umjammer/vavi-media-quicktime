@@ -16,6 +16,7 @@ public class MethodClosureUPP implements MethodClosure {
     /**
      * @return
      */
+    @Override
     public int getProc() {
         // TODO Auto-generated method stub
         return 0;
@@ -24,6 +25,7 @@ public class MethodClosureUPP implements MethodClosure {
     /**
      * 
      */
+    @Override
     public void dispose() {
         // TODO Auto-generated method stub
         

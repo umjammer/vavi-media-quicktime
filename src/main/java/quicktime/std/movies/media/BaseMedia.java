@@ -5,39 +5,41 @@ import quicktime.std.StdQTException;
 import quicktime.std.movies.Track;
 
 /**
- * The BaseMedia class repesents base media in QuickTime.
+ * The BaseMedia class represents base media in QuickTime.
  */
 public final class BaseMedia extends Media {
 
     /**
      * This constructor creates a media struct for the specified Track object.
-     * QuickTime::NewTrackMedia()
+     * @see "QuickTime::NewTrackMedia()"
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public BaseMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1735291491, paramInt, paramDataRef);
+    public BaseMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1735291491, timeScale, dataRef);
     }
 
     /**
      * This constructor creates a media struct for the specified Track object.
-     * QuickTime::NewTrackMedia()
+     * @see "QuickTime::NewTrackMedia()"
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public BaseMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public BaseMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     BaseMedia(int paramInt, Track paramTrack) throws QTException {
         super(paramTrack, paramInt);
     }
 
+    @Override
     SampleDescription makeDescription() throws QTException {
         return new SampleDescription(1735291491);
     }
 
+    @Override
     MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new MediaHandler(paramInt, paramObject);
     }

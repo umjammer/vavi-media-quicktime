@@ -36,7 +36,7 @@ import quicktime.util.EncodedImage;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * SWCompositor provides the capability to composit a complex image together of disparate
  * image sources and then treat the result as a single image which is presented to the user.
  *
@@ -78,7 +78,7 @@ import quicktime.util.RawEncodedImage;
  * has changed.
  *
  * The subclass defines completely the storage mechanism and protocols of its members.
- * @see {@link quicktime.std.anim.SpriteWorld},
+ * @see quicktime.std.anim.SpriteWorld,
  * {@link quicktime.std.anim.Sprite},
  * {@link quicktime.app.anim.TwoDSprite},
  * quicktime.app.display.Compositor
@@ -94,8 +94,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Used by subclasses to construct a SWCompositor. The subclass must specify a background or a backgroundColor
      * but not both.
      * @param spriteGWorld this the buffer which the internal SpriteWorld uses to composit its image into.
@@ -114,20 +114,20 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * default hit test is only to test on the visible pixels of a sprite* @deprecated since QTJava 6.1
      */
     public int hitTestFlag = 10;
 
-    private QDPoint hitTestPoint = new QDPoint(0, 0);
+    private final QDPoint hitTestPoint = new QDPoint(0, 0);
 
-    private QDGraphics mBGPict;
+    private final QDGraphics mBGPict;
 
-    private QDGraphics mSpriteGWorld;
+    private final QDGraphics mSpriteGWorld;
 
     private Region mClip = null;
 
-    private QDColor mBGColor;
+    private final QDColor mBGColor;
 
     private QDGraphics mCurrentGrafPort = QDGraphics.scratch;
 
@@ -140,8 +140,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     private ASpriteWorld mSpriteWorld = null;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This flag is used when the task method is called.
      * You can use any of the values from the idle in flags of the SpriteWorld
      */
@@ -204,8 +204,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Resets the internal counters that are used to calculate the frame rate of the Compositor.
      */
     public void resetStatistics() {
@@ -214,15 +214,15 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The compositor's frame rate is calculated by the number of times it is tickled from
      * the time an application calls resetStatistics and is only valid if the rate of
      * the Compositor's Timer is not zero. If this rate is zero this returns 0.
      * Thus an application uses these calls like:
      *
      * myCompositor.resetStatistics();
-     * Thread.sleep (2000);	//sleep the stat's thread for 2 seconds to allow gathering of profile info
+     * Thread.sleep (2000); //sleep the stat's thread for 2 seconds to allow gathering of profile info
      * float fps = myCompositor.getStatistics();
      *
      * This call does not reset the internal counters, so consequent calls of getStatistics
@@ -237,8 +237,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the list of invalidator objects for the Compositor's sprites
      * that have a dynamic image source. If no members of the Compositor
      * are dynamic image sources this call returns null.
@@ -249,8 +249,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the invalidator that is associated with the supplied
      * member if the member has an Invalidator. If the member doesn't
      * or the object is not a member of the Compositor this returns null.
@@ -272,13 +272,13 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method allows the application to register the intent to record a movie out of the
      * compositing output of the SWCompositor. After each composit cycle the SWCompositor will
      * call the frameReady of the RecordMovie object as long as the frameReady method returns true.
      * @param rm the RecordMovie object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setRecordMovie(RecordMovie paramRecordMovie) throws QTException {
         this.rm = paramRecordMovie;
@@ -287,8 +287,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the SWCompositor has a RecordMovie object.
      * @return a boolean
      */
@@ -297,32 +297,34 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method should return an ImageDescription that describes
      * the image data that the class contains.
      * @return the ImageDescription of an Image
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public ImageDescription getDescription() throws QTException {
         return new ImageDescription(this.mSpriteGWorld.getPixMap());
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the actual image data.
      * @return the image data
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @return java.lang.IndexOutOfBoundsException
      */
+    @Override
     public EncodedImage getImage() throws QTException, IndexOutOfBoundsException {
         return RawEncodedImage.fromPixMap(this.mSpriteGWorld.getPixMap());
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the SWCompositor that this is the parent container of this SWCompositor.
      * This call may return null if the calling object is the top level containing space.
      * @return the parent SWCompositor or null
@@ -332,23 +334,25 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public Matrix getMatrix() throws StdQTException {
         return this.mSpriteWorld != null ? this.mSpriteWorld.getMatrix() : this.savedMatrix;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      */
+    @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
         if (this.mSpriteWorld != null) {
             this.mSpriteWorld.setMatrix(paramMatrix);
@@ -356,7 +360,7 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
@@ -368,39 +372,42 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the size of the offscreen buffer of the Compositor
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         QDRect localQDRect = this.mSpriteGWorld.getPortRect();
         return new QDDimension(localQDRect.getWidth(), localQDRect.getHeight());
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
      */
+    @Override
     public QDGraphics getGWorld() {
         return this.mCurrentGrafPort;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
         if (paramQDGraphics == null)
             paramQDGraphics = QDGraphics.scratch;
@@ -435,14 +442,15 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to tell the client to adjust
      * its location, width and/or height. All values are in pixels.
      *
      * @param bounds the new size and location.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
         if (this.mSpriteWorld != null) {
             this.mSpriteWorld.setBounds(paramQDRect);
@@ -457,13 +465,14 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setLocation(int paramInt1, int paramInt2) throws QTException {
         QDRect localQDRect = getDisplayBounds();
         localQDRect.setX(paramInt1);
@@ -472,13 +481,14 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to get the client's
      * location, width and/or height. All values are in pixels.
      * @return bounds the new size and location.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDRect getDisplayBounds() throws QTException {
         if (this.mSpriteWorld != null)
             return this.mSpriteWorld.getBounds();
@@ -486,16 +496,17 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public final void redraw(Region paramRegion) throws QTException {
         if (this.mSpriteWorld != null) {
             QDRect localQDRect1 = null;
@@ -513,8 +524,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current state of the auto redrawing flag.
      * @return a boolean.
      * @see (boolean)
@@ -524,8 +535,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If a SWCompositor's time rate is equal to zero, changing a property of a member's sprite
      * requires the SWCompositor to be redrawn to see this change. This is done automatically for
      * you by the TwoDSprite class. However, if an application wishes to change a number of properties of
@@ -551,8 +562,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method can be called to explicitly force the SWCompositor to
      * redraw itself. It does not ticke the Compositor - so no ticklish or
      * invalidate actions will be performed. It will just force the internal
@@ -573,8 +584,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return the frontmost object that is located at the specified coordinates.
      * Hit test coordinates will take into account the location of the space
      * thus if the space is at 50, 50 and an object is located in the top,left
@@ -583,8 +594,9 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param x the x coordinate
      * @param y the y coordinate
      * @return an Object at that coordinate or null if no object at specified coordinate
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Object hitTest(int paramInt1, int paramInt2) throws QTException {
         if (this.mSpriteWorld != null) {
             this.hitTestPoint.setX(paramInt1);
@@ -607,13 +619,14 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the sprite world's clip.
-     * QuickTime::SetSpriteWorldClip()
+     * @see "QuickTime::SetSpriteWorldClip()"
      * @param clipRgn Specifies the clipping region.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setClip(Region paramRegion) throws QTException {
         if (this.mSpriteWorld != null) {
             this.mSpriteWorld.setClip(paramRegion);
@@ -622,31 +635,33 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current clipping region used by the sprite world
      * @return the current clip region.
      */
+    @Override
     public Region getClip() {
         return this.mClip;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * The Timer invokes the tickle method when the invocation constraints of
      * the Timer are reached.
      * @param er the effective rate of the Timer when the time condition matches
      * @param time the time that the Timer invoked the tickle method.
      * @return true if the Ticklish object should receive a consequent tickle, or false
      *  if the Ticklish object should not be tickled again.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public boolean tickle(float paramFloat, int paramInt) throws QTException {
+    @Override
+    public boolean tickle(float er, int time) throws QTException {
         Timer localTimer = getTimer();
         if ((localTimer.isActive()) && (this.mSpriteWorld != null)) {
-            super.tickle(paramFloat, paramInt);
+            super.tickle(er, time);
             if (this.invalList != null)
-                this.invalList.tickle(paramFloat, paramInt);
+                this.invalList.tickle(er, time);
             idle();
             this.frameCount += 1;
             return this.mSpriteWorld != null;
@@ -655,14 +670,15 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
      * @param c the SWCompositor it is being removed from
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException {
         this.spritePresenter.spriteIsCompositor = null;
         this.spritePresenter = null;
@@ -672,8 +688,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -691,9 +707,10 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param s the TwoDSprite that is presenting the DynamicImage's image in
      *  the Compositor. This is the sprite that must be invalidated.
      * @return an Invalidator or null if invalidation is not required
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @see quicktime.app.display.SWCompositor
      */
+    @Override
     public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException {
         if (this.spritePresenter != null)
             removedFromCompositor(null);
@@ -706,33 +723,35 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the graphics mode of the SpriteDisplay object - this will be restored
      * on each subsequent creation of the internal SpriteWorld. This may be null
      * if not specified
      * @return the current graphics mode or null
      */
+    @Override
     public GraphicsMode getGraphicsMode() {
         return this.gMode;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current graphics mode.
      * @param mode the new graphics mode
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setGraphicsMode(GraphicsMode paramGraphicsMode) throws QTException {
+    @Override
+    public void setGraphicsMode(GraphicsMode gMode) throws QTException {
         if (this.mSpriteWorld != null)
-            this.mSpriteWorld.setGraphicsMode(paramGraphicsMode);
-        this.gMode = paramGraphicsMode;
+            this.mSpriteWorld.setGraphicsMode(gMode);
+        this.gMode = gMode;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the TwoDSprite for the member as a Compositable object to enable
      * an application to get and set the graphics mode presentation of the member object.
      * @param member the member object
@@ -743,32 +762,34 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the TwoDSprite for the member as a Layerable object to enable
      * an application to get and set the layer presentation of the member object.
      * @param member the member object
      * @return the member's TwoDSprite presenter
      */
+    @Override
     public Layerable getLayerable(Object paramObject) {
         return getMemberSprite(paramObject);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the TwoDSprite for the member as a Transformable object to enable
      * an application to get and set the display presentation (its location, scale, etc) of the member object.
      * @param member the member object
      * @return the member's TwoDSprite presenter
      */
+    @Override
     public Transformable getTransformable(Object paramObject) {
         return getMemberSprite(paramObject);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method should be called by the subclass after the member has been added to the SWCompositor.
      * If the member is itself a TwoDSprite the member and s arguments should be the TwoDSprite object.
      * If the member is an instance of the DynamicImage interface then the addedToCompositor method
@@ -779,13 +800,12 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * is valid and the TwoDSprite can present it.
      * @param member the new member that has been added.
      * @param s the TwoDSprite that will present this member
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected synchronized void postProcessAdd(Object paramObject, TwoDSprite paramTwoDSprite) throws QTException {
         doDynamicImageAdd(paramObject, paramTwoDSprite);
         paramTwoDSprite.setParent(this);
-        if ((paramObject instanceof Notifier)) {
-            Notifier localNotifier = (Notifier) paramObject;
+        if ((paramObject instanceof Notifier localNotifier)) {
             localNotifier.addNotifyListener(paramTwoDSprite);
         }
         memberAdded(paramObject);
@@ -798,8 +818,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method should be called by the subclass before the member has been removed from the SWCompositor.
      * If the member is itself a TwoDSprite the member and s arguments should be the TwoDSprite object.
      * If the member is an instance of the DynamicImage interface then the removedFromCompositor method
@@ -808,7 +828,7 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * Invalidator list.
      * @param member the new member that has been removed.
      * @param s the TwoDSprite that presented this member
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected synchronized void postProcessRemove(Object paramObject, TwoDSprite paramTwoDSprite) throws QTException {
         doDynamicImageRemove(paramObject, paramTwoDSprite);
@@ -821,8 +841,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called if a SpriteWorld has previously been created and the destination
      * QDGraphics or QDGraphics is about to go away (such as removing a SpriteWorld from a QTCanvas).
      * Any Spirte objects that were attached to the sprite world will be invalid
@@ -846,8 +866,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called after the Compositor has been added to a valid QDGraphics and the
      * sprites can be added to the spriteworld. Any sprites that the Compositor knows about
      * through an action list or sprites being explicitly added, will be recreated at this
@@ -871,8 +891,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return a string representation of this object.
      * @return a String
      */
@@ -914,10 +934,11 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Registers an object as a listener of the Compositor. The object will receive notification when the Compositor draws a frame
      */
+    @Override
     public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList == null) {
             this.listenerList = new Vector();
@@ -929,10 +950,11 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes an object that is a listener of the Compositor. The object will no longer receive notification when the Compositor draws a frame
      */
+    @Override
     public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
         this.listenerList.removeElement(paramDrawingListener);
         if (this.listenerList.isEmpty()) {
@@ -941,8 +963,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the TwoDSprite presenter that is presenting the image data
      * of the given member. It returns null if the object is not a member.
      * @param member the member object
@@ -951,8 +973,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     public abstract TwoDSprite getMemberSprite(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns an Enumeration that allows your application to iterate over the TwoDSprite
      * presenters that are responsible for presenting the image data within the Compositor.
      * @return an Enumeration;
@@ -960,8 +982,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     public abstract Enumeration sprites();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the member that is being presented by the supplied TwoDSprite presenter.
      * It returns null if the TwoDSprite is not present in the Compositor.
      * @param sprite the TwoDSprite presenter

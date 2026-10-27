@@ -1,26 +1,22 @@
 
 package quicktime.vr;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 
 
 final class VRDispatcher implements PrimitivesLib {
-    private static Object linkage;
 
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private VRMethodClosure mMethodClosure;
 
-    private QTVRInstance vr;
+    private final QTVRInstance vr;
 
     private QTVREnteringNode en;
 
@@ -31,19 +27,6 @@ final class VRDispatcher implements PrimitivesLib {
     private QTVRImagingComplete ic;
 
     private QTVRInterceptor ip;
-
-    static {
-        class PrivelegedAction {
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(VRDispatcher.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     VRDispatcher(QTVRInstance vr, QTVREnteringNode en) {
         this.methodName = "enteringProc";
@@ -85,11 +68,11 @@ final class VRDispatcher implements PrimitivesLib {
         this.vr = paramQTVRInstance;
     }
 
-    private final short enteringProc(int paramInt1, int paramInt2, int paramInt3) {
+    private short enteringProc(int paramInt1, int paramInt2, int paramInt3) {
         return (short) this.en.execute(this.vr, paramInt2);
     }
 
-    private final short leavingProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+    private short leavingProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
         boolean[] arrayOfBoolean = new boolean[1];
         short s = (short) this.ln.execute(this.vr, paramInt2, paramInt3, arrayOfBoolean);
         if (arrayOfBoolean[0] != false) {
@@ -100,27 +83,22 @@ final class VRDispatcher implements PrimitivesLib {
         return s;
     }
 
-    private final short hotSpotProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    private short hotSpotProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         return (short) this.hs.execute(this.vr, paramInt2, paramInt3);
     }
 
-    private final short imagingComplete(int paramInt1, int paramInt2) {
+    private short imagingComplete(int paramInt1, int paramInt2) {
         return (short) this.ic.execute(this.vr, quicktime.qd.QDGraphics.getPort());
     }
 
-    private final void interceptProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    private void interceptProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         boolean bool = false;
         int i = getIntFromPointer(paramInt2, 4);
-        switch (i) {
-        case 8192:
-        case 8193:
-        case 8194:
-        case 8195:
-        case 8202:
-        case 8203:
-            bool = this.ip.execute(this.vr, new DVRInterceptRecord(paramInt2, this));
-            break;
-        }
+        bool = switch (i) {
+            case 8192, 8193, 8194, 8195, 8202, 8203 ->
+                    this.ip.execute(this.vr, new DVRInterceptRecord(paramInt2, this));
+            default -> bool;
+        };
 
         if (bool) {
             setByteInPointer(paramInt4, 0, (byte) 1);

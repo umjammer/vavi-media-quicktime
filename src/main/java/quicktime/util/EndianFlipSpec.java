@@ -14,7 +14,7 @@ package quicktime.util;
  * have the same flipping characteristics.
  *
  * A
- * @see {@link quicktime.util.EndianDescriptor}
+ * @see quicktime.util.EndianDescriptor
  */
 public class EndianFlipSpec {
 
@@ -89,8 +89,7 @@ public class EndianFlipSpec {
     public boolean equals(Object paramObject) {
         if (paramObject == this)
             return true;
-        if ((paramObject instanceof EndianFlipSpec)) {
-            EndianFlipSpec localEndianFlipSpec = (EndianFlipSpec) paramObject;
+        if ((paramObject instanceof EndianFlipSpec localEndianFlipSpec)) {
             return (localEndianFlipSpec.offset == this.offset) && (localEndianFlipSpec.sizeFlag == this.sizeFlag) && (localEndianFlipSpec.num == this.num);
         }
         return false;

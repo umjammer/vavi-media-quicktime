@@ -65,7 +65,7 @@ final class MovieAtoms {
                 size = end - p;
             }
             if (size < header || p + size > end) {
-                if (size == 4 || (size < 8 && list.size() > 0)) {
+                if (size == 4 || (size < 8 && !list.isEmpty())) {
                     // terminating 32 bit 0 of 'udta' and such
                     break;
                 }
@@ -618,7 +618,7 @@ final class MovieAtoms {
     static final class Out {
         private final ByteArrayOutputStream os = new ByteArrayOutputStream();
         private final List<Integer> starts = new ArrayList<>();
-        private byte[] tmp = new byte[8];
+        private final byte[] tmp = new byte[8];
 
         Out begin(int type) {
             starts.add(os.size());

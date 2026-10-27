@@ -6,18 +6,18 @@ import quicktime.app.anim.SWCompositor;
 import quicktime.app.anim.TwoDSprite;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class enables members of SWCompositors that present an image
  * which changes to explicitly invalidate the TwoDSprite that is their
  * presenter in the SWCompositor. This is a requirement of the SWCompositor
  * due to efficiencies in the composit cycle.
  * @see quicktime.app.display.SWCompositor
  */
-public abstract interface DynamicImage extends Compositable {
+public interface DynamicImage extends Compositable {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -35,24 +35,19 @@ public abstract interface DynamicImage extends Compositable {
      * @param s the TwoDSprite that is presenting the DynamicImage's image in
      *  the Compositor. This is the sprite that must be invalidated.
      * @return an Invalidator or null if invalidation is not required
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @see quicktime.app.display.SWCompositor
      */
-    public abstract Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException;
+    Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
      * @param c the SWCompositor it is being removed from
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException;
+    void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException;
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /DynamicImage.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

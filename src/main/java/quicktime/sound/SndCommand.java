@@ -30,12 +30,7 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SndCommand.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SndCommand.class));
             }
         }.establish();
     }

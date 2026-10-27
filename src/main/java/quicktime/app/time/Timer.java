@@ -9,6 +9,7 @@ import quicktime.std.clocks.TimeJumpCallBack;
 import quicktime.std.clocks.TimeRecord;
 import quicktime.std.movies.Movie;
 
+
 /**
  * This class provides timing services for either a subclass or a target object that
  * implements the Ticklish interface. The Timer invokes the tickle method based on
@@ -58,31 +59,29 @@ import quicktime.std.movies.Movie;
  * A consequent tickle to that will be in the interval specified or ASAP if this consequent tickle takes
  * longer than the specified time.
  *
- * @see {@link quicktime.std.clocks.TimeBase},
- * {@link quicktime.app.time.Ticklish},
- * {@link quicktime.app.time.Timeable}
+ * @see quicktime.std.clocks.TimeBase
+ * @see quicktime.app.time.Ticklish
+ * @see quicktime.app.time.Timeable
  */
 public class Timer implements Timeable {
 
-    private static final boolean debug = false;
-
     private static int count = 1;
 
-    private Movie m;
+    private final Movie m;
 
     TimeBase theTimeBase;
 
-    private Ticklish target;
+    private final Ticklish target;
 
-    private int whichOne;
+    private final int whichOne;
 
     /**
      * Create a Timer.
      * @param scale the scale of the timer's tickle invocation period
      * @param period the number of scale size ticks that elapse between each invocation of the tickle method
      */
-    public Timer(int paramInt1, int paramInt2) throws QTException {
-        this(paramInt1, paramInt2, null);
+    public Timer(int scale, int period) throws QTException {
+        this(scale, period, null);
     }
 
     /**
@@ -92,8 +91,8 @@ public class Timer implements Timeable {
      * @param target the Ticklish target of the Timer - if this is not null then the target's tickle and
      *  timeChanged method will be invoked by the Timer.
      */
-    public Timer(int paramInt1, int paramInt2, Ticklish paramTicklish) throws QTException {
-        this(paramInt1, paramInt2, paramTicklish, null);
+    public Timer(int scale, int period, Ticklish target) throws QTException {
+        this(scale, period, target, null);
     }
 
     /**
@@ -104,10 +103,10 @@ public class Timer implements Timeable {
      *  timeChanged method will be invoked by the Timer.
      * @param mov the Movie from which the TimeBase of the timer will be derived.
      */
-    public Timer(int paramInt1, int paramInt2, Ticklish paramTicklish, Movie paramMovie) throws QTException {
-        if (paramInt1 == 0)
+    public Timer(int scale, int period, Ticklish target, Movie mov) throws QTException {
+        if (scale == 0)
             throw new QTException("scale cannot be zero");
-        this.m = paramMovie;
+        this.m = mov;
         if (this.m != null) {
             this.theTimeBase = this.m.getTimeBase();
             this.isTimerTicking = (this.theTimeBase.getEffectiveRate() != 0.0F);
@@ -120,10 +119,10 @@ public class Timer implements Timeable {
             this.theTimeBase.setStopTime(localTimeRecord);
             this.theTimeBase.setFlags(1);
         }
-        this.tc = new TC(this.theTimeBase, paramInt1, Math.abs(paramInt2), 0);
+        this.tc = new TC(this.theTimeBase, scale, Math.abs(period), 0);
         this.tj = new TJ(this.theTimeBase);
         this.whichOne = (count++);
-        this.target = paramTicklish;
+        this.target = target;
         this.rc = new RC(this.theTimeBase);
     }
 
@@ -133,11 +132,11 @@ public class Timer implements Timeable {
 
     private boolean isTimerTicking = false;
 
-    private RC rc;
+    private final RC rc;
 
-    private TC tc;
+    private final TC tc;
 
-    private TJ tj;
+    private final TJ tj;
 
     private float lastKnownRate;
 
@@ -162,10 +161,10 @@ public class Timer implements Timeable {
      * Sets the tickle state of the Timer. If true then the Timer when active will tickle.
      * If false then the Timer when active will not tickle. This does not activate or deactivate a Timer.
      * @param flag a boolean
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setTickling(boolean paramBoolean) throws StdQTException {
-        this.doesTickle = paramBoolean;
+    public void setTickling(boolean flag) throws StdQTException {
+        this.doesTickle = flag;
         if (isActive()) {
             this.tc.cancel();
             if (this.doesTickle) {
@@ -192,6 +191,7 @@ public class Timer implements Timeable {
      * of this object.
      * @return a TimeBase
      */
+    @Override
     public final TimeBase getTimeBase() {
         return this.theTimeBase;
     }
@@ -203,15 +203,15 @@ public class Timer implements Timeable {
      * can be used to both reschedule a tickle call and ensure that a tickle will be sent.
      * @param scale the new scale of the Timer's tickle notification
      * @param period the number of scale ticks that will elapse between notifications.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void rescheduleTickle(int paramInt1, int paramInt2) throws QTException {
-        if (paramInt1 == 0)
+    public synchronized void rescheduleTickle(int scale, int period) throws QTException {
+        if (scale == 0)
             throw new QTException("scale cannot be zero");
         this.tc.cancel();
-        this.tc.scale = paramInt1;
-        this.tc.period = paramInt2;
-        this.tc.value = this.theTimeBase.getTime(paramInt1);
+        this.tc.scale = scale;
+        this.tc.period = period;
+        this.tc.value = this.theTimeBase.getTime(scale);
         this.tc.flags = (this.lastKnownRate > 0.0F ? 1 : 2);
         if (this.cbActive)
             this.tc.callMeWhen();
@@ -240,6 +240,7 @@ public class Timer implements Timeable {
      * is slaved to another TimeBase
      * @return the current rate
      */
+    @Override
     public float getRate() {
         return this.theTimeBase.getRate();
     }
@@ -253,9 +254,10 @@ public class Timer implements Timeable {
      * to play the object in a forwards direction.
      * @param rate the new playback rate.
      */
-    public void setRate(float paramFloat) {
-        this.theTimeBase.setRate(paramFloat);
-        if (paramFloat == 0.0F) {
+    @Override
+    public void setRate(float rate) {
+        this.theTimeBase.setRate(rate);
+        if (rate == 0.0F) {
             this.isTimerTicking = false;
         } else {
             this.isTimerTicking = true;
@@ -265,12 +267,12 @@ public class Timer implements Timeable {
     /**
      * Sets the active state of the Timer; only an active Timer will tickle.
      * @param flag fi true the Timer is active, if false it is inactive
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void setActive(boolean paramBoolean) throws QTException {
-        if (paramBoolean == this.cbActive)
+    public synchronized void setActive(boolean flag) throws QTException {
+        if (flag == this.cbActive)
             return;
-        this.cbActive = paramBoolean;
+        this.cbActive = flag;
         this.tc.cancel();
         this.tj.cancel();
         this.rc.cancel();
@@ -313,11 +315,11 @@ public class Timer implements Timeable {
      * changed, through being reset to a new time or through the effective rate
      * of the Timer changing from positive to negative or vice versa
      * @param newTime the new time of the Timer's time line expressed in the Ticklish.kScale
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    protected void timeChanged(int paramInt) throws QTException {
+    protected void timeChanged(int newTime) throws QTException {
         if (this.target != null) {
-            this.target.timeChanged(paramInt);
+            this.target.timeChanged(newTime);
         }
     }
 
@@ -329,11 +331,11 @@ public class Timer implements Timeable {
      * @param er the effective or actual rate that the timer is ticking at.
      * @param time the current time of the time base expressed in the Ticklish.kScale
      * @return true if the Timer should remain active and tickle again or false if it should become inactive.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    protected boolean tickle(float paramFloat, int paramInt) throws QTException {
+    protected boolean tickle(float er, int time) throws QTException {
         if (this.target != null)
-            return this.target.tickle(paramFloat, paramInt);
+            return this.target.tickle(er, time);
         return false;
     }
 
@@ -341,12 +343,11 @@ public class Timer implements Timeable {
      * The finalize method deactivates the timer.
      * java.lang.Throwable
      */
-    protected void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         setActive(false);
-        super.finalize();
     }
 
-    private final synchronized void doTimeChanged(float paramFloat, int paramInt) throws QTException {
+    private synchronized void doTimeChanged(float paramFloat, int paramInt) throws QTException {
         if (this.cbActive) {
             timeChanged(paramInt);
             this.lastKnownRate = paramFloat;
@@ -358,7 +359,7 @@ public class Timer implements Timeable {
         }
     }
 
-    private final void doTickle(float paramFloat, int paramInt) throws QTException {
+    private void doTickle(float paramFloat, int paramInt) throws QTException {
         if (paramFloat != 0.0F) {
             synchronized (this) {
                 if (this.cbActive) {
@@ -399,6 +400,7 @@ public class Timer implements Timeable {
             this.period = paramInt2;
         }
 
+        @Override
         public void execute() {
             try {
                 Timer.this.doTickle(this.rateWhenCalled, this.timeWhenCalledMsecs);
@@ -414,6 +416,7 @@ public class Timer implements Timeable {
             super(paramTimeBase);
         }
 
+        @Override
         public void execute() {
             Timer.this.tc.cancel();
             try {
@@ -433,6 +436,7 @@ public class Timer implements Timeable {
             super(paramTimeBase, 0.0F, 0);
         }
 
+        @Override
         public void execute() {
             try {
                 if (this.rateWhenCalled > 0.0F) {

@@ -59,7 +59,7 @@ public class QTRuntimeException extends RuntimeException {
      * @param val typically some error code
      */
     public QTRuntimeException(int paramInt) {
-        this(new Integer(paramInt).toString());
+        this(Integer.valueOf(paramInt).toString());
     }
 
     /**
@@ -71,7 +71,7 @@ public class QTRuntimeException extends RuntimeException {
         super(paramString);
     }
 
-    private int eCode = 0;
+    private final int eCode = 0;
 
     private Exception exception = null;
 
@@ -106,7 +106,7 @@ public class QTRuntimeException extends RuntimeException {
      * Print current build information and current exception details.
      */
     public String toString() {
-        String str = Integer.toString(this.eCode) + "=" + errorCodeToString();
+        String str = this.eCode + "=" + errorCodeToString();
         return getClass().getName() + QTBuild.info() + str + ",QT.vers:" + Integer.toHexString(QTSession.getQTVersion());
     }
 }

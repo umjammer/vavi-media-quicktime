@@ -3,6 +3,7 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
@@ -27,18 +28,14 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      */
     public static final int kNativeSize = 8;
 
+    @Serial
     private static final long serialVersionUID = -8181311485902882832L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(NoteRequestInfo.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(NoteRequestInfo.class));
             }
         }.establish();
     }
@@ -72,12 +69,14 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
         setTypicalPolyphony(1.0F);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         int i = paramObjectInputStream.readInt();
         this.bytes = new byte[i];
         paramObjectInputStream.read(this.bytes);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = getBytes();
         int i = getSize();
@@ -169,6 +168,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      * Makes a copy of a NoteRequestInfo object.
      * @return a NoteRequestInfo
      */
+    @Override
     public Object clone() {
         return new NoteRequestInfo(getBytes());
     }
@@ -189,8 +189,3 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /NoteRequestInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

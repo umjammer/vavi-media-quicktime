@@ -5,10 +5,10 @@ import quicktime.QTSession;
 import quicktime.app.time.Ticklish;
 
 /**
- * Deprecated.
+ * @deprecated
  * The TickleNode is used by the TicklList to contain its
  * Ticklish members.
- * @see {@link quicktime.app.actions.TickleList}
+ * @see quicktime.app.actions.TickleList
  */
 public class TickleNode {
 
@@ -23,8 +23,8 @@ public class TickleNode {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a TickleNode for the supplied Ticklish
      * @param action the Ticklish member
      */
@@ -35,8 +35,8 @@ public class TickleNode {
     boolean active = true;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return the Ticklish that is held by this node
      * @return the TIcklish
      */
@@ -45,8 +45,8 @@ public class TickleNode {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the Ticklish that is held by this node
      */
     public void setTicklish(Ticklish paramTicklish) {
@@ -54,8 +54,8 @@ public class TickleNode {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Allows the application to determine if this node of a TickleList is
      * currently active and thus its ticklish will be tickled by the list.
      * @return a boolean
@@ -65,8 +65,8 @@ public class TickleNode {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Allows the application to activate or deactivate a TickleNode that is
      * currently a member of a list.
      * @param flag a boolean
@@ -76,8 +76,8 @@ public class TickleNode {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return a String representation of this object
      * @return a String
      */

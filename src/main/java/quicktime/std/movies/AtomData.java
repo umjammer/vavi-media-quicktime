@@ -1,16 +1,14 @@
 package quicktime.std.movies;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.image.Curve;
 import quicktime.std.image.VectorStream;
 import quicktime.util.QTPointerRef;
 import quicktime.util.UtilException;
+
 
 /**
  * This is a Read Only structure that is used to read the values that are stored in an atom of an
@@ -19,37 +17,21 @@ import quicktime.util.UtilException;
  */
 public final class AtomData extends QTPointerRef implements QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(AtomData.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * This method is used to find the first atom of a specified type within a vector data stream and get its data.
-     * QuickTime::CurveGetAtomDataFromVectorStream
+     * @see "QuickTime::CurveGetAtomDataFromVectorStream"
      * @param vectorStream Contains a handle to the vector data stream from which to get the atom.
      * @param atomType Specifies the type of atom to find.
      * @return the atom's data.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public static AtomData fromVectorStream(Curve paramCurve, VectorStream paramVectorStream, int paramInt) throws StdQTException {
+    public static AtomData fromVectorStream(Curve paramCurve, VectorStream vectorStream, int atomType) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        paramVectorStream.lock();
-        int i = CurveGetAtomDataFromVectorStream(QTObject.ID(paramCurve), QTObject.ID(paramVectorStream), paramInt, arrayOfInt1, arrayOfInt2);
+        vectorStream.lock();
+        int i = CurveGetAtomDataFromVectorStream(QTObject.ID(paramCurve), QTObject.ID(vectorStream), atomType, arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(i);
-        paramVectorStream.unlock();
+        vectorStream.unlock();
         return new AtomData(arrayOfInt2[0], arrayOfInt1[0], paramCurve);
     }
 
@@ -63,9 +45,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the byte value at the offset.
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public byte getByte(int paramInt) throws IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getByteAt(paramInt);
+    public byte getByte(int offset) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getByteAt(offset);
     }
 
     /**
@@ -74,9 +56,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the short value at the offset.
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public short getShort(int paramInt) throws IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getShortAt(paramInt);
+    public short getShort(int offset) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getShortAt(offset);
     }
 
     /**
@@ -85,9 +67,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the int value at the offset.
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public int getInt(int paramInt) throws IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getIntAt(paramInt);
+    public int getInt(int offset) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getIntAt(offset);
     }
 
     /**
@@ -96,9 +78,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the long value at the offset.
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public long getLong(int paramInt) throws IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getLongAt(paramInt);
+    public long getLong(int offset) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getLongAt(offset);
     }
 
     /**
@@ -107,9 +89,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the float value at the offset.
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public float getFloat(int paramInt) throws IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getFloatAt(paramInt);
+    public float getFloat(int offset) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getFloatAt(offset);
     }
 
     /**
@@ -118,9 +100,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the double value at the offset.
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public double getDouble(int paramInt) throws IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getDoubleAt(paramInt);
+    public double getDouble(int offset) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getDoubleAt(offset);
     }
 
     /**
@@ -130,9 +112,9 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      * @throws quicktime.util.UtilException
      */
-    public String getCString(int paramInt) throws UtilException, IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getCStringAt(paramInt);
+    public String getCString(int offset) throws UtilException, IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getCStringAt(offset);
     }
 
     /**
@@ -142,25 +124,25 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      * @throws quicktime.util.UtilException
      */
-    public String getPString(int paramInt) throws UtilException, IndexOutOfBoundsException {
-        checkOffset(paramInt);
-        return getPStringAt(paramInt);
+    public String getPString(int offset) throws UtilException, IndexOutOfBoundsException {
+        checkOffset(offset);
+        return getPStringAt(offset);
     }
 
     /**
-     * Returns the byte values at the given position(offset) within the	object's memory area.
+     * Returns the byte values at the given position(offset) within the object's memory area.
      * @param offset the given number of bytes to locate the struct.
      * @param length the given number of bytes of memory. The maximum length that will be copied is
      *  (size - offset) bytes. If zero then this will return all of the available bytes from the offset.
      * @return the byte array
      * @throws java.lang.IndexOutOfBoundsException is thrown if the offset is larger than the size of the data
      */
-    public byte[] getBytes(int paramInt1, int paramInt2) throws IndexOutOfBoundsException {
-        checkOffset(paramInt1);
-        int i = getSize() - paramInt1;
-        int j = i > paramInt2 ? paramInt2 : paramInt2 == 0 ? i : i;
+    public byte[] getBytes(int offset, int length) throws IndexOutOfBoundsException {
+        checkOffset(offset);
+        int i = getSize() - offset;
+        int j = i > length ? length : length == 0 ? i : i;
         byte[] arrayOfByte = new byte[j];
-        getBytesAt(paramInt1, j, arrayOfByte, 0);
+        getBytesAt(offset, j, arrayOfByte, 0);
         return arrayOfByte;
     }
 

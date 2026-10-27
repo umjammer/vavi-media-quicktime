@@ -32,8 +32,7 @@ import quicktime.streaming.Presentation;
 import quicktime.streaming.Stream;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
-import quicktime.internal.awt.DrawingSurfaceInfo;
-import quicktime.internal.awt.MacDrawingSurface;
+
 
 /**
  * A color graphics port defines a complete drawing environment that determines where
@@ -88,12 +87,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QDGraphics.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDGraphics.class));
             }
         }.establish();
         try {
@@ -105,11 +99,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Call this method to obtain the QDGraphics of the object.
-     * QuickTime::GraphicsExportGetInputGWorld
+     * @see "QuickTime::GraphicsExportGetInputGWorld"
      * @param ge the GraphicsExporter
      * @return The current destination graphics port
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getInputGWorld()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsExporter#getInputGWorld()
      */
     public static QDGraphics fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -120,7 +114,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Returns the current QDGraphics.
-     * QuickTime::GetPort
+     * @see "QuickTime::GetPort"
      * @return a QDGraphics
      */
     public static QDGraphics getPort() {
@@ -133,9 +127,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Returns the pixel size for a given pixel format.
-     * QuickTime::QTGetPixelSize
+     * @see "QuickTime::QTGetPixelSize"
      * @return pixel size
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static int getPixelSize(int paramInt) throws StdQTException {
         return QTGetPixelSize(paramInt);
@@ -143,11 +137,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Call this method to obtain the QDGraphics of the object.
-     * QuickTime::GraphicsImportGetGWorld
+     * @see "QuickTime::GraphicsImportGetGWorld"
      * @param gi the GraphicsImporter
      * @return The current destination graphics port
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getGWorld()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.GraphicsImporter#getGWorld()
      */
     public static QDGraphics fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -159,11 +153,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Your application can determine a movie's graphics world by calling the getGWorld method.
-     * QuickTime::GetMovieGWorld()
+     * @see "QuickTime::GetMovieGWorld()"
      * @param m the Movie
      * @return The current destination graphics port
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.Movie#getGWorld()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.Movie#getGWorld()
      */
     public static QDGraphics fromMovie(Movie paramMovie) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -176,12 +170,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Your application can retrieve a Presentation's graphics world by calling the getGWorld method.
-     * QuickTime::QTSPresGetGWorld()
+     * @see "QuickTime::QTSPresGetGWorld()"
      * @param p the Presentation
      * @param s Stream
      * @return The current destination graphics port
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.streaming.Presentation#getGWorld()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.streaming.Presentation#getGWorld()
      */
     public static QDGraphics fromPresentation(Presentation paramPresentation, Stream paramStream) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -194,11 +188,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * This method returns a movie controller's color graphics port.
-     * QuickTime::MCGetControllerPort()
+     * @see "QuickTime::MCGetControllerPort()"
      * @param mc the MovieController
      * @return A QDGraphics object representing the controller's graf port.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.MovieController#getPort()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.MovieController#getPort()
      */
     public static QDGraphics fromMovieController(MovieController paramMovieController) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -210,11 +204,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Returns the QDGraphic context of the sequence grabber.
-     * QuickTime::SGGetGWorld
+     * @see "QuickTime::SGGetGWorld"
      * @param sg the SequenceGrabber
      * @return The current graf port of the sequence grabber.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.sg.SequenceGrabber#getGWorld()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.sg.SequenceGrabber#getGWorld()
      */
     public static QDGraphics fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -227,11 +221,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * This method determines the location of the previous image buffer allocated
      * by the compressor.
-     * QuickTime::GetCSequencePrevBuffer
+     * @see "QuickTime::GetCSequencePrevBuffer"
      * @param c the CSequence
      * @return a QDGraphics object which is the graphics world for the image buffer
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.CSequence#prevBuffer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.CSequence#prevBuffer()
      */
     public static QDGraphics fromCSequence(CSequence paramCSequence) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -242,11 +236,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * This method helps you determine the location of the offscreen image buffer
      * allocated by the decompressor.
-     * QuickTime::GetDSequenceImageBuffer
+     * @see "QuickTime::GetDSequenceImageBuffer"
      * @param d the DSequence
      * @return a QDGraphics object which is the graphics world for the image buffer
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.DSequence#getImageBuffer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.DSequence#getImageBuffer()
      */
     public static QDGraphics fromDSequenceImage(DSequence paramDSequence) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -257,11 +251,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * This method enables you to determine the location of the offscreen buffer
      * allocated by the decompressor.
-     * QuickTime::GetDSequenceScreenBuffer
+     * @see "QuickTime::GetDSequenceScreenBuffer"
      * @param d the DSequence
      * @return a QDGraphics object which is the graphics world for the screen buffer
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.image.DSequence#getScreenBuffer()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.image.DSequence#getScreenBuffer()
      */
     public static QDGraphics fromDSequenceScreen(DSequence paramDSequence) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -271,7 +265,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * This will return a QDGraphics object from a native graphics object
-     * QuickTime::GetNativeWindowPort
+     * @see "QuickTime::GetNativeWindowPort"
      */
     public static QDGraphics fromNativeGraphics(WinNativeGraphics paramWinNativeGraphics) throws NativeGraphicsException {
         if (paramWinNativeGraphics.hWnd == 0)
@@ -321,7 +315,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Creates an offscreen QDGraphics based on the current compression settings.
-     * QuickTime::SCNewGWorld()
+     * @see "QuickTime::SCNewGWorld()"
      * @param rp the boundaries of the graphics world.
      * @param flags flags as specified to NewGWorld.
      * {@link quicktime.std.qtcomponents.ImageCompressionDialog#newGWorld(quicktime.qd.QDRect, int)}
@@ -333,7 +327,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * Creates an offscreen QDGraphics object from the width, height, depth, and color table
      * of a specified image description structure.
-     * QuickTime::NewImageGWorld
+     * @see "QuickTime::NewImageGWorld"
      * @param flags holding graphics world flags.
      * quicktime.std.image.ImageDescription#newGWorld()
      */
@@ -346,7 +340,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * its handles to associated PixMap and ColorTables - that describe an offscreen
      * graphics port. Uses a pixel depth of 32 bits in ARGB format
      * and no special flags settings. By default the pixels are locked.
-     * QuickTime::QTNewGWorld
+     * @see "QuickTime::QTNewGWorld"
      * @param bounds the boundary rectangle and port rectangle for the offscreen
      *                    pixel map
      */
@@ -358,7 +352,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * An offscreen graphics world in Color QuickDraw contains a GWorld - and
      * its handles to associated PixMap and ColorTables - that describe an offscreen
      * graphics port. By default the pixels are locked.
-     * QuickTime::QTNewGWorld
+     * @see "QuickTime::QTNewGWorld"
      * @param pixelFormat the format of the pixels.
      * @param bounds the boundary rectangle and port rectangle for the offscreen
      *                    pixel map
@@ -371,7 +365,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * An offscreen graphics world in Color QuickDraw contains a GWorld - and
      * its handles to associated PixMap and ColorTables - that describe an offscreen
      * graphics port. By default the pixels are locked.
-     * QuickTime::QTNewGWorld
+     * @see "QuickTime::QTNewGWorld"
      * @param pixelFormat the format of the pixels.
      * @param bounds the boundary rectangle and port rectangle for the offscreen
      *                    pixel map
@@ -385,7 +379,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * An offscreen graphics world in Color QuickDraw contains a GWorld - and
      * its handles to associated PixMap and ColorTables - that describe an offscreen
      * graphics port. By default the pixels are locked.
-     * QuickTime::QTNewGWorld
+     * @see "QuickTime::QTNewGWorld"
      * @param pixelFormat the format of the pixels.
      * @param bounds the boundary rectangle and port rectangle for the offscreen
      *                    pixel map
@@ -424,7 +418,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * be invoked on this QDGraphics object. It will establish the required
      * global state for these methods to be called efficiently.
      * @param d the QDDrawer object that will do the drawing
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void beginDraw(QDDrawer paramQDDrawer) throws QTException {
         synchronized (QTNative.globalsLock) {
@@ -467,9 +461,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      */
     public QDRect getPortRect() {
         if (QTSession.isCurrentOS(4)) {
-            Object localObject = new QDRect();
-            GetPortBounds(_ID(), ((QDRect) localObject).getBytes());
-            return (QDRect) localObject;
+            QDRect localObject = new QDRect();
+            GetPortBounds(_ID(), localObject.getBytes());
+            return localObject;
         }
         Object localObject = new byte[8];
         getBytesAt(16, 8, (byte[]) localObject, 0);
@@ -478,11 +472,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Creates an 80-by-80 pixel thumbnail picture from the pixmap associated with this QDGraphics.
-     * QuickTime::MakeThumbnailFromPixMap()
+     * @see "QuickTime::MakeThumbnailFromPixMap()"
      * @param src a QDRect object defining the portion of the image to use for the thumbnail
      * @param colorDepth specifies the depth at which the image is likely to be viewed
      * @return a Pict object representing the thumbnail
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Pict makeThumbnail(QDRect paramQDRect, int paramInt) throws QTException {
         return Pict.thumbnailFromQDGraphics(this, paramQDRect, paramInt);
@@ -507,7 +501,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * It is implemented on the low level of native calls to avoid extra
      * load on garbage collector
      * @return Region object which defines the intersection of visible and clipping regions
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getVisClipRgn() throws QTException {
         Region localRegion1 = new Region();
@@ -527,9 +521,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * This method returns the clip Region of the port.
-     * QuickDraw::GetClip()
+     * @see "QuickDraw::GetClip()"
      * @return Region object which defines the clip region
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getClip() throws QTException {
         Region localRegion = new Region();
@@ -547,7 +541,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * This method sets the clip Region of the port.
-     * QuickDraw::SetClip()
+     * @see "QuickDraw::SetClip()"
      * @param rgn Region object which defines the new clip region
      */
     public void setClip(Region paramRegion) {
@@ -566,7 +560,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * To change the clipping region of this QDGraphics, use the ClipRect procedure.
      * This method will set the clip to the current port rect of the QDGraphics
-     * QuickDraw::ClipRect()
+     * @see "QuickDraw::ClipRect()"
      */
     public void clipRect() {
         synchronized (QTNative.globalsLock) {
@@ -598,7 +592,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Returns the current background color of the QDGraphic.
-     * QuickDraw::GetBackColor()
+     * @see "QuickDraw::GetBackColor()"
      * @return QDColor
      */
     public QDColor getBackColor() {
@@ -617,7 +611,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * Sets the current background color of the
      * QDGraphic.
-     * QuickDraw::RGBBackColor()
+     * @see "QuickDraw::RGBBackColor()"
      * @param bColor QDColor
      */
     public void setBackColor(QDColor paramQDColor) {
@@ -648,11 +642,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * and so on.
      * The arc is as wide as the pen width and as tall as the pen height.
      * The pen location does not change.
-     * QuickDraw::FrameArc()
+     * @see "QuickDraw::FrameArc()"
      * @param area The rectangle that defines an ovalÕs boundaries.
      * @param startAngle The angle indicating the start of the arc.
      * @param arcAngle The angle indicating the arcÕs extent.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void frameArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -675,11 +669,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * As in the FrameArc procedure described on page 3-72 of Inside Macintosh: Imaging With QuickDraw
      * and illustrated in Figure 3-21(Im), use the startAngle and arcAngle parameters to define the arc of the wedge.
      * The pen location does not change.
-     * QuickDraw::PaintArc()
+     * @see "QuickDraw::PaintArc()"
      * @param area The rectangle that defines an ovalÕs boundaries.
      * @param startAngle The angle indicating the start of the arc.
      * @param arcAngle The angle indicating the arcÕs extent.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void paintArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -702,11 +696,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * Imaging With QuickDraw and as illustrated in Figure 3-21(Im), use the startAngle and arcAngle parameters to
      * define the arc of the wedge.
      * This method leaves the location of the graphics pen unchanged.
-     * QuickDraw::EraseArc()
+     * @see "QuickDraw::EraseArc()"
      * @param area The rectangle that defines an ovalÕs boundaries.
      * @param startAngle The angle indicating the start of the arc.
      * @param arcAngle The angle indicating the arcÕs extent.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void eraseArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -729,11 +723,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * As in the FrameArc procedure described on page 3-72 of Inside Macintosh: Imaging With QuickDraw and as
      * illustrated in Figure 3-21(Im), use the startAngle and arcAngle parameters to define the arc of the wedge.
      * This procedure leaves the location of the graphics pen unchanged.
-     * QuickDraw::InvertArc()
+     * @see "QuickDraw::InvertArc()"
      * @param area The rectangle that defines an ovalÕs boundaries.
      * @param startAngle The angle indicating the start of the arc.
      * @param arcAngle The angle indicating the arcÕs extent.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void invertArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -758,11 +752,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * of curvature for the corners of the rounded rectangle.
      * If a region is open and being formed, the outside outline of the new rounded rectangle is mathematically
      * added to the regionÕs boundary.
-     * QuickDraw::FrameRoundRect()
+     * @see "QuickDraw::FrameRoundRect()"
      * @param area The rectangle that defines the rounded rectangleÕs boundaries.
      * @param ovalWidth The width of the oval defining the rounded corner.
      * @param ovalHeight The height of the oval defining the rounded corner.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void frameRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -784,11 +778,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * the interior of the rounded rectangle bounded by the rectangle that you specify in the area parameter.
      * Use the ovalWidth and ovalHeight parameters to specify the diameters of curvature for the corners of the
      * rounded rectangle. The pen location does not change..
-     * QuickDraw::PaintRoundRect()
+     * @see "QuickDraw::PaintRoundRect()"
      * @param area The rectangle that defines the rounded rectangleÕs boundaries.
      * @param ovalWidth The width of the oval defining the rounded corner.
      * @param ovalHeight The height of the oval defining the rounded corner.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void paintRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -811,11 +805,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * This effectively erases the rounded rectangle. Use the ovalWidth and ovalHeight
      * parameters to specify the diameters of curvature for the corners of the rounded rectangle.
      * This procedure leaves the location of the graphics pen unchanged.
-     * QuickDraw::EraseRoundRect()
+     * @see "QuickDraw::EraseRoundRect()"
      * @param area The rectangle that defines the rounded rectangleÕs boundaries.
      * @param ovalWidth The width of the oval defining the rounded corner.
      * @param ovalHeight The height of the oval defining the rounded corner.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void eraseRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -837,11 +831,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * that you specify in the area parameter. Every white pixel becomes black and every black pixel becomes white.
      * The ovalWidth and ovalHeight parameters specify the diameters of curvature for the corners.
      * The pen location does not change.
-     * QuickDraw::InvertRoundRect()
+     * @see "QuickDraw::InvertRoundRect()"
      * @param area The rectangle that defines the rounded rectangleÕs boundaries.
      * @param ovalWidth The width of the oval defining the rounded corner.
      * @param ovalHeight The height of the oval defining the rounded corner.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void invertRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
         if (paramQDRect == null) {
@@ -865,9 +859,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * The pen location does not change.
      * If a region is open and being formed, the outside outline of the new oval is mathematically added
      * to the regionÕs boundary.
-     * QuickDraw::FrameOval()
+     * @see "QuickDraw::FrameOval()"
      * @param area The rectangle that defines the ovalÕs boundary.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void frameOval(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null) {
@@ -888,9 +882,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * Using the pen mode for the current graphics port,
      * the PaintOval procedure draws the interior of an oval just inside the bounding rectangle
      * that you specify in the area parameter. The pen location does not change.
-     * QuickDraw::PaintOval()
+     * @see "QuickDraw::PaintOval()"
      * @param area The rectangle that defines the ovalÕs boundary.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void paintOval(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null) {
@@ -912,9 +906,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * the EraseOval procedure draws the interior of an oval just inside the bounding rectangle that
      * you specify in the area parameter. This effectively erases the oval bounded by the specified rectangle.
      * This procedure leaves the location of the graphics pen unchanged.
-     * QuickDraw::EraseOval()
+     * @see "QuickDraw::EraseOval()"
      * @param area The rectangle that defines the ovalÕs boundary.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void eraseOval(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null) {
@@ -936,9 +930,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * the bounding rectangle that you specify in the area parameter.
      * Every white pixel becomes black and every black pixel becomes white.
      * The pen location does not change.
-     * QuickDraw::InvertOval()
+     * @see "QuickDraw::InvertOval()"
      * @param area The rectangle that defines the ovalÕs boundary.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void invertOval(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null) {
@@ -964,9 +958,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * (which is stored in the polyBBox field of the Polygon record) by the pen width and pen height,
      * respectively. All other graphics operations, such as painting a polygon with the PaintPoly procedure,
      * occur strictly within the boundary of the polygon, as illustrated in Figure 3-22(Im).
-     * QuickDraw::FramePoly()
+     * @see "QuickDraw::FramePoly()"
      * @param poly Polygon to frame.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void framePoly(Polygon paramPolygon) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -984,9 +978,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * Using the pen pattern and pattern mode for the current graphics port,
      * PaintPoly draws the interior of a polygon
      * passed in the poly parameter. The pen location does not change.
-     * QuickDraw::PaintPoly()
+     * @see "QuickDraw::PaintPoly()"
      * @param poly Polygon to paint.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void paintPoly(Polygon paramPolygon) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1004,9 +998,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * Using the patCopy pattern mode, ErasePoly draws the
      * interior of the polygon passed in the poly parameter
      * with the background pattern for the current graphics port.
-     * QuickDraw::ErasePoly()
+     * @see "QuickDraw::ErasePoly()"
      * @param poly Polygon to erase.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void erasePoly(Polygon paramPolygon) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1024,9 +1018,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * invertPoly inverts the pixels enclosed by the polygon passed in the poly parameter.
      * Every white pixel becomes black and every black pixel becomes white.
      * This procedure leaves the location of the graphics pen unchanged.
-     * QuickDraw::InvertPoly()
+     * @see "QuickDraw::InvertPoly()"
      * @param poly Polygon to erase.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void invertPoly(Polygon paramPolygon) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1044,10 +1038,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * Using the pen size of the graphics pen for the current graphics port,
      * the FrameRect procedure draws an outline just inside the rectangle that you specify in the area parameter.
      * The outline is as wide as the pen width and as tall as the pen height. The pen location does not change.
-     * QuickDraw::FrameRect()
+     * @see "QuickDraw::FrameRect()"
      * @param area the portion of the QDGraphic port to frame
      *  or null for entire bounds
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void frameRect(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null)
@@ -1068,10 +1062,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Erases the specified rect with the current back color.
-     * QuickDraw::EraseRect()
+     * @see "QuickDraw::EraseRect()"
      * @param area the portion of the QDGraphic port to erase
      *  or null for entire bounds
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void eraseRect(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null) {
@@ -1090,9 +1084,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Erases the specified region with the current back color.
-     * QuickDraw::EraseRgn()
+     * @see "QuickDraw::EraseRgn()"
      * @param area the portion of the QDGraphic to erase
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void eraseRgn(Region paramRegion) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1109,11 +1103,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * Returns the RGB color for the pixel at the location you
      * specify in the h and v parameters.
-     * QuickDraw::GetCPixel()
+     * @see "QuickDraw::GetCPixel()"
      * @param h The horizontal coordinate of the point at the upper-left corner of the pixel.
      * @param v The vertical coordinate of the point at the upper-left corner of the pixel.
      * @return The QDColor for the pixel.
-     * @return {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public QDColor getCPixel(int paramInt1, int paramInt2) throws QDException {
         byte[] arrayOfByte = new byte[6];
@@ -1136,10 +1130,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * value to the index of the best-matching color in the current deviceÕs CLUT.
      * In a direct environment, the SetCPixel procedure sets the pixel value to a
      * 16-bit or 32-bit direct pixel value.
-     * QuickDraw::SetCPixel()
+     * @see "QuickDraw::SetCPixel()"
      * @param h The horizontal coordinate of the point at the upper-left corner of the pixel.
      * @param v The vertical coordinate of the point at the upper-left corner of the pixel.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void setCPixel(int paramInt1, int paramInt2, QDColor paramQDColor) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1160,10 +1154,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * All subsequent calls to the Line and LineTo procedures and to the
      * procedures that draw framed shapes in the current graphics port
      * use the new pen dimensions.
-     * QuickDraw::PenSize()
+     * @see "QuickDraw::PenSize()"
      * @param width The pen width, as an integer from 0 to 32,767. If you set the value to 0, the pen does not draw. Values less than 0 are undefined.
      * @param height The pen height, as an integer from 0 to 32,767. If you set the value to 0, the pen does not draw. Values less than 0 are undefined.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void penSize(int paramInt1, int paramInt2) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1181,7 +1175,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * The PenNormal procedure restores the size, of the graphics pen
      * in the current graphics port to their initial values:
      * a size of 1 pixel by 1 pixel. The pen location does not change.
-     * QuickDraw::PenNormal()
+     * @see "QuickDraw::PenNormal()"
      */
     public void penNormal() throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1198,7 +1192,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * Returns the current foreground color of the
      * QDGraphic.
-     * QuickDraw::GetForeColor()
+     * @see "QuickDraw::GetForeColor()"
      * @return QDColor
      */
     public QDColor getForeColor() {
@@ -1216,7 +1210,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Sets the current foreground color of the QDGraphics.
-     * QuickDraw::RGBForeColor()
+     * @see "QuickDraw::RGBForeColor()"
      * @param fColor QDColor
      */
     public void setForeColor(QDColor paramQDColor) {
@@ -1233,10 +1227,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Paints the specified rect with the current foreground color.
-     * QuickDraw::PaintRect()
+     * @see "QuickDraw::PaintRect()"
      * @param area the portion of the QDGraphic port to paint
      *  or null for entire bounds
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void paintRect(QDRect paramQDRect) throws QDException {
         if (paramQDRect == null) {
@@ -1259,11 +1253,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * local coordinates of the current graphics port. If you are using LineTo to
      * draw a region or polygon, its outline is infinitely thin and is not affected
      * by the values of the pnSize, pnMode, or pnPat field of the graphics port.
-     * QuickDraw::LineTo()
-     * QuickDraw::MacLineTo()
+     * @see "QuickDraw::LineTo()"
+     * @see "QuickDraw::MacLineTo()"
      * @param h The horizontal coordinate of the graphics penÕs new location.
      * @param v The vertical coordinate of the graphics penÕs new location.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void lineTo(int paramInt1, int paramInt2) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1284,10 +1278,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * Starting at the current location of the graphics pen, the Line procedure
      * draws a line the horizontal distance that you specify in the h
      * parameter and the vertical distance that you specify in the v parameter.
-     * QuickDraw::Line()
+     * @see "QuickDraw::Line()"
      * @param h The horizontal distance of the graphics penÕs movement.
      * @param v The vertical distance of the graphics penÕs movement.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void line(int paramInt1, int paramInt2) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1307,10 +1301,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * the new vertical coordinate you specify in the v parameter.
      * Specify the new location in the local coordinates of the current graphics port.
      * The MoveTo procedure performs no drawing.
-     * QuickDraw::MoveTo()
+     * @see "QuickDraw::MoveTo()"
      * @param h The horizontal distance of the graphics penÕs movement.
      * @param v The vertical distance of the graphics penÕs movement.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void moveTo(int paramInt1, int paramInt2) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1329,10 +1323,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * in the current graphics port a horizontal distance that you specify
      * in the h parameter and a vertical distance that you specify in the
      * v parameter.
-     * QuickDraw::Move()
+     * @see "QuickDraw::Move()"
      * @param h The horizontal distance of the graphics penÕs movement.
      * @param v The vertical distance of the graphics penÕs movement.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void move(int paramInt1, int paramInt2) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1348,10 +1342,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * Paints the specified region with the current foreground color.
-     * QuickDraw::PaintRgn()
-     * QuickDraw::MacPaintRgn()
+     * @see "QuickDraw::PaintRgn()"
+     * @see "QuickDraw::MacPaintRgn()"
      * @param area the portion of the QDGraphic port to paint
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void paintRgn(Region paramRegion) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1371,10 +1365,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
     /**
      * Draws an outline just inside the region you pass in the area parameter.
      * The outline never goes outside the region boundary. The pen location does not change.
-     * QuickDraw::FrameRgn()
-     * QuickDraw::MacFrameRgn()
+     * @see "QuickDraw::FrameRgn()"
+     * @see "QuickDraw::MacFrameRgn()"
      * @param area the portion of the QDGraphic port to paint
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void frameRgn(Region paramRegion) throws QDException {
         synchronized (QTNative.globalsLock) {
@@ -1393,7 +1387,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The TextFont procedure sets the font of the QDGraphics port in which the text is to be rendered.
-     * QuickDraw::TextFont()
+     * @see "QuickDraw::TextFont()"
      * @param fontNumber The font family ID (obtained from an getFNum call).
      * @see getFNum
      */
@@ -1413,7 +1407,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The getTextFont method returns the font family ID of the current font in this QDGraphics port.
-     * QuickDraw::TextFont()
+     * @see "QuickDraw::TextFont()"
      * @return The font family ID of the current font.
      * @see getFNum
      */
@@ -1423,7 +1417,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The TextFace procedure sets the style of the font in which the text is to be drawn in this QDGraphics port.
-     * QuickDraw::TextFace()
+     * @see "QuickDraw::TextFace()"
      * @param face The style for text to be drawn
      */
     public void textFace(int paramInt) {
@@ -1442,7 +1436,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The getTextFace method returns the style of the current font in this QDGraphics port.
-     * QuickDraw::TextFace()
+     * @see "QuickDraw::TextFace()"
      * @return The style of the current font.
      */
     public int getTextFace() {
@@ -1451,7 +1445,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The TextMode procedure sets the transfer mode for drawing text in this QDGraphics port.
-     * QuickDraw::TextMode()
+     * @see "QuickDraw::TextMode()"
      * @param mode The transfer mode to be used in drawing text.  Possible values are: srcCopy, srcOr, srcXOr, srcBic, etc.
      * @see quicktime.QTConstants#srcCopy
      */
@@ -1471,7 +1465,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The getTextMode method returns the current transfer mode for drawing text in this QDGraphics port.
-     * QuickDraw::TextMode()
+     * @see "QuickDraw::TextMode()"
      * @return The transfer mode used in drawing text.
      */
     public int getTextMode() {
@@ -1480,7 +1474,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The TextSize procedure sets the font size for text drawn in this QDGraphics port.
-     * QuickDraw::TextSize()
+     * @see "QuickDraw::TextSize()"
      * @param size The font size in points.  If you specify 0, the system font size is used.
      */
     public void textSize(int paramInt) {
@@ -1499,7 +1493,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The getTextSize method returns the current font size for text drawn in this QDGraphics port.
-     * QuickDraw::TextSize()
+     * @see "QuickDraw::TextSize()"
      * @return The font size in points.
      */
     public int getTextSize() {
@@ -1508,7 +1502,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The DrawChar procedure draws the glyph for the specified character at the current pen location in this QDGraphics port.
-     * QuickDraw::DrawChar()
+     * @see "QuickDraw::DrawChar()"
      * @param character The character code whose glyph is to be drawn.
      */
     public void drawChar(int paramInt) {
@@ -1527,7 +1521,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The DrawText procedure draws the specified text at the current pen location in this QDGraphics port.
-     * QuickDraw::DrawText()
+     * @see "QuickDraw::DrawText()"
      * @param text String containing the text to be drawn.
      * @param firstByte An offset from the start of the String (text) to the first byte of the text to be drawn.
      * @param byteCount The number of bytes of text to be drawn.
@@ -1551,7 +1545,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The CharWidth function returns the width in pixels of the specified character in this QDGraphics port.
-     * QuickDraw::CharWidth()
+     * @see "QuickDraw::CharWidth()"
      * @param character The character code whose width is to be measured.
      * @return The width of the specified character in pixels.
      */
@@ -1573,7 +1567,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The TextWidth function returns the length in pixels of the specified text in this QDGraphics port.
-     * QuickDraw::TextWidth()
+     * @see "QuickDraw::TextWidth()"
      * @param text String containing the text to be measured.
      * @param firstByte An offset from the start of the String (text) to the first byte of the text to be measured.
      * @param byteCount The number of bytes of text to be measured.
@@ -1598,7 +1592,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The StdText procedure is a QuickDraw bottleneck routine that can be called directly to obtain scaled (or unscaled) text..
-     * QuickDraw::StdText()
+     * @see "QuickDraw::StdText()"
      * @param count The number of bytes of text to be drawn.
      * @param text String containing the text to be drawn.
      * @param xScale Represents the scaling factor in the X dimension.
@@ -1623,7 +1617,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
 
     /**
      * The measureScaledText method (based on the QuickDraw function StdTxMeas) measures the width of scaled or unscaled text.
-     * QuickDraw::StdTxMeas()
+     * @see "QuickDraw::StdTxMeas()"
      * @param byteCount The number of bytes of text to be measured.
      * @param text String containing the text to be measured.
      * @param xScale Represents the scaling factor in the X dimension.

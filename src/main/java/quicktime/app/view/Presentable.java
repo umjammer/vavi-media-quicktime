@@ -9,34 +9,34 @@ import quicktime.qd.Region;
 import quicktime.std.image.Matrix;
 
 
-abstract interface Presentable {
-    public abstract void addedTo(Object paramObject);
+interface Presentable {
+    void addedTo(Object paramObject);
 
-    public abstract void removedFrom(Object paramObject);
+    void removedFrom(Object paramObject);
 
-    public abstract void setLocation(int paramInt1, int paramInt2) throws QTException;
+    void setLocation(int paramInt1, int paramInt2) throws QTException;
 
-    public abstract void setGWorld(QDGraphics paramQDGraphics) throws QTException;
+    void setGWorld(QDGraphics paramQDGraphics) throws QTException;
 
-    public abstract QDGraphics getGWorld() throws QTException;
+    QDGraphics getGWorld() throws QTException;
 
-    public abstract void setClip(Region paramRegion) throws QTException;
+    void setClip(Region paramRegion) throws QTException;
 
-    public abstract Region getClip() throws QTException;
+    Region getClip() throws QTException;
 
-    public abstract QDDimension getOriginalSize() throws QTException;
+    QDDimension getOriginalSize() throws QTException;
 
-    public abstract Matrix getMatrix() throws QTException;
+    Matrix getMatrix() throws QTException;
 
-    public abstract void setMatrix(Matrix paramMatrix) throws QTException;
+    void setMatrix(Matrix paramMatrix) throws QTException;
 
-    public abstract void setDisplayBounds(QDRect paramQDRect) throws QTException;
+    void setDisplayBounds(QDRect paramQDRect) throws QTException;
 
-    public abstract QDRect getDisplayBounds() throws QTException;
+    QDRect getDisplayBounds() throws QTException;
 
-    public abstract void redraw(Region paramRegion) throws QTException;
+    void redraw(Region paramRegion) throws QTException;
 
-    public abstract boolean isSingleFrame();
+    boolean isSingleFrame();
 }
 
 

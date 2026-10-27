@@ -150,8 +150,3 @@ public final class NewPresentationParams extends QTPointerRef {
         return getClass().getName() + "[dataType=" + QTUtils.fromOSType(getDataType()) + ",data=" + getData() + ",editList" + getEditList() + ",flags" + getFlags() + ",timeScale" + getTimeScale() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /NewPresentationParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

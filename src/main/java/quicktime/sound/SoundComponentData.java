@@ -3,6 +3,7 @@ package quicktime.sound;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
@@ -25,18 +26,14 @@ public final class SoundComponentData extends QTByteObject implements Primitives
 
     private QTPointer buff;
 
+    @Serial
     private static final long serialVersionUID = -7514870412490785051L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SoundComponentData.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SoundComponentData.class));
             }
         }.establish();
     }
@@ -45,6 +42,7 @@ public final class SoundComponentData extends QTByteObject implements Primitives
         super(28);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[28];
         paramObjectInputStream.read(this.bytes);
@@ -59,6 +57,7 @@ public final class SoundComponentData extends QTByteObject implements Primitives
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[28];
         for (int i = 0; i < 8; i += 4) {

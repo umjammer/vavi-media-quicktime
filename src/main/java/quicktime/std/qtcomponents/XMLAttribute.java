@@ -1,53 +1,28 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
 import quicktime.std.StdQTException;
 import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
 
+
 /**
  * The XMLAttribute corresponds to the QuickTime XMLAttribute
  */
 public final class XMLAttribute extends QTObject implements PrimitivesLib, QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(XMLAttribute.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
-    private static Object owner = new Object();
-
-    private static final boolean debug = false;
+    private static final Object owner = new Object();
 
     private static final int kXMLAttributeSize = 22;
-
     private static final int kIdentifierOffset = 0;
-
     private static final int kNameOffset = 4;
-
     private static final int kValueKindOffset = 8;
-
     private static final int kValueOffset = 12;
-
     private static final int kValueStrOffset = 18;
 
     XMLAttribute(int paramInt) throws QTException {
@@ -210,12 +185,10 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
      */
     public int getEnum() throws StdQTException {
         int i = getValueKind();
-        switch(i) {
-            case 32:
-            case 64:
-                return getIntFromPointer(_ID(), 12);
-        }
-        throw new StdQTException(-50);
+        return switch (i) {
+            case 32, 64 -> getIntFromPointer(_ID(), 12);
+            default -> throw new StdQTException(-50);
+        };
     }
 
     private String getStringFromPointer(int paramInt) {

@@ -42,12 +42,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTVRInstance.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTVRInstance.class));
             }
         }
         new PrivelegedAction().establish();
@@ -55,7 +50,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use the QTVRGetQTVRInstance function to get an instance of a QuickTime VR movie.
-     * QuickTime::QTVRGetQTVRInstance
+     * @see "QuickTime::QTVRGetQTVRInstance"
      * @param qtvrTrack A QTVR track contained in a QuickTime movie. You can obtain a reference to this track by
      *        calling QTVRGetQTVRTrack
      * @param mc A movie controller that is associated with the new QuickTime VR movie
@@ -78,15 +73,15 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
         super(paramInt);
     }
 
-    private Hashtable<Integer, VRDispatcher> ipProcs = new Hashtable<>();
+    private final Hashtable<Integer, VRDispatcher> ipProcs = new Hashtable<>();
 
     /**
      * The QTVRGetVRWorld function returns an atom
      * container that contains general scene information about the QuickTime VR movie
      * specified, as well as a list of all the nodes in that movie.
-     * QuickTime::QTVRGetVRWorld
+     * @see "QuickTime::QTVRGetVRWorld"
      * @return the VRWorld AtomContainer
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public AtomContainer getVRWorld() throws QTVRException {
         return AtomContainer.fromQTVRInstanceWorld(this);
@@ -95,12 +90,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetNodeInfo function to get the node information atom container
      * that describes a node and all the hot spots in the node.
-     * QuickTime::QTVRGetNodeInfo
+     * @see "QuickTime::QTVRGetNodeInfo"
      * @param nodeID Set this parameter to kQTVRCurrentNode to receive information
      *        about the current node
      * @return an atom container that contains information about the
      *        specified node.
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public AtomContainer getNodeInfo(int paramInt) throws QTVRException {
         return AtomContainer.fromQTVRInstanceNode(this, paramInt);
@@ -111,7 +106,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * Usually, you need only specify
      * the qtvr instance and the hot spot ID. You can pass zero for the nodeInfo and
      * selectedAtom parameters.
-     * QuickTime::QTVRTriggerHotSpot
+     * @see "QuickTime::QTVRTriggerHotSpot"
      * @param hotSpotID A hot spot ID.
      * @param nodeInfo A node information atom container (obtained from a previous
      *                 call to QTVRGetNodeInfo). You can pass the value 0 in this
@@ -120,7 +115,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param selectedAtom The atom of the hot spot to trigger. You can pass the value 0 in
      *                 this parameter to have the QuickTime VR Manager determine
      *                 the appropriate hot spot atom.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void triggerHotSpot(int paramInt, AtomContainer paramAtomContainer, Atom paramAtom) throws QTVRException {
         int i = 0;
@@ -133,11 +128,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVREnableHotSpot function to enable or disable one or more hot
      * spots.
-     * QuickTime::QTVREnableHotSpot
+     * @see "QuickTime::QTVREnableHotSpot"
      * @param enableFlag The kind of hot spot or hot spots to enable or disable.
      * @param hotSpotValue The desired hot spot or spots, relative to the specified enabled flag.
      * @param enable A Boolean value that indicates whether the specified hot spots are to be enabled (true) or disabled (false).
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void enableHotSpot(int paramInt1, int paramInt2, boolean paramBoolean) throws QTVRException {
         int i = 0;
@@ -150,11 +145,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRUpdate function to force an immediate update of a
      * QuickTime VR movie image.
-     * QuickTime::QTVRUpdate
+     * @see "QuickTime::QTVRUpdate"
      * @param imagingMode An imaging mode. You can specify
      *                 the kQTVRCurrentMode imaging mode to use the current
      *                 imaging mode.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void update(int paramInt) throws QTVRException {
         int i = 0;
@@ -166,9 +161,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use the QTVRGoToNodeID function to set the current node of a movie.
-     * QuickTime::QTVRGoToNodeID
+     * @see "QuickTime::QTVRGoToNodeID"
      * @param nodeID The ID of the node you want to be the current node.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void goToNodeID(int paramInt) throws QTVRException {
         int i = 0;
@@ -181,9 +176,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRNudge function to turn one step in a particular direction and
      * display the new view.
-     * QuickTime::QTVRNudge
+     * @see "QuickTime::QTVRNudge"
      * @param direction The direction of the nudge.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void nudge(int paramInt) throws QTVRException {
         int i = 0;
@@ -196,9 +191,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetPanAngle function to set the pan angle of a
      * QuickTime VR movie.
-     * QuickTime::QTVRSetPanAngle
+     * @see "QuickTime::QTVRSetPanAngle"
      * @param panAngle The desired pan angle of the specified movie.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setPanAngle(float paramFloat) throws QTVRException {
         int i = 0;
@@ -211,9 +206,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetTiltAngle function to set the tilt angle of a
      * QuickTime VR movie.
-     * QuickTime::QTVRSetTiltAngle
+     * @see "QuickTime::QTVRSetTiltAngle"
      * @param tiltAngle The desired tilt angle of the specified movie.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setTiltAngle(float paramFloat) throws QTVRException {
         int i = 0;
@@ -226,9 +221,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetFieldOfView function to set the vertical field of view of a
      * QuickTime VR movie.
-     * QuickTime::QTVRSetFieldOfView
+     * @see "QuickTime::QTVRSetFieldOfView"
      * @param fieldOfView The desired vertical field of view for the specified movie.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setFieldOfView(float paramFloat) throws QTVRException {
         int i = 0;
@@ -241,9 +236,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetConstraints function to get the current constraints of
      * a movie.
-     * QuickTime::QTVRGetConstraints
+     * @see "QuickTime::QTVRGetConstraints"
      * @param kind The type of constraints to be returned.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float getConstraints_min(int paramInt) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
@@ -259,9 +254,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetConstraints function to get the current constraints of
      * a movie.
-     * QuickTime::QTVRGetConstraints
+     * @see "QuickTime::QTVRGetConstraints"
      * @param kind The type of constraints to be returned.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float getConstraints_max(int paramInt) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
@@ -276,11 +271,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use the QTVRSetConstraints function to set the constraints of a movie.
-     * QuickTime::QTVRSetConstraints
+     * @see "QuickTime::QTVRSetConstraints"
      * @param kind The type of constraint to set..
      * @param minValue A floating-point value that contains the desired minimum constraint of the specified type.
      * @param maxValue A floating-point value that contains the desired maximum constraint of the specified type.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setConstraints(int paramInt, float paramFloat1, float paramFloat2) throws QTVRException {
         int i = 0;
@@ -293,11 +288,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetImagingProperty function to set the current value of an
      * imaging property of a movie.
-     * QuickTime::QTVRSetImagingProperty
+     * @see "QuickTime::QTVRSetImagingProperty"
      * @param imagingMode an imaging mode.
      * @param imagingProperty an imaging property.
      * @param propertyValue sets the current value of the specified imaging property for the specified mode.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setImagingProperty(int paramInt1, int paramInt2, int paramInt3) throws QTVRException {
         int i = 0;
@@ -310,11 +305,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetImagingProperty function to get the current value of an
      * imaging property of a movie.
-     * QuickTime::QTVRGetImagingProperty
+     * @see "QuickTime::QTVRGetImagingProperty"
      * @param imagingMode an imaging mode.
      * @param imagingProperty an imaging property.
      * @return the current value of the specified imaging property for the specified mode.
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getImagingProperty(int paramInt1, int paramInt2) throws QTVRException {
         int[] arrayOfInt = { 0 };
@@ -328,9 +323,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRSetAngularUnits to set the type of unit used when specifying angles.
-     * QuickTime::QTVRSetAngularUnits
+     * @see "QuickTime::QTVRSetAngularUnits"
      * @param units A constant that indicates the type of angular units to use.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setAngularUnits(int paramInt) throws QTVRException {
         int i = 0;
@@ -342,9 +337,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRPtToAngles to get the pan angle of a point.
-     * QuickTime::QTVRPtToAngles
+     * @see "QuickTime::QTVRPtToAngles"
      * @param pt A point, in the local coordinates of the graphics world of the specified movie.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float ptToPanAngle(QDPoint paramQDPoint) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
@@ -359,9 +354,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRPtToAngles to get the tilt angle of a point.
-     * QuickTime::QTVRPtToAngles
+     * @see "QuickTime::QTVRPtToAngles"
      * @param pt A point, in the local coordinates of the graphics world of the specified movie.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float ptToTiltAngle(QDPoint paramQDPoint) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
@@ -377,10 +372,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use QTVRWrapAndConstrain to preflight a change in the viewing or control characteristics of an object or
      * panoramic node.
-     * QuickTime::QTVRWrapAndConstrain
+     * @see "QuickTime::QTVRWrapAndConstrain"
      * @param kind a constraint type. See "Constraint Types" for a description of the available constraint types.
      * @param value the desired value of the specified viewing characteristic.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float wrapAndConstrain(int paramInt, float paramFloat) throws QTVRException {
         float[] arrayOfFloat = { 0.0F };
@@ -395,11 +390,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetEnteringNodeProc function to install or remove a
      * node-entering procedure.
-     * QuickTime::QTVRSetEnteringNodeProc
+     * @see "QuickTime::QTVRSetEnteringNodeProc"
      * @param enteringNodeProc an instance of the QTVREnteringNode object that will be called or null to remove the callback.
      * @param flags the flags
-     * @param {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void setEnteringNodeProc(QTVREnteringNode paramQTVREnteringNode, int paramInt) throws QTVRException {
         if (paramQTVREnteringNode == null) {
@@ -420,7 +415,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetEnteringNodeProc function to remove a
      * node-entering procedure.
-     * QuickTime::QTVRSetEnteringNodeProc
+     * @see "QuickTime::QTVRSetEnteringNodeProc"
      */
     public void removeEnteringNodeProc() {
         int i = 0;
@@ -435,11 +430,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetLeavingNodeProc function to install or remove a
      * node-leaving procedure.
-     * QuickTime::QTVRSetLeavingNodeProc
+     * @see "QuickTime::QTVRSetLeavingNodeProc"
      * @param leavingNodeProc an instance of the QTVRLeavingNode object that will be called or null to remove the callback.
      * @param flags the flags
-     * @param {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void setLeavingNodeProc(QTVRLeavingNode paramQTVRLeavingNode, int paramInt) throws QTVRException {
         if (paramQTVRLeavingNode == null) {
@@ -460,7 +455,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetLeavingNodeProc function to remove a
      * node-leaving procedure.
-     * QuickTime::QTVRSetLeavingNodeProc
+     * @see "QuickTime::QTVRSetLeavingNodeProc"
      */
     public void removeLeavingNodeProc() {
         int i = 0;
@@ -475,11 +470,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetMouseOverHotSpotProc function to install or remove a
      * mouse over hot spot procedure
-     * QuickTime::QTVRSetMouseOverHotSpotProc
+     * @see "QuickTime::QTVRSetMouseOverHotSpotProc"
      * @param mouseOverHotSpotProc an instance of the QTVRMouseOverHotSpot object that will be called or null to remove the callback.
      * @param flags the flags
-     * @param {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void setMouseOverHotSpotProc(QTVRMouseOverHotSpot paramQTVRMouseOverHotSpot, int paramInt) throws QTVRException {
         if (paramQTVRMouseOverHotSpot == null) {
@@ -500,7 +495,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetMouseOverHotSpotProc function to remove a
      * mouse over hot spot procedure.
-     * QuickTime::QTVRSetMouseOverHotSpotProc
+     * @see "QuickTime::QTVRSetMouseOverHotSpotProc"
      */
     public void removeMouseOverHotSpotProc() {
         int i = 0;
@@ -515,12 +510,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRInstallInterceptProc function to install or remove an intercept procedure for a
      * QuickTime VR Manager function
-     * QuickTime::QTVRInstallInterceptProc
+     * @see "QuickTime::QTVRInstallInterceptProc"
      * @param selector only the non-mouse selectors are supported
      * @param interceptProc the interceptor or null to remove a previously specified callback for the specified selector.
      * @param flags the flags
-     * @param {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void installInterceptProc(int paramInt1, QTVRInterceptor paramQTVRInterceptor, int paramInt2) throws QTVRException {
         removeInterceptProc(paramInt1);
@@ -541,10 +536,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRInstallInterceptProc function to install or remove an intercept procedure for a
      * QuickTime VR Manager function
-     * QuickTime::QTVRInstallInterceptProc
+     * @see "QuickTime::QTVRInstallInterceptProc"
      * @param selector only the non-mouse selectors are supported
-     * @param {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void removeInterceptProc(int paramInt) throws QTVRException {
         VRDispatcher localVRDispatcher = this.ipProcs.remove(paramInt);
@@ -561,8 +556,8 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * This method is used by the QTVRInterceptor execute method to call the QTVR default
      * proc for the selector that was intercepted.
-     * QuickTime::QTVRCallInterceptedProc
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @see "QuickTime::QTVRCallInterceptedProc"
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void callInterceptedProc(QTVRInterceptRecord paramQTVRInterceptRecord) throws QTVRException {
         int i = 0;
@@ -574,7 +569,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * The showDefaultView method sets the default values of the pan angle, tilt angle, field of view, view center (for object nodes), default state, mouse-down state, and all applicable animation and control settings for the node specified by the QTVRInstance you call this on.
-     * QuickTime::QTVRShowDefaultView
+     * @see "QuickTime::QTVRShowDefaultView"
      */
     public void showDefaultView() throws QTVRException {
         int i = 0;
@@ -586,9 +581,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * The setViewCenter method sets the view center of the QuickTimeÊVR movie specified by the qtvr parameter to the fixed point specified by the viewCenter parameter.
-     * QuickTime::QTVRSetViewCenter
+     * @see "QuickTime::QTVRSetViewCenter"
      * @param viewCenter A QDPoint structure that contains the desired view center of the specified movie.
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setViewCenter(QDPoint paramQDPoint) throws QTVRException {
         int i = 0;
@@ -600,9 +595,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * The getViewCenter method returns, in the QDPoint class, the x and y coordinates of the current view center of the QuickTimeÊVR movie specified by the QTVRInstance you call this on.
-     * QuickTime::QTVRGetViewCenter
+     * @see "QuickTime::QTVRGetViewCenter"
      * @return the veiw center
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public QDPoint getViewCenter() throws QTVRException {
         byte[] arrayOfByte = new byte[8];
@@ -616,10 +611,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * This method gets the type of a hot spot whose ID you specify. In combination with the kQTVRGetHotSpotTypeSelector intercept selector, this allows an application to change a hot spot's type dynamically.
-     * QuickTime::QTVRGetHotSpotType
+     * @see "QuickTime::QTVRGetHotSpotType"
      * @param hotSpotID a hot spot ID
      * @return the OSType of the hot spot specified by the hot spot ID.
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getHotSpotType(int paramInt) throws QTVRException {
         int[] arrayOfInt = { 0 };
@@ -634,10 +629,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * This method installs a callback that is invoked every time a QTVRInstance is drawn. The application can use this
      * callback to draw onto the QDGraphics that is supplied to the callback.
-     * QuickTime::QTVRSetPrescreenImagingCompleteProc
+     * @see "QuickTime::QTVRSetPrescreenImagingCompleteProc"
      * @param flags effect the conditions under which QTVR will invoke the callback
-     * @param {@link quicktime.vr.QTVRException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.vr.QTVRException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void setPrescreenImagingCompleteProc(QTVRImagingComplete paramQTVRImagingComplete, int paramInt) throws QTVRException {
         if (paramQTVRImagingComplete == null) {
@@ -658,8 +653,8 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRSetPrescreenImagingCompleteProc function to remove a
      * prescreen imaging complete proc.
-     * QuickTime::QTVRSetPrescreenImagingCompleteProc
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @see "QuickTime::QTVRSetPrescreenImagingCompleteProc"
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void removePrescreenImagingCompleteProc() {
         int i = 0;
@@ -676,10 +671,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * to the region occupied by the hot spot, in the QuickTimeÊVR movie specified
      * by the qtvr parameter, whose ID is specified by the hotSpotID parameter.
      * The region is clipped to the bounds of the movie's graphics world.
-     * QuickTime::QTVRGetHotSpotRegion
+     * @see "QuickTime::QTVRGetHotSpotRegion"
      * @param hotSpotID A hot spot ID
      * @return the region occupied by the hot spot having the specified ID
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getHotSpotRegion(int paramInt) throws QTException {
         Region localRegion = new Region();
@@ -694,7 +689,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * Returns a list of IDs of all the hot spots in the QuickTimeÊVR instance
      * that are currently visible.
-     * QuickTime::QTVRGetVisibleHotSpots
+     * @see "QuickTime::QTVRGetVisibleHotSpots"
      * @return currently visible hot spot IDs
      */
     public int[] getVisibleHotSpots() {
@@ -715,10 +710,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * Returns the ID of the hot spot in the QuickTimeÊVR instance that lies directly under
      * the point specified by the pt parameter.
      * If no hot spot lies under that point, the method returns 0.
-     * QuickTime::QTVRPtToHotSpotID
+     * @see "QuickTime::QTVRPtToHotSpotID"
      * @param pt A point, in the local coordinates of the graphics world of the specified movie
      * @return the hot spot ID or 0
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int ptToHotSpotID(QDPoint paramQDPoint) throws QTVRException {
         int[] arrayOfInt = { 0 };
@@ -734,9 +729,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * Sets the mouse-over tracking state of the QuickTimeÊVR movie specified by the QTVRInstance
      * object the method is called from. By default, QuickTimeÊVR tracks mouse movements in a
      * QuickTimeÊVR movie and changes the shape of the cursor as appropriate.
-     * QuickTime::QTVRSetMouseOverTracking
+     * @see "QuickTime::QTVRSetMouseOverTracking"
      * @param enable a boolean specified whether tracking should be disabled (false) or enabled (true)
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setMouseOverTracking(boolean paramBoolean) throws QTVRException {
         int i = 0;
@@ -751,9 +746,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * tracking for the QuickTimeÊVR movie specified by the QTVRInstance ( true ) or not ( false ).
      * By default, QuickTimeÊVR tracks mouse movements in a QuickTimeÊVR movie and changes the shape
      * of the cursor as appropriate.
-     * QuickTime::QTVRGetMouseOverTracking
+     * @see "QuickTime::QTVRGetMouseOverTracking"
      * @return true if QTVR is handling mouse-over tracking, false otherwise
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public boolean getMouseOverTracking() throws QTVRException {
         int i;
@@ -767,9 +762,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * Sets the mouse-down tracking state of the QuickTimeÊVR movie specified by the QTVRInstance
      * to the state specified by the enable parameter. By default, QuickTimeÊVR tracks mouse clicks
      * in a QuickTimeÊVR movie and triggers hot spots as appropriate.
-     * QuickTime::QTVRSetMouseDownTracking
+     * @see "QuickTime::QTVRSetMouseDownTracking"
      * @param enable a boolean specified whether tracking should be disabled (false) or enabled (true)
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setMouseDownTracking(boolean paramBoolean) throws QTVRException {
         int i = 0;
@@ -784,9 +779,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * currently handling mouse-down tracking for the QuickTimeÊVR movie specified by the
      * parameter ( true ) or not ( false ). By default, QuickTimeÊVR tracks mouse clicks in
      * a QuickTimeÊVR movie and triggers hot spots as necessary.
-     * QuickTime::QTVRGetMouseDownTracking
+     * @see "QuickTime::QTVRGetMouseDownTracking"
      * @return true if QTVR is handling mouse-down tracking, false otherwise
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public boolean getMouseDownTracking() throws QTVRException {
         int i;
@@ -803,9 +798,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * In other words, the cursor can move that many pixels during a mouse click and still have
      * the event considered a click. The default mouse-click hysteresis value is 2. This property is valid
      * for panoramas only.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param hysteresis the mouse-click hysteresis
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionMouseClickHysteresis(int paramInt) throws QTVRException {
         int i = 0;
@@ -819,9 +814,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * Gets the Mouse Click Hysteresis property of the Interaction property defined as the distance,
      * in pixels, from the location of a mouse-down event to the limit within which the cursor is
      * considered not to have moved.
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the mouse-click hysteresis value
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getInteractionMouseClickHysteresis() throws QTVRException {
         short[] arrayOfShort = { 0 };
@@ -838,9 +833,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * timeout, the number of ticks after which a mouse click times out and is automatically switched
      * from a hot spot selection into a pan. The default mouse-click timeout value is 30 ticks (one-half
      * second). This property is valid for panoramas only.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param timeout the mouse-click timeout
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionMouseClickTimeout(int paramInt) throws QTVRException {
         int i = 0;
@@ -853,9 +848,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * Gets the Mouse Click Timeout Interaction property defined as the number of ticks after which a
      * mouse click times out and is automatically switched from a hot spot selection into a pan.
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the mouse-click timeout value
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getInteractionMouseClickTimeout() throws QTVRException {
         int i = 0;
@@ -872,9 +867,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * speed of panning and tilting. This integer should be from 1 (the slowest speed) through 10
      * (the fastest speed); the default panning and tilting speed is 5. This property is valid only
      * for panoramas.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param speed the pan and tilt speed
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionPanTiltSpeed(int paramInt) throws QTVRException {
         int i;
@@ -886,9 +881,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * Gets the panning and tilting speed interaction property
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the pan and tilt speed
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getInteractionPanTiltSpeed() throws QTVRException {
         int i = 0;
@@ -905,9 +900,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * relative speed of zooming in and out. This integer should be from 1 (the slowest speed) through 10
      * (the fastest speed); the default zooming speed is 5. This property is valid for both objects and
      * panoramas.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param speed the zoom speed
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionZoomSpeed(int paramInt) throws QTVRException {
         int i;
@@ -919,9 +914,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * Gets the zoom speed interaction property
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the zoom speed
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getInteractionZoomSpeed() throws QTVRException {
         int[] arrayOfInt = { 0 };
@@ -938,9 +933,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * translate mode is enabled ( true ) or disabled ( false ). When translate mode is enabled, the
      * user can no longer pan or tilt using the mouse; instead, dragging the cursor causes the object
      * to translate. The default translate flag value is false . This property is valid for objects only.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param translate sets the mouseDown translation property
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionTranslateOnMouseDown(boolean paramBoolean) throws QTVRException {
         int i;
@@ -952,9 +947,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * Sets the translation interaction property
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the zoom speed
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public boolean getInteractionTranslateOnMouseDown() throws QTVRException {
         byte[] arrayOfByte = { 0 };
@@ -971,9 +966,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * scale, the number of degrees or radians that an object or panorama is panned or tilted when the cursor
      * is dragged the entire width of the object bounding box. The default value is 180.0. This property is
      * valid for objects only.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param scale sets the mouse motion scale property
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionMouseMotionScale(float paramFloat) throws QTVRException {
         float[] arrayOfFloat = { paramFloat };
@@ -986,9 +981,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * Sets the mouse motion scale interaction property
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the mouse motion scale
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float getInteractionMouseMotionScale() throws QTVRException {
         float[] arrayOfFloat = { 0.0F };
@@ -1003,9 +998,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * Sets the nudge mode interaction property. The parameter lets you set the QuickTimeÊVR nudge
      * mode to either rotate, translate, or be the same as the current mouse.
-     * QuickTime::QTVRSetInteractionProperty
+     * @see "QuickTime::QTVRSetInteractionProperty"
      * @param mode sets the nudge mode property (use kQTVRNudgeRotate, kQTVRNudgeTranslate, or kQTVRNudgeSameAsMouse)
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setInteractionNudgeMode(int paramInt) throws QTVRException {
         int i;
@@ -1017,9 +1012,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * Gets the nudge mode interaction property
-     * QuickTime::QTVRGetInteractionProperty
+     * @see "QuickTime::QTVRGetInteractionProperty"
      * @return the nudge mode
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public int getInteractionNudgeMode() throws QTVRException {
         int[] arrayOfInt = { 0 };
@@ -1034,16 +1029,16 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * kQTVRPanAngle, kQTVRTiltAngle, kQTVRFieldOfViewAngle
      * Only the above parameters can be passed into this call.
-     * QuickTime::QTVRSetViewParameter
+     * @see "QuickTime::QTVRSetViewParameter"
      * Requires QT 5.0.1 and above
      * @param viewParameter one of kQTVRPanAngle, kQTVRTiltAngle, kQTVRFieldOfViewAngle
      * @param flagsIn zero or combination of kQTVRValueIsRelative kQTVRValueIsRate kQTVRValueIsUserPrefRelative
-     *         kQTVRPanAngle:	zero (absolute) kQTVRValueIsRelative (relative to value)
-     *         kQTVRTiltAngle:	zero (absolute) kQTVRValueIsRelative (relative to value)
+     *         kQTVRPanAngle: zero (absolute) kQTVRValueIsRelative (relative to value)
+     *         kQTVRTiltAngle: zero (absolute) kQTVRValueIsRelative (relative to value)
      *         kQTVRFieldOfViewAngle: zero (absolute) kQTVRValueIsRelative (relative to value)
      *                 kQTVRValueIsRate + kQTVRValueIsUserPrefRelative (zoom in/out)
      * @param value value of the view angle
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setViewAngle(int paramInt1, int paramInt2, float paramFloat) throws QTVRException {
         int i = 0;
@@ -1057,11 +1052,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * kQTVRPanAngle, kQTVRTiltAngle, kQTVRFieldOfViewAngle
      * Only the above parameters can be passed into this call.
-     * QuickTime::QTVRGetViewParameter
+     * @see "QuickTime::QTVRGetViewParameter"
      * Requires QT 5.0.1 and above
      * @param viewParameter one of kQTVRPanAngle, kQTVRTiltAngle, kQTVRFieldOfViewAngle
      * @return the viewParameter value
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public float getViewAngle(int paramInt) throws QTVRException {
         int i = 0;
@@ -1078,12 +1073,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * kQTVRViewCenter
      *
-     * QuickTime::QTVRSetViewParameter
+     * @see "QuickTime::QTVRSetViewParameter"
      * Requires QT 5.0.1 and above
      * @param flagsIn zero or combination of kQTVRValueIsRelative kQTVRValueIsRate kQTVRValueIsUserPrefRelative
      *         kQTVRViewCenter: zero (absolute) kQTVRValueIsRelative (relative to value)
      * @param center point specifying the center
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setViewCentre(int paramInt, QDPoint paramQDPoint) throws QTVRException {
         int i = 0;
@@ -1097,10 +1092,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * kQTVRViewCenter
      *
-     * QuickTime::QTVRGetViewParameter
+     * @see "QuickTime::QTVRGetViewParameter"
      * Requires QT 5.0.1 and above
      * @return the center
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public QDPoint getViewCentre() throws QTVRException {
         int i = 0;
@@ -1117,10 +1112,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * kQTVRHotSpotsVisible
      *
-     * QuickTime::QTVRSetViewParameter
+     * @see "QuickTime::QTVRSetViewParameter"
      * Requires QT 5.0.1 and above
      * @param value true if visible
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void setHotSpotsVisible(boolean paramBoolean) throws QTVRException {
         int i = 0;
@@ -1134,10 +1129,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * kQTVRHotSpotsVisible
      *
-     * QuickTime::QTVRGetViewParameter
+     * @see "QuickTime::QTVRGetViewParameter"
      * Requires QT 5.0.1 and above
      * @return true if hotspot is visible
-     * @return {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public boolean getHotSpotsVisible() throws QTVRException {
         int i = 0;
@@ -1157,7 +1152,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * record is kQTVRUseDefaultCursor, the default cursor for the given resource ID is reloaded; in this case, the handle field of that
      * record should be set to NIL.
      * @param cursRecord the object pointing to the CursorRecord
-     * @param {@link quicktime.vr.QTVRException}
+     * @throws quicktime.vr.QTVRException
      */
     public void replaceCursor(CursorRecord paramCursorRecord) throws QTVRException {
         int i = QTVRReplaceCursor(_ID(), paramCursorRecord.getBytes());
@@ -1167,7 +1162,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetCurrentNodeID function to get the current node of
      * a movie.
-     * QuickTime::QTVRGetCurrentNodeID
+     * @see "QuickTime::QTVRGetCurrentNodeID"
      * @return the ID of the current node of the specified movie.
      */
     public int getCurrentNodeID() {
@@ -1178,7 +1173,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use the QTVRGetNodeType function to get the OSType of a movie node.
-     * QuickTime::QTVRGetNodeType
+     * @see "QuickTime::QTVRGetNodeType"
      * @param nodeID A node ID. Pass kQTVRCurrentNode for the current node.
      * @return the type of the specified node.
      */
@@ -1191,7 +1186,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetPanAngle function to get the pan angle of a
      * QuickTime VR movie.
-     * QuickTime::QTVRGetPanAngle
+     * @see "QuickTime::QTVRGetPanAngle"
      * @return a floating-point value that represents the current pan angle of the specified movie.
      */
     public float getPanAngle() {
@@ -1203,7 +1198,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetTiltAngle function to get the tilt angle of a
      * QuickTime VR movie.
-     * QuickTime::QTVRGetTiltAngle
+     * @see "QuickTime::QTVRGetTiltAngle"
      * @return a floating-point value that represents the current tilt angle of
      *  the specified movie.
      */
@@ -1216,7 +1211,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     /**
      * You can use the QTVRGetFieldOfView function to get the vertical field of view of a
      * QuickTime VR movie.
-     * QuickTime::QTVRGetFieldOfView
+     * @see "QuickTime::QTVRGetFieldOfView"
      * @return the current vertical field of view of the specified movie.
      */
     public float getFieldOfView() {
@@ -1227,7 +1222,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRGetAngularUnits to get the type of unit currently used when specifying angles.
-     * QuickTime::QTVRGetAngularUnits
+     * @see "QuickTime::QTVRGetAngularUnits"
      * @return a constant that indicates the type of angular units currently in use
      */
     public int getAngularUnits() {
@@ -1238,7 +1233,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRPanToColumn to get the column number in the object image array that corresponds to a pan angle.
-     * QuickTime::QTVRPanToColumn
+     * @see "QuickTime::QTVRPanToColumn"
      * @param panAngle a pan angle.
      * @return the column number in the object image array that corresponds to the specified pan angle.
      */
@@ -1250,7 +1245,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRColumnToPan to get the pan angle that corresponds to a column number in the object image array.
-     * QuickTime::QTVRColumnToPan
+     * @see "QuickTime::QTVRColumnToPan"
      * @param column A column number.
      * @return the pan angle that corresponds to the specified column number in the object image array.
      */
@@ -1262,7 +1257,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRTiltToRow to get the row number in the object image array that corresponds to a tilt angle.
-     * QuickTime::QTVRTiltToRow
+     * @see "QuickTime::QTVRTiltToRow"
      * @param tiltAngle a tilt angle.
      * @return The row number in the object image array that corresponds to the specified tilt angle.
      */
@@ -1274,7 +1269,7 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
 
     /**
      * You can use QTVRRowToTilt to get the tilt angle that corresponds to a row number in the object image array.
-     * QuickTime::QTVRRowToTilt
+     * @see "QuickTime::QTVRRowToTilt"
      * @param row a row number.
      * @return the tilt angle that corresponds to the specified row number in the object image array.
      */

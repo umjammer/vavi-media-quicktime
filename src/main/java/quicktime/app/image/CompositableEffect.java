@@ -8,13 +8,13 @@ import quicktime.app.anim.SWCompositor;
 import quicktime.app.anim.TwoDSprite;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is used to directly add an effect to a SWCompositor. Only effects
  * of zero source (such as fire, ripple) can be added directly. Filters and Transitions
  * act on one or two sources and must be added to a SWCompositor using the
  * QTEffectPresenter.
  *
- * @see {@link quicktime.app.image.QTEffectPresenter}
+ * @see quicktime.app.image.QTEffectPresenter
  */
 public class CompositableEffect extends QTEffect implements DynamicImage, Redrawable {
 
@@ -25,8 +25,8 @@ public class CompositableEffect extends QTEffect implements DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a CompositableEffect.
      */
     public CompositableEffect() throws QTException {
@@ -34,15 +34,15 @@ public class CompositableEffect extends QTEffect implements DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a CompositableEffect. The specified multiFrameFlag parameter should
      * be set to Redrawable.kMultiFrame as all of the existing QTEffects require
      * redrawing (and thus Invalidation) for their visual effect to be apparent.
      * @param multiFrameFlag is normally set to kMultiFrame
      */
-    public CompositableEffect(int paramInt) throws QTException {
-        super(paramInt);
+    public CompositableEffect(int multiFrameFlag) throws QTException {
+        super(multiFrameFlag);
     }
 
     class CEInvalidator extends Invalidator {
@@ -51,7 +51,8 @@ public class CompositableEffect extends QTEffect implements DynamicImage, Redraw
             super(paramTwoDSprite);
         }
 
-        public boolean tickle(float paramFloat, int paramInt) throws QTException {
+        @Override
+        public boolean tickle(float er, int t) throws QTException {
             if (CompositableEffect.this.isRedrawing()) {
                 CompositableEffect.this.redraw(null);
                 this.s.invalidate();
@@ -61,8 +62,8 @@ public class CompositableEffect extends QTEffect implements DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -82,18 +83,20 @@ public class CompositableEffect extends QTEffect implements DynamicImage, Redraw
      * @return an Invalidator or null if invalidation is not required
      * @see quicktime.app.display.SWCompositor
      */
-    public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) {
-        return isSingleFrame() ? null : new CEInvalidator(paramTwoDSprite);
+    @Override
+    public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) {
+        return isSingleFrame() ? null : new CEInvalidator(s);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
      * @param c the SWCompositor it is being removed from
      */
-    public void removedFromCompositor(SWCompositor paramSWCompositor) {
+    @Override
+    public void removedFromCompositor(SWCompositor c) {
     }
 }

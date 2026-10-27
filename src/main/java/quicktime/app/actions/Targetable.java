@@ -3,29 +3,29 @@ package quicktime.app.actions;
 import quicktime.app.time.Ticklish;
 
 /**
- * Deprecated.
+ * @deprecated
  * An object that implements this interface is an object that is defined to
  * invoke some action upon its target according to the time constraints
  * that are supplied by the caller of the tickle method. How the targetable
  * interprets and acts upon these time constraints is up to the object itself.
  */
-public abstract interface Targetable extends Ticklish {
+public interface Targetable extends Ticklish {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current target of the Targetable object - this is the object
      * that the Targetable will act upon.
      * @return the current target
      */
-    public abstract Object getTarget();
+    Object getTarget();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the target.
      * @param target the new target for the action list
      */
-    public abstract void setTarget(Object paramObject);
+    void setTarget(Object paramObject);
 }
 

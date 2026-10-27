@@ -3,38 +3,23 @@ package quicktime.std.qtcomponents;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.Serial;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
-public final class DataRateSettings extends QTByteObject implements PrimitivesLib {
 
-    private static Object linkage;
+public final class DataRateSettings extends QTByteObject implements PrimitivesLib {
 
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 16;
 
-    static final long serialVersionUID = 6877811007326112776L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(DataRateSettings.class);
-                    }
-                });
-            }
-        }.establish();
-    }
+    @Serial
+    private static final long serialVersionUID = 6877811007326112776L;
 
     /**
      * Construct temporal settings to set the dialog display.
@@ -56,21 +41,23 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
     }
 
     DataRateSettings() {
-        super(16);
+        super(kNativeSize);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[16];
-        byte[] arrayOfByte = new byte[16];
+        byte[] arrayOfByte = new byte[kNativeSize];
         paramObjectInputStream.read(arrayOfByte);
-        for (int i = 0; i < 16; i += 4) {
+        for (int i = 0; i < kNativeSize; i += 4) {
             setIntInArray(getBytes(), i, EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, i)));
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[16];
-        for (int i = 0; i < 16; i += 4) {
+        byte[] arrayOfByte = new byte[kNativeSize];
+        for (int i = 0; i < kNativeSize; i += 4) {
             setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
         paramObjectOutputStream.write(arrayOfByte);
@@ -88,8 +75,8 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
      * Specifies the default data rate in the dialog box.
      * @param dataRate the data rate
      */
-    public void setDataRate(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setDataRate(int dataRate) {
+        setIntAt(0, dataRate);
     }
 
     /**
@@ -104,8 +91,8 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
      * Specifies the default frame duration in the dialog box.
      * @param frameDuration the frameDuration
      */
-    public void setFrameDuration(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFrameDuration(int frameDuration) {
+        setIntAt(4, frameDuration);
     }
 
     /**
@@ -120,8 +107,8 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
      * Specifies the min spatial quality slider in the dialog box.
      * @param minSpatialQuality the quality setting
      */
-    public void setMinSpatialQuality(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setMinSpatialQuality(int minSpatialQuality) {
+        setIntAt(8, minSpatialQuality);
     }
 
     /**
@@ -136,8 +123,8 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
      * Specifies the min temporal quality slider in the dialog box.
      * @param minTemporalQuality the quality setting
      */
-    public void setMinTemporalQuality(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setMinTemporalQuality(int minTemporalQuality) {
+        setIntAt(12, minTemporalQuality);
     }
 
     private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {

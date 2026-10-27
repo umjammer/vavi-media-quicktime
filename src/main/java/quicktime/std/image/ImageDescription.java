@@ -79,8 +79,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Determines the image description information.
-     * QuickTime::GraphicsExportGetInputImageDescription
-     * @see {@link quicktime.std.image.GraphicsExporter#getInputImageDescription()}
+     * @see "QuickTime::GraphicsExportGetInputImageDescription"
+     * @see quicktime.std.image.GraphicsExporter#getInputImageDescription()
      */
     public static ImageDescription fromGraphicsExporter(GraphicsExporter graphicsexporter) throws StdQTException {
         int[] ai = new int[1];
@@ -91,8 +91,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Returns the image description information.
-     * QuickTime::GraphicsExportDoUseCompressor
-     * @see {@link quicktime.std.image.GraphicsExporter#doUseCompressor(quicktime.std.movies.AtomContainer)}
+     * @see "QuickTime::GraphicsExportDoUseCompressor"
+     * @see quicktime.std.image.GraphicsExporter#doUseCompressor(quicktime.std.movies.AtomContainer)
      */
     public static ImageDescription fromGraphicsExporterCompressor(GraphicsExporter graphicsexporter, AtomContainer atomcontainer) throws StdQTException {
         int[] ai = { 0 };
@@ -103,8 +103,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Determines the image description information.
-     * QuickTime::GraphicsImportGetImageDescription
-     * @see {@link quicktime.std.image.GraphicsImporter#getImageDescription()}
+     * @see "QuickTime::GraphicsImportGetImageDescription"
+     * @see quicktime.std.image.GraphicsImporter#getImageDescription()
      */
     public static ImageDescription fromGraphicsImporter(GraphicsImporter graphicsimporter) throws StdQTException {
         int[] ai = new int[1];
@@ -115,10 +115,10 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * This method gets the image description property of this sprite.
-     * QuickTime::GetSpriteProperty ()
+     * @see "QuickTime::GetSpriteProperty ()"
      * @return the image description.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.anim.Sprite#getImageDescription()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.anim.Sprite#getImageDescription()
      */
     public static ImageDescription fromSprite(Sprite sprite) throws StdQTException {
         int[] ai = { 0 };
@@ -130,13 +130,13 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
     /**
      * Compresses a frame that is sourced by a PixMap from the supplied QDGraphics, returning
      * the compressed data and an image description.
-     * QuickTime::SCCompressImage()
+     * @see "QuickTime::SCCompressImage()"
      * @param src the source PixMap.
      * @param srcRect you can specify to compress just a part of the pix map by specifying
      *  a rectangle - or pass in null to compress the entire pix map.
      * @return an image data object.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.qtcomponents.ImageCompressionDialog#compressImage(quicktime.qd.QDGraphics, quicktime.qd.QDRect)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.qtcomponents.ImageCompressionDialog#compressImage(quicktime.qd.QDGraphics, quicktime.qd.QDRect)
      */
     public static QTImage fromImageCompressionDialog(ImageCompressionDialog imagecompressiondialog, QDGraphics qdgraphics, QDRect qdrect) throws QTException {
         byte[] abyte0 = qdrect == null ? null : qdrect.getRect();
@@ -177,7 +177,7 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * the Encoded image formats.
      * @param width width of the image
      * @param height height of image
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDescription getJavaDefaultPixelDescription(int i, int j) throws QTException {
         ImageDescription imagedescription = null;
@@ -198,10 +198,10 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Create an ImageDescription for an Effect Type.
-     * QuickTime::MakeImageDescriptionForEffect
+     * @see "QuickTime::MakeImageDescriptionForEffect"
      * @param effectType the effectType for which the imageDescription will be made
      * @return the ImageDescription for the given Effect type.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDescription forEffect(int i) throws QTException {
         return new ImageDescription(allocate(i), null);
@@ -217,7 +217,7 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Create an ImageDescription from a PixMap.
-     * QuickTime::MakeImageDescriptionForPixMap
+     * @see "QuickTime::MakeImageDescriptionForPixMap"
      * @param pixmap the PixMap from which the imageDescription will be made
      */
     public ImageDescription(PixMap pixmap) throws QTException {
@@ -243,15 +243,16 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new ImageDescription(makeAndCopyHandle(), null);
     }
 
     /**
      * Update the custom color table for an image.
-     * QuickTime::SetImageDescriptionCTable
+     * @see "QuickTime::SetImageDescriptionCTable"
      * @param cTable a color table.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setCTable(ColorTable colortable) throws StdQTException {
         StdQTException.checkError(SetImageDescriptionCTable(_ID(), QTObject.ID(colortable)));
@@ -259,9 +260,9 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Get the custom color table for an image. If there is no CTable this returns null.
-     * QuickTime::GetImageDescriptionCTable
+     * @see "QuickTime::GetImageDescriptionCTable"
      * @return the ColorTable
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public ColorTable getCTable() throws QTException {
         return ColorTable.fromImageDescription(this);
@@ -269,10 +270,10 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Counts the number of extensions of a given type.
-     * QuickTime::CountImageDescriptionExtensionType
+     * @see "QuickTime::CountImageDescriptionExtensionType"
      * @param idType A four-byte signature indentifying the type of data being counted from the ImageDescription.
      * @return the number of extensions of the specified type
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int countExtensionType(int i) throws StdQTException {
         int[] ai = new int[1];
@@ -282,9 +283,9 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Returns the next extension type.
-     * QuickTime::GetNextImageDescriptionExtensionType
+     * @see "QuickTime::GetNextImageDescriptionExtensionType"
      * @return on entry, contains the starting point for the search. On return, will contain the next extension type found
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getNextExtensionType() throws StdQTException {
         int[] ai = new int[1];
@@ -294,10 +295,10 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Add the extended data of the image.
-     * QuickTime::AddImageDescriptionExtension
+     * @see "QuickTime::AddImageDescriptionExtension"
      * @param idType A four-byte signature indentifying the type of data being added to the ImageDescription.
      * @param extension The handle containing the extension data.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void addExtension(int i, QTHandle qthandle) throws StdQTException {
         StdQTException.checkError(AddImageDescriptionExtension(_ID(), QTObject.ID(qthandle), i));
@@ -305,10 +306,10 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Removes a specified extension from an ImageDescription.
-     * QuickTime::RemoveImageDescriptionExtension
+     * @see "QuickTime::RemoveImageDescriptionExtension"
      * @param idType A four-byte signature indentifying the type of data being removed from the ImageDescription.
      * @param index The index (from 1 to the count as returned by countExtensionType) of the extension to remove..
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void removeExtension(int i, int j) throws StdQTException {
         StdQTException.checkError(RemoveImageDescriptionExtension(_ID(), i, j));
@@ -316,11 +317,11 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     /**
      * Obtain the extended data for an image.
-     * QuickTime::GetImageDescriptionExtension
+     * @see "QuickTime::GetImageDescriptionExtension"
      * @param idType specifies the extension's type value.
      * @param index specifies the extension's index value.
      * @return a handle to the returned data.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     @Deprecated
     public QTHandle getExtension(int i, int j) throws StdQTException {
@@ -330,10 +331,10 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
     /**
      * Creates an offscreen QDGraphics object from the width, height, depth, and color table
      * of a specified image description structure.
-     * QuickTime::NewImageGWorld
+     * @see "QuickTime::NewImageGWorld"
      * @param flags holding graphics world flags.
      * @return a QDGraphics.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QDGraphics newGWorld(int i) throws QTException {
         return new QDGraphics(this, i);
@@ -556,7 +557,7 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
     /**
      * Set the name of the compression algorithm.
      * @param name indicates the compression algorithm.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public void setName(String s) throws UtilException {
         setPStringAt(50, 31, s);
@@ -655,12 +656,7 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ImageDescription.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ImageDescription.class));
             }
         }
         new PrivelegedAction().establish();

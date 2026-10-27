@@ -29,71 +29,74 @@ import quicktime.app.view.QTFactory;
  * Moving Movie Demo.
  */
 public class DukeMovie extends Frame {
-//_________________________ CLASS VARIABLES
-	private static final Color bgColor = Color.lightGray; //tumbling duke gif's are light gray
 
-//_________________________ CLASS METHODS
-	public static void main(String args[]) {
-		try {
-			QTSession.open(); //start a QuickTime session
-			Frame f = new DukeMovie("Biscotti = Java + QuickTime");
-                        f.pack();
-			f.setVisible(true);
-			f.toFront();
-		}
-		catch (Exception e) { 
-			QTSession.close(); 
-			System.exit(0); 
-		}
-	}
+    //_________________________ CLASS VARIABLES
+    private static final Color bgColor = Color.lightGray; //tumbling duke gif's are light gray
 
-	DukeMovie (String frameTitle) throws QTException, IOException {
-		super (frameTitle);
+    //_________________________ CLASS METHODS
+    static void main(String[] args) {
+        try {
+            QTSession.open(); //start a QuickTime session
+            Frame f = new DukeMovie("Biscotti = Java + QuickTime");
+            f.pack();
+            f.setVisible(true);
+            f.toFront();
+        } catch (Exception e) {
+            QTSession.close();
+            System.exit(0);
+        }
+    }
 
-		setBackground(bgColor);
-		setLayout(new BorderLayout());
-                
-		ms = new MovieScreen();
-		Panel panel = new Panel();
-                panel.add((Component)ms.getMovieComponent());
-                add("Center", panel);
-		
-		// create, add and start tumbling duke, if the images are available
-		try {
-			File file = QTFactory.findAbsolutePath ("duke");		
-			duke = new TumbleItem(file.getAbsolutePath());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (duke != null) {
-			duke.setBackground(bgColor);
-			add("North", duke);
-		}
-		
-		// create our little control panel out of simple AWT objects
-		cp = new ControlPanel(bgColor, ms, this);
-		add("South", cp);
+    DukeMovie(String frameTitle) throws QTException, IOException {
+        super(frameTitle);
 
-		//setBounds(0, 0, 625, 420);
-		addWindowListener(new WindowAdapter () {
-			public void windowOpened (WindowEvent ev) {
-				if (duke != null) duke.start();
-			}
+        setBackground(bgColor);
+        setLayout(new BorderLayout());
 
-			public void windowClosing (WindowEvent e) {
-				if (duke != null) duke.stop();
-				QTSession.close();
-				dispose();
-			}
+        ms = new MovieScreen();
+        Panel panel = new Panel();
+        panel.add((Component) ms.getMovieComponent());
+        add("Center", panel);
 
-			public void windowClosed (WindowEvent e) { 
-				System.exit(0);
-			}
-		});
-	}
+        // create, add and start tumbling duke, if the images are available
+        try {
+            File file = QTFactory.findAbsolutePath("duke");
+            duke = new TumbleItem(file.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (duke != null) {
+            duke.setBackground(bgColor);
+            add("North", duke);
+        }
 
-//_________________________ INSTANCE VARIABLES
-	private MovieScreen ms;
-	private TumbleItem  duke;
-	private ControlPanel cp;
+        // create our little control panel out of simple AWT objects
+        cp = new ControlPanel(bgColor, ms, this);
+        add("South", cp);
+
+        //setBounds(0, 0, 625, 420);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent ev) {
+                if (duke != null) duke.start();
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (duke != null) duke.stop();
+                QTSession.close();
+                dispose();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+
+    //_________________________ INSTANCE VARIABLES
+    private final MovieScreen ms;
+    private TumbleItem duke;
+    private final ControlPanel cp;
 }

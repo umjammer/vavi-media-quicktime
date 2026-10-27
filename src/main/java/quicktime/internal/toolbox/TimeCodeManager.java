@@ -236,7 +236,7 @@ public final class TimeCodeManager {
 
     /** @return a new user data of the source reference atoms of the description, 0 if none */
     static int sourceRef(byte[] desc) {
-        int end = Math.min(desc.length, Math.max(SOURCE_REF, Bytes.getInt(desc, 0)));
+        int end = Math.clamp(Bytes.getInt(desc, 0), SOURCE_REF, desc.length);
         if (end <= SOURCE_REF) {
             return 0;
         }

@@ -24,7 +24,7 @@ import quicktime.qd.Region;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * The QTImageProducer implements the java.awt.image.ImageProducer interface for a
  * single source QuickTime object. The QuickTime source can be a single frame (ie. still
  * image) or a mutliple frame source such as a movie, sprite world animation, effect, etc.
@@ -57,7 +57,7 @@ public class QTImageProducer implements ImageProducer, Redrawable {
         }
     }
 
-    private static long msecs = 0L;
+    private static final long msecs = 0L;
 
     private static final boolean profile = false;
 
@@ -65,13 +65,13 @@ public class QTImageProducer implements ImageProducer, Redrawable {
         return ((paramQTDrawable instanceof Space)) || ((paramQTDrawable instanceof Timeable)) || (((paramQTDrawable instanceof Redrawable)) && (!((Redrawable) paramQTDrawable).isSingleFrame()));
     }
 
-    private Dimension size;
+    private final Dimension size;
 
-    private int rowInts;
+    private final int rowInts;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates an ImageProducer from the specified qtSource. The initialSize of the
      * qtSource should be specified to get the best pixel resolution of the source
      * material.
@@ -102,7 +102,7 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public QDGraphics getGWorld() {
         return this.gw;
@@ -112,35 +112,36 @@ public class QTImageProducer implements ImageProducer, Redrawable {
 
     private PixMap pm;
 
-    private int[] pixels;
+    private final int[] pixels;
 
     private QTDrawable qtSource;
 
-    private ColorModel cm = new DirectColorModel(32, 16711680, 65280, 255, 0);
+    private final ColorModel cm = new DirectColorModel(32, 16711680, 65280, 255, 0);
 
-    private Hashtable props = new Hashtable();
+    private final Hashtable props = new Hashtable();
 
-    private Vector consumers = new Vector();
+    private final Vector consumers = new Vector();
 
     private boolean doesRedraw;
 
-    private boolean singleFrame;
+    private final boolean singleFrame;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the Redrawable only has a single frame to render and thus
      * will never need to re-acquire or redraw its image. Certain Redrawable objects
      * are able to optimise their resources knowing this constraint.
      * @return a boolean
      */
+    @Override
     public boolean isSingleFrame() {
         return this.singleFrame;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used to register an ImageConsumer with the
      * ImageProducer for access to the image data during a later
      * reconstruction of the Image.  The ImageProducer may, at its
@@ -148,8 +149,9 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * using the ImageConsumer interface immediately, or when the
      * next available image reconstruction is triggered by a call
      * to the startProduction method.
-     * @see {@link quicktime.app.image.QTImageProducer#startProduction(java.awt.image.ImageConsumer)}
+     * @see quicktime.app.image.QTImageProducer#startProduction(java.awt.image.ImageConsumer)
      */
+    @Override
     public synchronized void addConsumer(ImageConsumer paramImageConsumer) {
         if (isConsumer(paramImageConsumer)) {
             return;
@@ -181,19 +183,20 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method determines if a given ImageConsumer object
      * is currently registered with this ImageProducer as one
      * of its consumers.
      */
+    @Override
     public synchronized boolean isConsumer(ImageConsumer paramImageConsumer) {
         return this.consumers.contains(paramImageConsumer);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method removes the given ImageConsumer object
      * from the list of consumers currently registered to
      * receive image data.  It is not considered an error
@@ -201,13 +204,14 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * The ImageProducer should stop sending data to this
      * consumer as soon as is feasible.
      */
+    @Override
     public synchronized void removeConsumer(ImageConsumer paramImageConsumer) {
         this.consumers.removeElement(paramImageConsumer);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method both registers the given ImageConsumer object
      * as a consumer and starts an immediate reconstruction of
      * the image data which will then be delivered to this
@@ -215,8 +219,9 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * been registered with the producer.  This method differs
      * from the addConsumer method in that a reproduction of
      * the image data should be triggered as soon as possible.
-     * @see {@link quicktime.app.image.QTImageProducer#addConsumer(java.awt.image.ImageConsumer)}
+     * @see quicktime.app.image.QTImageProducer#addConsumer(java.awt.image.ImageConsumer)
      */
+    @Override
     public void startProduction(ImageConsumer paramImageConsumer) {
         synchronized (QTNative.globalsLock) {
             synchronized (this) {
@@ -253,8 +258,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called to redraw the QuickTime image source and
      * update any of the current ImageConsumers with the new pixels that have been generated.
      * This update will only be done if the redrawing flag is true.
@@ -262,7 +267,7 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      *  are grabbed and sent to the consumers. If not null then the qtSource
      *  invalidates the region specified, which can result in a faster draw. Also only those
      *  pixels that are within the bounds of the region are sent to the consumers.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void redraw(Region paramRegion) throws QTException {
         if ((!this.consumers.isEmpty()) || (!isSingleFrame())) {
@@ -274,8 +279,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method can be called by an application to have the QTImageProducer to update the pixel
      * data for each of the registered ImageConsumers when the source QTDrawable object has drawn.
      * Thus an application can either explicitly draw the QTDrawable source itself then call this method
@@ -283,7 +288,7 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * update the registered ImageConsumers.
      * @param invalidRgn enter null to copy all pixels, or specify a region that specifies the changed pixel data,
      *  which can econimize the copying of the pixel data to only those areas that have changed.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void updateConsumers(Region paramRegion) throws QTException {
         if (!isSingleFrame())
@@ -293,11 +298,11 @@ public class QTImageProducer implements ImageProducer, Redrawable {
         int j;
         int k;
         if (paramRegion != null) {
-            Object localObject = paramRegion.getRgnBBox();
-            i = ((QDRect) localObject).getX();
-            j = ((QDRect) localObject).getY();
-            k = ((QDRect) localObject).getWidth();
-            m = ((QDRect) localObject).getHeight();
+            QDRect localObject = paramRegion.getRgnBBox();
+            i = localObject.getX();
+            j = localObject.getY();
+            k = localObject.getWidth();
+            m = localObject.getHeight();
         } else {
             i = 0;
             j = 0;
@@ -305,8 +310,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
             m = this.size.height;
         }
         Object localObject = this.consumers.elements();
-        while (((Enumeration) localObject).hasMoreElements()) {
-            ImageConsumer localImageConsumer = (ImageConsumer) ((Enumeration) localObject).nextElement();
+        while (((Enumeration<?>) localObject).hasMoreElements()) {
+            ImageConsumer localImageConsumer = (ImageConsumer) ((Enumeration<?>) localObject).nextElement();
             localImageConsumer.setPixels(i, j, k, m, this.cm, this.pixels, 0, this.rowInts);
             if (isConsumer(localImageConsumer)) {
                 localImageConsumer.imageComplete(2);
@@ -315,29 +320,31 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If true then the redraw method of the object will fetch new image data
      * from its image source.
      * @param redrawFlag boolean determining whether the current image is redrawn (false)
      *  of fresh or updated image data is first retrieved (true).
      */
+    @Override
     public synchronized void setRedrawing(boolean paramBoolean) {
         this.doesRedraw = paramBoolean;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the image data may be altered or different upon different calls
      * of the redraw method of the QTDrawable interface
      */
+    @Override
     public boolean isRedrawing() {
         return this.doesRedraw;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * This returns the rendered size of the qtSource pixel data as specified in the constructor. * @deprecated since QTJava 6.1
      */
     public Dimension getSize() {
@@ -345,8 +352,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used by an ImageConsumer to request that
      * the ImageProducer attempt to resend the image data one
      * more time in TOPDOWNLEFTRIGHT order so that higher
@@ -359,16 +366,12 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * ImageConsumer method calls:
      *
      * ic.setHints(TOPDOWNLEFTRIGHT | < otherhints >);
-     * ic.setPixels(...);	// As many times as needed
+     * ic.setPixels(...); // As many times as needed
      * ic.imageComplete();
      *
      * @see ImageConsumer.setHints(int)
      */
+    @Override
     public void requestTopDownLeftRightResend(ImageConsumer paramImageConsumer) {
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /QTImageProducer.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

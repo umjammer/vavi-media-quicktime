@@ -28,7 +28,7 @@ public final class TweenData extends QTByteObject {
 
     public static final int kQTFloatDoubleNativeSize = 8;
 
-    private int type;
+    private final int type;
 
     /**
      * Allocates a TweenData object of type kTweenTypeShort from short start and end values
@@ -174,37 +174,18 @@ public final class TweenData extends QTByteObject {
     }
 
     private static int allocSize(int paramInt) throws QTException {
-        int i = 0;
-        switch(paramInt) {
-            case 1:
-                i = 2;
-                break;
-            case 2:
-            case 3:
-            case 10:
-                i = 4;
-                break;
-            case 4:
-                i = 4;
-                break;
-            case 5:
-                i = 8;
-                break;
-            case 7:
-                i = 36;
-                break;
-            case 8:
-                i = 6;
-                break;
-            case 9:
-                i = 10;
-                break;
-            case 11:
-                i = 8;
-                break;
-            case 12:
-                i = 8;
-        }
+        int i = switch (paramInt) {
+            case 1 -> 2;
+            case 2, 3, 10 -> 4;
+            case 4 -> 4;
+            case 5 -> 8;
+            case 7 -> 36;
+            case 8 -> 6;
+            case 9 -> 10;
+            case 11 -> 8;
+            case 12 -> 8;
+            default -> 0;
+        };
         if (i == 0) {
             throw new QTException("unsupported tween type");
         }

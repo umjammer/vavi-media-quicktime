@@ -2,8 +2,6 @@ package quicktime.std.music;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
 import com.apple.mrj.macos.carbon.CarbonEventClient;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -14,14 +12,13 @@ import quicktime.std.StdQTException;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
 
+
 /**
  * Note channels are used to play notes. The application
  * can either provide the NoteAllocator component for the NoteChanel
  * or can allow the system to create a default one.
  */
 public final class NoteChannel extends QTObject implements QuickTimeLib {
-
-    private static Object linkage;
 
     /**
      * The smallest microtone is a semitone / 128. This constant expresses that value (1/128).
@@ -33,21 +30,7 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      */
     public static final float kMicroControllerResolution = 0.0078125F;
 
-    private NoteAllocator na;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(NoteChannel.class);
-                    }
-                });
-            }
-        }.establish();
-    }
+    private final NoteAllocator na;
 
     private static int allocate(NoteAllocator paramNoteAllocator, NoteRequest paramNoteRequest) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -68,7 +51,7 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * This constructor will use the system created NoteAllocator, which can
      * be retrieved if required, through the NoteChannel.getNoteAllocator() method
      * once the NoteChannel is created.
-     * QuickTime::NANewNoteChannel
+     * @see "QuickTime::NANewNoteChannel"
      */
     public NoteChannel(int paramInt1, int paramInt2) throws QTException {
         this(new NoteRequest(paramInt1, paramInt2));
@@ -76,34 +59,34 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Creates a new NoteChannel object using the default NoteAllocator
-     * QuickTime::NANewNoteChannel
+     * @see "QuickTime::NANewNoteChannel"
      * @param nr attributes of note request
      */
-    public NoteChannel(NoteRequest paramNoteRequest) throws QTException {
-        this(NoteAllocator.getDefault(), paramNoteRequest);
+    public NoteChannel(NoteRequest nr) throws QTException {
+        this(NoteAllocator.getDefault(), nr);
     }
 
     /**
      * Creates a new NoteChannel object.
-     * QuickTime::NANewNoteChannel
+     * @see "QuickTime::NANewNoteChannel"
      * @param na the NoteAllocator component instance to use
      * @param nr attributes of note request
      */
-    public NoteChannel(NoteAllocator paramNoteAllocator, NoteRequest paramNoteRequest) throws QTException {
-        super(allocate(paramNoteAllocator, paramNoteRequest), QTObject.ID(paramNoteAllocator));
-        this.na = paramNoteAllocator;
+    public NoteChannel(NoteAllocator na, NoteRequest nr) throws QTException {
+        super(allocate(na, nr), QTObject.ID(na));
+        this.na = na;
     }
 
     /**
      * Creates a new NoteChannel object.
-     * QuickTime::NANewNoteChannel
-     * QuickTime::NAStuffToneDescription
+     * @see "QuickTime::NANewNoteChannel"
+     * @see "QuickTime::NAStuffToneDescription"
      * @param na the NoteAllocator component instance to use
      * @param gmNumber the general MIDI number for the desired instrument
      */
-    public NoteChannel(NoteAllocator paramNoteAllocator, int paramInt) throws QTException {
-        super(allocate(paramNoteAllocator, paramInt), QTObject.ID(paramNoteAllocator));
-        this.na = paramNoteAllocator;
+    public NoteChannel(NoteAllocator na, int gmNumber) throws QTException {
+        super(allocate(na, gmNumber), QTObject.ID(na));
+        this.na = na;
     }
 
     NoteChannel(NoteAllocator paramNoteAllocator, int paramInt, Object paramObject) {
@@ -120,9 +103,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the index of the NoteAllocator of the MusicComponent that is used by this NoteChannel.
-     * QuickTime::NAGetNoteChannelInfo
+     * @see "QuickTime::NAGetNoteChannelInfo"
      * @return index
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final int getIndexInfo() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -133,9 +116,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the part number within the NoteChannel's MusicComponent that corresponds to this channel.
-     * QuickTime::NAGetNoteChannelInfo
+     * @see "QuickTime::NAGetNoteChannelInfo"
      * @return part number
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final int getPartInfo() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -146,10 +129,10 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the Music component in use by the note channel.
-     * QuickTime::NAGetNoteChannelInfo
-     * QuickTime::NAGetRegisteredMusicDevice
+     * @see "QuickTime::NAGetNoteChannelInfo"
+     * @see "QuickTime::NAGetRegisteredMusicDevice"
      * @return index
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public MusicComponent getMusicComponent() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -161,7 +144,7 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Will attempt to re-allocate the note channel if it was invalid previously.
-     * QuickTime::NAPrerollNoteChannel
+     * @see "QuickTime::NAPrerollNoteChannel"
      */
     public final void preroll() throws StdQTException {
         StdQTException.checkError(NAPrerollNoteChannel(QTObject.ID(this.na), _ID()));
@@ -169,7 +152,7 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Marks a note channel as available to be stolen.
-     * QuickTime::NAUnrollNoteChannel
+     * @see "QuickTime::NAUnrollNoteChannel"
      */
     public final void unroll() throws StdQTException {
         StdQTException.checkError(NAUnrollNoteChannel(QTObject.ID(this.na), _ID()));
@@ -178,7 +161,7 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
     /**
      * Turns off all currently sounding notes, and resets all controllers to their
      * default values.
-     * QuickTime::NAResetNoteChannel
+     * @see "QuickTime::NAResetNoteChannel"
      */
     public final void reset() throws StdQTException {
         StdQTException.checkError(NAResetNoteChannel(QTObject.ID(this.na), _ID()));
@@ -186,166 +169,166 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Sets the volume on the note channel.
-     * QuickTime::NASetNoteChannelVolume
+     * @see "QuickTime::NASetNoteChannelVolume"
      * @param volume volume value
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setVolume(float paramFloat) throws StdQTException {
-        StdQTException.checkError(NASetNoteChannelVolume(QTObject.ID(this.na), _ID(), QTUtils.X2Fix(paramFloat)));
+    public final void setVolume(float volume) throws StdQTException {
+        StdQTException.checkError(NASetNoteChannelVolume(QTObject.ID(this.na), _ID(), QTUtils.X2Fix(volume)));
     }
 
     /**
      * Modifies the pan controller setting for the note channel.
-     * QuickTime::NASetNoteChannelBalance
+     * @see "QuickTime::NASetNoteChannelBalance"
      * @param balance pan value (-128 left, to 128 right)
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setBalance(int paramInt) throws StdQTException {
-        StdQTException.checkError(NASetNoteChannelBalance(QTObject.ID(this.na), _ID(), paramInt));
+    public final void setBalance(int balance) throws StdQTException {
+        StdQTException.checkError(NASetNoteChannelBalance(QTObject.ID(this.na), _ID(), balance));
     }
 
     /**
      * Plays a musical note with given pitch and velocity.
-     * QuickTime::NAPlayNote
+     * @see "QuickTime::NAPlayNote"
      * @param pitch MIDI pitch values (0 to 127, 60 is middle C)
      * @param velocity velocity of note, where 0 = silence - note off.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void playNoteRaw(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(NAPlayNote(QTObject.ID(this.na), _ID(), paramInt1, paramInt2));
+    public final void playNoteRaw(int pitch, int velocity) throws StdQTException {
+        StdQTException.checkError(NAPlayNote(QTObject.ID(this.na), _ID(), pitch, velocity));
     }
 
     /**
      * Plays a musical note with given pitch and velocity.
      * The microtone resolution is 128 steps (kMicrotonalResolution) per semitone.
-     * QuickTime::NAPlayNote
+     * @see "QuickTime::NAPlayNote"
      * @param noteNumber 0 -&gt; 127 correspond to MIDI note numbers (60 is middle C).
      * @param cents 0 -&gt; 100 correspond to the division of a semitone into 100 logarithmically equal segments.
      * @param velocity velocity of note, where 0 = silence - note off.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void playNoteCents(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        paramInt1 <<= 8;
-        paramInt1 += (int) (1.28F * paramInt2 + 0.5F);
-        playNoteRaw(paramInt1, paramInt3);
+    public final void playNoteCents(int noteNumber, int cents, int velocity) throws StdQTException {
+        noteNumber <<= 8;
+        noteNumber += (int) (1.28F * cents + 0.5F);
+        playNoteRaw(noteNumber, velocity);
     }
 
     /**
      * Plays a musical note with given pitch and velocity.
      * The microtone resolution is 128 steps (kMicrotonalResolution) per semitone.
-     * QuickTime::NAPlayNote
+     * @see "QuickTime::NAPlayNote"
      * @param pitch 1.000 -&gt; 127.999 correspond to MIDI note numbers (60 is middle C).
      * @param velocity velocity of note, where 0 = silence - note off.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void playNote(float paramFloat, int paramInt) throws StdQTException {
-        StdQTException.checkError(NAPlayNote(QTObject.ID(this.na), _ID(), QTUtils.X2ShortFix(paramFloat), paramInt));
+    public final void playNote(float pitch, int velocity) throws StdQTException {
+        StdQTException.checkError(NAPlayNote(QTObject.ID(this.na), _ID(), QTUtils.X2ShortFix(pitch), velocity));
     }
 
     /**
      * Retrieves the current value for the specified controller
      * The micro controller resolution is 128 steps (kMicroControllerResolution) per semitone.
-     * QuickTime::NAGetController
+     * @see "QuickTime::NAGetController"
      * @param controllerNumber which controller
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final float getController(int paramInt) throws StdQTException {
+    public final float getController(int controllerNumber) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(NAGetController(QTObject.ID(this.na), _ID(), paramInt, arrayOfInt));
+        StdQTException.checkError(NAGetController(QTObject.ID(this.na), _ID(), controllerNumber, arrayOfInt));
         return QTUtils.ShortFix2X((short) arrayOfInt[0]);
     }
 
     /**
      * Changes the specified controller to the specified value.
-     * QuickTime::NASetController
+     * @see "QuickTime::NASetController"
      * @param controllerNumber which controller
      * @param controllerValue the new controller value,
-     * 			dealing with raw controller values, which have the full range of a short (-32768 to 32767)
-     * @param {@link quicktime.std.StdQTException}
+     *    dealing with raw controller values, which have the full range of a short (-32768 to 32767)
+     * @throws quicktime.std.StdQTException
      */
-    public final void setControllerRaw(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(NASetController(QTObject.ID(this.na), _ID(), paramInt1, paramInt2));
+    public final void setControllerRaw(int controllerNumber, int controllerValue) throws StdQTException {
+        StdQTException.checkError(NASetController(QTObject.ID(this.na), _ID(), controllerNumber, controllerValue));
     }
 
     /**
      * Changes the specified controller to the specified value.
      * The micro controller resolution is 128 steps (kMicroControllerResolution) per semitone.
-     * QuickTime::NASetController
+     * @see "QuickTime::NASetController"
      * @param controllerNumber which controller
      * @param controllerValue the new controller value, range -128.000 to 127.999
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setController(int paramInt, float paramFloat) throws StdQTException {
-        StdQTException.checkError(NASetController(QTObject.ID(this.na), _ID(), paramInt, QTUtils.X2ShortFix(paramFloat)));
+    public final void setController(int controllerNumber, float controllerValue) throws StdQTException {
+        StdQTException.checkError(NASetController(QTObject.ID(this.na), _ID(), controllerNumber, QTUtils.X2ShortFix(controllerValue)));
     }
 
     /**
      * Returns the value of a knob for the note channel.
-     * QuickTime::NAGetKnob
+     * @see "QuickTime::NAGetKnob"
      * @param knobNumber index or ID of the knob
      * @return the value of the knob
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final int getKnob(int paramInt) throws StdQTException {
+    public final int getKnob(int knobNumber) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NAGetKnob(QTObject.ID(this.na), _ID(), paramInt, arrayOfInt));
+        StdQTException.checkError(NAGetKnob(QTObject.ID(this.na), _ID(), knobNumber, arrayOfInt));
         return arrayOfInt[0];
     }
 
     /**
      * Sets the value of a knob for the note channel.
-     * QuickTime::NASetKnob
+     * @see "QuickTime::NASetKnob"
      * @param knobNumber index or ID of the knob
      * @param knobValue the value of the knob
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setKnob(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(NASetKnob(QTObject.ID(this.na), _ID(), paramInt1, paramInt2));
+    public final void setKnob(int knobNumber, int knobValue) throws StdQTException {
+        StdQTException.checkError(NASetKnob(QTObject.ID(this.na), _ID(), knobNumber, knobValue));
     }
 
     /**
      * Locate the best fitting instrument number for the given ToneDescription.
-     * QuickTime::NAFindNoteChannelTone
+     * @see "QuickTime::NAFindNoteChannelTone"
      * @param td description for instrument fit
      * @return the instrument index of fit
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final int findTone(ToneDescription paramToneDescription) throws StdQTException {
+    public final int findTone(ToneDescription td) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NAFindNoteChannelTone(QTObject.ID(this.na), _ID(), paramToneDescription.getBytes(), arrayOfInt));
+        StdQTException.checkError(NAFindNoteChannelTone(QTObject.ID(this.na), _ID(), td.getBytes(), arrayOfInt));
         return arrayOfInt[0];
     }
 
     /**
-     * Initialises a note channel with an atomic instrument.
-     * QuickTime::NASetAtomicInstrument
+     * Initializes a note channel with an atomic instrument.
+     * @see "QuickTime::NASetAtomicInstrument"
      * @param instrument the AtomicInstrument to set the channel to.
      * @param flags use the set flags from Atomic instrument.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setAtomicInstrument(AtomicInstrument paramAtomicInstrument, int paramInt) throws StdQTException {
-        QTPointerRef localQTPointerRef = paramAtomicInstrument.toQTPointer();
-        int i = NASetAtomicInstrument(QTObject.ID(this.na), _ID(), QTObject.ID(localQTPointerRef), paramInt);
-        if (!paramAtomicInstrument.isLocked())
-            paramAtomicInstrument.unlock();
+    public final void setAtomicInstrument(AtomicInstrument instrument, int flags) throws StdQTException {
+        QTPointerRef localQTPointerRef = instrument.toQTPointer();
+        int i = NASetAtomicInstrument(QTObject.ID(this.na), _ID(), QTObject.ID(localQTPointerRef), flags);
+        if (!instrument.isLocked())
+            instrument.unlock();
         StdQTException.checkError(i);
     }
 
     /**
      * Change the instrument setting to the specified instrument number.
-     * QuickTime::NASetInstrumentNumber
+     * @see "QuickTime::NASetInstrumentNumber"
      * @param instrumentNumber instrument number to apply
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setInstrumentNumber(int paramInt) throws StdQTException {
-        StdQTException.checkError(NASetInstrumentNumber(QTObject.ID(this.na), _ID(), paramInt));
+    public final void setInstrumentNumber(int instrumentNumber) throws StdQTException {
+        StdQTException.checkError(NASetInstrumentNumber(QTObject.ID(this.na), _ID(), instrumentNumber));
     }
 
     /**
      * Get the NoteRequest that corresponds to this NoteChannel.
-     * QuickTime::NAGetNoteRequest
+     * @see "QuickTime::NAGetNoteRequest"
      * @return a new NoteRequest class with the parameters of this NoteChannel
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public final NoteRequest getNoteRequest() throws QTException {
         NoteRequest localNoteRequest = new NoteRequest();
@@ -355,24 +338,21 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Presents a user interface for changing the instrument used by the note channel.
-     * QuickTime::NAPickEditInstrument
+     * @see "QuickTime::NAPickEditInstrument"
      * @param prompt Dialog box prompt "New Instrument..."
      * @param flags flags to limit user options
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void pickEditInstrument(final String prompt, final int flags) throws StdQTException {
+    public final void pickEditInstrument(String prompt, int flags) throws StdQTException {
         int k = 0;
         if (QTSession.isCurrentOS(4)) {
-            k = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                public Object invoke() {
-                    int i = 0;
-                    synchronized (QTNative.globalsLock) {
-                        i = NoteChannel.NAPickEditInstrument(QTObject.ID(NoteChannel.this.na), 0, QTUtils.String2PString(prompt, 255), 0, _ID(), 0, flags);
-                        return new Integer(i);
-                    }
+            k = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int i = 0;
+                synchronized (QTNative.globalsLock) {
+                    i = NoteChannel.NAPickEditInstrument(QTObject.ID(NoteChannel.this.na), 0, QTUtils.String2PString(prompt, 255), 0, _ID(), 0, flags);
+                    return i;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(k);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -383,7 +363,7 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Get the NoteRequest that corresponds to this NoteChannel.
-     * QuickTime::NASendMIDI
+     * @see "QuickTime::NASendMIDI"
      */
     public final void sendMIDI(MusicMIDIPacket paramMusicMIDIPacket) throws StdQTException {
         int i = NASendMIDI(QTObject.ID(this.na), _ID(), paramMusicMIDIPacket.getBytes());
@@ -392,12 +372,12 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     /**
      * Passes sound localization data to a note channel.
-     * QuickTime::NASetNoteChannelSoundLocalization
+     * @see "QuickTime::NASetNoteChannelSoundLocalization"
      * @param slData sound localization data
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setSoundLocalization(SoundLocalization paramSoundLocalization) throws StdQTException {
-        StdQTException.checkError(NASetNoteChannelSoundLocalization(QTObject.ID(this.na), _ID(), QTObject.ID(paramSoundLocalization)));
+    public final void setSoundLocalization(SoundLocalization slData) throws StdQTException {
+        StdQTException.checkError(NASetNoteChannelSoundLocalization(QTObject.ID(this.na), _ID(), QTObject.ID(slData)));
     }
 
     private static int NANewNoteChannel(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
@@ -480,8 +460,3 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
         return MusicManager.NAGetRegisteredMusicDevice(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /NoteChannel.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

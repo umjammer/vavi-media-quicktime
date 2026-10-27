@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
@@ -13,7 +15,8 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
 
     private static final int kNativeSize = 10;
 
-    static final long serialVersionUID = 7513389675945192418L;
+    @Serial
+    private static final long serialVersionUID = 7513389675945192418L;
 
     private static EndianDescriptor ed;
 
@@ -35,6 +38,7 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
         }
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRTrackRefEntry localQTVRTrackRefEntry = new QTVRTrackRefEntry();
@@ -42,11 +46,13 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
         System.arraycopy(localQTVRTrackRefEntry.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRTrackRefEntry localQTVRTrackRefEntry = (QTVRTrackRefEntry) clone();
         paramObjectOutputStream.write(localQTVRTrackRefEntry.getBytes());
     }
 
+    @Override
     protected Object clone() {
         try {
             return new QTVRTrackRefEntry(this.bytes);

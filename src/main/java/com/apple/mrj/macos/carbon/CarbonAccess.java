@@ -5,10 +5,11 @@ import quicktime.QTSession;
 
 
 public class CarbonAccess {
-    public static Object invokeCarbonEventClient(final CarbonEventClient call) {
+    public static Object invokeCarbonEventClient(CarbonEventClient call) {
         class Runner implements Runnable {
             public Object fResult;
 
+            @Override
             public void run() {
                 try {
                     if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() == 65539) {
@@ -21,7 +22,7 @@ public class CarbonAccess {
                     }
                 }
             }
-        };
+        }
 
         Runner runner = new Runner();
         // the toolbox is emulated in Java and thread safe, no need to hop onto the carbon event loop

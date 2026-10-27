@@ -31,7 +31,7 @@ public final class CodecName extends QTPointerRef {
     /**
      * Returns the type name in string.
      * @return the type name.
-     * @return {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public String getTypeName() throws UtilException {
         return getPStringAt(8);
@@ -60,8 +60,3 @@ public final class CodecName extends QTPointerRef {
         return getClass().getName() + "[codec=" + getCodecComponent() + ",cType=" + getCType() + ",name=" + getName() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /CodecName.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

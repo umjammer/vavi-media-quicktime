@@ -5,7 +5,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is used by QuickTime objects that have an action associated
  * with them. When those object's actions are fired they will generate
  * an action event, with those objects as the source of the event,
@@ -24,8 +24,8 @@ public class QTActionEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructs an QTActionEvent object with the specified source object.
      * @param source the object where the event originated
      * @param command the command string for this action event
@@ -35,8 +35,8 @@ public class QTActionEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructs an QTActionEvent object with the specified source object.
      * @param source the object where the event originated
      * @param command the command string for this action event
@@ -49,8 +49,8 @@ public class QTActionEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the command name associated with this action.
      */
     public String getActionCommand() {
@@ -58,8 +58,8 @@ public class QTActionEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the modifiers held down during this action event.
      */
     public int getModifiers() {
@@ -69,8 +69,8 @@ public class QTActionEvent extends EventObject {
     private boolean consume = false;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTActionEvents can be consumed by any of their listeners.
      * If the event is consumed it will not be passed on to
      * any other listeners. Calling this method indicates that
@@ -81,8 +81,8 @@ public class QTActionEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return true if the event is consumed.
      */
     public boolean isConsumed() {
@@ -90,16 +90,11 @@ public class QTActionEvent extends EventObject {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return a String representation of this object.
      */
     public String toString() {
         return getClass().getName() + "[actionCommand=" + this.actionCommand + ",source=" + this.source + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /QTActionEvent.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

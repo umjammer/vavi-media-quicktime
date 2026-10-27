@@ -10,14 +10,14 @@ import quicktime.QTException;
  * method. Thus when this interface's draw method is called, this global state does not
  * have to be reestablished before each drawing operation is performed.
  */
-public abstract interface QDDrawer {
+public interface QDDrawer {
 
     /**
      * A class can draw efficiently on the supplied QDGraphics when this method
      * is called on the QDDrawer object by the QDGraphics.beginDraw method.
      * @param g the QDGraphics that is currently set up to draw upon.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void draw(QDGraphics paramQDGraphics) throws QTException;
+    void draw(QDGraphics paramQDGraphics) throws QTException;
 }
 

@@ -13,10 +13,12 @@ final class MacNativeGraphics extends NativeGraphics {
         this.nd = ((MacDrawingSurface) paramDrawingSurfaceInfo.getSurface());
     }
 
+    @Override
     public final QDGraphics getGWorld() throws NativeGraphicsException {
         return QDGraphics.fromNativeGraphics(this);
     }
 
+    @Override
     int _getWindow() throws NativeGraphicsException {
         throw new NativeGraphicsException("Method NOT IMPLEMENTED");
     }

@@ -30,7 +30,7 @@ import quicktime.util.IntEncodedImage;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * Enables standard java drawing commands and graphics objects to have their content
  * rendered by QuickTime within a QuickTime graphics space. The QTImageDrawer is a parent
  * container for an object that implements the Paintable interface - which is the object that
@@ -78,8 +78,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     private static final boolean isWin = QTSession.isCurrentOS(2);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This flag modifies the behaviour of the multiFrame flag in that
      * it will retain resources that are used between invocations of the
      * attached Paintables paint method. This setting is useful when
@@ -89,7 +89,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      */
     public static final int kMultiFrameRetain = 6;
 
-    private ImagePresenter image;
+    private final ImagePresenter image;
 
     private Dimension mSize;
 
@@ -99,11 +99,11 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
 
     private Graphics offscreenGraphics;
 
-    private Paintable painter;
+    private final Paintable painter;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This creates the QTImageDrawer object which is the parent container of the
      * Paintable object. You supply an initial size - which defines the drawing area
      * that the paintable object has to draw into. Once created a paintable object's
@@ -127,8 +127,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This creates a QTImageDrawer that will grab the pixel data that results from drawing
      * the specified image at its full size. Only single frame java.awt.Images are supported.
      * @param image the java.awt.Image to capture. The size of this image must be known before
@@ -148,8 +148,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This creates a QTImageDrawer that will grab the pixel data that results from a scaled drawing
      * of the specified image at the specified size. Only single frame java.awt.Images are supported.
      * @param image the java.awt.Image to capture.
@@ -168,7 +168,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
 
     private NotifyListener nl;
 
-    private int singleFrameFlag;
+    private final int singleFrameFlag;
 
     private RawEncodedImage rei;
 
@@ -177,8 +177,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     private TwoDSprite sprite;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Paintable object that is the client of the QTImageDrawer.
      * This call may return null if the QTImageDrawer is a singleFrame based
      * capture and the single frame has already been captured.
@@ -189,15 +189,15 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method uses the supplied GraphicsExporter to export
      * the current image that is being presented by the QTImageDrawer
      * and its Paintable client. The GraphicsExporter's output target
      * must be set before this call is made.
      * @param exporter the GraphicsExporter that will be used to export the pixel image
      * @return the number of bytes that were written to the destination of the GraphicsExporter
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int export(GraphicsExporter paramGraphicsExporter) throws QTException {
         QDGraphics localQDGraphics = new QDGraphics(getDescription(), 0);
@@ -205,8 +205,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method uses the supplied GraphicsExporter to export
      * the current image that is being presented by the QTImageDrawer
      * and its Paintable client. The GraphicsExporter's output target
@@ -214,7 +214,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @param exporter the GraphicsExporter that will be used to export the pixel image
      * @param offscreenGWorld the destination QDGraphics that is used to export (ie. the pixel image).
      * @return the number of bytes that were written to the destination of the GraphicsExporter
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int export(GraphicsExporter paramGraphicsExporter, QDGraphics paramQDGraphics) throws QTException {
         if (this.canv == null) {
@@ -275,8 +275,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current size of the offscreen Image that the Painter object
      * will draw into.
      * @return the size
@@ -286,30 +286,32 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns a region that defines the current clipping region for the object.
      * @return the clipping region
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public final Region getClip() throws QTException {
         return this.image.getClip();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets a region that will define the clipping region for the object
      * @param reg the new clipping region
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final void setClip(Region paramRegion) throws StdQTException {
         this.image.setClip(paramRegion);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return an ImagePresenter object from the drawing that has been done
      * by the Paintable object. This will copy the image data that has been created.
      * You will have to have attached the QTImageDrawer
@@ -318,7 +320,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * unless the java.awt.Component is attached to a container with an existing
      * native graphics environment.
      * @return an ImagePresenter object of the drawn java image.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public ImagePresenter toImagePresenter() throws QTException {
         if (this.iData == null) {
@@ -333,24 +335,26 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method should return an ImageDescription that describes
      * the image data that the class contains.
      * @return the ImageDescription of an Image
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public ImageDescription getDescription() throws QTException {
         return this.image.getDescription();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the actual image data.
      * @return the image data
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized EncodedImage getImage() throws QTException {
         if (this.iData == null)
             return this.rei;
@@ -358,32 +362,34 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public final Matrix getMatrix() throws StdQTException {
         return this.image.getMatrix();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method assigns a mapping matrix to the sequence.
-     * QuickTime::SetDSequenceMatrix
+     * @see "QuickTime::SetDSequenceMatrix"
      * @param matrix a Matrix object that specifies how to transform the image during
      *                 decompression
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public final void setMatrix(Matrix paramMatrix) throws QTException {
         this.image.setMatrix(paramMatrix);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
@@ -394,64 +400,69 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the original size
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @see ()
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         return this.image.getOriginalSize();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
      */
+    @Override
     public final QDGraphics getGWorld() {
         return this.image.getGWorld();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
         this.image.setGWorld(paramQDGraphics);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to tell the client to adjust its
      * location, width and/or height. All values are in pixels.
      *
      * @param bounds the new size and location.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
         this.image.setDisplayBounds(paramQDRect);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setLocation(int paramInt1, int paramInt2) throws QTException {
         QDRect localQDRect = getDisplayBounds();
         localQDRect.setX(paramInt1);
@@ -460,20 +471,21 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to ask the client for its boundary.
      * All values are in pixels.
      *
      * @return the boundary of the client
      */
+    @Override
     public QDRect getDisplayBounds() {
         return this.image.getDisplayBounds();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
@@ -484,9 +496,10 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * have the Paintable client repaint itself then you must set the
      * redrawing flag to true.
      * @param invalidRgn the invalidRgn that the client should redraw
-     * @param {@link quicktime.QTException}
-     * @see {@link quicktime.app.image.QTImageDrawer#setRedrawing(boolean)}
+     * @throws quicktime.QTException
+     * @see quicktime.app.image.QTImageDrawer#setRedrawing(boolean)
      */
+    @Override
     public synchronized void redraw(Region paramRegion) throws QTException {
         if ((this.iData == null) && (this.rei == null))
             return;
@@ -507,42 +520,45 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If true then the redraw method of the object will fetch new image data
      * from its image source.
      * @param redrawFlag boolean determining whether the current image is redrawn (false)
      *  of fresh or updated image data is first retrieved (true).
      */
+    @Override
     public void setRedrawing(boolean paramBoolean) {
         this.mRedrawFlag = paramBoolean;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the Redrawable only has a single frame to render and thus
      * will never need to re-acquire or redraw its image. Certain Redrawable objects
      * are able to optimise their resources knowing this constraint.
      * @return a boolean
      */
+    @Override
     public boolean isSingleFrame() {
         return this.singleFrameFlag == 1;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the image data may be altered or different upon different calls
      * of the redraw method of the QTDrawable interface
      */
+    @Override
     public boolean isRedrawing() {
         return this.mRedrawFlag;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used to paint the painter object's image and to grab
      * the resulting pixels into a format that the QTImageDrawer can then
      * draw using the quicktime drawing commands. It returns a Region
@@ -550,7 +566,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * the call. It will call the Paintable's paint method.
      * @return a Region or null if the QTImageDrawer does not yet have an
      *  offscreen java.awt.Image object to paint too.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region prepaint() throws QTException {
         if (this.offscreenImage == null) {
@@ -563,19 +579,19 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
             }
             Rectangle[] arrayOfRectangle = this.painter.paint(this.offscreenGraphics);
             if (arrayOfRectangle != null) {
-                for (int i = 0; i < arrayOfRectangle.length; i++) {
-                    if (arrayOfRectangle[i] == null)
+                for (Rectangle rectangle : arrayOfRectangle) {
+                    if (rectangle == null)
                         break;
-                    int j = arrayOfRectangle[i].x;
-                    int k = arrayOfRectangle[i].y;
-                    int m = arrayOfRectangle[i].width > this.mSize.width ? this.mSize.width : arrayOfRectangle[i].width;
-                    int n = arrayOfRectangle[i].height > this.mSize.height ? this.mSize.height : arrayOfRectangle[i].height;
+                    int j = rectangle.x;
+                    int k = rectangle.y;
+                    int m = Math.min(rectangle.width, this.mSize.width);
+                    int n = Math.min(rectangle.height, this.mSize.height);
                     PixelGrabber localPixelGrabber = new PixelGrabber(this.offscreenImage, j, k, m, n, this.iData.getInts(), k * this.mSize.width + j, this.mSize.width);
                     localPixelGrabber.grabPixels();
                     if (localRegion == null) {
-                        localRegion = new Region(new QDRect(arrayOfRectangle[i].x, arrayOfRectangle[i].y, arrayOfRectangle[i].width, arrayOfRectangle[i].height));
+                        localRegion = new Region(new QDRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                     } else
-                        localRegion = localRegion.union(new QDRect(arrayOfRectangle[i].x, arrayOfRectangle[i].y, arrayOfRectangle[i].width, arrayOfRectangle[i].height));
+                        localRegion = localRegion.union(new QDRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                 }
             }
         } catch (InterruptedException localInterruptedException) {
@@ -593,23 +609,25 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This sets the GraphicsMode for the Compositor when it draws its composited
      * contents to its destination QDGraphics (typically the QTCanvas).
      * @param mode Specifies the graphics mode.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setGraphicsMode(GraphicsMode paramGraphicsMode) throws QTException {
-        this.image.setGraphicsMode(paramGraphicsMode);
+    @Override
+    public void setGraphicsMode(GraphicsMode gMode) throws QTException {
+        this.image.setGraphicsMode(gMode);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This gets the current GraphicsMode for the compositor.
      * @return a Graphics mode object
      */
+    @Override
     public GraphicsMode getGraphicsMode() {
         return this.image.getGraphicsMode();
     }
@@ -620,7 +638,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
             super(paramTwoDSprite);
         }
 
-        public boolean tickle(float paramFloat, int paramInt) throws QTException {
+        @Override
+        public boolean tickle(float er, int t) throws QTException {
             if (QTImageDrawer.this.iData != null) {
                 if (QTImageDrawer.this.isRedrawing()) {
                     QTImageDrawer.this.redraw(null);
@@ -632,8 +651,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -656,26 +675,28 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @return an Invalidator or null if invalidation is not required
      * @see quicktime.app.display.SWCompositor
      */
+    @Override
     public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) {
         this.sprite = paramTwoDSprite;
         return isSingleFrame() ? null : new RedrawInvalidator(paramTwoDSprite);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
      * @param c the SWCompositor it is being removed from
      */
+    @Override
     public void removedFromCompositor(SWCompositor paramSWCompositor) {
         this.sprite = null;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest. If the object is a kind of
@@ -685,6 +706,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public synchronized void addedTo(Object paramObject) {
         if ((paramObject instanceof Component)) {
             if (this.canv != null)
@@ -698,8 +720,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest. If the object is a kind of
@@ -708,6 +730,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void removedFrom(Object paramObject) {
         if ((paramObject instanceof Component)) {
             this.canv = null;
@@ -716,25 +739,21 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This registers the deferred listener.
      * @param nl the NotifyListener that is interested in something from this Notifier
      * @return true if the Notifer is an appropriate Notifier for the Listener
      */
-    public boolean addNotifyListener(NotifyListener paramNotifyListener) {
-        this.nl = paramNotifyListener;
-        if (!paramNotifyListener.setNotifier(this)) {
-            paramNotifyListener = null;
+    @Override
+    public boolean addNotifyListener(NotifyListener nl) {
+        this.nl = nl;
+        if (!nl.setNotifier(this)) {
+            nl = null;
             return false;
         }
         if (this.canv != null)
-            paramNotifyListener.notifyComplete();
+            nl.notifyComplete();
         return true;
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /QTImageDrawer.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

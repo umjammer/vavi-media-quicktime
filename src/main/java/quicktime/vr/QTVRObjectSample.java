@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.qd.QDPoint;
@@ -70,7 +72,8 @@ public final class QTVRObjectSample extends QTVRAtom {
      */
     public static final short kAbsoluteUI = 5;
 
-    static final long serialVersionUID = 8513787618060671940L;
+    @Serial
+    private static final long serialVersionUID = 8513787618060671940L;
 
     private static EndianDescriptor ed;
 
@@ -89,10 +92,12 @@ public final class QTVRObjectSample extends QTVRAtom {
         super(paramArrayOfByte, kNativeSize);
     }
 
+    @Override
     protected int getNativeSize() {
         return kNativeSize;
     }
 
+    @Override
     protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRObjectSample localQTVRObjectSample = new QTVRObjectSample();
@@ -100,6 +105,7 @@ public final class QTVRObjectSample extends QTVRAtom {
         System.arraycopy(localQTVRObjectSample.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Override
     protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRObjectSample localQTVRObjectSample = (QTVRObjectSample) clone();
         paramObjectOutputStream.write(localQTVRObjectSample.getBytes());
@@ -108,6 +114,7 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         try {
             return new QTVRObjectSample(this.bytes);

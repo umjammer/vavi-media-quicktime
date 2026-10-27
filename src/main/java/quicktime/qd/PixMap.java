@@ -31,25 +31,20 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      */
     public static final int kNativeSize = 50;
 
-    private boolean isOff;
+    private final boolean isOff;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(PixMap.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(PixMap.class));
             }
         }.establish();
     }
 
     /**
      * A PixMap object which describes the pixels in the QDGraphics.
-     * QuickTime::GetGWorldPixMap()
+     * @see "QuickTime::GetGWorldPixMap()"
      * @return a PixMap object
      * @see quicktime.std.qd.QDGraphics#getPixMap
      */
@@ -61,7 +56,7 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
 
     /**
      * A PixMap object which describes the pixels in the QDGraphics.
-     * QuickTime::GetGWorldPixMap()
+     * @see "QuickTime::GetGWorldPixMap()"
      * @param g the QDGraphics object
      * @return a PixMap object
      * @see quicktime.std.qd.QDGraphics#getPixMap
@@ -81,11 +76,11 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
 
     /**
      * A PixMap object which describes the Matte of a Track.
-     * QuickTime::GetTrackMatte()
+     * @see "QuickTime::GetTrackMatte()"
      * @param t the Track object
      * @return a PixMap object, or null if no matte set
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.movies.Track#getMatte()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.movies.Track#getMatte()
      */
     public static PixMap fromTrack(Track paramTrack) throws StdQTException {
         int i = 0;
@@ -153,9 +148,9 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      */
     public QDRect getBounds() {
         if (QTSession.isCurrentOS(4)) {
-            Object localObject = new QDRect();
-            GetPixBounds(_ID(), ((QDRect) localObject).getBytes());
-            return (QDRect) localObject;
+            QDRect localObject = new QDRect();
+            GetPixBounds(_ID(), localObject.getBytes());
+            return localObject;
         }
         Object localObject = new byte[8];
         getBytesAt(6, 8, (byte[]) localObject, 0);
@@ -175,10 +170,12 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
         return ColorTable.fromPixMap(this);
     }
 
+    @Override
     protected void doLock() {
         LockPixels(_ID());
     }
 
+    @Override
     protected void doUnlock() {
         UnlockPixels(_ID());
     }
@@ -224,8 +221,3 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
         return QuickDrawManager.GetPixBounds(paramInt, paramArrayOfByte);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/PixMap
- * .class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

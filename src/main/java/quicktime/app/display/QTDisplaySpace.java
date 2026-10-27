@@ -5,7 +5,7 @@ import quicktime.app.image.Transformable;
 import quicktime.app.spaces.Space;
 
 /**
- * Deprecated.
+ * @deprecated
  * This interface defines the minimum API that a QTDisplay space provides.
  * That is, a QTDisplaySpace is some kind of QTDrawable so can be set as a
  * client for a QTCanvas.
@@ -24,32 +24,32 @@ import quicktime.app.spaces.Space;
  * display matrix. As such the QTDisplaySpace also provides an API for retrieving a
  * member's Transformable interface that allows a member to get and set its display
  * matrix.
- * @see {@link quicktime.app.image.Transformable},
+ * @see quicktime.app.image.Transformable,
  * {@link quicktime.app.display.Layerable}
  */
-public abstract interface QTDisplaySpace extends QTDrawable, Space {
+public interface QTDisplaySpace extends QTDrawable, Space {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the layer of the frontmost member in the display space.
      * @return an int
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract int getFrontLayer() throws QTException;
+    int getFrontLayer() throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the layer of the backmost member in the display space.
      * @return an int
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract int getBackLayer() throws QTException;
+    int getBackLayer() throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Layerable object for a member (or null if the Object is not a member)
      * that allows the application to get and set the layer of a member. This may or may
      * not be the member itself, depending both on the type of the object of the member
@@ -57,11 +57,11 @@ public abstract interface QTDisplaySpace extends QTDrawable, Space {
      * @param member the member
      * @return a Layerable object to interact with the display layer of a member.
      */
-    public abstract Layerable getLayerable(Object paramObject);
+    Layerable getLayerable(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Transformable object that represents the member in the DisplaySpace.
      * The Transformable object allows the application to get and set the TwoD display
      * characteristics of a member (position, size, rotation, skewing, perspective).
@@ -72,24 +72,24 @@ public abstract interface QTDisplaySpace extends QTDrawable, Space {
      * @return a Transformable object that allows the application to manipulate the two d
      *  display characteristics of the member or null if the object is not a member.
      */
-    public abstract Transformable getTransformable(Object paramObject);
+    Transformable getTransformable(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Adds a member to the QTDisplaySpace at the specified layer. If the member is
      * not an appropriate type of object for the Space this method returns false and the
      * member is not added.
      * @param member the member to add to the Display Space
      * @param layer the layer of the member when added.
      * @return true if the member was appropriate and was added to the space, otherwise false
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract boolean addMember(Object paramObject, int paramInt) throws QTException;
+    boolean addMember(Object paramObject, int paramInt) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return the frontmost object that is located at the specified coordinates.
      * Hit test coordinates will take into account the location of the space
      * thus if the space is at 50, 50 and an object is located in the top,left
@@ -98,8 +98,8 @@ public abstract interface QTDisplaySpace extends QTDrawable, Space {
      * @param x the x coordinate
      * @param y the y coordinate
      * @return an Object at that coordinate or null if no object at specified coordinate
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract Object hitTest(int paramInt1, int paramInt2) throws QTException;
+    Object hitTest(int paramInt1, int paramInt2) throws QTException;
 }
 

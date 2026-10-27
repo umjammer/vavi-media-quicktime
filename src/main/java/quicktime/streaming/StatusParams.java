@@ -25,12 +25,7 @@ public class StatusParams extends QTPointerRef implements PrimitivesLib {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(StatusParams.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(StatusParams.class));
             }
         }
         new PrivelegedAction().establish();

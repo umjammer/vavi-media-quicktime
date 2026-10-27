@@ -6,7 +6,7 @@ package quicktime.jdirect;
  * static field of type Object, that is initialized in its static
  * initializer by calling JDirectLinker.loadLibrary.
  */
-public abstract interface QuickDraw3DLib extends SharedLibrary {
+public interface QuickDraw3DLib extends SharedLibrary {
 
-    public static final Object libraryInstance = QTNative.load3D();
+    Object libraryInstance = QTNative.load3D();
 }

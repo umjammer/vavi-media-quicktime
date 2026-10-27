@@ -37,6 +37,7 @@ public final class QTMIDIPort extends SynthesizerConnections {
     /**
      * Return a copy of this object.
      */
+    @Override
     public Object clone() {
         return new QTMIDIPort(this.bytes);
     }

@@ -26,12 +26,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Polygon.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Polygon.class));
             }
         }.establish();
     }
@@ -60,7 +55,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Allocates a new empty Polygon.
-     * QuickDraw::OpenPoly
+     * @see "QuickDraw::OpenPoly"
      */
     public Polygon(QDGraphics paramQDGraphics) throws QTException {
         super(allocate(paramQDGraphics), null, false);
@@ -80,7 +75,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Completes the collection of lines that define the polygon.
-     * QuickDraw::ClosePoly
+     * @see "QuickDraw::ClosePoly"
      */
     public void close() throws QDException {
         if (this.gw != null) {
@@ -100,6 +95,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
      * Returns size of the Polygon.
      * @return the size of the handle
      */
+    @Override
     public int getSize() {
         return getShortAt(0);
     }
@@ -125,7 +121,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
     /**
      * Copies the mathematical structure of the implicit Polygon into a newly created Polygon.
      * @return A new Polygon copy.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Polygon copy() throws QTException {
         return new Polygon(makeAndCopyHandle());
@@ -133,9 +129,10 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Copies the mathematical structure of the implicit Polygon into a newly created Polygon.
-     * QuickDraw::Copy
+     * @see "QuickDraw::Copy"
      * @return A new Polygon copy.
      */
+    @Override
     public Object clone() {
         try {
             return copy();
@@ -160,10 +157,10 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
      * is to the right and down; if either is negative, the corresponding movement is in the opposite
      * direction. The Polygon retains its size and shape. This doesnÕt affect the screen unless
      * you subsequently redraw the polygon.
-     * QuickDraw::OffsetPoly()
+     * @see "QuickDraw::OffsetPoly()"
      * @param dh The horizontal distance to move the polygon.
      * @param dv The vertical distance to move the polygon.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      */
     public void offset(int paramInt1, int paramInt2) throws QDException {
         OffsetPoly(_ID(), (short) paramInt1, (short) paramInt2);

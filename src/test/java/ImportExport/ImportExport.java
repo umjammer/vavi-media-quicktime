@@ -1,4 +1,5 @@
 package ImportExport;
+
 import java.awt.Button;
 import java.awt.Component;
 import java.awt.FileDialog;
@@ -25,7 +26,8 @@ import quicktime.std.qtcomponents.MovieExporter;
 
 
 public class ImportExport extends Frame implements StdQTConstants, IOConstants, Errors {
-    public static void main(String args[]) {
+
+    static void main(String[] args) {
         try {
             QTSession.open();
             ImportExport ie = new ImportExport("Import Export");
@@ -42,35 +44,25 @@ public class ImportExport extends Frame implements StdQTConstants, IOConstants, 
         super(title);
 
         Button importBtn = new Button("Import Media");
-        importBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                importMedia();
-            }
-        });
+        importBtn.addActionListener(ae -> importMedia());
 
         add(importBtn, "North");
         Button refMovieButton = new Button("Reference Movie");
-        refMovieButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                makeReferenceMovie();
-            }
-        });
+        refMovieButton.addActionListener(ae -> makeReferenceMovie());
         add(refMovieButton, "Center");
 
         Button exportButton = new Button("Export Movie");
-        exportButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                exportMovie();
-            }
-        });
+        exportButton.addActionListener(ae -> exportMovie());
         add(exportButton, "South");
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -226,12 +218,14 @@ public class ImportExport extends Frame implements StdQTConstants, IOConstants, 
     }
 
     static class Runner implements Runnable {
+
         Runner(Movie mov) {
             theInputMovie = mov;
         }
 
         Movie theInputMovie;
 
+        @Override
         public void run() {
             try {
                 // this determines both the exporter type, the resulting file
@@ -281,11 +275,9 @@ public class ImportExport extends Frame implements StdQTConstants, IOConstants, 
                     // create the output file but don't open it
                     outFile.createMovieFile(kMoviePlayer, createMovieFileDeleteCurFile);
                     // set a progress proc - we just print out to System.out
-                    theMovieExp.setProgressProc(new MovieProgress() {
-                        public int execute(Movie mov, int message, int whatOperation, float percentDone) {
-                            System.out.println(mov + ",message=" + Integer.toHexString(message) + "," + ",what=" + Integer.toHexString(whatOperation) + ",%=" + percentDone);
-                            return 0;
-                        }
+                    theMovieExp.setProgressProc((MovieProgress) (mov, message, whatOperation, percentDone) -> {
+                        System.out.println(mov + ",message=" + Integer.toHexString(message) + "," + ",what=" + Integer.toHexString(whatOperation) + ",%=" + percentDone);
+                        return 0;
                     });
                     // do the export of the movie
                     theMovieExp.toFile(outFile, theInputMovie, null, 0, theInputMovie.getDuration());

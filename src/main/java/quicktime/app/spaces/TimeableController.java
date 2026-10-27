@@ -3,7 +3,7 @@ package quicktime.app.spaces;
 import quicktime.app.time.Timeable;
 
 /**
- * Deprecated.
+ * @deprecated
  * A TimeableController is a controller that provides its own TimeBase
  * thus allowing it to have an independent sense of time from the Space
  * to which it is attached. When a TimableController is added to a Space
@@ -14,6 +14,6 @@ import quicktime.app.time.Timeable;
  * parent Space and its TimeableController, whilst still allowing the
  * TimeableController to provide its own rate and control of its time-line.
  */
-public abstract interface TimeableController extends Timeable, Controller {
+public interface TimeableController extends Timeable, Controller {
 }
 

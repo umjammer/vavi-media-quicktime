@@ -27,7 +27,7 @@ import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
 
 /**
- * Deprecated.
+ * @deprecated
  * A specialized canvas which supplies access to the native graphics environment
  * and offers expanded functionality to control its viewing or display size.
  * The QTCanvas object can display any object which implements the Drawable interface.
@@ -124,16 +124,16 @@ public class QTCanvas extends Canvas {
     private static int canvasCount = 0;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client should maintain the aspect size of its original dimensions
      * but grow bigger by integral increments (2x, 3x, 4x, etc.)
      */
     public static final int kIntegralResize = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client should revert to its initially specified size. The client
      * can be made smaller (using an aspect setting) but can be no larger than its initial size. The QTCanvas
      * takes this initial size as the best viewing size for its client.
@@ -141,48 +141,48 @@ public class QTCanvas extends Canvas {
     public static final int kInitialSize = 2;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client can be resized to any size >= the minimum and <=
      * the maximum.
      */
     public static final int kFreeResize = 3;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client can be resized to any size which preserves the
      * initial aspect ratio.
      */
     public static final int kAspectResize = 4;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag if the client can be resized to any size which is a factor of
      * 2 of the initial size.
      */
     public static final int kPerformanceResize = 5;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag to allow the client's horizontal aspect to be any size, but the vertical
      * axis will be the intial size of smaller. This is a good setting for QT VR content.
      */
     public static final int kHorizontalResize = 6;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag to allow the client's vertical aspect to be any size, but the horizontal
      * axis will be the intial size of smaller.
      */
     public static final int kVerticalResize = 7;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use this flag specify that the client cannot be resized
      */
     public static final int kInitialSizeNoResize = 8;
@@ -191,11 +191,11 @@ public class QTCanvas extends Canvas {
 
     private transient Vector<?> mControllers;
 
-    private QTCanvasHelper qtcHelper;
+    private final QTCanvasHelper qtcHelper;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructor for creating a client-less QTCanvas. Default settings are:
      */
     public QTCanvas() {
@@ -203,8 +203,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructor for creating a client-less QTCanvas.
      * @param resizeFlag the resize control setting
      * @param xAlignment a value between 0 and 1 that sets the position of the drawable client within the
@@ -259,7 +259,7 @@ public class QTCanvas extends Canvas {
 
     transient NativeGraphics ng = null;
 
-    private transient long msecs = 0L;
+    private final transient long msecs = 0L;
 
     transient boolean deferResize = false;
 
@@ -268,8 +268,8 @@ public class QTCanvas extends Canvas {
     boolean isWin = QTSession.isCurrentOS(2);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will return a QTJava object, QDGraphics, which is a reference to
      * the native graphics drawing environment being used by this QTCanvas object.
      * If the canvas is invisible it will return an offscreen QDGraphics that will never
@@ -288,13 +288,13 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the coordinates of a component relative to the NativeGrapics
      * window it is currently placed within.
      * @return a Point object representing the location of the QTCanvas in the native graphics environment
-     * @return {@link quicktime.QTUnknownOSException}
-     * @return {@link quicktime.qd.NativeGraphicsException}
+     * @throws quicktime.QTUnknownOSException
+     * @throws quicktime.qd.NativeGraphicsException
      */
     public final Point getNGLocation() throws QTUnknownOSException, NativeGraphicsException {
         if ((this.qtcHelper.mClient instanceof QTDrawable)) {
@@ -304,8 +304,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the NativeGrapics object that represents the Graphics Port that corresponds
      * to the display space taken up by the QTCanvas. It may return null if there is currently
      * no native graphics environment
@@ -316,16 +316,16 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * An incoming point (typically from some kind of MouseEvent) is in coordinates that have their origin
      * set at the local coordinate system of the canvas. This method converts those coordinates into
      * the native graphics location that is the coordinate system of the canvas' client.
      * @param x the x location
      * @param y the y location
      * @return a QDPoint that translates the x and y into the NativeGraphics coordinate system.
-     * @return {@link quicktime.QTUnknownOSException}
-     * @return {@link quicktime.qd.NativeGraphicsException}
+     * @throws quicktime.QTUnknownOSException
+     * @throws quicktime.qd.NativeGraphicsException
      */
     public final QDPoint translatePoint(int paramInt1, int paramInt2) throws QTUnknownOSException, NativeGraphicsException {
         Point localPoint = getNGLocation();
@@ -333,8 +333,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes the client from the canvas.
      */
     public final synchronized void removeClient() {
@@ -343,8 +343,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Associates a new client, a Drawable object, with this QTCanvas.
      * The flag determines if awt will perform a layout and how the client will be integrated
      * with the canvas. If the flag is false then the new client will take on the current size and
@@ -362,15 +362,15 @@ public class QTCanvas extends Canvas {
      * @param layoutFlag if true java.awt will re-layout the canvas, if false the client will fit
      *  into the existing state (display size, etc) of the canvas, disregarding any resize that might
      *  have occured to honour the layout flag setting with respect to the different size of the new client.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void setClient(Drawable paramDrawable, boolean paramBoolean) throws QTException {
         this.qtcHelper.doSetClient(paramDrawable, paramDrawable != null ? paramDrawable.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), paramBoolean);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Associates a new client, a Drawable object, with this QTCanvas. It will use existing
      * alignment and resize restrictions.
      *
@@ -380,15 +380,15 @@ public class QTCanvas extends Canvas {
      * QTException or subclass - there was a problem within QuickTime itself in dealing with this client
      * @param client a Drawable object - if null the method will remove the client
      * @param initialBounds the best size of the client
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public synchronized void setClient(Drawable paramDrawable, QDRect paramQDRect) throws QTException {
         this.qtcHelper.doSetClient(paramDrawable, paramQDRect, getMinimumSize(), getMaximumSize(), true);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Drawable object currently associated with this QTCanvas.
      * @return a Drawable object
      */
@@ -403,26 +403,10 @@ public class QTCanvas extends Canvas {
     void setInitialWidthAndHeight(QDRect paramQDRect, Dimension paramDimension1, Dimension paramDimension2) {
         this.initialWidth = paramQDRect.getWidth();
         this.initialHeight = paramQDRect.getHeight();
-        if (paramDimension1.width < 0)
-            this.minWidth = 0;
-        else {
-            this.minWidth = paramDimension1.width;
-        }
-        if (paramDimension1.height < 0)
-            this.minHeight = 0;
-        else {
-            this.minHeight = paramDimension1.height;
-        }
-        if (paramDimension2.width < this.minWidth)
-            this.maxWidth = this.minWidth;
-        else {
-            this.maxWidth = paramDimension2.width;
-        }
-        if (paramDimension2.height < this.minHeight)
-            this.maxHeight = this.minHeight;
-        else {
-            this.maxHeight = paramDimension2.height;
-        }
+        this.minWidth = Math.max(paramDimension1.width, 0);
+        this.minHeight = Math.max(paramDimension1.height, 0);
+        this.maxWidth = Math.max(paramDimension2.width, this.minWidth);
+        this.maxHeight = Math.max(paramDimension2.height, this.minHeight);
         if (this.initialWidth < this.minWidth) {
             this.initialWidth = this.minWidth;
         } else if (this.initialWidth > this.maxWidth) {
@@ -450,8 +434,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the alignment position values. The alignment values must be between 0.0
      * and 1.0. Values out of this range will be reset to either 0.0 or 1.0, whichever
      * is closest to the given argument.
@@ -475,7 +459,7 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @see * @deprecated since QTJava 6.1
      */
     public final void setAlignmentX(float paramFloat) {
@@ -483,51 +467,45 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @see * @deprecated since QTJava 6.1
      */
     public final void setAlignmentY(float paramFloat) {
         setAlignment(getAlignmentX(), paramFloat);
     }
 
-    private final void setAlignmentValues(float paramFloat1, float paramFloat2) {
+    private void setAlignmentValues(float paramFloat1, float paramFloat2) {
         if (paramFloat1 > 1.0F) {
             this.xAlignment = 1.0F;
-        } else if (paramFloat1 < 0.0F)
-            this.xAlignment = 0.0F;
-        else {
-            this.xAlignment = paramFloat1;
-        }
+        } else this.xAlignment = Math.max(paramFloat1, 0.0F);
         if (paramFloat2 > 1.0F) {
             this.yAlignment = 1.0F;
-        } else if (paramFloat2 < 0.0F)
-            this.yAlignment = 0.0F;
-        else {
-            this.yAlignment = paramFloat2;
-        }
+        } else this.yAlignment = Math.max(paramFloat2, 0.0F);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the x position alignment being used.
      */
+    @Override
     public float getAlignmentX() {
         return this.xAlignment;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the y position alignment being used.
      */
+    @Override
     public float getAlignmentY() {
         return this.yAlignment;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Reset the resize flag and re-layout the component.
      * @param rFlag the new value for the resizeFlag
      */
@@ -539,8 +517,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the resize flag being used.
      * @return the resize flag value
      */
@@ -549,13 +527,14 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the minimum size of the QTCanvas. If the QTCanvas is currently smaller
      * than the minimum size passed in, it will be adjusted to meet the new minimum
      * size requirements, in accordance with the setting of the resizeFlag.
      * @param minSize a Dimension object
      */
+    @Override
     public void setMinimumSize(Dimension paramDimension) {
         if (paramDimension == null) {
             setMinimumSize(0, 0);
@@ -565,41 +544,34 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the minimum size of the canvas.
      * @param width the minimum width
      * @param height the minimum height
      */
     public void setMinimumSize(int paramInt1, int paramInt2) {
-        if (paramInt1 < 0)
-            this.minWidth = 0;
-        else {
-            this.minWidth = paramInt1;
-        }
-        if (paramInt2 < 0)
-            this.minHeight = 0;
-        else {
-            this.minHeight = paramInt2;
-        }
+        this.minWidth = Math.max(paramInt1, 0);
+        this.minHeight = Math.max(paramInt2, 0);
         if ((this.currentWidth < this.minWidth) || (this.currentHeight < this.minHeight)) {
             doParentLayout();
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the minimum acceptable size of this QTCanvas object.
      * @return a Dimension object which defines the minimum size
      */
+    @Override
     public Dimension getMinimumSize() {
         return new Dimension(this.minWidth, this.minHeight);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the best size of the client, the size of the client when it was set to this QTCanvas, or
      * the size if the appliction notified the QTCanvas that the clien't best size was changed.
      * This may not be the size of the display space of the
@@ -612,8 +584,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used by an appliction to notify a QTCanvas that the best size of its' current
      * client has changed. This is typically the initial or actual size of the client before
      * any matrix transforamations have been applied to the client.
@@ -636,8 +608,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used by an appliction to notify a QTCanvas that the best size of its' current
      * client has changed. This is typically the initial or actual size of the client before
      * any matrix transforamations have been applied to the client.
@@ -658,16 +630,8 @@ public class QTCanvas extends Canvas {
      */
     public void clientChanged(int paramInt1, int paramInt2) {
         Rectangle localRectangle = new Rectangle(getLocation(), new Dimension(this.initialWidth, this.initialHeight));
-        if (paramInt1 < 0)
-            this.initialWidth = 0;
-        else {
-            this.initialWidth = paramInt1;
-        }
-        if (paramInt2 < 0)
-            this.initialHeight = 0;
-        else {
-            this.initialHeight = paramInt2;
-        }
+        this.initialWidth = Math.max(paramInt1, 0);
+        this.initialHeight = Math.max(paramInt2, 0);
         if (!this.appHasSetPreferredSize) {
             this.prefWidth = this.initialWidth;
             this.prefHeight = this.initialHeight;
@@ -676,22 +640,24 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the preferred size of the QTCanvas object. If you haven't explicitly set the preferred
      * size of the canvas this will be the initial size of the canvas' client.
      * @return a Dimension object which defines the preferred size
      */
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(this.prefWidth, this.prefHeight);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the preferred size of the QTCanvas object.
      * @return a Dimension object which defines the preferred size
      */
+    @Override
     public void setPreferredSize(Dimension paramDimension) {
         if (paramDimension == null) {
             setPreferredSize(this.initialWidth, this.initialHeight);
@@ -701,8 +667,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the preferred size of the QTCanvas object.
      * Passing in values of less than zero for width and height will reset the behaviour of the QTCanvas
      * to retrieve the preferred size as the initial size of the current or new client
@@ -731,24 +697,26 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * We override this method so that QTCanvas can gain the focus immediately
      * @return true, this component is focus-traversable
      */
+    @Override
     public boolean isFocusTraversable() {
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the minimum size of the QTCanvas. If the QTCanvas is currently larger
      * than the maximum size passed in, it will be adjusted to meet the new maximum
      * size requirements, in accordance with the setting of the resizeFlag.
      * If null is passed in, maximum size will be the size of the screen
      * @param maxSize a Dimension object
      */
+    @Override
     public void setMaximumSize(Dimension paramDimension) {
         if (paramDimension == null) {
             Dimension localDimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -759,34 +727,27 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the maximum size of the canvas.
      * @param width the minimum width
      * @param height the minimum height
      */
     public void setMaximumSize(int paramInt1, int paramInt2) {
-        if (paramInt1 < 0)
-            this.maxWidth = 0;
-        else {
-            this.maxWidth = paramInt1;
-        }
-        if (paramInt2 < 0)
-            this.maxHeight = 0;
-        else {
-            this.maxHeight = paramInt2;
-        }
+        this.maxWidth = Math.max(paramInt1, 0);
+        this.maxHeight = Math.max(paramInt2, 0);
         if ((this.currentWidth > this.maxWidth) || (this.currentHeight > this.maxHeight)) {
             doParentLayout();
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the maximum acceptable size of this QTCanvas object.
      * @return a Dimension object which defines the maximum size
      */
+    @Override
     public Dimension getMaximumSize() {
         return new Dimension(this.maxWidth, this.maxHeight);
     }
@@ -801,8 +762,8 @@ public class QTCanvas extends Canvas {
         } else if (paramInt2 > this.maxHeight) {
             paramInt2 = this.maxHeight;
         }
-        float f1 = paramInt1 / (this.initialWidth < 1 ? 1 : this.initialWidth);
-        float f2 = paramInt2 / (this.initialHeight < 1 ? 1 : this.initialHeight);
+        float f1 = paramInt1 / (Math.max(this.initialWidth, 1));
+        float f2 = paramInt2 / (Math.max(this.initialHeight, 1));
         int i;
         int j;
         if (f1 < f2) {
@@ -986,7 +947,7 @@ public class QTCanvas extends Canvas {
         }
     }
 
-    private final void setCurrentXY(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    private void setCurrentXY(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         int i = paramInt3 - this.currentWidth;
         if (i < 0) {
             i = 0;
@@ -1000,39 +961,42 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Resizes the QTCanvas object to the specified parameters.
      * @param dim a Dimension object with the new width and height
      */
+    @Override
     @Deprecated
     public void setSize(Dimension paramDimension) {
         setSize(paramDimension.width, paramDimension.height);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Resizes the QTCanvas object, as well as the associated Drawable object.
      * @param width the width, in pixels, to make this component
      * @param height the height, in pixels, to make this component
      */
+    @Override
     public void setSize(int paramInt1, int paramInt2) {
         setBounds(this.currentX, this.currentY, paramInt1, paramInt2);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>As of JDK version 1.1,
      * replaced by setBounds(int, int, int, int).</I>
      */
+    @Override
     public final void reshape(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         setBounds(paramInt1, paramInt2, paramInt3, paramInt4);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Resizes and/or moves the QTCanvas object as well as the associated Drawable
      * object to the parameters specified.
      * @param x the x coordinate, in pixels, relative to the parent of this
@@ -1042,6 +1006,7 @@ public class QTCanvas extends Canvas {
      * @param width the width, in pixels, to make this component
      * @param height the height, in pixels, to make this component
      */
+    @Override
     public final synchronized void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         boolean bool = isValid();
         int i = this.currentWidth;
@@ -1066,12 +1031,13 @@ public class QTCanvas extends Canvas {
     ComponentListener clientListener;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * We override the update method to call our paint method as the background colour repaint is
      * not valid for a QTCanvas object. However, subclasses can override the update method to
      * do whatever is appropriate for their particular situation.
      */
+    @Override
     public void update(Graphics paramGraphics) {
         if (this.qtcHelper.mClient == null) {
             super.update(paramGraphics);
@@ -1083,11 +1049,12 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the visible state of the Canvas.
      * @param b if true canvas is visible, if false then its not
      */
+    @Override
     public synchronized void setVisible(boolean paramBoolean) {
         super.setVisible(paramBoolean);
         try {
@@ -1107,8 +1074,8 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A ComponentListener and ComponentEvent are used to listen to these types
      * of events that occur to the QTCanvas' client - ie. when the QTCanvas' client
      * is resized, moved, shown or hidden. These events generally occur in conjunction
@@ -1126,8 +1093,8 @@ public class QTCanvas extends Canvas {
      *
      * public void removeQTClientListener(java.awt.event.ComponentListener
      * e)
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a previously registered ComponentListener that is listening
      * to events that occur with the QTCanvas' QTDrawable client.
      * @param e the ComponentListener
@@ -1138,8 +1105,8 @@ public class QTCanvas extends Canvas {
      * addNotify</H3>
      *
      * public void addNotify()
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * We use this method to notify an existing client that its NativeGraphics
      * environment may have changed and it should recheck its status
      * <HR/>
@@ -1148,8 +1115,8 @@ public class QTCanvas extends Canvas {
      * removeNotify</H3>
      *
      * public void removeNotify()
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Overridden to notify the client associated with this QTCanvas that it no
      * longer has a grafport to draw to and should stop all graphics operations.
      * <HR/>
@@ -1158,8 +1125,8 @@ public class QTCanvas extends Canvas {
      * toString</H3>
      *
      * public java.lang.String toString()
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Print information about this object.
      * @return a string representing this QTCanvas object
      * <HR/>
@@ -1169,7 +1136,7 @@ public class QTCanvas extends Canvas {
      *
      * protected void finalize()
      * throws java.lang.Throwable
-     * Deprecated.
+     * @deprecated
      * java.lang.Throwable
      * <HR/>
      * <A/>
@@ -1230,6 +1197,7 @@ public class QTCanvas extends Canvas {
     /**
      * @deprecated
      */
+    @Override
     public synchronized void addNotify() {
         super.addNotify();
         if (!this.addDone) {
@@ -1259,6 +1227,7 @@ public class QTCanvas extends Canvas {
     /**
      * @deprecated
      */
+    @Override
     public synchronized void removeNotify() {
         synchronized (QTSession.terminationLock()) {
             if ((this.addDone) && (QTSession.isInitialized())) {
@@ -1292,6 +1261,7 @@ public class QTCanvas extends Canvas {
         return getClass().getName() + "_" + this.numCanvas + "_" + "[Location=" + getLocation() + ",Size=" + getSize() + "]";
     }
 
+    @Override
     protected void finalize() throws Throwable {
         try {
             removeNotify();
@@ -1302,10 +1272,11 @@ public class QTCanvas extends Canvas {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Override the standard paint method.
      */
+    @Override
     @Deprecated
     public void paint(Graphics g) {
         if (qtcHelper.mClient != null) {

@@ -2,12 +2,10 @@
 package quicktime.app.view;
 
 import com.apple.eawt.CocoaComponent;
-import java.applet.Applet;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -15,7 +13,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.PrintStream;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -34,15 +34,13 @@ import quicktime.std.sg.SGVideoChannel;
 
 
 class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListener, MouseListener {
+
+    private static final Logger logger = System.getLogger(QTJavaCocoaCanvas.class.getName());
+
     private static final int kSetMovie = 0;
-
     private static final int kSetImage = 1;
-
     private static final int kSetMovieController = 2;
-
     private static final int kSetSeqGrabber = 3;
-
-    private static boolean debug = false;
 
     static {
         if (!QTSession.isCurrentOS(4))
@@ -61,7 +59,7 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
 
     private boolean addDone = false;
 
-    private boolean viewShown = false;
+    private final boolean viewShown = false;
 
     private Movie movie;
 
@@ -87,7 +85,7 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
 
     private int maxHeight;
 
-    private QDRect oldbounds = null;
+    private final QDRect oldbounds = null;
 
     transient int initialWidth;
 
@@ -99,7 +97,7 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
 
     private boolean performanceResize = false;
 
-    private boolean QTMOVIEVIEW = false;
+    private final boolean QTMOVIEVIEW = false;
 
     private WindowAdapter wa;
 
@@ -113,20 +111,19 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
                 if (this.controller != null) {
                     try {
                         localQDRect = this.controller.getBounds();
-                        if (debug)
-                            System.err.println("createNSView controller " + this.controller + "bounds " + localQDRect);
-                    } catch (QTException localQTException) {
+                        logger.log(Level.DEBUG, "createNSView controller " + this.controller + "bounds " + localQDRect);
+                    } catch (QTException _) {
                     }
                 } else {
                     localQDRect = this.movie.getBounds();
                 }
                 setInitialWidthAndHeight(localQDRect, getMinimumSize(), getMaximumSize());
-            } catch (StdQTException localStdQTException1) {
+            } catch (StdQTException _) {
             }
             return this.qtjavaView = createNSViewNative(localQDRect.getWidthF(),
                                                         localQDRect.getHeightF(),
-                                                        new Integer(QTObject.ID(this.movie)),
-                                                        this.controller != null ? new Integer(QTObject.ID(this.controller))
+                                                        QTObject.ID(this.movie),
+                                                        this.controller != null ? QTObject.ID(this.controller)
                                                                                 : null);
         }
 
@@ -134,24 +131,23 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
             try {
                 localQDRect = this.image.getBoundsRect();
                 setInitialWidthAndHeight(localQDRect, getMinimumSize(), getMaximumSize());
-            } catch (StdQTException localStdQTException2) {
+            } catch (StdQTException _) {
             }
             return this.qtjavaView = createImageNSViewNative(localQDRect.getWidth(),
                                                              localQDRect.getHeight(),
-                                                             new Integer(QTObject.ID(this.image)));
+                    QTObject.ID(this.image));
         }
         if (this.sgChannel != null) {
             try {
                 if ((this.sgChannel instanceof SGVideoChannel))
                     localQDRect = this.sgChannel.getBounds();
                 setInitialWidthAndHeight(localQDRect, getMinimumSize(), getMaximumSize());
-                if (debug)
-                    System.err.println("***createNSView sgChannel " + this.sgChannel + ", " + localQDRect);
-            } catch (StdQTException localStdQTException3) {
+                logger.log(Level.DEBUG, "***createNSView sgChannel " + this.sgChannel + ", " + localQDRect);
+            } catch (StdQTException _) {
             }
             return this.qtjavaView = createSequenceGrabberNSView(localQDRect.getWidth(),
                                                                  localQDRect.getHeight(),
-                                                                 new Integer(QTObject.ID(this.sgChannel.getSequenceGrabber())));
+                    QTObject.ID(this.sgChannel.getSequenceGrabber()));
         }
         return 0;
     }
@@ -160,9 +156,7 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         this();
         this.movie = paramMovieController.getMovie();
         this.controller = paramMovieController;
-        if (debug) {
-            System.err.println("QTJavaCocoaCanvas " + this.movie + ", " + this.controller);
-        }
+        logger.log(Level.DEBUG, "QTJavaCocoaCanvas " + this.movie + ", " + this.controller);
     }
 
     QTJavaCocoaCanvas(Movie paramMovie) {
@@ -170,23 +164,19 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         this.movie = paramMovie;
         this.controller = null;
         this.performanceResize = false;
-        if (debug) {
-            System.err.println("QTJavaCocoaCanvas " + this.movie);
-        }
+        logger.log(Level.DEBUG, "QTJavaCocoaCanvas " + this.movie);
     }
 
     QTJavaCocoaCanvas(GraphicsImporter paramGraphicsImporter) {
         this();
         this.image = paramGraphicsImporter;
-        if (debug)
-            System.err.println("QTJavaCocoaCanvas " + paramGraphicsImporter);
+        logger.log(Level.DEBUG, "QTJavaCocoaCanvas " + paramGraphicsImporter);
     }
 
     QTJavaCocoaCanvas(SGVideoChannel paramSGVideoChannel) {
         this();
         this.sgChannel = paramSGVideoChannel;
-        if (debug)
-            System.err.println("QTJavaCocoaCanvas " + this.sgChannel);
+        logger.log(Level.DEBUG, "QTJavaCocoaCanvas " + this.sgChannel);
     }
 
     private QTJavaCocoaCanvas() {
@@ -198,11 +188,11 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         this.maxHeight = Integer.MAX_VALUE;
     }
 
+    @Override
     public void addNotify() {
         super.addNotify();
         if (!this.addDone) {
-            if (debug)
-                System.err.println("addNotify qtjavaView " + this.qtjavaView);
+            logger.log(Level.DEBUG, "addNotify qtjavaView " + this.qtjavaView);
             addedTo();
             QTSession.addActiveCanvas(this);
             this.addDone = true;
@@ -212,16 +202,15 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         }
     }
 
+    @Override
     public synchronized void removeNotify() {
-        if (debug)
-            System.err.println("removeNotify:");
+        logger.log(Level.DEBUG, "removeNotify:");
         if ((this.addDone) && (QTSession.isInitialized())) {
             try {
                 if (this.movie != null)
                     doRemoveDrawable();
                 QTSession.removeActiveCanvas(this);
-                if (debug)
-                    System.err.println("removeNotify:");
+                logger.log(Level.DEBUG, "removeNotify:");
                 this.addDone = false;
             } finally {
                 super.removeNotify();
@@ -230,9 +219,8 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
             super.removeNotify();
     }
 
-    private final void doParentLayout() {
-        if (debug)
-            System.err.println("doParentLayout:" + getParent());
+    private void doParentLayout() {
+        logger.log(Level.DEBUG, "doParentLayout:" + getParent());
         Container localContainer = getParent();
         if (localContainer != null) {
             invalidate();
@@ -242,13 +230,13 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         super.setBounds(this.currentX, this.currentY, this.currentWidth, this.currentHeight);
     }
 
+    @Override
     public void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        if (debug)
-            System.err.println("setBounds: " + paramInt3 + "," + paramInt4);
+        logger.log(Level.DEBUG, "setBounds: " + paramInt3 + "," + paramInt4);
         super.setBounds(paramInt1, paramInt2, paramInt3, paramInt4);
     }
 
-    private final void setCurrentXY(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    private void setCurrentXY(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
         int i = paramInt3 - this.currentWidth;
         if (i < 0) {
             i = 0;
@@ -265,15 +253,15 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
             this.currentX = paramInt1;
             this.currentY = paramInt2;
         }
-        if (debug) {
-            System.err.println("setCurrentXY " + this.currentX + " " + this.currentY);
-        }
+        logger.log(Level.DEBUG, "setCurrentXY " + this.currentX + " " + this.currentY);
     }
 
+    @Override
     public float getAlignmentX() {
         return this.performanceResize ? 0.5F : 0.0F;
     }
 
+    @Override
     public float getAlignmentY() {
         return this.performanceResize ? 0.5F : 0.0F;
     }
@@ -295,8 +283,7 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
             this.currentHeight = paramInt2;
         }
 
-        if (debug)
-            System.out.println("setCurrentWidthHeight( " + this.currentWidth + ", " + this.currentHeight + ", " + this.minWidth
+        logger.log(Level.DEBUG, "setCurrentWidthHeight( " + this.currentWidth + ", " + this.currentHeight + ", " + this.minWidth
                                + ", " + this.minHeight);
     }
 
@@ -304,26 +291,10 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         this.initialWidth = paramQDRect.getWidth();
         this.initialHeight = paramQDRect.getHeight();
 
-        if (paramDimension1.width < 0)
-            this.minWidth = 0;
-        else {
-            this.minWidth = paramDimension1.width;
-        }
-        if (paramDimension1.height < 0)
-            this.minHeight = 0;
-        else {
-            this.minHeight = paramDimension1.height;
-        }
-        if (paramDimension2.width < this.minWidth)
-            this.maxWidth = this.minWidth;
-        else {
-            this.maxWidth = paramDimension2.width;
-        }
-        if (paramDimension2.height < this.minHeight)
-            this.maxHeight = this.minHeight;
-        else {
-            this.maxHeight = paramDimension2.height;
-        }
+        this.minWidth = Math.max(paramDimension1.width, 0);
+        this.minHeight = Math.max(paramDimension1.height, 0);
+        this.maxWidth = Math.max(paramDimension2.width, this.minWidth);
+        this.maxHeight = Math.max(paramDimension2.height, this.minHeight);
         if (this.initialWidth < this.minWidth) {
             this.initialWidth = this.minWidth;
         } else if (this.initialWidth > this.maxWidth) {
@@ -336,8 +307,7 @@ class QTJavaCocoaCanvas extends CocoaComponent implements QTComponent, KeyListen
         }
         this.prefWidth = this.initialWidth;
         this.prefHeight = this.initialHeight;
-        if (debug)
-            System.err.println("setInitialWidthAndHeight " + this.initialWidth + " " + this.initialHeight + " " + this.prefWidth
+        logger.log(Level.DEBUG, "setInitialWidthAndHeight " + this.initialWidth + " " + this.initialHeight + " " + this.prefWidth
                                + " " + this.prefHeight);
     }
 
@@ -384,38 +354,36 @@ label0:
                 currentHeight /= 2;
             } while (true);
         }
-
     }
 
+    @Override
     public Dimension getPreferredSize() {
         Dimension localDimension = null;
         localDimension = new Dimension(this.prefWidth, this.prefHeight);
-        if (debug)
-            System.err.println("getPreferredSize " + localDimension);
+        logger.log(Level.DEBUG, "getPreferredSize " + localDimension);
         return localDimension;
     }
 
     public Dimension getBestSize() {
         Dimension localDimension = null;
         localDimension = new Dimension(this.initialWidth, this.initialHeight);
-        if (debug)
-            System.err.println("getBestSize " + localDimension);
+        logger.log(Level.DEBUG, "getBestSize " + localDimension);
         return localDimension;
     }
 
+    @Override
     public Dimension getMinimumSize() {
         Dimension localDimension = null;
         localDimension = new Dimension(this.minWidth, this.minHeight);
-        if (debug)
-            System.err.println("getMinimumSize " + localDimension);
+        logger.log(Level.DEBUG, "getMinimumSize " + localDimension);
         return localDimension;
     }
 
+    @Override
     public Dimension getMaximumSize() {
         Dimension localDimension = null;
         localDimension = new Dimension(32767, 32767);
-        if (debug)
-            System.err.println("getMaximumSize " + localDimension);
+        logger.log(Level.DEBUG, "getMaximumSize " + localDimension);
         return localDimension;
     }
 
@@ -430,14 +398,17 @@ label0:
         }
     }
 
+    @Override
     public Movie getMovie() {
         return this.movie;
     }
 
+    @Override
     public MovieController getMovieController() {
         return this.controller;
     }
 
+    @Override
     public void setMovieController(MovieController paramMovieController) throws QTException {
         QDRect localQDRect = null;
         if (paramMovieController == this.controller) {
@@ -452,10 +423,10 @@ label0:
             try {
                 localQDRect = paramMovieController.getBounds();
                 if ((this.qtjavaView != 0) && (isValid())) {
-                    sendMessage(2, new Integer(QTObject.ID(paramMovieController)));
+                    sendMessage(2, QTObject.ID(paramMovieController));
                     setInitialWidthAndHeight(localQDRect, getMinimumSize(), getMaximumSize());
                 }
-            } catch (QTException localQTException) {
+            } catch (QTException _) {
             }
             if ((this.qtjavaView != 0) && (isValid())) {
                 addedTo();
@@ -463,20 +434,20 @@ label0:
         }
     }
 
+    @Override
     public void setMovie(Movie paramMovie) throws QTException {
         QDRect localQDRect = null;
         if (paramMovie == this.movie) {
             return;
         }
-        if (debug)
-            System.err.println("setMovie " + paramMovie);
+        logger.log(Level.DEBUG, "setMovie " + paramMovie);
         doRemoveDrawable();
 
         this.movie = paramMovie;
         if (paramMovie != null) {
             localQDRect = this.movie.getBounds();
             if ((this.qtjavaView != 0) && (isValid()))
-                sendMessage(0, new Integer(QTObject.ID(this.movie)));
+                sendMessage(0, QTObject.ID(this.movie));
             setInitialWidthAndHeight(localQDRect, getMinimumSize(), getMaximumSize());
         }
     }
@@ -486,8 +457,7 @@ label0:
         if (paramSGVideoChannel == this.sgChannel) {
             return;
         }
-        if (debug)
-            System.err.println("setSGChannel " + this.sgChannel);
+        logger.log(Level.DEBUG, "setSGChannel " + this.sgChannel);
         if (this.sgChannel != null) {
             doRemoveDrawable();
         }
@@ -496,22 +466,22 @@ label0:
             if ((this.sgChannel instanceof SGVideoChannel))
                 localQDRect = this.sgChannel.getBounds();
             if ((this.qtjavaView != 0) && (isValid()))
-                sendMessage(3, new Integer(QTObject.ID(this.sgChannel.getSequenceGrabber())));
+                sendMessage(3, QTObject.ID(this.sgChannel.getSequenceGrabber()));
             setInitialWidthAndHeight(localQDRect, getMinimumSize(), getMaximumSize());
         }
     }
 
+    @Override
     public Component asComponent() {
         return this;
     }
 
     void doRemoveDrawable() {
         QDGraphics localQDGraphics = null;
-        if (debug)
-            System.out.println("doRemoveDrawable:");
+        logger.log(Level.DEBUG, "doRemoveDrawable:");
         try {
             localQDGraphics = QDGraphics.scratch;
-            if ((this.movie != null) && (QTSession.isInitialized()) && (this.movie != null)) {
+            if (this.movie != null && QTSession.isInitialized()) {
                 this.movie.setRate(0.0F);
                 this.movie.stop();
             }
@@ -528,23 +498,23 @@ label0:
                 }
             }
         } catch (QTException localQTException) {
-            if (debug)
-                localQTException.printStackTrace();
+            localQTException.printStackTrace();
         } finally {
             if (this.controller != null)
                 removedFrom();
-            if (debug)
-                System.out.println("finally:");
+            logger.log(Level.DEBUG, "finally:");
             this.movie = null;
             this.controller = null;
             this.image = null;
         }
     }
 
+    @Override
     public GraphicsImporter getImage() {
         return this.image;
     }
 
+    @Override
     public void setImage(GraphicsImporter paramGraphicsImporter) {
         QDRect localQDRect = null;
         if (this.image == paramGraphicsImporter) {
@@ -560,19 +530,16 @@ label0:
             } catch (StdQTException localStdQTException) {
             }
             if ((this.qtjavaView != 0) && (isValid()))
-                sendMessage(1, new Integer(QTObject.ID(this.image)));
+                sendMessage(1, QTObject.ID(this.image));
             doParentLayout();
         }
         repaint();
     }
 
     protected void addedTo() {
-        if (debug) {
-            try {
-                if (debug)
-                    System.err.println("addedTo " + this.controller.getPort());
-            } catch (StdQTException localStdQTException1) {
-            }
+        try {
+            logger.log(Level.DEBUG, "addedTo " + this.controller.getPort());
+        } catch (StdQTException _) {
         }
         if (this.controller != null) {
             addKeyListener(this);
@@ -591,11 +558,12 @@ label0:
             if (this.controller != null) {
                 this.controller.setKeysEnabled(true);
             }
-        } catch (StdQTException localStdQTException2) {
+        } catch (StdQTException _) {
         }
         if ((localObject1 instanceof Window)) {
             this.parentWindow = ((Window) localObject1);
             this.wa = new WindowAdapter() {
+                @Override
                 public void windowActivated(WindowEvent paramAnonymousWindowEvent) {
                     try {
                         if (QTJavaCocoaCanvas.this.controller != null) {
@@ -603,10 +571,11 @@ label0:
                             QTJavaCocoaCanvas.this.controller.activate();
                         }
                         QTJavaCocoaCanvas.this.redraw(null);
-                    } catch (QTException localQTException) {
+                    } catch (QTException _) {
                     }
                 }
 
+                @Override
                 public void windowDeactivated(WindowEvent paramAnonymousWindowEvent) {
                     synchronized (QTSession.terminationLock()) {
                         if (QTSession.isInitialized()) {
@@ -617,7 +586,7 @@ label0:
                                                                                false);
                                 }
                                 QTJavaCocoaCanvas.this.redraw(null);
-                            } catch (QTException localQTException) {
+                            } catch (QTException _) {
                             }
                         } else {
                             QTJavaCocoaCanvas.this.removedFrom();
@@ -640,10 +609,10 @@ label0:
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent paramKeyEvent) {
         try {
-            if (debug)
-                System.err.println("Key pressed " + paramKeyEvent);
+            logger.log(Level.DEBUG, "Key pressed " + paramKeyEvent);
             if (this.controller != null) {
                 boolean bool = this.controller.key(paramKeyEvent.getKeyCode(), paramKeyEvent.getModifiers());
             }
@@ -652,65 +621,50 @@ label0:
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent paramMouseEvent) {
-        if (debug)
-            System.err.println("mousePressed " + paramMouseEvent);
+        logger.log(Level.DEBUG, "mousePressed " + paramMouseEvent);
         try {
             Object localObject1 = getParent();
             Object localObject2 = localObject1;
             while (localObject2 != null) {
-                if (debug)
-                    System.err.println(localObject2 + " getLocation " + ((Container) localObject2).getLocation() + " getBounds "
+                logger.log(Level.DEBUG, localObject2 + " getLocation " + ((Container) localObject2).getLocation() + " getBounds "
                                        + ((Container) localObject2).getBounds());
-                if (((localObject2 instanceof Window)) || ((localObject2 instanceof Frame))
-                    || ((localObject2 instanceof Applet)))
+                if (((localObject2 instanceof Window)) || ((localObject2 instanceof Frame)))
                     break;
                 localObject1 = localObject2;
                 localObject2 = ((Container) localObject1).getParent();
             }
-            if (debug)
-                System.err.println(localObject1 + " getLocation " + ((Container) localObject1).getLocation() + " getBounds "
+            logger.log(Level.DEBUG, localObject1 + " getLocation " + ((Container) localObject1).getLocation() + " getBounds "
                                    + ((Container) localObject1).getBounds());
-            if ((localObject1 instanceof Applet)) {
-                if (this.controller != null) {
-                    this.controller.click(new QDPoint(paramMouseEvent.getX(),
-                                                      paramMouseEvent.getY() + (((Container) localObject1).getLocation().y - 22)
-                                                                              + getLocation().y),
-                                          paramMouseEvent.getModifiers());
-                }
-            } else {
-                if (debug) {
-                    System.err.println(paramMouseEvent.getX() + ((Container) localObject1).getLocation().x + getLocation().x
-                                       + ", "
-                                       + (paramMouseEvent.getY()
-                                          + (((Container) localObject1).getLocation().y == 22 ? ((Container) localObject1)
-                                                  .getLocation().y : ((Container) localObject1).getLocation().y
-                                                                     - 22)
-                                          + getLocation().y));
-                }
+            logger.log(Level.DEBUG, paramMouseEvent.getX() + ((Container) localObject1).getLocation().x + getLocation().x
+                               + ", "
+                               + (paramMouseEvent.getY()
+                                  + (((Container) localObject1).getLocation().y == 22 ? ((Container) localObject1)
+                                          .getLocation().y : ((Container) localObject1).getLocation().y
+                                                             - 22)
+                                  + getLocation().y));
 
-                if (this.controller != null)
-                    this.controller.click(
-                                          new QDPoint(paramMouseEvent.getX() + ((Container) localObject1).getLocation().x
-                                                      + getLocation().x,
-                                                      ((Container) localObject1).getLocation().y != 22
-                                                                                                       ? paramMouseEvent.getY()
-                                                                                                         + (((Container) localObject1)
-                                                                                                                 .getLocation().y
-                                                                                                            - 22)
-                                                                                                         + getLocation().y
-                                                                                                       : paramMouseEvent
-                                                                                                               .getY()),
-                                          paramMouseEvent.getModifiers());
-            }
+            if (this.controller != null)
+                this.controller.click(
+                                      new QDPoint(paramMouseEvent.getX() + ((Container) localObject1).getLocation().x
+                                                  + getLocation().x,
+                                                  ((Container) localObject1).getLocation().y != 22
+                                                                                                   ? paramMouseEvent.getY()
+                                                                                                     + (((Container) localObject1)
+                                                                                                             .getLocation().y
+                                                                                                        - 22)
+                                                                                                     + getLocation().y
+                                                                                                   : paramMouseEvent
+                                                                                                           .getY()),
+                                      paramMouseEvent.getModifiers());
         } catch (QTException localQTException) {
             QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mousePressed");
         }
     }
 
-    private final void redraw(Region paramRegion) throws QTException {
-        if (debug)
-            System.out.println("RD:");
+    private void redraw(Region paramRegion) throws QTException {
+        logger.log(Level.DEBUG, "RD:");
         if (paramRegion != null) {
             try {
                 if (this.controller != null) {
@@ -767,21 +721,27 @@ label0:
         PlatformManager.removeMovie(paramInt);
     }
 
+    @Override
     public void keyReleased(KeyEvent paramKeyEvent) {
     }
 
+    @Override
     public void keyTyped(KeyEvent paramKeyEvent) {
     }
 
+    @Override
     public void mouseClicked(MouseEvent paramMouseEvent) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent paramMouseEvent) {
     }
 
+    @Override
     public void mouseExited(MouseEvent paramMouseEvent) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent paramMouseEvent) {
     }
 }

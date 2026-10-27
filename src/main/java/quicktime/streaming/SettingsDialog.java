@@ -24,12 +24,7 @@ public class SettingsDialog implements QTStreamingLib {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SettingsDialog.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SettingsDialog.class));
             }
         }
         new PrivelegedAction().establish();
@@ -38,18 +33,19 @@ public class SettingsDialog implements QTStreamingLib {
     /**
      * This method creates and displays a new settings dialog for all active streams
      * @param p the presentation to configure
-     *  QuickTime::QTSPresSettingsDialog
+     * @see " QuickTime::QTSPresSettingsDialog"
      */
     public SettingsDialog(Presentation paramPresentation) throws QTException {
-        final Presentation localPresentation = paramPresentation;
+        Presentation localPresentation = paramPresentation;
         if (QTSession.isCurrentOS(4)) {
-            StdQTException.checkError(((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            StdQTException.checkError((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     int i = SettingsDialog.QTSPresSettingsDialog(QTObject.ID(localPresentation), 0, 0, 0, 0);
-                    return new Integer(i);
+                    return i;
                 }
-            })).intValue());
+            }));
         } else {
             synchronized (QTNative.globalsLock) {
                 StdQTException.checkError(QTSPresSettingsDialog(QTObject.ID(paramPresentation), 0, 0, 0, 0));
@@ -61,7 +57,7 @@ public class SettingsDialog implements QTStreamingLib {
      * This method creates and displays a new settings dialog for a specific stream
      * @param p the presentation to configure
      * @param s the stream to configure
-     *  QuickTime::QTSPresSettingsDialog
+     * @see " QuickTime::QTSPresSettingsDialog"
      */
     public SettingsDialog(Presentation paramPresentation, Stream paramStream) throws QTException {
         synchronized (QTNative.globalsLock) {

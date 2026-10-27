@@ -32,12 +32,7 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SGChannel.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGChannel.class));
             }
         }.establish();
     }
@@ -76,9 +71,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * This method allows you to retrieve a sample description from the SGChannel.
-     * QuickTime::SGGetChannelSampleDescription()
+     * @see "QuickTime::SGGetChannelSampleDescription()"
      * @return a SampleDescription object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public final SampleDescription getSampleDescription() throws QTException {
         SampleDescription localSampleDescription = makeDescription();
@@ -96,20 +91,21 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Instructs the sequence grabber to display its settings dialog box to the user.
-     * QuickTime::SGSettingsDialog
+     * @see "QuickTime::SGSettingsDialog"
      */
     public void settingsDialog() throws StdQTException {
-        final int[] arrayOfInt = null;
-        final int i = _ID();
+        int[] arrayOfInt = null;
+        int i = _ID();
         int j;
         if (QTSession.isCurrentOS(4)) {
-            j = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            j = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     int l = SGChannel.SGSettingsDialog(QTObject.ID(SGChannel.this.owner), i, (short) 0, arrayOfInt, 0, 0, 0);
                     return l;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(j);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -121,21 +117,21 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Instructs the sequence grabber to display its settings dialog box to the user.
-     * QuickTime::SGSettingsDialog
+     * @see "QuickTime::SGSettingsDialog"
      * @param flags The control flags for the current operation.
      * @param panelList An array of sequence grabber panel component identifiers.
      *   Will only present these components in the panel component pop-up menu. Set to null to use all identifiers.
      *          SGPanel[] panelList
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void settingsDialog(int paramInt, Component[] paramArrayOfComponent) throws StdQTException {
         int i = 0;
-        final int j = i;
+        int j = i;
         int[] arrayOfInt1 = null;
-        final int[] arrayOfInt2 = arrayOfInt1;
-        final int k = paramInt;
+        int[] arrayOfInt2 = arrayOfInt1;
+        int k = paramInt;
         int m = 0;
-        final int n = _ID();
+        int n = _ID();
         if (paramArrayOfComponent != null) {
             i = paramArrayOfComponent.length;
             arrayOfInt1 = new int[i];
@@ -144,13 +140,14 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
             }
         }
         if (QTSession.isCurrentOS(4)) {
-            int o = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            int o = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     int l = SGChannel.SGSettingsDialog(QTObject.ID(SGChannel.this.owner), n, (short) j, arrayOfInt2, k, 0, 0);
                     return l;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(o);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -162,10 +159,10 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Set the source identification information associated with a sequence grabber channel.
-     * QuickTime::SGChannelSetDataSourceName
+     * @see "QuickTime::SGChannelSetDataSourceName"
      * @param name Source identification name.
      * @param scriptTag source informationÕs language code.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setDataSourceName(String paramString, int paramInt) throws StdQTException {
         int i = SGChannelSetDataSourceName(_ID(), QTUtils.String2PString(paramString, 255), paramInt);
@@ -174,7 +171,7 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Get the source identification information associated with a sequence grabber channel.
-     * QuickTime::SGChannelGetDataSourceName
+     * @see "QuickTime::SGChannelGetDataSourceName"
      */
     public SGDataSourceInfo getDataSourceName() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -188,9 +185,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * Configure a SequenceGrabber channel based on the UserData
      * passed in. You typically get the UserData via a call to
      * NewUserDataFromHandle or from first calling SGGetChannelSettings.
-     * QuickTime::SGSetChannelSettings
+     * @see "QuickTime::SGSetChannelSettings"
      * @param ud Specifies a user data list with configuration information for the sequence grabber.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setSettings(UserData paramUserData) throws StdQTException {
         int i = SGSetChannelSettings(QTObject.ID(this.owner), _ID(), QTObject.ID(paramUserData), 0);
@@ -200,7 +197,7 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
     /**
      * Retrieves the current settings of the SequenceGrabber channel.
      * The sequence grabber places this configuration information into a Movie Toolbox user data list.
-     * QuickTime::SGGetChannelSettings
+     * @see "QuickTime::SGGetChannelSettings"
      */
     public UserData getSettings() throws StdQTException {
         return UserData.fromSGChannel(this);
@@ -208,9 +205,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Specifies how a channel is to be used by the SequenceGrabber component.
-     * QuickTime::SGSetChannelUsage
+     * @see "QuickTime::SGSetChannelUsage"
      * @param usage contains flags that specify how the channel is to be used
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setUsage(int paramInt) throws StdQTException {
         StdQTException.checkError(SGSetChannelUsage(_ID(), paramInt));
@@ -218,9 +215,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Returns how the channel is being used by the SequenceGrabber component.
-     * QuickTime::SGGetChannelUsage
+     * @see "QuickTime::SGGetChannelUsage"
      * @return current usage flags
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getUsage() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -231,9 +228,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
     /**
      * Allows you to influence the speed and quality with which the sequence grabber displays data
      * from a channel.
-     * QuickTime::SGSetChannelPlayFlags
+     * @see "QuickTime::SGSetChannelPlayFlags"
      * @param playFlags the flags
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPlayFlags(int paramInt) throws StdQTException {
         StdQTException.checkError(SGSetChannelPlayFlags(_ID(), paramInt));
@@ -242,9 +239,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
     /**
      * Allows you to get the speed and quality with which the sequence grabber displays data
      * from a channel.
-     * QuickTime::SGGetChannelPlayFlags
+     * @see "QuickTime::SGGetChannelPlayFlags"
      * @return the flags
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getPlayFlags() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -254,7 +251,7 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * The method allows the sequence grabber to assign a device to your channel.
-     * QuickTime::SGSetChannelDevice
+     * @see "QuickTime::SGSetChannelDevice"
      */
     public void setDevice(String paramString) throws StdQTException {
         StdQTException.checkError(SGSetChannelDevice(_ID(), QTUtils.String2PString(paramString, 255)));
@@ -262,9 +259,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * Get the list of currently available Sound Input Driver names.
-     * QuickTime::SGGetChannelDeviceList
+     * @see "QuickTime::SGGetChannelDeviceList"
      * @return the sound input names list.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      * @see (String driverName) to set the input driver.
      */
     public SGDeviceList getDeviceList(int paramInt) throws StdQTException {
@@ -277,9 +274,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     /**
      * This method allows you to retrieve a channelÕs time scale.
-     * QuickTime::SGGetChannelTimeScale
+     * @see "QuickTime::SGGetChannelTimeScale"
      * @return the time scale
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getTimeScale() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -289,7 +286,7 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
     }
 
     /**
-     * QuickTime::SGSetChannelOutput
+     * @see "QuickTime::SGSetChannelOutput"
      */
     public void setOutput(SGOutput paramSGOutput) throws StdQTException {
         paramSGOutput.setChannel(this);

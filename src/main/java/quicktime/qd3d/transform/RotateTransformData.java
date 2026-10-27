@@ -3,6 +3,8 @@ package quicktime.qd3d.transform;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.util.EndianDescriptor;
@@ -22,7 +24,8 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
      */
     public static final int kNativeSize = 8;
 
-    static final long serialVersionUID = -5583319263995802834L;
+    @Serial
+    private static final long serialVersionUID = -5583319263995802834L;
 
     static {
         if (QTSession.isCurrentOS(4)) {
@@ -34,7 +37,7 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -60,6 +63,7 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
         RotateTransformData localRotateTransformData = new RotateTransformData();
@@ -72,6 +76,7 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
         System.arraycopy(localRotateTransformData.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         RotateTransformData localRotateTransformData = (RotateTransformData) clone();
         try {
@@ -113,6 +118,7 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new RotateTransformData(this.bytes);
     }

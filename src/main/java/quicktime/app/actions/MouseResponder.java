@@ -5,7 +5,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is an abstract class that is used to provide a base level functionality for
  * objects that respond to Mouse events.
  *
@@ -29,112 +29,112 @@ import quicktime.QTSession;
  *
  * Mouse move, enter and exit events do not have a target - they relate to the space
  * within which the controller has a declared interest.
- * @see {@link quicktime.app.event.QTMouseController}
+ * @see quicktime.app.event.QTMouseController
  */
 public abstract class MouseResponder {
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kNoModifiersMask = 0;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kAnyModifiersMask = 0;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kNoModifiers = -1;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kAnyModifiers = -2;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kAnyOneOfModifiers = -3;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kModifiersDisregarded = -4;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kModifiersExactMatch = -5;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kSpecifiedModifiersOrNone = -6;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kClickEvents = 1;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kPressReleaseEvents = 2;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kDragEvents = 4;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kMoveEvents = 8;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kEnterEvents = 16;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kExitEvents = 32;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kTargetMoveEvents = 64;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kMouseEvents = 51;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kMouseMotionEvents = 12;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kQTMouseMotionEvents = 76;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kRolloverEvents = 100;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kMouseOrMouseMotionEvents = 63;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kAnyMouseEvent = 127;
 
@@ -145,8 +145,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * You pass in to this constructor the modifier keys and the conditions of the modifier test
      * that will trigger the activation of the responder object.
      * @param modifierKeyMask the modifier key's mask
@@ -163,15 +163,15 @@ public abstract class MouseResponder {
     private int activationEvent = 0;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The mask that is used to test which modifier keys will be regarded as valid
      */
     public int modifierKeyMask;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The conditions of the modifier keys that will invoke an event
      */
     public int modifierTestConditions;
@@ -181,8 +181,8 @@ public abstract class MouseResponder {
     MouseController controller;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the MouseController that the responder is attached to.
      * @return a MouseController
      */
@@ -191,8 +191,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the repsonder is interested in the specified event.
      * @param eventType to test interest
      * @return true if interested, false if not
@@ -202,8 +202,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the repsonder is interested in the specified event.
      * @param eventType to test interest
      * @param eventModifiers modifier keys of mouse event
@@ -218,21 +218,15 @@ public abstract class MouseResponder {
      */
     private boolean doModifiersTest(int paramInt) {
         paramInt &= 0xF;
-        switch(this.modifierTestConditions) {
-            case -6:
-                return (paramInt == 0) || (paramInt == this.modifierKeyMask);
-            case -3:
-                return (paramInt & this.modifierKeyMask) != 0;
-            case -4:
-                return true;
-            case -2:
-                return paramInt != 0;
-            case -1:
-                return paramInt == 0;
-            case -5:
-                return paramInt == this.modifierKeyMask;
-        }
-        return false;
+        return switch (this.modifierTestConditions) {
+            case -6 -> (paramInt == 0) || (paramInt == this.modifierKeyMask);
+            case -3 -> (paramInt & this.modifierKeyMask) != 0;
+            case -4 -> true;
+            case -2 -> paramInt != 0;
+            case -1 -> paramInt == 0;
+            case -5 -> paramInt == this.modifierKeyMask;
+            default -> false;
+        };
     }
 
     void activate(int paramInt) {
@@ -240,8 +234,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the event which activated the responder. If
      * the responder is inactive this will return 0.
      * @return the event type.
@@ -251,8 +245,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the responder is currently active.
      * @return true if active, false if not
      */
@@ -261,8 +255,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A subclass can call this method to deactivate a responder.
      * It will not cancel a responder from becoming active again.
      * For instance in drags if the object should no longer be dragged
@@ -276,8 +270,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The MouseController asks its MouseResponder if the space it has been added to is
      * an appropriate Space for the MouseResponder to deal with. If not the MouseResponder
      * subclass that implements this method throws a ClassCastException and the MouseController
@@ -287,8 +281,8 @@ public abstract class MouseResponder {
     protected abstract void setTargetSpace(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the MouseController when it has returned a target
      * (say from a mousePressed event) and the Controller sets the target that the
      * MouseResponder will then respond to.
@@ -297,8 +291,8 @@ public abstract class MouseResponder {
     protected abstract void setTarget(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When the Responder is deactivated from the MouseController the controller
      * uses this method to tell the Responder that it no longer has a target
      * to act upon
@@ -306,8 +300,8 @@ public abstract class MouseResponder {
     protected abstract void removeTarget();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The MouseController delegates the appropriateness of objects that it can control
      * to the MouseResponder. The MouseResponder returns true if the given object is
      * the type of object that it can control.
@@ -317,8 +311,8 @@ public abstract class MouseResponder {
     public abstract boolean isAppropriate(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been clicked on a found and valid target within the enclosing space.
      * @param e the MouseEvent that triggered this event
      */
@@ -326,8 +320,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse enters a QTDrawable space. There is no target set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
@@ -335,8 +329,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse exits a QTDrawable space. There is no target set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
@@ -344,8 +338,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when a mouseMoved event enters a Target within an enclosing space. The Target is set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
@@ -353,8 +347,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when a mouseMoved event exits a Target within an enclosing space. The Target is set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
@@ -362,8 +356,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse button has been moved over a space. There is no target set for events of this kind.
      * (with no buttons no down).
      * @param e the MouseEvent that triggered this event
@@ -372,8 +366,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been pressed on a found and valid target within the enclosing space.
      * @param e the MouseEvent that triggered this event
      */
@@ -381,8 +375,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been dragged on a found and valid target within the enclosing space.
      * This method is only called if the responder has been activated by a mouse pressed event.
      * @param e the MouseEvent that triggered this event
@@ -391,8 +385,8 @@ public abstract class MouseResponder {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse has been released after being pressed on a found and valid target within the enclosing space.
      * @param e the MouseEvent that triggered this event
      */

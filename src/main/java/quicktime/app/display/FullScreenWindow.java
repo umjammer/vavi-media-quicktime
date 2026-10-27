@@ -14,7 +14,7 @@ import quicktime.qd.QDRect;
 import quicktime.std.movies.FullScreen;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is provided for usage when the screen is put into full screen mode.
  * The class manages a FullScreen object that will hide menu bars, task bars, etc.
  * thus making available the entire screen for an application to use. The FullScreenWindow
@@ -31,7 +31,7 @@ public class FullScreenWindow extends Window {
 
     private static Frame fr = null;
 
-    private FullScreen fs;
+    private final FullScreen fs;
 
     private static Frame _getFrame() {
         if (fr == null)
@@ -40,8 +40,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a awt.Window for use in full screen mode. It will create the
      * FullScreen object which enables the screen to be placed into full screen mode
      */
@@ -50,8 +50,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a awt.Window for use in full screen mode. The application can pass in the
      * FullScreen object which enables the screen to be placed into full screen mode.
      * @param fs the QuickTime FullScreen object
@@ -61,8 +61,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a awt.Window for use in full screen mode. The application can pass in the
      * FullScreen object which enables the screen to be placed into full screen mode.
      * @param fs the QuickTime FullScreen object
@@ -82,8 +82,8 @@ public class FullScreenWindow extends Window {
     private GDevice gd;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This variable controls whether addNotify will actually call or fail - failing is silent.
      * The variable is set to true during the show method and is reset to false from the hide method
      * which also calls removeNotify to remove the native restrictions imposed by incompatible functionality
@@ -92,8 +92,8 @@ public class FullScreenWindow extends Window {
     protected boolean doNotify = false;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns the FullScreen object that is used by the FullScreenWindow to
      * place the screen into full screen mode when the show method is called,
      * and to return the screen to normal mode when the hide method is called.
@@ -107,14 +107,15 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a previously set value of the requested size of the FullScreenWindow.
      * It may return a width and height of 0, 0 if no previous size has been requested.
      * In this case the current display size of the screen is used when the screen is
      * placed into full screen mode.
      * @return the currently requested size for full screen display
      */
+    @Override
     public Dimension getPreferredSize() {
         try {
             if ((this.w == 0) || (this.h == 0)) {
@@ -128,8 +129,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The application can set the requested size of the full screen when the screen is placed
      * into full screen mode. This method does not establish if the resolution requested is available,
      * it will only request that size when the show method is called. To see if a requested size
@@ -147,8 +148,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the flags that will be used when the screen is placed in full screen mode with the show method.
      * @return the full screen flags
      */
@@ -157,8 +158,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the flags that will be used when the screen is placed in full screen mode with the show method.
      * @param flags the full screen flags
      */
@@ -167,8 +168,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the device that corresponds to the screen that will be placed in full screen mode with the show method.
      * @param gDevice the gDevice of a screen of null to set the main screen
      */
@@ -177,8 +178,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the device that corresponds to the screen that will be placed in full screen mode with the show method.
      * @return the gDevice of a screen of null
      */
@@ -187,8 +188,8 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used to place the specified screen, at the specified resolution and flags, into full screen
      * mode. It then resizes and positions the FullScreenWindow object so that the content region of this Window
      * takes up the entire screen. It then shows the FullScreenWindow object. On both MacOS and Win32 there are no
@@ -204,6 +205,7 @@ public class FullScreenWindow extends Window {
      * It is the Applications responsibility to hide this window when done as the user has no direct way to hide
      * the window.
      */
+    @Override
     public void show() {
         if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
             this.doNotify = true;
@@ -252,11 +254,12 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will return the specified screen to normal mode. It then hides the
      * window.
      */
+    @Override
     public void hide() {
         this.doNotify = false;
         try {
@@ -276,13 +279,14 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The addNotify method can only be successful in this class during or after the execution of the show method.
      * The native Java VM's have peculiarities in windows positioning which are not compatible with
      * the requirement of the FullScreenWindow's purpose to fill the entire screen. An application should never need
      * to call this method directly - if it is called at an inappropriate time the call will silently fail.
      */
+    @Override
     public void addNotify() {
         if (this.doNotify) {
             super.addNotify();
@@ -290,12 +294,13 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * For a full screen window pack can only be called after the window has been shown.
      * The FullScreenWindow.show call will call pack to ensure that the contained components
      * are laid out correctly.
      */
+    @Override
     public void pack() {
         if (this.doNotify) {
             super.pack();
@@ -303,11 +308,12 @@ public class FullScreenWindow extends Window {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns insets of 0, 0, 0, 0 as a FullScreenWindow has no frame or border.
      * @return the insets of this container.
      */
+    @Override
     public Insets getInsets() {
         return new Insets(0, 0, 0, 0);
     }

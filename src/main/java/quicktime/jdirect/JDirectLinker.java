@@ -1,5 +1,7 @@
 package quicktime.jdirect;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -11,7 +13,7 @@ import quicktime.internal.toolbox.PlatformManager;
 
 public class JDirectLinker {
 
-    private static final boolean debug = false;
+    private static final Logger logger = System.getLogger(JDirectLinker.class.getName());
 
     private static final String kLibraryInstanceFieldName = "libraryInstance";
 
@@ -48,7 +50,7 @@ public class JDirectLinker {
             this.libraryHandle = JDirectLinker.loadNativeLibrary(this.libraryName);
         }
 
-        protected void finalize() {
+        protected void dispose() {
             JDirectLinker.unloadNativeLibrary(this.libraryHandle);
         }
     }
@@ -61,8 +63,7 @@ public class JDirectLinker {
         int[] arrayOfInt = loadNativeLibraries(paramArrayOfString);
         MethodSpec[] arrayOfMethodSpec = getNativeMethods(paramClass);
         int i = arrayOfMethodSpec.length;
-        for (int j = 0; j < i; j++) {
-            MethodSpec localMethodSpec = arrayOfMethodSpec[j];
+        for (MethodSpec localMethodSpec : arrayOfMethodSpec) {
             linkNativeMethod(paramClass, localMethodSpec.name, localMethodSpec.signature, localMethodSpec.frameSize, arrayOfInt);
         }
     }
@@ -74,8 +75,7 @@ public class JDirectLinker {
         int[] arrayOfInt = gatherLibraries(paramClass);
         MethodSpec[] arrayOfMethodSpec = getNativeMethods(paramClass);
         int i = arrayOfMethodSpec.length;
-        for (int j = 0; j < i; j++) {
-            MethodSpec localMethodSpec = arrayOfMethodSpec[j];
+        for (MethodSpec localMethodSpec : arrayOfMethodSpec) {
             linkNativeMethod(paramClass, localMethodSpec.name, localMethodSpec.signature, localMethodSpec.frameSize, arrayOfInt);
         }
     }
@@ -97,8 +97,7 @@ public class JDirectLinker {
 
     private static void examineInterfaces(Vector<Library> paramVector, Class<?>[] paramArrayOfClass) {
         int i = paramArrayOfClass.length;
-        for (int j = 0; j < i; j++) {
-            Class<?> localClass = paramArrayOfClass[j];
+        for (Class<?> localClass : paramArrayOfClass) {
             if ((SharedLibrary.class != localClass) && (SharedLibrary.class.isAssignableFrom(localClass))) {
                 try {
                     Field localField = localClass.getDeclaredField("libraryInstance");
@@ -108,11 +107,11 @@ public class JDirectLinker {
                             paramVector.addElement(localLibrary);
                         }
                     }
-                } catch (NoSuchFieldException localNoSuchFieldException) {
+                } catch (NoSuchFieldException _) {
                 } catch (IllegalAccessException localIllegalAccessException) {
-                    System.err.println("JDirectLinker.examineInterfaces: can't access library field from interface: " + localClass.getName());
+                    logger.log(Level.DEBUG, "JDirectLinker.examineInterfaces: can't access library field from interface: " + localClass.getName());
                 } catch (Throwable localThrowable) {
-                    System.err.println("JDirectLinker.examineInterfaces: exception: " + localThrowable);
+                    logger.log(Level.DEBUG, "JDirectLinker.examineInterfaces: exception: " + localThrowable);
                 }
                 Class<?>[] arrayOfClass = localClass.getInterfaces();
                 if (arrayOfClass.length != 0) {
@@ -138,8 +137,7 @@ public class JDirectLinker {
         Vector<MethodSpec> localVector = new Vector<>();
         Method[] arrayOfMethod = paramClass.getDeclaredMethods();
         int i = arrayOfMethod.length;
-        for (int j = 0; j < i; j++) {
-            Method localMethod = arrayOfMethod[j];
+        for (Method localMethod : arrayOfMethod) {
             if (Modifier.isNative(localMethod.getModifiers())) {
                 String str1 = localMethod.getName();
                 String str2 = getSignature(localMethod);
@@ -156,7 +154,7 @@ public class JDirectLinker {
         int i = 0;
         Class<?>[] arrayOfClass = paramMethod.getParameterTypes();
         int j = arrayOfClass.length;
-        for (int k = 0; k < j; k++) i += getArgSize(arrayOfClass[k]);
+        for (Class<?> ofClass : arrayOfClass) i += getArgSize(ofClass);
         return i;
     }
 
@@ -164,23 +162,21 @@ public class JDirectLinker {
         String str = paramClass.getName();
         if (paramClass.isPrimitive()) {
             int i = Character.toUpperCase(str.charAt(0));
-            switch(i) {
-                case 68:
-                case 76:
-                    return 8;
-            }
-            return 4;
+            return switch (i) {
+                case 68, 76 -> 8;
+                default -> 4;
+            };
         }
         return 4;
     }
 
     private static String getSignature(Method paramMethod) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append('(');
         Class<?>[] arrayOfClass = paramMethod.getParameterTypes();
         int i = arrayOfClass.length;
-        for (int j = 0; j < i; j++) {
-            sb.append(getSignature(arrayOfClass[j]));
+        for (Class<?> ofClass : arrayOfClass) {
+            sb.append(getSignature(ofClass));
         }
         sb.append(')');
         sb.append(getSignature(paramMethod.getReturnType()));
@@ -211,23 +207,7 @@ public class JDirectLinker {
 
     static {
         if (QTSession.isCurrentOS(2)) {
-            if (QTSession.getJavaVersion() == 65537) {
-                System.loadLibrary("QTJava");
-            } else {
-                class PrivelegedAction {
-
-                    void establish() {
-                        AccessController.doPrivileged(new PrivilegedAction<Void>() {
-
-                            public Void run() {
-                                System.loadLibrary("QTJava");
-                                return null;
-                            }
-                        });
-                    }
-                }
-                new PrivelegedAction().establish();
-            }
+            System.loadLibrary("QTJava");
         }
     }
 }

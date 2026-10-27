@@ -1,34 +1,16 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.comp.ComponentIdentifier;
 import quicktime.std.qtcomponents.SpatialSettings;
+
 
 /**
  * Corresponds to the Codec Component type.
  * refer to Image Compression Manager in QuickTime
  */
 public class CodecComponent extends ComponentIdentifier implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CodecComponent.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     /**
      * choose the first compressor or decompressor of the specified type.
@@ -53,7 +35,7 @@ public class CodecComponent extends ComponentIdentifier implements QuickTimeLib 
     /**
      * Get the default Codec in the dialog box.
      * @return the Codec
-     * @see {@link quicktime.std.qtcomponents.SpatialSettings#getCodec()}
+     * @see quicktime.std.qtcomponents.SpatialSettings#getCodec()
      */
     public static CodecComponent fromSpatialSettings(SpatialSettings paramSpatialSettings) {
         return new CodecComponent(getIntFromArray(paramSpatialSettings.getBytes(), 4));

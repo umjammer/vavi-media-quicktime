@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
@@ -25,23 +26,19 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ICMPixelFormatInfo.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ICMPixelFormatInfo.class));
             }
         }.establish();
     }
 
-    private static byte[] ar = new byte[36];
+    private static final byte[] ar = new byte[36];
 
-    static final long serialVersionUID = 8739457055061219117L;
+    @Serial
+    private static final long serialVersionUID = 8739457055061219117L;
 
     /**
      * Returns true if the provided pixelFormat is a valid pixel format.
-     * QuickTime::ICMGetPixelFormatInfo
+     * @see "QuickTime::ICMGetPixelFormatInfo"
      * @param pixelFormat Specifies the pixel format.
      * @return a boolean
      */
@@ -52,10 +49,10 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
 
     /**
      * Set the PixelFormat info.
-     * QuickTime::ICMSetPixelFormatInfo
+     * @see "QuickTime::ICMSetPixelFormatInfo"
      * @param pixelFormat Specifies the pixel format.
      * @return an ICMPixelFormatInfo structure
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static ICMPixelFormatInfo setPixelFormatInfo(int paramInt) throws StdQTException {
         if (!QTSession.isCurrentOS(4)) {
@@ -69,10 +66,10 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
 
     /**
      * Get the PixelFormat info.
-     * QuickTime::ICMGetPixelFormatInfo
+     * @see "QuickTime::ICMGetPixelFormatInfo"
      * @param pixelFormat Specifies the pixel format.
      * @return an ICMPixelFormatInfo structure
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static ICMPixelFormatInfo getPixelFormatInfo(int paramInt) throws StdQTException {
         ICMPixelFormatInfo localICMPixelFormatInfo = new ICMPixelFormatInfo();
@@ -85,6 +82,7 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
         super(36);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[36];
         paramObjectInputStream.read(this.bytes);
@@ -101,6 +99,7 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[36];
         int i = getIntFromArray(getBytes(), 0);
@@ -153,8 +152,3 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
         return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /ICMPixelFormatInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

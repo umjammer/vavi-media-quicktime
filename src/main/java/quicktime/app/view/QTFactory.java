@@ -45,9 +45,9 @@ public final class QTFactory {
      * @param movie the movie to be displayed
      * @return QTComponent displaying the movie, this can be added to the FullScreenWindow for displaying movie
      *  in fullscreen mode.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static QTComponent makeQTComponent(final Movie mov) throws QTException {
+    public static QTComponent makeQTComponent(Movie mov) throws QTException {
         if (QTSession.isCurrentOS(4)) {
             // the toolbox is emulated, components draw with Java 2D
             return new QTJavaJ2DCanvas(mov);
@@ -58,12 +58,9 @@ public final class QTFactory {
                 QTComponent comp;
 
                 void establish() {
-                    AccessController.doPrivileged(new PrivilegedAction<QTComponent>() {
-
-                        public QTComponent run() {
-                            comp = new QTJavaCocoaCanvas(mov);
-                            return comp;
-                        }
+                    AccessController.doPrivileged((PrivilegedAction<QTComponent>) () -> {
+                        comp = new QTJavaCocoaCanvas(mov);
+                        return comp;
                     });
                 }
 
@@ -83,9 +80,9 @@ public final class QTFactory {
      * @param ctlr the MovieController attached to the movie, if this is NULL the class creates its own controller object.
      *  you can use the getMovieController() call of the component controller to get this movie controller.
      * @return QTComponent displaying the movie and the controller attached to it.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static QTComponent makeQTComponent(final MovieController controller) throws QTException {
+    public static QTComponent makeQTComponent(MovieController controller) throws QTException {
         if (QTSession.isCurrentOS(4)) {
             return new QTJavaJ2DCanvas(controller);
         }
@@ -95,15 +92,12 @@ public final class QTFactory {
                 QTComponent comp;
 
                 void establish() {
-                    AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                        public Object run() {
-                            try {
-                                comp = new QTJavaCocoaCanvas(controller);
-                            } catch (QTException e) {
-                            }
-                            return comp;
+                    AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+                        try {
+                            comp = new QTJavaCocoaCanvas(controller);
+                        } catch (QTException e) {
                         }
+                        return comp;
                     });
                 }
 
@@ -122,9 +116,9 @@ public final class QTFactory {
      * Accepts a GraphicsImporter as its parameters to display in the java component.
      * @param graphicsImporter the image to be displayed
      * @return QTComponent displaying the image represented by the GraphicsImporter component.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static QTComponent makeQTComponent(final GraphicsImporter gi) throws QTException {
+    public static QTComponent makeQTComponent(GraphicsImporter gi) throws QTException {
         if (QTSession.isCurrentOS(4)) {
             return new QTJavaJ2DCanvas(gi);
         }
@@ -134,12 +128,9 @@ public final class QTFactory {
                 QTComponent comp;
 
                 void establish() {
-                    AccessController.doPrivileged(new PrivilegedAction<QTComponent>() {
-
-                        public QTComponent run() {
-                            comp = new QTJavaCocoaCanvas(gi);
-                            return comp;
-                        }
+                    AccessController.doPrivileged((PrivilegedAction<QTComponent>) () -> {
+                        comp = new QTJavaCocoaCanvas(gi);
+                        return comp;
                     });
                 }
 
@@ -157,7 +148,7 @@ public final class QTFactory {
     /**
      * Accepts a GraphicsImporter as its parameters to display in the java component.
      * @return javax.swing.JComponent displaying the image represented by the GraphicsImporter component.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static QTJComponent makeQTJComponent(GraphicsImporterDrawer paramGraphicsImporterDrawer) throws QTException {
         return new JQTCanvas(paramGraphicsImporterDrawer);
@@ -167,7 +158,7 @@ public final class QTFactory {
      * Accepts a MoviePlayer object as its parameters to display in the java component.
      * @param moviePlayer the movie to be displayed
      * @return javax.swing.JComponent displaying the movie represented by the MoviePlayer object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static QTJComponent makeQTJComponent(MoviePlayer paramMoviePlayer) throws QTException {
         return new JQTCanvas(paramMoviePlayer);
@@ -283,7 +274,7 @@ public final class QTFactory {
     }
 
     private static void buildClassPathsVector() throws IOException {
-        classPaths = new Vector(8);
+        classPaths = new Vector<>(8);
         String str1 = System.getProperty("java.class.path");
         while (str1 != null) {
             int i = str1.indexOf(File.pathSeparatorChar);
@@ -298,7 +289,7 @@ public final class QTFactory {
             str3 = returnExistingFile(str3);
             if (str3 != null) {
                 str3 = str3.substring(0, str3.lastIndexOf(File.separatorChar) + 1);
-                if ((!classPaths.contains(str3)) && (str3.length() > 0)) {
+                if ((!classPaths.contains(str3)) && (!str3.isEmpty())) {
                     classPaths.addElement(str3);
                 }
             }

@@ -33,12 +33,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SampleDescription.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SampleDescription.class));
             }
         }.establish();
     }
@@ -60,10 +55,10 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Determines the sample description of the component.
-     * QuickTime::MovieImportGetSampleDescription
+     * @see "QuickTime::MovieImportGetSampleDescription"
      * @return The sample description.
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.qtcomponents.MovieImporter#getSampleDescription()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.qtcomponents.MovieImporter#getSampleDescription()
      */
     public static SampleDescription fromMovieImporter(MovieImporter paramMovieImporter) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -94,15 +89,16 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
      * This method returns the size of the media sample description.
      * @return the size of the sample description.
      */
+    @Override
     public int getSize() {
         return getIntAt(0);
     }
 
     /**
      * Resizes the SampleDescription to the specified size.
-     * QuickTime::SetHandleSize
+     * @see "QuickTime::SetHandleSize"
      * @param size the new size of the SampleDescription.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setSize(int paramInt) throws StdQTException {
         boolean bool = isLocked();
@@ -150,6 +146,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new SampleDescription(makeAndCopyHandle(), null, false);
     }

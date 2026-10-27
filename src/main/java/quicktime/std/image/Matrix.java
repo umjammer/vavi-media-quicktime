@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTException;
@@ -32,18 +33,14 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      */
     public static final int kNativeSize = 36;
 
+    @Serial
     private static final long serialVersionUID = -3479751345142891528L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Matrix.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Matrix.class));
             }
         }.establish();
     }
@@ -79,7 +76,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * in QuickTime 4 or later. The resulting matrix can be concatenated
      * with the matrix from which the source points are derived
      * to transform the display object to the destination area.
-     * QuickTime::QuadToQuadMatrix
+     * @see "QuickTime::QuadToQuadMatrix"
      * @param source a set of 4 points t,l t,r b,r and b,l that describes the source area
      * @param dest a set of 4 points t,l t,r b,r and b,l that describes the destination area
      */
@@ -132,6 +129,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         paramQDPoint.setY(QTUtils.Fix2X(paramArrayOfInt[1]));
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[36];
         paramObjectInputStream.read(this.bytes);
@@ -142,6 +140,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[36];
         for (int i = 0; i < getBytes().length; i += 4) {
@@ -298,7 +297,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * Obtains information about the matrix.
-     * QuickTime::GetMatrixType
+     * @see "QuickTime::GetMatrixType"
      * @return indicates the nature of the transformation defined by Matrix.
      */
     public short getType() {
@@ -314,7 +313,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * Set the contents of a matrix so that it performs no transformation.
-     * QuickTime::SetIdentityMatrix
+     * @see "QuickTime::SetIdentityMatrix"
      */
     public void setIdentity() {
         SetIdentityMatrix(getBytes());
@@ -322,7 +321,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * add a translation value to a specified matrix.
-     * QuickTime::TranslateMatrix
+     * @see "QuickTime::TranslateMatrix"
      * @param deltaH specifies the value to be added to the x coordinate translation value.
      */
     public void translate(float paramFloat1, float paramFloat2) {
@@ -331,7 +330,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * modifies the contents of a matrix so that is defines a rotation operation.
-     * QuickTime::RotateMatrix
+     * @see "QuickTime::RotateMatrix"
      * @param degrees specifies the number of degrees of rotation.
      * @param aboutX specifies the x coordinate of the anchor point of rotation.
      * @param aboutY specifies the y coordinate of the anchor point of rotation.
@@ -342,7 +341,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * modifies the contents of a matrix so that it defines a scaling operation.
-     * QuickTime::ScaleMatrix
+     * @see "QuickTime::ScaleMatrix"
      * @param scaleX specifies the scaling factor applied to x coordinates.
      * @param scaleY specifies the scaling factor applied to y coordinates.
      * @param aboutX specifies the x coordinate of the anchor point.
@@ -354,7 +353,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * modifies the contents of a matrix so that it defines a skew transformation.
-     * QuickTime::SkewMatrix
+     * @see "QuickTime::SkewMatrix"
      * @param skewX specifies the skew value to be applied to x coordinate.
      * @param skewY specifies the skew value to be applied to y coordinate.
      * @param aboutX specifies the x coordinate of the anchor point.
@@ -366,7 +365,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * creates a new matrix that is the inverse of a specified matrix.
-     * QuickTime::InverseMatrix
+     * @see "QuickTime::InverseMatrix"
      * @param mr specifies the new inverse matrix.
      * @return true if inverse matrix was created, else return false.
      */
@@ -377,7 +376,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     /**
      * Concatenates two matrices, combining the transformations described by both
      * matrices into a single matrix.
-     * QuickTime::ConcatMatrix
+     * @see "QuickTime::ConcatMatrix"
      */
     public void concat(Matrix paramMatrix) {
         ConcatMatrix(getBytes(), paramMatrix.getBytes());
@@ -385,9 +384,9 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * Transforms a set of fixed points through a specified matrix.
-     * QuickTime::TransformFixedPoints
+     * @see "QuickTime::TransformFixedPoints"
      * @param dpts a set of float points.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void transformDPoints(QDPoint paramQDPoint) throws QTException {
         int[] arrayOfInt = DoublePt2FixedPt(paramQDPoint);
@@ -405,9 +404,9 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * transforms a set of QuickDraw points through a specified matrix.
-     * QuickTime::TransformPoints
+     * @see "QuickTime::TransformPoints"
      * @param pts an array of Points.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void transformPoints(QDPoint paramQDPoint) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -432,10 +431,10 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     /**
      * transforms the upper left and lower right points of a rectangle through a specified
      * matrix.
-     * QuickTime::TransformFixedRect
+     * @see "QuickTime::TransformFixedRect"
      * @param r the QDRect to be transformed.
      * @return false if the transformation is other than scaling and translation.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean transformDRect(QDRect paramQDRect) throws QTException {
         if (paramQDRect.getFixedRect() == null)
@@ -446,10 +445,10 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     /**
      * transforms the upper left and lower right points of a rectangle through a specified
      * matrix.
-     * QuickTime::TransformFixedRect
+     * @see "QuickTime::TransformFixedRect"
      * @param r the QDRect to be transformed.
      * @return false if the transformation is other than scaling and translation.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean transformDRect(QDRect paramQDRect, QDPoint[] paramArrayOfQDPoint) throws QTException {
         int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
@@ -464,10 +463,10 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * transforms the upper left and lower right points of a rectangle through a specified matrix.
-     * QuickTime::TransformRect
+     * @see "QuickTime::TransformRect"
      * @param r the rectangle to be transformed.
      * @return false if the transformation is other than scaling and translation.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean transformRect(QDRect paramQDRect) throws QTException {
         return TransformRect(getBytes(), paramQDRect.getRect(), 0) != 0;
@@ -475,10 +474,10 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * transforms the upper left and lower right points of a rectangle through a specified matrix.
-     * QuickTime::TransformRect
+     * @see "QuickTime::TransformRect"
      * @param r the rectangle to be transformed.
      * @return false if the transformation is other than scaling and translation.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean transformRect(QDRect paramQDRect, QDPoint[] paramArrayOfQDPoint) throws QTException {
         int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
@@ -491,9 +490,9 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * applies a specified matrix to a region.
-     * QuickTime::TransformRgn
+     * @see "QuickTime::TransformRgn"
      * @param r the region to be transformed.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void transformRgn(Region paramRegion) throws StdQTException {
         StdQTException.checkError(TransformRgn(getBytes(), QTObject.ID(paramRegion)));
@@ -502,7 +501,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     /**
      * creates a matrix that performs a translate and scale operation as described by the relationship
      * between two rectangles.
-     * QuickTime::RectMatrix
+     * @see "QuickTime::RectMatrix"
      * @param srcRect the source rectangle.
      * @param dstRect the destination rectangle.
      */
@@ -513,7 +512,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     /**
      * alters an existing matrix so that it defines a transformation from one rectangle to
      * another.
-     * QuickTime::MapMatrix
+     * @see "QuickTime::MapMatrix"
      * @param fromRect the source rectangle.
      * @param toRect the destination rectangle.
      */
@@ -530,7 +529,7 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * copies the contents of the one matrix into another matrix.
-     * QuickTime::CopyMatrix
+     * @see "QuickTime::CopyMatrix"
      * @return a clone Matrix.
      */
     public Matrix copy() {
@@ -539,16 +538,17 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     /**
      * copies the contents of the one matrix into another matrix.
-     * QuickTime::CopyMatrix
+     * @see "QuickTime::CopyMatrix"
      * @return a clone Matrix.
      */
+    @Override
     public Object clone() {
         return copy();
     }
 
     /**
      * Compares the contents of a matrix for Equality.
-     * QuickTime::EqualMatrix
+     * @see "QuickTime::EqualMatrix"
      * @param m the Matrix you are testing for equality.
      * @return a boolean of whether the matrices are equal.
      */
@@ -644,8 +644,3 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /Matrix.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

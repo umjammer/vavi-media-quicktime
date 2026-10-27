@@ -7,7 +7,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * The SimpleActionList class extends the TickleList to
  * provide a list of Targetable objects. The Targetable interface
  * extends the Ticklish interface providing a Ticklish object
@@ -17,7 +17,7 @@ import quicktime.QTSession;
  * that are associated with a particular target and return an enumeration
  * that is capable of enumerating over the list's targets.
  *
- * @see {@link quicktime.app.actions.Targetable}
+ * @see quicktime.app.actions.Targetable
  */
 public class SimpleActionList extends TickleList {
 
@@ -28,8 +28,8 @@ public class SimpleActionList extends TickleList {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return an Enumeration that is capable of enumerating through
      * the targets that are targetted by the actions. As any of the
      * actions that are added can target the same object, this Enumerator
@@ -42,20 +42,21 @@ public class SimpleActionList extends TickleList {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the object implements the Targetable interface. Only
      * Targetable objects can be members of the SimpleActionList
      * @param object an object to test for appropriateness of this list
      * @return true if the object implements the Targetable interface
      */
-    public boolean isAppropriate(Object paramObject) {
-        return paramObject instanceof Targetable;
+    @Override
+    public boolean isAppropriate(Object object) {
+        return object instanceof Targetable;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes any and all actions that target the supplied target.
      * @param target the target which determines which actions to remove
      */
@@ -95,6 +96,7 @@ public class SimpleActionList extends TickleList {
             this.current = paramTickleNode;
         }
 
+        @Override
         public boolean hasMoreElements() {
             while (this.current != null) {
                 if (!this.rt.contains(((Targetable) this.current.action).getTarget()))
@@ -104,6 +106,7 @@ public class SimpleActionList extends TickleList {
             return false;
         }
 
+        @Override
         public Object nextElement() {
             if (this.current == null)
                 throw new NoSuchElementException("ActionList");
@@ -114,7 +117,7 @@ public class SimpleActionList extends TickleList {
             return localObject;
         }
 
-        private Vector rt = new Vector();
+        private final Vector rt = new Vector();
     }
 }
 

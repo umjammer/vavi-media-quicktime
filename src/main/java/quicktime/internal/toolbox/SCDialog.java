@@ -83,7 +83,7 @@ final class SCDialog {
                 depth.setSelectedIndex(i);
             }
         }
-        JSlider quality = new JSlider(0, Codecs.codecLosslessQuality, Math.min(Codecs.codecLosslessQuality, Math.max(0, s.spatial(10))));
+        JSlider quality = new JSlider(0, Codecs.codecLosslessQuality, Math.clamp(s.spatial(10), 0, Codecs.codecLosslessQuality));
         JPanel p = new JPanel(new GridBagLayout());
         row(p, 0, "Compressor:", codec);
         row(p, 1, "Depth:", depth);

@@ -4,24 +4,26 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * A convenience adapter class for dealing with mouse events that enter or exit a space.
  */
 public class MouseEnterExitAdapter extends MouseMoveAdapter implements MouseEnterExitListener {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse enters a space.
      */
+    @Override
     public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Invoked when the mouse exits a space.
      */
+    @Override
     public void mouseExited(QTMouseEvent paramQTMouseEvent) {
     }
 
@@ -31,8 +33,3 @@ public class MouseEnterExitAdapter extends MouseMoveAdapter implements MouseEnte
         }
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /MouseEnterExitAdapter.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

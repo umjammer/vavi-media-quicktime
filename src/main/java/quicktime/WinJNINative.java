@@ -1,12 +1,11 @@
 
 package quicktime;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.PlatformManager;
 
 
 final class WinJNINative {
+
     static int DoSecurityInit() {
         return PlatformManager.DoSecurityInit();
     }
@@ -25,23 +24,7 @@ final class WinJNINative {
 
     static {
         if (QTSession.isCurrentOS(2)) {
-            if (QTSession.getJavaVersion() == 65537) {
-                System.loadLibrary("QTJava");
-
-            } else {
-
-                class PrivelegedAction {
-                    void establish() {
-                        AccessController.doPrivileged(new PrivilegedAction<Void>() {
-                            public Void run() {
-                                System.loadLibrary("QTJava");
-                                return null;
-                            }
-                        });
-                    }
-                }
-                new PrivelegedAction().establish();
-            }
+            System.loadLibrary("QTJava");
         }
     }
 }

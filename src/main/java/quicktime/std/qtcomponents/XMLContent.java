@@ -1,46 +1,25 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
+
 
 /**
  * The XMLContent implements java wrapper of pointer to QuickTime XMLContent
  */
 public final class XMLContent extends QTObject implements PrimitivesLib, QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(XMLContent.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
-    private static Object owner = new Object();
+    private static final Object owner = new Object();
 
     private static final int kXMLElementContentDataSize = 20;
-
     private static final int kKindOffset = 0;
-
     private static final int kElementOffset = 4;
-
     private static final int kDataOffset = 4;
 
     XMLContent(int paramInt) throws QTException {
@@ -60,7 +39,7 @@ public final class XMLContent extends QTObject implements PrimitivesLib, QuickTi
     /**
      * get type of content
      * @return StdQTConstants5.xmlContentTypeInvalid, StdQTConstants5.xmlContentTypeElement or StdQTConstants5.xmlContentTypeCharData
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getKind() throws StdQTException {
         return getIntFromPointer(_ID(), 0);

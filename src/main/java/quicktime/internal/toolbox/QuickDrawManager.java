@@ -1297,11 +1297,7 @@ public final class QuickDrawManager {
     private static final Map<Integer, String> fontNames = new HashMap<>();
 
     static synchronized int fontId(String name) {
-        Integer id = fontIds.get(name);
-        if (id == null) {
-            id = 1024 + fontIds.size();
-            fontIds.put(name, id);
-        }
+        Integer id = fontIds.computeIfAbsent(name, k -> 1024 + fontIds.size());
         fontNames.put(id, name);
         return id;
     }

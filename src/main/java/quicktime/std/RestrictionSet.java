@@ -27,12 +27,7 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(RestrictionSet.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(RestrictionSet.class));
             }
         }
         new PrivelegedAction().establish();
@@ -44,10 +39,10 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the restrictions, if any, specified on a given movie.
-     * QuickTime::QTGetMovieRestrictions
+     * @see "QuickTime::QTGetMovieRestrictions"
      * @param theMovie the movie whose restrictions are returned
      * @return the RestrictionSet object for given movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static RestrictionSet fromMovie(Movie paramMovie) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
@@ -59,7 +54,7 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
     /**
      * Use this routine to determine what restrictions are enforced by the currently
      * running version of QuickTime.
-     * QuickTime::QTGetSupportedRestrictions
+     * @see "QuickTime::QTGetSupportedRestrictions"
      * @return restrictions in force for the class passed.
      */
     public static int getSupportedRestrictions(int paramInt) {
@@ -71,7 +66,7 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
     /**
      * Returns the information about the restrictions designated by the specified
      * restriction set. If you want to determine all of the restrictions, use this routine to determine the count.
-     * QuickTime::QTRestrictionsGetInfo
+     * @see "QuickTime::QTRestrictionsGetInfo"
      */
     public int getClassCount() {
         int[] arrayOfInt1 = { 0 };
@@ -83,7 +78,7 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
     /**
      * Returns the information about the restrictions designated by the specified
      * restriction set.
-     * QuickTime::QTRestrictionsGetInfo
+     * @see "QuickTime::QTRestrictionsGetInfo"
      * @return an updated integer value that changes with change to the restrition set
      */
     public int getSeed() {
@@ -95,7 +90,7 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the restricted items.
-     * QuickTime::QTRestrictionsGetItem
+     * @see "QuickTime::QTRestrictionsGetItem"
      * @param restrictionClass class of restrictions to be reported: kQTRestrictionClassSave or kQTRestrictionClassEdit
      * @return integer holding constants that indicate individual restrictions
      */

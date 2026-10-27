@@ -13,8 +13,8 @@ public class QTAppException extends QTException {
      * Construct an Exception.
      * @param message A message
      */
-    public QTAppException(String paramString) {
-        super(paramString);
+    public QTAppException(String message) {
+        super(message);
     }
 
     /**

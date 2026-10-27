@@ -15,7 +15,7 @@ import quicktime.std.image.GraphicsMode;
 import quicktime.std.image.Matrix;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class handles all the tasks of updating and redrawing the TwoDSprite. It takes care of
  * redrawing the Dynamic images that are in the sprite. This class also sets the size and location
  * of the TwoDSprite.
@@ -23,13 +23,13 @@ import quicktime.std.image.Matrix;
 public class UIElement extends TwoDSprite implements DynamicImage {
 
     /**
-     * Deprecated.
+     * @deprecated
      * The image used when the UIElement is deactive* @deprecated since QTJava 6.1
      */
     protected ImageSpec deactiveImage;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The image used when the UIElement is active* @deprecated since QTJava 6.1
      */
     protected ImageSpec currentImage;
@@ -45,8 +45,8 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Constructs a UIElement sprite.
      * @param currentImage this will be the currentImage that is presented by the UIElement. It may NOT be null
      * @param deactiveImage this is the image that will be used if the UIElement is deactiveated. It may be null
@@ -65,12 +65,12 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     private boolean active = true;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * sets the x and y coordinates of the UIElement.
      * @param tx the x coordinate
      * @param ty the y coordinate
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setLocation(int paramInt1, int paramInt2) throws QTException {
         Matrix localMatrix = getMatrix();
@@ -82,11 +82,11 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * sets the size of the UIElement
      * @param size the Dimension size in pixel values
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setSize(QDDimension paramQDDimension) throws QTException {
         Matrix localMatrix1 = getMatrix();
@@ -102,10 +102,10 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the location and the size of the UIElement.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QDRect getBounds() throws QTException {
         Matrix localMatrix = getMatrix();
@@ -114,12 +114,12 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current image of the UIElement.
      * @param newCurrentImage the current image thats set to be displayed by the TwoDSprite. If null
      *  the UIElement is deactivated.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected void setCurrentImage(ImageSpec paramImageSpec) throws QTException {
         if ((this.c != null) && ((this.currentImage instanceof DynamicImage))) {
@@ -138,11 +138,11 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current state of the UIElement , it wont receive any events when set to false
      * @param active true will set the state to active
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setActive(boolean paramBoolean) throws QTException {
         this.active = paramBoolean;
@@ -154,8 +154,8 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current state of the UIElement
      * @return true if actives
      */
@@ -164,8 +164,8 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -183,9 +183,10 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @param s the TwoDSprite that is presenting the DynamicImage's image in
      *  the Compositor. This is the sprite that must be invalidated.
      * @return an Invalidator or null if invalidation is not required
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.app.anim.SWCompositor}
+     * @throws quicktime.QTException
+     * @see quicktime.app.anim.SWCompositor
      */
+    @Override
     public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException {
         this.c = paramSWCompositor;
         setCurrentImage(this.currentImage);
@@ -193,15 +194,16 @@ public class UIElement extends TwoDSprite implements DynamicImage {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
      * @param c the SWCompositor it is being removed from
-     * @param {@link quicktime.QTException}
-     * @see {@link quicktime.app.anim.SWCompositor}
+     * @throws quicktime.QTException
+     * @see quicktime.app.anim.SWCompositor
      */
+    @Override
     public void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException {
         this.c = null;
         this.currentInvalidator = null;
@@ -213,9 +215,10 @@ public class UIElement extends TwoDSprite implements DynamicImage {
             super(paramTwoDSprite);
         }
 
-        public boolean tickle(float paramFloat, int paramInt) throws QTException {
+        @Override
+        public boolean tickle(float er, int t) throws QTException {
             if (UIElement.this.currentInvalidator != null)
-                return UIElement.this.currentInvalidator.tickle(paramFloat, paramInt);
+                return UIElement.this.currentInvalidator.tickle(er, t);
             return true;
         }
     }

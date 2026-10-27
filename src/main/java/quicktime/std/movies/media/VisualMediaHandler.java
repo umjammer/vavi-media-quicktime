@@ -1,11 +1,8 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MediaHandlerManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
 import quicktime.qd.QDPoint;
@@ -13,23 +10,8 @@ import quicktime.std.StdQTException;
 import quicktime.std.image.GraphicsMode;
 import quicktime.util.QTPointer;
 
+
 public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(VisualMediaHandler.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     protected VisualMediaHandler(int paramInt, Object paramObject) {
         super(paramInt, paramObject);
@@ -37,20 +19,20 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
 
     /**
      * Allows you to set the graphics mode and blend color of the video media handler.
-     * QuickTime::MediaSetGraphicsMode
+     * @see "QuickTime::MediaSetGraphicsMode"
      * @param graphicsMode the graphics mode.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public final void setGraphicsMode(GraphicsMode paramGraphicsMode) throws StdQTException {
-        StdQTException.checkError(MediaSetGraphicsMode(_ID(), paramGraphicsMode.getGraphicsMode(), paramGraphicsMode.getColor().getRGBColor()));
+    public final void setGraphicsMode(GraphicsMode graphicsMode) throws StdQTException {
+        StdQTException.checkError(MediaSetGraphicsMode(_ID(), graphicsMode.getGraphicsMode(), graphicsMode.getColor().getRGBColor()));
     }
 
     /**
      * Obtain the transfer mode and blend or transparent color values.
-     * QuickTime::MediaGetGraphicsMode
+     * @see "QuickTime::MediaGetGraphicsMode"
      * currently used by the video media handler.
      * @return the blend or transparent color
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final GraphicsMode getGraphicsMode() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -61,9 +43,9 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
 
     /**
      * Determine whether the visual media of the track has opaque drawing settings in its presentation.
-     * QuickTime::MediaGetTrackOpaque
+     * @see "QuickTime::MediaGetTrackOpaque"
      * @return true if some part of the track's media is opaque.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final boolean getTrackOpaque() throws StdQTException {
         byte[] arrayOfByte = { 0 };
@@ -73,9 +55,9 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
 
     /**
      * You can use to hit test a flash, sprite, text and 3D track and get a refCon for a button or symbol that was hit.
-     * QuickTime::MediaHitTestForTargetRefCon
+     * @see "QuickTime::MediaHitTestForTargetRefCon"
      * @return the target RefCon at the specified point
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final int hitTestForTargetRefCon(int paramInt, QDPoint paramQDPoint) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -85,9 +67,9 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
 
     /**
      * You can use to hit test a flash, sprite, text and 3D track for a given button or symbol.
-     * QuickTime::MediaHitTestTargetRefCon
+     * @see "QuickTime::MediaHitTestTargetRefCon"
      * @return true if some part of the target RefCon is hit.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final boolean hitTestTargetRefCon(int paramInt1, int paramInt2, QDPoint paramQDPoint) throws StdQTException {
         byte[] arrayOfByte = { 0 };

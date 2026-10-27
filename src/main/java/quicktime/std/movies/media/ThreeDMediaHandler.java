@@ -11,7 +11,7 @@ public class ThreeDMediaHandler extends VisualMediaHandler {
 
     /**
      * No QT Documentation.
-     * QuickTime::Media3DGetNamedObjectList()
+     * @see "QuickTime::Media3DGetNamedObjectList()"
      */
     public AtomContainer getNamedObjectList() throws StdQTException {
         return AtomContainer.fromThreeDMediaHandlerObject(this);
@@ -19,7 +19,7 @@ public class ThreeDMediaHandler extends VisualMediaHandler {
 
     /**
      * No QT Documentation.
-     * QuickTime::Media3DGetRendererList()
+     * @see "QuickTime::Media3DGetRendererList()"
      */
     public AtomContainer getRendererList() throws StdQTException {
         return AtomContainer.fromThreeDMediaHandlerRenderer(this);

@@ -1,42 +1,23 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.XMLParserManager;
 import quicktime.internal.toolbox.MemoryManager;
+import quicktime.internal.toolbox.XMLParserManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
+
 
 /**
  * XMLDoc class corresponds to the QuickTime XMLDoc
  */
 public final class XMLDoc extends QTObject implements PrimitivesLib, QuickTimeLib {
 
-    private static Object linkage;
-
     private static final int kXMLDocDataSize = 20;
-
     private static final int kRootElementOffset = 4;
 
     private XMLParser owner;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(XMLDoc.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     XMLDoc(int paramInt, XMLParser paramXMLParser) throws QTException {
         super(paramInt, paramXMLParser);
@@ -45,7 +26,7 @@ public final class XMLDoc extends QTObject implements PrimitivesLib, QuickTimeLi
 
     /**
      * Disposes of a XMLDoc parse tree
-     * QuickTime::XMLParseDisposeXMLDoc
+     * @see "QuickTime::XMLParseDisposeXMLDoc"
      */
     public void dispose() throws StdQTException {
         if (this.owner != null) {

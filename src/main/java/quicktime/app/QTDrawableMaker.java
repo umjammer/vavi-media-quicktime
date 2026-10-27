@@ -11,7 +11,7 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is used in the making of QTDrawable objects by the QTFactory.makeDrawable methods
  * when a GraphicsImporter or Movie is made from the user's input. Applications can
  * subclass this class and pass it in to the makeDrawable methods to overide the method
@@ -38,27 +38,27 @@ public class QTDrawableMaker {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @param gi the GraphicsImporter from which to construct a QTDrawable object which is capable of
      *  presenting the image data imported by the GraphicsImporter.
      * @return an GraphicsImporterDrawer object from the supplied GraphicsImporter
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public QTDrawable fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws QTException {
-        return new GraphicsImporterDrawer(paramGraphicsImporter);
+    public QTDrawable fromGraphicsImporter(GraphicsImporter gi) throws QTException {
+        return new GraphicsImporterDrawer(gi);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @param m the Movie from which to construct a QTDrawable object which is capable of
      *  presenting the Movie.
      * @return a QTPlayer object from the supplied Movie
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public QTDrawable fromMovie(Movie paramMovie) throws QTException {
-        MovieController localMovieController = new MovieController(paramMovie);
+    public QTDrawable fromMovie(Movie m) throws QTException {
+        MovieController localMovieController = new MovieController(m);
         localMovieController.setKeysEnabled(true);
         return new QTPlayer(localMovieController);
     }

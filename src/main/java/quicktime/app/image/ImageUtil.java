@@ -18,7 +18,7 @@ import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * Some utility routines for dealing with images
  */
 public final class ImageUtil {
@@ -26,7 +26,7 @@ public final class ImageUtil {
     private static final boolean debug = false;
 
     /**
-     * Deprecated.
+     * @deprecated
      * This is the OSType that is used to create hit test data for kAnimationCodec compressed images* @deprecated since QTJava 6.1
      */
     public static final int kHitTestRgnSrc = 1768776048;
@@ -38,8 +38,8 @@ public final class ImageUtil {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
      * the keyColor set as a transparent colour that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will also
@@ -48,15 +48,15 @@ public final class ImageUtil {
      * The images will be compressed at a default setting of 16bit resolution.
      * @param keyColor the color that will be removed from the images appearance
      * @return an ImageDataSequence object that contains the new images
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor) throws QTException {
         return makeTransparent(paramImageSpec, paramQDColor, new QDGraphics(16, paramImageSpec.getDescription().getBounds()), null, null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
      * the keyColor set as a transparent colour that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will use the depth
@@ -69,15 +69,15 @@ public final class ImageUtil {
      *  This graphics should be the size of the image (or a portion) that will be used to determine which
      *  parts of the image are compressed.
      * @return an ImageDataSequence object that contains the new images
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor, QDGraphics paramQDGraphics) throws QTException {
         return makeTransparent(paramImageSpec, paramQDColor, paramQDGraphics, null, null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
      * the keyColor set as a transparent colour that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will use the depth
@@ -91,15 +91,15 @@ public final class ImageUtil {
      *  parts of the image are compressed.
      * @param r a hit test Region
      * @return an ImageDataSequence object that contains the new images
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor, QDGraphics paramQDGraphics, Region paramRegion) throws QTException {
         return makeTransparent(paramImageSpec, paramQDColor, paramQDGraphics, paramRegion, null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
      * the keyColor set as a transparent colour that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will use the depth
@@ -115,7 +115,7 @@ public final class ImageUtil {
      *  parts of the image are compressed.
      * @param r an array of Regions that supply hit test data for each image in the sequence.
      * @return an ImageDataSequence object that contains the new images
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDataSequence makeTransparent(ImageDataSequence paramImageDataSequence, QDColor paramQDColor, QDGraphics paramQDGraphics, Region[] paramArrayOfRegion) throws QTException {
         return makeTransparent(paramImageDataSequence, paramQDColor, paramQDGraphics, null, paramArrayOfRegion);
@@ -142,8 +142,7 @@ public final class ImageUtil {
             localImageDescription = new ImageDescription(localPixMap2);
             localImageDescription.lock();
         }
-        if ((paramImageSpec instanceof ImageDataSequence)) {
-            ImageDataSequence localImageDataSequence2 = (ImageDataSequence) paramImageSpec;
+        if ((paramImageSpec instanceof ImageDataSequence localImageDataSequence2)) {
             for (int k = 1; k <= localImageDataSequence2.size(); k++) {
                 if (j != 0) {
                     localCSequenceToMemory.begin(localQDGraphics1, localQDRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, paramImageSpec.getDescription().getCTable(), 0);
@@ -219,8 +218,8 @@ public final class ImageUtil {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This routine will create an ImageDataSeqeuence object from specified Track of a Movie.
      * This method gets image data that matches the first sample description that is
      * contained in the track, loads the individual frames into memory and returns an ImageDataSequence
@@ -228,7 +227,7 @@ public final class ImageUtil {
      * @param imageTrack this track contains image data - it must contain a VideoMedia object.
      * @return a ImageDataSequence object that contains a sequence of image data and a single description
      *  that defines the compression, bounds, etc. that is common to all of the image data objects
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static ImageDataSequence createSequence(quicktime.std.movies.Track paramTrack) throws QTException {
         Media localMedia = Media.getTrackMedia(paramTrack);
@@ -250,8 +249,8 @@ public final class ImageUtil {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This routine will create an ImageDataSeqeuence object from the collection of
      * files that are found in the specified directory that begin with the specified
      * fileName. The default FileFilter object is passed in as the filter. The default
@@ -262,7 +261,7 @@ public final class ImageUtil {
      * @return a ImageDataSequence object that contains a sequence of image data and a single description
      *  that defines the compression, bounds, etc. that is common to all of the image data objects
      * @return java.io.IOException
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @see <A href="../../../quicktime/app/image/FileFilter.html">for a description of the format of the file name
      *  that this filter will deal with.</A>
      */
@@ -271,8 +270,8 @@ public final class ImageUtil {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This routine will create an ImageDataSeqeuence object from the collection of
      * files that are found in the specified directory that begin with the specified
      * fileName. You supply a FileFilter object to do custom filter operations. The default
@@ -284,7 +283,7 @@ public final class ImageUtil {
      * @return a ImageDataSequence object that contains a sequence of image data and a single description
      *  that defines the compression, bounds, etc. that is common to all of the image data objects
      * @return java.io.IOException
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @see <A href="../../../quicktime/app/image/FileFilter.html">for a description of the format of the file name
      *  that this filter will deal with and the methods that can be overridden or extended.</A>
      */

@@ -8,11 +8,11 @@ import quicktime.util.QTUtils;
 
 
 final class QTCompDispatcher {
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private QTCompMethodClosure mMethodClosure;
 
@@ -39,11 +39,11 @@ final class QTCompDispatcher {
         this.mp = paramMovieProgress;
     }
 
-    private final short mpDefaultProc(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
+    private short mpDefaultProc(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
         return 0;
     }
 
-    private final short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
+    private short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
         return (short) this.mp.execute(this.theCurrentMov, paramShort1, paramShort2, QTUtils.Fix2X(paramInt2));
     }
 

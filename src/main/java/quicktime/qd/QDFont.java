@@ -19,22 +19,17 @@ public final class QDFont implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QDFont.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDFont.class));
             }
         }.establish();
     }
 
     /**
      * The GetFontName procedure gets the name of a font family that has a specified family ID number.
-     * QuickDraw::GetFontName()
+     * @see "QuickDraw::GetFontName()"
      * @return the name of the font. If the font specified in the familyID parameter does not exist, theName contains an empty string.
      */
-    public static final String getFontName(int paramInt) {
+    public static String getFontName(int paramInt) {
         byte[] arrayOfByte = new byte[255];
         GetFontName((short) paramInt, arrayOfByte);
         return QTUtils.PString2String(arrayOfByte, 0);
@@ -42,11 +37,11 @@ public final class QDFont implements QuickTimeLib {
 
     /**
      * The GetFNum procedure gets the font family ID for a specified font family name.
-     * QuickDraw::GetFNum()
+     * @see "QuickDraw::GetFNum()"
      * @param theName The font family name
      * @return the familyID that corresponds to the supplied font family name. If the font specified in the parameter theName does not exist, familyID contains 0.
      */
-    public static final int getFNum(String paramString) {
+    public static int getFNum(String paramString) {
         byte[] arrayOfByte = QTUtils.String2PString(paramString, 255);
         short[] arrayOfShort = { 0 };
         GetFNum(arrayOfByte, arrayOfShort);

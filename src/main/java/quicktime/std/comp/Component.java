@@ -1,13 +1,11 @@
 package quicktime.std.comp;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
+
 
 /**
  * Representation of an open ComponentInstance.
@@ -15,30 +13,13 @@ import quicktime.std.StdQTException;
  */
 public class Component extends ComponentIdentifier implements QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Component.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     /**
      * Given a component identifier it opens the specified component.
-     * QuickTime::OpenAComponent
+     * @see "QuickTime::OpenAComponent"
      * @param comp the component identifier to open
      */
-    public Component(ComponentIdentifier paramComponentIdentifier) throws StdQTException {
-        this(allocate(QTObject.ID(paramComponentIdentifier)), null);
+    public Component(ComponentIdentifier comp) throws StdQTException {
+        this(allocate(QTObject.ID(comp)), null);
     }
 
     protected Component(ComponentIdentifier paramComponentIdentifier, int paramInt) throws QTException {
@@ -47,15 +28,13 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
 
     /**
      * Opens the specified component.
-     * QuickTime::OpenADefaultComponent
+     * @see "@see "QuickTime::OpenADefaultComponent""
      * @param type the component type
      * @param subType the component sub type
-     * {@link quicktime.std.StdQTException}
-     * - Possible component allocation error.
-     * {@link quicktime.QTException}
+     * @throws quicktime.std.StdQTException Possible component allocation error.
      */
-    public Component(int paramInt1, int paramInt2) throws QTException {
-        this(allocate(paramInt1, paramInt2), null);
+    public Component(int type, int subType) throws QTException {
+        this(allocate(type, subType), null);
     }
 
     protected Component(int paramInt, Object paramObject) {
@@ -86,7 +65,7 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
 
     /**
      * Determines the current number of open connections managed by the Component.
-     * QuickTime::CountComponentInstances
+     * @see "@see "QuickTime::CountComponentInstances""
      * @return The number of component instances of the specified Component.
      */
     public final int count() {

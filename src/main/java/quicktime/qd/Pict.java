@@ -47,19 +47,14 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Pict.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Pict.class));
             }
         }.establish();
     }
 
-    private static int kNativeSize = 10;
+    private static final int kNativeSize = 10;
 
-    private static transient QDGraphics gw = null;
+    private static QDGraphics gw = null;
 
     private static final int[] savedPort = { 0 };
 
@@ -67,12 +62,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * Creates an 80-by-80 pixel thumbnail picture from the pixmap associated with this QDGraphics.
-     * QuickTime::MakeThumbnailFromPixMap()
+     * @see "QuickTime::MakeThumbnailFromPixMap()"
      * @param qd the QDGraphics from which to make the thumbnail
      * @param src a QDRect object defining the portion of the image to use for the thumbnail
      * @param colorDepth specifies the depth at which the image is likely to be viewed
      * @return a Pict object representing the thumbnail
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Pict thumbnailFromQDGraphics(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt) throws QTException {
         Pict localPict = new Pict(4, false);
@@ -96,12 +91,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * This method creates a QuickDraw picture from the specified track at the specified time.
-     * QuickTime::GetTrackPict()
+     * @see "QuickTime::GetTrackPict()"
      * @param t the track object
      * @param time Specifies the track image for the picture. The time parameter contains the time from which the image is taken.
      * @return a Pict object for the specified time.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.Track#getPict(int)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.Track#getPict(int)
      */
     public static Pict fromTrack(Track paramTrack, int paramInt) throws QTException {
         int i = GetTrackPict(QTObject.ID(paramTrack), paramInt);
@@ -113,12 +108,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * This method creates a picture from the specified movie at the specified time.
      * This function uses only those movie tracks that are currently enabled and would therefore
      * be used in playback. Your application may call this function even if the movie is inactive.
-     * QuickTime::GetMoviePict()
+     * @see "QuickTime::GetMoviePict()"
      * @param time contains the time from which the image is taken.
      * @param m the Movie object
      * @return a Pict object
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.Movie#getPict(int)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.Movie#getPict(int)
      */
     public static Pict fromMovie(Movie paramMovie, int paramInt) throws QTException {
         int i = GetMoviePict(QTObject.ID(paramMovie), paramInt);
@@ -129,11 +124,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     /**
      * This method creates a picture that contains a movie's poster.
      * returns a PicHandle object for the image.
-     * QuickTime::GetMoviePosterPict()
+     * @see "QuickTime::GetMoviePosterPict()"
      * @param m the Movie object
      * @return a Pict object
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.Movie#getPosterPict()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.Movie#getPosterPict()
      */
     public static Pict fromMovie(Movie paramMovie) throws QTException {
         int i = GetMoviePosterPict(QTObject.ID(paramMovie));
@@ -144,12 +139,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     /**
      * This method creates a picture that contains a representation of the presentation
      * returns a PicHandle object for the image.
-     * QuickTime::QTSPresGetPicture()
+     * @see "QuickTime::QTSPresGetPicture()"
      * @param p the Presentation object
      * @param s the stream object
      * @return a Pict object
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.streaming.Presentation#getPicture(quicktime.streaming.Stream)}
+     * @throws quicktime.QTException
+     * @see quicktime.streaming.Presentation#getPicture(quicktime.streaming.Stream)
      */
     public static Pict fromPresentation(Presentation paramPresentation, Stream paramStream) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -165,13 +160,13 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * the sequence grabber component obtains and configures appropriate sequence grabber
      * channel components (if necessary), grabs the data, and then releases any components
      * it obtained.
-     * QuickTime::SGGrabPict
+     * @see "QuickTime::SGGrabPict"
      * @param bounds The bounding rectangle.
      * @param offscreenDepth The bit depth of the Pict.
      * @param grabPictFlags The flags for the operation.
      * @return The Pict.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.sg.SequenceGrabber#grabPict(quicktime.qd.QDRect, int, int)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.sg.SequenceGrabber#grabPict(quicktime.qd.QDRect, int, int)
      */
     public static Pict fromSequenceGrabber(SequenceGrabber paramSequenceGrabber, QDRect paramQDRect, int paramInt1, int paramInt2) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -182,10 +177,10 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * Creates a new Pict containing the image currently in use by this import component.
-     * QuickTime::GraphicsImportGetAsPicture
+     * @see "QuickTime::GraphicsImportGetAsPicture"
      * @return a pict
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getAsPicture()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsImporter#getAsPicture()
      */
     public static Pict fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -196,10 +191,10 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * Creates a new Pict containing the image currently in use by this import component.
-     * QuickTime::GraphicsExportGetInputPicture
+     * @see "QuickTime::GraphicsExportGetInputPicture"
      * @return a pict
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getInputPicture()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getInputPicture()
      */
     public static Pict fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -210,11 +205,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * Compresses a Pict returning a new Pict.
-     * QuickTime::SCCompressPicture()
+     * @see "QuickTime::SCCompressPicture()"
      * @param src the source Pict.
      * @return a Pict
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.qtcomponents.ImageCompressionDialog#compressPicture(quicktime.qd.Pict)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.qtcomponents.ImageCompressionDialog#compressPicture(quicktime.qd.Pict)
      */
     public static Pict fromImageCompressionDialog(ImageCompressionDialog paramImageCompressionDialog, Pict paramPict) throws QTException {
         Pict localPict = new Pict(4, true);
@@ -230,7 +225,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * to ensure that the file is valid PICT file.
      * @param file the PICT file
      * @return a Pict
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      * @return java.io.IOException
      */
     public static Pict fromFile(File paramFile) throws QTException, IOException {
@@ -248,11 +243,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * Use OpenCPicture to begin defining a picture, collecting all of your subsequent
      * drawing commands in this record. The returned Pict must be closed before any
      * other methods can be applied to it.
-     * QuickDraw::OpenCPicture
+     * @see "QuickDraw::OpenCPicture"
      * @param port the port which the open picture will record operations from
      * @param params the parameters for the new Pict
      * @return a Pict
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Pict open(QDGraphics paramQDGraphics, OpenCPicParams paramOpenCPicParams) throws QTException {
         if (gw != null)
@@ -319,7 +314,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * Completes the collection of drawing commands and picture comments that define your picture.
-     * QuickDraw::ClosePicture()
+     * @see "QuickDraw::ClosePicture()"
      */
     public void close() throws QDException {
         if (gw != null) {
@@ -338,11 +333,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     /**
      * This allows your application to compress a single-frame image stored as a picture.
      * Returns the result in a new picture.
-     * QuickTime::CompressPicture()
+     * @see "QuickTime::CompressPicture()"
      * @param quality Specifies the desired compressed image quality
      * @param cType Specifies the compressor type
      * @return dstPicture The destination compressed image
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Pict compress(int paramInt1, int paramInt2) throws QTException {
         if (isOpen())
@@ -355,7 +350,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     /**
      * This allows your application to compress a single-frame image with more variance that stored as a picture.
      * Returns the result in a new picture.
-     * QuickTime::FCompressPicture()
+     * @see "QuickTime::FCompressPicture()"
      * @param colorDepth Specifies the depth at which the image is to be compressed
      *          // * @param clut Specifies the custom color lookup table. Uses source color table only.
      * @param quality Specifies the desired compressed image quality
@@ -364,7 +359,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @param cType Specifies the compressor type
      * @param codec Specifies the compression indentifier
      * @return dstPicture The destination compressed image
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Pict fCompress(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) throws QTException {
         if (isOpen())
@@ -376,10 +371,10 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * To draw a picture on any type of output device.
-     * QuickTime::DrawPicture()
+     * @see "QuickTime::DrawPicture()"
      * @param cg Specified graph port on which it will be drawn. This may NOT be null.
      * @param frameRect Specified rectangle with the coordinates in which to draw the picture.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void draw(QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
         if (isOpen())
@@ -401,12 +396,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     /**
      * Allows the drawing of an image that is stored as a picture.
      * Also, trims that image to fit the region you specify.
-     * QuickTime::DrawTrimmedPicture()
+     * @see "QuickTime::DrawTrimmedPicture()"
      * @param cg Specified graph port on which it will be drawn. This may NOT be null.
      * @param frameRect Specifies the rectangle into which the decompressed image is to be loaded
      * @param trimMask Specifies the destination clipping region
      * @param doDither Specifies whether to dither or not
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void drawTrimmed(QDGraphics paramQDGraphics, QDRect paramQDRect, Region paramRegion, int paramInt) throws QTException {
         if (isOpen())
@@ -428,10 +423,10 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
 
     /**
      * This allows your application to create an 80-by-80 pixel thumbnail picture from a specified picture.
-     * QuickTime::MakeThumbnailFromPicture()
+     * @see "QuickTime::MakeThumbnailFromPicture()"
      * @param colorDepth Specifies the desired depth at which the image is likely to be viewed
      * @return The desired thumbnail picture
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Pict makeThumbnail(int paramInt) throws QTException {
         if (isOpen())
@@ -455,7 +450,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     /**
      * Write out the Pict to the specified file.
      * @param file the destination file that the Pict will be written to.
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.qd.QDException
      * @param java.io.IOException
      */
     public void writeToFile(File paramFile) throws QDException, IOException {
@@ -476,6 +471,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         return super.toString() + "[pictFrame=" + getPictFrame() + ",isOpen=" + isOpen() + "]";
     }
 
+    @Override
     protected void _dispose() {
         try {
             close();
@@ -584,8 +580,3 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         return StreamingManager.QTSPresGetPicture(paramInt1, paramInt2, paramArrayOfInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd/Pict.
- * class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

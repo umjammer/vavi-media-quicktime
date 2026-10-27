@@ -3,6 +3,7 @@ package quicktime.qd3d.math;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
@@ -31,7 +32,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      */
     public static final int kNativeSize = 36;
 
-    static final long serialVersionUID = 6277243717121923106L;
+    @Serial
+    private static final long serialVersionUID = 6277243717121923106L;
 
     static {
         if (QTSession.isCurrentOS(4)) {
@@ -40,12 +42,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Matrix3x3.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Matrix3x3.class));
             }
         }
         new PrivelegedAction().establish();
@@ -55,7 +52,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -84,6 +81,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         super(36);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[36];
         paramObjectInputStream.read(this.bytes);
@@ -94,6 +92,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         Matrix3x3 localMatrix3x3 = copy();
         try {
@@ -250,18 +249,18 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Returns a copy of the matrix.
-     * QuickDraw3D::Q3Matrix3x3_Copy
+     * @see "QuickDraw3D::Q3Matrix3x3_Copy"
      * @return a copy of matrix3x3.
      */
     public Matrix3x3 copy() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3((float[][]) null);
+        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
         int i = Q3Matrix3x3_Copy(getBytes(), localMatrix3x3.getBytes());
         return localMatrix3x3;
     }
 
     /**
      * Sets the Matrix to the 3-by-3 identity matrix.
-     * QuickDraw3D::Q3Matrix3x3_SetIdentity
+     * @see "QuickDraw3D::Q3Matrix3x3_SetIdentity"
      */
     public void setIdentity() {
         int i = Q3Matrix3x3_SetIdentity(getBytes());
@@ -269,52 +268,52 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Returns the transpose of the matrix.
-     * QuickDraw3D::Q3Matrix3x3_Transpose
+     * @see "QuickDraw3D::Q3Matrix3x3_Transpose"
      * @return the transpose matrix
      */
     public Matrix3x3 transpose() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3((float[][]) null);
+        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
         int i = Q3Matrix3x3_Transpose(getBytes(), localMatrix3x3.getBytes());
         return localMatrix3x3;
     }
 
     /**
      * Returns the inverse of the matrix.
-     * QuickDraw3D::Q3Matrix3x3_Invert
+     * @see "QuickDraw3D::Q3Matrix3x3_Invert"
      * @return the invert matrix
      */
     public Matrix3x3 invert() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3((float[][]) null);
+        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
         int i = Q3Matrix3x3_Invert(getBytes(), localMatrix3x3.getBytes());
         return localMatrix3x3;
     }
 
     /**
      * Returns the adjoint of the matrix.
-     * QuickDraw3D::Q3Matrix3x3_Adjoint
+     * @see "QuickDraw3D::Q3Matrix3x3_Adjoint"
      * @return the adjoint matrix
      */
     public Matrix3x3 adjoint() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3((float[][]) null);
+        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
         int i = Q3Matrix3x3_Adjoint(getBytes(), localMatrix3x3.getBytes());
         return localMatrix3x3;
     }
 
     /**
      * Returns the product of the two 3-by-3 matrices, this and matrixB.
-     * QuickDraw3D::Q3Matrix3x3_Multiply
+     * @see "QuickDraw3D::Q3Matrix3x3_Multiply"
      * @param matrixB a matrix
      * @return the product
      */
     public Matrix3x3 multiply(Matrix3x3 paramMatrix3x3) {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3((float[][]) null);
+        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
         int i = Q3Matrix3x3_Multiply(getBytes(), paramMatrix3x3.getBytes(), localMatrix3x3.getBytes());
         return localMatrix3x3;
     }
 
     /**
      * Returns the determinant of this matrix.
-     * QuickDraw3D::Q3Matrix3x3_Determinant
+     * @see "QuickDraw3D::Q3Matrix3x3_Determinant"
      * @return the determinanta
      */
     public float determinant() {
@@ -324,7 +323,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Translates a matrix by the amount xTrans along the x coordinate axis
      * and by the amount yTrans along the y coordinate axis.
-     * QuickDraw3D::Q3Matrix3x3_SetTranslate
+     * @see "QuickDraw3D::Q3Matrix3x3_SetTranslate"
      * @param xTrans The desired amount of translation along the x coordinate axis.
      * @param yTrans The desired amount of translation along the y coordinate axis.
      */
@@ -335,7 +334,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Scales a matrix by the amount xScale along the x coordinate axis
      * and by the amount yScale along the y coordinate axis.
-     * QuickDraw3D::Q3Matrix3x3_SetScale
+     * @see "QuickDraw3D::Q3Matrix3x3_SetScale"
      * @param xScale The desired amount of scaling along the x coordinate axis.
      * @param yScale The desired amount of scaling along the y coordinate axis.
      */
@@ -345,7 +344,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Rotates a matrix by the specified angle around the point origin.
-     * QuickDraw3D::Q3Matrix3x3_SetRotateAboutPoint
+     * @see "QuickDraw3D::Q3Matrix3x3_SetRotateAboutPoint"
      * @param origin The desired origin of rotation.
      * @param angle The desired angle of rotation, in radians.
      */
@@ -356,6 +355,7 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return copy();
     }
@@ -400,8 +400,3 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         return QD3DManager.Q3Matrix3x3_SetRotateAboutPoint(paramArrayOfByte1, paramArrayOfByte2, paramFloat);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/math
- * /Matrix3x3.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

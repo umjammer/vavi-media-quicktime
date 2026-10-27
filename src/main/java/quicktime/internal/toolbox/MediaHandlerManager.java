@@ -191,7 +191,7 @@ public final class MediaHandlerManager {
         if (mt < 0) {
             return peaks;
         }
-        int frames = (int) Math.max(1, m.timeScale / 30);
+        int frames = Math.max(1, m.timeScale / 30);
         try {
             float[] pcm = Audio.read(m, mt, frames, channels);
             if (pcm == null) {

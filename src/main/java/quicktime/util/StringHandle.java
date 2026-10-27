@@ -1,13 +1,11 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.image.CodecName;
+
 
 /**
  * This class is used to store 7bit ASCII value strings
@@ -20,27 +18,12 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
 
     public static final int kPStringFormat = 2;
 
-    private int strFormat;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(StringHandle.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
+    private final int strFormat;
 
     /**
      * Get the name of the compressor component.
      * @return the name.
-     * @see {@link quicktime.std.image.CodecName#getName()}
+     * @see quicktime.std.image.CodecName#getName()
      */
     public static StringHandle fromCodecName(CodecName paramCodecName) {
         int i = getIntFromPointer(QTObject.ID(paramCodecName), 40);
@@ -55,15 +38,15 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
      * @param format if kCStringFormat the string is formatted as a C string with a '\0' termination
      *  if kPStringFormat then the string is formatted as a PString with a count byte inserted at the start.
      */
-    public StringHandle(String paramString, int paramInt) throws QTException {
-        super(paramString.length() + 1, false);
-        this.strFormat = paramInt;
+    public StringHandle(String str, int format) throws QTException {
+        super(str.length() + 1, false);
+        this.strFormat = format;
         if (this.strFormat == 1) {
-            setCStringAt(0, paramString.length(), paramString);
+            setCStringAt(0, str.length(), str);
         } else if (this.strFormat == 2) {
-            if (paramString.length() > 255)
+            if (str.length() > 255)
                 throw new QTException(-50);
-            setPStringAt(0, paramString.length(), paramString);
+            setPStringAt(0, str.length(), str);
         } else {
             throw new QTException(-50);
         }
@@ -93,7 +76,7 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
     /**
      * Returns the String found in the Handle as a java.lang.String
      * @return java.lang.String representation
-     * @return {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public String toJavaString() throws UtilException {
         return this.strFormat == 1 ? getCStringAt(0) : getPStringAt(0);
@@ -103,13 +86,13 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
      * Sets the String found in the handle to the java.lang.String characters.
      * This will NOT grow the handle so that handle must be big enough to hold the new string
      * @param str the characters that the StringHandle will be set to
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
-    public void fromJavaString(String paramString) throws UtilException {
+    public void fromJavaString(String str) throws UtilException {
         if (this.strFormat == 1) {
-            setCStringAt(0, getSize(), paramString);
+            setCStringAt(0, getSize(), str);
         } else {
-            setPStringAt(0, 255 > getSize() ? getSize() : 255, paramString);
+            setPStringAt(0, Math.min(255, getSize()), str);
         }
     }
 

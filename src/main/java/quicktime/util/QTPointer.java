@@ -24,21 +24,16 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTPointer.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTPointer.class));
             }
         }.establish();
     }
 
     /**
      * The buffer that contains the sound data.
-     * QuickTime::GraphicsExportGetInputPtr
+     * @see "QuickTime::GraphicsExportGetInputPtr"
      * @return the QTPointer buffer
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.GraphicsExporter.getInputPtr
      */
     public static QTPointerRef fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
@@ -52,7 +47,7 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
     /**
      * The buffer that contains the sound data.
      * @return the QTPointer buffer
-     * @see {@link quicktime.sound.SoundComponentData#getBuffer()}
+     * @see quicktime.sound.SoundComponentData#getBuffer()
      */
     public static QTPointer fromSCData(SoundComponentData paramSoundComponentData) {
         if (getIntFromArray(paramSoundComponentData.getBytes(), 20) == 0)
@@ -65,7 +60,7 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * is an int or byte encoded image, but will return the same object if it is a RawEncodedImage.
      * @param image the encoded image data
      * @return the encoded image data as a Pointer
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static QTPointer fromEncodedImage(EncodedImage paramEncodedImage) throws QTException {
         if ((paramEncodedImage instanceof ByteEncodedImage))
@@ -137,6 +132,7 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
     /**
      * Returns a copy of this object
      */
+    @Override
     public Object clone() {
         return new QTPointer(makeAndCopyPtr(0, getSize()), getSize(), null);
     }
@@ -144,9 +140,9 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
     /**
      * This method will resize the memory that a pointer points to.
      * This operation can fail if memory cannot increase its size
-     * QuickTime::SetPtrSize
+     * @see "QuickTime::SetPtrSize"
      * @param newSize the new size
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public void setSize(int paramInt) throws UtilException {
         SetPtrSize(_ID(), paramInt);

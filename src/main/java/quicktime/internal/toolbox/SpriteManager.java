@@ -6,8 +6,6 @@
 
 package quicktime.internal.toolbox;
 
-import java.awt.Component;
-
 
 /**
  * SpriteManager.

@@ -6,7 +6,7 @@ import quicktime.qd.QDGraphics;
 import quicktime.qd.Region;
 
 /**
- * Deprecated.
+ * @deprecated
  * This interface is designed to work hand-in-hand with a QTCanvas object. Therefore,
  * all classes which want to interact with a QTCanvas object, referred to as 'clients'
  * must implement this interface.
@@ -20,56 +20,56 @@ import quicktime.qd.Region;
  * graphics environment has changed in some unexpected way or that the media object itself
  * is in some unexpected state.
  */
-public abstract interface QTDrawable extends Drawable, Transformable {
+public interface QTDrawable extends Drawable, Transformable {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void setLocation(int paramInt1, int paramInt2) throws QTException;
+    void setLocation(int paramInt1, int paramInt2) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void setGWorld(QDGraphics paramQDGraphics) throws QTException;
+    void setGWorld(QDGraphics paramQDGraphics) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract QDGraphics getGWorld() throws QTException;
+    QDGraphics getGWorld() throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method allows you to set a Transformable's clipping region.
      * @param theClip a Region that defines the new clipping region.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void setClip(Region paramRegion) throws QTException;
+    void setClip(Region paramRegion) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method allows you to get the current clipped Region of the Transformable.
      * @return the clipping region
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract Region getClip() throws QTException;
+    Region getClip() throws QTException;
 }
 

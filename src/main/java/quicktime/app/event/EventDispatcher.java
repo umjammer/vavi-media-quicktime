@@ -7,7 +7,7 @@ import quicktime.app.spaces.ListenerController;
 import quicktime.app.spaces.Space;
 
 /**
- * Deprecated.
+ * @deprecated
  * The EventDispatch is an abstract class that will create a subclass that will
  * dispatch events to the controller.
  * When creating an event dispatcher the make method will supply the ListenerController,
@@ -33,8 +33,8 @@ public abstract class EventDispatcher {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Register a custom event handler maker that will make an EventDispatcher
      * based on the type of controller, event interest and Space.
      */
@@ -45,14 +45,14 @@ public abstract class EventDispatcher {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a custom event handler maker.
      */
     public static void removeMaker(EventDispatcherMaker paramEventDispatcherMaker) {
         if (vec != null)
             vec.removeElement(paramEventDispatcherMaker);
-        if (vec.size() == 0) {
+        if (vec.isEmpty()) {
             vec = null;
         }
     }
@@ -71,25 +71,25 @@ public abstract class EventDispatcher {
             }
         }
         Class<?> localClass = paramObject.getClass();
-        Object localObject = localClass.getName();
+        String localObject = localClass.getName();
         while (!localClass.getName().equals("java.lang.Object")) {
             localObject = localClass.getName();
             localClass = localClass.getSuperclass();
         }
-        if ((((String) localObject).equals("java.awt.Component")) && ((paramListenerController instanceof QTMouseController))) {
+        if ((localObject.equals("java.awt.Component")) && ((paramListenerController instanceof QTMouseController))) {
             return new AWTMouseEventDispatcher((QTMouseController) paramListenerController, paramSpace, paramObject);
         }
         return null;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * When the ListenerController is addedTo its source of interest this method is called.* @deprecated since QTJava 6.1
      */
     protected abstract void addedTo();
 
     /**
-     * Deprecated.
+     * @deprecated
      * When the ListenerController is removedFrom its source of interest this method is called.* @deprecated since QTJava 6.1
      */
     protected abstract void removedFrom();
@@ -118,8 +118,3 @@ public abstract class EventDispatcher {
     void removeMouseTargetListener() {
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /EventDispatcher.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

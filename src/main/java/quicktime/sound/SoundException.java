@@ -28,7 +28,7 @@ public final class SoundException extends QTException {
      * This method will throw an exception if the incoming err argument is
      * a non-zero value.
      * @param err the result or error code if non-zero an exception is thrown
-     * @param {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public static void checkError(int paramInt) throws SoundException {
         if (paramInt < 0) {

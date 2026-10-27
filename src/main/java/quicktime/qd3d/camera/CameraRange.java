@@ -3,6 +3,8 @@ package quicktime.qd3d.camera;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.util.EndianDescriptor;
@@ -24,7 +26,8 @@ public final class CameraRange extends QTByteObject implements Cloneable {
      */
     public static final int kNativeSize = 8;
 
-    static final long serialVersionUID = -4968315887114751172L;
+    @Serial
+    private static final long serialVersionUID = -4968315887114751172L;
 
     static {
         if (QTSession.isCurrentOS(4)) {
@@ -36,7 +39,7 @@ public final class CameraRange extends QTByteObject implements Cloneable {
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -60,6 +63,7 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
         CameraRange localCameraRange = new CameraRange();
@@ -72,6 +76,7 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         System.arraycopy(localCameraRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         CameraRange localCameraRange = (CameraRange) clone();
         try {
@@ -113,6 +118,7 @@ public final class CameraRange extends QTByteObject implements Cloneable {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new CameraRange(getBytes());
     }

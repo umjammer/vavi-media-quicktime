@@ -1,22 +1,17 @@
 
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 
 
 final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
-    private static Object linkage;
 
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private XMLMethodClosure mMethodClosure;
 
@@ -33,18 +28,6 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
     private XMLCharDataProc charDataExecute;
 
     private XMLPreprocessorProc preprocessorExecute;
-
-    static {
-        new Object() {
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(XMLDispatcher.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     XMLDispatcher(XMLStartDocProc paramXMLStartDocProc) {
         this.methodName = "startDocProc";

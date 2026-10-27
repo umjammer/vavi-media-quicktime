@@ -612,7 +612,7 @@ final class Codecs {
             ImageWriteParam p = w.getDefaultWriteParam();
             if (format.equals("jpeg")) {
                 p.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                p.setCompressionQuality(Math.max(0.05f, Math.min(1f, quality / (float) codecMaxQuality)));
+                p.setCompressionQuality(Math.clamp(quality / (float) codecMaxQuality, 0.05f, 1f));
             } else if (format.equals("tiff") && p.canWriteCompressed()) {
                 p.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                 p.setCompressionType("Deflate");
@@ -1115,7 +1115,7 @@ final class Codecs {
                 return img;
             }
             int[] px = pixels(img);
-            int length = Math.min(data.length, Math.max(4, Bytes.getInt(data, 0) & 0x00ff_ffff));
+            int length = Math.clamp(Bytes.getInt(data, 0) & 0x00ff_ffff, 4, data.length);
             if (length < data.length && (data[0] & 0xff) != 0xe1) {
                 length = data.length;
             }

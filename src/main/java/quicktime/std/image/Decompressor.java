@@ -1,34 +1,16 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
+
 
 /**
  * Corresponds to the Decompressor component type
  * Refer to DecompressorComponent in QuickTime
  */
 public final class Decompressor extends CodecComponent implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Decompressor.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     Decompressor(int paramInt) {
         super(paramInt);
@@ -37,14 +19,14 @@ public final class Decompressor extends CodecComponent implements QuickTimeLib {
     /**
      * determines which of the installed decompressors has been chosen to field requests
      * made using one of the special compressor identifiers.
-     * see QuickTime::FindCodec
+     * @see "see QuickTime::FindCodec"
      * @param cType specifies the CodecComponent class.
      * @param specCodec contains a special identifier value.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public static Decompressor findCodec(int paramInt, CodecComponent paramCodecComponent) throws StdQTException {
+    public static Decompressor findCodec(int cType, CodecComponent specCodec) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = FindCodec(paramInt, QTObject.ID(paramCodecComponent), 0, arrayOfInt);
+        int i = FindCodec(cType, QTObject.ID(specCodec), 0, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0] == 0 ? null : new Decompressor(arrayOfInt[0]);
     }

@@ -6,9 +6,9 @@ package quicktime.jdirect;
  * static field of type Object, that is initialized in its static
  * initializer by calling JDirectLinker.loadLibrary.
  */
-public abstract interface InterfaceLib extends SharedLibrary {
+public interface InterfaceLib extends SharedLibrary {
 
-    public static final Object libraryInstance = QTNative.loadIL();
+    Object libraryInstance = QTNative.loadIL();
 
-    public static final String JDirect_MacOSX = "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon";
+    String JDirect_MacOSX = "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon";
 }

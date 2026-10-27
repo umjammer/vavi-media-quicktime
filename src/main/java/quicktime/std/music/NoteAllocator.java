@@ -28,12 +28,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(NoteAllocator.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(NoteAllocator.class));
             }
         }.establish();
     }
@@ -46,7 +41,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * Returns a system created NoteAllocator instance that can be used
      * by applications.
      * @return a NoteAllocator
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static NoteAllocator getDefault() throws QTException {
         if (defaultNA == null) {
@@ -59,7 +54,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Opens the NoteAllocator component.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      */
     public NoteAllocator() throws QTException {
         this(0);
@@ -67,7 +62,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Opens the NoteAllocator component with a specified subType.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      */
     public NoteAllocator(int paramInt) throws QTException {
         super(1852798049, paramInt);
@@ -79,9 +74,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Returns the number of NoteChannels handled by the specific NoteAllocator instance.
-     * QuickTime::NAGetIndNoteChannel
+     * @see "QuickTime::NAGetIndNoteChannel"
      * @return number of NoteChannels
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int numNoteChannels() throws StdQTException {
         int i = NAGetIndNoteChannel(_ID(), 0, null, null);
@@ -92,10 +87,10 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Returns a new NoteChannel as indexed into the NoteAllocator instance.
-     * QuickTime::NAGetIndNoteChannel
+     * @see "QuickTime::NAGetIndNoteChannel"
      * @param index the index of the NoteChannel
      * @return a new NoteChannel instance
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public NoteChannel getIndNoteChannel(int paramInt) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -108,7 +103,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Call periodically to allow the note allocator to perform tasks.
-     * QuickTime::NATask
+     * @see "QuickTime::NATask"
      */
     public void task() throws StdQTException {
         StdQTException.checkError(NATask(_ID()));
@@ -116,25 +111,26 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Displays a dialog to allow instrument selection.
-     * QuickTime::NAPickArrangement
+     * @see "QuickTime::NAPickArrangement"
      * @param prompt dialog box prompt.
      * @param track a movie track
      * @param songName the name of the song to display
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void pickArrangement(String paramString1, Track paramTrack, String paramString2) throws StdQTException {
-        final String str1 = paramString1;
-        final Track localTrack = paramTrack;
-        final String str2 = paramString2;
-        final int i = _ID();
+        String str1 = paramString1;
+        Track localTrack = paramTrack;
+        String str2 = paramString2;
+        int i = _ID();
         if (QTSession.isCurrentOS(4)) {
-            this.res = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            this.res = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     NoteAllocator.this.res = NoteAllocator.NAPickArrangement(i, 0, QTUtils.String2PString(str1, 255), 0, 0, QTObject.ID(localTrack), QTUtils.String2PString(str2, 255));
-                    return new Integer(NoteAllocator.this.res);
+                    return NoteAllocator.this.res;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(this.res);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -145,29 +141,30 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Displays a copyright dialog with information specific to a music device.
-     * QuickTime::NACopyrightDialog
+     * @see "QuickTime::NACopyrightDialog"
      * @param p picture for dialog
      * @param author author information
      * @param copyright copyright information
      * @param other and additional information
      * @param title title information
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void copyrightDialog(Pict paramPict, String paramString1, String paramString2, String paramString3, String paramString4) throws StdQTException {
-        final String str1 = paramString1;
-        final String str2 = paramString2;
-        final String str3 = paramString3;
-        final Pict localPict = paramPict;
-        final String str4 = paramString4;
-        final int i = _ID();
+        String str1 = paramString1;
+        String str2 = paramString2;
+        String str3 = paramString3;
+        Pict localPict = paramPict;
+        String str4 = paramString4;
+        int i = _ID();
         if (QTSession.isCurrentOS(4)) {
-            this.res = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            this.res = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
+                @Override
                 public Object invoke() {
                     NoteAllocator.this.res = NoteAllocator.NACopyrightDialog(i, QTObject.ID(localPict), QTUtils.String2PString(str1, 255), QTUtils.String2PString(str2, 255), QTUtils.String2PString(str3, 255), QTUtils.String2PString(str4, 255), 0, 0);
-                    return new Integer(NoteAllocator.this.res);
+                    return NoteAllocator.this.res;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(this.res);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -178,9 +175,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Return the number of MusicComponents that are registered with the note allocator.
-     * QuickTime::NAGetRegisteredMusicDevice
+     * @see "QuickTime::NAGetRegisteredMusicDevice"
      * @return the number of music components.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int numMusicComponents() throws StdQTException {
         int i = NAGetRegisteredMusicDevice(_ID(), 0, null, null, null, null);
@@ -195,10 +192,10 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * the sample bank, which is used in the ToneDescription/NoteRequest as the synthesizerName
      * field to create NoteChannels that use this component (the synthesizerType will be
      * StdQTConstants.kSoftSynthComponentSubType).
-     * QuickTime::NARegisterMusicDevice
+     * @see "QuickTime::NARegisterMusicDevice"
      * @param soundBankFile a DLS or SF2 file of sample data
      * @return the name of the synthesizer to use when creating NoteChannels that use this bank
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public String registerMusicDevice_SoundBank(QTFile paramQTFile) throws QTException {
         byte[] arrayOfByte = new byte[32];
@@ -208,11 +205,11 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Registers a music component with the NoteAllocator.
-     * QuickTime::NARegisterMusicDevice
+     * @see "QuickTime::NARegisterMusicDevice"
      * @param synthType the subType of the MusicComponent of the synth
      * @param name the synthesizer name
      * @param connections a synthesizer connections for a MIDI device.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void registerMusicDevice(int paramInt, String paramString, SynthesizerConnections paramSynthesizerConnections) throws StdQTException {
         StdQTException.checkError(NARegisterMusicDevice(_ID(), paramInt, QTUtils.String2PString(paramString, 31), paramSynthesizerConnections.getBytes()));
@@ -220,9 +217,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Removes a previously registered music component from the NoteAllocator.
-     * QuickTime::NAUnregisterMusicDevice
+     * @see "QuickTime::NAUnregisterMusicDevice"
      * @param index the index of the synthesizer to unregister.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void unregisterMusicDevice(int paramInt) throws StdQTException {
         StdQTException.checkError(NAUnregisterMusicDevice(_ID(), paramInt));
@@ -230,10 +227,10 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Return information about music components that are registered with the note allocator.
-     * QuickTime::NAGetRegisteredMusicDevice
+     * @see "QuickTime::NAGetRegisteredMusicDevice"
      * @param index the index of the component you are interested in.
      * @return music component information
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public MusicComponentInfo getRegisteredMusicDevice(int paramInt) throws StdQTException {
         byte[] arrayOfByte = new byte[256];
@@ -254,7 +251,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
     /**
      * Obtain external MIDI connection information about the MIDI device that is
      * attached to the system and selected as the default MIDI input device.
-     * QuickTime::NAGetDefaultMIDIInput()
+     * @see "QuickTime::NAGetDefaultMIDIInput()"
      */
     public SynthesizerConnections getDefaultMIDIInput() throws StdQTException {
         SynthesizerConnections localSynthesizerConnections = new SynthesizerConnections();
@@ -264,9 +261,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Initializes an external MIDI device that is used to receive external MIDI information.
-     * QuickTime::NASetDefaultMIDIInput()
+     * @see "QuickTime::NASetDefaultMIDIInput()"
      * @param sc connections for the external MIDI input device
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setDefaultMIDIInput(SynthesizerConnections paramSynthesizerConnections) throws StdQTException {
         StdQTException.checkError(NASetDefaultMIDIInput(_ID(), paramSynthesizerConnections.getBytes()));
@@ -274,7 +271,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Saves the current list of registered devices to the QuickTime default file.
-     * QuickTime::NASaveMusicConfiguration()
+     * @see "QuickTime::NASaveMusicConfiguration()"
      */
     public void saveMusicConfiguration() throws StdQTException {
         StdQTException.checkError(NASaveMusicConfiguration(_ID()));
@@ -282,9 +279,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Get the MIDI input ports that are available to the NoteAllocator.
-     * QuickTime::NAGetMIDIPorts()
+     * @see "QuickTime::NAGetMIDIPorts()"
      * @return the MIDI input ports list.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTMIDIPortList getMIDIInPorts() throws QTException {
         int[] arrayOfInt = new int[1];
@@ -294,9 +291,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
 
     /**
      * Get the MIDI output ports that are available to the NoteAllocator.
-     * QuickTime::NAGetMIDIPorts()
+     * @see "QuickTime::NAGetMIDIPorts()"
      * @return the MIDI output ports list.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTMIDIPortList getMIDIOutPorts() throws QTException {
         int[] arrayOfInt = new int[1];
@@ -307,7 +304,7 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
     /**
      * Removes the external default MIDI service procedure call, if previously defined by
      * the useDefaultMIDIInput call.
-     * QuickTime::NALoseDefaultMIDIInput()
+     * @see "QuickTime::NALoseDefaultMIDIInput()"
      */
     public void loseDefaultMIDIInput() throws StdQTException {
         StdQTException.checkError(NALoseDefaultMIDIInput(_ID()));

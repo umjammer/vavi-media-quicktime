@@ -20,7 +20,7 @@ import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * QTFilters are visual effects that are applied to a single source image.
  * They inherit much of the characteristics of the QTEffect class.
  */
@@ -33,8 +33,8 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTFilter which is a singleFrame filter and an initialSize of 0, 0.
      */
     public QTFilter() throws QTException {
@@ -42,7 +42,7 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Creates a QTFilter which is a singleFrame filter and specified initialSize.
      * @param d the initSize of the effect.
@@ -52,8 +52,8 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTFilter which is a singleFrame filter and specified initialSize.
      * @param d the initSize of the effect.
      */
@@ -62,8 +62,8 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTFilter of specified frame setting and an initialSize of 0, 0.
      */
     public QTFilter(int paramInt) throws QTException {
@@ -71,7 +71,7 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Creates a QTFilter of specified frame setting and initSize.
      * @param d the initSize of the effect.
@@ -81,8 +81,8 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTFilter of specified frame setting and initSize.
      * @param d the initSize of the effect.
      */
@@ -101,60 +101,62 @@ public class QTFilter extends QTEffect {
     private static int nThreads;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will take the incoming parameters and use this as the control parameters for the
      * effect. The container will be locked for the duration of the effect object's life or until
      * another effect is set.
      * @param effectParams the parameters that determine the effect that is run
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setEffect(AtomContainer paramAtomContainer) throws QTException {
-        if (paramAtomContainer == null) {
+    @Override
+    public void setEffect(AtomContainer effectParams) throws QTException {
+        if (effectParams == null) {
             this.effectSamplePtr = null;
             if (this.effectSample != null)
                 this.effectSample.unlock();
             this.effectSample = null;
             return;
         }
-        this.effectSample = paramAtomContainer;
+        this.effectSample = effectParams;
         Atom localAtom1 = Atom.kParentIsContainer;
         int i = this.effectSample.countChildrenOfType(localAtom1, 1936876320);
         for (int j = 0; j < i; j++) {
-            Object localObject = this.effectSample.findChildByIndex_Atom(localAtom1, 1936876320, 1);
-            this.effectSample.removeAtom((Atom) localObject);
+            Atom localObject = this.effectSample.findChildByIndex_Atom(localAtom1, 1936876320, 1);
+            this.effectSample.removeAtom(localObject);
         }
         this.effectSample.insertChild(localAtom1, 1936876320, 1, 0, EndianOrder.flipNativeToBigEndian32(this.srcA));
         Atom localAtom2 = this.effectSample.findChildByID_Atom(localAtom1, 2003329396, 1);
         this.effectSample.lock();
-        Object localObject = this.effectSample.getAtomData(localAtom2);
-        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(((AtomData) localObject).getInt(0)));
+        AtomData localObject = this.effectSample.getAtomData(localAtom2);
+        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(localObject.getInt(0)));
         this.effectSamplePtr = RawEncodedImage.fromQTPointer(this.effectSample.toQTPointer());
         setUpSequence();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * If the original size was not specified in the Constructor then the
      * original size of the current sourceImage is returned. If the original size
      * was specified then it is returned.
      * @return a QDDimension
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         return super.getOriginalSize();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This sets the QT source of the QTFilter, which is the image that the current filter will be
      * applied to when doEffect is called.
      * @param image the image to use as the source of the filter
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setSourceImage(ImageSpec paramImageSpec) throws QTException {
         if (paramImageSpec != null) {
@@ -170,7 +172,7 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the currently set source image of the QTFilter * @deprecated since QTJava 6.1
      */
     public ImageSpec getSourceImage() {
@@ -178,15 +180,16 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by a number of other methods to create
      * the DSequence that is used to render the QTEffect.
      * When called the method will create a new DSequence if the required
      * state has been established to enable the creation of the DSequence.
      * @return true if a new DSequence was created, otherwise false.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected synchronized boolean setUpSequence() throws QTException {
         if (this.drawSourceListener == null) {
             return false;
@@ -260,7 +263,8 @@ public class QTFilter extends QTEffect {
         /**
          * @deprecated
          */
-        public void drawingComplete(QTDrawable paramQTDrawable) {
+        @Override
+        public void drawingComplete(QTDrawable drawable) {
             if (this.imgDataSeq != null) {
                 try {
                     this.imgDataSeq.setSourceData(this.encImage);
@@ -277,6 +281,7 @@ public class QTFilter extends QTEffect {
         /**
          * @deprecated
          */
+        @Override
         public void run() {
             while (running) {
                 synchronized (this) {

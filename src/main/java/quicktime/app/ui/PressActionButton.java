@@ -6,7 +6,7 @@ import quicktime.QTSession;
 import quicktime.app.image.ImageSpec;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class represents a normal button which fires the action event
  * when the button is pressed. It keeps firing till the button is released
  */
@@ -19,8 +19,8 @@ public class PressActionButton extends QTButton {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current image of the QTButton and creates a TwoDSprite button.
      * @param releasedImage the image to be displayed when the mouse is not pressed
      * @param pressedImage the image to be displayed when the mouse is pressed
@@ -31,8 +31,8 @@ public class PressActionButton extends QTButton {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current image of the QTButton and creates a TwoDSprite button.
      * @param releasedImage the image to be displayed when the mouse is not pressed
      * @param pressedImage the image to be displayed when the mouse is pressed
@@ -46,8 +46,8 @@ public class PressActionButton extends QTButton {
     private boolean doContinuousPress = true;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If this is set to true, the button will continue to fire whilst
      * the user presses the mouse and it is also in the button.
      * If this is false, the action will fire ONLY when the user first presses the button.
@@ -57,7 +57,7 @@ public class PressActionButton extends QTButton {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return a boolean * @deprecated since QTJava 6.1
      */
     public boolean isContinuousPressAction() {
@@ -65,26 +65,24 @@ public class PressActionButton extends QTButton {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method. is called when the mouse button is pressed over the QTButton
      * it keeps firing as long as the mouse is pressed. This method is invoked by
      * the ButtonActivator.
      */
+    @Override
     public void pressed() throws QTException {
         super.pressed();
         if (this.doContinuousPress) {
-            new Thread(new Runnable() {
-
-                public void run() {
-                    while (PressActionButton.this.isPressed()) {
-                        if (PressActionButton.this.isMouseInButton())
-                            PressActionButton.this.fireAction();
-                        try {
-                            Thread.sleep(1L);
-                        } catch (InterruptedException localInterruptedException) {
-                            localInterruptedException.printStackTrace();
-                        }
+            new Thread(() -> {
+                while (PressActionButton.this.isPressed()) {
+                    if (PressActionButton.this.isMouseInButton())
+                        PressActionButton.this.fireAction();
+                    try {
+                        Thread.sleep(1L);
+                    } catch (InterruptedException localInterruptedException) {
+                        localInterruptedException.printStackTrace();
                     }
                 }
             }).start();

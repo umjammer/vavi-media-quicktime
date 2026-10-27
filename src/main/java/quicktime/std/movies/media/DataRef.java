@@ -2,8 +2,7 @@ package quicktime.std.movies.media;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -13,7 +12,6 @@ import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.io.AliasHandle;
 import quicktime.io.QTFile;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.image.GraphicsExporter;
@@ -26,35 +24,20 @@ import quicktime.util.QTHandleRef;
 import quicktime.util.QTUtils;
 import quicktime.util.StringHandle;
 
+
 /**
  * The DataRef class implements the data reference structure of the Movie Toolbox.
  */
 public final class DataRef extends QTHandle implements QuickTimeLib {
 
-    private static Object linkage;
-
     private int dataRefType;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(DataRef.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     /**
      * This method returns a copy of a data reference.
-     * QuickTime::GraphicsExportGetInputDataReference()
+     * @see "QuickTime::GraphicsExportGetInputDataReference()"
      * @return a copy of a data reference from the graphics exporter component.
-     * @return {@link quicktime.QTException}
-     * @see quicktime.std.image.GraphicsExporter.getInputDataReference
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getInputDataReference
      */
     public static DataRef fromGraphicsExporterInputDataRef(GraphicsExporter paramGraphicsExporter) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -65,10 +48,10 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
 
     /**
      * This method returns a copy of a data reference.
-     * QuickTime::GraphicsExportGetOutputDataReference()
+     * @see "QuickTime::GraphicsExportGetOutputDataReference()"
      * @return a copy of a data reference from the graphics exporter component.
-     * @return {@link quicktime.QTException}
-     * @see quicktime.std.image.GraphicsExporter.getOutputDataReference
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getOutputDataReference
      */
     public static DataRef fromGraphicsExporterOutputDataRef(GraphicsExporter paramGraphicsExporter) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -80,10 +63,10 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
 
     /**
      * This method allows your application to get the default data reference for the movie.
-     * QuickTime::GetMovieDefaultDataRef()
-     * @return a DataRef object specifiying the default data reference for the movie.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.Movie#getDefaultDataRef()}
+     * @see "QuickTime::GetMovieDefaultDataRef()"
+     * @return a DataRef object specifying the default data reference for the movie.
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.Movie#getDefaultDataRef()
      */
     public static DataRef fromMovie(Movie paramMovie) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -95,10 +78,10 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
 
     /**
      * Determines the data reference that is currently assigned to a sequence grabber component.
-     * QuickTime::SGGetDataRef
+     * @see "QuickTime::SGGetDataRef"
      * @return the dataRef
-     * @return {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.sg.SequenceGrabber#getDataRef()}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.sg.SequenceGrabber#getDataRef()
      */
     public static DataRef fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -111,31 +94,31 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
 
     /**
      * This method returns a copy of a specified data reference.
-     * QuickTime::GetMediaDataRef()
+     * @see "QuickTime::GetMediaDataRef()"
      * @param index Identifies the data reference.
      * @return a copy of a specified data reference.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.movies.media.Media#getDataRef(int)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.media.Media#getDataRef(int)
      */
-    public static DataRef fromMedia(Media paramMedia, int paramInt) throws QTException {
+    public static DataRef fromMedia(Media paramMedia, int index) throws QTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
-        StdQTException.checkError(GetMediaDataRef(QTObject.ID(paramMedia), (short) paramInt, arrayOfInt1, arrayOfInt2, arrayOfInt3));
+        StdQTException.checkError(GetMediaDataRef(QTObject.ID(paramMedia), (short) index, arrayOfInt1, arrayOfInt2, arrayOfInt3));
         return new DataRef(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0]);
     }
 
     /**
-     * QuickTime::SGGetOutputDataReference(
+     * @see "QuickTime::SGGetOutputDataReference("
      * @param sg the sequence grabber that owns this output
      * @param output the output from which to get the data ref from
      * @return the data reference associated with this sequence grabber output.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public static DataRef fromSGOutput(SequenceGrabber paramSequenceGrabber, SGOutput paramSGOutput) throws StdQTException {
+    public static DataRef fromSGOutput(SequenceGrabber sg, SGOutput output) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        int i = SGGetOutputDataReference(QTObject.ID(paramSequenceGrabber), QTObject.ID(paramSGOutput), arrayOfInt1, arrayOfInt2);
+        int i = SGGetOutputDataReference(QTObject.ID(sg), QTObject.ID(output), arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(i);
         return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
     }
@@ -145,13 +128,13 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * If there is no DataHandler for this URL an invalidDataRef exception is thrown
      * @param url the URL that is used to create a DataReference.
      */
-    public DataRef(String paramString) throws QTException {
+    public DataRef(String url) throws QTException {
         super(4, false);
-        if (paramString.startsWith("file")) {
-            QTFile localQTFile = new QTFile(paramString.substring(7).replace('/', File.separatorChar));
+        if (url.startsWith("file")) {
+            QTFile localQTFile = new QTFile(url.substring(7).replace('/', File.separatorChar));
             setAliasHandle(localQTFile.newAlias(true));
         } else {
-            setURLDataRef(QTUtils.String2CString(paramString));
+            setURLDataRef(QTUtils.String2CString(url));
         }
     }
 
@@ -167,9 +150,9 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * This constructor creates a DataRef that represents an AliasHandle.
      * @param a the AliasHandle that is reference by this DataRef.
      */
-    public DataRef(AliasHandle paramAliasHandle) throws IOException, QTException {
+    public DataRef(AliasHandle a) throws IOException, QTException {
         super(4, false);
-        setAliasHandle(paramAliasHandle);
+        setAliasHandle(a);
     }
 
     /**
@@ -177,11 +160,11 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * so the dataRefType is a handle DataRef ('hndl').
      * @param handle Specifies the data (a handle) that this reference should point to.
      */
-    public DataRef(QTHandleRef paramQTHandleRef) throws QTException {
+    public DataRef(QTHandleRef handle) throws QTException {
         super(4, true);
         this.dataRefType = 1752065132;
-        this.hdl = paramQTHandleRef;
-        setIntAt(0, QTObject.ID(paramQTHandleRef));
+        this.hdl = handle;
+        setIntAt(0, QTObject.ID(handle));
     }
 
     /**
@@ -190,9 +173,9 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * QuickTime (and should if at all possible) about the format of the data
      * that is contained within the handle. Hints can take one of three forms
      *
-     * MIME Type	-> kDataRefMimeTypeTag
-     * MacOS File Type	-> kDataRefQTFileTypeTag
-     * File extension	-> kDataRefFileExtensionTag
+     * MIME Type -> kDataRefMimeTypeTag
+     * MacOS File Type -> kDataRefQTFileTypeTag
+     * File extension -> kDataRefFileExtensionTag
      *
      * The preferred usage is to pass in either the MacOS File Type (which will also work on non-MacOS platforms)
      * or the MIME type information. The File extension is a more arbitrary indicator and should be the least
@@ -201,12 +184,12 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @param hintFlag describes the hint data that is used
      * @param hintString contains the hint information
      */
-    public DataRef(QTHandleRef paramQTHandleRef, int paramInt, String paramString) throws QTException {
+    public DataRef(QTHandleRef handle, int hintFlag, String hintString) throws QTException {
         super(4, true);
         this.dataRefType = 1752065132;
-        this.hdl = paramQTHandleRef;
-        setIntAt(0, QTObject.ID(paramQTHandleRef));
-        switch(paramInt) {
+        this.hdl = handle;
+        setIntAt(0, QTObject.ID(handle));
+        switch(hintFlag) {
             case 1718909296:
                 if (QTSession.getQTVersion() == 3)
                     throw new QTException(-50);
@@ -214,12 +197,12 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
                 setByteAt(4, (byte) 0);
                 setIntAt(5, EndianOrder.flipNativeToBigEndian32(12));
                 setIntAt(9, EndianOrder.flipNativeToBigEndian32(1718909296));
-                setIntAt(13, EndianOrder.flipNativeToBigEndian32(QTUtils.toOSType(paramString)));
+                setIntAt(13, EndianOrder.flipNativeToBigEndian32(QTUtils.toOSType(hintString)));
                 break;
             case 1835625829:
                 if (QTSession.getQTVersion() == 3)
                     throw new QTException(-50);
-                byte[] arrayOfByte = QTUtils.String2PString(paramString, 255);
+                byte[] arrayOfByte = QTUtils.String2PString(hintString, 255);
                 setSize(13 + arrayOfByte.length);
                 setByteAt(4, (byte) 0);
                 setIntAt(5, EndianOrder.flipNativeToBigEndian32(8 + arrayOfByte.length));
@@ -227,7 +210,7 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
                 setBytesAt(13, arrayOfByte.length, arrayOfByte, 0);
                 break;
             case 1702392864:
-                concatenate(new StringHandle("X." + paramString, 2));
+                concatenate(new StringHandle("X." + hintString, 2));
                 break;
             default:
                 throw new QTException(-50);
@@ -311,14 +294,14 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * data reference and type along with setting the following bit of the long integer referenced through the flags parameter.
      * @param theMovie the movie whose anchor data reference is returned.
      * @return movie's anchor data reference.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public DataRef fromMovieAnchor(Movie paramMovie) throws StdQTException {
+    public DataRef fromMovieAnchor(Movie theMovie) throws StdQTException {
         int i = 0;
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         int[] arrayOfInt3 = { 0 };
-        i = GetMovieAnchorDataRef(QTObject.ID(paramMovie), arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        i = GetMovieAnchorDataRef(QTObject.ID(theMovie), arrayOfInt1, arrayOfInt2, arrayOfInt3);
         StdQTException.checkError(i);
         if (arrayOfInt1[0] == 0) {
             return null;

@@ -1,13 +1,11 @@
 package quicktime.std.clocks;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ClockManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.QTPointerRef;
+
 
 /**
  * The TimeRecord allows a full description of a QuickTime time specification structure.
@@ -16,23 +14,7 @@ import quicktime.util.QTPointerRef;
  */
 public class TimeRecord extends QTPointerRef implements QuickTimeLib {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 16;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TimeRecord.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     /**
      * This record is an empty record that will need to be filled out by passing
@@ -91,7 +73,7 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
 
     /**
      * Convert a time from one time base into a time that is relative to another time base.
-     * QuickTime::ConvertTime
+     * @see "QuickTime::ConvertTime"
      * @param newBase Specifies the time base for this operation
      */
     public final void convertTime(TimeBase paramTimeBase) {
@@ -100,7 +82,7 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
 
     /**
      * Convert a time from one time scale into a time that is relative to another time base.
-     * QuickTime::ConvertTimeScale
+     * @see "QuickTime::ConvertTimeScale"
      * @param newScale The time scale
      */
     public final void convertTimeScale(int paramInt) {
@@ -109,7 +91,7 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
 
     /**
      * This adds two times specified in time structures.
-     * QuickTime::AddTime
+     * @see "QuickTime::AddTime"
      * @param source The source operand time base with a time value to add
      */
     public final void addTime(TimeRecord paramTimeRecord) {
@@ -118,7 +100,7 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
 
     /**
      * This subtracts two times specified in time structures.
-     * QuickTime::SubtractTime
+     * @see "QuickTime::SubtractTime"
      * @param source The source operand time base with a time value to subtract
      */
     public final void subtractTime(TimeRecord paramTimeRecord) {

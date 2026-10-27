@@ -11,7 +11,7 @@ public abstract class TimeJumpCallBack extends QTCallBack {
 
     /**
      * This allows your application to obtain a new callback.
-     * QuickTime::NewCallBack()
+     * @see "QuickTime::NewCallBack()"
      * @param tb the time base that the callback is attached too.
      */
     public TimeJumpCallBack(TimeBase paramTimeBase) throws QTException {
@@ -21,8 +21,9 @@ public abstract class TimeJumpCallBack extends QTCallBack {
     /**
      * Specifies the time when the callback sholud be called.
      * Should set flags that specify certain scheduling information before calling this function
-     * QuickTime::CallMeWhen
+     * @see "QuickTime::CallMeWhen"
      */
+    @Override
     public final void callMeWhen() throws StdQTException {
         super.callMeWhen(0, 0, 0);
     }

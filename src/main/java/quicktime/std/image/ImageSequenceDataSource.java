@@ -32,12 +32,7 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ImageSequenceDataSource.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ImageSequenceDataSource.class));
             }
         }.establish();
     }
@@ -56,7 +51,7 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
 
     /**
      * Creates a new data source for an ImageSequence.
-     * QuickTime::CDSequenceNewDataSource
+     * @see "QuickTime::CDSequenceNewDataSource"
      * @param sourceType A four-character code describing how the input will be used. This code is usually derived from the information returned by the codec. For example, if a mask plane was passed, this field might contain ÔmaskÕ.
      * @param sourceInputNumber More than one instance of a given source type may exist. The first occurrence should have a source input number of 1, and so on.
      * @param dataDescription A handle to a data structure describing the input data. For compressed image data, this is just an ImageDescriptionHandle.
@@ -67,7 +62,7 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
 
     /**
      * This will retrieve a previously created data source for an ImageSequence.
-     * QuickTime::CDSequenceGetDataSource
+     * @see "QuickTime::CDSequenceGetDataSource"
      * @param sourceType A four-character code describing how the input will be used. This code is usually derived from the information returned by the codec. For example, if a mask plane was passed, this field might contain ÔmaskÕ.
      * @param sourceInputNumber More than one instance of a given source type may exist. The first occurrence should have a source input number of 1, and so on.
      */
@@ -82,7 +77,7 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
      * a PixMap the data source itself is unchanged by when you draw into the PixMap the
      * contents of the PixMap have changed - so you use this method to notify the ImageSequence
      * that the data has changed.
-     * QuickTime::CDSequenceChangedSourceData
+     * @see "QuickTime::CDSequenceChangedSourceData"
      */
     public void changedSourceData() throws StdQTException {
         if (!this.isValid)
@@ -94,9 +89,9 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
      * The CDSequenceSetSourceData function is called to set data in a new frame to a
      * specific source. For example, as a new frame of compressed data arrives at a
      * source, CDSequenceSetSourceData will be called.
-     * QuickTime::CDSequenceSetSourceData
+     * @see "QuickTime::CDSequenceSetSourceData"
      * @param data the new encoded image data for the DataSource.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setSourceData(EncodedImage paramEncodedImage) throws StdQTException {
         if (!this.isValid)
@@ -116,7 +111,7 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
      * However if you want to remove a previously created data source for an image sequence
      * an application can use this call to dispose of this data source. Once called this object
      * is invalid and consequent calls on this object will return an error
-     * QuickTime::CDSequenceDisposeDataSource
+     * @see "QuickTime::CDSequenceDisposeDataSource"
      */
     public void dispose() throws StdQTException {
         StdQTException.checkError(CDSequenceDisposeDataSource(_ID()));
@@ -151,8 +146,3 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
         return ImageCompressionManager.CDSequenceDisposeDataSource(paramInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /ImageSequenceDataSource.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -48,12 +48,12 @@ class MovieControllerTest {
         assertEquals(movie, mc.getMovie());
         QDRect bounds = mc.getBounds();
         assertEquals(box.getHeight() + 16, bounds.getHeight(), 0);
-        QDGraphics port = new QDGraphics(new QDRect(0, 0, (int) bounds.getWidth(), (int) bounds.getHeight()));
+        QDGraphics port = new QDGraphics(new QDRect(0, 0, bounds.getWidth(), bounds.getHeight()));
         mc.setPort(port);
         mc.setBounds(new QDRect(0, 0, (int) bounds.getWidth(), (int) bounds.getHeight()));
 
         // click the play button
-        mc.click(new QDPoint(8, (int) bounds.getHeight() - 8), 0);
+        mc.click(new QDPoint(8, bounds.getHeight() - 8), 0);
         assertTrue(mc.getPlayRate() != 0 || movie.getRate() != 0);
         mc.idle();
         mc.key(' ', 0);
@@ -62,7 +62,7 @@ class MovieControllerTest {
         // the bar is drawn
         mc.idle();
         RawEncodedImage pixels = port.getPixMap().getPixelData();
-        int y = (int) bounds.getHeight() - 2;
+        int y = bounds.getHeight() - 2;
         assertNotEquals(0, pixels.getInt(y * pixels.getRowBytes() + 4 * 4) & 0xffffff);
 
         mc.setLooping(true);

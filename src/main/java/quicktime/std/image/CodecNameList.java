@@ -1,13 +1,11 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.internal.toolbox.ImageCompressionManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.QTPointerRef;
+
 
 /**
  * CodecNameList corresponds to CodecNameSpecListPtr data structure
@@ -16,35 +14,19 @@ import quicktime.util.QTPointerRef;
  */
 public final class CodecNameList extends QTPointerRef implements QuickTimeLib {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 6;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CodecNameList.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Retrieve a list of installed compressor components or a
      * list of installed compressor types.
-     * see QuickTime::GetCodecNameList
+     * @see "see QuickTime::GetCodecNameList"
      * @param show specifies an integer that controls the contents of the list.
      */
-    public CodecNameList(int paramInt) throws QTException {
-        super(allocate((short) paramInt), kNativeSize, null);
+    public CodecNameList(int show) throws QTException {
+        super(allocate((short) show), kNativeSize, null);
     }
 
     private static int allocate(short paramShort) throws StdQTException {
@@ -57,13 +39,13 @@ public final class CodecNameList extends QTPointerRef implements QuickTimeLib {
     /**
      * Retrieves the nth element in the codec name list.
      * @param n the index to the list.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public CodecName getNth(int paramInt) throws StdQTException {
-        if (paramInt > getCount()) {
+    public CodecName getNth(int n) throws StdQTException {
+        if (n > getCount()) {
             throw new StdQTException("CodecName.getNth");
         }
-        return new CodecName(_ID() + 2 + 44 * paramInt, this);
+        return new CodecName(_ID() + 2 + 44 * n, this);
     }
 
     /**

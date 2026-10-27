@@ -387,8 +387,3 @@ public final class QTSConstants {
 
     public static final int kQTSSourcerIdleSelect = 1302;
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /QTSConstants.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

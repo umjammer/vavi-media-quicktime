@@ -12,12 +12,12 @@ import quicktime.qd.QDPoint;
 import quicktime.qd.QDRect;
 
 /**
- * Deprecated.
+ * @deprecated
  * The SWController deals with SpriteWorldHitTest calls on the SpriteWorld that
  * is contained by the SWCompositor's sub classes.
  * By default it will do hit testing on the actual sprite image itself. However, an application can
  * set the hit-test flags to support any mode of hit testing appropriate.
- * @see {@link quicktime.app.event.QTMouseController}
+ * @see quicktime.app.event.QTMouseController
  */
 public class SWController extends MouseController {
 
@@ -34,8 +34,8 @@ public class SWController extends MouseController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Construct a SWController object.
      * @param mr the Responder that will respond to mouse events when a sprite is hit.
      * @param wholeSpace if true all object that are in the space will be dragged. If false
@@ -46,8 +46,8 @@ public class SWController extends MouseController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Construct a SWController object.
      * @param mr the Responder that will respond to mouse events when a sprite is hit.
      * @param wholeSpace if true all object that are in the space will be dragged. If false
@@ -60,29 +60,31 @@ public class SWController extends MouseController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current Space that the SWController is attached to.
      * This space will be an instance of the SWCompositor class.
      * @return the Space the controller is attached to.
      */
+    @Override
     public Space getSpace() {
         return this.sd;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the target Space of the MouseController. This target must be
      * a kind of SWCompositor class.
      * @param target the potential target space for the SWController.
      */
+    @Override
     protected void setTargetSpace(Space paramSpace) {
         this.sd = ((SWCompositor) paramSpace);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the flags that control the hit test parameters on the SpriteWorld. * @deprecated since QTJava 6.1
      */
     public int getFlags() {
@@ -90,7 +92,7 @@ public class SWController extends MouseController {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Set the flags for controlling the hit test behaviour of the SpriteWorld.* @deprecated since QTJava 6.1
      */
     public void setFlags(int paramInt) {
@@ -98,31 +100,33 @@ public class SWController extends MouseController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A method that is called whenever the MouseController deactivates its responder.
      * A subclass should use this method to deactivate a responder (either explicitly or calling super.deactivateResponder).
      * For example a user may have
      * dragged a member out of a group, so the drag action's target is no longer valid and
      * the Responder has no target to act upon.
      */
+    @Override
     protected void deactivateResponder() {
         this.isActive = false;
         super.deactivateResponder();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A notification method that is called whenever the MouseController activates its responder.
      */
+    @Override
     protected void responderActivated() {
         this.isActive = true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is used to setup translation values for x and y of an event to
      * translate the event into the local coordinate space of a member's display Space.
      * In the case of a DirectGroup the translation is (0, 0), in the case of a
@@ -131,6 +135,7 @@ public class SWController extends MouseController {
      *
      * The method sets the value of the protected instance variables xLocationOffset and yLocation offset.
      */
+    @Override
     protected void setTranslation() {
         SWCompositor localSWCompositor1 = this.sd;
         SWCompositor localSWCompositor2 = localSWCompositor1;
@@ -149,19 +154,20 @@ public class SWController extends MouseController {
         }
     }
 
-    private QDPoint p = new QDPoint(0, 0);
+    private final QDPoint p = new QDPoint(0, 0);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called when a MouseController has received a mouse
      * event in its space. This method returns a TwoDSprite object if the SpriteWorld.hitTest
      * method returns a Sprite at the event's location.
      * @param event a mouse down event
      * @return a TwoDSprite object that is located at the event coordinates or null if no Sprite
      *  at the location of the event.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected Object getSelected(MouseEvent paramMouseEvent) throws QTException {
         QDRect localQDRect = this.sd.getDisplayBounds();
         this.p.setX(paramMouseEvent.getX() + localQDRect.getX());
@@ -173,7 +179,7 @@ public class SWController extends MouseController {
             this.sd.hitTestFlag = this.flags;
             return this.sd.hitTest(this.p.getX(), this.p.getY());
         }
-        Object localObject = null;
+        TwoDSprite localObject = null;
         Enumeration localEnumeration = members();
         while (localEnumeration.hasMoreElements()) {
             this.p.setX(paramMouseEvent.getX());
@@ -181,7 +187,7 @@ public class SWController extends MouseController {
             TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
             if (localTwoDSprite.hitTest(this.flags, this.p)) {
                 if (localObject != null) {
-                    if (localTwoDSprite.getLayer() < ((TwoDSprite) localObject).getLayer())
+                    if (localTwoDSprite.getLayer() < localObject.getLayer())
                         localObject = localTwoDSprite;
                 } else {
                     localObject = localTwoDSprite;

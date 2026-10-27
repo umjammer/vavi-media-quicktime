@@ -30,12 +30,7 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(OpenedFile.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(OpenedFile.class));
             }
         }
         new PrivelegedAction().establish();
@@ -76,9 +71,9 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
 
     private boolean closed = false;
 
-    private QTFile f;
+    private final QTFile f;
 
-    private int fileType;
+    private final int fileType;
 
     public final QTFile getFile() {
         return this.f;
@@ -86,8 +81,8 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
 
     /**
      * This method closes an open stream and the associated movie file.
-     * QuickTime::CloseMovieFile()
-     * QuickTime::FSClose()
+     * @see "QuickTime::CloseMovieFile()"
+     * @see "QuickTime::FSClose()"
      */
     public final void close() throws QTIOException {
         if (this.closed)
@@ -106,6 +101,7 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         this.closed = true;
     }
 
+    @Override
     protected final void _dispose() throws QTIOException {
         close();
     }

@@ -3,7 +3,7 @@ package quicktime.app.actions;
 import quicktime.std.image.Matrix;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class provides a standard mechanism for applying matrix manipulations to
  * a Transformable target and supporting constraint bounding of the target's location
  * after its matrix is altered.
@@ -19,40 +19,40 @@ import quicktime.std.image.Matrix;
 public abstract class TransformMatrix {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Used to nofify subclasses that the applied transformations have
      * exceeded one of the sides of the enclosing space of the Transformable target.
      */
     protected static final int kLeftSide = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Used to nofify subclasses that the applied transformations have
      * exceeded one of the sides of the enclosing space of the Transformable target.
      */
     protected static final int kRightSide = 16;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Used to nofify subclasses that the applied transformations have
      * exceeded one of the sides of the enclosing space of the Transformable target.
      */
     protected static final int kTopSide = 256;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Used to nofify subclasses that the applied transformations have
      * exceeded one of the sides of the enclosing space of the Transformable target.
      */
     protected static final int kBottomSide = 4096;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -62,8 +62,8 @@ public abstract class TransformMatrix {
     public static final int kNoConstraint = 0;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -73,8 +73,8 @@ public abstract class TransformMatrix {
     public static final int kConstrainWithinLeft = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -84,8 +84,8 @@ public abstract class TransformMatrix {
     public static final int kConstrainWithinRight = 16;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -95,8 +95,8 @@ public abstract class TransformMatrix {
     public static final int kConstrainWithinTop = 256;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -106,8 +106,8 @@ public abstract class TransformMatrix {
     public static final int kConstrainWithinBottom = 4096;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -117,8 +117,8 @@ public abstract class TransformMatrix {
     public static final int kConstrainWithinHorizontal = 17;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -134,8 +134,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -145,8 +145,8 @@ public abstract class TransformMatrix {
     public static final int kConstrainWithinAll = 4369;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -156,8 +156,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedLeft = 65536;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -167,8 +167,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedRight = 1048576;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -178,8 +178,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedTop = 16777216;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -189,8 +189,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedBottom = 268435456;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -200,8 +200,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedHorizontal = 1114112;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -211,8 +211,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedVertical = 285212672;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Use these as constraint flags to restrict transformations that relocated the
      * the target within its space. The client of this class can either completely
      * specify the number of pixels outside of the space that the target should be constrained
@@ -222,8 +222,8 @@ public abstract class TransformMatrix {
     public static final int kConstraintSpecifiedAll = 286326784;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a TransformMatrix class
      */
     protected TransformMatrix() {
@@ -233,8 +233,8 @@ public abstract class TransformMatrix {
     private int constrained = 0;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This is the Transformable target (which MUST be a member of the space)
      * of the TransformMatrix action. It is this target
      * that has its matrix transformed by the subclass. It is set in the intialize method.
@@ -242,8 +242,8 @@ public abstract class TransformMatrix {
     protected quicktime.app.image.Transformable target;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Specify the number of pixels that the target is constrained to when it is positioned
      * beyond the right hand side. Its default value is 1, which means that its position is constrained
      * to showing only 1 column (the left hand column) of the target's  pixels.
@@ -251,8 +251,8 @@ public abstract class TransformMatrix {
     public int specifiedRightConstraint = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Specify the number of pixels that the target is constrained to when it is positioned
      * beyond the left hand side. Its default value is 1, which means that its position is constrained
      * to showing only 1 column (the right hand column) of the target's  pixels.
@@ -260,8 +260,8 @@ public abstract class TransformMatrix {
     public int specifiedLeftConstraint = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Specify the number of pixels that the target is constrained to when it is positioned
      * beyond the top side. Its default value is 1, which means that its position is constrained
      * to showing only 1 row (the bottom row) of the target's pixels.
@@ -269,8 +269,8 @@ public abstract class TransformMatrix {
     public int specifiedTopConstraint = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Specify the number of pixels that the target is constrained to when it is positioned
      * beyond the bottom side. Its default value is 1, which means that its position is constrained
      * to showing only 1 row (the top row) of the target's pixels.
@@ -285,9 +285,9 @@ public abstract class TransformMatrix {
 
     private Matrix origTargetMatrix;
 
-    private quicktime.qd.QDPoint[] newPt = new quicktime.qd.QDPoint[1];
+    private final quicktime.qd.QDPoint[] newPt = new quicktime.qd.QDPoint[1];
 
-    private quicktime.qd.QDRect transformMatrixRect = new quicktime.qd.QDRect();
+    private final quicktime.qd.QDRect transformMatrixRect = new quicktime.qd.QDRect();
 
     private Matrix deltaMatrix;
 
@@ -300,7 +300,7 @@ public abstract class TransformMatrix {
     private int setYBottom;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Return a string representation of this class. * @deprecated since QTJava 6.1
      */
     public String toString() {
@@ -308,8 +308,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the incoming object is a Matrix action with the same target.
      * @param obj the object to test
      * @return true if equal, false if not
@@ -321,8 +321,7 @@ public abstract class TransformMatrix {
             return false;
         if (!paramObject.getClass().getName().equals(getClass().getName()))
             return false;
-        if ((paramObject instanceof TransformMatrix)) {
-            TransformMatrix localTransformMatrix = (TransformMatrix) paramObject;
+        if ((paramObject instanceof TransformMatrix localTransformMatrix)) {
             if (this.target != null)
                 return this.target.equals(localTransformMatrix.target);
         }
@@ -330,8 +329,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * @return the current target of this object.
      */
     public quicktime.app.image.Transformable getTarget() {
@@ -339,8 +338,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Using the constrain constants transformation of the target's matrix can be constrained in any direction.
      * @param flag constraint flag
      */
@@ -349,7 +348,7 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the current constraint setting * @deprecated since QTJava 6.1
      */
     public int getConstraint() {
@@ -357,8 +356,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called to initialize the TransformMatrix operation. Typically this is
      * used with the transformMatrix (Matrix) call. This version of the initialize call is used
      * used with the MatrixAction class that applies some kind of transformation in the matrix
@@ -373,7 +372,7 @@ public abstract class TransformMatrix {
      * if constraint testing is performed.
      *
      * @param space the space which the Transformable object is a member of.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void initialize(quicktime.app.display.QTDisplaySpace paramQTDisplaySpace, quicktime.app.image.Transformable paramTransformable) throws quicktime.QTException {
         this.target = paramTransformable;
@@ -394,8 +393,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called to initialize the TransformMatrix operation. Typically this is
      * used with the transformMatrix (Matrix, int deltaX, int deltaY) call. This version of the initialize call is used
      * used with the DragAction where each time the user selects an object to drag the TransformMatrix is reinitialized.
@@ -404,7 +403,7 @@ public abstract class TransformMatrix {
      *  transformMatrix (Matrix, int deltaX, int deltaY) method, the deltaX value is a delta from this specified origin.
      * @param y the y-origin about which the transformation is applied. In consequent calls to the
      *  transformMatrix (Matrix, int deltaX, int deltaY) method, the deltaY value is a delta from this specified origin.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void initialize(quicktime.app.display.QTDisplaySpace paramQTDisplaySpace, quicktime.app.image.Transformable paramTransformable, int paramInt1, int paramInt2) throws quicktime.QTException {
         this.target = paramTransformable;
@@ -426,12 +425,12 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will apply the transformation matrix to the target.
      * It will call the doTransformation (Matrix) method.
      * @return true if the this transformation reached a constraining condition
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean transformTarget() throws quicktime.QTException {
         this.deltaMatrix = this.target.getMatrix().copy();
@@ -440,14 +439,14 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will apply the transformation matrix to the target.
      * It will call the doTransformation (Matrix, int deltaX, int deltaY) method.
      * @param newX the new x position expressed in the local coordinates of the space.
      * @param newY the new y position expressed in the local coordinates of the space.
      * @return true if the this transformation reached a constraining condition
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean transformTarget(int paramInt1, int paramInt2) throws quicktime.QTException {
         this.newPt[0].setX(paramInt1);
@@ -546,8 +545,8 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If a subclass is applying specified transformations to a matrix, then it should
      * negate the value of these pre-defined transformation values. This is used in conjunction
      * with the transformMatrix usage.
@@ -556,28 +555,28 @@ public abstract class TransformMatrix {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Applies the transformation of the Matrix.
      * @param theMatrix The matrix handed in is the original matrix of the target when the TransformMatrix object was initialized.
      * @param deltaX the difference between the original x point when the TransformMatrix object was initialized and the current location.
      * @param deltaY the difference between the original y point when the TransformMatrix object was initialized and the current location.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected abstract void doTransformation(Matrix paramMatrix, int paramInt1, int paramInt2) throws quicktime.QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Applies the transformation of the Matrix.
      * @param theMatrix The matrix handed in is the current matrix of the target.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected abstract void doTransformation(Matrix paramMatrix) throws quicktime.QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called whenever a constraints test hits one of the sides of the enclosing space.
      * @param whichSide indicates which side the constraints test hit.
      */

@@ -23,7 +23,7 @@ public final class QTMIDIPortList extends QTHandleRef implements Cloneable {
      * Return a port at the specified (one based) index.
      * @param index the index which contains the port to return.
      * @return a QTMIDIPort found at the specified index.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QTMIDIPort getPort(int paramInt) throws StdQTException {
         if (paramInt > getShortAt(0))
@@ -41,6 +41,7 @@ public final class QTMIDIPortList extends QTHandleRef implements Cloneable {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new QTMIDIPortList(makeAndCopyHandle());
     }
@@ -52,8 +53,3 @@ public final class QTMIDIPortList extends QTHandleRef implements Cloneable {
         return getClass().getName() + "[numberOfPorts=" + getLength() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /QTMIDIPortList.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

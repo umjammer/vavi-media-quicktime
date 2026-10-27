@@ -6,7 +6,7 @@ import quicktime.util.QTUtils;
 
 /**
  * Provides scheduled operations with time base time rate changes.
- * QuickTime::QTCallBack
+ * @see "QuickTime::QTCallBack"
  */
 public abstract class RateCallBack extends QTCallBack {
 
@@ -14,7 +14,7 @@ public abstract class RateCallBack extends QTCallBack {
      * Creates a new callback event that will invoke its Callback object when the rate of the
      * specified timebase reaches a certain value.
      * The callback is not active until you schedule it by calling the callMeWhen method.
-     * QuickTime::NewCallBack()
+     * @see "QuickTime::NewCallBack()"
      * @param tb the time base that the callback is attached too.
      * @param rate the specified rate which will invoke the Callback
      * @param flags the conditions under which the Callback will be executed
@@ -38,8 +38,9 @@ public abstract class RateCallBack extends QTCallBack {
     /**
      * Makes the callback active.
      * The rate value should be set before this method is called.
-     * QuickTime::CallMeWhen
+     * @see "QuickTime::CallMeWhen"
      */
+    @Override
     public final void callMeWhen() throws StdQTException {
         super.callMeWhen(QTUtils.X2Fix(this.rate), this.flags, 0);
     }

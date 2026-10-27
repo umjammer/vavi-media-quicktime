@@ -128,8 +128,3 @@ public final class SourcerInitParams extends QTPointer {
         return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",dataType=" + QTUtils.fromOSType(getDataType()) + ",data" + getData() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /SourcerInitParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

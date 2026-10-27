@@ -113,9 +113,9 @@ public class MusicData extends QTHandle {
      * @return the stuffed representation of this type of extended music event.
      */
     public static long stuffXNoteEvent(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        long l1 = 0x90000000 | paramInt1 << 16 | paramInt2 << 0;
+        long l1 = 0x90000000 | (long) paramInt1 << 16 | paramInt2 << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000 | paramInt4 << 0 | paramInt3 << 22;
+        long l2 = 0x80000000 | paramInt4 << 0 | (long) paramInt3 << 22;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
         l1 &= 0xFFFFFFFF;
         l2 &= 0xFFFFFFFF;
@@ -131,7 +131,7 @@ public class MusicData extends QTHandle {
      * @return the stuffed representation of this type of extended music event.
      */
     public static long stuffXControlEvent(int paramInt1, int paramInt2, int paramInt3) {
-        long l1 = 0xA0000000 | paramInt1 << 16 | (paramInt3 & qtma_MASK(16)) << 0;
+        long l1 = 0xA0000000 | (long) paramInt1 << 16 | (paramInt3 & qtma_MASK(16)) << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
         long l2 = 0x80000000 | paramInt2 << 0;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
@@ -149,9 +149,9 @@ public class MusicData extends QTHandle {
      * @return the stuffed representation of this type of extended music event.
      */
     public static long stuffXKnobEvent(int paramInt1, int paramInt2, int paramInt3) {
-        long l1 = 0xB0000000 | paramInt1 << 16 | paramInt3 >> 16 << 0;
+        long l1 = 0xB0000000 | (long) paramInt1 << 16 | paramInt3 >> 16 << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000 | paramInt2 << 16 | (paramInt3 & 0xFFFF) << 0;
+        long l2 = 0x80000000 | (long) paramInt2 << 16 | (paramInt3 & 0xFFFF) << 0;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
         l1 &= 0xFFFFFFFF;
         l2 &= 0xFFFFFFFF;
@@ -385,8 +385,9 @@ public class MusicData extends QTHandle {
      * Resets the size of the MusicData object to the new size (in bytes).
      * The end of sequence marker is inserted in the last four bytes of the MusicData object.
      * @param newSize - the new size of the MusicData object.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
+    @Override
     public void setSize(int paramInt) throws UtilException {
         super.setSize(paramInt);
         setIntAt(paramInt - 4, EndianOrder.flipNativeToBigEndian32(1610612736));
@@ -464,7 +465,7 @@ public class MusicData extends QTHandle {
      * by two ints:
      * 0xFnnn0017 where nnn is the part number - signifies start of note request event (0x0017 is the size of a note request event)
      * the note request data
-     * 0xC0010017	-> signifies end of note request event
+     * 0xC0010017 -> signifies end of note request event
      *
      * Thus when calculating offsets for the position in the MusicData for a second NoteRequest event
      * it is (given that the first note request is event is at the start of the music data and its offset is 1 as the header event takes up the first entry):
@@ -522,7 +523,7 @@ public class MusicData extends QTHandle {
      * by two music events (ints):
      * 0xFnnnxxxx where nnn is the part number - signifies start of note request event (xxxx is the size of an atomic instrument + head and tail event)
      * the AtomicInstrument data
-     * 0xC006xxxx	-> signifies end of atomic instrument event (xxxx is the identical size as the header)
+     * 0xC006xxxx -> signifies end of atomic instrument event (xxxx is the identical size as the header)
      *
      * Thus when calculating offsets for the position in the MusicData for a second AtomicInstrument event
      * it is:
@@ -577,8 +578,3 @@ public class MusicData extends QTHandle {
         return new AtomicInstrument(m, null);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /MusicData.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

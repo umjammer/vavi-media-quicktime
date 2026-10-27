@@ -10,7 +10,7 @@ public class SGVideoCompressorInfo {
     public int mDepth;
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>use theCompressor field</I>
      * This field is no longer used and is ALWAYS set to zero
      */

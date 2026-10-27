@@ -1,5 +1,7 @@
 package quicktime.streaming;
 
+import java.util.Arrays;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.qd.GDevice;
@@ -281,7 +283,7 @@ public class MediaParams extends QTPointerRef {
     /**
      * Sets the frequency bands assoicated with the sound media
      * @param bands frequency bands
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setFrequencyBands(QTPointer paramQTPointer) throws QTException {
         setShortAt(72, (short) paramQTPointer.getSize());
@@ -325,11 +327,6 @@ public class MediaParams extends QTPointerRef {
      * @return a String
      */
     public String toString() {
-        return getClass().getName() + "[width=" + getWidth() + ",height=" + getHeight() + ",matrix=" + getMatrix() + ",\n" + "gWorld=" + getGWorld() + ",gdHandle=" + getGDHandle() + ",clip=" + getClip() + ",graphicsMode=" + getGraphicsMode() + ",opColor=" + getOpColor() + ",\n" + "leftVolume=" + getLeftVolume() + ",rightVolume=" + getRightVolume() + ",bassLevel=" + getBassLevel() + ",trebleLevel=" + getTrebleLevel() + ",frequencyBandsCount=" + getFrequencyBandsCount() + ",frequencyBands=" + getFrequencyBands() + ",levelMeteringEnabled=" + isLevelMeteringEnabled() + "]";
+        return getClass().getName() + "[width=" + getWidth() + ",height=" + getHeight() + ",matrix=" + getMatrix() + ",\n" + "gWorld=" + getGWorld() + ",gdHandle=" + getGDHandle() + ",clip=" + getClip() + ",graphicsMode=" + getGraphicsMode() + ",opColor=" + getOpColor() + ",\n" + "leftVolume=" + getLeftVolume() + ",rightVolume=" + getRightVolume() + ",bassLevel=" + getBassLevel() + ",trebleLevel=" + getTrebleLevel() + ",frequencyBandsCount=" + getFrequencyBandsCount() + ",frequencyBands=" + Arrays.toString(getFrequencyBands()) + ",levelMeteringEnabled=" + isLevelMeteringEnabled() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /MediaParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

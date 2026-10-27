@@ -29,17 +29,12 @@ public final class QTUtils implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTUtils.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTUtils.class));
             }
         }.establish();
     }
 
-    private static boolean isWin = (!QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4));
+    private static final boolean isWin = (!QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4));
 
     private static final int kIsPointer = 1;
 
@@ -49,13 +44,13 @@ public final class QTUtils implements QuickTimeLib {
 
     private static final int kIsFloatArray = 4096;
 
-    private static int kShiftModShiftMask = 9;
+    private static final int kShiftModShiftMask = 9;
 
-    private static int kControlModShiftMask = 12;
+    private static final int kControlModShiftMask = 12;
 
-    private static int kCommandModShiftMask = 8;
+    private static final int kCommandModShiftMask = 8;
 
-    private static int kOptionModShiftMask = 11;
+    private static final int kOptionModShiftMask = 11;
 
     /**
      * Convert the modifier values in java InputEvents to those expected by QT.
@@ -91,27 +86,18 @@ public final class QTUtils implements QuickTimeLib {
      * Convert the key values in java KeyEvents to those expected by QT.
      */
     public static int convertKeyValue(int paramInt) {
-        switch(paramInt) {
-            case 10:
-                return 13;
-            case 37:
-                return 28;
-            case 39:
-                return 29;
-            case 38:
-                return 30;
-            case 40:
-                return 31;
-            case 36:
-                return 1;
-            case 35:
-                return 4;
-            case 33:
-                return 11;
-            case 34:
-                return 12;
-        }
-        return paramInt;
+        return switch (paramInt) {
+            case 10 -> 13;
+            case 37 -> 28;
+            case 39 -> 29;
+            case 38 -> 30;
+            case 40 -> 31;
+            case 36 -> 1;
+            case 35 -> 4;
+            case 33 -> 11;
+            case 34 -> 12;
+            default -> paramInt;
+        };
     }
 
     /**
@@ -247,15 +233,17 @@ public final class QTUtils implements QuickTimeLib {
     /**
      * Converts an OSType (4 character) string into an int.
      */
-    public static final int toOSType(String paramString) {
-        while (paramString.length() < 4) paramString = paramString + " ";
+    public static int toOSType(String paramString) {
+        StringBuilder paramStringBuilder = new StringBuilder(paramString);
+        while (paramStringBuilder.length() < 4) paramStringBuilder.append(" ");
+        paramString = paramStringBuilder.toString();
         return toOSType(paramString.charAt(0), paramString.charAt(1), paramString.charAt(2), paramString.charAt(3));
     }
 
     /**
      * Converts four characters into an OSType int
      */
-    public static final int toOSType(char paramChar1, char paramChar2, char paramChar3, char paramChar4) {
+    public static int toOSType(char paramChar1, char paramChar2, char paramChar3, char paramChar4) {
         return paramChar1 << '\030' | (paramChar2 & 0xFF) << '\020' | (paramChar3 & 0xFF) << '\b' | paramChar4 & 0xFF;
     }
 
@@ -302,7 +290,7 @@ public final class QTUtils implements QuickTimeLib {
      * This will flip the endian order of a 16bit value
      * @param s the value to flip
      * @return the flipped value
-     * @see {@link quicktime.util.EndianOrder}
+     * @see quicktime.util.EndianOrder
      */
     public static short endianFlip16(short paramShort) {
         return (short) (paramShort << 8 & 0xFF00 | paramShort >>> 8 & 0xFF);
@@ -312,7 +300,7 @@ public final class QTUtils implements QuickTimeLib {
      * This will flip the endian order of a 32bit value
      * @param i the value to flip
      * @return the flipped value
-     * @see {@link quicktime.util.EndianOrder}
+     * @see quicktime.util.EndianOrder
      */
     public static int endianFlip32(int paramInt) {
         return paramInt << 24 & 0xFF000000 | paramInt << 8 & 0xFF0000 | paramInt >>> 8 & 0xFF00 | paramInt >>> 24 & 0xFF;
@@ -322,10 +310,10 @@ public final class QTUtils implements QuickTimeLib {
      * This will flip the endian order of a 64bit value
      * @param l the value to flip
      * @return the flipped value
-     * @see {@link quicktime.util.EndianOrder}
+     * @see quicktime.util.EndianOrder
      */
     public static long endianFlip64(long paramLong) {
-        return paramLong << 56 & 0xFF00000000000000l | paramLong << 40 & 0xFF000000000000l | paramLong << 24 & 0xFF0000000000l | paramLong << 8 & 0xFF00000000l | paramLong >>> 8 & 0xFF000000 | paramLong >>> 24 & 0xFF0000 | paramLong >>> 40 & 0xFF00 | paramLong >>> 56 & 0xFF;
+        return paramLong << 56 & 0xFF00000000000000L | paramLong << 40 & 0xFF000000000000L | paramLong << 24 & 0xFF0000000000L | paramLong << 8 & 0xFF00000000L | paramLong >>> 8 & 0xFF000000 | paramLong >>> 24 & 0xFF0000 | paramLong >>> 40 & 0xFF00 | paramLong >>> 56 & 0xFF;
     }
 
     /**
@@ -338,8 +326,8 @@ public final class QTUtils implements QuickTimeLib {
      * @param srcOffset the number of bytes from the start of the src object that the supplied endian descriptor
      *  will be applied.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
-     * @see {@link quicktime.util.EndianOrder}
+     * @throws quicktime.util.UtilException
+     * @see quicktime.util.EndianOrder
      */
     public static void endianFlip(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
         endianFlip(paramObject, paramInt, paramObject, paramInt, paramEndianDescriptor);
@@ -358,8 +346,8 @@ public final class QTUtils implements QuickTimeLib {
      * @param dest the object that will be the flipped version of the source object.
      * @param destOffset the number of bytes from the start of the dest object that the flipped values will be copied too.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
-     * @see {@link quicktime.util.EndianOrder}
+     * @throws quicktime.util.UtilException
+     * @see quicktime.util.EndianOrder
      */
     public static void endianFlip(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (paramEndianDescriptor == null) {

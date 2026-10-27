@@ -4,7 +4,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * Certain actions like invalidate can only be performed on a TwoDSprite
  * when the Sprite that it uses is an active member of its SpriteWorld.
  * If a method is called on the TwoDSprite when its Sprite is invalid
@@ -19,8 +19,8 @@ public class SpriteInvalidException extends QTRuntimeException {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates the exception.
      * @param s a message
      */

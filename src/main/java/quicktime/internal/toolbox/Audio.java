@@ -160,8 +160,8 @@ final class Audio {
                             diff += step >> 2;
                         }
                         predictor += (nibble & 8) != 0 ? -diff : diff;
-                        predictor = Math.max(-32768, Math.min(32767, predictor));
-                        index = Math.max(0, Math.min(88, index + IMA_INDEX[nibble]));
+                        predictor = Math.clamp(predictor, -32768, 32767);
+                        index = Math.clamp(index + IMA_INDEX[nibble], 0, 88);
                         out[(p * 64 + i) * channels + c] = predictor / 32768f;
                     }
                 }

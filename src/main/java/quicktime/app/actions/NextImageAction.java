@@ -7,7 +7,7 @@ import quicktime.app.image.ImageSequencer;
 import quicktime.app.image.ImageSettable;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class will display the next image of its sequence of images
  * whenever the doAction method is called from the super class
  * tickle method.
@@ -15,7 +15,7 @@ import quicktime.app.image.ImageSettable;
 public class NextImageAction extends SequencerAction implements Targetable {
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     protected ImageSettable target;
 
@@ -26,8 +26,8 @@ public class NextImageAction extends SequencerAction implements Targetable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates an ImageAction.
      * @param scale the amount with which a second is divided into at a rate of one
      * @param period the number of scale ticks that elapse between invocations of the action.
@@ -40,34 +40,37 @@ public class NextImageAction extends SequencerAction implements Targetable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the Target of the NextImageAction which is an ImageSettable object.
      * @param target the new target for the Action
      */
+    @Override
     public void setTarget(Object paramObject) {
         this.target = ((ImageSettable) paramObject);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current target of the action.
      * @return the target - an ImageSettable object
      */
+    @Override
     public Object getTarget() {
         return this.target;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method does whatever actions are appropriate so that subsequent calls to getImage and getDescription
      * return the correct image data.
      * @param er the actual rate at which the action has been triggered
      * @param t the time in Ticklish.kScale that the action has been triggered
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected void doAction(float paramFloat, int paramInt) throws QTException {
         if (paramFloat > 0.0F) {
             this.seq.setFrameNext();

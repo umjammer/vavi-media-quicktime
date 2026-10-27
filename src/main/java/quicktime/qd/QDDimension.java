@@ -3,6 +3,7 @@ package quicktime.qd;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -21,18 +22,14 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
 
     private static final int kNativeSize = 8;
 
+    @Serial
     private static final long serialVersionUID = -3790051028201084503L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QDDimension.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDDimension.class));
             }
         }.establish();
     }
@@ -41,7 +38,7 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * Returns the EndianDescriptor for QDRect Rect.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -77,6 +74,7 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
         setHeight(paramFloat2);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
         byte[] arrayOfByte = new byte[12];
@@ -88,6 +86,7 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[12];
         setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(1));
@@ -164,6 +163,7 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * Return a copy of the QDDimension
      * @return a QDDimension
      */
+    @Override
     public Object clone() {
         return copy();
     }
@@ -182,8 +182,7 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
     public boolean equals(Object paramObject) {
         if (paramObject == this)
             return true;
-        if ((paramObject instanceof QDDimension)) {
-            QDDimension localQDDimension = (QDDimension) paramObject;
+        if ((paramObject instanceof QDDimension localQDDimension)) {
             return (getWidth() == localQDDimension.getWidth()) && (getHeight() == localQDDimension.getHeight());
         }
         return false;

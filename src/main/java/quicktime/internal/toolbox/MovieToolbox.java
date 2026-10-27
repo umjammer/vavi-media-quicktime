@@ -973,7 +973,7 @@ public final class MovieToolbox {
             // the media time of the search start inside this edit
             long from = forward ? Math.max(time, es) : Math.min(time, ee - 1);
             long mt = e.mediaTime + t.mediaDuration(from - es, e.rate);
-            long sample = m.sampleAt(Math.min(Math.max(mt, 0), Math.max(0, m.duration() - 1)));
+            long sample = m.sampleAt(Math.clamp(mt, 0, Math.max(0, m.duration() - 1)));
             if (sample == 0) {
                 continue;
             }
@@ -2630,7 +2630,7 @@ public final class MovieToolbox {
                 m.dataRefs.add(DataRefRec.forHandle(Heap.newHandle(0)));
             }
         }
-        return Math.min(Math.max(1, m.defaultDataRefIndex), m.dataRefs.size());
+        return Math.clamp(m.defaultDataRefIndex, 1, m.dataRefs.size());
     }
 
     /** @return the description index for the sample description handle */
@@ -2735,7 +2735,7 @@ public final class MovieToolbox {
             n = Math.min(left, maxNumberOfSamples);
         } else if (m.isSound()) {
             // a chunk of up to a second
-            n = Math.min(left, Math.max(1, m.timeScale / Math.max(1, run.duration)));
+            n = Math.clamp(m.timeScale / Math.max(1, run.duration), 1, left);
         } else {
             n = 1;
         }
@@ -2856,7 +2856,7 @@ public final class MovieToolbox {
         boolean edgeOK = (flags & nextTimeEdgeOK) != 0;
         long t = -1;
         long d = 0;
-        long s = m.sampleAt(Math.max(0, Math.min(time, (int) Math.max(0, m.duration() - 1))));
+        long s = m.sampleAt(Math.clamp(time, 0, (int) Math.max(0, m.duration() - 1)));
         if (s > 0) {
             if ((flags & nextTimeSyncSample) != 0) {
                 long cur = m.timeOfSample(s);

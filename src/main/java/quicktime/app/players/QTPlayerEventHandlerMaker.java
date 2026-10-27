@@ -1,17 +1,17 @@
 package quicktime.app.players;
 
 /**
- * Deprecated.
+ * @deprecated
  * Objects that implement this interface return a QTPlayerEventHandler
  * when the make method is called based on their particular
  * ability to receive events from the addedToInterest source
  * and handle events for the particular player.
  */
-public abstract interface QTPlayerEventHandlerMaker {
+public interface QTPlayerEventHandlerMaker {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return an event handler for the specified player where the
      * addedToInterest object is the object that will be the source
      * of events for that player. If either the player or interest
@@ -22,6 +22,6 @@ public abstract interface QTPlayerEventHandlerMaker {
      * @return a QTPlayerEventHandler or null if can't handle events
      *  from either the specified source or the specified player.
      */
-    public abstract QTPlayerEventHandler make(QTPlayer paramQTPlayer, Object paramObject);
+    QTPlayerEventHandler make(QTPlayer paramQTPlayer, Object paramObject);
 }
 

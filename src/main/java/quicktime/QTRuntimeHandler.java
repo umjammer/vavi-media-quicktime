@@ -17,7 +17,7 @@ package quicktime;
  * harmless, innocous or dealt with and the calling code will assume that basically
  * the exception never occured.
  */
-public abstract interface QTRuntimeHandler {
+public interface QTRuntimeHandler {
 
     /**
      * This method is called by the handleExceptionOrThrow method of QTRuntimeException,
@@ -35,6 +35,6 @@ public abstract interface QTRuntimeHandler {
      *  problem will occur for the user. For example there is no memory left to complete an operation and
      *  the application cannot free up any memory resources it is holding.
      */
-    public abstract void exceptionOccurred(QTRuntimeException paramQTRuntimeException, Object paramObject, String paramString, boolean paramBoolean);
+    void exceptionOccurred(QTRuntimeException paramQTRuntimeException, Object paramObject, String paramString, boolean paramBoolean);
 }
 

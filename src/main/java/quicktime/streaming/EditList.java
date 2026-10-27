@@ -36,6 +36,7 @@ public class EditList extends QTVector {
         return localEditEntry;
     }
 
+    @Override
     protected QTPointerRef makeElement() {
         EditEntry localEditEntry = null;
         try {
@@ -46,8 +47,3 @@ public class EditList extends QTVector {
         return localEditEntry;
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /EditList.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

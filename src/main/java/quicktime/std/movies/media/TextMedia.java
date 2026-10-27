@@ -11,7 +11,7 @@ public final class TextMedia extends Media {
 
     /**
      * This constructor creates a media struct for the specified Track object.
-     * QuickTime::NewTrackMedia()
+     * @see "QuickTime::NewTrackMedia()"
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
@@ -22,7 +22,7 @@ public final class TextMedia extends Media {
 
     /**
      * This constructor creates a media struct for the specified Track object.
-     * QuickTime::NewTrackMedia()
+     * @see "QuickTime::NewTrackMedia()"
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
@@ -34,10 +34,12 @@ public final class TextMedia extends Media {
         super(paramTrack, paramInt);
     }
 
+    @Override
     final SampleDescription makeDescription() throws QTException {
         return new TextDescription();
     }
 
+    @Override
     final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new TextMediaHandler(paramInt, paramObject);
     }
@@ -45,9 +47,9 @@ public final class TextMedia extends Media {
     /**
      * This method allows you to obtain a reference to a media handler component.
      * This returns the handler that is the appropriate class for this particular media.
-     * QuickTime::GetMediaHandler()
+     * @see "QuickTime::GetMediaHandler()"
      * @return a MediaHandler object for the media's media handler.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public TextMediaHandler getTextHandler() throws StdQTException {
         return new TextMediaHandler(getNativeMediaHandler(), this);
@@ -56,10 +58,10 @@ public final class TextMedia extends Media {
     /**
      * This method allows you to retrieve a sample description from a media.
      * This returns the description that is the appropriate class for this particular media.
-     * QuickTime::GetMediaSampleDescription()
+     * @see "QuickTime::GetMediaSampleDescription()"
      * @param index Specifies the index of the description to retrieve.
      * @return an TextDescription object for the specified index.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public TextDescription getTextDescription(int paramInt) throws QTException {
         TextDescription localTextDescription = new TextDescription();

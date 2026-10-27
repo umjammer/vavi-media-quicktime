@@ -20,12 +20,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QDPoint.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDPoint.class));
             }
         }.establish();
     }
@@ -34,7 +29,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Returns the EndianDescriptor for FixedPoint point.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorFixedPoint() {
+    public static EndianDescriptor getEndianDescriptorFixedPoint() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -42,7 +37,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Returns the EndianDescriptor for TQ3Point2D point.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorTQ3Point2D() {
+    public static EndianDescriptor getEndianDescriptorTQ3Point2D() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -50,11 +45,11 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Returns the EndianDescriptor for TQ3Point2D point.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorQTVRFloatPoint() {
+    public static EndianDescriptor getEndianDescriptorQTVRFloatPoint() {
         return EndianDescriptor.flipAll32;
     }
 
-    private static boolean doEndianSwap = (!QTSession.isCurrentOS(1)) && (!QTSession.isCurrentOS(4));
+    private static final boolean doEndianSwap = (!QTSession.isCurrentOS(1)) && (!QTSession.isCurrentOS(4));
 
     /**
      * These constants are used in the fromArray call to indicate
@@ -143,7 +138,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>As of QTJava v 4.0</I>
      * Create a QDPoint at specified location
      */
@@ -319,8 +314,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
-        if ((paramObject instanceof QDPoint)) {
-            QDPoint localQDPoint = (QDPoint) paramObject;
+        if ((paramObject instanceof QDPoint localQDPoint)) {
             return (localQDPoint.getXF() == getXF()) && (localQDPoint.getYF() == getYF());
         }
         return false;
@@ -337,6 +331,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Return a copy of the QDPoint
      * @return a QDPoint
      */
+    @Override
     public Object clone() {
         return copy();
     }

@@ -17,7 +17,7 @@ import quicktime.util.QTHandle;
 import quicktime.util.QTUtils;
 
 /**
- * Deprecated.
+ * @deprecated
  * A DirectGroup contains a set of QTDrawable objects that present their
  * visual contents directly to the screen.
  *
@@ -61,7 +61,7 @@ public class DirectGroup extends GroupDrawable {
         }
     }
 
-    private static Protocol p = makeP();
+    private static final Protocol p = makeP();
 
     private boolean doMemCleanup;
 
@@ -74,7 +74,7 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0, replaced by DirectGroup</I>
      * Create a new grouped drawable where the members draw directly to the screen.
      * @param initialSize the size of the display group
@@ -86,8 +86,8 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a new grouped drawable where the members draw directly to the screen.
      * @param initialSize the size of the display group
      * @param bc the background color of the group
@@ -97,8 +97,8 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a new grouped drawable where the members draw directly to the screen.
      * @param initialSize the size of the display group
      * @param bc the background color of the group
@@ -111,8 +111,8 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the Object object is an appropriate member of the Space. To be an
      * appropriate member the object must pass the passProtocol method of the Protocol
      * object of the Space.
@@ -122,16 +122,17 @@ public class DirectGroup extends GroupDrawable {
      * in a parent DirectGroup.
      * @param object the Object to test
      * @return true if the object passes the current protocol of the Protocol object of the Space.
-     * @see {@link quicktime.app.spaces.DynamicCollection},
+     * @see quicktime.app.spaces.DynamicCollection,
      * {@link quicktime.app.spaces.Protocol}
      */
-    public boolean isAppropriate(Object paramObject) {
-        return (getProtocol().passProtocol(paramObject)) && (!(paramObject instanceof GroupDrawable));
+    @Override
+    public boolean isAppropriate(Object object) {
+        return (getProtocol().passProtocol(object)) && (!(object instanceof GroupDrawable));
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Add a QTDrawable object to the group based on the provided alignment and layer parametres.
      * This method is provided as a convenience method to position a member in the current
      * display space of the Group.
@@ -139,7 +140,7 @@ public class DirectGroup extends GroupDrawable {
      * @param xAlign the x position of the drawable within the group - 0 is left, 1 is bounds.width - member.width
      * @param yAlign the y position of the drawable within the group - 0 is top, 1 is bounds.height - member.height
      * @return true if the member is appropriate and was added.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean addMember(Object paramObject, int paramInt, float paramFloat1, float paramFloat2) throws QTException {
         if (!isAppropriate(paramObject))
@@ -150,15 +151,16 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Add a QTDrawable object to the group based on the current location of the member and the specified
      * layer parametre.
      * @param layer the layer where the drawer will be placed
      * @param member the member to add to the Display Space
      * @return true if the member is appropriate and was added.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public boolean addMember(Object paramObject, int paramInt) throws QTException {
         if (!isAppropriate(paramObject))
             return false;
@@ -168,33 +170,35 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Add a QTDrawable object to the group with the current location of the QTDrawable.
      * If the member implements the Layerable interface it will get the layer and assign the layer appropriately.
      * Otherwise, the member will be added with a layer of 1.
      * @param member the member to add
      * @return true if the member is appropriate and was added.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public boolean addMember(Object paramObject) throws QTException {
+    @Override
+    public boolean addMember(Object member) throws QTException {
         int i = 1;
-        if ((paramObject instanceof Layerable))
-            i = ((Layerable) paramObject).getLayer();
-        return addMember(paramObject, i);
+        if ((member instanceof Layerable))
+            i = ((Layerable) member).getLayer();
+        return addMember(member, i);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
         super.setGWorld(paramQDGraphics);
         Enumeration<?> localEnumeration = this.vec.elements();
@@ -208,22 +212,23 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called automatically via the QTCanvas object associated with
      * this client to set its boundary.
      *
      * @param bounds a QDRect object describing the boundary
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setDisplayBounds(QDRect paramQDRect) throws QTException {
         super.setDisplayBounds(paramQDRect);
         setClip(null);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This is an optimized drawing method that will only reset the clipping of those
      * objects that are behind the supplied member. It will call memberChanged to do this.
      * It will then only redraw those members who are behind the specified member if and only
@@ -233,8 +238,9 @@ public class DirectGroup extends GroupDrawable {
      * location of the member.
      * @param d the drawable from which to recalculate.
      * @param invalidRgn the invalidRgn that the DirectGroup should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void redrawMember(QTDrawable paramQTDrawable, Region paramRegion) throws QTException {
         if (paramQTDrawable != null) {
             GroupMember localGroupMember1 = null;
@@ -281,26 +287,27 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method allows you to set a Transformable's clipping region.
      * @param theClip a Region that defines the new clipping region.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setClip(Region paramRegion) throws QTException {
         this.clip = (paramRegion == null ? new Region(getDisplayBounds()) : paramRegion.sect(getDisplayBounds()));
         Region localRegion = this.clip;
-        Object localObject = null;
+        GroupMember localObject = null;
         this.doMemCleanup = true;
         for (int i = 0; i < this.vec.size(); i++) {
             GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
             if (localObject != null)
-                localRegion = localRegion.diff(drawersRegion((GroupMember) localObject));
+                localRegion = localRegion.diff(drawersRegion(localObject));
             localGroupMember.drawer.setClip(localRegion);
             localObject = localGroupMember;
         }
         if (localObject != null) {
-            this.eraseRegion = localRegion.diff(drawersRegion((GroupMember) localObject));
+            this.eraseRegion = localRegion.diff(drawersRegion(localObject));
         } else {
             this.eraseRegion = localRegion;
         }
@@ -365,8 +372,8 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This tells the group that the position or display size of the
      * drawer has changed and it should recalculate its alignment and clipping
      * based on the new position.
@@ -375,8 +382,9 @@ public class DirectGroup extends GroupDrawable {
      * characteristics of the drawer.
      * @param d the drawer that has changed
      * @return the GroupMember object that is associated with that drawer.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public GroupMember memberChanged(QTDrawable paramQTDrawable) throws QTException {
         GroupMember localGroupMember = getGroupMember(paramQTDrawable);
         if (localGroupMember != null) {
@@ -386,15 +394,16 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will reset an item's alignment and redraw the group.
      * @param d the drawer to reposition the alignment
      * @param xAlign the new x alignment value for the member
      * @param yAlign the new y alignemen value for the member
      * @return true if the drawer is a member of the group
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public boolean setMemberAlignment(QTDrawable paramQTDrawable, float paramFloat1, float paramFloat2) throws QTException {
         boolean bool = super.setMemberAlignment(paramQTDrawable, paramFloat1, paramFloat2);
         if (bool) {
@@ -405,15 +414,16 @@ public class DirectGroup extends GroupDrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This sets the layer of the incoming drawable to the new layer.
      * It returns true if the drawable is a member of the group and
      * was reset, false otherwise.
      * @param layer the new layer
      * @return true if d is a member of the group
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public boolean setMemberLayer(QTDrawable paramQTDrawable, int paramInt) throws QTException {
         boolean bool = super.setMemberLayer(paramQTDrawable, paramInt);
         if (bool) {
@@ -430,27 +440,27 @@ public class DirectGroup extends GroupDrawable {
     private boolean setClips(QTDrawable paramQTDrawable) throws QTException {
         boolean bool = false;
         Region localRegion = this.clip;
-        Object localObject = null;
+        GroupMember localObject = null;
         for (int i = 0; i < this.vec.size(); i++) {
             GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
             if (localObject != null)
-                localRegion = localRegion.diff(((GroupMember) localObject).clipRegion);
+                localRegion = localRegion.diff(localObject.clipRegion);
             localObject = localGroupMember;
-            if (((GroupMember) localObject).drawer.equals(paramQTDrawable)) {
+            if (localObject.drawer.equals(paramQTDrawable)) {
                 bool = true;
                 this.doMemCleanup = true;
-                ((GroupMember) localObject).clipRegion = null;
+                localObject.clipRegion = null;
                 this.redoCachedMembersClip = true;
                 for (i++; i < this.vec.size(); i++) {
                     localGroupMember = (GroupMember) this.vec.elementAt(i);
-                    localRegion = localRegion.diff(drawersRegion((GroupMember) localObject));
+                    localRegion = localRegion.diff(drawersRegion(localObject));
                     localGroupMember.drawer.setClip(localRegion);
                     localObject = localGroupMember;
                 }
             }
         }
         if (localObject != null) {
-            this.eraseRegion = localRegion.diff(drawersRegion((GroupMember) localObject));
+            this.eraseRegion = localRegion.diff(drawersRegion(localObject));
         }
         this.redoCachedMembersClip = false;
         if (!this.doMemCleanup) {

@@ -30,12 +30,7 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TimeCodeDescription.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(TimeCodeDescription.class));
             }
         }.establish();
     }
@@ -73,6 +68,7 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new TimeCodeDescription(makeAndCopyHandle());
     }

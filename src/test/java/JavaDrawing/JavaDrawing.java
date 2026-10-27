@@ -22,7 +22,8 @@ import quicktime.std.image.GraphicsImporter;
 
 
 public class JavaDrawing extends Frame {
-    public static void main(String args[]) {
+
+    static void main(String[] args) {
         try {
             QTSession.open();
             JavaDrawing jd = new JavaDrawing("QT in Java");
@@ -42,11 +43,13 @@ public class JavaDrawing extends Frame {
 
         // add a WindowListener to close the program down
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }

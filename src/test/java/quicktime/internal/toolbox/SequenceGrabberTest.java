@@ -37,6 +37,7 @@ import quicktime.std.sg.VideoDigitizer;
 import quicktime.util.RawEncodedImage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -149,7 +150,7 @@ class SequenceGrabberTest implements StdQTConstants {
         Movie movie = Movie.fromFile(OpenMovieFile.asRead(new QTFile(file)));
         assertEquals(2, movie.getTrackCount());
         MovieRec m = Heap.peer(QTObject.ID(movie), MovieRec.class);
-        MediaRec v = m.tracks.get(0).media;
+        MediaRec v = m.tracks.getFirst().media;
         assertTrue(v.sampleCount() >= 5, "frames: " + v.sampleCount());
         assertEquals("rle ", Bytes.fourCC(Bytes.getInt(v.descriptions.getFirst(), 4)));
         BufferedImage frame = JavaFrames.decode(v, v.duration() / 2);
@@ -178,7 +179,7 @@ class SequenceGrabberTest implements StdQTConstants {
         sg.setDataProc((channel, data, offset, chRefCon, time, writeType) -> {
             calls.incrementAndGet();
             bytes.addAndGet(data.getSize());
-            assertTrue(channel instanceof SGVideoChannel);
+            assertInstanceOf(SGVideoChannel.class, channel);
             return 0;
         });
         sg.setDataOutput(null, seqGrabDontMakeMovie);

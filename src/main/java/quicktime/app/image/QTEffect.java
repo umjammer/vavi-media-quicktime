@@ -27,7 +27,7 @@ import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 
 /**
- * Deprecated.
+ * @deprecated
  * QTEffect forms the base class for visual effects that can be applied to images.
  * Depending on the effect itself, visual effects can be applied over a length of time, or once only. They can be
  * applied to no source images, a single image or multiple images.
@@ -52,8 +52,8 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTEffect with kMultiFrame set with a default initial size of 0, 0.
      */
     public QTEffect() throws QTException {
@@ -61,7 +61,7 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Creates a QTEffect with kMultiFrame set and the specified initial size.
      * @param d the initialSize of the effect.
@@ -71,8 +71,8 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTEffect with kMultiFrame set with a default initial size of 0, 0.
      * @param multiFrameFlag is normally set to kMultiFrame. The setting of this flag
      *  will also set the initial setting of the redrawing flag. QTEffects
@@ -85,7 +85,7 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Creates a QTEffect. The specified multiFrameFlag parameter should
      * be set to Redrawable.kMultiFrame as all of the existing QTEffects require
@@ -103,8 +103,8 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTEffect. The specified multiFrameFlag parameter should
      * be set to Redrawable.kMultiFrame as all of the existing QTEffects require
      * redrawing for their visual effect to be apparent.
@@ -159,13 +159,13 @@ public class QTEffect implements QTDrawable, Redrawable {
 
     private boolean mRedrawFlag;
 
-    private int singleFrameFlag;
+    private final int singleFrameFlag;
 
     boolean needsRedraw = false;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If true then the current frame of the effect is drawn on redraw.
      * If false then the effect is only applied when you explicitly apply it
      * For an effect or a filter the default setting for this flag is true - the effect
@@ -173,47 +173,50 @@ public class QTEffect implements QTDrawable, Redrawable {
      * is false - the source of the effect only is redrawn.
      * @param redrawFlag boolean indicating redraw behaviour
      */
+    @Override
     public void setRedrawing(boolean paramBoolean) {
         this.mRedrawFlag = paramBoolean;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the state of the redraw flag
      * @return boolean
      */
+    @Override
     public boolean isRedrawing() {
         return this.mRedrawFlag;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the Redrawable only has a single frame to render and thus
      * will never need to re-acquire or redraw its image. Certain Redrawable objects
      * are able to optimise their resources knowing this constraint.
      * @return a boolean
      */
+    @Override
     public boolean isSingleFrame() {
         return this.singleFrameFlag == 1;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This sets the GraphicsMode for the Compositor when it draws its composited
      * contents to its destination QDGraphics (typically the QTCanvas).
      */
-    public void setGraphicsMode(GraphicsMode paramGraphicsMode) throws QTException {
+    public void setGraphicsMode(GraphicsMode gMode) throws QTException {
         if (this.effectSequence != null)
-            this.effectSequence.setGraphicsMode(paramGraphicsMode);
-        this.gMode = paramGraphicsMode;
+            this.effectSequence.setGraphicsMode(gMode);
+        this.gMode = gMode;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This gets the current GraphicsMode for the QTEffect.
      */
     public GraphicsMode getGraphicsMode() {
@@ -221,13 +224,14 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will set the clipping of the effect - it defines the region of the source image
      * that the effect will be applied to.
      * @param r the clipping region
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public void setClip(Region paramRegion) throws StdQTException {
         this.clip = paramRegion;
         if (this.effectSequence != null)
@@ -235,17 +239,18 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the current clipping region of the effect or null if the effect is not clipped * @deprecated since QTJava 6.1
      * @return the clipping region
      */
+    @Override
     public Region getClip() {
         return this.clip;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return a copy of the AtomContainer that contains the
      * current effect settings. You can alter the values of this container but you
      * must call setEffect for those new values to be used by the effect.
@@ -255,23 +260,23 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will take the incoming parameters and use this as the control parameters for the
      * effect. The container will be locked for the duration of the effect object's life or until
      * another effect is set.
      * @param effectParams the parameters that determine the effect that is run
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setEffect(AtomContainer paramAtomContainer) throws QTException {
-        if (paramAtomContainer == null) {
+    public void setEffect(AtomContainer effectParams) throws QTException {
+        if (effectParams == null) {
             this.effectSamplePtr = null;
             if (this.effectSample != null)
                 this.effectSample.unlock();
             this.effectSample = null;
             return;
         }
-        this.effectSample = paramAtomContainer;
+        this.effectSample = effectParams;
         Atom localAtom = this.effectSample.findChildByID_Atom(Atom.kParentIsContainer, 2003329396, 1);
         this.effectSample.lock();
         AtomData localAtomData = this.effectSample.getAtomData(localAtom);
@@ -281,14 +286,14 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by a number of other methods to create
      * the DSequence that is used to render the QTEffect.
      * When called the method will create a new DSequence if the required
      * state has been established to enable the creation of the DSequence.
      * @return true if a new DSequence was created, otherwise false.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected synchronized boolean setUpSequence() throws QTException {
         QDRect localQDRect = getDisplayBounds();
@@ -308,7 +313,7 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the current maximum number of frames that an effect will run for * @deprecated since QTJava 6.1
      */
     public int getFrames() {
@@ -316,8 +321,8 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns the current frame that the effect is rendering.
      * @return the current frame
      */
@@ -326,17 +331,17 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will make sure the component (effect) is there and can set its parameter list for display.
      * If the effect is not present then an exception with a paramErr will be thrown
      * @param effectType the effect type to check for
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void checkForEffect(int paramInt) throws QTException {
+    public void checkForEffect(int effectType) throws QTException {
         ComponentDescription localComponentDescription = new ComponentDescription();
         localComponentDescription.setType(QTUtils.toOSType("imdc"));
-        localComponentDescription.setSubType(paramInt);
+        localComponentDescription.setSubType(effectType);
         ComponentIdentifier localComponentIdentifier = ComponentIdentifier.find(localComponentDescription);
         if (localComponentIdentifier == null) {
             throw new StdQTException(-50);
@@ -344,16 +349,17 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
         this.mDestPort = paramQDGraphics;
         if (QDGraphics.scratch.equals(paramQDGraphics)) {
@@ -364,65 +370,69 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized QDGraphics getGWorld() throws QTException {
         return this.mDestPort;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to tell the client to adjust its
      * location, width and/or height. All values are in pixels.
      *
      * @param bounds the new size and location.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws QTException {
-        this.mDisplayBounds = paramQDRect;
-        this.effectDesc.setHeight(paramQDRect.getHeight());
-        this.effectDesc.setWidth(paramQDRect.getWidth());
-        this.mat.setTx(paramQDRect.getX());
-        this.mat.setTy(paramQDRect.getY());
+    @Override
+    public synchronized void setDisplayBounds(QDRect bounds) throws QTException {
+        this.mDisplayBounds = bounds;
+        this.effectDesc.setHeight(bounds.getHeight());
+        this.effectDesc.setWidth(bounds.getWidth());
+        this.mat.setTx(bounds.getX());
+        this.mat.setTy(bounds.getY());
         setUpSequence();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    @Override
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to ask the client for its boundary.
      * All values are in pixels.
      *
      * @return the display boundary of the client
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDRect getDisplayBounds() throws QTException {
         return this.mDisplayBounds == null ? new QDRect(this.initSize.getWidth(), this.initSize.getHeight()) : this.mDisplayBounds;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the DSequence that is used by the QTEffect. This
      * object may be null if the QTEffect is not currently attached to
      * a valid destination QDGraphics. The application should not cache this
@@ -434,8 +444,8 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the actual image data - in this case the effect's atom container.
      * @return the image data
      */
@@ -444,19 +454,19 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method should return an ImageDescription that describes
      * the image data that the class contains.
      * @return the ImageDescription of an Image
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public ImageDescription getDescription() throws QTException {
         return this.effectDesc;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
@@ -468,35 +478,38 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return a Dimension
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         return this.initSize.copy();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Matrix getMatrix() throws QTException {
         return this.mat.copy();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      */
+    @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
         this.mat = paramMatrix.copy();
         if (this.effectSequence != null) {
@@ -505,59 +518,57 @@ public class QTEffect implements QTDrawable, Redrawable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void redraw(Region paramRegion) throws QTException {
+    @Override
+    public synchronized void redraw(Region invalidRgn) throws QTException {
         if (this.effectSequence != null) {
             this.tb.setValue(this.currentFrame, this.mNumberOfFrames);
             this.ft.setValue(this.currentFrame);
-            if (paramRegion != null) {
+            if (invalidRgn != null) {
                 if (getClip() == null) {
-                    this.effectSequence.setMask(paramRegion);
+                    this.effectSequence.setMask(invalidRgn);
                 } else
-                    this.effectSequence.invalidate(paramRegion);
+                    this.effectSequence.invalidate(invalidRgn);
             }
             this.effectSequence.decompressFrameWhen(this.effectSamplePtr, 0, this.ft);
-            if ((paramRegion != null) && (getClip() == null)) {
+            if ((invalidRgn != null) && (getClip() == null)) {
                 this.effectSequence.setMask(getClip());
             }
         }
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest.
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
      */
-    public void addedTo(Object paramObject) {
+    @Override
+    public void addedTo(Object interest) {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest.
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
      */
-    public void removedFrom(Object paramObject) {
+    @Override
+    public void removedFrom(Object interest) {
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/image
- * /QTEffect.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

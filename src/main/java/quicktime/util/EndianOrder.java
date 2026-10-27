@@ -179,8 +179,8 @@ public final class EndianOrder {
      * @param srcOffset the number of bytes from the start of the src object that the supplied endian descriptor
      *  will be applied.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
-     * @see {@link quicktime.util.EndianOrder}
+     * @throws quicktime.util.UtilException
+     * @see quicktime.util.EndianOrder
      */
     public static void flipNativeToBigEndian(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeLittleEndian()) {
@@ -200,8 +200,8 @@ public final class EndianOrder {
      * @param srcOffset the number of bytes from the start of the src object that the supplied endian descriptor
      *  will be applied.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
-     * @see {@link quicktime.util.EndianOrder}
+     * @throws quicktime.util.UtilException
+     * @see quicktime.util.EndianOrder
      */
     public static void flipBigEndianToNative(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeLittleEndian()) {
@@ -221,7 +221,7 @@ public final class EndianOrder {
      * @param srcOffset the number of bytes from the start of the src object that the supplied endian descriptor
      *  will be applied.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void flipNativeToLittleEndian(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeBigEndian()) {
@@ -241,7 +241,7 @@ public final class EndianOrder {
      * @param srcOffset the number of bytes from the start of the src object that the supplied endian descriptor
      *  will be applied.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void flipLittleEndianToNative(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeBigEndian()) {
@@ -264,7 +264,7 @@ public final class EndianOrder {
      * @param dest the object that will be the flipped version of the source object.
      * @param destOffset the number of bytes from the start of the dest object that the flipped values will be copied too.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void flipNativeToBigEndian(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeLittleEndian()) {
@@ -287,7 +287,7 @@ public final class EndianOrder {
      * @param dest the object that will be the flipped version of the source object.
      * @param destOffset the number of bytes from the start of the dest object that the flipped values will be copied too.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void flipBigEndianToNative(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeLittleEndian()) {
@@ -310,7 +310,7 @@ public final class EndianOrder {
      * @param dest the object that will be the flipped version of the source object.
      * @param destOffset the number of bytes from the start of the dest object that the flipped values will be copied too.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void flipNativeToLittleEndian(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeBigEndian()) {
@@ -333,7 +333,7 @@ public final class EndianOrder {
      * @param dest the object that will be the flipped version of the source object.
      * @param destOffset the number of bytes from the start of the dest object that the flipped values will be copied too.
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
-     * @param {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public static void flipLittleEndianToNative(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
         if (isNativeBigEndian()) {

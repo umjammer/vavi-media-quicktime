@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
@@ -14,7 +16,8 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
 
     private static EndianDescriptor ed;
 
-    static final long serialVersionUID = 2448417950352800908L;
+    @Serial
+    private static final long serialVersionUID = 2448417950352800908L;
 
     /**
      * Creates a QTVRAngleRange object containing no data
@@ -40,6 +43,7 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
         return ed;
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[8];
         QTVRAngleRange localQTVRAngleRange = new QTVRAngleRange();
@@ -47,11 +51,13 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
         System.arraycopy(localQTVRAngleRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRAngleRange localQTVRAngleRange = (QTVRAngleRange) clone();
         paramObjectOutputStream.write(localQTVRAngleRange.getBytes());
     }
 
+    @Override
     protected Object clone() {
         try {
             return new QTVRAngleRange(this.bytes);

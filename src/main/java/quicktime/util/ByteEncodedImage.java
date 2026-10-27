@@ -3,6 +3,8 @@ package quicktime.util;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 
 /**
  * ByteEncodedImages keep the encoded image data as an array of bytes.
@@ -11,7 +13,8 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
 
     private transient int rowBytes;
 
-    static final long serialVersionUID = -2074813762531832L;
+    @Serial
+    private static final long serialVersionUID = -2074813762531832L;
 
     /**
      * This will make a ByteEncodedImage from an array of bytes. It will not copy
@@ -62,12 +65,14 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
         this.rowBytes = paramInt;
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         int i = paramObjectInputStream.readInt();
         this.bytes = new byte[i];
         paramObjectInputStream.read(getBytes());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         int i = getSize();
         paramObjectOutputStream.writeInt(i);
@@ -78,6 +83,7 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
     /**
      * Returns a copy of the current object
      */
+    @Override
     public Object clone() {
         byte[] arrayOfByte = new byte[this.bytes.length];
         System.arraycopy(this.bytes, 0, arrayOfByte, 0, this.bytes.length);
@@ -88,6 +94,7 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
      * Returns the byte at the specified offset
      * The offset is specified in bytes into the encoded image object.
      */
+    @Override
     public byte getByte(int paramInt) {
         if ((paramInt > getSize()) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
@@ -98,6 +105,7 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
      * Returns the short at the specified offset
      * The offset is specified in bytes into the encoded image object.
      */
+    @Override
     public short getShort(int paramInt) {
         if ((paramInt > getSize() - 1) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
@@ -108,6 +116,7 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
      * Returns the int at the specified offset
      * The offset is specified in bytes into the encoded image object.
      */
+    @Override
     public int getInt(int paramInt) {
         if ((paramInt > getSize() - 3) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
@@ -119,6 +128,7 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
      * that the encoded image data is comprised of. This number will
      * at least be as big as width*pixelSize, and maybe larger.
      */
+    @Override
     public int getRowBytes() {
         return this.rowBytes;
     }

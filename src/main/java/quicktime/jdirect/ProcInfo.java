@@ -34,39 +34,39 @@ final class ProcInfo {
     private static final int kNoByteCode = 0;
     private static final int kOneByteCode = 1;
 
-    static final int RESULT_SIZE(int paramInt) {
+    static int RESULT_SIZE(int paramInt) {
         return SIZE_CODE(paramInt) << 4;
     }
 
-    static final int STACK_ROUTINE_PARAMETER(int paramInt1, int paramInt2) {
+    static int STACK_ROUTINE_PARAMETER(int paramInt1, int paramInt2) {
         return SIZE_CODE(paramInt2) << 6 + (paramInt1 - 1) * 2;
     }
 
-    static final int DISPATCHED_STACK_ROUTINE_PARAMETER(int paramInt1, int paramInt2) {
+    static int DISPATCHED_STACK_ROUTINE_PARAMETER(int paramInt1, int paramInt2) {
         return SIZE_CODE(paramInt2) << 8 + (paramInt1 - 1) * 2;
     }
 
-    static final int DISPATCHED_STACK_ROUTINE_SELECTOR_SIZE(int paramInt) {
+    static int DISPATCHED_STACK_ROUTINE_SELECTOR_SIZE(int paramInt) {
         return SIZE_CODE(paramInt) << 6;
     }
 
-    static final int REGISTER_RESULT_LOCATION(int paramInt) {
+    static int REGISTER_RESULT_LOCATION(int paramInt) {
         return paramInt << 6;
     }
 
-    static final int REGISTER_ROUTINE_PARAMETER(int paramInt1, int paramInt2, int paramInt3) {
+    static int REGISTER_ROUTINE_PARAMETER(int paramInt1, int paramInt2, int paramInt3) {
         return (SIZE_CODE(paramInt3) << 0 | paramInt2 << 2) << 11 + (paramInt1 - 1) * 5;
     }
 
-    static final int COMPONENT_MGR_RESULT_SIZE(int paramInt) {
+    static int COMPONENT_MGR_RESULT_SIZE(int paramInt) {
         return SIZE_CODE(paramInt) << 10;
     }
 
-    static final int COMPONENT_MGR_PARAMETER(int paramInt1, int paramInt2) {
+    static int COMPONENT_MGR_PARAMETER(int paramInt1, int paramInt2) {
         return SIZE_CODE(paramInt2) << 12 + (paramInt1 - 1) * 2;
     }
 
-    static final int SPECIAL_CASE_PROCINFO(int paramInt) {
+    static int SPECIAL_CASE_PROCINFO(int paramInt) {
         return 0xF | paramInt << 4;
     }
 
@@ -102,18 +102,13 @@ final class ProcInfo {
     private static final int kComponentMgrParameterPhase = 12;
     private static final int kSpecialCase = 15;
 
-    private static final int SIZE_CODE(int paramInt) {
-        int i = 0;
-        switch (paramInt) {
-        case 4:
-            i = 3;
-            break;
-        case 2:
-            i = 2;
-            break;
-        case 1:
-            i = 1;
-        }
+    private static int SIZE_CODE(int paramInt) {
+        int i = switch (paramInt) {
+            case 4 -> 3;
+            case 2 -> 2;
+            case 1 -> 1;
+            default -> 0;
+        };
         return i;
     }
 }

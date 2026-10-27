@@ -29,7 +29,6 @@ import quicktime.sound.SPBDevice;
 import quicktime.sound.SndChannel;
 import quicktime.sound.SndHandle;
 import quicktime.sound.SndInfo;
-import quicktime.sound.SoundException;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.media.SoundDescription;
 import quicktime.util.QTHandle;
@@ -37,6 +36,7 @@ import quicktime.util.QTPointer;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -160,7 +160,7 @@ class SoundTest {
         assertTrue(SoundPlayer.isPlaying(m));
         movie.stop();
         Thread.sleep(100);
-        assertTrue(!SoundPlayer.isPlaying(m));
+        assertFalse(SoundPlayer.isPlaying(m));
         short[] played = capture.left();
         assertTrue(played.length > SoundPlayer.RATE / 10, "played " + played.length);
         assertEquals(880, crossings(played), 120);

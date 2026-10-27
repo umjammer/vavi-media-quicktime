@@ -3,6 +3,8 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
@@ -17,7 +19,8 @@ public final class InstSampleDesc extends QTByteObject {
      */
     public static final int kNativeSize = 46;
 
-    static final long serialVersionUID = -7868738374047072834L;
+    @Serial
+    private static final long serialVersionUID = -7868738374047072834L;
 
     /**
      * Makes a instance of this class.
@@ -26,11 +29,13 @@ public final class InstSampleDesc extends QTByteObject {
         super(46);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[46];
         paramObjectInputStream.read(getBytes());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         paramObjectOutputStream.write(getBytes());
     }
@@ -285,8 +290,3 @@ public final class InstSampleDesc extends QTByteObject {
         return getClass().getName() + "[dataFormat=" + QTUtils.fromOSType(getDataFormat()) + ",numChannels=" + getNumChannels() + ",sampleSize=" + getSampleSize() + ",sampleRate=" + getSampleRate() + ",sampleDataID=" + getSampleDataID() + ",offset=" + getOffset() + ",numSamples=" + getNumSamples() + ",loopType=" + getLoopType() + ",loopStart=" + getLoopStart() + ",loopEnd=" + getLoopEnd() + ",pitchNormal=" + getPitchNormal() + ",pitchLow=" + getPitchLow() + ",pitchHigh=" + getPitchHigh() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /InstSampleDesc.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

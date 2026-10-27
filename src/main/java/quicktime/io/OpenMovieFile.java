@@ -10,10 +10,10 @@ public final class OpenMovieFile extends OpenedFile {
 
     /**
      * Open the specified movie file for reading.
-     * QuickTime::OpenMovieFile()
+     * @see "QuickTime::OpenMovieFile()"
      * @param f the movie file to open
      * @return the opened movie file.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static OpenMovieFile asRead(QTFile paramQTFile) throws QTException {
         return new OpenMovieFile(paramQTFile, 256);
@@ -21,10 +21,10 @@ public final class OpenMovieFile extends OpenedFile {
 
     /**
      * Open the specified movie file for writing.
-     * QuickTime::OpenMovieFile()
+     * @see "QuickTime::OpenMovieFile()"
      * @param f the movie file to open
      * @return the opened movie file.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static OpenMovieFile asWrite(QTFile paramQTFile) throws QTException {
         return new OpenMovieFile(paramQTFile, 512);

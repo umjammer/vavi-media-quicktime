@@ -3,6 +3,7 @@ package quicktime.qd3d.math;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
@@ -30,7 +31,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      */
     public static final int kNativeSize = 64;
 
-    static final long serialVersionUID = -1974342924500452995L;
+    @Serial
+    private static final long serialVersionUID = -1974342924500452995L;
 
     static {
         if (QTSession.isCurrentOS(4)) {
@@ -39,12 +41,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Matrix4x4.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Matrix4x4.class));
             }
         }
         new PrivelegedAction().establish();
@@ -54,7 +51,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -90,6 +87,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
         super(64);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[64];
         paramObjectInputStream.read(this.bytes);
@@ -100,6 +98,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         Matrix4x4 localMatrix4x4 = copy();
         try {
@@ -368,18 +367,18 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Returns a copy of the matrix.
-     * QuickDraw3D::Q3Matrix4x4_Copy
+     * @see "QuickDraw3D::Q3Matrix4x4_Copy"
      * @return a copy of matrix3x3.
      */
     public Matrix4x4 copy() {
-        Matrix4x4 localMatrix4x4 = new Matrix4x4((float[][]) null);
+        Matrix4x4 localMatrix4x4 = new Matrix4x4(null);
         int i = Q3Matrix4x4_Copy(getBytes(), localMatrix4x4.getBytes());
         return localMatrix4x4;
     }
 
     /**
      * Sets the Matrix to the 4-by-4 identity matrix.
-     * QuickDraw3D::Q3Matrix4x4_SetIdentity
+     * @see "QuickDraw3D::Q3Matrix4x4_SetIdentity"
      */
     public void setIdentity() {
         int i = Q3Matrix4x4_SetIdentity(getBytes());
@@ -387,41 +386,41 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Returns the transpose of the matrix.
-     * QuickDraw3D::Q3Matrix4x4_Transpose
+     * @see "QuickDraw3D::Q3Matrix4x4_Transpose"
      * @return the transpose matrix
      */
     public Matrix4x4 transpose() {
-        Matrix4x4 localMatrix4x4 = new Matrix4x4((float[][]) null);
+        Matrix4x4 localMatrix4x4 = new Matrix4x4(null);
         int i = Q3Matrix4x4_Transpose(getBytes(), localMatrix4x4.getBytes());
         return localMatrix4x4;
     }
 
     /**
      * Returns the inverse of the matrix.
-     * QuickDraw3D::Q3Matrix4x4_Invert
+     * @see "QuickDraw3D::Q3Matrix4x4_Invert"
      * @return the invert matrix
      */
     public Matrix4x4 invert() {
-        Matrix4x4 localMatrix4x4 = new Matrix4x4((float[][]) null);
+        Matrix4x4 localMatrix4x4 = new Matrix4x4(null);
         int i = Q3Matrix4x4_Invert(getBytes(), localMatrix4x4.getBytes());
         return localMatrix4x4;
     }
 
     /**
      * Returns the product of the two 4-by-4 matrices, this and matrixB.
-     * QuickDraw3D::Q3Matrix4x4_Multiply
+     * @see "QuickDraw3D::Q3Matrix4x4_Multiply"
      * @param matrixB a matrix
      * @return the product
      */
     public Matrix4x4 multiply(Matrix4x4 paramMatrix4x4) {
-        Matrix4x4 localMatrix4x4 = new Matrix4x4((float[][]) null);
+        Matrix4x4 localMatrix4x4 = new Matrix4x4(null);
         int i = Q3Matrix4x4_Multiply(getBytes(), paramMatrix4x4.getBytes(), localMatrix4x4.getBytes());
         return localMatrix4x4;
     }
 
     /**
      * Returns the determinant of this matrix.
-     * QuickDraw3D::Q3Matrix4x4_Determinant
+     * @see "QuickDraw3D::Q3Matrix4x4_Determinant"
      * @return the determinanta
      */
     public float determinant() {
@@ -431,7 +430,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Translates a matrix by the amount xTrans along the x coordinate axis,
      * by the amount yTrans along the y coordinate axis and by the amount zTrans along the z coordinate axis.
-     * QuickDraw3D::Q3Matrix4x4_SetTranslate
+     * @see "QuickDraw3D::Q3Matrix4x4_SetTranslate"
      * @param xTrans The desired amount of translation along the x coordinate axis.
      * @param yTrans The desired amount of translation along the y coordinate axis.
      * @param zTrans The desired amount of translation along the z coordinate axis.
@@ -444,7 +443,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Scales a matrix by the amount xScale along the x coordinate axis,
      * by the amount yScale along the y coordinate axis
      * and by the amount zScale along the z coordinate axis.
-     * QuickDraw3D::Q3Matrix4x4_SetScale
+     * @see "QuickDraw3D::Q3Matrix4x4_SetScale"
      * @param xScale The desired amount of scaling along the x coordinate axis.
      * @param yScale The desired amount of scaling along the y coordinate axis.
      * @param zScale The desired amount of scaling along the z coordinate axis.
@@ -455,7 +454,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Rotates a matrix by the specified angle around the point origin.
-     * QuickDraw3D::Q3Matrix4x4_SetRotateAboutPoint
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotateAboutPoint"
      * @param origin The desired origin of rotation.
      * @param xAngle The desired angle of rotation around the x component of origin, in radians.
      * @param yAngle The desired angle of rotation around the y component of origin, in radians.
@@ -468,7 +467,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Sets a rotate-about-axis matrix that rotates an object by the specified angle
      * around the axis determined by the point origin and the specified orientation.
-     * QuickDraw3D::Q3Matrix4x4_SetRotateAboutAxis
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotateAboutAxis"
      * @param origin The desired origin of rotation.
      * @param orientation The desired orientation of the axis of rotation.
      * @param angle The desired angle of rotation, in radians.
@@ -479,7 +478,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Sets a rotational matrix that rotates an object by the specified angle around the x axis.
-     * QuickDraw3D::Q3Matrix4x4_SetRotate_X
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_X"
      * @param angle The desired angle of rotation around the x coordinate axis, in radians.
      */
     public void setRotateX(float paramFloat) {
@@ -488,7 +487,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Sets a rotational matrix that rotates an object by the specified angle around the y axis.
-     * QuickDraw3D::Q3Matrix4x4_SetRotate_Y
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_Y"
      * @param angle The desired angle of rotation around the y coordinate axis, in radians.
      */
     public void setRotateY(float paramFloat) {
@@ -497,7 +496,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Sets a rotational matrix that rotates an object by the specified angle around the x axis.
-     * QuickDraw3D::Q3Matrix4x4_SetRotate_Z
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_Z"
      * @param angle The desired angle of rotation around the z coordinate axis, in radians.
      */
     public void setRotateZ(float paramFloat) {
@@ -507,7 +506,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Sets a rotational matrix that rotates an object by the specified angles around their
      * specified axis.
-     * QuickDraw3D::Q3Matrix4x4_SetRotate_XYZ
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_XYZ"
      * @param xAngle The desired angle of rotation around the x coordinate axis, in radians.
      * @param yAngle The desired angle of rotation around the y coordinate axis, in radians.
      * @param zAngle The desired angle of rotation around the z coordinate axis, in radians.
@@ -520,7 +519,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets a rotational matrix that rotates objects
      * around the origin in such a way that the transformed vector v1 matches the
      * vector v2. Both v1 and v2 should be normalized.
-     * QuickDraw3D::Q3Matrix4x4_SetRotateVectorToVector
+     * @see "QuickDraw3D::Q3Matrix4x4_SetRotateVectorToVector"
      * @param v1 A three-dimensional vector.
      * @param v2 A three-dimensional vector.
      */
@@ -530,7 +529,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
 
     /**
      * Sets a 4-by-4 matrix that represents the quaternion specified by the quaternion parameter.
-     * QuickDraw3D::Q3Matrix4x4_SetQuaternion
+     * @see "QuickDraw3D::Q3Matrix4x4_SetQuaternion"
      * @param quaternion A quaternion.
      */
     public void setQuaternion(Quaternion paramQuaternion) {
@@ -540,6 +539,7 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return copy();
     }
@@ -608,8 +608,3 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
         return QD3DManager.Q3Matrix4x4_SetQuaternion(paramArrayOfByte1, paramArrayOfByte2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/qd3d/math
- * /Matrix4x4.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

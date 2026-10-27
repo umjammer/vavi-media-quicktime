@@ -3,6 +3,8 @@ package quicktime.std.qtcomponents;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.util.QTByteObject;
 
 /**
@@ -14,7 +16,8 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
 
     private static final int kNativeSize = 4;
 
-    static final long serialVersionUID = -6484583375141374076L;
+    @Serial
+    private static final long serialVersionUID = -6484583375141374076L;
 
     /**
      * Creates a TimeCodeDef object which has no initial settings.
@@ -55,11 +58,13 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(getBytes());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         paramObjectOutputStream.write(getBytes());
     }
@@ -150,6 +155,7 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
     /**
      * Makes a copy of a object.
      */
+    @Override
     public Object clone() {
         return new TimeCodeTime(getBytes());
     }

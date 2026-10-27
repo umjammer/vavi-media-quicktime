@@ -6,7 +6,7 @@ import quicktime.QTSession;
 import quicktime.app.time.Ticklish;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is the base class for all periodically recurring time based actions.
  * The Actionable object (if defined) will
  * be an object that has its trigger method called when the PeriodicAction sub-class
@@ -32,8 +32,8 @@ public abstract class PeriodicAction implements Ticklish {
     private static final boolean doPrint = false;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The actionable actor object that can be invoked by an action if a constraining
      * condition is reached
      */
@@ -46,8 +46,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a PeriodicAction. Subclasses are responsible for defining the action
      * that occurs whenever the action is invoked.
      * @param scale the amount with which a second is divided into at a rate of one
@@ -59,8 +59,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If true then the tickle method returns true and the action is considered to
      * be still active by its owner and will be invoked on consequent tickles.
      */
@@ -77,20 +77,21 @@ public abstract class PeriodicAction implements Ticklish {
     private int triggerCondition = 3;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method should be called by the actions owner whenver a time condition
      * of the owner's time line has changed, as this can effect the trigger
      * conditions of the action.
-     * @see {@link quicktime.app.time.Ticklish}
+     * @see quicktime.app.time.Ticklish
      */
+    @Override
     public void timeChanged(int paramInt) throws QTException {
         this.lastTime = paramInt;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method can be called as often as you like, though effective rate
      * cannot be zero.
      * The provided time and rate values are used to calculate whether an action
@@ -99,8 +100,9 @@ public abstract class PeriodicAction implements Ticklish {
      * @param effectiveRate the effective rate of the Timer when the time condition matches
      * @param currentTime the time that the Timer invoked the tickle method.
      * @return true if the action is still interested in being tickled.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public boolean tickle(float paramFloat, int paramInt) throws QTException {
         if (this.period == 0) {
             this.lastTime = paramInt;
@@ -122,8 +124,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the actionable object of the action.
      */
     public void setActionable(Actionable paramActionable) {
@@ -131,8 +133,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method retreives the current actor that is attached to the action
      */
     public Actionable getActionable() {
@@ -140,8 +142,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current period of the action - how many scale ticks will elapse
      * before the action is executed. If the period is zero the doAction method
      * is called whenever the PeriodicAction is tickled.
@@ -153,8 +155,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current period of the action
      * @return the period
      */
@@ -163,8 +165,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the scale of the action - this is the resolution of a second at rate == 1,
      * thus a scale of 10 is 100msecs at rate == 1, 50msecs at rate == 2 etc. This value
      * must be greater than zero.
@@ -178,8 +180,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return the current scale of the action.
      * @return the current scale
      */
@@ -188,8 +190,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the trigger condition of the action - an action can trigger
      * either when rate is positive, rate is negative or either.
      * @return the current trigger condition
@@ -202,8 +204,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the trigger condition of the action - an action can trigger
      * either when rate is positive, rate is negative or either.
      * @param cond the current trigger condition
@@ -216,8 +218,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return a String representation of this object.
      * @return a String
      */
@@ -226,8 +228,8 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the objects are equal or false otherwise.
      * @param obj the object to test
      * @return a boolean
@@ -235,8 +237,7 @@ public abstract class PeriodicAction implements Ticklish {
     public boolean equals(Object paramObject) {
         if (this == paramObject)
             return true;
-        if ((paramObject instanceof PeriodicAction)) {
-            PeriodicAction localPeriodicAction = (PeriodicAction) paramObject;
+        if ((paramObject instanceof PeriodicAction localPeriodicAction)) {
             if ((this.reschedule != localPeriodicAction.reschedule) || (this.lastTime != localPeriodicAction.lastTime) || (this.scale != localPeriodicAction.scale) || (this.period != localPeriodicAction.period) || (this.triggerCondition != localPeriodicAction.triggerCondition)) {
                 return false;
             }
@@ -252,20 +253,20 @@ public abstract class PeriodicAction implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the tickle method when an action becomes active.
      * Subclasses should do their desired actions
      * when this method is called.
      * @param er the actual rate at which the action has been triggered
      * @param t the time in Ticklish.kScale that the action has been triggered
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected abstract void doAction(float paramFloat, int paramInt) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If after the doAction method has exeucted this method returns true then
      * if the Action has an Actionable object this actionable is triggered. If
      * constraintReached returns false no further action is taken.

@@ -16,18 +16,13 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
 
     private static Object linkage;
 
-    private int mElSize;
+    private final int mElSize;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTVector.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTVector.class));
             }
         }.establish();
     }
@@ -40,9 +35,9 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
 
     protected int mNumElements = 0;
 
-    private int mInitialSize;
+    private final int mInitialSize;
 
-    private final boolean doSizeCheck() throws UtilException {
+    private boolean doSizeCheck() throws UtilException {
         if (this.mNumElements * this.mElSize >= getSize())
             return true;
         return false;
@@ -99,6 +94,7 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
     /**
      * Returns the size of the QTPionter
      */
+    @Override
     public int getSize() {
         return this.mNumElements * this.mElSize;
     }

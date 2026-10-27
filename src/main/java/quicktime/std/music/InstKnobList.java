@@ -82,8 +82,3 @@ public final class InstKnobList extends QTByteObject {
         return localInstKnob;
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /InstKnobList.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

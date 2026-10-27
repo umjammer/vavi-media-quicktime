@@ -1,9 +1,11 @@
 package quicktime.app.anim;
 
+import java.io.Serial;
+
 import quicktime.std.image.ImageDescription;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class can be used to retain the current sprite settings which can be used
  * at a later stage to reset the TwoDSprite to those settings. The EncodedImage and ImageDescription
  * of the TwoDSpriteInfo class are transient and thus will not be saved when this object is serialized.
@@ -11,6 +13,7 @@ import quicktime.std.image.ImageDescription;
  */
 public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java.io.Serializable {
 
+    @Serial
     private static final long serialVersionUID = 3807095621519970448L;
 
     transient quicktime.util.EncodedImage image;
@@ -32,8 +35,8 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Contains the information that can be used to create a sprite.
      * @param im the image of the sprite
      * @param d the image description that describes the format of the im
@@ -50,8 +53,8 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Contains the information that can be used to create a sprite.
      * @param im the image of the sprite
      * @param d the image description that describes the format of the im
@@ -70,27 +73,29 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * This method returns the actual image data.
      * An Exception is throw if there was some problem retrieving the data.
      * @return The current image data of the sprite* @deprecated since QTJava 6.1
      */
+    @Override
     public quicktime.util.EncodedImage getImage() {
         return this.image;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * This method should return an ImageDescription that describes
      * the image data that the class contains.
      * @return The description that describes the image * @deprecated since QTJava 6.1
      */
+    @Override
     public ImageDescription getDescription() {
         return this.desc;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return The display matrix of the Sprite * @deprecated since QTJava 6.1
      */
     public quicktime.std.image.Matrix getMatrix() {
@@ -98,7 +103,7 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return The layer of the sprite in its SpriteWorld * @deprecated since QTJava 6.1
      */
     public int getLayer() {
@@ -106,7 +111,7 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return The visibility of the sprite * @deprecated since QTJava 6.1
      */
     public boolean getVisible() {
@@ -114,14 +119,14 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public quicktime.std.image.GraphicsMode getGraphicsMode() {
         return this.graphicsMode;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * @return a String representation of this object* @deprecated since QTJava 6.1
      */
     public String toString() {

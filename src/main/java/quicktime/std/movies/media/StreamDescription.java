@@ -42,8 +42,8 @@ public final class StreamDescription extends SampleDescription {
      * This constructor makes a new StreamDescription object. This sets the default type of the
      * @param mediaType this is the mediaType of the StreamDescription
      *
-     * 		StdQTConstants4.kQTSRTSPDataType
-     * 		StdQTConstants4.kQTSSDPDataType
+     *   StdQTConstants4.kQTSRTSPDataType
+     *   StdQTConstants4.kQTSSDPDataType
      */
     public StreamDescription(int paramInt) throws QTException {
         super(28, true, paramInt);
@@ -56,6 +56,7 @@ public final class StreamDescription extends SampleDescription {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new StreamDescription(makeAndCopyHandle(), null);
     }

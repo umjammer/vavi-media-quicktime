@@ -13,24 +13,20 @@ import quicktime.jdirect.QTNative;
 final class IdleDispatcher implements PrimitivesLib, InterfaceLib {
     private static Object linkage;
 
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private IdleMethodClosure mMethodClosure;
 
-    private NextTaskNeededSooner tns;
+    private final NextTaskNeededSooner tns;
 
     static {
         new Object() {
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(IdleDispatcher.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(IdleDispatcher.class));
             }
         }.establish();
     }

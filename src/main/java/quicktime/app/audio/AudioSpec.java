@@ -3,7 +3,7 @@ package quicktime.app.audio;
 import quicktime.QTException;
 
 /**
- * Deprecated.
+ * @deprecated
  * AudioSpec provides a standard interface that all audio
  * capable objects can support.
  *
@@ -19,38 +19,33 @@ import quicktime.QTException;
  * and its volume is changed this will not make the audio object audible, it has to be
  * explicitly unmuted. This is inline with the way most mixing consoles work.
  */
-public abstract interface AudioSpec {
+public interface AudioSpec {
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the volume setting (0 is silent, 1 is unity gain) * @deprecated since QTJava 6.1
      */
-    public abstract float getVolume() throws QTException;
+    float getVolume() throws QTException;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Sets the volume. * @deprecated since QTJava 6.1
      */
-    public abstract void setVolume(float paramFloat) throws QTException;
+    void setVolume(float paramFloat) throws QTException;
 
     /**
-     * Deprecated.
+     * @deprecated
      * Returns the current mute status * @deprecated since QTJava 6.1
      */
-    public abstract boolean isMuted() throws QTException;
+    boolean isMuted() throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Allows the muting of the specific channel. When unmuted the AudioSpec object will return
      * to its current volume setting.
      * @param flag turn muting on - true or off - false.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void setMuted(boolean paramBoolean) throws QTException;
+    void setMuted(boolean flag) throws QTException;
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/audio
- * /AudioSpec.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

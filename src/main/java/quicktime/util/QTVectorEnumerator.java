@@ -5,7 +5,7 @@ import java.util.Enumeration;
 
 
 class QTVectorEnumerator implements Enumeration<QTPointerRef> {
-    private QTVector mVector;
+    private final QTVector mVector;
 
     QTVectorEnumerator(QTVector paramQTVector) {
         this.mVector = paramQTVector;
@@ -13,10 +13,12 @@ class QTVectorEnumerator implements Enumeration<QTPointerRef> {
 
     private int index = 0;
 
+    @Override
     public boolean hasMoreElements() {
         return this.index < this.mVector.size();
     }
 
+    @Override
     public QTPointerRef nextElement() {
         QTPointerRef localQTPointerRef = this.mVector.makeElement();
         if (localQTPointerRef == null)

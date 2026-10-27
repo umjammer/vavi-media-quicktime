@@ -27,12 +27,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTVRInterceptRecord.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTVRInterceptRecord.class));
             }
         }
         new PrivelegedAction().establish();
@@ -69,7 +64,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRSetPanAngleSelector or kQTVRSetTiltAngleSelector
      * a paramError QTException is thrown.
      * @return the angle in Radians.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public float getAngle() throws QTException {
         int i = getSelector();
@@ -85,7 +80,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRSetPanAngleSelector or kQTVRSetTiltAngleSelector
      * a paramError QTException is thrown.
      * @param angle the angle in Radians.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setAngle(float paramFloat) throws QTException {
         int i = getSelector();
@@ -101,7 +96,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRSetFieldOfViewSelector
      * a paramError QTException is thrown.
      * @return the field of view
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public float getFieldOfView() throws QTException {
         int i = getSelector();
@@ -116,7 +111,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRSetFieldOfViewSelector
      * a paramError QTException is thrown.
      * @param fieldOfView the field of view
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setFieldOfView(float paramFloat) throws QTException {
         int i = getSelector();
@@ -131,7 +126,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRSetViewCenterSelector
      * a paramError QTException is thrown.
      * @return the current view center
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QDPoint getViewCenter() throws QTException {
         int i = getSelector();
@@ -148,7 +143,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRSetViewCenterSelector
      * a paramError QTException is thrown.
      * @param viewCenter the new view center
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setViewCenter(QDPoint paramQDPoint) throws QTException {
         int i = getSelector();
@@ -164,7 +159,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRTriggerHotSpotSelector or kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
      * @return the hot spot ID
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int getHotSpotID() throws QTException {
         int i = getSelector();
@@ -179,7 +174,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRTriggerHotSpotSelector or kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
      * @param hotSpotID the new hot spot ID
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setHotSpotID(int paramInt) throws QTException {
         int i = getSelector();
@@ -194,7 +189,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
      * @return the hot spot type
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int getHotSpotType() throws QTException {
         if (getSelector() != 8203)
@@ -208,7 +203,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * If the selector is not kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
      * @param hotSpotType the new hot spot type
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setHotSpotType(int paramInt) throws QTException {
         if (getSelector() != 8203)
@@ -226,26 +221,18 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
         try {
             str = str + "[selector=0x" + Integer.toHexString(getSelector());
             str = str + ",paramCount=" + getParamCount();
-            switch(getSelector()) {
-                case 8192:
-                    str = str + ",pan angle (Radians)=" + getAngle();
-                    break;
-                case 8193:
-                    str = str + ",tilt angle (Radians)=" + getAngle();
-                    break;
-                case 8194:
-                    str = str + ",field of view (Radians)=" + getFieldOfView();
-                    break;
-                case 8195:
-                    str = str + ",view center=" + getViewCenter();
-                    break;
-                case 8202:
+            str = switch (getSelector()) {
+                case 8192 -> str + ",pan angle (Radians)=" + getAngle();
+                case 8193 -> str + ",tilt angle (Radians)=" + getAngle();
+                case 8194 -> str + ",field of view (Radians)=" + getFieldOfView();
+                case 8195 -> str + ",view center=" + getViewCenter();
+                case 8202 -> str + ",hot spot ID=" + getHotSpotID();
+                case 8203 -> {
                     str = str + ",hot spot ID=" + getHotSpotID();
-                    break;
-                case 8203:
-                    str = str + ",hot spot ID=" + getHotSpotID();
-                    str = str + ",hotSpotType='" + QTUtils.fromOSType(getHotSpotType()) + "'";
-            }
+                    yield str + ",hotSpotType='" + QTUtils.fromOSType(getHotSpotType()) + "'";
+                }
+                default -> str;
+            };
         } catch (QTException localQTException) {
             str = str + "MISMATCHED SELECTOR";
         }

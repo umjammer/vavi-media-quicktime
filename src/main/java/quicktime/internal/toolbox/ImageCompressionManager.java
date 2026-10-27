@@ -336,7 +336,7 @@ public final class ImageCompressionManager {
     }
 
     public static short DecompressImage(int data, int desc, int dst, byte[] srcRect, byte[] dstRect, short mode, int mask) {
-        return decompressImage((Object) data, desc, dst, srcRect, dstRect, mode, mask);
+        return decompressImage(data, desc, dst, srcRect, dstRect, mode, mask);
     }
 
     public static short DecompressImage(int[] data, int desc, int dst, byte[] srcRect, byte[] dstRect, short mode, int mask) {
@@ -346,7 +346,7 @@ public final class ImageCompressionManager {
     public static short FDecompressImage(int data, int desc, int dst, byte[] srcRect, byte[] matrix, short mode, int mask, int matte, byte[] matteRect,
                                          int accuracy, int codec, int bufferSize, int dataProc, int progressProc) {
         AffineTransform at = Imaging.transform(matrix);
-        return decompressImage((Object) data, desc, dst, srcRect, at, mode, mask);
+        return decompressImage(data, desc, dst, srcRect, at, mode, mask);
     }
 
     private static short convertImage(int srcDD, Object srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, Object dstData) {
@@ -386,7 +386,7 @@ public final class ImageCompressionManager {
     }
 
     public static short ConvertImage(int srcDD, int srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int dstData) {
-        return convertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, (Object) dstData);
+        return convertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
     public static short ConvertImage(int srcDD, int srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int[] dstData) {
@@ -533,7 +533,7 @@ public final class ImageCompressionManager {
     }
 
     public static short TrimImage(int desc, int inData, int inBufferSize, int dataProc, int outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
-        return trimImage(desc, inData, (Object) outData, trimRect);
+        return trimImage(desc, inData, outData, trimRect);
     }
 
     public static short TrimImage(int desc, int inData, int inBufferSize, int dataProc, int[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
@@ -635,7 +635,7 @@ public final class ImageCompressionManager {
     /** @return offsets of the extension atoms */
     static List<int[]> extensions(byte[] d) {
         List<int[]> l = new ArrayList<>();
-        int end = Math.min(d.length, Math.max(Codecs.DESCRIPTION_SIZE, Bytes.getInt(d, 0)));
+        int end = Math.clamp(Bytes.getInt(d, 0), Codecs.DESCRIPTION_SIZE, d.length);
         int p = extensionsStart(d);
         while (p + 8 <= end) {
             int size = Bytes.getInt(d, p);
@@ -660,7 +660,7 @@ public final class ImageCompressionManager {
     }
 
     static byte[] addExtension(byte[] d, int type, byte[] data) {
-        int size = Math.max(Codecs.DESCRIPTION_SIZE, Math.min(d.length, Bytes.getInt(d, 0)));
+        int size = Math.clamp(d.length, Codecs.DESCRIPTION_SIZE, Bytes.getInt(d, 0));
         byte[] n = Arrays.copyOf(d, size + 8 + data.length);
         Bytes.putInt(n, size, 8 + data.length);
         Bytes.putInt(n, size + 4, type);
@@ -860,13 +860,12 @@ public final class ImageCompressionManager {
         }
         switch (f) {
             case "raw ", "twos", "sowt", "NONE", "in24", "in32", "fl32", "fl64", "lpcm" -> {
-                if (f.equals("in24")) {
-                    bytes = 3;
-                } else if (f.equals("in32") || f.equals("fl32")) {
-                    bytes = 4;
-                } else if (f.equals("fl64")) {
-                    bytes = 8;
-                }
+                bytes = switch (f) {
+                    case "in24" -> 3;
+                    case "in32", "fl32" -> 4;
+                    case "fl64" -> 8;
+                    default -> bytes;
+                };
                 spp = 1;
                 bpp = bytes;
                 bps = bytes;
@@ -2287,7 +2286,7 @@ public final class ImageCompressionManager {
         if (c == null) {
             return paramErr;
         }
-        int i = Math.max(0, Math.min(pointIndex, c.points.size()));
+        int i = Math.clamp(pointIndex, 0, c.points.size());
         c.points.add(i, new double[] {Bytes.fixedToDouble(Bytes.getInt(point, 0)), Bytes.fixedToDouble(Bytes.getInt(point, 4))});
         c.onCurve.add(i, isOnPath != 0);
         Heap.setHandleBytes(pathHandle, Curves.replace(paths, contourIndex, c));

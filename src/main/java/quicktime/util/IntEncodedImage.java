@@ -13,7 +13,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
 
     static Object linkage;
 
-    private int[] ints;
+    private final int[] ints;
 
     private int rowBytes;
 
@@ -21,12 +21,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         class PrivelegedAction {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(IntEncodedImage.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(IntEncodedImage.class));
             }
         }
         new PrivelegedAction().establish();
@@ -96,6 +91,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
     /**
      * Returns the size in bytes of the EncodedImage data
      */
+    @Override
     public int getSize() {
         return this.ints.length * 4;
     }
@@ -104,6 +100,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
      * Returns the byte at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
+    @Override
     public byte getByte(int paramInt) {
         if ((paramInt > getSize()) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
@@ -114,6 +111,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
      * Returns the short at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
+    @Override
     public short getShort(int paramInt) {
         if ((paramInt > getSize() - 1) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
@@ -124,6 +122,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
      * Returns the int at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
+    @Override
     public int getInt(int paramInt) {
         if ((paramInt > getSize() - 3) || (paramInt < 0))
             throw new ArrayIndexOutOfBoundsException();
@@ -135,6 +134,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
      * that the encoded image data is comprised of. This number will
      * at least be as big as width*pixelSize, and maybe larger.
      */
+    @Override
     public int getRowBytes() {
         return this.rowBytes;
     }
@@ -159,6 +159,7 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
     /**
      * Returns a copy of the current object
      */
+    @Override
     public Object clone() {
         int[] arrayOfInt = new int[this.ints.length];
         System.arraycopy(this.ints, 0, arrayOfInt, 0, this.ints.length);

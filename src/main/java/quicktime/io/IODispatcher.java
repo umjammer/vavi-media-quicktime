@@ -9,17 +9,17 @@ import quicktime.std.movies.MovieProgress;
 
 
 final class IODispatcher {
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
     private IOMethodClosure mMethodClosure;
 
     private Movie theCurrentMov;
 
-    private MovieProgress mp;
+    private final MovieProgress mp;
 
     IODispatcher(MovieProgress paramMovieProgress) {
         this.methodName = "movieProgress";
@@ -28,7 +28,7 @@ final class IODispatcher {
         this.mp = paramMovieProgress;
     }
 
-    private final short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
+    private short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
         if (paramInt1 != 0) {
             if (this.theCurrentMov == null) {
                 this.theCurrentMov = IOMovie.make(paramInt1, this);

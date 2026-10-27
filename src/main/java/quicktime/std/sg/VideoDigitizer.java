@@ -1,15 +1,13 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.SequenceGrabberManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.Region;
 import quicktime.std.StdQTException;
 import quicktime.std.comp.Component;
+
 
 /**
  * The video digitizing channel.
@@ -18,22 +16,6 @@ import quicktime.std.comp.Component;
  * refer to VideoDigitizer component in QuickTime
  */
 public final class VideoDigitizer extends Component implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(VideoDigitizer.class);
-                    }
-                });
-            }
-        }.establish();
-    }
 
     static VideoDigitizer makeVideoDigitizer(int paramInt, Object paramObject) {
         return paramInt == 0 ? null : new VideoDigitizer(paramInt, paramObject);
@@ -46,7 +28,7 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
     /**
      * Opens the specified video component,'vidg', with any subType.
      * SGPanels should not be accessable by the public.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      */
     public VideoDigitizer() throws QTException {
         this(0);
@@ -55,7 +37,7 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
     /**
      * Opens the specified video component,'vidg', with the given subType.
      * SGPanels should not be accessable by the public.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      * @param subType The video component sub type
      */
     public VideoDigitizer(int paramInt) throws QTException {
@@ -64,9 +46,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Returns the number of input sources that a video digitizer component supports.
-     * QuickTime::VDGetNumberOfInputs
+     * @see "QuickTime::VDGetNumberOfInputs"
      * @return the number of inputs
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getNumberOfInputs() throws StdQTException {
         short[] arrayOfShort = { 0 };
@@ -78,9 +60,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
     /**
      * Allows applications to select an input video source for a video digitizer component.
      * This is a 0 based index.
-     * QuickTime::VDSetInput
+     * @see "QuickTime::VDSetInput"
      * @param input the input video source.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInput(int paramInt) throws StdQTException {
         int i = VDSetInput(_ID(), (short) paramInt);
@@ -89,9 +71,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Returns the index that identifies the currently active input video source.
-     * QuickTime::VDGetInput
+     * @see "QuickTime::VDGetInput"
      * @return the index for the current input device
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getInput() throws StdQTException {
         short[] arrayOfShort = { 0 };
@@ -102,9 +84,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Allows you to define a clipping region.
-     * QuickTime::VDSetClipRgn
+     * @see "QuickTime::VDSetClipRgn"
      * @param clipRegion specifies the clip region
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setClipRgn(Region paramRegion) throws StdQTException {
         int i = VDSetClipRgn(_ID(), QTObject.ID(paramRegion));
@@ -113,10 +95,10 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Allows you to disable all or part of a clipping region that was previously set.
-     * QuickTime::VDClearClipRgn
+     * @see "QuickTime::VDClearClipRgn"
      * @param clipRegion specifies the clipping region to clear. This must correspond to all
      *  or part of a previously set clip region.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void clearClipRgn(Region paramRegion) throws StdQTException {
         int i = VDClearClipRgn(_ID(), QTObject.ID(paramRegion));
@@ -125,9 +107,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Allows your application to control whether clipping is enabled or disabled.
-     * QuickTime::VDSetClipState
+     * @see "QuickTime::VDSetClipState"
      * @param clipEnable if true clipping is enabled, otherwise it is disabled.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setClipState(boolean paramBoolean) throws StdQTException {
         int i = VDSetClipState(_ID(), (short) (paramBoolean ? 1 : 0));
@@ -136,9 +118,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Allows your application to determine if clipping is enabled or not.
-     * QuickTime::VDGetClipState
+     * @see "QuickTime::VDGetClipState"
      * @return if true clipping is enabled otherwise it isn't.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public boolean getClipState() throws StdQTException {
         short[] arrayOfShort = { 0 };
@@ -150,9 +132,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
     /**
      * Allows your application to determine the
      * capability and status information about a specified video digitizer component.
-     * QuickTime::VDGetDigitizerInfo
+     * @see "QuickTime::VDGetDigitizerInfo"
      * @return if true clipping is enabled otherwise it isn't.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public DigitizerInfo getDigitizerInfo() throws StdQTException {
         DigitizerInfo localDigitizerInfo = new DigitizerInfo();
@@ -163,12 +145,12 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Determines the format of the video signal provided by a specified video input source.
-     * QuickTime::VDGetInputFormat
+     * @see "QuickTime::VDGetInputFormat"
      * @param input The input video source for this request. Video digitizer components number video sources sequentially, starting at 0. So, to request
      *  information about the first video source, an application sets this parameter to 0. Applications can get the number of video sources supported by a
      *  video digitizer component by calling getNumberOfInputs ().
      * @return the video format of the specified input source.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getInputFormat(int paramInt) throws StdQTException {
         short[] arrayOfShort = { 0 };
@@ -179,9 +161,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
 
     /**
      * Specifies the input signaling standard to digitize.
-     * QuickTime::VDSetInputStandard
+     * @see "QuickTime::VDSetInputStandard"
      * @param input the input signaling standard. (ntscIn, palIn, secamIn)
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInputStandard(int paramInt) throws StdQTException {
         int i = VDSetInputStandard(_ID(), (short) paramInt);

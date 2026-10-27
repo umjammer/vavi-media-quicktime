@@ -19,26 +19,22 @@ import quicktime.util.QTPointerRef;
 final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
     private static Object linkage;
 
-    private String methodName;
+    private final String methodName;
 
-    private String methodSig;
+    private final String methodSig;
 
-    private int procInfo;
+    private final int procInfo;
 
-    private SGDataProc cb;
+    private final SGDataProc cb;
 
     private SGMethodClosure mMethodClosure;
 
-    private SequenceGrabber sg;
+    private final SequenceGrabber sg;
 
     static {
         new Object() {
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SGDispatcher.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGDispatcher.class));
             }
         }.establish();
     }
@@ -66,7 +62,7 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
         }
         try {
             int j = localComponentDescription.getSubType();
-            Object localObject = null;
+            SGChannel localObject = null;
             if (j == 1936684398) {
                 localObject = new SGSoundChannel(paramInt1, this.sg);
             } else if (j == 1986618469) {
@@ -80,7 +76,7 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
             }
             SGPtr localSGPtr = new SGPtr(paramInt2, paramInt3, this);
 
-            int k = this.cb.execute((SGChannel) localObject,
+            int k = this.cb.execute(localObject,
                                     localSGPtr,
                                     paramInt4 == 0 ? 0 : getIntFromPointer(paramInt4, 0),
                                     paramInt5,

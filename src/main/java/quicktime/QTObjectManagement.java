@@ -45,11 +45,7 @@ final class QTObjectManagement implements
     static {
         class PrivelegedAction {
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTObjectManagement.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTObjectManagement.class));
             }
         }
 
@@ -95,7 +91,7 @@ final class QTObjectManagement implements
             Thread.yield();
         if (qtObjs == null)
             return false;
-        Integer localInteger = new Integer(paramInt);
+        Integer localInteger = paramInt;
         return qtObjs.containsKey(localInteger);
     }
 
@@ -120,22 +116,16 @@ final class QTObjectManagement implements
             } else
                 str1 = "Component";
         } else if ((paramQTObject instanceof quicktime.util.QTHandleRef)) {
-            if ((paramQTObject instanceof quicktime.qd.Region)) {
-                str1 = "Region";
-            } else if ((paramQTObject instanceof Polygon)) {
-                str1 = "Polygon";
-            } else if ((paramQTObject instanceof quicktime.qd.Pict)) {
-                str1 = "Pict";
-            } else if ((paramQTObject instanceof quicktime.std.movies.AtomContainer)) {
-                str1 = "AtomContainer";
-            } else if ((paramQTObject instanceof ColorTable)) {
-                str1 = "ColorTable";
-            } else if ((paramQTObject instanceof quicktime.qd.PixMap)) {
-                str1 = "PixMap";
-            } else if ((paramQTObject instanceof quicktime.std.sg.SGDeviceList)) {
-                str1 = "SGDeviceList";
-            } else
-                str1 = "QTHandleRef";
+            str1 = switch (paramQTObject) {
+                case quicktime.qd.Region region -> "Region";
+                case Polygon polygon -> "Polygon";
+                case quicktime.qd.Pict pict -> "Pict";
+                case quicktime.std.movies.AtomContainer atomContainer -> "AtomContainer";
+                case ColorTable colorTable -> "ColorTable";
+                case quicktime.qd.PixMap pixMap -> "PixMap";
+                case quicktime.std.sg.SGDeviceList sgDeviceList -> "SGDeviceList";
+                default -> "QTHandleRef";
+            };
         } else if ((paramQTObject instanceof QTPointerRef)) {
             String str2 = paramQTObject.getClass().getName();
             if (str2.endsWith("QDGraphics")) {
@@ -178,15 +168,15 @@ final class QTObjectManagement implements
         }
 
         if (paramInt2 != 0) {
-            str1 = str1 + "_" + Integer.toString(paramInt2);
+            str1 = str1 + "_" + paramInt2;
         }
 
-        qtObjs.put(new Integer(paramInt1), str1);
+        qtObjs.put(paramInt1, str1);
         return true;
     }
 
     static boolean remove(int paramInt, QTObject paramQTObject) throws QTException {
-        Integer localInteger = new Integer(paramInt);
+        Integer localInteger = paramInt;
         if (qtObjs.containsKey(localInteger)) {
             try {
                 disposeSessionObject(paramInt, (String) qtObjs.get(localInteger), paramQTObject);
@@ -210,43 +200,43 @@ final class QTObjectManagement implements
             Thread.yield();
         lock = true;
 
-        Enumeration localEnumeration = qtObjs.keys();
+        Enumeration<Integer> localEnumeration = qtObjs.keys();
         while (localEnumeration.hasMoreElements()) {
             Integer localObject1 = (Integer) localEnumeration.nextElement();
             String localObject2 = (String) qtObjs.get(localObject1);
 
-            if (((String) localObject2).startsWith("SGDeviceList")) {
+            if (localObject2.startsWith("SGDeviceList")) {
                 try {
-                    disposeSessionObject(((Integer) localObject1).intValue(), "SGDeviceList");
+                    disposeSessionObject(localObject1, "SGDeviceList");
                 } catch (QTException localQTException1) {
                     localQTException1.printStackTrace();
                 }
             }
-            if (((String) localObject2).startsWith("NoteChannel")) {
+            if (localObject2.startsWith("NoteChannel")) {
                 try {
-                    disposeSessionObject(((Integer) localObject1).intValue(), "NoteChannel");
+                    disposeSessionObject(localObject1, "NoteChannel");
                 } catch (QTException localQTException2) {
                     localQTException2.printStackTrace();
                 }
             }
-            if (((String) localObject2).startsWith("SpriteWorld")) {
+            if (localObject2.startsWith("SpriteWorld")) {
                 try {
-                    disposeSessionObject(((Integer) localObject1).intValue(), "SpriteWorld");
+                    disposeSessionObject(localObject1, "SpriteWorld");
                 } catch (QTException localQTException3) {
                     localQTException3.printStackTrace();
                 }
             }
-            if (((String) localObject2).startsWith("CDSequence")) {
+            if (localObject2.startsWith("CDSequence")) {
                 try {
-                    disposeSessionObject(((Integer) localObject1).intValue(), "CDSequence");
+                    disposeSessionObject(localObject1, "CDSequence");
                 } catch (QTException localQTException4) {
                     localQTException4.printStackTrace();
                 }
             }
         }
         localEnumeration = qtObjs.keys();
-        Object localObject1 = new Vector();
-        Object localObject2 = new Vector();
+        Object localObject1 = new Vector<>();
+        Object localObject2 = new Vector<>();
         Integer localInteger;
         while (localEnumeration.hasMoreElements()) {
             localInteger = (Integer) localEnumeration.nextElement();
@@ -263,7 +253,7 @@ final class QTObjectManagement implements
 
                        (!str.startsWith("CDSequence"))) {
                 try {
-                    disposeSessionObject(localInteger.intValue(), str);
+                    disposeSessionObject(localInteger, str);
                 } catch (QTException localQTException7) {
                     localQTException7.printStackTrace();
                 }
@@ -274,7 +264,7 @@ final class QTObjectManagement implements
         while (localEnumeration.hasMoreElements()) {
             localInteger = (Integer) localEnumeration.nextElement();
             try {
-                disposeSessionObject(localInteger.intValue(), "Movie");
+                disposeSessionObject(localInteger, "Movie");
             } catch (QTException localQTException5) {
                 localQTException5.printStackTrace();
             }
@@ -284,7 +274,7 @@ final class QTObjectManagement implements
         while (localEnumeration.hasMoreElements()) {
             localInteger = (Integer) localEnumeration.nextElement();
             try {
-                disposeSessionObject(localInteger.intValue(), "QDGraphics");
+                disposeSessionObject(localInteger, "QDGraphics");
             } catch (QTException localQTException6) {
                 localQTException6.printStackTrace();
             }
@@ -294,9 +284,9 @@ final class QTObjectManagement implements
         lock = false;
 
         qtObjs = null;
-        ((Vector) localObject1).removeAllElements();
+        ((Vector<?>) localObject1).removeAllElements();
         localObject1 = null;
-        ((Vector) localObject2).removeAllElements();
+        ((Vector<?>) localObject2).removeAllElements();
         localObject2 = null;
     }
 
@@ -304,7 +294,7 @@ final class QTObjectManagement implements
         int i = paramString.lastIndexOf("_");
         if (i != -1) {
             String str = paramString.substring(i + 1);
-            return new Integer(str).intValue();
+            return Integer.valueOf(str);
         }
 
         return 0;

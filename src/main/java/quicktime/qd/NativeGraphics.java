@@ -25,11 +25,11 @@ public abstract class NativeGraphics {
      * will be able to return the QDGraphics that will be dependent on the particular
      * platform that we are currently running on.
      * @return the platform specific implementation of the NativeGrapics class
-     * @return {@link quicktime.qd.NativeGraphicsException}
-     * @return {@link quicktime.QTUnknownOSException}
+     * @throws quicktime.qd.NativeGraphicsException
+     * @throws quicktime.QTUnknownOSException
      */
-    public static final NativeGraphics getContext(Canvas paramCanvas) throws NativeGraphicsException, QTUnknownOSException {
-        return getContext(paramCanvas);
+    public static NativeGraphics getContext(Canvas paramCanvas) throws NativeGraphicsException, QTUnknownOSException {
+        return getContext((Component) paramCanvas);
     }
 
     /**
@@ -37,10 +37,10 @@ public abstract class NativeGraphics {
      * will be able to return the QDGraphics that will be dependent on the particular
      * platform that we are currently running on.
      * @return the platform specific implementation of the NativeGrapics class
-     * @return {@link quicktime.qd.NativeGraphicsException}
-     * @return {@link quicktime.QTUnknownOSException}
+     * @throws quicktime.qd.NativeGraphicsException
+     * @throws quicktime.QTUnknownOSException
      */
-    public static final NativeGraphics getContext(Component paramComponent) throws NativeGraphicsException, QTUnknownOSException {
+    public static NativeGraphics getContext(Component paramComponent) throws NativeGraphicsException, QTUnknownOSException {
         ComponentPeer localComponentPeer = sun.awt.AWTAccessor.getComponentAccessor().getPeer(paramComponent);
         if (localComponentPeer == null)
             throw new NativeGraphicsException("AWT drawing environment is not initialised");
@@ -65,8 +65,8 @@ public abstract class NativeGraphics {
      * will be able to return the QDGraphics that will be dependent on the particular
      * platform and Java environment that we are currently running on.
      * @return the platform specific implementation of the NativeGrapics class
-     * @return {@link quicktime.qd.NativeGraphicsException}
-     * @return {@link quicktime.QTUnknownOSException}
+     * @throws quicktime.qd.NativeGraphicsException
+     * @throws quicktime.QTUnknownOSException
      */
     public static NativeGraphics getContext(Object paramObject) throws NativeGraphicsException, QTUnknownOSException {
         Class<?> localClass = paramObject.getClass();
@@ -146,6 +146,7 @@ public abstract class NativeGraphics {
             this.dsi.lock();
     }
 
+    @Override
     protected void finalize() throws Throwable {
         this.dsi = null;
         this.jnidrawingsurfaceinfo = null;

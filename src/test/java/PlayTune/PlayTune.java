@@ -53,7 +53,8 @@ import quicktime.util.StringHandle;
  * article on QTMusic
  */
 public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
-    public static void main(String args[]) {
+
+    static void main(String[] args) {
         try {
             QTSession.open();
             PlayTune app = new PlayTune("Play Tune");
@@ -83,17 +84,17 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
         aTunePlayer = new TunePlayer();
         NoteChannel[] noteChanArray = new NoteChannel[2];
         myNoteChannel = noteChanArray[0] = new NoteChannel(1, 4); // a piano
-                                                                    // with 4
-                                                                    // voice
-                                                                    // polyphony
+        // with 4
+        // voice
+        // polyphony
 
         File f = QTFactory.findAbsolutePath("sin440.aif");
         myInstrument = createAtomicInstrument(new QTFile(f));
 
         noteChanArray[1] = myInstrument.newNoteChannel(0); // new NoteChannel
-                                                            // (41, 3);//a
-                                                            // violin with 3
-                                                            // voice polyphony
+        // (41, 3);//a
+        // violin with 3
+        // voice polyphony
         aTunePlayer.setNoteChannels(noteChanArray);
 
         // this is the tune itself
@@ -101,39 +102,31 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
 
         // create a button to start the tune playing
         Button playBtn = new Button("Play Tune");
-        playBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                try {
-                    aTunePlayer.queue(aTune, 1.0F, 0, 0x7FFFFFFF, 0);
-                } catch (QTException e) {
-                    e.printStackTrace();
-                }
+        playBtn.addActionListener(ae -> {
+            try {
+                aTunePlayer.queue(aTune, 1.0F, 0, 0x7FFFFFFF, 0);
+            } catch (QTException e) {
+                e.printStackTrace();
             }
         });
 
         add(playBtn, "North");
         Button saveBtn = new Button("Save Tune");
-        saveBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                makeMovie();
-            }
-        });
+        saveBtn.addActionListener(ae -> makeMovie());
         add(saveBtn, "Center");
 
         Button rebuildBtn = new Button("Rebuild Tune");
-        rebuildBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                rebuildTune();
-            }
-        });
+        rebuildBtn.addActionListener(ae -> rebuildTune());
         add(rebuildBtn, "South");
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 QTSession.close();
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -142,16 +135,16 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
     }
 
     static final int
-    // why 600 -> that is the scale of the media when we add it to the movie
+            // why 600 -> that is the scale of the media when we add it to the movie
             kNoteDuration = 240, // • in 600ths of a second
             kRestDuration = 300, // • in 600ths -- tempo will be 120 bpm
 
-            // 21 music events plus 1 for end of sequence marker
-            our_sequence_length = (22 * 4), // • bytes
-            // why 9? - the tune we have has 9 rest's in it - the "rest" event
-            // essentially
-            // sets up the grid and the duration
-            our_sequence_duration = (9 * kRestDuration); // • 600ths
+    // 21 music events plus 1 for end of sequence marker
+    our_sequence_length = (22 * 4), // • bytes
+    // why 9? - the tune we have has 9 rest's in it - the "rest" event
+    // essentially
+    // sets up the grid and the duration
+    our_sequence_duration = (9 * kRestDuration); // • 600ths
 
     // create a tune
     static MusicData testSequenceCreation() throws QTException {
@@ -159,41 +152,41 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
         MusicData tune = new MusicData(our_sequence_length);
 
         tune.setMusicEvent(0, MusicData.stuffNoteEvent(1, 60, 100, kNoteDuration)); // •
-                                                                                    // piano
-                                                                                    // C
+        // piano
+        // C
         tune.setMusicEvent(1, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(2, MusicData.stuffNoteEvent(2, 60, 100, kNoteDuration)); // •
-                                                                                    // violin
-                                                                                    // C
+        // violin
+        // C
         tune.setMusicEvent(3, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(4, MusicData.stuffNoteEvent(1, 63, 100, kNoteDuration)); // •
-                                                                                    // piano
+        // piano
         tune.setMusicEvent(5, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(6, MusicData.stuffNoteEvent(2, 64, 100, kNoteDuration)); // •
 
-                                                                                    // violin
+        // violin
         tune.setMusicEvent(7, MusicData.stuffRestEvent(kRestDuration));
         // • Make the 5th and 6th notes much softer, just for fun.
         tune.setMusicEvent(8, MusicData.stuffNoteEvent(1, 67, 60, kNoteDuration)); // •
-                                                                                    // piano
+        // piano
         tune.setMusicEvent(9, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(10, MusicData.stuffNoteEvent(2, 66, 60, kNoteDuration)); // •
-                                                                                    // violin
+        // violin
         tune.setMusicEvent(11, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(12, MusicData.stuffNoteEvent(1, 72, 100, kNoteDuration)); // •
-                                                                                        // piano
+        // piano
         tune.setMusicEvent(13, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(14, MusicData.stuffNoteEvent(2, 73, 100, kNoteDuration)); // •
-                                                                                        // violin
+        // violin
         tune.setMusicEvent(15, MusicData.stuffRestEvent(kRestDuration));
         tune.setMusicEvent(16, MusicData.stuffNoteEvent(1, 60, 100, kNoteDuration)); // •
-                                                                                        // piano
+        // piano
         tune.setMusicEvent(17, MusicData.stuffNoteEvent(1, 67, 100, kNoteDuration)); // •
-                                                                                        // piano
+        // piano
         tune.setMusicEvent(18, MusicData.stuffNoteEvent(2, 63, 100, kNoteDuration)); // •
-                                                                                        // violin
+        // violin
         tune.setMusicEvent(19, MusicData.stuffNoteEvent(2, 72, 100, kNoteDuration)); // •
-                                                                                        // violin
+        // violin
         tune.setMusicEvent(20, MusicData.stuffRestEvent(kRestDuration));
         // • end-of-sequence marker already in MusicData object
         // tune.setMusicEvent (21, MusicData.stuffMarkerEvent (0, 0));
@@ -322,7 +315,7 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
                 System.out.print(",event footer:" + Integer.toHexString(eventFooter));
                 int eventSubtype = MusicData.generalSubtype_Footer(eventFooter);
                 System.out.print(",event subtype:" + eventSubtype);
-                System.out.println("");
+                System.out.println();
 
                 // based on the event sub type we have either
                 // stored a note request or an atomic instrument
@@ -332,18 +325,18 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
                 // general event + 1
                 // (to get past the general event header)
                 switch (eventSubtype) {
-                case kGeneralEventNoteRequest:
-                    NoteRequest nr = theMusicData.getNoteRequest(currentEventIndex + 1);
-                    System.out.println(nr);
-                    myNoteChannel = noteChanArray[i] = new NoteChannel(nr);
-                    break;
-                case kGeneralEventAtomicInstrument:
-                    AtomicInstrument ai = theMusicData.getAtomicInstrument(currentEventIndex + 1);
-                    System.out.println(ai);
-                    noteChanArray[i] = myInstrument.newNoteChannel(0);
-                    break;
-                default:
-                    break; // skip this general event
+                    case kGeneralEventNoteRequest:
+                        NoteRequest nr = theMusicData.getNoteRequest(currentEventIndex + 1);
+                        System.out.println(nr);
+                        myNoteChannel = noteChanArray[i] = new NoteChannel(nr);
+                        break;
+                    case kGeneralEventAtomicInstrument:
+                        AtomicInstrument ai = theMusicData.getAtomicInstrument(currentEventIndex + 1);
+                        System.out.println(ai);
+                        noteChanArray[i] = myInstrument.newNoteChannel(0);
+                        break;
+                    default:
+                        break; // skip this general event
                 }
                 // move our index to the next general event header
                 currentEventIndex += eventLength;
@@ -372,7 +365,7 @@ public class PlayTune extends Frame implements StdQTConstants, SoundConstants {
      * createAtomicInstrument
      * Create a custom atomic instrument using the sampled sound data in the
      * specified resource handle.
-     *
+     * <p>
      * A custom instrument is defined by a QTAtom structure containing
      * appropriate atoms (hence the name
      * "atomic" instrument). See the QT3.0 book "QuickTime Music Architecture"

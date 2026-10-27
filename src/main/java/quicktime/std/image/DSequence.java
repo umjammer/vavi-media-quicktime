@@ -1,7 +1,5 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -22,36 +20,21 @@ import quicktime.util.EncodedImage;
 import quicktime.util.IntEncodedImage;
 import quicktime.util.RawEncodedImage;
 
+
 /**
  * This class is used for decompressing a sequence of images.
  * The Movie Toolbox handles the details of decompressing image sequences in
  * QuickTime movies. If you need to decompress other sequences, your application
  * can use this class.
- * @see {@link quicktime.std.image.CDSequence},
+ * @see quicktime.std.image.CDSequence,
  * {@link quicktime.std.image.CSequence}
  */
 public final class DSequence extends CDSequence {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(DSequence.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Creating an instance of this class signals the beginning of the process of
      * decompressing a sequence of frames.
-     * QuickTime::DecompressSequenceBegin
+     * @see "QuickTime::DecompressSequenceBegin"
      * @param desc an ImageDescription object which describes the compressed data
      * @param port a QDGraphics for the destination image. This may NOT be null.
      * @param srcRect a QDRect defining the portion of the image to decompress, or null to use
@@ -63,15 +46,15 @@ public final class DSequence extends CDSequence {
      * @param accuracy the accuracy desired in the decompressed image
      * @param codec a Decompressor identifier
      */
-    public DSequence(ImageDescription paramImageDescription, QDGraphics paramQDGraphics, QDRect paramQDRect, Matrix paramMatrix, Region paramRegion, int paramInt1, int paramInt2, CodecComponent paramCodecComponent) throws QTException {
-        super(begin(paramImageDescription, paramQDGraphics, paramQDRect, paramMatrix, paramRegion, paramInt1, paramInt2, paramCodecComponent), paramQDGraphics);
-        this.mImageDescription = paramImageDescription;
+    public DSequence(ImageDescription desc, QDGraphics port, QDRect srcRect, Matrix matrix, Region mask, int flags, int accuracy, CodecComponent codec) throws QTException {
+        super(begin(desc, port, srcRect, matrix, mask, flags, accuracy, codec), port);
+        this.mImageDescription = desc;
     }
 
     /**
      * This constructor allows you to pass a compressed sample so the codec can perform
      * preflighting before the first decompressFrame call.
-     * QuickTime::DecompressSequenceBeginS
+     * @see "QuickTime::DecompressSequenceBeginS"
      * @param desc an ImageDescription object which describes the compressed data
      * @param data encoded image data
      * @param port a QDGraphics for the destination image. This may NOT be null.
@@ -84,29 +67,29 @@ public final class DSequence extends CDSequence {
      * @param accuracy the accuracy desired in the decompressed image
      * @param codec a Decompressor identifier
      */
-    public DSequence(ImageDescription paramImageDescription, EncodedImage paramEncodedImage, QDGraphics paramQDGraphics, QDRect paramQDRect, Matrix paramMatrix, Region paramRegion, int paramInt1, int paramInt2, CodecComponent paramCodecComponent) throws QTException {
-        super(beginS(paramImageDescription, paramEncodedImage, paramQDGraphics, paramQDRect, paramMatrix, paramRegion, paramInt1, paramInt2, paramCodecComponent), paramQDGraphics);
-        this.mImageDescription = paramImageDescription;
+    public DSequence(ImageDescription desc, EncodedImage data, QDGraphics port, QDRect srcRect, Matrix matrix, Region flags, int mask, int accuracy, CodecComponent codec) throws QTException {
+        super(beginS(desc, data, port, srcRect, matrix, flags, mask, accuracy, codec), port);
+        this.mImageDescription = desc;
     }
 
     private static final int[] savedPort = { 0 };
 
     private static final int[] savedDevice = { 0 };
 
-    private static int codecDSeqFlushInstdOfDirtying = 256;
+    private static final int codecDSeqFlushInstdOfDirtying = 256;
 
-    private static int begin(ImageDescription paramImageDescription, QDGraphics paramQDGraphics, QDRect paramQDRect, Matrix paramMatrix, Region paramRegion, int paramInt1, int paramInt2, CodecComponent paramCodecComponent) throws StdQTException {
+    private static int begin(ImageDescription desc, QDGraphics port, QDRect srcRect, Matrix matrix, Region flags, int mask, int accuracy, CodecComponent codec) throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = 0;
-        if (paramQDGraphics == null) {
+        if (port == null) {
             throw new StdQTException(-50);
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 GetGWorld(savedPort, savedDevice);
             }
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = DecompressSequenceBegin(arrayOfInt, QTObject.ID(paramImageDescription), QTObject.ID(paramQDGraphics), 0, paramQDRect == null ? null : paramQDRect.getRect(), paramMatrix == null ? null : paramMatrix.getBytes(), (short) 0, QTObject.ID(paramRegion), (short) paramInt1, paramInt2, QTObject.ID(paramCodecComponent));
+            SetGWorld(QTObject.ID(port), 0);
+            i = DecompressSequenceBegin(arrayOfInt, QTObject.ID(desc), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -117,22 +100,22 @@ public final class DSequence extends CDSequence {
         return arrayOfInt[0];
     }
 
-    private static int beginS(ImageDescription paramImageDescription, EncodedImage paramEncodedImage, QDGraphics paramQDGraphics, QDRect paramQDRect, Matrix paramMatrix, Region paramRegion, int paramInt1, int paramInt2, CodecComponent paramCodecComponent) throws StdQTException {
+    private static int beginS(ImageDescription desc, EncodedImage paramEncodedImage, QDGraphics port, QDRect srcRect, Matrix matrix, Region flags, int mask, int accuracy, CodecComponent codec) throws StdQTException {
         int[] arrayOfInt = { 0 };
         int i = -50;
-        if (paramQDGraphics == null) {
+        if (port == null) {
             throw new StdQTException(-50);
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
+            SetGWorld(QTObject.ID(port), 0);
             if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramEncodedImage.getSize(), QTObject.ID(paramQDGraphics), 0, paramQDRect == null ? null : paramQDRect.getRect(), paramMatrix == null ? null : paramMatrix.getBytes(), (short) 0, QTObject.ID(paramRegion), (short) paramInt1, paramInt2, QTObject.ID(paramCodecComponent));
+                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(desc), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramEncodedImage.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
             } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage).getInts(), paramEncodedImage.getSize(), QTObject.ID(paramQDGraphics), 0, paramQDRect == null ? null : paramQDRect.getRect(), paramMatrix == null ? null : paramMatrix.getBytes(), (short) 0, QTObject.ID(paramRegion), (short) paramInt1, paramInt2, QTObject.ID(paramCodecComponent));
+                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(desc), ((IntEncodedImage) paramEncodedImage).getInts(), paramEncodedImage.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
             } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage), paramEncodedImage.getSize(), QTObject.ID(paramQDGraphics), 0, paramQDRect == null ? null : paramQDRect.getRect(), paramMatrix == null ? null : paramMatrix.getBytes(), (short) 0, QTObject.ID(paramRegion), (short) paramInt1, paramInt2, QTObject.ID(paramCodecComponent));
+                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(desc), QTObject.ID((RawEncodedImage) paramEncodedImage), paramEncodedImage.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
@@ -145,128 +128,128 @@ public final class DSequence extends CDSequence {
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrameS
+     * @see "QuickTime::DecompressSequenceFrameS"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameS(EncodedImage paramEncodedImage, int paramInt) throws StdQTException {
-        if ((paramEncodedImage instanceof RawEncodedImage))
-            return decompressFrameS((RawEncodedImage) paramEncodedImage, paramInt);
-        if ((paramEncodedImage instanceof IntEncodedImage))
-            return decompressFrameS((IntEncodedImage) paramEncodedImage, paramInt);
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            return decompressFrameS((ByteEncodedImage) paramEncodedImage, paramInt);
+    public int decompressFrameS(EncodedImage data, int inFlags) throws StdQTException {
+        if ((data instanceof RawEncodedImage))
+            return decompressFrameS((RawEncodedImage) data, inFlags);
+        if ((data instanceof IntEncodedImage))
+            return decompressFrameS((IntEncodedImage) data, inFlags);
+        if ((data instanceof ByteEncodedImage)) {
+            return decompressFrameS((ByteEncodedImage) data, inFlags);
         }
         throw new StdQTException(-50);
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrameS
+     * @see "QuickTime::DecompressSequenceFrameS"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameS(ByteEncodedImage paramByteEncodedImage, int paramInt) throws StdQTException {
+    public int decompressFrameS(ByteEncodedImage data, int inFlags) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameS(_ID(), paramByteEncodedImage.getBytes(), paramByteEncodedImage.getSize(), (short) paramInt, arrayOfShort, 0);
+        int i = DecompressSequenceFrameS(_ID(), data.getBytes(), data.getSize(), (short) inFlags, arrayOfShort, 0);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrameS
+     * @see "QuickTime::DecompressSequenceFrameS"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameS(IntEncodedImage paramIntEncodedImage, int paramInt) throws StdQTException {
+    public int decompressFrameS(IntEncodedImage data, int inFlags) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameS(_ID(), paramIntEncodedImage.getInts(), paramIntEncodedImage.getSize(), (short) paramInt, arrayOfShort, 0);
+        int i = DecompressSequenceFrameS(_ID(), data.getInts(), data.getSize(), (short) inFlags, arrayOfShort, 0);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrameS
+     * @see "QuickTime::DecompressSequenceFrameS"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameS(RawEncodedImage paramRawEncodedImage, int paramInt) throws StdQTException {
+    public int decompressFrameS(RawEncodedImage data, int inFlags) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameS(_ID(), QTObject.ID(paramRawEncodedImage), paramRawEncodedImage.getSize(), (short) paramInt, arrayOfShort, 0);
+        int i = DecompressSequenceFrameS(_ID(), QTObject.ID(data), data.getSize(), (short) inFlags, arrayOfShort, 0);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrame
+     * @see "QuickTime::DecompressSequenceFrame"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrame(EncodedImage paramEncodedImage, int paramInt) throws StdQTException {
-        if ((paramEncodedImage instanceof RawEncodedImage))
-            return decompressFrame((RawEncodedImage) paramEncodedImage, paramInt);
-        if ((paramEncodedImage instanceof IntEncodedImage))
-            return decompressFrame((IntEncodedImage) paramEncodedImage, paramInt);
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            return decompressFrame((ByteEncodedImage) paramEncodedImage, paramInt);
+    public int decompressFrame(EncodedImage data, int inFlags) throws StdQTException {
+        if ((data instanceof RawEncodedImage))
+            return decompressFrame((RawEncodedImage) data, inFlags);
+        if ((data instanceof IntEncodedImage))
+            return decompressFrame((IntEncodedImage) data, inFlags);
+        if ((data instanceof ByteEncodedImage)) {
+            return decompressFrame((ByteEncodedImage) data, inFlags);
         }
         throw new StdQTException(-50);
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrame
+     * @see "QuickTime::DecompressSequenceFrame"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrame(ByteEncodedImage paramByteEncodedImage, int paramInt) throws StdQTException {
+    public int decompressFrame(ByteEncodedImage data, int inFlags) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrame(_ID(), paramByteEncodedImage.getBytes(), (short) paramInt, arrayOfShort, 0);
+        int i = DecompressSequenceFrame(_ID(), data.getBytes(), (short) inFlags, arrayOfShort, 0);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrame
+     * @see "QuickTime::DecompressSequenceFrame"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrame(IntEncodedImage paramIntEncodedImage, int paramInt) throws StdQTException {
+    public int decompressFrame(IntEncodedImage data, int inFlags) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrame(_ID(), paramIntEncodedImage.getInts(), (short) paramInt, arrayOfShort, 0);
+        int i = DecompressSequenceFrame(_ID(), data.getInts(), (short) inFlags, arrayOfShort, 0);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
 
     /**
      * Your application calls this method to decompress one of a sequence of frames.
-     * QuickTime::DecompressSequenceFrame
+     * @see "QuickTime::DecompressSequenceFrame"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrame(RawEncodedImage paramRawEncodedImage, int paramInt) throws StdQTException {
+    public int decompressFrame(RawEncodedImage data, int inFlags) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrame(_ID(), QTObject.ID(paramRawEncodedImage), (short) paramInt, arrayOfShort, 0);
+        int i = DecompressSequenceFrame(_ID(), QTObject.ID(data), (short) inFlags, arrayOfShort, 0);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -274,18 +257,18 @@ public final class DSequence extends CDSequence {
     /**
      * Queues a frame for decompression and specifies the time at which
      * decompression will begin.
-     * QuickTime::DecompressSequenceFrameWhen
+     * @see "QuickTime::DecompressSequenceFrameWhen"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @param frameTime an ICMFrameTime object that contains the frame's time information,
      *                   including the time at which the frame should be displayed, its
      *                   duration, and the movie's playback rate.
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameWhen(ByteEncodedImage paramByteEncodedImage, int paramInt, ICMFrameTime paramICMFrameTime) throws StdQTException {
+    public int decompressFrameWhen(ByteEncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameWhen(_ID(), paramByteEncodedImage.getBytes(), paramByteEncodedImage.getSize(), (short) paramInt, arrayOfShort, 0, paramICMFrameTime.getBytes());
+        int i = DecompressSequenceFrameWhen(_ID(), data.getBytes(), data.getSize(), (short) inFlags, arrayOfShort, 0, frameTime.getBytes());
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -293,18 +276,18 @@ public final class DSequence extends CDSequence {
     /**
      * Queues a frame for decompression and specifies the time at which
      * decompression will begin.
-     * QuickTime::DecompressSequenceFrameWhen
+     * @see "QuickTime::DecompressSequenceFrameWhen"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @param frameTime an ICMFrameTime object that contains the frame's time information,
      *                   including the time at which the frame should be displayed, its
      *                   duration, and the movie's playback rate.
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameWhen(IntEncodedImage paramIntEncodedImage, int paramInt, ICMFrameTime paramICMFrameTime) throws StdQTException {
+    public int decompressFrameWhen(IntEncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameWhen(_ID(), paramIntEncodedImage.getInts(), paramIntEncodedImage.getSize(), (short) paramInt, arrayOfShort, 0, paramICMFrameTime.getBytes());
+        int i = DecompressSequenceFrameWhen(_ID(), data.getInts(), data.getSize(), (short) inFlags, arrayOfShort, 0, frameTime.getBytes());
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -312,18 +295,18 @@ public final class DSequence extends CDSequence {
     /**
      * Queues a frame for decompression and specifies the time at which
      * decompression will begin.
-     * QuickTime::DecompressSequenceFrameWhen
+     * @see "QuickTime::DecompressSequenceFrameWhen"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @param frameTime an ICMFrameTime object that contains the frame's time information,
      *                   including the time at which the frame should be displayed, its
      *                   duration, and the movie's playback rate.
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameWhen(RawEncodedImage paramRawEncodedImage, int paramInt, ICMFrameTime paramICMFrameTime) throws StdQTException {
+    public int decompressFrameWhen(RawEncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameWhen(_ID(), QTObject.ID(paramRawEncodedImage), paramRawEncodedImage.getSize(), (short) paramInt, arrayOfShort, 0, paramICMFrameTime.getBytes());
+        int i = DecompressSequenceFrameWhen(_ID(), QTObject.ID(data), data.getSize(), (short) inFlags, arrayOfShort, 0, frameTime.getBytes());
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -331,74 +314,74 @@ public final class DSequence extends CDSequence {
     /**
      * Queues a frame for decompression and specifies the time at which
      * decompression will begin.
-     * QuickTime::DecompressSequenceFrameWhen
+     * @see "QuickTime::DecompressSequenceFrameWhen"
      * @param data encoded image data
      * @param inFlags flags providing further control information
      * @param frameTime an ICMFrameTime object that contains the frame's time information,
      *                   including the time at which the frame should be displayed, its
      *                   duration, and the movie's playback rate.
      * @return the outFlags value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public int decompressFrameWhen(EncodedImage paramEncodedImage, int paramInt, ICMFrameTime paramICMFrameTime) throws StdQTException {
-        if ((paramEncodedImage instanceof RawEncodedImage))
-            return decompressFrameWhen((RawEncodedImage) paramEncodedImage, paramInt, paramICMFrameTime);
-        if ((paramEncodedImage instanceof IntEncodedImage))
-            return decompressFrameWhen((IntEncodedImage) paramEncodedImage, paramInt, paramICMFrameTime);
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            return decompressFrameWhen((ByteEncodedImage) paramEncodedImage, paramInt, paramICMFrameTime);
+    public int decompressFrameWhen(EncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
+        if ((data instanceof RawEncodedImage))
+            return decompressFrameWhen((RawEncodedImage) data, inFlags, frameTime);
+        if ((data instanceof IntEncodedImage))
+            return decompressFrameWhen((IntEncodedImage) data, inFlags, frameTime);
+        if ((data instanceof ByteEncodedImage)) {
+            return decompressFrameWhen((ByteEncodedImage) data, inFlags, frameTime);
         }
         throw new StdQTException(-50);
     }
 
     /**
      * This method sets the mode used when drawing the decompressed image.
-     * QuickTime::SetDSequenceTransferMode
+     * @see "QuickTime::SetDSequenceTransferMode"
      * @param mode the transfer mode to use when drawing the decompressed image
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setGraphicsMode(GraphicsMode paramGraphicsMode) throws StdQTException {
-        StdQTException.checkError(SetDSequenceTransferMode(_ID(), (short) paramGraphicsMode.getGraphicsMode(), paramGraphicsMode.getColor().getRGBColor()));
+    public void setGraphicsMode(GraphicsMode mode) throws StdQTException {
+        StdQTException.checkError(SetDSequenceTransferMode(_ID(), (short) mode.getGraphicsMode(), mode.getColor().getRGBColor()));
     }
 
     /**
      * This method sets the mode used when drawing the decompressed image.
-     * QuickTime::SetDSequenceTransferMode
+     * @see "QuickTime::SetDSequenceTransferMode"
      * @param mode the transfer mode to use when drawing the decompressed image
      * @param opColor an QDColor object to be used in addPin, subPin, blend and
      *                 transparent operations. If null, the opColor is left unchanged.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setTransferMode(int paramInt, QDColor paramQDColor) throws StdQTException {
-        setGraphicsMode(new GraphicsMode(paramInt, paramQDColor));
+    public void setTransferMode(int mode, QDColor opColor) throws StdQTException {
+        setGraphicsMode(new GraphicsMode(mode, opColor));
     }
 
     /**
      * This method defines the portion of the image to decompress.
-     * QuickTime::SetDSequenceSrcRect
+     * @see "QuickTime::SetDSequenceSrcRect"
      * @param srcRect a QDRect object defining the portion of the object to decompress
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setSrcRect(QDRect paramQDRect) throws StdQTException {
-        StdQTException.checkError(SetDSequenceSrcRect(_ID(), paramQDRect.getRect()));
+    public void setSrcRect(QDRect srcRect) throws StdQTException {
+        StdQTException.checkError(SetDSequenceSrcRect(_ID(), srcRect.getRect()));
     }
 
     /**
      * This method assigns a mapping matrix to the sequence.
-     * QuickTime::SetDSequenceMatrix
+     * @see "QuickTime::SetDSequenceMatrix"
      * @param matrix a Matrix object that specifies how to transform the image during
      *                 decompression
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setMatrix(Matrix paramMatrix) throws StdQTException {
-        StdQTException.checkError(SetDSequenceMatrix(_ID(), paramMatrix.getBytes()));
+    public void setMatrix(Matrix matrix) throws StdQTException {
+        StdQTException.checkError(SetDSequenceMatrix(_ID(), matrix.getBytes()));
     }
 
     /**
      * This method returns the matrix associated with the sequence
-     * QuickTime::GetDSequenceMatrix
+     * @see "QuickTime::GetDSequenceMatrix"
      * @return Matrix a matrix object that specifies the transform of the image sequence
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Matrix getMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
@@ -408,53 +391,53 @@ public final class DSequence extends CDSequence {
 
     /**
      * This method sets the flags of the image sequence
-     * QuickTime::SetDSequenceFlags
+     * @see "QuickTime::SetDSequenceFlags"
      * @param flags the flags associated with the sequence
      * @param flagsMask the masks to use for filtering out unwanted flags
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setFlags(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(SetDSequenceFlags(_ID(), paramInt1, paramInt2));
+    public void setFlags(int flags, int flagsMask) throws StdQTException {
+        StdQTException.checkError(SetDSequenceFlags(_ID(), flags, flagsMask));
     }
 
     /**
      * This method assigns a clipping region to the sequence.
-     * QuickTime::SetDSequenceMask
+     * @see "QuickTime::SetDSequenceMask"
      * @param mask a Region object which is applied to the desitnation image. If null
      *               then masking is stopped.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setMask(Region paramRegion) throws StdQTException {
-        StdQTException.checkError(SetDSequenceMask(_ID(), QTObject.ID(paramRegion)));
+    public void setMask(Region mask) throws StdQTException {
+        StdQTException.checkError(SetDSequenceMask(_ID(), QTObject.ID(mask)));
     }
 
     /**
      * This method assigns a blend matte to the sequence.
-     * QuickTime::SetDSequenceMatte
+     * @see "QuickTime::SetDSequenceMatte"
      * @param matte a PixMap object which contains a blend matte
      * @param matteRect a QDRect object which defines the boundary of the matte
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setMatte(PixMap paramPixMap, QDRect paramQDRect) throws StdQTException {
-        StdQTException.checkError(SetDSequenceMatte(_ID(), QTObject.ID(paramPixMap), paramQDRect.getRect()));
+    public void setMatte(PixMap matte, QDRect matteRect) throws StdQTException {
+        StdQTException.checkError(SetDSequenceMatte(_ID(), QTObject.ID(matte), matteRect.getRect()));
     }
 
     /**
      * This method adjusts the decompression accuracy for this sequence.
-     * QuickTime::SetDSequenceAccuracy
+     * @see "QuickTime::SetDSequenceAccuracy"
      * @param accuracy the accuracy desired in the decompressed image
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void setAccuracy(int paramInt) throws StdQTException {
-        StdQTException.checkError(SetDSequenceAccuracy(_ID(), paramInt));
+    public void setAccuracy(int accuracy) throws StdQTException {
+        StdQTException.checkError(SetDSequenceAccuracy(_ID(), accuracy));
     }
 
     /**
      * This method helps you determine the location of the offscreen image buffer
      * allocated by the decompressor.
-     * QuickTime::GetDSequenceImageBuffer
+     * @see "QuickTime::GetDSequenceImageBuffer"
      * @return a QDGraphics object which is the graphics world for the image buffer
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDGraphics getImageBuffer() throws StdQTException {
         return QDGraphics.fromDSequenceImage(this);
@@ -463,9 +446,9 @@ public final class DSequence extends CDSequence {
     /**
      * This method enables you to determine the location of the offscreen buffer
      * allocated by the decompressor.
-     * QuickTime::GetDSequenceScreenBuffer
+     * @see "QuickTime::GetDSequenceScreenBuffer"
      * @return a QDGraphics object which is the graphics world for the screen buffer
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDGraphics getScreenBuffer() throws StdQTException {
         return QDGraphics.fromDSequenceScreen(this);
@@ -473,23 +456,23 @@ public final class DSequence extends CDSequence {
 
     /**
      * Tests to see if an image contains data at a given point.
-     * QuickTime::PtInDSequenceData
+     * @see "QuickTime::PtInDSequenceData"
      * @param data encoded image data
      * @param where a Point object, (0,0) is upper left corner of the image
      * @return true if the compressed data contains data at the point specified
      *               by the where parameter. false if the specified point falls within
      *               a blank portion of the image.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public boolean ptInData(EncodedImage paramEncodedImage, QDPoint paramQDPoint) throws StdQTException {
+    public boolean ptInData(EncodedImage data, QDPoint where) throws StdQTException {
         byte[] arrayOfByte = new byte[1];
         int i = -50;
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            i = PtInDSequenceData(_ID(), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramEncodedImage.getSize(), paramQDPoint.getPoint(), arrayOfByte);
-        } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-            i = PtInDSequenceData(_ID(), ((IntEncodedImage) paramEncodedImage).getInts(), paramEncodedImage.getSize(), paramQDPoint.getPoint(), arrayOfByte);
-        } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-            i = PtInDSequenceData(_ID(), QTObject.ID((RawEncodedImage) paramEncodedImage), paramEncodedImage.getSize(), paramQDPoint.getPoint(), arrayOfByte);
+        if ((data instanceof ByteEncodedImage)) {
+            i = PtInDSequenceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize(), where.getPoint(), arrayOfByte);
+        } else if ((data instanceof IntEncodedImage)) {
+            i = PtInDSequenceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize(), where.getPoint(), arrayOfByte);
+        } else if ((data instanceof RawEncodedImage)) {
+            i = PtInDSequenceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize(), where.getPoint(), arrayOfByte);
         }
         StdQTException.checkError(i);
         return arrayOfByte[0] != 0;
@@ -497,22 +480,22 @@ public final class DSequence extends CDSequence {
 
     /**
      * The HitTestDSequenceData function allows the calling application to perform hit testing on compressed data.
-     * QuickTime::HitTestDSequenceData
+     * @see "QuickTime::HitTestDSequenceData"
      * @param data compressed data in the format specified by the description of the DSequence.
      * @param where A QuickDraw Point (0,0) based at the top-left corner of the image.
      * @param hitFlags indicates the hit-testing behaviour that is sought
      * @return true if the compressed data contains data at the point specified by the where parameter.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public boolean hitTestData(EncodedImage paramEncodedImage, QDPoint paramQDPoint, int paramInt) throws StdQTException {
+    public boolean hitTestData(EncodedImage data, QDPoint where, int hitFlags) throws StdQTException {
         int[] arrayOfInt = { 0 };
         int i = 0;
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            i = HitTestDSequenceData(_ID(), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramEncodedImage.getSize(), paramQDPoint.getPoint(), arrayOfInt, paramInt);
-        } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-            i = HitTestDSequenceData(_ID(), ((IntEncodedImage) paramEncodedImage).getInts(), paramEncodedImage.getSize(), paramQDPoint.getPoint(), arrayOfInt, paramInt);
-        } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-            i = HitTestDSequenceData(_ID(), QTObject.ID((RawEncodedImage) paramEncodedImage), paramEncodedImage.getSize(), paramQDPoint.getPoint(), arrayOfInt, paramInt);
+        if ((data instanceof ByteEncodedImage)) {
+            i = HitTestDSequenceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize(), where.getPoint(), arrayOfInt, hitFlags);
+        } else if ((data instanceof IntEncodedImage)) {
+            i = HitTestDSequenceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize(), where.getPoint(), arrayOfInt, hitFlags);
+        } else if ((data instanceof RawEncodedImage)) {
+            i = HitTestDSequenceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize(), where.getPoint(), arrayOfInt, hitFlags);
         }
         StdQTException.checkError(i);
         return arrayOfInt[0] != 0;
@@ -520,7 +503,7 @@ public final class DSequence extends CDSequence {
 
     /**
      * Stops a decompression sequence, aborting processing of any queued frames.
-     * QuickTime::CDSequenceFlush
+     * @see "QuickTime::CDSequenceFlush"
      */
     public void flush() throws StdQTException {
         StdQTException.checkError(CDSequenceFlush(_ID()));
@@ -529,17 +512,17 @@ public final class DSequence extends CDSequence {
     /**
      * Notifies the Image Compression Manager that the destination port for the given image
      * decompression sequence has been invalidated.
-     * QuickTime::CDSequenceInvalidate
+     * @see "QuickTime::CDSequenceInvalidate"
      * @param invalRgn a Region describing the invalid portion of the image
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
-    public void invalidate(Region paramRegion) throws StdQTException {
-        StdQTException.checkError(CDSequenceInvalidate(_ID(), QTObject.ID(paramRegion)));
+    public void invalidate(Region invalRgn) throws StdQTException {
+        StdQTException.checkError(CDSequenceInvalidate(_ID(), QTObject.ID(invalRgn)));
     }
 
     /**
      * Hides the cursor during decompression operations.
-     * QuickTime::ICMShieldSequenceCursor
+     * @see "QuickTime::ICMShieldSequenceCursor"
      */
     public void shieldCursor() throws StdQTException {
         StdQTException.checkError(ICMShieldSequenceCursor(_ID()));
@@ -688,8 +671,3 @@ public final class DSequence extends CDSequence {
         QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /DSequence.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

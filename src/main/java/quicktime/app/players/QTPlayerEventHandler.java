@@ -5,7 +5,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * When a QTPlayer is addedTo some kind of display space it receives
  * an addedTo (or removedFrom) notification. At this point the QTPlayer
  * will dispatch to the QTPlayerEventHandler to return a QTPlayerEventHandler
@@ -30,8 +30,8 @@ public abstract class QTPlayerEventHandler {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Register a custom event handler maker that will make an EventDispatcher
      * based on the type of event interest for the QTPlayer
      */
@@ -42,14 +42,14 @@ public abstract class QTPlayerEventHandler {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a custom event handler maker.
      */
     public static void removeEventHandlerMaker(QTPlayerEventHandlerMaker paramQTPlayerEventHandlerMaker) {
         if (vec != null)
             vec.removeElement(paramQTPlayerEventHandlerMaker);
-        if (vec.size() == 0) {
+        if (vec.isEmpty()) {
             vec = null;
         }
     }
@@ -57,36 +57,36 @@ public abstract class QTPlayerEventHandler {
     static QTPlayerEventHandler make(QTPlayer paramQTPlayer, Object paramObject) {
         if (vec != null) {
             for (int i = 0; i < vec.size(); i++) {
-                Object localObject = (QTPlayerEventHandlerMaker) vec.elementAt(i);
-                QTPlayerEventHandler localQTPlayerEventHandler = ((QTPlayerEventHandlerMaker) localObject).make(paramQTPlayer, paramObject);
+                QTPlayerEventHandlerMaker localObject = (QTPlayerEventHandlerMaker) vec.elementAt(i);
+                QTPlayerEventHandler localQTPlayerEventHandler = localObject.make(paramQTPlayer, paramObject);
                 if (localQTPlayerEventHandler != null) {
                     return localQTPlayerEventHandler;
                 }
             }
         }
-        Class localClass = paramObject.getClass();
-        Object localObject = localClass.getName();
+        Class<?> localClass = paramObject.getClass();
+        String localObject = localClass.getName();
         while (!localClass.getName().equals("java.lang.Object")) {
             localObject = localClass.getName();
             localClass = localClass.getSuperclass();
         }
-        if (((String) localObject).equals("java.awt.Component")) {
+        if (localObject.equals("java.awt.Component")) {
             return new QTPlayerAWTEventHandler(paramQTPlayer, paramObject);
         }
         return null;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When the QTPlayer is removed from its addedTo interest its event Handler
      * is notified and should remove any interests it has declared for events
      */
     protected abstract void removedFrom();
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When the QTPlayer is added to its addedTo interest its event Handler
      * is notified and should add any interests it requires to receive
      * events.

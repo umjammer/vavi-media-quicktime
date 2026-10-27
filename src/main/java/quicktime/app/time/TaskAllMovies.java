@@ -22,7 +22,7 @@ import quicktime.std.movies.Movie;
  *
  * An application can retrieve the Tasking object and set its default thread to a
  * TaskThread object of its choice.
- * @see {@link quicktime.app.players.MoviePlayer},
+ * @see quicktime.app.players.MoviePlayer,
  * {@link quicktime.app.time.Timer},
  * {@link quicktime.app.players.MoviePresenter}
  */
@@ -83,6 +83,7 @@ public class TaskAllMovies extends Tasking {
     /**
      * Calls Movie.taskAll to task all active Movies and TimeBases.
      */
+    @Override
     public void task() throws QTException {
         Movie.taskAll(0);
     }

@@ -4,7 +4,7 @@ import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
 /**
- * Deprecated.
+ * @deprecated
  * This interface defines operations that can control the positioning of
  * a cursor through a sequence of data.
  * Generally a sequencer will define a get method to retrieve the data
@@ -14,27 +14,27 @@ import quicktime.QTSession;
 public abstract class Sequencer {
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kNoLooping = 0;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kLoopForwards = 1;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kLoopPalindrome = 2;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kLastFrame = -1;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kFirstFrame = 1;
 
@@ -51,8 +51,8 @@ public abstract class Sequencer {
     private boolean forwards = true;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the type of looping behaviour of the Sequencer.
      * @param flag the looping flag
      * @see kNoLooping,
@@ -66,8 +66,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the type of looping behaviour of the Sequencer.
      * @return the looping behaviour flag
      */
@@ -76,8 +76,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current frame number
      */
     public int getCurrentFrame() {
@@ -87,8 +87,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current frame number. This will observe
      * correct behaviour given the current state
      * of the image object it refers to - it will loop, etc.
@@ -133,8 +133,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current frame number to the next frame.
      */
     public void setFrameNext() {
@@ -152,8 +152,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the current frame number to the previous frame.
      * Calling previousFrame where the index of the frame is
      * currently the first index and looping is set to normal has no effect.
@@ -181,8 +181,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns a string representation of this class.
      */
     public String toString() {
@@ -190,8 +190,8 @@ public abstract class Sequencer {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the number of frames of the data
      * which the sequencer is sequencing.
      * @return the current number of frames of the sequencers data sequence

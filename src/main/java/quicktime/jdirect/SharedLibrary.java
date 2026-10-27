@@ -6,6 +6,6 @@ package quicktime.jdirect;
  * static field of type Object, that is initialized in its static
  * initializer by calling JDirectLinker.loadLibrary.
  */
-public abstract interface SharedLibrary {
+public interface SharedLibrary {
 }
 

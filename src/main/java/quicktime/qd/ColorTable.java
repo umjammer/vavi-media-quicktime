@@ -1,13 +1,10 @@
 package quicktime.qd;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.image.ImageDescription;
@@ -15,63 +12,47 @@ import quicktime.std.movies.Movie;
 import quicktime.std.qtcomponents.ImageCompressionDialog;
 import quicktime.util.QTHandleRef;
 
+
 /**
  * When creating a PixMap for a particular graphics device, Color QuickDraw creates
  * a ColorTable that defines the best colors available for the pixel image on that
  * particular graphics device.
  * refer to ColorTable in QuickDraw
- * @see quicktime.std.qd.PixMap
+ * @see "quicktime.std.qd.PixMap"
  */
 public final class ColorTable extends QTHandleRef implements QuickTimeLib {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 16;
 
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ColorTable.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     /**
      * Get the custom color table for an image. If there is no CTable this returns null.
-     * QuickTime::GetImageDescriptionCTable
+     * @see "QuickTime::GetImageDescriptionCTable"
      * @param id the ImageDescription
-     * @param {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.ImageDescription#getCTable()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.ImageDescription#getCTable()
      */
-    public static ColorTable fromImageDescription(ImageDescription paramImageDescription) throws QTException {
+    public static ColorTable fromImageDescription(ImageDescription id) throws QTException {
         int[] arrayOfInt = new int[1];
-        if ((paramImageDescription.getClutID() == -1) || (paramImageDescription.getClutID() == 0))
+        if ((id.getClutID() == -1) || (id.getClutID() == 0))
             return null;
-        StdQTException.checkError(GetImageDescriptionCTable(QTObject.ID(paramImageDescription), arrayOfInt));
+        StdQTException.checkError(GetImageDescriptionCTable(QTObject.ID(id), arrayOfInt));
         return (arrayOfInt[0] == -1) || (arrayOfInt[0] == 0) ? null : new ColorTable(arrayOfInt[0], false);
     }
 
     /**
      * This method allows your application to get the color table of the movie.
-     * QuickTime::GetMovieColorTable()
+     * @see "QuickTime::GetMovieColorTable()"
      * @param m the movie to get the color table from
      * @return a ColorTable object specifiying the current color table.
-     * @return {@link quicktime.QTException}
-     * @see quicktime.std.movies.Movie#getCTable
+     * @throws quicktime.QTException
+     * @see quicktime.std.movies.Movie#getColorTable
      */
-    public static ColorTable fromMovie(Movie paramMovie) throws QTException {
+    public static ColorTable fromMovie(Movie m) throws QTException {
         int[] arrayOfInt = new int[1];
-        int i = GetMovieColorTable(QTObject.ID(paramMovie), arrayOfInt);
+        int i = GetMovieColorTable(QTObject.ID(m), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0] == -1 ? null : new ColorTable(arrayOfInt[0], false);
     }
@@ -83,7 +64,7 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
      * PixMap object will be maintained by the ColorTable object to prevent the
      * PixMap from being garbage collected before the ColorTable.
      * @return a ColorTable object
-     * @see quicktime.std.qd.PixMap
+     * @see "quicktime.std.qd.PixMap"
      */
     public static ColorTable fromPixMap(PixMap paramPixMap) {
         return new ColorTable(getIntFromHandle(QTObject.ID(paramPixMap), 42), paramPixMap, false);
@@ -91,10 +72,10 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
 
     /**
      * Gets the current color table or null to clear the current color table for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the current color table or null if no color table being used.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.qtcomponents.ImageCompressionDialog#getInfoColorTable()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.qtcomponents.ImageCompressionDialog#getInfoColorTable()
      */
     public static ColorTable fromCompressionDialog(ImageCompressionDialog paramImageCompressionDialog) throws QTException {
         int[] arrayOfInt = { 0 };

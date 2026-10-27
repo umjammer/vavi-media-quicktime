@@ -23,12 +23,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SndHandle.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SndHandle.class));
             }
         }.establish();
     }
@@ -53,7 +48,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * Construct a sound resource for containing sampled sound that can be used to record and play sound.
      * You must append the actual sample data to the created SndHandle before it can be used to
      * record or play.
-     * QuickTime::SetupSndHeader
+     * @see "QuickTime::SetupSndHeader"
      * @param numChannels the number of channels for the sound
      * @param sampleRate the rate at which the sound was recorded
      * @param sampleSize The sample size for the original sound (that is, bits per sample).
@@ -67,7 +62,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * Construct a sound resource for containing sampled sound that can be used to record and play sound.
      * You must append the actual sample data to the created SndHandle before it can be used to
      * record or play.
-     * QuickTime::SetupSndHeader
+     * @see "QuickTime::SetupSndHeader"
      * @param numChannels the number of channels for the sound
      * @param sampleRate the rate at which the sound was recorded
      * @param sampleSize The sample size for the original sound (that is, bits per sample).
@@ -82,14 +77,14 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
 
     /**
      * You can use the SetupSndHeader function to construct a sound resource containing sampled sound that can be passed to the SndPlay function.
-     * QuickTime::SetupSndHeader
+     * @see "QuickTime::SetupSndHeader"
      * @param numChannels the number of channels for the sound
      * @param sampleRate the rate at which the sound was recorded
      * @param sampleSize The sample size for the original sound (that is, bits per sample).
      * @param compressionType The compression type for the sound ('NONE', 'MAC3', 'MAC6', or other third-party types).
      * @param numBytes The number of bytes of audio data that are to be stored in the handle. (This value is not necessarily the same as the number of samples in the sound.)
      * @return the size (in bytes) of the 'snd ' resource header that is created
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public int setupHeader(int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4) throws SoundException {
         return setupHeader(paramInt1, paramFloat, paramInt2, paramInt3, 60, paramInt4);
@@ -97,7 +92,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
 
     /**
      * You can use the SetupSndHeader function to construct a sound resource containing sampled sound that can be passed to the SndPlay function.
-     * QuickTime::SetupSndHeader
+     * @see "QuickTime::SetupSndHeader"
      * @param numChannels the number of channels for the sound
      * @param sampleRate the rate at which the sound was recorded
      * @param sampleSize The sample size for the original sound (that is, bits per sample).
@@ -105,7 +100,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param baseNote The base note for the sound, expressed as a MIDI note value.
      * @param numBytes The number of bytes of audio data that are to be stored in the handle. (This value is not necessarily the same as the number of samples in the sound.)
      * @return the size (in bytes) of the 'snd ' resource header that is created
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public int setupHeader(int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4, int paramInt5) throws SoundException {
         short[] arrayOfShort = { 0 };
@@ -115,9 +110,9 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
 
     /**
      * The number of bytes from the beginning of the sound resource specified by the sndHdl parameter to the sound header that is contained within.
-     * QuickTime::GetSoundHeaderOffset
+     * @see "QuickTime::GetSoundHeaderOffset"
      * @return the offset to the sound header
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public final int getSoundHeaderOffset() throws SoundException {
         int[] arrayOfInt = { 0 };
@@ -130,7 +125,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * The SndHandle will be locked by this call and should remain locked for the
      * life of the returned data object.
      * @return a QTPointer to the Sound data
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTPointerRef getSoundData() throws QTException {
         if (this.buf != null) {
@@ -152,7 +147,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * If a pre-existing buffer has been appended this will be removed and
      * replace with the incoming buffer. This will copy the incoming buffer.
      * @param buffer the buffer that contains the actual sound data.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void appendSoundData(QTPointerRef paramQTPointerRef) throws QTException {
         int[] arrayOfInt1 = { 0 };
@@ -173,7 +168,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * Appends the specified number of bytes to the SoundHandle after
      * the header. The call resizes the SndHandle to the sound header offset + buffer size.
      * @param bufferSize the number of bytes to append for the sound buffer
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void appendSoundBuffer(int paramInt) throws QTException {
         int[] arrayOfInt1 = { 0 };
@@ -189,7 +184,7 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * Sets the internal buffer Pointer of this sound header to the incomding buffer.
      * This does NOT copy memory and is therefore the most efficient means of storing the data.
      * @param buffer the buffer that contains the actual sound data.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void setSoundData(QTPointerRef paramQTPointerRef) throws QTException {
         int i = getSoundHeaderOffset();
@@ -204,9 +199,9 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
 
     /**
      * You use this function to retrieve information about a SndHandle.
-     * QuickTime::ParseSndHeader
+     * @see "QuickTime::ParseSndHeader"
      * @return a SndInfo object
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public final SndInfo parseSndHeader() throws SoundException {
         int[] arrayOfInt1 = { 0 };

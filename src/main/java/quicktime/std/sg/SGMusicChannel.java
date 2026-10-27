@@ -13,7 +13,7 @@ import quicktime.std.music.ToneDescription;
 
 /**
  * Assists in Creating a MIDI Channel.
- * QuickTime Components::SGChannel
+ * @see "QuickTime Components::SGChannel"
  */
 public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
 
@@ -23,12 +23,7 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SGMusicChannel.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGMusicChannel.class));
             }
         }.establish();
     }
@@ -41,22 +36,23 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
      * Creates a sequence grabber music channel and assigns a channel component to the channel.
      * The channel component is responsible for providing music data to the
      * sequence grabber component.
-     * QuickTime::SGNewChannel
+     * @see "QuickTime::SGNewChannel"
      * @param owner specifies the sequence grabber component the channel is attached to.
      */
     public SGMusicChannel(SequenceGrabber paramSequenceGrabber) throws StdQTException {
         super(paramSequenceGrabber, 1836413801);
     }
 
+    @Override
     final SampleDescription makeDescription() throws QTException {
         return new MusicDescription();
     }
 
     /**
      * This method allows you to retrieve a music sample description from the SGChannel.
-     * QuickTime::SGGetChannelSampleDescription()
+     * @see "QuickTime::SGGetChannelSampleDescription()"
      * @return a MusicDescription object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public final MusicDescription getMusicDescription() throws QTException {
         return (MusicDescription) getSampleDescription();
@@ -64,7 +60,7 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Gets the Instrument associates with a particular channel.
-     * QuickTime::SGGetInstrument
+     * @see "QuickTime::SGGetInstrument"
      */
     public ToneDescription getInstrument() throws StdQTException {
         ToneDescription localToneDescription = new ToneDescription();
@@ -75,9 +71,9 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Sets the Instrument associates with a particular channel.
-     * QuickTime::SGSetInstrument
+     * @see "QuickTime::SGSetInstrument"
      * @param td specifies the instrument to set the channel to.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInstrument(ToneDescription paramToneDescription) throws StdQTException {
         int i = SGSetInstrument(_ID(), paramToneDescription.getBytes());

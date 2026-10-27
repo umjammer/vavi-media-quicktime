@@ -3,7 +3,7 @@ package quicktime.app.display;
 import quicktime.QTException;
 
 /**
- * Deprecated.
+ * @deprecated
  * An interface for dealing with display objects which are members of
  * QTDisplaySpaces. The use of this interface shields both the group and
  * its members from a required knowledge of layer characteristics. Thus
@@ -12,31 +12,31 @@ import quicktime.QTException;
  * a helper object that is not the member itself as the object that will
  * be able to set and get the layer information for a member
  */
-public abstract interface Layerable {
+public interface Layerable {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This is the Back most layer value for a group member
      */
-    public static final int kBackMostLayer = 32767;
+    int kBackMostLayer = 32767;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Return the current layer of the Layerable object.
      * @return the layer
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract int getLayer() throws QTException;
+    int getLayer() throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the new layer of the Layerable object.
      * @param layer the new layer
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void setLayer(int paramInt) throws QTException;
+    void setLayer(int paramInt) throws QTException;
 }
 

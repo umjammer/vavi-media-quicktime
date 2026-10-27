@@ -66,12 +66,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(Movie.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Movie.class));
             }
         }.establish();
     }
@@ -83,9 +78,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * The moviesTask method services all of the currently active movies.
      * You should call moviesTask as often as possible.
-     * QuickTime::MoviesTask()
+     * @see "QuickTime::MoviesTask()"
      * @param maxMilliSecToUse Determines the maximum number of milliseconds that MoviesTask can work before returning.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static void taskAll(int paramInt) throws QTException {
         synchronized (QTNative.globalsLock) {
@@ -104,12 +99,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * Creates a Movie object and the file as specified by the QTFile.
      * This call will not open the created movie file.
-     * QuickTime::CreateMovieFile()
+     * @see "QuickTime::CreateMovieFile()"
      * @param pathName specifies the complete pathName of the file that is to be created.
      * @param fCreator Specifies the creator of the file.
      * @param flags Specifies the behaviour when creating the file.
      * @return QTFile object that specifies the newly created movie file.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie createMovieFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
         if ((paramInt2 & 0x80000000) != 0) {
@@ -140,9 +135,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * Determines a reference to the movie that contains the data collected during a record operation.
      * You can use this movie identifier with Movie Toolbox functions.
-     * QuickTime::SGGetMovie
+     * @see "QuickTime::SGGetMovie"
      * @return The Movie or null if there is no movie.
-     * @see {@link quicktime.std.sg.SequenceGrabber#getMovie()}
+     * @see quicktime.std.sg.SequenceGrabber#getMovie()
      */
     public static Movie fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) {
         int i = SGGetMovie(QTObject.ID(paramSequenceGrabber));
@@ -151,9 +146,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to create a movie from the contents of the scrap.
-     * QuickTime::NewMovieFromScrap()
+     * @see "QuickTime::NewMovieFromScrap()"
      * @param newMovieFlags Controls the operation of this method.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie fromScrap(int paramInt) throws QTException {
         int i = 0;
@@ -169,9 +164,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (i == 0) {
             throw new StdQTException(63526);
         }
-        Object x = new Movie(i, null);
-        ((Movie) x).init();
-        return (Movie) x;
+        Movie x = new Movie(i, null);
+        x.init();
+        return x;
     }
 
     /**
@@ -180,9 +175,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * opened file represented by the OpenMovieFile object.
      * Once you have opened a movie file and loaded a movie, your application can
      * proceed to work with the movie.
-     * QuickTime::NewMovieFromFile()
+     * @see "QuickTime::NewMovieFromFile()"
      * @param fileIn identifies the open movie file from which the movie is to be loaded.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie fromFile(OpenMovieFile paramOpenMovieFile) throws QTException {
         return fromFile(paramOpenMovieFile, 1, null);
@@ -194,11 +189,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * opened file represented by the OpenMovieFile object.
      * Once you have opened a movie file and loaded a movie, your application can
      * proceed to work with the movie.
-     * QuickTime::NewMovieFromFile()
+     * @see "QuickTime::NewMovieFromFile()"
      * @param fileIn identifies the open movie file stream from which the movie is to be loaded.
      * @param flags controls the operation of this method.
      * @param info a MovieInfo object to receive state information about the movie.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie fromFile(OpenMovieFile paramOpenMovieFile, int paramInt, MovieInfo paramMovieInfo) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -222,17 +217,17 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (paramMovieInfo != null) {
             paramMovieInfo.setMovieInfo(arrayOfShort[0], arrayOfByte2[0] == 1, new String(arrayOfByte1, 1, arrayOfByte1.length - 1));
         }
-        Object x = new Movie(arrayOfInt[0], null);
-        ((Movie) x).init();
-        return (Movie) x;
+        Movie x = new Movie(arrayOfInt[0], null);
+        x.init();
+        return x;
     }
 
     /**
      * This method creates a movie in memory from a movie resource or
      * a handle you obtained from the PutMovieIntoHandle function.
-     * QuickTime::NewMovieFromHandle()
+     * @see "QuickTime::NewMovieFromHandle()"
      * @param hand contains a handle to the movie resource from which the movie is to be loaded.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie fromHandle(QTHandle paramQTHandle) throws QTException {
         return fromHandle(paramQTHandle, 1, null);
@@ -241,11 +236,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method creates a movie in memory from a movie resource or
      * a handle you obtained from the PutMovieIntoHandle function.
-     * QuickTime::NewMovieFromHandle()
+     * @see "QuickTime::NewMovieFromHandle()"
      * @param hand contains a handle to the movie resource from which the movie is to be loaded.
      * @param flags controls the operation of this method.
      * @param info a MovieInfo object to receive state information about the movie.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie fromHandle(QTHandle paramQTHandle, int paramInt, MovieInfo paramMovieInfo) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -268,23 +263,23 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (paramMovieInfo != null) {
             paramMovieInfo.setMovieInfo(0, arrayOfByte[0] == 1, null);
         }
-        Object x = new Movie(arrayOfInt[0], null);
-        ((Movie) x).init();
-        ((Movie) x).dataRef = paramQTHandle;
-        return (Movie) x;
+        Movie x = new Movie(arrayOfInt[0], null);
+        x.init();
+        x.dataRef = paramQTHandle;
+        return x;
     }
 
     /**
      * This method enables you to retrieve a movie
      * that is stored anywhere in the data fork of a specified file.
-     * QuickTime::NewMovieFromDataFork()
+     * @see "QuickTime::NewMovieFromDataFork()"
      * @param fileIn The open movie file stream.
      * @param fileOffset Specifies the starting file offset of the atom in the data
      *                     fork of the file specified by the fRefNum parameter.
      * @param flags controls the operation of this method.
      * @param info a MovieInfo object to receive state information about the movie.
-     * @param {@link quicktime.QTException}
-     * @param {@link quicktime.qd.QDException}
+     * @throws quicktime.QTException
+     * @throws quicktime.qd.QDException
      */
     public static Movie fromDataFork(OpenFile paramOpenFile, int paramInt1, int paramInt2, MovieInfo paramMovieInfo) throws QTException, QDException {
         int[] arrayOfInt = { 0 };
@@ -307,20 +302,20 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (paramMovieInfo != null) {
             paramMovieInfo.setMovieInfo(0, arrayOfByte[0] == 1, "");
         }
-        Object x = new Movie(arrayOfInt[0], null);
-        ((Movie) x).init();
-        return (Movie) x;
+        Movie x = new Movie(arrayOfInt[0], null);
+        x.init();
+        return x;
     }
 
     /**
      * This method enables you to retrieve a movie from any data reference.
-     * QuickTime::NewMovieFromDataRef()
+     * @see "QuickTime::NewMovieFromDataRef()"
      * @param defaultDataRef a DataRef object specifying the data reference this method will load the movie from.
      * @param flags Controls the operation of this method.
      *
      *  NOTE: it is a good idea to use the flag newMovieAsyncOK (defined in StdQTConstants4) to prevent the VM from
      *  blocking (in the case of no network connection, or a bad URL)
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static Movie fromDataRef(DataRef paramDataRef, int paramInt) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -338,10 +333,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (arrayOfInt[0] == 0)
             throw new StdQTException(63524);
         StdQTException.checkError(i);
-        Object x = new Movie(arrayOfInt[0], null);
-        ((Movie) x).init();
-        ((Movie) x).dataRef = paramDataRef;
-        return (Movie) x;
+        Movie x = new Movie(arrayOfInt[0], null);
+        x.init();
+        x.dataRef = paramDataRef;
+        return x;
     }
 
     Movie(int paramInt, Object paramObject) {
@@ -353,7 +348,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * initializes the data structures for the new movie, which contains no tracks.
      * It supplies default settings of the movie being inactive and will select enabled tracks from
      * track groups.
-     * QuickTime::NewMovie()
+     * @see "QuickTime::NewMovie()"
      */
     public Movie() throws QTException {
         this(1);
@@ -364,7 +359,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * initializes the data structures for the new movie, which contains no tracks.
      * It supplies default settings of the movie being active and will select enabled tracks from
      * track groups.
-     * QuickTime::NewMovie()
+     * @see "QuickTime::NewMovie()"
      * @param flags flags to control settings when creating the movie.
      */
     public Movie(int paramInt) throws QTException {
@@ -412,14 +407,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method adds a movie resource to a specified resource file.
-     * QuickTime::AddMovieResource()
+     * @see "QuickTime::AddMovieResource()"
      * @param fileOut Identifies the open writable movie file stream to which the resource is to be added.
      * @param resID Contains a pointer to a field that contains the resource ID number for the new resource.
      *  If the field referred to by the resId parameter is set to 0, the Movie Toolbox assigns a
      *  unique resource ID number to the new resource.
      * @param resourceName a String object that contains the name of the movie resource.
      *  If you set the resourceName parameter to null, the toolbox creates an unnamed resource.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int addResource(OpenMovieFile paramOpenMovieFile, int paramInt, String paramString) throws StdQTException {
         short[] arrayOfShort = { (short) paramInt };
@@ -431,12 +426,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method replaces the contents of a movie resource in a specified movie file.
-     * QuickTime::UpdateMovieResource()
+     * @see "QuickTime::UpdateMovieResource()"
      * @param fileOut Specifies the open writable movie file stream for the movie to be updated.
      * @param resID Specifies the resource number for the movie.
      * @param resourceName Points to a new name for the resource. If you do not want to change the resource's name,
      *  set this parameter to null.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void updateResource(OpenMovieFile paramOpenMovieFile, int paramInt, String paramString) throws StdQTException {
         byte[] arrayOfByte = paramString != null ? QTUtils.String2PString(paramString, 255) : null;
@@ -446,10 +441,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method removes a movie resource from a specified movie file.
-     * QuickTime::RemoveMovieResource()
+     * @see "QuickTime::RemoveMovieResource()"
      * @param fileOut Specifies the open writable movie file stream for the movie to be removed.
      * @param resID Specifies the resource number for the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void removeResource(OpenMovieFile paramOpenMovieFile, int paramInt) throws StdQTException {
         int i = RemoveMovieResource((short) QTObject.ID(paramOpenMovieFile), (short) paramInt);
@@ -459,9 +454,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * The moviesTask method services this movie.
      * You should call moviesTask as often as possible.
-     * QuickTime::MoviesTask()
+     * @see "QuickTime::MoviesTask()"
      * @param maxMilliSecToUse Determines the maximum number of milliseconds that MoviesTask can work before returning.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void task(int paramInt) throws QTException {
         synchronized (QTNative.globalsLock) {
@@ -477,11 +472,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This allows you to assign a drawing-complete method to a movie.
      * The Movie Toolbox calls this function based upon guidelines you establish when you assign the method to the movie.
-     * QuickTime::SetMovieDrawingCompleteProc()
+     * @see "QuickTime::SetMovieDrawingCompleteProc()"
      * @param flags flags that control under what conditions the proc is called
      * @param proc the object that will be called when drawing is complete
-     * @param {@link quicktime.std.StdQTException}
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @throws quicktime.std.StdQTException
+     * @see quicktime.std.clocks.QTCallBack
      */
     public void setDrawingCompleteProc(int paramInt, MovieDrawingComplete paramMovieDrawingComplete) throws StdQTException {
         if (paramMovieDrawingComplete == null) {
@@ -497,7 +492,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This allows you to remove a previously assigned drawing-complete method to a movie.
-     * QuickTime::SetMovieDrawingCompleteProc()
+     * @see "QuickTime::SetMovieDrawingCompleteProc()"
      */
     public void removeDrawingCompleteProc() throws StdQTException {
         SetMovieDrawingCompleteProc(_ID(), 0, 0, 0);
@@ -509,11 +504,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to prepare a portion of a movie for playback.
-     * QuickTime::PrerollMovie()
+     * @see "QuickTime::PrerollMovie()"
      * @param time Contains the starting time of the movie segment to play.
      * @param rate Specifies the rate at which you anticipate playing the movie.
      *  Positive values indicate forward rates and negative values indicate reverse rates.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void preroll(int paramInt, float paramFloat) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
@@ -529,11 +524,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows your application to prepare a portion of a movie for playback.
      * This call is used when using a remote movie to establish network connections.
-     * QuickTime::PrePrerollMovie()
+     * @see "QuickTime::PrePrerollMovie()"
      * @param time Contains the starting time of the movie segment to play.
      * @param rate Specifies the rate at which you anticipate playing the movie.
      *  Positive values indicate forward rates and negative values indicate reverse rates.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void prePreroll(int paramInt, float paramFloat) throws StdQTException {
         this.preUPP = null;
@@ -543,12 +538,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows your application to prepare a portion of a movie for playback.
      * This call is used when using a remote movie to establish network connections.
-     * QuickTime::PrePrerollMovie()
+     * @see "QuickTime::PrePrerollMovie()"
      * @param time Contains the starting time of the movie segment to play.
      * @param rate Specifies the rate at which you anticipate playing the movie.
      *  Positive values indicate forward rates and negative values indicate reverse rates.
      * @param proc the MoviePrePreroll object that will be invoked by this call. This can be null.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void prePreroll(int paramInt, float paramFloat, MoviePrePreroll paramMoviePrePreroll) throws StdQTException {
         if (QTSession.getQTMajorVersion() == 3) {
@@ -557,10 +552,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             return;
         }
         if (paramMoviePrePreroll == null) {
-            paramMoviePrePreroll = new MoviePrePreroll() {
-
-                public void execute(Movie paramAnonymousMovie, int paramAnonymousInt) {
-                }
+            paramMoviePrePreroll = (paramAnonymousMovie, paramAnonymousInt) -> {
             };
         }
         this.preUPP = new MoviesDispatcher(this, paramMoviePrePreroll);
@@ -575,7 +567,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This call is used when using a remote movie to establish network connections.
      * This version of the pre-preroll is Asynchronous and the Supplied MoviePrePreroll proc will
      * be called back when the movie is pre-preRolled
-     * QuickTime::AbortPrePrerollMovie()
+     * @see "QuickTime::AbortPrePrerollMovie()"
      */
     public void abortPrePreroll(int paramInt) throws StdQTException {
         if (QTSession.getQTMajorVersion() == 3)
@@ -589,11 +581,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method loads a movie's data into memory. If the movie does not fit, the method throws an error.
-     * QuickTime::LoadMovieIntoRam()
+     * @see "QuickTime::LoadMovieIntoRam()"
      * @param time Allows you to specify a portion of the movie to load. The time parameter contains the starting time of the movie segment to load.
      * @param duration Allows you to specify a portion of the movie to load. The time parameter contains the starting time of the movie segment to load. The duration parameter specifies the length of the segment to load.
      * @param flags Gives you explicit control over what is loaded into memory and how long to keep it around.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void loadIntoRam(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
         int i = LoadMovieIntoRam(_ID(), paramInt1, paramInt2, paramInt3);
@@ -602,9 +594,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to activate and deactivate a movie.
-     * QuickTime::SetMovieActive()
+     * @see "QuickTime::SetMovieActive()"
      * @param active Activates or deactivates the movie. Set this parameter to true to activate the movie; set this parameter to false to deactivate the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setActive(boolean paramBoolean) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
@@ -621,7 +613,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a boolean value. The method returns true if the movie is active and false if the movie is not active.
-     * QuickTime::GetMovieActive()
+     * @see "QuickTime::GetMovieActive()"
      */
     public boolean getActive() throws StdQTException {
         int i = GetMovieActive(_ID());
@@ -634,7 +626,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * which is where the movie last stopped playing. Before playing the movie,
      * the Movie Toolbox makes the movie active, prerolls the movie, and sets the movie to
      * its preferred playback rate.
-     * QuickTime::StartMovie()
+     * @see "QuickTime::StartMovie()"
      */
     public void start() throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -645,7 +637,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method stops the playback of a movie.
-     * QuickTime::StopMovie()
+     * @see "QuickTime::StopMovie()"
      */
     public void stop() throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -656,7 +648,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method repositions a movie to play from its start.
-     * QuickTime::GoToBeginningOfMovie()
+     * @see "QuickTime::GoToBeginningOfMovie()"
      */
     public void goToBeginning() throws StdQTException {
         GoToBeginningOfMovie(_ID());
@@ -665,7 +657,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method repositions a movie to play from its end.
-     * QuickTime::GoToEndOfMovie()
+     * @see "QuickTime::GoToEndOfMovie()"
      */
     public void goToEnd() throws StdQTException {
         GoToEndOfMovie(_ID());
@@ -674,7 +666,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to determine if a particular movie has completely finished playing.
-     * QuickTime::IsMovieDone()
+     * @see "QuickTime::IsMovieDone()"
      */
     public boolean isDone() throws StdQTException {
         int i = IsMovieDone(_ID());
@@ -685,7 +677,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows your application to determine whether a movie is in preview mode.
      * If a movie is in preview mode, only the movie's preview can be displayed.
-     * QuickTime::GetMoviePreviewMode()
+     * @see "QuickTime::GetMoviePreviewMode()"
      */
     public boolean getPreviewMode() throws StdQTException {
         int i = GetMoviePreviewMode(_ID());
@@ -696,7 +688,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows your application to place a movie into and out of preview mode.
      * When a movie is in preview mode, only those tracks identified as preview tracks are serviced.
-     * QuickTime::SetMoviePreviewMode()
+     * @see "QuickTime::SetMoviePreviewMode()"
      */
     public void setPreviewMode(boolean paramBoolean) throws StdQTException {
         byte b = (byte) (paramBoolean ? 1 : 0);
@@ -707,7 +699,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * You can use showPoster method to display a movie's poster. The movie poster
      * uses the movie's matrix and display clipping characteristics.
-     * QuickTime::ShowMoviePoster()
+     * @see "QuickTime::ShowMoviePoster()"
      */
     public void showPoster() throws StdQTException {
         ShowMoviePoster(_ID());
@@ -716,7 +708,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method plays a movie's preview.
-     * QuickTime::PlayMoviePreview()
+     * @see "QuickTime::PlayMoviePreview()"
      */
     public void playPreview() throws StdQTException {
         PlayMoviePreview(_ID(), 0, 0);
@@ -725,9 +717,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Your application can determine a movie's graphics world by calling the getGWorld method.
-     * QuickTime::GetMovieGWorld()
+     * @see "QuickTime::GetMovieGWorld()"
      * @return The current destination graphics port
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDGraphics getGWorld() throws StdQTException {
         return QDGraphics.fromMovie(this);
@@ -736,10 +728,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * The setGWorld method allows your application to establish a movie's display
      * coordinate system by setting the graphics world for displaying a movie.
-     * QuickTime::SetMovieGWorld()
+     * @see "QuickTime::SetMovieGWorld()"
      * @param port the new graphics port or null to use current port
      * @param gdh the graphics device or null to use the current device
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setGWorld(QDGraphics paramQDGraphics, GDevice paramGDevice) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -750,7 +742,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * No QT Documentation.
-     * QuickTime::GetMovieNaturalBoundsRect()
+     * @see "QuickTime::GetMovieNaturalBoundsRect()"
      */
     public QDRect getNaturalBoundsRect() throws StdQTException {
         QDRect localQDRect = new QDRect();
@@ -761,7 +753,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * No QT Documentation.
-     * QuickTime::GetNextTrackForCompositing()
+     * @see "QuickTime::GetNextTrackForCompositing()"
      */
     public Track getNextTrackForCompositing(Track paramTrack) throws QTException {
         int i = GetNextTrackForCompositing(_ID(), QTObject.ID(paramTrack));
@@ -771,7 +763,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * No QT Documentation.
-     * QuickTime::GetPrevTrackForCompositing()
+     * @see "QuickTime::GetPrevTrackForCompositing()"
      */
     public Track getPrevTrackForCompositing(Track paramTrack) throws QTException {
         int i = GetPrevTrackForCompositing(_ID(), QTObject.ID(paramTrack));
@@ -783,10 +775,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method creates a picture from the specified movie at the specified time.
      * This function uses only those movie tracks that are currently enabled and would therefore
      * be used in playback. Your application may call this function even if the movie is inactive.
-     * QuickTime::GetMoviePict()
+     * @see "QuickTime::GetMoviePict()"
      * @param time contains the time from which the image is taken.
      * @return a Pict
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Pict getPict(int paramInt) throws QTException {
         return Pict.fromMovie(this, paramInt);
@@ -795,9 +787,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method creates a picture that contains a movie's poster.
      * returns a PicHandle object for the image.
-     * QuickTime::GetMoviePosterPict()
+     * @see "QuickTime::GetMoviePosterPict()"
      * @return a Pict
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Pict getPosterPict() throws QTException {
         return Pict.fromMovie(this);
@@ -806,7 +798,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows your application to ensure that the Movie Toolbox properly
      * displays your movie after it has been uncovered.
-     * QuickTime::UpdateMovie()
+     * @see "QuickTime::UpdateMovie()"
      */
     public void update() throws StdQTException {
         int i = UpdateMovie(_ID());
@@ -816,9 +808,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method invalidates part of the movie specified by the invalidRgn. The invalidated
      * part will be drawn next time MoviesTask is called.
-     * QuickTime::InvalidateMovieRegion()
+     * @see "QuickTime::InvalidateMovieRegion()"
      * @param invalidRgn a Region object to specify the invalid part of the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void invalidateRegion(Region paramRegion) throws StdQTException {
         int i = InvalidateMovieRegion(_ID(), QTObject.ID(paramRegion));
@@ -831,9 +823,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * graphics world and defines the movie's boundaries over the entire duration of the movie.
      * The movie's boundary rectangle defines the size and shape of the movie before the
      * Movie Toolbox applies the display clipping region.
-     * QuickTime::GetMovieBox()
+     * @see "QuickTime::GetMovieBox()"
      * @return The movie's boundary rectangle
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDRect getBounds() throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
@@ -844,10 +836,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
                 return localQDRect;
             }
         }
-        Object x = new QDRect();
-        GetMovieBox(_ID(), ((QDRect) x).getRect());
+        QDRect x = new QDRect();
+        GetMovieBox(_ID(), x.getRect());
         StdQTException.checkError(GetMoviesError());
-        return (QDRect) x;
+        return x;
     }
 
     /**
@@ -856,9 +848,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * graphics world and defines the movie's boundaries over the entire duration of the movie.
      * The movie's boundary rectangle defines the size and shape of the movie before the
      * Movie Toolbox applies the display clipping region.
-     * QuickTime::GetMovieBox()
+     * @see "QuickTime::GetMovieBox()"
      * @return The movie's boundary rectangle
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDRect getBox() throws StdQTException {
         return getBounds();
@@ -868,9 +860,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method sets a movie's boundary rectangle, or movie box,
      * which is a rectangle that encompasses the spatial representation of all of
      * the movie's enabled tracks. The movie box is in the display coordinate system.
-     * QuickTime::SetMovieBox()
+     * @see "QuickTime::SetMovieBox()"
      * @param boxRect the coordinates of the new boundary rectangle.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setBounds(QDRect paramQDRect) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
@@ -887,9 +879,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method sets a movie's boundary rectangle, or movie box,
      * which is a rectangle that encompasses the spatial representation of all of
      * the movie's enabled tracks. The movie box is in the display coordinate system.
-     * QuickTime::SetMovieBox()
+     * @see "QuickTime::SetMovieBox()"
      * @param boxRect the coordinates of the new boundary rectangle.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setBox(QDRect paramQDRect) throws StdQTException {
         setBounds(paramQDRect);
@@ -897,9 +889,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine a movie's current display clipping region.
-     * QuickTime::GetMovieDisplayClipRgn()
+     * @see "QuickTime::GetMovieDisplayClipRgn()"
      * @return a Region object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getDisplayClipRgn() throws QTException {
         return Region.fromMovieDisplayClip(this);
@@ -907,9 +899,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to establish a movie's current display clipping region.
-     * QuickTime::SetMovieDisplayClipRgn()
+     * @see "QuickTime::SetMovieDisplayClipRgn()"
      * @param theClip a Region object.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setDisplayClipRgn(Region paramRegion) throws StdQTException {
         SetMovieDisplayClipRgn(_ID(), QTObject.ID(paramRegion));
@@ -918,9 +910,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine a movie's clipping region.
-     * QuickTime::GetMovieClipRgn()
+     * @see "QuickTime::GetMovieClipRgn()"
      * @return a Region object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getClipRgn() throws QTException {
         return Region.fromMovieClip(this);
@@ -928,9 +920,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to establish a movie's clipping region.
-     * QuickTime::SetMovieClipRgn()
+     * @see "QuickTime::SetMovieClipRgn()"
      * @param theClip a Region object specifying the new clip region.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setClipRgn(Region paramRegion) throws StdQTException {
         SetMovieClipRgn(_ID(), QTObject.ID(paramRegion));
@@ -943,9 +935,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * after the track matrix, track clip, movie matrix, and movie clip have
      * been applied to all of the movie's tracks. This region is in the display
      * coordinate system of the movie's graphics world.
-     * QuickTime::GetMovieDisplayBoundsRgn()
+     * @see "QuickTime::GetMovieDisplayBoundsRgn()"
      * @return a Region object specifying the display boundary region.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getDisplayBoundsRgn() throws QTException {
         return Region.fromMovieDisplayBounds(this);
@@ -957,9 +949,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * The movie boundary region encloses all of a movie's tracks after the union of
      * the track clip and the track matrix has been applied to all the movie's
      * tracks (but not to the movie itself).
-     * QuickTime::GetMovieBoundsRgn()
+     * @see "QuickTime::GetMovieBoundsRgn()"
      * @return a Region object specifying the movie boundary region.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getBoundsRgn() throws QTException {
         return Region.fromMovieBounds(this);
@@ -968,9 +960,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method creates a new movie resource for you. You can use this handle to store a QuickTime movie
      * in a specialized storage format.
-     * QuickTime::PutMovieIntoHandle()
+     * @see "QuickTime::PutMovieIntoHandle()"
      * @param intoThisHandle Specifies the handle where the movie will be placed into.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void putIntoHandle(QTHandle paramQTHandle) throws StdQTException {
         int i = PutMovieIntoHandle(_ID(), QTObject.ID(paramQTHandle));
@@ -979,11 +971,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to store a movie in the data fork of a given file.
-     * QuickTime::PutMovieIntoDataFork()
+     * @see "QuickTime::PutMovieIntoDataFork()"
      * @param fileOut Specifies the open writable movie file stream where the movie will be placed into.
      * @param offset Indicates where the movie should be written.
      * @param maxSize Indicates the largest number of bytes that may be written.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void putIntoDataFork(OpenMovieFile paramOpenMovieFile, int paramInt1, int paramInt2) throws StdQTException {
         short s = (short) QTObject.ID(paramOpenMovieFile);
@@ -993,9 +985,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a long integer that contains the movie's creation date and time information.
-     * QuickTime::GetMovieCreationTime()
+     * @see "QuickTime::GetMovieCreationTime()"
      * @return the creation time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getCreationTime() throws StdQTException {
         int i = GetMovieCreationTime(_ID());
@@ -1005,9 +997,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a long integer that contains the movie's creation date and time information.
-     * QuickTime::GetMovieModificationTime()
+     * @see "QuickTime::GetMovieModificationTime()"
      * @return the modification time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getModificationTime() throws StdQTException {
         int i = GetMovieModificationTime(_ID());
@@ -1017,9 +1009,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns the time scale of a movie.
-     * QuickTime::GetMovieTimeScale()
+     * @see "QuickTime::GetMovieTimeScale()"
      * @return the time scale.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getTimeScale() throws StdQTException {
         int i = GetMovieTimeScale(_ID());
@@ -1029,9 +1021,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method establishes a movie's time scale.
-     * QuickTime::SetMovieTimeScale()
+     * @see "QuickTime::SetMovieTimeScale()"
      * @param timeScale Specifies the movie's new time scale.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setTimeScale(int paramInt) throws StdQTException {
         SetMovieTimeScale(_ID(), paramInt);
@@ -1040,7 +1032,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns the duration of a movie.
-     * QuickTime::GetMovieDuration()
+     * @see "QuickTime::GetMovieDuration()"
      * return the duration.
      */
     public int getDuration() throws StdQTException {
@@ -1051,9 +1043,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a movie's playback rate.
-     * QuickTime::GetMovieRate()
+     * @see "QuickTime::GetMovieRate()"
      * @return the playback rate.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getRate() throws StdQTException {
         int i = GetMovieRate(_ID());
@@ -1063,9 +1055,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method sets a movie's playback rate.
-     * QuickTime::SetMovieRate()
+     * @see "QuickTime::SetMovieRate()"
      * @param rate Specifies the rate.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setRate(float paramFloat) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
@@ -1080,9 +1072,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a movie's default playback rate.
-     * QuickTime::GetMoviePreferredRate()
+     * @see "QuickTime::GetMoviePreferredRate()"
      * @return the preferred rate.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getPreferredRate() throws StdQTException {
         int i = GetMoviePreferredRate(_ID());
@@ -1092,9 +1084,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to specify a movie's default playback rate.
-     * QuickTime::SetMoviePreferredRate()
+     * @see "QuickTime::SetMoviePreferredRate()"
      * @param rate Specifies the rate.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPreferredRate(float paramFloat) throws StdQTException {
         SetMoviePreferredRate(_ID(), QTUtils.X2Fix(paramFloat));
@@ -1103,9 +1095,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a movie's preferred volume setting.
-     * QuickTime::GetMoviePreferredVolume()
+     * @see "QuickTime::GetMoviePreferredVolume()"
      * @return the preferred volume.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getPreferredVolume() throws StdQTException {
         short s = GetMoviePreferredVolume(_ID());
@@ -1115,9 +1107,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to set a movie's preferred volume setting.
-     * QuickTime::SetMoviePreferredVolume()
+     * @see "QuickTime::SetMoviePreferredVolume()"
      * @param volume Specifies the preferred volume setting of the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPreferredVolume(float paramFloat) throws StdQTException {
         SetMoviePreferredVolume(_ID(), QTUtils.X2ShortFix(paramFloat));
@@ -1126,9 +1118,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns movie's current volume setting.
-     * QuickTime::GetMovieVolume()
+     * @see "QuickTime::GetMovieVolume()"
      * @return the volume.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getVolume() throws StdQTException {
         short s = GetMovieVolume(_ID());
@@ -1138,9 +1130,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to set a movie's current volume.
-     * QuickTime::SetMovieVolume()
+     * @see "QuickTime::SetMovieVolume()"
      * @param volume Specifies the current volume setting of the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setVolume(float paramFloat) throws StdQTException {
         SetMovieVolume(_ID(), QTUtils.X2ShortFix(paramFloat));
@@ -1150,9 +1142,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows allows your application to retrieve a movie's
      * transformation matrix.
-     * QuickTime::GetMovieMatrix()
+     * @see "QuickTime::GetMovieMatrix()"
      * @return a Matrix object.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Matrix getMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
@@ -1165,9 +1157,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method allows your application to set a movie's transformation matrix.
      * The Movie Toolbox uses a movie's matrix to map a movie from its display coordinate system to
      * its graphics world.
-     * QuickTime::SetMovieMatrix()
+     * @see "QuickTime::SetMovieMatrix()"
      * @param matrix the matrix to set
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setMatrix(Matrix paramMatrix) throws StdQTException {
         SetMovieMatrix(_ID(), paramMatrix.getBytes());
@@ -1176,9 +1168,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns the starting time and duration of the movie's preview.
-     * QuickTime::GetMoviePreviewTime()
+     * @see "QuickTime::GetMoviePreviewTime()"
      * @return a TimeInfo object.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public TimeInfo getPreviewTime() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -1190,9 +1182,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to define the starting time and duration of the movie's preview.
-     * QuickTime::SetMoviePreviewTime()
+     * @see "QuickTime::SetMoviePreviewTime()"
      * @param previewTimeInfo a TimeInfo object.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPreviewTime(TimeInfo paramTimeInfo) throws StdQTException {
         SetMoviePreviewTime(_ID(), paramTimeInfo.time, paramTimeInfo.duration);
@@ -1201,7 +1193,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to define the starting time and duration of the movie's preview.
-     * QuickTime::SetMoviePreviewTime()
+     * @see "QuickTime::SetMoviePreviewTime()"
      */
     public void setPreviewTime(int paramInt1, int paramInt2) throws StdQTException {
         SetMoviePreviewTime(_ID(), paramInt1, paramInt2);
@@ -1210,9 +1202,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns the poster's time in the movie.
-     * QuickTime::GetMoviePosterTime()
+     * @see "QuickTime::GetMoviePosterTime()"
      * @return the poster's time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getPosterTime() throws StdQTException {
         int i = GetMoviePosterTime(_ID());
@@ -1222,9 +1214,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method sets the poster time for the movie.
-     * QuickTime::SetMoviePosterTime()
+     * @see "QuickTime::SetMoviePosterTime()"
      * @param posterTime the poster time.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPosterTime(int paramInt) throws StdQTException {
         SetMoviePosterTime(_ID(), paramInt);
@@ -1233,9 +1225,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns information about a movie's current selection.
-     * QuickTime::GetMovieSelection()
+     * @see "QuickTime::GetMovieSelection()"
      * @return a TimeInfo object specifying the movie's selection.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public TimeInfo getSelection() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -1247,9 +1239,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method sets a movie's current selection.
-     * QuickTime::SetMovieSelection()
+     * @see "QuickTime::SetMovieSelection()"
      * @param selectionTimeInfo a TimeInfo object specifying the time information for movie's new selection.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setSelection(TimeInfo paramTimeInfo) throws StdQTException {
         SetMovieSelection(_ID(), paramTimeInfo.time, paramTimeInfo.duration);
@@ -1258,10 +1250,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method sets a movie's current selection.
-     * QuickTime::SetMovieSelection()
+     * @see "QuickTime::SetMovieSelection()"
      * @param selectionTime Contains a time value specifying the starting point of the current selection.
      * @param selectionDuration Contains a time value that specifies the duration of the current selection.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setSelection(int paramInt1, int paramInt2) throws StdQTException {
         SetMovieSelection(_ID(), paramInt1, paramInt2);
@@ -1270,9 +1262,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to define a movie's active segment.
-     * QuickTime::SetMovieActiveSegment()
+     * @see "QuickTime::SetMovieActiveSegment()"
      * @param activeSegmentTimeInfo a TimeInfo object specifying the time information of the active segment.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setActiveSegment(TimeInfo paramTimeInfo) throws StdQTException {
         SetMovieActiveSegment(_ID(), paramTimeInfo.time, paramTimeInfo.duration);
@@ -1281,9 +1273,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine what portion of a movie is currently active for playing.
-     * QuickTime::GetMovieActiveSegment()
+     * @see "QuickTime::GetMovieActiveSegment()"
      * @return a TimeInfo object specifying the active segment of the movie.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public TimeInfo getActiveSegment() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -1295,9 +1287,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a movie's current time.
-     * QuickTime::GetMovieTime()
+     * @see "QuickTime::GetMovieTime()"
      * @return the movie's current time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getTime() throws StdQTException {
         int i = GetMovieTime(_ID(), 0);
@@ -1307,9 +1299,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns a movie's current time as a TimeRecord object.
-     * QuickTime::GetMovieTime()
+     * @see "QuickTime::GetMovieTime()"
      * @return the movie's current time as a TimeRecord object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public TimeRecord getTRTime() throws QTException {
         TimeRecord localTimeRecord = new TimeRecord();
@@ -1320,9 +1312,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to set a movie's current time.
-     * QuickTime::SetMovieTime()
+     * @see "QuickTime::SetMovieTime()"
      * @param newtime A TimeRecord object specifying the new time for the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setTime(TimeRecord paramTimeRecord) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -1333,7 +1325,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to set a movie's time value.
-     * QuickTime::SetMovieTimeValue()
+     * @see "QuickTime::SetMovieTimeValue()"
      */
     public void setTimeValue(int paramInt) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -1344,9 +1336,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to obtain access to a movie's user data list.
-     * QuickTime::GetMovieUserData()
+     * @see "QuickTime::GetMovieUserData()"
      * @return a reference to the movie's user data list.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public UserData getUserData() throws StdQTException {
         return UserData.fromMovie(this);
@@ -1354,9 +1346,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method returns the number of tracks in a movie.
-     * QuickTime::GetMovieTrackCount()
+     * @see "QuickTime::GetMovieTrackCount()"
      * @return the number of tracks in a movie.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getTrackCount() throws StdQTException {
         int i = GetMovieTrackCount(_ID());
@@ -1366,10 +1358,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine the track identifier of a track given the track's ID value.
-     * QuickTime::GetMovieTrack()
+     * @see "QuickTime::GetMovieTrack()"
      * @param trackID ID value of the track (from Track.getID())
      * @return a Track object for the trackID.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track getTrack(int paramInt) throws QTException {
         int i = GetMovieTrack(_ID(), paramInt);
@@ -1379,10 +1371,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine the track identifier of a track given the track's index value.
-     * QuickTime::GetMovieIndTrack()
+     * @see "QuickTime::GetMovieIndTrack()"
      * @param index index value of the track in the movie (Moive.getTrackCount())
      * @return a Track object for the specified index.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track getIndTrack(int paramInt) throws QTException {
         int i = GetMovieIndTrack(_ID(), paramInt);
@@ -1392,12 +1384,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine the track identifier of a track given a track type and an index value.
-     * QuickTime::GetMovieIndTrackType()
+     * @see "QuickTime::GetMovieIndTrackType()"
      * @param index Specifies the index value of the track for this operation. This is not that same as the track's index value in the movie. Rather, this parameter is an index into the set of tracks that meet your other selection criteria.
      * @param trackType Contains either a media type or a media characteristic value.
      * @param flags Contains flags that control the search operation.
      * @return a Track object for the specified index with in the tracks with the specified track type.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track getIndTrackType(int paramInt1, int paramInt2, int paramInt3) throws QTException {
         int i = GetMovieIndTrackType(_ID(), paramInt1, paramInt2, paramInt3);
@@ -1407,9 +1399,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Removes a track from a movie.
-     * QuickTime::DisposeMovieTrack()
+     * @see "QuickTime::DisposeMovieTrack()"
      * @param track the track to remove from this movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void removeTrack(Track paramTrack) throws StdQTException {
         if (QTObject.ID(paramTrack) == 0) {
@@ -1428,9 +1420,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to enable and disable automatic track selection by the Movie Toolbox.
-     * QuickTime::SetAutoTrackAlternatesEnabled()
+     * @see "QuickTime::SetAutoTrackAlternatesEnabled()"
      * @param enable Controls automatic track selection.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setAutoTrackAlternatesEnabled(boolean paramBoolean) throws StdQTException {
         byte b = (byte) (paramBoolean ? 1 : 0);
@@ -1440,7 +1432,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to instruct the Movie Toolbox to select appropriate tracks immediately.
-     * QuickTime::SelectMovieAlternates()
+     * @see "QuickTime::SelectMovieAlternates()"
      */
     public void selectAlternates() throws StdQTException {
         SelectMovieAlternates(_ID());
@@ -1449,13 +1441,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method searches for times of interest in a movie.
-     * QuickTime::GetMovieNextInterestingTime()
+     * @see "QuickTime::GetMovieNextInterestingTime()"
      * @param interestingTimeFlags Specifies the search criteria.
      * @param mediaTypes Specifies an array of media types
      * @param time Specifies a time value that establishes the starting point for the search.
      * @param rate Contains the search direction.
      * @return a TimeInfo object specifying the interesting time.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public TimeInfo getNextInterestingTime(int paramInt1, int[] paramArrayOfInt, int paramInt2, float paramFloat) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -1471,7 +1463,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method adds an empty segment to a movie.
-     * QuickTime::InsertEmptyMovieSegment()
+     * @see "QuickTime::InsertEmptyMovieSegment()"
      */
     public void insertEmptySegment(int paramInt1, int paramInt2) throws StdQTException {
         int i = InsertEmptyMovieSegment(_ID(), paramInt1, paramInt2);
@@ -1480,12 +1472,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * The insertSegment method copies part of one movie to another.
-     * QuickTime::InsertMovieSegment()
+     * @see "QuickTime::InsertMovieSegment()"
      * @param dstMovie Specifies the destination movie for this operation.
      *  Specifies the start of the segment in the source movie.
      *  Specifies the duration of the segment in the source movie.
      *  Contains a time value specifying where the segment is to be inserted.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void insertSegment(Movie paramMovie, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
         int i = InsertMovieSegment(_ID(), QTObject.ID(paramMovie), paramInt1, paramInt2, paramInt3);
@@ -1494,10 +1486,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method removes a specified segment from a movie.
-     * QuickTime::DeleteMovieSegment()
+     * @see "QuickTime::DeleteMovieSegment()"
      * @param startTime Contains a time value specifying the starting point of the segment to be deleted.
      * @param duration Contains a time value that specifies the duration of the segment to be deleted.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void deleteSegment(int paramInt1, int paramInt2) throws StdQTException {
         int i = DeleteMovieSegment(_ID(), paramInt1, paramInt2);
@@ -1506,11 +1498,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method changes the duration of a segment of a movie and then removes the current selection from the original movie.
-     * QuickTime::ScaleMovieSegment()
+     * @see "QuickTime::ScaleMovieSegment()"
      * @param startTime Specifies the start of the segment.
      * @param oldDuration Specifies the duration of the segment in the source movie.
      * @param newDuration Specifies the new duration of the segment.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void scaleSegment(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
         int i = ScaleMovieSegment(_ID(), paramInt1, paramInt2, paramInt3);
@@ -1519,9 +1511,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method creates a new movie that contains the original movie's current selection.
-     * QuickTime::CutMovieSelection()
+     * @see "QuickTime::CutMovieSelection()"
      * @return a new Movie object that contains the original movie's current selection.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Movie cutSelection() throws QTException {
         int i = CutMovieSelection(_ID());
@@ -1531,9 +1523,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method creates a new movie that contains the original movie's current selection.
-     * QuickTime::CopyMovieSelection()
+     * @see "QuickTime::CopyMovieSelection()"
      * @return a new Movie object that contains the original movie's current selection.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Movie copySelection() throws QTException {
         int i = CopyMovieSelection(_ID());
@@ -1543,9 +1535,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method places the tracks from one movie into another movie.
-     * QuickTime::PasteMovieSelection()
+     * @see "QuickTime::PasteMovieSelection()"
      * @param srcMovie Specifies the source movie for this operation.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void pasteSelection(Movie paramMovie) throws StdQTException {
         PasteMovieSelection(_ID(), QTObject.ID(paramMovie));
@@ -1554,9 +1546,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method adds one or more tracks to a movie.
-     * QuickTime::AddMovieSelection()
+     * @see "QuickTime::AddMovieSelection()"
      * @param srcMovie Specifies the source movie for this operation.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void addSelection(Movie paramMovie) throws StdQTException {
         AddMovieSelection(_ID(), QTObject.ID(paramMovie));
@@ -1565,7 +1557,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method removes the segment of the movie that is defined by the current selection.
-     * QuickTime::ClearMovieSelection()
+     * @see "QuickTime::ClearMovieSelection()"
      */
     public void clearSelection() throws StdQTException {
         ClearMovieSelection(_ID());
@@ -1574,12 +1566,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method takes the contents of a specified handle, together with its type, and pastes it into a specified movie.
-     * QuickTime::PasteHandleIntoMovie()
+     * @see "QuickTime::PasteHandleIntoMovie()"
      * @param handle Specifies the handle to be pasted into the movie indicated by the handleType parameter.
      * @param handleType Indicates the data type of the handle specified in the h parameter.
      * @param flags Specifies a constant that further refines conditions of the paste operation.
      * @param userComp Specifies the component or an instance of the component that is to perform the conversion of the data into a QuickTime movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void pasteHandle(QTHandle paramQTHandle, int paramInt1, int paramInt2, MovieImporter paramMovieImporter) throws StdQTException {
         int i = PasteHandleIntoMovie(QTObject.ID(paramQTHandle), paramInt1, _ID(), paramInt2, QTObject.ID(paramMovieImporter));
@@ -1588,7 +1580,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method takes a movie (or a single track from within that movie) and converts it into a handle of a specified type.
-     * QuickTime::PutMovieIntoTypedHandle()
+     * @see "QuickTime::PutMovieIntoTypedHandle()"
      * @param targetTrack Specifies the track to convert.
      * @param handleType Indicates the type of the new data.
      * @param start Specifies the start time of the segment of the movie or track to be converted.
@@ -1598,7 +1590,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  want to perform the conversion. Otherwise, set this parameter to 0 for the Movie Toolbox to
      *  choose the appropriate component.
      * @return a QTHandle object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTHandle putIntoTypedHandle(Track paramTrack, int paramInt1, int paramInt2, int paramInt3, int paramInt4, MovieExporter paramMovieExporter) throws QTException {
         int i = 0;
@@ -1613,9 +1605,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * The copySettings method copies many settings from one movie to another, overwriting the destination settings in the process.
-     * QuickTime::CopyMovieSettings()
+     * @see "QuickTime::CopyMovieSettings()"
      * @param dstMovie Specifies the destination movie for this operation.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void copySettings(Movie paramMovie) throws StdQTException {
         int i = CopyMovieSettings(_ID(), QTObject.ID(paramMovie));
@@ -1625,11 +1617,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method adds an empty track to the movie. The type of the track and its data reference is specified
      * by the parameters.
-     * QuickTime::AddEmptyTrackToMovie()
+     * @see "QuickTime::AddEmptyTrackToMovie()"
      * @param srcTrack Specifies the Track object that will be used to determine the type and properties of the empty track.
      * @param dataRef Specifies the default data reference for the empty track.
      * @return a Track object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track addEmptyTrack(Track paramTrack, DataRef paramDataRef) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -1640,11 +1632,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Create a track in a movie.
-     * QuickTime::NewMovieTrack()
+     * @see "QuickTime::NewMovieTrack()"
      * @param width Specifies the width of the track, in pixels.
      * @param height Specifies the height of the track, in pixels.
      * @param trackVolume Specifies the volume setting of the track.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track newTrack(float paramFloat1, float paramFloat2, float paramFloat3) throws QTException {
         return addTrack(paramFloat1, paramFloat2, paramFloat3);
@@ -1652,11 +1644,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Create a track in a movie.
-     * QuickTime::NewMovieTrack()
+     * @see "QuickTime::NewMovieTrack()"
      * @param width Specifies the width of the track, in pixels.
      * @param height Specifies the height of the track, in pixels.
      * @param trackVolume Specifies the volume setting of the track.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track addTrack(float paramFloat1, float paramFloat2, float paramFloat3) throws QTException {
         return new Track(this, paramFloat1, paramFloat2, paramFloat3);
@@ -1664,9 +1656,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * You can create an edit state by calling the NewMovieEditState function.
-     * QuickTime::NewMovieEditState()
+     * @see "QuickTime::NewMovieEditState()"
      * @return a movie's current edit state
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public MovieEditState newEditState() throws QTException {
         int i = NewMovieEditState(_ID());
@@ -1677,9 +1669,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * Your application can use this method to return a movie to its condition according
      * to an edit state you created previously.
-     * QuickTime::UseMovieEditState()
+     * @see "QuickTime::UseMovieEditState()"
      * @param anEditState Specifies the edit state for this operation.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void useEditState(MovieEditState paramMovieEditState) throws StdQTException {
         int i = UseMovieEditState(_ID(), QTObject.ID(paramMovieEditState));
@@ -1688,11 +1680,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine the size, in bytes, of the sample data in a segment of a movie.
-     * QuickTime::GetMovieDataSize()
+     * @see "QuickTime::GetMovieDataSize()"
      * @param startTime Contains a time value specifying the starting point of the segment.
      * @param duration Contains a time value that specifies the duration of the segment.
      * @return the data size.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getDataSize(int paramInt1, int paramInt2) throws StdQTException {
         int i = GetMovieDataSize(_ID(), paramInt1, paramInt2);
@@ -1704,10 +1696,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method allows your application to determine whether a specified point lies in the region
      * defined by a movie's final display boundary region after it has been clipped by the movie's
      * display clipping region.
-     * QuickTime::PtInMovie()
+     * @see "QuickTime::PtInMovie()"
      * @param pt Specifies the point to be checked.
      * @return whether the point is in the movie or not.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public boolean pointInMovie(QDPoint paramQDPoint) throws StdQTException {
         int i = PtInMovie(_ID(), paramQDPoint.getPoint());
@@ -1717,9 +1709,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to specify a movie's language.
-     * QuickTime::SetMovieLanguage()
+     * @see "QuickTime::SetMovieLanguage()"
      * @param language Specifies the movie's language or region code.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setLanguage(int paramInt) throws StdQTException {
         SetMovieLanguage(_ID(), paramInt);
@@ -1728,9 +1720,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine whether a movie has changed and needs to be saved.
-     * QuickTime::HasMovieChanged()
+     * @see "QuickTime::HasMovieChanged()"
      * @return whether the movie has changed or not.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public boolean hasChanged() throws StdQTException {
         int i = HasMovieChanged(_ID());
@@ -1740,7 +1732,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method sets the movie changed flag to indicate that the movie has not been changed.
-     * QuickTime::ClearMovieChanged()
+     * @see "QuickTime::ClearMovieChanged()"
      */
     public void clearChanged() throws StdQTException {
         ClearMovieChanged(_ID());
@@ -1749,9 +1741,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method sets the default data reference for the movie.
-     * QuickTime::SetMovieDefaultDataRef()
+     * @see "QuickTime::SetMovieDefaultDataRef()"
      * @param newRef Specifies the default data reference object.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setDefaultDataRef(DataRef paramDataRef) throws StdQTException {
         int i = SetMovieDefaultDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType());
@@ -1761,9 +1753,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to get the default data reference for the movie.
-     * QuickTime::GetMovieDefaultDataRef()
+     * @see "QuickTime::GetMovieDefaultDataRef()"
      * @return a DataRef object specifiying the default data reference for the movie.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public DataRef getDefaultDataRef() throws QTException {
         return DataRef.fromMovie(this);
@@ -1771,9 +1763,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to assign a color table to the movie.
-     * QuickTime::SetMovieColorTable()
+     * @see "QuickTime::SetMovieColorTable()"
      * @param ctab Specifies the new color table.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setColorTable(ColorTable paramColorTable) throws StdQTException {
         int i = SetMovieColorTable(_ID(), QTObject.ID(paramColorTable));
@@ -1782,9 +1774,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to get the color table of the movie.
-     * QuickTime::GetMovieColorTable()
+     * @see "QuickTime::GetMovieColorTable()"
      * @return a ColorTable object specifiying the current color table.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public ColorTable getColorTable() throws QTException {
         return ColorTable.fromMovie(this);
@@ -1792,7 +1784,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method creates a new movie file containing a specified movie.
-     * QuickTime::FlattenMovie()
+     * @see "QuickTime::FlattenMovie()"
      * @param movieFlattenFlags Controls the process of adding movie data to the new movie file.
      * @param fileOut Contains writable movie file for the movie to be created.
      * @param creator Specifies the creator value for the new file.
@@ -1801,7 +1793,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param resName A String with the name of the movie resource. If you set the resName parameter to null,
      *  the toolbox creates an unnamed resource.
      * @return the resource ID number of the new resource
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int flatten(int paramInt1, QTFile paramQTFile, int paramInt2, int paramInt3, int paramInt4, int paramInt5, String paramString) throws QTException {
         short[] arrayOfShort = new short[1];
@@ -1817,14 +1809,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method creates a new movie file and creates a new movie that contains all of its movie data.
-     * QuickTime::FlattenMovieData()
+     * @see "QuickTime::FlattenMovieData()"
      * @param movieFlattenFlags Controls the process of adding movie data to the new movie file.
      * @param fileOut Contains writable movie file for the movie to be created.
      * @param creator Specifies the creator value for the new file.
      * @param scriptTag Specifies the script in which the movie file should be created.
      * @param createQTFileFlags Controls file creation options.
      * @return a Movie object for the new movie.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Movie flattenData(int paramInt1, QTFile paramQTFile, int paramInt2, int paramInt3, int paramInt4) throws QTException {
         int i = 0;
@@ -1846,11 +1838,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method creates a new movie that contains all of its movie data loaded into memory.
      * The handle must be the size of the movie's data (see getDataSize() method).
-     * QuickTime::FlattenMovieData()
+     * @see "QuickTime::FlattenMovieData()"
      * @param movieFlattenFlags Controls the process of adding movie data to the new movie file.
      * @param handle the handle that is used to contain the new movie's data for the new movie that is returned.
      * @return a Movie object for the new movie.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Movie flattenData(int paramInt, QTHandle paramQTHandle) throws QTException {
         byte[] arrayOfByte = new byte[8];
@@ -1870,34 +1862,35 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             }
         }
         StdQTException.checkError(GetMoviesError());
-        Object x = null;
+        Movie x = null;
         if (i != 0) {
             x = new Movie(i, null);
-            ((Movie) x).dataRef = paramQTHandle;
-            ((Movie) x).setActive(true);
+            x.dataRef = paramQTHandle;
+            x.setActive(true);
         }
-        return (Movie) x;
+        return x;
     }
 
     /**
      * This method allows you to attach a progress function to a movie. Currently it
      * assigns the default progress proc to the movie.
-     * QuickTime::SetMovieProgressProc()
+     * @see "QuickTime::SetMovieProgressProc()"
      */
     public void setProgressProc() throws StdQTException {
         int i = 0;
         if (QTSession.isCurrentOS(4)) {
-            i = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            i = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
-                int res1 = 0;
+                final int res1 = 0;
 
+                @Override
                 public Object invoke() {
                     synchronized (QTNative.globalsLock) {
                         Movie.SetMovieProgressProc(_ID(), -1, 0);
                     }
-                    return new Integer(this.res1);
+                    return this.res1;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(i);
         } else {
             synchronized (QTNative.globalsLock) {
@@ -1913,9 +1906,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to attach a progress function to a movie.
-     * QuickTime::SetMovieProgressProc()
+     * @see "QuickTime::SetMovieProgressProc()"
      * @param mp the new MovieProgress object
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setProgressProc(MovieProgress paramMovieProgress) throws StdQTException {
         int i = 0;
@@ -1934,9 +1927,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to intercept executing wired actions of this movie.
-     * QuickTime::AddMovieExecuteWiredActionsProc()
+     * @see "QuickTime::AddMovieExecuteWiredActionsProc()"
      * @param wa the new ExecutingWiredActions object
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void addExecuteWiredActionsProc(ExecutingWiredAction paramExecutingWiredAction) throws StdQTException {
         if (paramExecutingWiredAction == null) {
@@ -1952,7 +1945,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to remove the existing executing wired actions of this movie.
-     * QuickTime::RemoveMovieExecuteWiredActionsProc()
+     * @see "QuickTime::RemoveMovieExecuteWiredActionsProc()"
      */
     public void removeExecuteWiredActionsProc() throws StdQTException {
         if (this.wiredUPP != null) {
@@ -1965,9 +1958,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method executes specified wired actions associated with the movie
-     * QuickTime::MovieExecuteWiredActions()
+     * @see "QuickTime::MovieExecuteWiredActions()"
      * @param flags execution flags
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void executeWiredActions(int paramInt, AtomContainer paramAtomContainer) throws StdQTException {
         StdQTException.checkError(MovieExecuteWiredActions(_ID(), paramInt, QTObject.ID(paramAtomContainer)));
@@ -1975,14 +1968,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to search for text in a movie.
-     * QuickTime::MovieSearchText()
+     * @see "QuickTime::MovieSearchText()"
      * @param text Specifies the text to be searched.
      * @param searchFlags controls the operation of this method.
      * @param searchTrack Specifes the track which you want to limit the search to that track.
      * @param searchTime Specifes the starting time for the search
      * @param searchOffset Specifes the offset in media samples. Search will begin from that offset.
      * @return a SearchResult object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public SearchResult searchText(QTPointer paramQTPointer, int paramInt1, Track paramTrack, int paramInt2, int paramInt3) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -1998,13 +1991,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to search for text in a movie.
-     * QuickTime::MovieSearchText()
+     * @see "QuickTime::MovieSearchText()"
      * @param text Specifies th etext to be searched.
      * @param searchFlags controls the operation of this method.
      * @param searchTime Specifes the starting time for the search
      * @param searchOffset Specifes the offset in media samples. Search will begin from that offset.
      * @return a SearchResult object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public SearchResult searchText(QTPointer paramQTPointer, int paramInt1, int paramInt2, int paramInt3) throws QTException {
         int[] arrayOfInt1 = new int[1];
@@ -2020,9 +2013,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to obtain a poster's boundary rectangle.
-     * QuickTime::GetPosterBox()
+     * @see "QuickTime::GetPosterBox()"
      * @return a Rectangle object specifying the poster box for the movie.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDRect getPosterBox() throws StdQTException {
         QDRect localQDRect = new QDRect();
@@ -2033,9 +2026,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to set a poster's boundary rectangle.
-     * QuickTime::SetPosterBox()
+     * @see "QuickTime::SetPosterBox()"
      * @param boxRect a Rectangle object specifying the poster box for the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPosterBox(QDRect paramQDRect) throws StdQTException {
         SetPosterBox(_ID(), paramQDRect.getRect());
@@ -2044,11 +2037,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to determine a movie's display boundary region during a specified segment.
-     * QuickTime::GetMovieSegmentDisplayBoundsRgn()
+     * @see "QuickTime::GetMovieSegmentDisplayBoundsRgn()"
      * @param time Specifies the starting time of the movie segment to consider.
      * @param duration Specifies the length of the segment to consider.
      * @return a Region object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Region getSegmentDisplayBoundsRgn(int paramInt1, int paramInt2) throws QTException {
         return Region.fromMovieSegment(this, paramInt1, paramInt2);
@@ -2056,10 +2049,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method searches for errors in all the enabled tracks of the movie.
-     * QuickTime::GetMovieStatus()
+     * @see "QuickTime::GetMovieStatus()"
      * @return a StatusInfo object specifying the first found problem track. Nothing is returned
      *  if there is no problem track.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public StatusInfo getStatus() throws QTException {
         int[] arrayOfInt = new int[1];
@@ -2072,18 +2065,15 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method displays a dialog giving information about the movie.
-     * QuickTime::ShowMovieInformation()
+     * @see "QuickTime::ShowMovieInformation()"
      */
     public void showInformation() throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
-            CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                public Object invoke() {
-                    synchronized (QTNative.globalsLock) {
-                        Movie.ShowMovieInformation(_ID(), 0, 0);
-                    }
-                    return null;
+            CarbonAccess.invokeCarbonEventClient(() -> {
+                synchronized (QTNative.globalsLock) {
+                    Movie.ShowMovieInformation(_ID(), 0, 0);
                 }
+                return null;
             });
             StdQTException.checkError(GetMoviesError());
         } else {
@@ -2096,9 +2086,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to place a movie onto the scrap.
-     * QuickTime::PutMovieOnScrap()
+     * @see "QuickTime::PutMovieOnScrap()"
      * @param movieScrapFlags Flags that control the operation.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void putOnScrap(int paramInt) throws StdQTException {
         int i = PutMovieOnScrap(_ID(), paramInt);
@@ -2107,10 +2097,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows your application to provide information to the Movie Toolbox that can influence movie playback.
-     * QuickTime::SetMoviePlayHints()
+     * @see "QuickTime::SetMoviePlayHints()"
      * @param flags Specifies the optimizations that can be used with this movie.
      * @param flagsMask Indicates which flags in the flags parameter are to be considered in this operation.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPlayHints(int paramInt1, int paramInt2) throws StdQTException {
         SetMoviePlayHints(_ID(), paramInt1, paramInt2);
@@ -2119,9 +2109,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to get movie's TimeBase.
-     * QuickTime::GetMovieTimeBase()
+     * @see "QuickTime::GetMovieTimeBase()"
      * @return a TimeBase object for movie's timebase
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public TimeBase getTimeBase() throws StdQTException {
         return TimeBase.fromMovie(this);
@@ -2129,10 +2119,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to assign a master time base to a movie.
-     * QuickTime::SetMovieMasterTimeBase()
+     * @see "QuickTime::SetMovieMasterTimeBase()"
      * @param tb Specifies the master time base to be assigned to this movie.
      * @param slaveZero Specifies the time, in the time scale of the master time base, that corresponds to a 0 time value for the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setMasterTimeBase(TimeBase paramTimeBase, TimeRecord paramTimeRecord) throws StdQTException {
         SetMovieMasterTimeBase(_ID(), QTObject.ID(paramTimeBase), QTObject.ID(paramTimeRecord));
@@ -2141,9 +2131,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method allows you to assign a clock component to a movie.
-     * QuickTime::SetMovieMasterClock()
+     * @see "QuickTime::SetMovieMasterClock()"
      * @param slaveZero Contains the time, in the clock's time scale, that corresponds to a 0 time value for the movie.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setMasterClock(Clock paramClock, TimeRecord paramTimeRecord) throws StdQTException {
         SetMovieMasterClock(_ID(), QTObject.ID(paramClock), QTObject.ID(paramTimeRecord));
@@ -2152,14 +2142,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method converts this movie into a specified file and type.
-     * QuickTime::ConvertMovieToFile()
+     * @see "QuickTime::ConvertMovieToFile()"
      * @param onlyTrack Specifies the track within the source movie for this conversion operation. To specify all tracks, set the value of this parameter to null.
      * @param outputFile Specifies the destination file.
      * @param fileType Specifies the data type of the destination file for the movie.
      * @param creator Specifies the creator value for the output file if it is a new one.
      * @param scriptTag Specifies the script into which the movie should be converted if the output file is a new one.
      * @return the resource id of the movie created.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int convertToFile(Track paramTrack, QTFile paramQTFile, int paramInt1, int paramInt2, int paramInt3) throws QTException {
         return convertToFile(paramTrack, paramQTFile, paramInt1, paramInt2, paramInt3, 0, null);
@@ -2167,13 +2157,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method converts this movie into a specified file and type.
-     * QuickTime::ConvertMovieToFile()
+     * @see "QuickTime::ConvertMovieToFile()"
      * @param outputFile Specifies the destination file.
      * @param fileType Specifies the data type of the destination file for the movie.
      * @param creator Specifies the creator value for the output file if it is a new one.
      * @param scriptTag Specifies the script into which the movie should be converted if the output file is a new one.
      * @return the resource id of the movie created.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int convertToFile(QTFile paramQTFile, int paramInt1, int paramInt2, int paramInt3) throws QTException {
         return convertToFile(null, paramQTFile, paramInt1, paramInt2, paramInt3, 0, null);
@@ -2181,14 +2171,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method converts this movie into a specified file and type.
-     * QuickTime::ConvertMovieToFile()
+     * @see "QuickTime::ConvertMovieToFile()"
      * @param outputFile Specifies the destination file.
      * @param fileType Specifies the data type of the destination file for the movie.
      * @param creator Specifies the creator value for the output file if it is a new one.
      * @param scriptTag Specifies the script into which the movie should be converted if the output file is a new one.
      * @param flags the appropriate flags for this operation
      * @return the resource id of the movie created.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public int convertToFile(QTFile paramQTFile, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException {
         return convertToFile(null, paramQTFile, paramInt1, paramInt2, paramInt3, paramInt4, null);
@@ -2196,7 +2186,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * This method converts this movie into a specified file and type.
-     * QuickTime::ConvertMovieToFile()
+     * @see "QuickTime::ConvertMovieToFile()"
      * @param onlyTrack Specifies the track within the source movie for this conversion operation. To specify all tracks, set the value of this parameter to null.
      * @param outputFile Specifies the destination file.
      * @param fileType Specifies the data type of the destination file for the movie.
@@ -2205,25 +2195,26 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param flags the appropriate flags for this operation
      * @param userComp A ComponentIdentifier of type 'spit' that will be opened and used by this call to export the Movie
      * @return the resource id of the movie created.
-     * @return {@link quicktime.QTException}
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.QTException
+     * @throws quicktime.std.StdQTException
      */
-    public int convertToFile(final Track onlyTrack, QTFile paramQTFile, final int fileType, final int creator, final int scriptTag, final int flags, final MovieExporter userComp) throws QTException, StdQTException {
-        final short[] resID_native = new short[1];
-        final byte[] fsspec = paramQTFile.getFSSpec(false, 512);
+    public int convertToFile(Track onlyTrack, QTFile paramQTFile, int fileType, int creator, int scriptTag, int flags, MovieExporter userComp) throws QTException, StdQTException {
+        short[] resID_native = new short[1];
+        byte[] fsspec = paramQTFile.getFSSpec(false, 512);
         int i1;
         if (QTSession.isCurrentOS(4)) {
-            i1 = ((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
+            i1 = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
                 int res1;
 
+                @Override
                 public Object invoke() {
                     synchronized (QTNative.globalsLock) {
                         this.res1 = Movie.ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), fsspec, fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
                     }
                     return this.res1;
                 }
-            })).intValue();
+            });
             StdQTException.checkError(i1);
             return resID_native[0];
         }
@@ -2238,10 +2229,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * The QTVRGetQTVRTrack function returns a track for the QTVR track
      * that has the index specified by the index parameter in the QuickTime movie specified by the
      * theMovie parameter. If there is no such track, QTVRGetQTVRTrack returns the value null.
-     * QuickTime::QTVRGetQTVRTrack()
+     * @see "QuickTime::QTVRGetQTVRTrack()"
      * @param index this value indicates the nth VR Track to return. QT3.0 only supports one VR track so this
      *  value should be set to 1.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Track getQTVRTrack(int paramInt) throws QTException {
         int i = QTVRGetQTVRTrack(_ID(), paramInt);
@@ -2263,9 +2254,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Determine whether a movie is being progressively downloaded..
-     * QuickTime::QTMovieNeedsTimeTable()
+     * @see "QuickTime::QTMovieNeedsTimeTable()"
      * @return a boolean if movie is being progressively downloaded
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public final boolean needsTimeTable() throws StdQTException {
         byte[] arrayOfByte = new byte[1];
@@ -2276,7 +2267,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Returns the duration of the part of a movie that has already been downloaded.
-     * QuickTime::GetMaxLoadedTimeInMovie()
+     * @see "QuickTime::GetMaxLoadedTimeInMovie()"
      */
     public final int maxLoadedTimeInMovie() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -2287,10 +2278,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Copies the user data in the movie to the destination movie
-     * QuickTime::CopyMovieUserData()
+     * @see "QuickTime::CopyMovieUserData()"
      * @param destMovie destination movie for user data
      * @param replace true if the user data should be replaced; false if you want the data merged
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void copyUserDataToMovie(Movie paramMovie, boolean paramBoolean) throws StdQTException {
         StdQTException.checkError(CopyMovieUserData(_ID(), QTObject.ID(paramMovie), paramBoolean == true ? 1919970403 : 1835361639));
@@ -2298,10 +2289,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Copies the user data from the specified movie into this movie
-     * QuickTime::CopyMovieUserData()
+     * @see "QuickTime::CopyMovieUserData()"
      * @param srcMovie source movie for user data
      * @param replace true if the user data should be replaced; false if you want the data merged
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void copyUserDataFromMovie(Movie paramMovie, boolean paramBoolean) throws StdQTException {
         StdQTException.checkError(CopyMovieUserData(QTObject.ID(paramMovie), _ID(), paramBoolean == true ? 1919970403 : 1835361639));
@@ -2309,12 +2300,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
 
     /**
      * Copies the user data from the specified movie into the destination movie
-     * QuickTime::CopyMovieUserData()
+     * @see "QuickTime::CopyMovieUserData()"
      * @param srcMovie source movie for user data
      * @param destMovie destination movie for user data
      * @param copyRule constant for merge or replace
      *     use StdQTConstants5_1.kQTCopyUserDataReplace or StdQTConstants5_1.kQTCopyUserDataMerge
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static void copyUserData(Movie paramMovie1, Movie paramMovie2, int paramInt) throws StdQTException {
         StdQTException.checkError(CopyMovieUserData(QTObject.ID(paramMovie1), QTObject.ID(paramMovie2), paramInt));
@@ -2325,7 +2316,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * master timebase clock. This is useful to tie the movies master timebase to a sound clock
      * if there is a sound track.
      *
-     * QuickTime::ChooseMovieClock()
+     * @see "QuickTime::ChooseMovieClock()"
      * @param flags the movie flags
      */
     public void chooseClock(int paramInt) {
@@ -2335,10 +2326,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * QuickTime can handle public movie handles with self contained data references.
      * (Requires QT 6)
-     * QuickTime::PutMovieForDataRefIntoHandle()
+     * @see "QuickTime::PutMovieForDataRefIntoHandle()"
      * @param ref the dataref
      * @param handle the handle
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void putDataRefIntoHandle(DataRef paramDataRef, QTHandle paramQTHandle) throws StdQTException {
         StdQTException.checkError(PutMovieForDataRefIntoHandle(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), QTObject.ID(paramQTHandle)));
@@ -2347,13 +2338,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * QuickTime can handle public movie handles with self contained data references.
      * (Requires QT 6)
-     * QuickTime::NewMovieForDataRefFromHandle()
+     * @see "QuickTime::NewMovieForDataRefFromHandle()"
      * @param dataRef the dataref of movie to be created
      * @param publicHandle the handle containing the movie
      * @param flags the movie creation flags
      * @param info movie info (this can be null)
      * @return movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Movie forDataRefFromHandle(DataRef paramDataRef, QTHandle paramQTHandle, int paramInt, MovieInfo paramMovieInfo) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -2375,20 +2366,20 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (paramMovieInfo != null) {
             paramMovieInfo.setMovieInfo(0, arrayOfByte[0] == 1, null);
         }
-        Object x = new Movie(arrayOfInt[0], null);
-        ((Movie) x).init();
-        ((Movie) x).dataRef = paramDataRef;
-        return (Movie) x;
+        Movie x = new Movie(arrayOfInt[0], null);
+        x.init();
+        x.dataRef = paramDataRef;
+        return x;
     }
 
     /**
      * Allows the user to ask the QuickTime idle manager when idling routines such as movies.task()
      * need to be called. (Requires QT 6)
-     * QuickTime::QTGetTimeUntilNextTask()
+     * @see "QuickTime::QTGetTimeUntilNextTask()"
      * @param scale the time scale to be used for the return value
      * @return the amount of time that needs to elapse in the given time scale before
      *  QuickTime's idling mechanism needs to be called
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static int getTimeUntilNextTask(int paramInt) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -2399,7 +2390,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * Allows the user to specify one or more callback routines that will be called when QuickTime
      * needs tasking. (Requires QT 6)
-     * QuickTime::QTInstallNextTaskNeededSoonerCallback()
+     * @see "QuickTime::QTInstallNextTaskNeededSoonerCallback()"
      */
     public static void setNextTaskNeededSoonerCallback(NextTaskNeededSooner paramNextTaskNeededSooner, int paramInt1, int paramInt2) throws StdQTException {
         if (paramNextTaskNeededSooner == null) {
@@ -2413,7 +2404,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * Allows the user to remove a callback from the IdleManager that no longer needs servicing.
      * (Requires QT 6)
-     * QuickTime::QTUninstallNextTaskNeededSoonerCallback()
+     * @see "QuickTime::QTUninstallNextTaskNeededSoonerCallback()"
      */
     public static void removeNextTaskNeededSoonerCallback(NextTaskNeededSooner paramNextTaskNeededSooner) throws StdQTException {
         if (paramNextTaskNeededSooner == null) {
@@ -2424,19 +2415,19 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         StdQTException.checkError(QTUninstallNextTaskNeededSoonerCallback(localIdleDispatcher.ID(), 0));
     }
 
-    private static Hashtable dispatchers = new Hashtable<>();
+    private static final Hashtable<Object, Object> dispatchers = new Hashtable<>();
 
     /**
      * This method creates a new movie file containing a specified movie.
      * (Requires QT 6)
-     * QuickTime::FlattenMovieDataToDataRef()
+     * @see "QuickTime::FlattenMovieDataToDataRef()"
      * @param dataRef Contains dataRef for the movie to be created.
      * @param movieFlattenFlags Controls the process of adding movie data to the new movie file.
      * @param creator Specifies the creator value for the new file.
      * @param scriptTag Specifies the script in which the movie file should be created.
      * @param createMovieFileFlags Controls movie creation options.
      * @return the new movie
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public Movie flattenDataToDataRef(DataRef paramDataRef, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException {
         int i = 0;
@@ -2467,7 +2458,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This routine sets the movie's anchor data reference. Pass null to reset the anchor data reference to nothing.
      * The routine copies the data reference.
      * @param dataRef the dataref to the movie
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setMovieAnchorDataRef(DataRef paramDataRef) throws StdQTException {
         int i = 0;
@@ -2485,7 +2476,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * If there is no anchor data reference associated with the movie the method returns true.
      * @return the anchor flag (If there is no anchor data reference associated with the movie then kMovieAnchorDataRefIsDefault is returned)
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public boolean isAnchorDefaultDataRef() throws StdQTException {
         int i = 0;

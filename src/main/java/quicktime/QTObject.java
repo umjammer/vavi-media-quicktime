@@ -13,7 +13,7 @@ public abstract class QTObject {
 
     static boolean qtIsNOTInitialized = true;
 
-    public static final int ID(QTObject paramQTObject) {
+    public static int ID(QTObject paramQTObject) {
         return paramQTObject == null ? 0 : paramQTObject.nativeRep;
     }
 
@@ -48,7 +48,7 @@ public abstract class QTObject {
 
     private transient Object ref = null;
 
-    protected final transient int sessionAllocated = QTSession.sessionID;
+    protected static final int sessionAllocated = QTSession.sessionID;
 
     protected final int _ID() {
         if ((qtIsNOTInitialized) || (this.nativeRep == 0) || (this.sessionAllocated != QTSession.sessionID)) {
@@ -66,6 +66,7 @@ public abstract class QTObject {
         return (QTObjectManagement.isMember(this.nativeRep)) && (this.sessionAllocated == QTSession.sessionID);
     }
 
+    @Override
     protected final void finalize() throws Throwable {
         try {
             synchronized (this) {
@@ -121,7 +122,7 @@ public abstract class QTObject {
         return getClass().getName() + "@" + Integer.toHexString(this.nativeRep);
     }
 
-    private final void _doSC() {
+    private void _doSC() {
         if ((doSecurityCheck) && (!(this instanceof QTCallBack)) && (!(this instanceof Media))) {
             if ((getClass().getClassLoader() != null) && (!getClass().getName().startsWith("quicktime."))) {
                 throw new SecurityException(getClass().getName() + " cannot be constructed with current Security settings");

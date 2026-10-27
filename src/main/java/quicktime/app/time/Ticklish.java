@@ -14,19 +14,19 @@ import quicktime.QTException;
  * another or a rate change from positive to negative or vice versa, then the timer will
  * call the timeChanged method with the new time, also expressed in the scale of the
  * Ticklish.kScale value.
- * @see {@link quicktime.app.time.Timer}
+ * @see quicktime.app.time.Timer
  */
-public abstract interface Ticklish {
+public interface Ticklish {
 
     /**
      * The scale of the time values that are given to the ticklish object
      */
-    public static final int kScale = 1000;
+    int kScale = 1000;
 
     /**
      * Invoked by the timer when a time condition of its time base has changed.
      */
-    public abstract void timeChanged(int paramInt) throws QTException;
+    void timeChanged(int paramInt) throws QTException;
 
     /**
      * The Timer invokes the tickle method when the invocation constraints of
@@ -35,8 +35,8 @@ public abstract interface Ticklish {
      * @param time the time that the Timer invoked the tickle method.
      * @return true if the Ticklish object should receive a consequent tickle, or false
      *  if the Ticklish object should not be tickled again.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract boolean tickle(float paramFloat, int paramInt) throws QTException;
+    boolean tickle(float paramFloat, int paramInt) throws QTException;
 }
 

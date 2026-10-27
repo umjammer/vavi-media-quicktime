@@ -1,10 +1,10 @@
 
 package quicktime.app.view;
 
-public abstract interface DrawingNotifier {
-    public abstract void addDrawingListener(DrawingListener paramDrawingListener);
+public interface DrawingNotifier {
+    void addDrawingListener(DrawingListener paramDrawingListener);
 
-    public abstract void removeDrawingListener(DrawingListener paramDrawingListener);
+    void removeDrawingListener(DrawingListener paramDrawingListener);
 }
 
 

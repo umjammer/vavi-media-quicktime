@@ -170,8 +170,8 @@ class QTJavaJ2DCanvas extends JComponent implements QTComponent {
     }
 
     private void start(QDRect bounds) {
-        width = Math.max(1, (int) bounds.getWidth());
-        height = Math.max(1, (int) bounds.getHeight());
+        width = Math.max(1, bounds.getWidth());
+        height = Math.max(1, bounds.getHeight());
         setPreferredSize(new Dimension(width, height));
         resizeTo(width, height);
         timer.start();
@@ -213,8 +213,8 @@ class QTJavaJ2DCanvas extends JComponent implements QTComponent {
         timer.stop();
         if (image != null) {
             QDRect r = image.getBoundsRect();
-            width = Math.max(1, (int) r.getWidth());
-            height = Math.max(1, (int) r.getHeight());
+            width = Math.max(1, r.getWidth());
+            height = Math.max(1, r.getHeight());
             setPreferredSize(new Dimension(width, height));
             resizeTo(width, height);
         }

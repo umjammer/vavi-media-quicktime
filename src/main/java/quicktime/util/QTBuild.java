@@ -1,12 +1,17 @@
 package quicktime.util;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Calendar;
 import quicktime.QTSession;
+
 
 /**
  * Contains build information for the QTJava library.
  */
 public final class QTBuild {
+
+    private static final Logger logger = System.getLogger(QTBuild.class.getName());
 
     /**
      * The version of QTJava
@@ -37,30 +42,30 @@ public final class QTBuild {
     /**
      * @return The version of QTJava
      */
-    public static final int getVersion() {
+    public static int getVersion() {
         return 6;
     }
 
     /**
      * @return The sub-version of QTJava
      */
-    public static final int getSubVersion() {
+    public static int getSubVersion() {
         return 1;
     }
 
     /**
      * @return The qualifier for the sub-version of QTJava
      */
-    public static final int getQualifyingSubVersion() {
+    public static int getQualifyingSubVersion() {
         return 3;
     }
 
     /**
-     * Deprecated.
-     * <I/>
-     * @see isValid
+     * @deprecated
+     *
+     * @see #isValid
      */
-    public static final void expired() {
+    public static void expired() {
     }
 
     /**
@@ -71,14 +76,14 @@ public final class QTBuild {
      * The call can also be used as a means of establishing whether the QTJava classes can be found
      * by the system - the call can be made without the application having called QTSession.open.
      */
-    public static final void isValid() {
+    public static void isValid() {
         if ("g".equals("g")) {
             return;
         }
         Calendar localCalendar = Calendar.getInstance();
-        localCalendar.set(2005, 9, 15);
+        localCalendar.set(2005, Calendar.OCTOBER, 15);
         if ((!QTSession.isCurrentOS(4)) && (Calendar.getInstance().after(localCalendar))) {
-            System.err.println("This version of QTJava has expired");
+            logger.log(Level.DEBUG, "This version of QTJava has expired");
             throw new SecurityException("QTJava has expired.");
         }
     }

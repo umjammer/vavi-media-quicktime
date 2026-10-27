@@ -55,10 +55,12 @@ public class GenericMedia extends Media {
         return this.mediaType;
     }
 
+    @Override
     protected SampleDescription makeDescription() throws QTException {
         return new SampleDescription(this.mediaType);
     }
 
+    @Override
     protected MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new MediaHandler(paramInt, paramObject);
     }

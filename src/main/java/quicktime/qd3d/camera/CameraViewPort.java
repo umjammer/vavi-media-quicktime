@@ -3,6 +3,8 @@ package quicktime.qd3d.camera;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.qd.QDPoint;
@@ -33,7 +35,8 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
      */
     public static final int kNativeSize = 16;
 
-    static final long serialVersionUID = -480864256741555003L;
+    @Serial
+    private static final long serialVersionUID = -480864256741555003L;
 
     static {
         if (QTSession.isCurrentOS(4)) {
@@ -45,7 +48,7 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
      * Returns the EndianDescriptor for this class.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptor() {
+    public static EndianDescriptor getEndianDescriptor() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -62,17 +65,18 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
      * @param width The width.
      * @param height The height.
      */
-    public CameraViewPort(QDPoint paramQDPoint, float paramFloat1, float paramFloat2) {
+    public CameraViewPort(QDPoint origin, float width, float height) {
         this();
-        setOrigin(paramQDPoint);
-        setWidth(paramFloat1);
-        setHeight(paramFloat2);
+        setOrigin(origin);
+        setWidth(width);
+        setHeight(height);
     }
 
     protected CameraViewPort(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[16];
         CameraViewPort localCameraViewPort = new CameraViewPort();
@@ -85,6 +89,7 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
         System.arraycopy(localCameraViewPort.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         CameraViewPort localCameraViewPort = (CameraViewPort) clone();
         try {
@@ -141,6 +146,7 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new CameraViewPort(this.bytes);
     }

@@ -182,8 +182,3 @@ public final class PushDataParams extends QTPointer {
         return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",sampleDescription=" + getSampleDescription() + ",sampleDescriptionSeed=" + getSampleDescSeed() + ",sampleTime=" + getSampleTime() + ",duration=" + getDuration() + ",dataPtr=" + getDataPtr() + "]";
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/streaming
- * /PushDataParams.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

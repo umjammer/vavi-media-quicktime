@@ -23,12 +23,7 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TextMediaHandler.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(TextMediaHandler.class));
             }
         }.establish();
     }
@@ -39,7 +34,7 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
 
     /**
      * This method adds a single block of styled text to an existing media.
-     * QuickTime::TextMediaAddTextSample()
+     * @see "QuickTime::TextMediaAddTextSample()"
      * @param text Contains the text to be added.
      * @param fontSize Indicates the size of the font.
      * @param textFace Indicates the typeface or style of the text (that is, bold, italic, and so on).
@@ -54,7 +49,7 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @param rgbHiliteColor The color for highlighting.
      * @param duration Specifies how long the text sample should last. This duration is expressed in the media's time base.
      * @return The actual media time at which the sample was added.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int addTextSample(QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2, int paramInt3, QDColor paramQDColor1, QDColor paramQDColor2, int paramInt4, QDRect paramQDRect, int paramInt5, int paramInt6, int paramInt7, int paramInt8, QDColor paramQDColor3, int paramInt9) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -82,12 +77,12 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
 
     /**
      * This method searches for text with a specified media handler starting at a given time.
-     * QuickTime::TextMediaFindNextText()
+     * @see "QuickTime::TextMediaFindNextText()"
      * @param text containes the text to be searched.
      * @param findFlags Specifies the conditions of the search.
      * @param startTime Indicates the time (expressed in the movie time scale) at which to begin the search.
      * @return a FoundTextInfo object
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public FoundTextInfo findNextText(QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
@@ -100,12 +95,12 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
 
     /**
      * This method can specify selected text to be highlighted.
-     * QuickTime::TextMediaHiliteTextSample()
+     * @see "QuickTime::TextMediaHiliteTextSample()"
      * @param sampleTime Indicates a sample time (in the movie time scale) for the text to be highlighted.
      * @param hiliteStart Specifies the beginning of the text to be highlighted.
      * @param hiliteEnd Specifies the end of the text to be highlighted.
      * @param hiliteColor Contains a pointer to the RGB color for highlighting.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void hiliteTextSample(int paramInt1, int paramInt2, int paramInt3, QDColor paramQDColor) throws StdQTException {
         int i = TextMediaHiliteTextSample(_ID(), paramInt1, (short) paramInt2, (short) paramInt3, paramQDColor != null ? paramQDColor.getRGBColor() : null);
@@ -114,9 +109,9 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
 
     /**
      * This method allows you to specify the shadow offset for the text media.
-     * QuickTime::TextMediaSetTextSampleData()
+     * @see "QuickTime::TextMediaSetTextSampleData()"
      * @param offset Specifies the offset.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setDropShadowOffset(QDPoint paramQDPoint) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -126,9 +121,9 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
 
     /**
      * This method allows you to specify the translucency value for the text shadows.
-     * QuickTime::TextMediaSetTextSampleData()
+     * @see "QuickTime::TextMediaSetTextSampleData()"
      * @param translucency Specifies the translucency.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setDropShadowTranslucency(int paramInt) throws StdQTException {
         int[] arrayOfInt = new int[1];

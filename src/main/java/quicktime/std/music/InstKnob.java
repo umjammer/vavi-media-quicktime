@@ -3,6 +3,8 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
@@ -13,7 +15,8 @@ public final class InstKnob extends QTByteObject {
 
     private static final int kNativeSize = 8;
 
-    static final long serialVersionUID = 3340534534429409660L;
+    @Serial
+    private static final long serialVersionUID = 3340534534429409660L;
 
     /**
      * Makes an instance of this class
@@ -22,11 +25,13 @@ public final class InstKnob extends QTByteObject {
         super(kNativeSize);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(getBytes());
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         paramObjectOutputStream.write(getBytes());
     }

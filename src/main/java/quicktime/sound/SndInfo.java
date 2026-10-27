@@ -37,12 +37,7 @@ public final class SndInfo implements SoundLib, InterfaceLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SndInfo.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SndInfo.class));
             }
         }.establish();
     }
@@ -51,7 +46,7 @@ public final class SndInfo implements SoundLib, InterfaceLib {
      * The SetupAIFFHeader function creates an AIFF or AIFF-C file header, depending on the parameters passed to it:
      * Uncompressed sounds of any type are stored in AIFF format (that is, the compressionType parameter is 'NONE').
      * Compressed sounds of any type are stored in AIFF-C format (that is, the compressionType parameter is different from 'NONE').
-     * QuickTime::SetupAIFFHeader
+     * @see "QuickTime::SetupAIFFHeader"
      * @param file the open file to parse
      * @param numChannels The number of channels for the sound; one channel is equivalent to monaural sound and two channels are equivalent to stereo sound.
      * @param sampleRate The rate at which the sound was recorded.
@@ -59,7 +54,7 @@ public final class SndInfo implements SoundLib, InterfaceLib {
      * @param compressionType The compression type for the sound ('NONE', 'MAC3', 'MAC6', or other third-party types).
      * @param numBytes The number of bytes of audio data that are to be stored in the Common Chunk of the AIFF or AIFF-C file. Max value is a 32-bit unsigned int.
      * @param numFrames The number of sample frames for the sample sound. If you are using a compression type defined by Apple, you can pass 0 in this field and the appropriate value for this field will be computed automatically. Max value is a 32-bit unsigned int.
-     * @param {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public static void setupAIFFHeader(OpenFile paramOpenFile, int paramInt1, float paramFloat, int paramInt2, int paramInt3, long paramLong1, long paramLong2) throws SoundException {
         int i = SetupAIFFHeader((short) QTObject.ID(paramOpenFile), (short) paramInt1, QTUtils.X2UFix(paramFloat), (short) paramInt2, paramInt3, (int) paramLong1, (int) paramLong2);
@@ -68,10 +63,10 @@ public final class SndInfo implements SoundLib, InterfaceLib {
 
     /**
      * You use this function to retrieve information about from a AIFF Sound File.
-     * QuickTime::ParseAIFFHeader
+     * @see "QuickTime::ParseAIFFHeader"
      * @param file the open file to parse
      * @return a SndInfo object
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
     public static SndInfo parseAIFFHeader(OpenFile paramOpenFile) throws SoundException {
         int[] arrayOfInt1 = { 0 };

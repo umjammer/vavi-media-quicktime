@@ -57,8 +57,3 @@ public class KnobDescription extends QTByteObject {
         return getIntAt(80);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /KnobDescription.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

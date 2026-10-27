@@ -3,6 +3,7 @@ package quicktime.std.image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.QTObject;
@@ -27,18 +28,14 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
      */
     public static final int kNativeSize = 48;
 
-    static final long serialVersionUID = 8668877262716984973L;
+    @Serial
+    private static final long serialVersionUID = 8668877262716984973L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(ICMFrameTime.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ICMFrameTime.class));
             }
         }.establish();
     }
@@ -57,6 +54,7 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[48];
         paramObjectInputStream.read(this.bytes);
@@ -77,6 +75,7 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
         setBase(TimeBase.fromICMFrameTime(this));
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[48];
         long l1 = getValue();
@@ -249,6 +248,7 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new ICMFrameTime(this.bytes);
     }
@@ -276,8 +276,3 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
         return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /ICMFrameTime.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

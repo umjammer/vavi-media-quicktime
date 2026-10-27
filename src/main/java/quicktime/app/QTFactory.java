@@ -24,7 +24,7 @@ import quicktime.util.QTHandle;
 import quicktime.util.QTUtils;
 
 /**
- * Deprecated.
+ * @deprecated
  * The QTFactory class provides factory methods for creating classes that are used
  * to present media that QuickTime can import. It also provides some utility methods
  * for finding directories and files in the local file system.
@@ -67,7 +67,7 @@ public final class QTFactory {
             str3 = returnExistingFile(str3);
             if (str3 != null) {
                 str3 = str3.substring(0, str3.lastIndexOf(File.separatorChar) + 1);
-                if ((!classPaths.contains(str3)) && (str3.length() > 0)) {
+                if ((!classPaths.contains(str3)) && (!str3.isEmpty())) {
                     classPaths.addElement(str3);
                 }
             }
@@ -89,8 +89,8 @@ public final class QTFactory {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will take apart the path specification of the fileName and return the
      * first instance of the file (the last name in the path) that it finds within the
      * directories that are known to Java at runtime.
@@ -123,25 +123,25 @@ public final class QTFactory {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will add a directory to the internal list of directories that are searched in
      * the find methods. The incoming File object must specify a directory that exists or an IOException
      * will be thrown. If the directory is already a member of the list it will not be added.
      * Directories that are added explicitly will be searched first in the find calls.
      * @param dir a directory
-     * @param java.io.IOException
+     * @rgrows java.io.IOException
      */
-    public static void addDirectory(File paramFile) throws IOException {
-        if (!paramFile.exists())
-            throw new IOException(paramFile + ",does not exist");
-        if (!paramFile.isDirectory()) {
-            throw new IOException(paramFile + ",must be a directory");
+    public static void addDirectory(File dir) throws IOException {
+        if (!dir.exists())
+            throw new IOException(dir + ",does not exist");
+        if (!dir.isDirectory()) {
+            throw new IOException(dir + ",must be a directory");
         }
         if (classPaths == null) {
             buildClassPathsVector();
         }
-        String str = paramFile.getCanonicalPath();
+        String str = dir.getCanonicalPath();
         str = str.replace('/', File.separatorChar);
         if (str.charAt(str.length() - 1) != '/') {
             str = str + "/";
@@ -153,23 +153,23 @@ public final class QTFactory {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method will remove a directory from the internal list of directories that are searched in
      * the find methods.
      * @param dir a directory
-     * @param java.io.IOException
+     * @rgrows java.io.IOException
      */
-    public static void removeDirectory(File paramFile) throws IOException {
-        if (!paramFile.exists())
+    public static void removeDirectory(File dir) throws IOException {
+        if (!dir.exists())
             return;
-        if (!paramFile.isDirectory()) {
+        if (!dir.isDirectory()) {
             return;
         }
         if (classPaths == null) {
             return;
         }
-        String str = paramFile.getCanonicalPath();
+        String str = dir.getCanonicalPath();
         str = str.replace('/', File.separatorChar);
         if (str.charAt(str.length() - 1) != '/') {
             str = str + "/";
@@ -178,8 +178,8 @@ public final class QTFactory {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Given a filename this method will exhaustively search all paths found in the user.dir and the classPath and
      * will return a file object that contains an absolute path to the specified argument.
      * @param fileName the file to search for.
@@ -189,25 +189,25 @@ public final class QTFactory {
      *  applet to position and locate files at run time.
      * @throws java.io.IOException the file cannot be found in any of the class path locations.
      */
-    public static File findAbsolutePath(String paramString) throws IOException {
-        paramString = paramString.replace('/', File.separatorChar);
+    public static File findAbsolutePath(String fileName) throws IOException {
+        fileName = fileName.replace('/', File.separatorChar);
         if (classPaths == null) {
             buildClassPathsVector();
         }
         Enumeration localEnumeration = classPaths.elements();
         while (localEnumeration.hasMoreElements()) {
             String str1 = (String) localEnumeration.nextElement();
-            String str2 = returnExistingFile(str1 + paramString);
+            String str2 = returnExistingFile(str1 + fileName);
             if (str2 != null) {
                 return new File(str2);
             }
         }
-        throw new FileNotFoundException(paramString);
+        throw new FileNotFoundException(fileName);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a QTDrawable object from the specified file. The file must specify an absolute path.
      * It uses the default QTDrawableMaker to return an GraphicsImporterDrawer object from a GraphicsImporter and a
      * QTPlayer from a Movie.
@@ -216,7 +216,7 @@ public final class QTFactory {
      *  the function will throw a StdQTException with error code invalidMovie.
      * @throws java.io.IOException is thrown if the file would violate security settings of an applet
      * @throws quicktime.QTException
-     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * @see quicktime.app.image.GraphicsImporterDrawer,
      * {@link quicktime.app.players.QTPlayer},
      * {@link quicktime.app.QTDrawableMaker}
      */
@@ -225,8 +225,8 @@ public final class QTFactory {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a QTDrawable object from the specified file. The file must specify an absolute path.
      * It uses the supplied QTDrawableMaker to return objects from a GraphicsImporter or
      * a Movie.
@@ -237,40 +237,40 @@ public final class QTFactory {
      *  the function will throw a StdQTException with error code invalidMovie.
      * @throws java.io.IOException if the file is not found
      * @throws quicktime.QTException
-     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * @see quicktime.app.image.GraphicsImporterDrawer,
      * {@link quicktime.app.players.QTPlayer},
      * {@link quicktime.app.QTDrawableMaker}
      */
-    public static QTDrawable makeDrawable(QTFile paramQTFile, QTDrawableMaker paramQTDrawableMaker) throws IOException, QTException {
+    public static QTDrawable makeDrawable(QTFile paramQTFile, QTDrawableMaker maker) throws IOException, QTException {
         if (!paramQTFile.exists())
             throw new FileNotFoundException(paramQTFile.getName());
         String str = getFileExtension(paramQTFile.getAbsolutePath());
         if (("mid".equalsIgnoreCase(str)) || ("smf".equalsIgnoreCase(str)) || ("midi".equalsIgnoreCase(str)) || ("kar".equalsIgnoreCase(str))) {
-            Object localObject = readBytesIntoHandle(new FileInputStream(paramQTFile));
-            Movie localMovie = importMovie((QTHandle) localObject, QTUtils.toOSType("Midi"));
+            QTHandle localObject = readBytesIntoHandle(new FileInputStream(paramQTFile));
+            Movie localMovie = importMovie(localObject, QTUtils.toOSType("Midi"));
             if (localMovie != null) {
-                return paramQTDrawableMaker.fromMovie(localMovie);
+                return maker.fromMovie(localMovie);
             }
         }
-        Object localObject = openAsImage(paramQTFile);
+        GraphicsImporter localObject = openAsImage(paramQTFile);
         Movie localMovie = null;
         if (localObject != null) {
             localMovie = checkIfMovie(paramQTFile);
             if (localMovie == null) {
-                return paramQTDrawableMaker.fromGraphicsImporter((GraphicsImporter) localObject);
+                return maker.fromGraphicsImporter(localObject);
             }
-            return paramQTDrawableMaker.fromMovie(localMovie);
+            return maker.fromMovie(localMovie);
         }
         localMovie = openAsMovie(paramQTFile);
         if (localMovie != null) {
-            return paramQTDrawableMaker.fromMovie(localMovie);
+            return maker.fromMovie(localMovie);
         }
         throw new QTException(63533);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a QTDrawable object from the specified input stream.
      * The input stream will be read in its entirety to a byte array which is then used as the
      * source of the data to import. The hints are used by the importers to determine
@@ -278,9 +278,9 @@ public final class QTFactory {
      * QuickTime about the format of the data
      * that is contained within the InputStream. Hints can take one of three forms
      *
-     * MIME Type	-> kDataRefMimeTypeTag
-     * MacOS File Type	-> kDataRefQTFileTypeTag
-     * File extension	-> kDataRefFileExtensionTag
+     * MIME Type -> kDataRefMimeTypeTag
+     * MacOS File Type -> kDataRefQTFileTypeTag
+     * File extension -> kDataRefFileExtensionTag
      *
      * The preferred usage is to pass in either the MacOS File Type (which will also work on non-MacOS platforms)
      * or the MIME type information. The File extension is a more arbitrary indicator and should be the least
@@ -293,17 +293,17 @@ public final class QTFactory {
      *  the function will throw a StdQTException with error code invalidMovie.
      * @throws java.io.IOException is thrown if the input stream is unable to aquire all the data
      * @throws quicktime.QTException
-     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * @see quicktime.app.image.GraphicsImporterDrawer,
      * {@link quicktime.app.players.QTPlayer},
      * {@link quicktime.app.QTDrawableMaker}
      */
-    public static QTDrawable makeDrawable(InputStream paramInputStream, int paramInt, String paramString) throws IOException, QTException {
-        return makeDrawable(paramInputStream, paramInt, paramString, new QTDrawableMaker());
+    public static QTDrawable makeDrawable(InputStream is, int paramInt, String hintString) throws IOException, QTException {
+        return makeDrawable(is, paramInt, hintString, new QTDrawableMaker());
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a QTDrawable object from the specified input stream.
      * The input stream will be read in its entirety to a byte array which is then used as the
      * source of the data to import. The hints are used by the importers to determine
@@ -311,9 +311,9 @@ public final class QTFactory {
      * QuickTime about the format of the data
      * that is contained within the InputStream. Hints can take one of three forms
      *
-     * MIME Type	-> kDataRefMimeTypeTag
-     * MacOS File Type	-> kDataRefQTFileTypeTag
-     * File extension	-> kDataRefFileExtensionTag
+     * MIME Type -> kDataRefMimeTypeTag
+     * MacOS File Type -> kDataRefQTFileTypeTag
+     * File extension -> kDataRefFileExtensionTag
      *
      * The preferred usage is to pass in either the MacOS File Type (which will also work on non-MacOS platforms)
      * or the MIME type information. The File extension is a more arbitrary indicator and should be the least
@@ -327,38 +327,38 @@ public final class QTFactory {
      *  the function will throw a StdQTException with error code invalidMovie.
      * @throws java.io.IOException is thrown if the input stream is unable to aquire all the data
      * @throws quicktime.QTException
-     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * @see quicktime.app.image.GraphicsImporterDrawer,
      * {@link quicktime.app.players.QTPlayer},
      * {@link quicktime.app.QTDrawableMaker}
      */
-    public static QTDrawable makeDrawable(InputStream paramInputStream, int paramInt, String paramString, QTDrawableMaker paramQTDrawableMaker) throws IOException, QTException {
+    public static QTDrawable makeDrawable(InputStream paramInputStream, int paramInt, String hintString, QTDrawableMaker maker) throws IOException, QTException {
         QTHandle localQTHandle = readBytesIntoHandle(paramInputStream);
-        DataRef localDataRef = new DataRef(localQTHandle, paramInt, paramString);
-        if ((paramString != null) && (("mid".equalsIgnoreCase(paramString)) || ("smf".equalsIgnoreCase(paramString)) || ("midi".equalsIgnoreCase(paramString)) || ("kar".equalsIgnoreCase(paramString)))) {
-            Object localObject = importMovie(localQTHandle, QTUtils.toOSType("Midi"));
+        DataRef localDataRef = new DataRef(localQTHandle, paramInt, hintString);
+        if ((hintString != null) && (("mid".equalsIgnoreCase(hintString)) || ("smf".equalsIgnoreCase(hintString)) || ("midi".equalsIgnoreCase(hintString)) || ("kar".equalsIgnoreCase(hintString)))) {
+            Movie localObject = importMovie(localQTHandle, QTUtils.toOSType("Midi"));
             if (localObject != null) {
-                return paramQTDrawableMaker.fromMovie((Movie) localObject);
+                return maker.fromMovie(localObject);
             }
         }
-        Object localObject = importImage(localDataRef);
+        GraphicsImporter localObject = importImage(localDataRef);
         Movie localMovie = null;
         if (localObject != null) {
             localMovie = checkIfMovie(localDataRef);
             if (localMovie == null) {
-                return paramQTDrawableMaker.fromGraphicsImporter((GraphicsImporter) localObject);
+                return maker.fromGraphicsImporter(localObject);
             }
-            return paramQTDrawableMaker.fromMovie(localMovie);
+            return maker.fromMovie(localMovie);
         }
         localMovie = openAsMovie(localDataRef);
         if (localMovie != null) {
-            return paramQTDrawableMaker.fromMovie(localMovie);
+            return maker.fromMovie(localMovie);
         }
         throw new QTException(63533);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a QTDrawable object from the specified URL.
      * It uses the default QTDrawableMaker to return an GraphicsImporterDrawer from a GraphicsImporter or
      * a QTPlayer from a Movie.
@@ -369,13 +369,13 @@ public final class QTFactory {
      * @throws java.lang.SecurityException is thrown if the file would violate security settings of an applet
      * @throws quicktime.QTException
      */
-    public static QTDrawable makeDrawable(String paramString) throws QTException {
-        return makeDrawable(paramString, new QTDrawableMaker());
+    public static QTDrawable makeDrawable(String url) throws QTException {
+        return makeDrawable(url, new QTDrawableMaker());
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This returns a QTDrawable object from the specified Universal Resource Locator.
      * It uses the supplied QTDrawableMaker to return objects from a GraphicsImporter or
      * a Movie.
@@ -387,35 +387,35 @@ public final class QTFactory {
      *  the function will throw a StdQTException with error code invalidMovie.
      * @throws java.lang.SecurityException is thrown if the file would violate security settings of an applet
      * @throws quicktime.QTException
-     * @see {@link quicktime.app.image.GraphicsImporterDrawer},
+     * @see quicktime.app.image.GraphicsImporterDrawer,
      * {@link quicktime.app.players.QTPlayer},
      * {@link quicktime.app.QTDrawableMaker}
      */
-    public static QTDrawable makeDrawable(String paramString, QTDrawableMaker paramQTDrawableMaker) throws QTException {
-        if (paramString.startsWith("file:")) {
-            paramString = paramString.substring(5);
-            while ((paramString.charAt(0) == '/') && (paramString.charAt(1) == '/')) {
-                paramString = paramString.substring(1);
+    public static QTDrawable makeDrawable(String url, QTDrawableMaker maker) throws QTException {
+        if (url.startsWith("file:")) {
+            url = url.substring(5);
+            while ((url.charAt(0) == '/') && (url.charAt(1) == '/')) {
+                url = url.substring(1);
             }
             try {
-                return makeDrawable(new QTFile(paramString), paramQTDrawableMaker);
+                return makeDrawable(new QTFile(url), maker);
             } catch (IOException localIOException) {
                 throw new QTException(-43);
             }
         }
-        DataRef localDataRef = new DataRef(paramString);
+        DataRef localDataRef = new DataRef(url);
         GraphicsImporter localGraphicsImporter = importImage(localDataRef);
         Movie localMovie = null;
         if (localGraphicsImporter != null) {
             localMovie = checkIfMovie(localDataRef);
             if (localMovie == null) {
-                return paramQTDrawableMaker.fromGraphicsImporter(localGraphicsImporter);
+                return maker.fromGraphicsImporter(localGraphicsImporter);
             }
-            return paramQTDrawableMaker.fromMovie(localMovie);
+            return maker.fromMovie(localMovie);
         }
         localMovie = openAsMovie(localDataRef);
         if (localMovie != null) {
-            return paramQTDrawableMaker.fromMovie(localMovie);
+            return maker.fromMovie(localMovie);
         }
         throw new QTException(63533);
     }

@@ -6,11 +6,11 @@ import quicktime.QTSession;
 import quicktime.app.anim.TwoDSprite;
 import quicktime.app.time.Ticklish;
 
+
 /**
- * Deprecated.
  * The Invalidator class is used as a helper class when Compositing objects
  * that have a changing image source.
- *
+ * <p>
  * The SWCompositor uses QuickTime's SpriteWorld to draw a member's image.
  * If the member's image data is changing but there are no changes in the
  * presentation of the member's Sprite (a QuickTime Sprite is used to represent
@@ -18,12 +18,12 @@ import quicktime.app.time.Ticklish;
  * cycle of the SpriteWorld will not redraw the Sprite. Thus in order to
  * force the SpriteWorld to redraw a Sprite of this nature, the Sprite that
  * is presenting the member must be invalidated.
- *
+ * <p>
  * Some classes explicitly use the Invalidator class in this
  * release, the CompositableEffect and QTImageDrawer. Implicit invalidation
  * is done in other classes (MoviePresenter, the SWCompositor itself if it a
  * member of a parent SWCompositor) as they possess their own sense of drawing.
- *
+ * <p>
  * If an Invalidator is required it is returned by the addedToCompositor method
  * and the SWCompositor keeps a list of the Invalidators and invokes the invalidator
  * each time the SWCompositor itself is tickled. Subclasses of the Invalidator
@@ -39,12 +39,12 @@ import quicktime.app.time.Ticklish;
  * @see quicktime.app.display.SWCompositor,
  * {@link quicktime.app.image.QTImageDrawer},
  * {@link quicktime.app.players.MoviePresenter}
+ * @deprecated
  */
 public class Invalidator implements Ticklish {
 
     /**
-     * Deprecated.
-     * This is the sprite that requires invalidation in the tickle call * @deprecated since QTJava 6.1
+     * @deprecated This is the sprite that requires invalidation in the tickle call * @deprecated since QTJava 6.1
      */
     protected TwoDSprite s;
 
@@ -55,53 +55,57 @@ public class Invalidator implements Ticklish {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Constructs an Invalidator with the TwoDSprite that is presenting the Image
      * and would require invalidation.
      * @param s the TwoDSprite presenter
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public Invalidator(TwoDSprite paramTwoDSprite) {
-        this.s = paramTwoDSprite;
+    public Invalidator(TwoDSprite s) {
+        this.s = s;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * This returns the target TwoDSprite of the Invalidator.
      * @return a TwoDSprite object
+     * @since QTJava 6.1
+     * @deprecated
      */
     public TwoDSprite getTarget() {
         return this.s;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * The Invalidators typically ignore time and rate values and invalidate
      * their sprite. The default implementation will always invalidate the
      * sprite - subclasses can refine the actual conditions under which
      * invalidation is appropriate.
-     * However an Invalidator subclass could of course use the time and rate values.
+     * However, an Invalidator subclass could of course use the time and rate values.
+     *
      * @param er the effective rate of the Ticklish's Timer
-     * @param t the time at which the Ticklish has been tickled.
+     * @param t  the time at which the Ticklish has been tickled.
      * @return true if the Ticklish object should receive a consequent tickle, or false
-     *  if the Ticklish object should not be tickled again.
-     * @return {@link quicktime.QTException}
+     * if the Ticklish object should not be tickled again.
+     * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public boolean tickle(float paramFloat, int paramInt) throws QTException {
+    @Override
+    public boolean tickle(float er, int t) throws QTException {
         this.s.invalidate();
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * This call is ignored by the default Invalidator.
+     *
      * @param newTime the new time when the Ticklish's time line has changed
-     * @param {@link quicktime.QTException}
+     * @throws  quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public void timeChanged(int paramInt) throws QTException {
+    @Override
+    public void timeChanged(int newTime) throws QTException {
     }
 }
 

@@ -1,7 +1,7 @@
 package quicktime.std;
 
-public abstract interface DialogCompletionCallback {
+public interface DialogCompletionCallback {
 
-    public abstract void execute(Object paramObject);
+    void execute(Object paramObject);
 }
 

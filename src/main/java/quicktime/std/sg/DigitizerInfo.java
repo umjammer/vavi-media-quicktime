@@ -3,50 +3,36 @@ package quicktime.std.sg;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.Serial;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
-public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, QuickTimeLib, Cloneable {
 
-    private static Object linkage;
+public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, QuickTimeLib, Cloneable {
 
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 42;
 
+    @Serial
     private static final long serialVersionUID = -1283193746361395107L;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(DigitizerInfo.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     DigitizerInfo() {
-        super(42);
+        super(kNativeSize);
     }
 
     DigitizerInfo(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[42];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         setShortInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, 0)));
         for (int i = 4; i < 18; i += 4) {
@@ -57,8 +43,9 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[42];
+        byte[] arrayOfByte = new byte[kNativeSize];
         setShortInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 0)));
         for (int i = 2; i < 18; i += 4) {
             setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
@@ -134,6 +121,7 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new DigitizerInfo(this.bytes);
     }
@@ -143,7 +131,14 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
      * @return a string representing this object
      */
     public String toString() {
-        return getClass().getName() + " MinDestHeight: " + getMinDestHeight() + " MinDestWidth: " + getMinDestWidth() + " \nmaxDestHeight: " + getmaxDestHeight() + " MaxDestWidth: " + getmaxDestWidth() + " \nblendLevels: " + getblendLevels() + " InputCapabilityFlags: " + getInputCapabilityFlags() + " \nOutputCapabilityFlags: " + getOutputCapabilityFlags();
+        return getClass().getName() +
+                " MinDestHeight: " + getMinDestHeight() +
+                " MinDestWidth: " + getMinDestWidth() +
+                " \nmaxDestHeight: " + getmaxDestHeight() +
+                " MaxDestWidth: " + getmaxDestWidth() +
+                " \nblendLevels: " + getblendLevels() +
+                " InputCapabilityFlags: " + getInputCapabilityFlags() +
+                " \nOutputCapabilityFlags: " + getOutputCapabilityFlags();
     }
 
     private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {

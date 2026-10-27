@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -31,12 +32,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QDColor.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDColor.class));
             }
         }.establish();
     }
@@ -111,13 +107,14 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
 
     private transient int endPercent;
 
-    static final long serialVersionUID = -6088195721752787215L;
+    @Serial
+    private static final long serialVersionUID = -6088195721752787215L;
 
     /**
      * Returns the EndianDescriptor for RGBColor color.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorRGBColor() {
+    public static EndianDescriptor getEndianDescriptorRGBColor() {
         return EndianDescriptor.flipAll16;
     }
 
@@ -125,7 +122,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Returns the EndianDescriptor for ARGBColor color.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorARGBColor() {
+    public static EndianDescriptor getEndianDescriptorARGBColor() {
         return EndianDescriptor.flipAll16;
     }
 
@@ -133,7 +130,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Returns the EndianDescriptor for ARGBColor color.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorGradientColor() {
+    public static EndianDescriptor getEndianDescriptorGradientColor() {
         if (ed == null) {
             ed = new EndianDescriptor(0);
             EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 4);
@@ -148,7 +145,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Returns the EndianDescriptor for TQ3Color color.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorTQ3Color() {
+    public static EndianDescriptor getEndianDescriptorTQ3Color() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -156,7 +153,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Returns the EndianDescriptor for TQ3ColorARGB color.
      * @return an EndianDescriptor
      */
-    public static final EndianDescriptor getEndianDescriptorTQ3ColorARGB() {
+    public static EndianDescriptor getEndianDescriptorTQ3ColorARGB() {
         return EndianDescriptor.flipAll32;
     }
 
@@ -316,7 +313,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>as of QTJava 4.0</I>
      * Create an instance of an QDColor class
      * @param color the java.awt.Color class to convert
@@ -333,11 +330,10 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     private static float checkRange(float paramFloat) {
         if (paramFloat < 0.0F)
             return 0.0F;
-        if (paramFloat > 1.0F)
-            return 1.0F;
-        return paramFloat;
+        return Math.min(paramFloat, 1.0F);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[6];
         byte[] arrayOfByte = new byte[10];
@@ -356,6 +352,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[18];
         for (int i = 0; i < 6; i += 2) {
@@ -484,6 +481,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     /**
      * Returns a copy of this object
      */
+    @Override
     public Object clone() {
         return new QDColor(getRGBColor(), getAlpha());
     }

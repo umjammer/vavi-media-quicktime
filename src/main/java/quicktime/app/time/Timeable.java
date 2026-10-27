@@ -31,30 +31,30 @@ import quicktime.std.clocks.TimeBase;
  * {@link quicktime.app.players.MoviePlayer},
  * {@link quicktime.std.clocks.TimeBase}
  */
-public abstract interface Timeable {
+public interface Timeable {
 
     /**
      * Returns the current time base that provides the time foundation
      * of this object.
      * @return a TimeBase
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract TimeBase getTimeBase() throws QTException;
+    TimeBase getTimeBase() throws QTException;
 
     /**
      * Sets the Timeable's playback rate. Typically a rate of zero will
      * mean that the player is stopped, a positive value that the player
      * is playing forwards, a negative value that the time values are decreasing.
      * @param rate the new playback rate.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract void setRate(float paramFloat) throws QTException;
+    void setRate(float paramFloat) throws QTException;
 
     /**
      * Returns the current rate of the Timeable object.
      * @return the playback rate
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public abstract float getRate() throws QTException;
+    float getRate() throws QTException;
 }
 

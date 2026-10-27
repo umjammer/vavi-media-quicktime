@@ -22,7 +22,7 @@ import quicktime.util.QTUtils;
 class QTCanvasHelper {
     private static final boolean debug = false;
 
-    private QTCanvas canvas;
+    private final QTCanvas canvas;
 
     transient Drawable mClient;
 
@@ -101,8 +101,7 @@ class QTCanvasHelper {
     }
 
     void doSetGWorld(boolean paramBoolean) throws QTException {
-        if ((this.mClient instanceof QTDrawable)) {
-            QTDrawable localQTDrawable = (QTDrawable) this.mClient;
+        if ((this.mClient instanceof QTDrawable localQTDrawable)) {
             QDGraphics localQDGraphics1;
             if ((paramBoolean) && (this.canvas.isDisplayable())) {
                 localQDGraphics1 = this.canvas.getPort();

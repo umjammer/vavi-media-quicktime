@@ -39,9 +39,9 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
 
     private boolean deferTasking = false;
 
-    private static TaskThread sgTasker = new TaskThread("Default SG Tasker", 20);
+    private static final TaskThread sgTasker = new TaskThread("Default SG Tasker", 20);
 
-    private QTJavaAWTCanvas canvas;
+    private final QTJavaAWTCanvas canvas;
 
     AWTCanvasHelper(QTJavaAWTCanvas paramQTJavaAWTCanvas) {
         this.canvas = paramQTJavaAWTCanvas;
@@ -51,6 +51,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
 
     private WindowAdapter wa;
 
+    @Override
     public final void task() throws QTException {
         if (this.canvas.movieController != null) {
             this.canvas.movieController.idle();
@@ -83,12 +84,13 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
     }
 
     class PrerollCallback implements MoviePrePreroll {
-        private float r;
+        private final float r;
 
         PrerollCallback(float paramFloat) {
             this.r = paramFloat;
         }
 
+        @Override
         public void execute(Movie paramMovie, int paramInt) {
             synchronized (this) {
                 if (AWTCanvasHelper.this.lastRate == 0.0F) {
@@ -124,6 +126,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
         if ((localObject1 instanceof Window)) {
             this.parentWindow = ((Window) localObject1);
             this.wa = new WindowAdapter() {
+                @Override
                 public void windowActivated(WindowEvent paramAnonymousWindowEvent) {
                     if (QTSession.isInitialized())
                         try {
@@ -140,6 +143,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
                         }
                 }
 
+                @Override
                 public void windowDeactivated(WindowEvent paramAnonymousWindowEvent) {
                     if (QTSession.isInitialized()) {
                         try {
@@ -173,6 +177,7 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent paramKeyEvent) {
         try {
             if (this.canvas.movieController != null) {
@@ -184,12 +189,15 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent paramKeyEvent) {
     }
 
+    @Override
     public void keyTyped(KeyEvent paramKeyEvent) {
     }
 
+    @Override
     public void mousePressed(MouseEvent paramMouseEvent) {
         try {
             if (this.canvas.movieController != null) {
@@ -202,15 +210,19 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
         }
     }
 
+    @Override
     public void mouseClicked(MouseEvent paramMouseEvent) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent paramMouseEvent) {
     }
 
+    @Override
     public void mouseExited(MouseEvent paramMouseEvent) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent paramMouseEvent) {
     }
 

@@ -45,6 +45,7 @@ public final class SpriteDescription extends SampleDescription {
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new SpriteDescription(makeAndCopyHandle());
     }

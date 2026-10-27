@@ -21,12 +21,7 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SoundCompressionDialog.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SoundCompressionDialog.class));
             }
         }.establish();
     }
@@ -40,9 +35,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Retrieves the current sample rate for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the sample rate
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getInfoSampleRate() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -52,9 +47,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Sets the current sample rate for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      * @param rate the new sample rate
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInfoSampleRate(float paramFloat) throws StdQTException {
         int[] arrayOfInt = { QTUtils.X2Fix(paramFloat) };
@@ -63,9 +58,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Retrieves the current sample size for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the sample size
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getInfoSampleSize() throws StdQTException {
         short[] arrayOfShort = { 0 };
@@ -75,9 +70,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Sets the current sample size for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      * @param size the new sample size
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInfoSampleSize(int paramInt) throws StdQTException {
         short[] arrayOfShort = { (short) paramInt };
@@ -86,9 +81,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Retrieves the current channel count for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the channel count
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getInfoChannelCount() throws StdQTException {
         short[] arrayOfShort = { 0 };
@@ -98,9 +93,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Sets the current channel count for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      * @param n the new channel count
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInfoChannelCount(int paramInt) throws StdQTException {
         short[] arrayOfShort = { (short) paramInt };
@@ -109,9 +104,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Sets the current compression type for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      * @param compType the new compression type
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInfoCompression(int paramInt) throws StdQTException {
         int[] arrayOfInt = { paramInt };
@@ -120,9 +115,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Retrieves the current compression type for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the compression
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getInfoCompression() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -132,9 +127,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Sets the current list of compression types for a dialog.
-     * QuickTime::SCSetInfo()
+     * @see "QuickTime::SCSetInfo()"
      * @param compTypes the new compression types, if null then show all available compression options.
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setInfoCompressionList(int[] paramArrayOfInt) throws StdQTException {
         if (paramArrayOfInt == null) {
@@ -150,9 +145,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
 
     /**
      * Retrieves the current compression type list for a dialog.
-     * QuickTime::SCGetInfo()
+     * @see "QuickTime::SCGetInfo()"
      * @return the compression list
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int[] getInfoCompressionList() throws StdQTException {
         int i = NewHandle(4);

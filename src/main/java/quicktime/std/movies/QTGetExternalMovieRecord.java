@@ -19,12 +19,7 @@ public final class QTGetExternalMovieRecord extends QTPointerRef implements quic
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTGetExternalMovieRecord.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTGetExternalMovieRecord.class));
             }
         }.establish();
     }

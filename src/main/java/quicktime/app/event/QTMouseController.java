@@ -11,7 +11,7 @@ import quicktime.app.spaces.Space;
 import quicktime.qd.QDRect;
 
 /**
- * Deprecated.
+ * @deprecated
  * A QTMouseController is attached to a Space. When the space is added to
  * its container (for instance a QTCanvas in the case of QTDisplaySpaces)
  * it will create an event dispatcher that will translate these container
@@ -64,16 +64,16 @@ public class QTMouseController implements ListenerController {
     MouseMoveListener mouseMoveListener;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * The space which the controller is attached too. If the controller is not
      * attached to a space this variable will be null. It is set in the addedToSpace method.
      */
     protected Space space;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the Space which the MouseController has been attached to.
      * @return the current space.
      */
@@ -82,14 +82,15 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the space when a Controller is being addedTo the Space s.
      * If the Controller is not an appropriate controller for that kind of Space this
      * method can throw an exception and the controller won't be added to the Space.
      * @param s the Space being added to
      * @see setTargetSpace()
      */
+    @Override
     public void addedToSpace(Space paramSpace) {
         this.space = paramSpace;
         if ((this.space instanceof SWCompositor)) {
@@ -104,13 +105,14 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Called by the Space when a Controller is being removed
      * from a Space. This is only called by the Space on controllers that have
      * previously been added, thus the space they are being removed from
      * is the space they were added to. Sets the targetSpace to null.
      */
+    @Override
     public void removedFromSpace() {
         this.space = null;
         this.compSpace = null;
@@ -122,8 +124,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest. When this method is called the source
@@ -133,6 +135,7 @@ public class QTMouseController implements ListenerController {
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void addedTo(Object paramObject) {
         this.listenerSource = paramObject;
         if (this.handler == null) {
@@ -141,14 +144,15 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest.
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
      */
+    @Override
     public void removedFrom(Object paramObject) {
         this.listenerSource = null;
         if (this.handler != null) {
@@ -157,8 +161,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called when a controller is added to its space and
      * the controller needs to create its event handler
      */
@@ -177,8 +181,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called when a controller is removed from its space and it had an active event
      * handler
      */
@@ -188,8 +192,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns true if the location of the QTMouseEvent is
      * within the Space's area, or false if it isn't. This test
      * assumes that the space is some kind of QTDisplaySpace, and can
@@ -235,8 +239,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Add a QTMouseListener for this controller. The controller
      * will take the appropriate action based on the known mouse listeners
      * in the quicktime.app.event package.
@@ -253,8 +257,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a QTMouseListener for this controller.
      * @param l a new QTMouseListener
      */
@@ -293,8 +297,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseButtonListener(s) it will
      * dispatch click events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
@@ -306,8 +310,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the mouse event
@@ -317,8 +321,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseButtonListener(s) it will
      * dispatch press events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
@@ -330,8 +334,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -341,8 +345,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseButtonListener(s) it will
      * dispatch release events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
@@ -354,8 +358,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -394,8 +398,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseMoveListener(s) it will
      * dispatch drag events that occur within its Space's area to those listeners.
      * Mouse drag events will continue to be delivered to
@@ -427,8 +431,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -438,8 +442,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseMoveListener(s) it will
      * dispatch move events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
@@ -463,8 +467,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -502,8 +506,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseEnterExitListener(s) it will
      * dispatch a mouseEntered event when the mouse moves or is dragged into the space.
      * @param e the QTMouseEvent of this type.
@@ -519,8 +523,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -530,8 +534,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseEnterExitListener(s) it will
      * dispatch a mouseExited event when the mouse moves or is dragged out of the space.
      * @param e the QTMouseEvent of this type.
@@ -549,8 +553,8 @@ public class QTMouseController implements ListenerController {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -559,8 +563,3 @@ public class QTMouseController implements ListenerController {
         this.mouseEnterExitListener.mouseExited(paramQTMouseEvent);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /QTMouseController.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

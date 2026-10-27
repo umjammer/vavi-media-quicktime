@@ -22,12 +22,7 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(MovieMediaHandler.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MovieMediaHandler.class));
             }
         }.establish();
     }
@@ -38,9 +33,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method retrieves the duration of the currently instantiated embedded movie
-     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @see "QuickTime::MovieMediaGetCurrentMovieProperty()"
      * @return the duration of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getCurrentMoviePropertyDuration() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -51,9 +46,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method gets the time scale of the currently instantiated embedded movie
-     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @see "QuickTime::MovieMediaGetCurrentMovieProperty()"
      * @return the time scale of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getCurrentMoviePropertyTimeScale() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -64,9 +59,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method gets the time record associated with the currently instantiated embedded movie
-     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @see "QuickTime::MovieMediaGetCurrentMovieProperty()"
      * @return the time of the movie as a TimeRecord
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public TimeRecord getCurrentMoviePropertyTime() throws QTException {
         TimeRecord localTimeRecord = new TimeRecord();
@@ -77,9 +72,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method gets the natural bounds of the currently instantiated embedded movie
-     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @see "QuickTime::MovieMediaGetCurrentMovieProperty()"
      * @return the natural bounds of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public QDRect getCurrentMoviePropertyNaturalBounds() throws StdQTException {
         QDRect localQDRect = new QDRect();
@@ -90,9 +85,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method gets the matrix of the currently instantiated embedded movie
-     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @see "QuickTime::MovieMediaGetCurrentMovieProperty()"
      * @return the matrix of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public Matrix getCurrentMoviePropertyMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
@@ -104,9 +99,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
     /**
      * This method returns an array of all the track IDs associated with the currently
      * instantiated embedded movie
-     * QuickTime::MovieMediaGetCurrentMovieProperty()
+     * @see "QuickTime::MovieMediaGetCurrentMovieProperty()"
      * @return an array of track IDs of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int[] getCurrentMoviePropertyTrackList() throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -118,10 +113,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method gets the media type of the currently instantiated embedded movie
-     * QuickTime::MovieGetCurrentTrackProperty()
+     * @see "QuickTime::MovieGetCurrentTrackProperty()"
      * @param trackID the ID of the track to return the type of
      * @return the media type of the movie
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getCurrentTrackPropertyMediaType(int paramInt) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -132,11 +127,11 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method gets the data reference of the currently instantiated embedded movie
-     * QuickTime::MovieMediaGetChildMovieDataReference()
+     * @see "QuickTime::MovieMediaGetChildMovieDataReference()"
      * @param dataRefID the ID of the data reference to retrieve
      * @param dataRefIndex the index of the data reference to retrieve
      * @return the DataRef of the movie
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public DataRef getChildMovieDataReference(int paramInt1, int paramInt2) throws QTException {
         int i = 0;
@@ -148,11 +143,11 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method sets the data reference of the currently instantiated embedded movie
-     * QuickTime::MovieMediaSetChildMovieDataReference()
+     * @see "QuickTime::MovieMediaSetChildMovieDataReference()"
      * @param dataRefID the ID of the data ref to set
      * @param dataRefType the type of the data ref to set
      * @param dataRef the data ref to set
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setChildMovieDataReference(int paramInt1, int paramInt2, DataRef paramDataRef) throws StdQTException {
         int i = MovieMediaSetChildMovieDataReference(_ID(), paramInt1, paramInt2, paramDataRef.getBytes());
@@ -161,9 +156,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
 
     /**
      * This method loads the movie associated with a specific data reference
-     * QuickTime::MovieMediaLoadChildMovieFromDataReference()
+     * @see "QuickTime::MovieMediaLoadChildMovieFromDataReference()"
      * @param dataRefID the dataReference ID to be used
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void loadChildMovieFromDataReference(int paramInt) throws StdQTException {
         int i = MovieMediaLoadChildMovieFromDataReference(_ID(), paramInt);

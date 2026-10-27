@@ -3,6 +3,7 @@ package quicktime.std.qtcomponents;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -23,18 +24,14 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
      */
     public static final int kNativeSize = 14;
 
-    static final long serialVersionUID = -1950218889120312012L;
+    @Serial
+    private static final long serialVersionUID = -1950218889120312012L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TimeCodeDef.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(TimeCodeDef.class));
             }
         }.establish();
     }
@@ -55,6 +52,7 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[14];
         paramObjectInputStream.read(getBytes());
@@ -65,6 +63,7 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[14];
         System.arraycopy(getBytes(), 0, arrayOfByte, 0, 14);
@@ -158,6 +157,7 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
     /**
      * Makes a copy of a object.
      */
+    @Override
     public Object clone() {
         return new TimeCodeDef(this.bytes);
     }

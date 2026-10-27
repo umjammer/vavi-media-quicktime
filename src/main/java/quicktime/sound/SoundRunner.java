@@ -122,15 +122,10 @@ final class SoundRunner {
 
             this.runnerThread = ((Thread) new Object() {
                 Object doPrivelegedAction() {
-                    return java.security.AccessController.doPrivileged(new PrivilegedAction<Thread>() {
-
-                        public Thread run() {
-                            return soundParamBlock != null ? new Thread(new CompletionRunner(),
-                                                                        "Sound Completion Thread:" + ++whichThread)
-                                                           : new Thread(new SndCallbackRunner(),
-                                                                        "SndChannel CallBack Thread:" + ++whichThread);
-                        }
-                    });
+                    return java.security.AccessController.doPrivileged((PrivilegedAction<Thread>) () -> soundParamBlock != null ? new Thread(new CompletionRunner(),
+                                                                "Sound Completion Thread:" + ++whichThread)
+                                                   : new Thread(new SndCallbackRunner(),
+                                                                "SndChannel CallBack Thread:" + ++whichThread));
                 }
             }.doPrivelegedAction());
         }
@@ -145,6 +140,7 @@ final class SoundRunner {
         CompletionRunner() {
         }
 
+        @Override
         public void run() {
             for (;;) {
                 SoundRunner.this.doWait();
@@ -162,6 +158,7 @@ final class SoundRunner {
         SndCallbackRunner() {
         }
 
+        @Override
         public void run() {
             for (;;) {
                 SoundRunner.this.doWait();
@@ -198,6 +195,7 @@ final class SoundRunner {
     }
 
     static class MRJIdler implements Runnable {
+        @Override
         public void run() {
             try {
                 while (SoundRunner.activeCallbacks >= 1) {

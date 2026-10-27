@@ -3,8 +3,9 @@ package quicktime.io;
 import java.awt.FileDialog;
 import java.io.File;
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -26,34 +27,14 @@ import quicktime.std.movies.media.DataRef;
 import quicktime.std.music.SynthesizerConnections;
 import quicktime.std.qtcomponents.MovieImporter;
 import quicktime.std.sg.SequenceGrabber;
-import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
-import quicktime.util.UtilException;
+
 
 /**
  * The QTFile class represents a file for QuickTime movies.
  */
 public final class QTFile extends File implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTFile.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
-    private static boolean debug = false;
 
     /**
      * Standard types used in get file.
@@ -79,10 +60,10 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * Determines the file that the graphics resides in.
-     * QuickTime::GraphicsImportGetDataFile
+     * @see "QuickTime::GraphicsImportGetDataFile"
      * @return The file that contains the graphics data.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#getDataFile()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsImporter#getDataFile()
      */
     public static QTFile fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws QTException {
         byte[] arrayOfByte = makeFSSpec();
@@ -93,27 +74,27 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * Presents a dialog box letting the user save an image in a foreign file format.
-     * QuickTime::GraphicsImportDoExportImageFileDialog
+     * @see "QuickTime::GraphicsImportDoExportImageFileDialog"
      * @param inDefaultSpec suggests the default name for the file. If you do not want to suggest a default name, pass null.
      * @param prompt A prompt that appears in the standard put dialog box; it may be nil, in which case a default string is used.
-     * @param {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsImporter#doExportImageFileDialog(quicktime.io.QTFile, java.lang.String)}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsImporter#doExportImageFileDialog(quicktime.io.QTFile, java.lang.String)
      */
-    public static GraphicsImporterInfo fromGraphicsImporter(GraphicsImporter paramGraphicsImporter, QTFile paramQTFile, String paramString) throws QTException {
+    public static GraphicsImporterInfo fromGraphicsImporter(GraphicsImporter paramGraphicsImporter, QTFile inDefaultSpec, String prompt) throws QTException {
         int[] arrayOfInt = new int[1];
         byte[] arrayOfByte = makeFSSpec();
         short[] arrayOfShort = new short[1];
-        int i = GraphicsImportDoExportImageFileDialog(QTObject.ID(paramGraphicsImporter), paramQTFile != null ? paramQTFile.getFSSpec(true, 512) : null, paramString != null ? QTUtils.String2PString(paramString, 255) : null, 0, arrayOfInt, arrayOfByte, arrayOfShort);
+        int i = GraphicsImportDoExportImageFileDialog(QTObject.ID(paramGraphicsImporter), inDefaultSpec != null ? inDefaultSpec.getFSSpec(true, 512) : null, prompt != null ? QTUtils.String2PString(prompt, 255) : null, 0, arrayOfInt, arrayOfByte, arrayOfShort);
         StdQTException.checkError(i);
         return new GraphicsImporterInfo(arrayOfInt[0], new QTFile(arrayOfByte), arrayOfShort[0]);
     }
 
     /**
      * Determines the file that is the source of input images to the Graphics exporter.
-     * QuickTime::GraphicsExportGetInputFile
+     * @see "QuickTime::GraphicsExportGetInputFile"
      * @return The QTFile object
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getInputFile()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getInputFile()
      */
     public static QTFile fromGraphicsExporterInput(GraphicsExporter paramGraphicsExporter) throws QTException {
         byte[] arrayOfByte = makeFSSpec();
@@ -124,10 +105,10 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * Determines the file that is the destination of Output images to the Graphics exporter.
-     * QuickTime::GraphicsExportGetOutputFile
+     * @see "QuickTime::GraphicsExportGetOutputFile"
      * @return The QTFile object
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.image.GraphicsExporter#getOutputFile()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.image.GraphicsExporter#getOutputFile()
      */
     public static QTFile fromGraphicsExporterOutput(GraphicsExporter paramGraphicsExporter) throws QTException {
         byte[] arrayOfByte = makeFSSpec();
@@ -138,10 +119,10 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * Allows you to determine the movie file that is currently assigned to a sequence grabber component.
-     * QuickTime::SGGetDataOutput
+     * @see "QuickTime::SGGetDataOutput"
      * @return The QTFile movie file.
-     * @return {@link quicktime.QTException}
-     * @see {@link quicktime.std.sg.SequenceGrabber#getDataOutputFile()}
+     * @throws quicktime.QTException
+     * @see quicktime.std.sg.SequenceGrabber#getDataOutputFile()
      */
     public static QTFile fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws QTException {
         byte[] arrayOfByte = makeFSSpec();
@@ -156,10 +137,10 @@ public final class QTFile extends File implements QuickTimeLib {
      * a MusicComponent as specified in that component's SynthesizerConnections
      * @param conns the Synthesiser connections
      * @return a QTFile
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static QTFile fromSynthesizerConnections(SynthesizerConnections paramSynthesizerConnections) throws QTException {
-        int i = getIntFromArray(paramSynthesizerConnections.getBytes(), 24);
+    public static QTFile fromSynthesizerConnections(SynthesizerConnections conns) throws QTException {
+        int i = getIntFromArray(conns.getBytes(), 24);
         if (i == 0)
             return null;
         byte[] arrayOfByte = makeFSSpec();
@@ -175,25 +156,23 @@ public final class QTFile extends File implements QuickTimeLib {
      * @param fileName a full path file specification path
      * @param permission the requested permission.
      */
-    public static void checkSecurity(String paramString, int paramInt) {
-        SecurityManager localSecurityManager = System.getSecurityManager();
-        if (localSecurityManager != null) {
-            int i = 0;
-            if ((paramInt & 0x100) != 0) {
-                localSecurityManager.checkRead(paramString);
-                i = 1;
-            }
-            if ((paramInt & 0x200) != 0) {
-                localSecurityManager.checkWrite(paramString);
-                i = 1;
-            }
-            if ((paramInt & 0x400) != 0) {
-                localSecurityManager.checkDelete(paramString);
-                i = 1;
-            }
-            if (i == 0) {
-                throw new SecurityException(paramString + ",Unknown permission request:0x" + Integer.toHexString(paramInt));
-            }
+    public static void checkSecurity(String fileName, int permission) {
+        Path path = Path.of(fileName);
+        int i = 0;
+        if ((permission & 0x100) != 0) {
+            Files.isReadable(path);
+            i = 1;
+        }
+        if ((permission & 0x200) != 0) {
+            Files.isWritable(path);
+            i = 1;
+        }
+        if ((permission & 0x400) != 0) {
+            Files.isExecutable(path);
+            i = 1;
+        }
+        if (i == 0) {
+            throw new SecurityException(fileName + ",Unknown permission request:0x" + Integer.toHexString(permission));
         }
     }
 
@@ -201,23 +180,21 @@ public final class QTFile extends File implements QuickTimeLib {
      * This method will take an alias and will resolve it,
      * returning the full path name of the resolved file. You must have
      * read permission to the resultant file path or a SecurityException will be thrown.
-     * QuickTime::ResolveAlias
+     * @see "QuickTime::ResolveAlias"
      * @param alias the alias to resolve
      * @return the QTFile object of the resolved alias
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static QTFile resolveAlias(AliasHandle paramAliasHandle) throws QTException {
+    public static QTFile resolveAlias(AliasHandle alias) throws QTException {
         byte[] arrayOfByte1 = makeFSSpec();
         byte[] arrayOfByte2 = { 0 };
-        int i = ResolveAlias(null, QTObject.ID(paramAliasHandle), arrayOfByte1, arrayOfByte2);
+        int i = ResolveAlias(null, QTObject.ID(alias), arrayOfByte1, arrayOfByte2);
         QTIOException.checkError(i, QTUtils.PString2String(arrayOfByte1, 6));
         QTFile localQTFile = new QTFile(arrayOfByte1);
-        if (System.getSecurityManager() != null) {
-            try {
-                checkSecurity(localQTFile.getCanonicalPath(), 256);
-            } catch (IOException localIOException) {
-                throw new QTIOException(localIOException.getMessage());
-            }
+        try {
+            checkSecurity(localQTFile.getCanonicalPath(), 256);
+        } catch (IOException localIOException) {
+            throw new QTIOException(localIOException.getMessage());
         }
         return localQTFile;
     }
@@ -235,12 +212,12 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * Present a standard open file panel to the user to retrieve a file.
-     * QuickTime::StandardGetFilePreview()
+     * @see "QuickTime::StandardGetFilePreview()"
      * @param fileTypes the particular file types you want the user to see. No fileTypes assumes all files. Max of 4.
      * @return The file object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static QTFile standardGetFilePreview(int[] paramArrayOfInt) throws QTException {
+    public static QTFile standardGetFilePreview(int[] fileTypes) throws QTException {
         byte[] arrayOfByte1;
         if (QTSession.isCurrentOS(4)) {
             FileDialog localFileDialog = new FileDialog(new java.awt.Frame(), "Open File...");
@@ -252,7 +229,7 @@ public final class QTFile extends File implements QuickTimeLib {
         }
         synchronized (QTNative.globalsLock) {
             byte[] arrayOfByte2 = makeStdFileReply();
-            StandardGetFilePreview(0, (short) getNumTypes(paramArrayOfInt), paramArrayOfInt, arrayOfByte2);
+            StandardGetFilePreview(0, (short) getNumTypes(fileTypes), fileTypes, arrayOfByte2);
             if (arrayOfByte2[0] == 0)
                 throw new QTIOException(-128, "");
             arrayOfByte1 = makeFSSpec();
@@ -265,16 +242,16 @@ public final class QTFile extends File implements QuickTimeLib {
      * Used to return a QTFile object from a full path specification
      * @param pathName the full path name of the file
      */
-    public QTFile(String paramString) {
-        super(paramString);
+    public QTFile(String pathName) {
+        super(pathName);
     }
 
     /**
      * Used to return a QTFile object from a Java file object.
      * @param file a java File object
      */
-    public QTFile(File paramFile) {
-        this(paramFile.getPath());
+    public QTFile(File file) {
+        this(file.getPath());
     }
 
     private QTFile(byte[] paramArrayOfByte) throws QTIOException {
@@ -290,9 +267,9 @@ public final class QTFile extends File implements QuickTimeLib {
      * Returns the byte array containing the fsspec.
      * @param permissions you must specify whether the file will be reading or writing.
      * @return the byte array
-     * @return {@link quicktime.io.QTIOException}
+     * @throws quicktime.io.QTIOException
      */
-    public final byte[] getFSSpec(boolean paramBoolean, int paramInt) throws QTIOException {
+    public final byte[] getFSSpec(boolean paramBoolean, int permissions) throws QTIOException {
         if (this.fileSpec == null) {
             try {
                 this.fileSpec = path2Spec(getCanonicalPath(), paramBoolean);
@@ -301,7 +278,7 @@ public final class QTFile extends File implements QuickTimeLib {
             }
         }
         try {
-            checkSecurity(getCanonicalPath(), paramInt);
+            checkSecurity(getCanonicalPath(), permissions);
         } catch (IOException localIOException2) {
             throw new QTIOException(localIOException2.getMessage());
         }
@@ -312,137 +289,137 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * This method takes a specified file and converts it to a movie file.
-     * QuickTime::ConvertFileToMovieFile()
+     * @see "QuickTime::ConvertFileToMovieFile()"
      * @param fCreator Specifies the creator value for the file if it is a new one.
      * @param inFlags Controls movie file conversion flags.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void convertToMovieFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
-        convertToMovieFile(paramQTFile, paramInt1, paramInt2, null, null);
+    public void convertToMovieFile(QTFile paramQTFile, int fCreator, int inFlags) throws QTException {
+        convertToMovieFile(paramQTFile, fCreator, inFlags, null, null);
     }
 
     /**
      * This method takes a specified file and converts it to a movie file.
      * The specified files must be full paths or a fnfErr exception will be thrown
-     * QuickTime::ConvertFileToMovieFile()
+     * @see "QuickTime::ConvertFileToMovieFile()"
      * @param outputFile the destination movie file.
      * @param fCreator Specifies the creator value for the file if it is a new one.
      * @param inFlags Controls movie file conversion flags.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void convertToMovieFile(QTFile paramQTFile, int paramInt1, int paramInt2, MovieImporter paramMovieImporter) throws QTException {
-        convertToMovieFile(paramQTFile, paramInt1, paramInt2, paramMovieImporter, null);
+    public void convertToMovieFile(QTFile outputFile, int fCreator, int inFlags, MovieImporter paramMovieImporter) throws QTException {
+        convertToMovieFile(outputFile, fCreator, inFlags, paramMovieImporter, null);
     }
 
     /**
      * This method takes a specified file and converts it to a movie file.
      * The specified files must be full paths or a fnfErr exception will be thrown
-     * QuickTime::ConvertFileToMovieFile()
+     * @see "QuickTime::ConvertFileToMovieFile()"
      * @param outputFile the destination movie file.
      * @param fCreator Specifies the creator value for the file if it is a new one.
      * @param flags Controls movie file conversion flags.
      * @param mp Specifies the movie progress object or null otherwise.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void convertToMovieFile(QTFile paramQTFile, int paramInt1, int paramInt2, MovieImporter paramMovieImporter, MovieProgress paramMovieProgress) throws QTException {
+    public void convertToMovieFile(QTFile outputFile, int fCreator, int flags, MovieImporter paramMovieImporter, MovieProgress mp) throws QTException {
         byte[] arrayOfByte1 = getFSSpec(true, 256);
-        byte[] arrayOfByte2 = paramQTFile.getFSSpec(false, 512);
-        if ((paramInt2 & 0x80000000) != 0) {
+        byte[] arrayOfByte2 = outputFile.getFSSpec(false, 512);
+        if ((flags & 0x80000000) != 0) {
             try {
-                checkSecurity(paramQTFile.getCanonicalPath(), 1024);
+                checkSecurity(outputFile.getCanonicalPath(), 1024);
             } catch (IOException localIOException) {
                 throw new QTIOException(localIOException.getMessage());
             }
         }
         IODispatcher localIODispatcher = null;
         int i = -1;
-        if (paramMovieProgress != null) {
-            localIODispatcher = new IODispatcher(paramMovieProgress);
+        if (mp != null) {
+            localIODispatcher = new IODispatcher(mp);
             i = localIODispatcher.ID();
         }
-        int j = ConvertFileToMovieFile(arrayOfByte1, arrayOfByte2, paramInt1, (short) -1, null, paramInt2, QTObject.ID(paramMovieImporter), i, 0);
+        int j = ConvertFileToMovieFile(arrayOfByte1, arrayOfByte2, fCreator, (short) -1, null, flags, QTObject.ID(paramMovieImporter), i, 0);
         if (localIODispatcher != null)
             localIODispatcher.cleanupMethodClosure();
-        QTIOException.checkError(j, getPath() + "," + paramQTFile.getPath());
+        QTIOException.checkError(j, getPath() + "," + outputFile.getPath());
     }
 
     /**
      * Creates a file as specified by this QTFile.
      * This call will not open the created movie file.
-     * QuickTime::CreateMovieFile()
+     * @see "QuickTime::CreateMovieFile()"
      * @param fCreator Specifies the creator of the file.
      * @param flags Specifies the behaviour when creating the file.
-     * @param {@link quicktime.io.QTIOException}
+     * @throws quicktime.io.QTIOException
      */
-    public void createMovieFile(int paramInt1, int paramInt2) throws QTIOException {
-        if ((paramInt2 & 0x80000000) != 0) {
+    public void createMovieFile(int fCreator, int flags) throws QTIOException {
+        if ((flags & 0x80000000) != 0) {
             try {
                 checkSecurity(getCanonicalPath(), 1024);
             } catch (IOException localIOException) {
                 throw new QTIOException(localIOException.getMessage());
             }
         }
-        int i = CreateMovieFile(getFSSpec(false, 512), paramInt1, (short) -1, paramInt2 | 0x20000000 | 0x40000000, null, null);
+        int i = CreateMovieFile(getFSSpec(false, 512), fCreator, (short) -1, flags | 0x20000000 | 0x40000000, null, null);
         QTIOException.checkError(i, getPath());
     }
 
     /**
      * Creates a short cut movie file as specified by this QTFile. A Shortcut movie just
      * contains a data reference which refers to another movie.
-     * QuickTime::CreateShortcutMovieFile()
+     * @see "QuickTime::CreateShortcutMovieFile()"
      * @param creator Specifies the creator of the file.
      * @param scriptTag the system script identifier
      * @param createMovieFileFlags Specifies the behaviour when creating the file.
      * @param targetDataRef this is a data reference to the location of the data that is referred to by
      *  the resultant movie that this call creates.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public void createShortcutMovieFile(int paramInt1, int paramInt2, int paramInt3, DataRef paramDataRef) throws QTException {
+    public void createShortcutMovieFile(int creator, int scriptTag, int createMovieFileFlags, DataRef targetDataRef) throws QTException {
         if (QTSession.getQTMajorVersion() < 4) {
             throw new QTException(-50);
         }
-        if ((paramInt3 & 0x80000000) != 0) {
+        if ((createMovieFileFlags & 0x80000000) != 0) {
             try {
                 checkSecurity(getCanonicalPath(), 1024);
             } catch (IOException localIOException) {
                 throw new QTIOException(localIOException.getMessage());
             }
         }
-        int i = CreateShortcutMovieFile(getFSSpec(false, 512), paramInt1, (short) paramInt2, paramInt3, QTObject.ID(paramDataRef), paramDataRef.getType());
+        int i = CreateShortcutMovieFile(getFSSpec(false, 512), creator, (short) scriptTag, createMovieFileFlags, QTObject.ID(targetDataRef), targetDataRef.getType());
         QTIOException.checkError(i, getPath());
     }
 
     /**
      * Creates an alias record that describes the specified target.
-     * QuickTime::QTNewAlias
+     * @see "QuickTime::QTNewAlias"
      * @param minimal if true then the alias is a minimal alias.
      * @return an AliasHandle that represents the QTFile
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public AliasHandle newAlias(boolean paramBoolean) throws QTException {
-        return AliasHandle.fromQTFile(this, paramBoolean);
+    public AliasHandle newAlias(boolean minimal) throws QTException {
+        return AliasHandle.fromQTFile(this, minimal);
     }
 
     /**
      * Creates a relative alias record that describes the specified target with respect to the given file.
-     * QuickTime::NewAlias
+     * @see "QuickTime::NewAlias"
      * @param relativeToFile the file from which the target is relative to.
      * @param minimal if true then the alias is a minimal alias.
      * @return an AliasHandle that represents the QTFile
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public AliasHandle relativeAlias(QTFile paramQTFile, boolean paramBoolean) throws QTException {
-        return AliasHandle.fromTargetQTFile(paramQTFile, this, paramBoolean);
+    public AliasHandle relativeAlias(QTFile relativeToFile, boolean minimal) throws QTException {
+        return AliasHandle.fromTargetQTFile(relativeToFile, this, minimal);
     }
 
     /**
      * Returns the target FSSpec passed in
-     * QuickTime::ResolveAliasFile
+     * @see "QuickTime::ResolveAliasFile"
      * @param resolveAliasChains set to true if all aliases to be resolved in a chain.
-     * @param {@link quicktime.io.QTIOException}
+     * @throws quicktime.io.QTIOException
      */
-    public QTFile resolveAlias(boolean paramBoolean) throws QTIOException {
-        byte b = (byte) (paramBoolean ? 1 : 0);
+    public QTFile resolveAlias(boolean resolveAliasChains) throws QTIOException {
+        byte b = (byte) (resolveAliasChains ? 1 : 0);
         byte[] arrayOfByte1 = { 0 };
         byte[] arrayOfByte2 = { 0 };
         byte[] arrayOfByte3 = getFSSpec(true, 256);
@@ -453,10 +430,11 @@ public final class QTFile extends File implements QuickTimeLib {
 
     /**
      * This method deletes a movie file.
-     * QuickTime::DeleteMovieFile()
+     * @see "QuickTime::DeleteMovieFile()"
      * @return true if the file is successfully deleted;
      *              false otherwise.
      */
+    @Override
     public boolean delete() {
         boolean bool = false;
         try {
@@ -527,7 +505,7 @@ public final class QTFile extends File implements QuickTimeLib {
 
     private static final String cleanUpPathName(String paramString) {
         int i = paramString.length();
-        StringBuffer localStringBuffer = new StringBuffer();
+        StringBuilder localStringBuffer = new StringBuilder();
         for (int j = 0; j < i; j++) {
             if (paramString.charAt(j) == '%') {
                 String str = paramString.substring(j + 1, j + 3);
@@ -650,10 +628,9 @@ public final class QTFile extends File implements QuickTimeLib {
             setShortAt(28, paramShort);
         }
 
-        protected final void finalize() throws Throwable {
+        protected final void dispose() throws Throwable {
             if (getIntAt(18) != 0)
                 QTFile.DisposePtr(getIntAt(18));
-            super.finalize();
         }
 
         private String getPString(int paramInt) {
@@ -686,30 +663,30 @@ public final class QTFile extends File implements QuickTimeLib {
         localCInfoPBRec.setNamePtr(getPStringAt(paramArrayOfByte, 6));
         localCInfoPBRec.setFileDirIndex((short) -1);
         localCInfoPBRec.setFileDirID(getIntFromArray(paramArrayOfByte, 2));
-        Object localObject = new String(getPStringAt(paramArrayOfByte, 6));
+        String localObject = getPStringAt(paramArrayOfByte, 6);
         int i = getIntFromArray(paramArrayOfByte, 2);
         for (; ; ) {
             String str = "";
             localCInfoPBRec.setFileDirID(i);
             int j = PBGetCatInfoSync(localCInfoPBRec.getBytes());
-            QTIOException.checkError(j, (String) localObject);
+            QTIOException.checkError(j, localObject);
             if (localCInfoPBRec.getFileDirID() == 2) {
                 str = localCInfoPBRec.getName();
                 str = str + File.separator;
-                str = str + (String) localObject;
+                str = str + localObject;
                 localObject = str;
                 str = File.separator;
-                str = str + (String) localObject;
+                str = str + localObject;
                 localObject = str;
                 break;
             }
             i = localCInfoPBRec.getDirParID();
             str = localCInfoPBRec.getName();
             str = str + File.separator;
-            str = str + (String) localObject;
+            str = str + localObject;
             localObject = str;
         }
-        return (String) localObject;
+        return localObject;
     }
 
     private static String getPStringAt(byte[] paramArrayOfByte, int paramInt) {

@@ -11,10 +11,10 @@ public final class OpenFile extends OpenedFile {
 
     /**
      * Open the specified file for reading.
-     * QuickTime::FSpOpenDF()
+     * @see "QuickTime::FSpOpenDF()"
      * @param f the file to open
      * @return the opened file.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static OpenFile asRead(QTFile paramQTFile) throws QTException {
         return new OpenFile(paramQTFile, 256);
@@ -22,10 +22,10 @@ public final class OpenFile extends OpenedFile {
 
     /**
      * Open the specified file for writing.
-     * QuickTime::FSpOpenDF()
+     * @see "QuickTime::FSpOpenDF()"
      * @param f the file to open
      * @return the opened file.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static OpenFile asWrite(QTFile paramQTFile) throws QTException {
         return new OpenFile(paramQTFile, 512);

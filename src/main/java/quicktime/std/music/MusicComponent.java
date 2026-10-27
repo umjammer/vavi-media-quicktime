@@ -35,31 +35,26 @@ public final class MusicComponent extends Component implements QuickTimeLib {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(MusicComponent.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MusicComponent.class));
             }
         }.establish();
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>should use NoteAllocator calls to get a MusicComponent Instance</I>
      * Opens the MusicComponent component.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      */
     public MusicComponent() throws QTException {
         this(0);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>should use NoteAllocator calls to get a MusicComponent Instance</I>
      * Opens the MusicComponent component with a specified subType.
-     * QuickTime::OpenADefaultComponent
+     * @see "QuickTime::OpenADefaultComponent"
      */
     public MusicComponent(int paramInt) throws QTException {
         super(1836413801, paramInt);
@@ -71,9 +66,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Returns a structure describing the synthesizer controlled by the music component device.
-     * QuickTime::MusicGetDescription
+     * @see "QuickTime::MusicGetDescription"
      * @return a SynthesizerDescription
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public SynthesizerDescription getDescription() throws StdQTException {
         SynthesizerDescription localSynthesizerDescription = new SynthesizerDescription();
@@ -84,11 +79,11 @@ public final class MusicComponent extends Component implements QuickTimeLib {
     /**
      * Returns the AtomicInstrument that is set for that part. If not set, this method
      * can return null.
-     * QuickTime::MusicGetPartAtomicInstrument
+     * @see "QuickTime::MusicGetPartAtomicInstrument"
      * @param part the part
      * @param flags Specify what pieces of information about an atomic instrument the caller is interested in.
      * @return the AtomicInstrument
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public AtomicInstrument getPartAtomicInstrument(int paramInt1, int paramInt2) throws StdQTException {
         int[] arrayOfInt = { 0 };
@@ -102,10 +97,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * Returns the value of the specified global synthesizer
      * knob. A global knob controls an aspect of the entire synthesizer. It is not specific
      * to a part within the synthesizer.
-     * QuickTime::MusicGetKnob
+     * @see "QuickTime::MusicGetKnob"
      * @param knobID the knob id
      * @return the knob value
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public int getKnob(int paramInt) throws StdQTException {
         int i = MusicGetKnob(_ID(), paramInt);
@@ -116,10 +111,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Sets the value of a global knob for a synthesiser.
-     * QuickTime::MusicSetKnob
+     * @see "QuickTime::MusicSetKnob"
      * @param knobID the knob id
      * @param knobValue the knob value
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setKnob(int paramInt1, int paramInt2) throws StdQTException {
         StdQTException.checkError(MusicSetKnob(_ID(), paramInt1, paramInt2));
@@ -127,10 +122,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Returns a part's name.
-     * QuickTime::MusicGetPartName
+     * @see "QuickTime::MusicGetPartName"
      * @param part the part
      * @return the name
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public String getPartName(int paramInt) throws StdQTException {
         byte[] arrayOfByte = new byte[32];
@@ -140,10 +135,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Sets a part's name.
-     * QuickTime::MusicSetPartName
+     * @see "QuickTime::MusicSetPartName"
      * @param part the part
      * @param name the name
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setPartName(int paramInt, String paramString) throws StdQTException {
         StdQTException.checkError(MusicSetPartName(_ID(), paramInt, QTUtils.String2PString(paramString, 31)));
@@ -152,9 +147,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
     /**
      * Sets a value in semitones,
      * which is the synthesizerÕs master tuning.
-     * QuickTime::MusicSetMasterTune
+     * @see "QuickTime::MusicSetMasterTune"
      * @param masterTune the new tuning
-     * @param {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public void setMasterTune(float paramFloat) throws StdQTException {
         StdQTException.checkError(MusicSetMasterTune(_ID(), QTUtils.X2Fix(paramFloat)));
@@ -163,9 +158,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
     /**
      * Returns a value in semitones,
      * which is the synthesizerÕs master tuning.
-     * QuickTime::MusicGetMasterTune
+     * @see "QuickTime::MusicGetMasterTune"
      * @return tuning
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public float getMasterTune() throws StdQTException {
         int i = MusicGetMasterTune(_ID());
@@ -176,10 +171,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Returns a Instrument knob description for the specified knob index or knob ID for the MusicComponent.
-     * QuickTime::MusicGetInstrumentKnobDescription
+     * @see "QuickTime::MusicGetInstrumentKnobDescription"
      * @param knobIndex the knob index to get
      * @return a KnobDescription
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public KnobDescription getInstrumentKnobDescrption(int paramInt) throws StdQTException {
         KnobDescription localKnobDescription = new KnobDescription();
@@ -189,10 +184,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Returns a Drum knob description for the specified knob index or knob ID for the MusicComponent.
-     * QuickTime::MusicGetDrumKnobDescription
+     * @see "QuickTime::MusicGetDrumKnobDescription"
      * @param knobIndex the knob index to get
      * @return a KnobDescription
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public KnobDescription getDrumKnobDescrption(int paramInt) throws StdQTException {
         KnobDescription localKnobDescription = new KnobDescription();
@@ -202,10 +197,10 @@ public final class MusicComponent extends Component implements QuickTimeLib {
 
     /**
      * Returns a knob description for the specified global knob index or knob ID for the MusicComponent.
-     * QuickTime::MusicGetKnobDescription
+     * @see "QuickTime::MusicGetKnobDescription"
      * @param knobIndex the knob index to get
      * @return a KnobDescription
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public KnobDescription getKnobDescrption(int paramInt) throws StdQTException {
         KnobDescription localKnobDescription = new KnobDescription();
@@ -257,8 +252,3 @@ public final class MusicComponent extends Component implements QuickTimeLib {
         return MusicManager.MusicGetKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /MusicComponent.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -21,8 +21,3 @@ class EventLoopTimerClosureUPP extends MethodClosure {
     }
 }
 
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/com/apple/mrj/macos
- * /carbon/EventLoopTimerClosureUPP.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

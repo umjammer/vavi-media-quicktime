@@ -11,7 +11,7 @@ import quicktime.qd.QDRect;
 import quicktime.std.image.Matrix;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class provides the means for a basic Matrix actions. Each time
  * the tickle method is called, it will retrieve the matrix from the target and
  * invoke the transformMatrix method, which the subclass must implement. The subclass
@@ -29,8 +29,8 @@ import quicktime.std.image.Matrix;
 public class MatrixAction extends PeriodicAction implements Targetable {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * These constants are used in the boundsReached call to indicate to the
      * subclass which edge the target has collided with. Horizontal and Vertical
      * sides are provided as a means for testing for both left and right,
@@ -39,8 +39,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     protected static final int kLeftSide = 1;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * These constants are used in the boundsReached call to indicate to the
      * subclass which edge the target has collided with. Horizontal and Vertical
      * sides are provided as a means for testing for both left and right,
@@ -49,8 +49,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     protected static final int kRightSide = 16;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * These constants are used in the boundsReached call to indicate to the
      * subclass which edge the target has collided with. Horizontal and Vertical
      * sides are provided as a means for testing for both left and right,
@@ -59,8 +59,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     protected static final int kTopSide = 256;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * These constants are used in the boundsReached call to indicate to the
      * subclass which edge the target has collided with. Horizontal and Vertical
      * sides are provided as a means for testing for both left and right,
@@ -69,13 +69,13 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     protected static final int kBottomSide = 4096;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The target of the matrix transformations* @deprecated since QTJava 6.1
      */
     protected Transformable target;
 
     /**
-     * Deprecated.
+     * @deprecated
      * This is the class that will do the transformations on the target's matrix * @deprecated since QTJava 6.1
      */
     protected TransformMatrix transMatrix;
@@ -87,7 +87,7 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * Create a PeriodicAction that will act upon a Matrix.
      * @param scale the amount with which a second is divided into at a rate of one
@@ -103,8 +103,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a MatrixAction that will act upon a Matrix. It delegates the
      * matrix transformation to the TransformMatrix object that is supplied in the constructor.
      * @param scale the amount with which a second is divided into at a rate of one
@@ -122,8 +122,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set this boolean to true or false to perform bounds testing of the
      * target within the bounds of its enclosing Space. Default is false.
      * If true the enclosing Space must be specified.
@@ -137,54 +137,56 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     private boolean consReached = false;
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * Sets the target of the action. The target must be some kind of Transformable object.
      * @param target a Transformable object
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @see quicktime.app.actions.TransformMatrix
      */
+    @Override
     public void setTarget(Object paramObject) {
         this.target = ((Transformable) paramObject);
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * Returns the current target of the action.
      * @return the current target
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @see quicktime.app.actions.TransformMatrix
      */
+    @Override
     public Object getTarget() {
         return this.target;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * The space which is the space that the transformable
      * object is a member of.
      * @return the enclosing space.
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @see quicktime.app.actions.TransformMatrix
      */
     public QTDrawable getSpace() {
         return this.space;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * Set the space which is the space that the transformable
      * target is a member of.
      * @param space the enclosing space.
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @see quicktime.app.actions.TransformMatrix
      */
     public void setSpace(QTDrawable paramQTDrawable) {
         this.space = paramQTDrawable;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * When called it performs three primary tasks:
      *
      * (1) Checks to see if rate direction has changed - if so calls the rateDirectionChanged method
@@ -196,8 +198,9 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * through calling the setTargetMatrix with the transformed matrix.
      * @param er the rate at which the action was invoked.
      * @param t the time at which the action was invoked.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     protected void doAction(float paramFloat, int paramInt) throws QTException {
         this.consReached = false;
         if (((paramFloat > 0.0F) && (!this.forwards)) || ((paramFloat < 0.0F) && (this.forwards))) {
@@ -265,22 +268,22 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * This method is invoked by the doAction method once the matrix has been
      * transformed. The default behaviour of this method is to just call the target's
      * setMatrix method with the transformed matrix.
      * @param transformedMatrix the new matrix for the target
-     * @param {@link quicktime.QTException}
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @throws quicktime.QTException
+     * @see quicktime.app.actions.TransformMatrix
      */
     protected void setTargetMatrix(Matrix paramMatrix) throws QTException {
         this.target.setMatrix(paramMatrix);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Subclasses should return true if after an action is triggered (the doAction
      * method is called) the action has reached one of its specified constraint conditions
      * and the actionable object should be triggered. How this is defined is determined
@@ -288,12 +291,13 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * if the Action has an Actionable actor.
      * @return true if the actionable object (if set) should be triggered
      */
+    @Override
     protected boolean constraintReached() {
         return this.consReached;
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * Return a string representation of this class. * @deprecated since QTJava 6.1
      * @return a String
      */
@@ -302,15 +306,14 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the incoming object is a Matrix action with the same target.
      * @param obj the object to test
      * @return true if equal, false if not
      */
     public boolean equals(Object paramObject) {
-        if ((paramObject instanceof MatrixAction)) {
-            MatrixAction localMatrixAction = (MatrixAction) paramObject;
+        if ((paramObject instanceof MatrixAction localMatrixAction)) {
             if (this.transMatrix != null) {
                 if (!this.transMatrix.equals(localMatrixAction.transMatrix)) {
                     return false;
@@ -326,35 +329,35 @@ public class MatrixAction extends PeriodicAction implements Targetable {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * The Matrix action notifies subclasses when the rate at which an action is tickled changes
      * from positive to negative or vice versa.
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @see quicktime.app.actions.TransformMatrix
      */
     protected void rateDirectionChanged(boolean paramBoolean) throws QTException {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * The Matrix action calls the transformMatrix method with a Matrix that the subclass
      * should transform according to the particular transformation of the subclass.
      * @param theMatrix the matrix to transform.
-     * @param {@link quicktime.QTException}
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @throws quicktime.QTException
+     * @see quicktime.app.actions.TransformMatrix
      */
     protected void transformMatrix(Matrix paramMatrix) throws QTException {
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4</I>
      * If the Matrix action is doing constraint bounds testing and a bounding
      * condition is reached the Matrix action calls this method with one of four
      * flags to indicate which side of the enclosing space the target collided with.
      * @param whichSide a flag that indicates which side
-     * @see {@link quicktime.app.actions.TransformMatrix}
+     * @see quicktime.app.actions.TransformMatrix
      */
     protected void boundsReached(int paramInt) {
     }

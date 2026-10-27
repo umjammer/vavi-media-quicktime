@@ -13,12 +13,7 @@ public final class QTVRMediaHandler extends MediaHandler implements QuickTimeLib
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTVRMediaHandler.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTVRMediaHandler.class));
             }
         }.establish();
     }

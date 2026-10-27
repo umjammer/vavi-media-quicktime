@@ -14,7 +14,7 @@ import quicktime.qd.QDRect;
 import quicktime.qd.Region;
 
 /**
- * Deprecated.
+ * @deprecated
  * A QTMouseTargetController deals with mouse events in a space where the mouse event
  * occurs over (or selects) a member of that space. Members are selected based on
  * being the frontmost member of the space (or of the members explicitly added to the controller).
@@ -59,8 +59,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTMouseTargetController with a default setting of wholespace equals true.
      */
     public QTMouseTargetController() {
@@ -68,8 +68,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Creates a QTMouseTargetController.
      * @param wholespace the initial setting of the wholespace variable.
      */
@@ -78,7 +78,7 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         this.memberVec = new Vector();
     }
 
-    private QDPoint cachePoint = new QDPoint(0, 0);
+    private final QDPoint cachePoint = new QDPoint(0, 0);
 
     MouseTargetListener mouseTargetListener;
 
@@ -86,11 +86,11 @@ public class QTMouseTargetController extends QTMouseController implements Collec
 
     private boolean wholespace;
 
-    private Vector memberVec;
+    private final Vector memberVec;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the space when a Controller is being addedTo the Space s.
      * If the Controller is not an appropriate controller for that kind of Space this
      * method can throw an exception and the controller won't be added to the Space.
@@ -100,6 +100,7 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param s the Space being added to
      * @see setTargetSpace()
      */
+    @Override
     public synchronized void addedToSpace(Space paramSpace) {
         super.addedToSpace(paramSpace);
         for (int i = 0; i < this.memberVec.size(); i++) {
@@ -125,11 +126,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called when a controller is removed from its space and it had an active event
      * handler
      */
+    @Override
     protected void removeActiveHandler() {
         if ((this.mouseTargetListener != null) && (this.currentMouseMovedTarget != null)) {
             QTMouseEvent localQTMouseEvent = new QTMouseEvent(this.space);
@@ -142,11 +144,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called when a controller is added to its space and
      * the controller needs to create its event handler
      */
+    @Override
     protected void addHandler() {
         super.addHandler();
         if (hasMouseTargetListener())
@@ -154,8 +157,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current setting of the wholespace flag.
      * @return a boolean
      */
@@ -164,8 +167,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the new value of the wholespace flag.
      * @param flag if true all objects in the controller's space are potentially controllable.
      */
@@ -174,41 +177,42 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If wholespace is set to false, then only objects that are explicitly added
      * to the controller will be controlled by it.
      * Use this method to add these objects to the controller.
      * @param member the new member object that will be controlled.
      * @return a boolean indicating whether the object was added or not.
      */
-    public synchronized boolean addMember(Object paramObject) {
-        if (!isAppropriate(paramObject))
+    @Override
+    public synchronized boolean addMember(Object member) {
+        if (!isAppropriate(member))
             return false;
-        if (!hasMember(paramObject)) {
+        if (!hasMember(member)) {
             if (this.compSpace != null) {
-                if (!(paramObject instanceof TwoDSprite)) {
-                    TwoDSprite localTwoDSprite = this.compSpace.getMemberSprite(paramObject);
+                if (!(member instanceof TwoDSprite)) {
+                    TwoDSprite localTwoDSprite = this.compSpace.getMemberSprite(member);
                     if (localTwoDSprite == null) {
                         return false;
                     }
                     this.memberVec.addElement(localTwoDSprite);
                     return true;
                 }
-                if (!this.compSpace.hasMember(paramObject)) {
+                if (!this.compSpace.hasMember(member)) {
                     return false;
                 }
-            } else if ((this.space != null) && (!this.space.hasMember(paramObject))) {
+            } else if ((this.space != null) && (!this.space.hasMember(member))) {
                 return false;
             }
-            this.memberVec.addElement(paramObject);
+            this.memberVec.addElement(member);
         }
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the provided object is an appropriate candidate for
      * membership in a collection. The provided QTJava collections use this method
      * to ensure a minimal requirement of Class or Interface instanceof tests to
@@ -219,29 +223,31 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @return true if the supplied object is appropriate for this collection, or false if not.
      *  This method will also return true if the Controller has not been addedTo a space, in which
      *  case when it is the appropriate test will be performed.
-     * @see {@link quicktime.app.spaces.DynamicCollection},
+     * @see quicktime.app.spaces.DynamicCollection,
      * {@link quicktime.app.spaces.Protocol}
      */
-    public boolean isAppropriate(Object paramObject) {
+    @Override
+    public boolean isAppropriate(Object object) {
         if (this.space != null) {
-            return this.space.isAppropriate(paramObject);
+            return this.space.isAppropriate(object);
         }
         return true;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Removes a member from the collection of objects that the controller controls
      * @param member the object that will be removed from the controller.
      */
-    public void removeMember(Object paramObject) {
-        this.memberVec.removeElement(paramObject);
+    @Override
+    public void removeMember(Object member) {
+        this.memberVec.removeElement(member);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an enumeration of all members of this controller. If wholespace is set to
      * true then this Enumeration may return an empty collection as the default behaviour
      * of the MouseController is that if wholespace is true any object in the space is
@@ -249,13 +255,14 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * Controller.
      * @return an Enumeration
      */
+    @Override
     public Enumeration members() {
         return this.memberVec.elements();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the controller's collection of controllable objects is empty.
      * If wholespace is true this does not mean that the controller is not capable of
      * controlling object in its Space as the default behaviour
@@ -264,23 +271,25 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * Controller.
      * @return a boolean
      */
+    @Override
     public boolean isEmpty() {
         return this.memberVec.isEmpty();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the number of members that have been explicitly added to the Controller.
      * @return an int
      */
+    @Override
     public int size() {
         return this.memberVec.size();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the member has been explicitly added to this controller.
      * As the default behaviour
      * of the MouseController is that if wholespace is true any object in the space is
@@ -291,18 +300,20 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param object the object to test for membership
      * @return a boolean
      */
-    public boolean hasMember(Object paramObject) {
-        return paramObject == null ? false : this.memberVec.contains(paramObject);
+    @Override
+    public boolean hasMember(Object member) {
+        return member == null ? false : this.memberVec.contains(member);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Add a QTMouseListener for this controller. The controller
      * will take the appropriate action based on the known mouse listeners
      * in the quicktime.app.event package.
      * @param l a new QTMouseListener
      */
+    @Override
     public void addQTMouseListener(QTMouseListener paramQTMouseListener) {
         if ((paramQTMouseListener instanceof MouseTargetListener))
             addMouseTargetListener((MouseTargetListener) paramQTMouseListener);
@@ -310,11 +321,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a QTMouseListener for this controller.
      * @param l a new QTMouseListener
      */
+    @Override
     public void removeQTMouseListener(QTMouseListener paramQTMouseListener) {
         if ((paramQTMouseListener instanceof MouseTargetListener))
             removeMouseTargetListener((MouseTargetListener) paramQTMouseListener);
@@ -346,17 +358,19 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         return this.mouseTargetListener != null;
     }
 
+    @Override
     boolean isInterestedInMouseMoveEvents(QTMouseEvent paramQTMouseEvent) {
         return ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) || (super.isInterestedInMouseMoveEvents(paramQTMouseEvent));
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
+    @Override
     protected void doMousePressed(QTMouseEvent paramQTMouseEvent) {
         this.mousePressTarget = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
         if (this.mousePressTarget != null) {
@@ -368,12 +382,13 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseButtonListener(s) it will
      * dispatch release events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
      */
+    @Override
     public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
         if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
             if (translateAndIsWithin(paramQTMouseEvent)) {
@@ -385,8 +400,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -417,12 +432,13 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
+    @Override
     protected void doMouseClicked(QTMouseEvent paramQTMouseEvent) {
         Object localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
         if (localObject != null) {
@@ -433,8 +449,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseMoveListener(s) it will
      * dispatch drag events that occur within its Space's area to those listeners.
      * Mouse drag events will continue to be delivered to
@@ -442,6 +458,7 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * released (regardless of whether the mouse is within the space or not).
      * @param e the QTMouseEvent of this type.
      */
+    @Override
     public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
         if (this.mousePressTarget == null) {
             return;
@@ -450,12 +467,13 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
+    @Override
     protected void doMouseDragged(QTMouseEvent paramQTMouseEvent) {
         paramQTMouseEvent.setTarget(this.mousePressTarget);
         if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
@@ -500,8 +518,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -511,8 +529,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
@@ -522,14 +540,15 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      * @param isWithinItsSpace if true the mouse moved event is within the enclosing space. If false
      *  it isn't.
      */
+    @Override
     protected void doMouseMoved(QTMouseEvent paramQTMouseEvent, boolean paramBoolean) {
         if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
             if ((!paramBoolean) && (this.currentMouseMovedTarget != null)) {
@@ -572,12 +591,13 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseEnterExitListener(s) it will
      * dispatch a mouseEntered event when the mouse moves or is dragged into the space.
      * @param e the QTMouseEvent of this type.
      */
+    @Override
     public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
         super.mouseEntered(paramQTMouseEvent);
         if (((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) ? 1 : 0) == 0) {
@@ -586,24 +606,26 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
+    @Override
     protected void doMouseEntered(QTMouseEvent paramQTMouseEvent) {
         super.doMouseEntered(paramQTMouseEvent);
         doMouseEnter_Target(paramQTMouseEvent);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * If the QTMouseController has a MouseEnterExitListener(s) it will
      * dispatch a mouseExited event when the mouse moves or is dragged out of the space.
      * @param e the QTMouseEvent of this type.
      */
+    @Override
     public void mouseExited(QTMouseEvent paramQTMouseEvent) {
         if (((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) ? 1 : 0) == 0) {
             doMouseExit_Target(paramQTMouseEvent);
@@ -612,12 +634,13 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method dispatches the event to the appropriate listeners. Subclasses can overide
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
+    @Override
     protected void doMouseExited(QTMouseEvent paramQTMouseEvent) {
         doMouseExit_Target(paramQTMouseEvent);
         super.doMouseExited(paramQTMouseEvent);
@@ -670,8 +693,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the frontmost object at the specified location that is a member of the space
      * if wholespace is true, or the frontmost object in the controller's collection if
      * wholespace is false.
@@ -697,7 +720,7 @@ public class QTMouseTargetController extends QTMouseController implements Collec
                     }
                     return null;
                 }
-                Object localObject = null;
+                TwoDSprite localObject = null;
                 Enumeration localEnumeration = members();
                 this.cachePoint.setX(i);
                 this.cachePoint.setY(j);
@@ -705,7 +728,7 @@ public class QTMouseTargetController extends QTMouseController implements Collec
                     TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
                     if (localTwoDSprite.hitTest(this.compSpace.hitTestFlag | 0x10, this.cachePoint)) {
                         if (localObject != null) {
-                            if (localTwoDSprite.getLayer() < ((TwoDSprite) localObject).getLayer())
+                            if (localTwoDSprite.getLayer() < localObject.getLayer())
                                 localObject = localTwoDSprite;
                         } else {
                             localObject = localTwoDSprite;
@@ -720,8 +743,3 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         return null;
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/app/event
- * /QTMouseTargetController.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

@@ -39,7 +39,7 @@ import quicktime.vr.QTVRMouseOverHotSpot;
 
 public class MovieCallbacks extends Frame implements Errors {
 
-    public static void main(String args[]) {
+    static void main(String[] args) {
         try {
             System.out.println("Open a Multi-node VR Movie...");
             QTSession.open(QTSession.kInitVR);
@@ -100,6 +100,7 @@ public class MovieCallbacks extends Frame implements Errors {
         add((Component) mComponent);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 try { // remove callbacks we instantiated
                     if (myQTVRInstance != null) {
@@ -123,6 +124,7 @@ public class MovieCallbacks extends Frame implements Errors {
                 dispose();
             }
 
+            @Override
             public void windowClosed(WindowEvent e) {
                 System.exit(0);
             }
@@ -130,6 +132,8 @@ public class MovieCallbacks extends Frame implements Errors {
     }
 
     static class MovieDrawing implements MovieDrawingComplete {
+
+        @Override
         public int execute(Movie m) {
             System.out.println("drawing:" + m);
             return 0;
@@ -142,6 +146,8 @@ public class MovieCallbacks extends Frame implements Errors {
     }
 
     static class EnteringNode implements QTVREnteringNode {
+
+        @Override
         public int execute(QTVRInstance vr, int nodeID) {
             System.out.println(vr + ",entering:" + nodeID);
             return 0;
@@ -149,6 +155,8 @@ public class MovieCallbacks extends Frame implements Errors {
     }
 
     static class LeavingNode implements QTVRLeavingNode {
+
+        @Override
         public int execute(QTVRInstance vr, int fromNodeID, int toNodeID, boolean[] cancel) {
             System.out.println(vr + ",leaving:" + fromNodeID + ",entering:" + toNodeID);
             // no error and Don't cancel leaving node
@@ -158,6 +166,8 @@ public class MovieCallbacks extends Frame implements Errors {
     }
 
     static class HotSpot implements QTVRMouseOverHotSpot {
+
+        @Override
         public int execute(QTVRInstance vr, int hotSpotID, int flags) {
             System.out.println(vr + ",hotSpot:" + hotSpotID + ",flags=" + flags);
             return 0;
@@ -165,6 +175,8 @@ public class MovieCallbacks extends Frame implements Errors {
     }
 
     static class Interceptor implements QTVRInterceptor {
+
+        @Override
         public boolean execute(QTVRInstance vr, QTVRInterceptRecord qtvrMsg) {
             System.out.println(vr + "," + qtvrMsg);
             return false; // dont cancel default execution
@@ -172,11 +184,14 @@ public class MovieCallbacks extends Frame implements Errors {
     }
 
     static class PMFilter extends ActionFilter {
+
+        @Override
         public boolean execute(MovieController mc, int action) {
             System.out.println(mc + "," + "action:" + action);
             return false;
         }
 
+        @Override
         public boolean execute(MovieController mc, int action, float value) {
             System.out.println(mc + "," + "action:" + action + ",value=" + value);
             return false;
@@ -185,6 +200,8 @@ public class MovieCallbacks extends Frame implements Errors {
 
     // Runtime Error Handling
     static class Handler implements QTRuntimeHandler {
+
+        @Override
         public void exceptionOccurred(QTRuntimeException e, Object eGenerator, String methodNameIfKnown, boolean unrecoverableFlag) {
             System.out.println(eGenerator + "," + methodNameIfKnown + ",unrecoverable=" + unrecoverableFlag);
             e.printStackTrace();

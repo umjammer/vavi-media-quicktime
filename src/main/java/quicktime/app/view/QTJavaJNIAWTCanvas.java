@@ -16,15 +16,13 @@ final class QTJavaJNIAWTCanvas {
     static {
         class PrivelegedAction {
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        try {
-                            System.loadLibrary("QTJava");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return null;
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+                    try {
+                        System.loadLibrary("QTJava");
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    return null;
                 });
             }
         }

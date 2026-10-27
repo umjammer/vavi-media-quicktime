@@ -33,12 +33,7 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SoundDescription.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SoundDescription.class));
             }
         }.establish();
     }
@@ -81,6 +76,7 @@ public final class SoundDescription extends SampleDescription implements QuickTi
     /**
      * Implementation of Cloneable Interface.
      */
+    @Override
     public Object clone() {
         return new SoundDescription(makeAndCopyHandle(), null);
     }
@@ -171,10 +167,10 @@ public final class SoundDescription extends SampleDescription implements QuickTi
 
     /**
      * Add application specific info to a Sound Description object
-     * QuickTime::AddSoundDescriptionExtension
+     * @see "QuickTime::AddSoundDescriptionExtension"
      * @param extension a QTHandle containing the info to add to the sound description
      * @param idType an OSType used to tag the information for later retrieval or removal
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void addExtension(QTHandleRef paramQTHandleRef, int paramInt) throws QTException {
         int i = AddSoundDescriptionExtension(_ID(), QTObject.ID(paramQTHandleRef), paramInt);
@@ -183,9 +179,9 @@ public final class SoundDescription extends SampleDescription implements QuickTi
 
     /**
      * Remove application specific info from a Sound Description object
-     * QuickTime::RemoveSoundDescriptionExtension
+     * @see "QuickTime::RemoveSoundDescriptionExtension"
      * @param idType an OSType identifying the information for removal
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public void removeExtension(int paramInt) throws QTException {
         int i = RemoveSoundDescriptionExtension(_ID(), paramInt);
@@ -194,10 +190,10 @@ public final class SoundDescription extends SampleDescription implements QuickTi
 
     /**
      * Retrieve application specific info from a Sound Description object
-     * QuickTime::GetSoundDescriptionExtension
+     * @see "QuickTime::GetSoundDescriptionExtension"
      * @param idType an OSType identifying the information for removal
      * @return a dataref to the Extension
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTHandle getExtension(int paramInt) throws QTException {
         return QTHandle.fromSoundDescription(this, paramInt);

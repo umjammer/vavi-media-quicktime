@@ -18,6 +18,7 @@ public abstract class Tasking implements Taskable {
      * It is removedFrom the TaskThread that it was added to and a Taskable
      * can only be in one TaskThread object.
      */
+    @Override
     public void removedFromTasker() {
         this.tt = null;
     }
@@ -27,6 +28,7 @@ public abstract class Tasking implements Taskable {
      * The parameter is the TaskThread that the object is being added to.
      * @param t the TaskThread
      */
+    @Override
     public void addedToTasker(TaskThread paramTaskThread) {
         this.tt = paramTaskThread;
     }
@@ -36,6 +38,7 @@ public abstract class Tasking implements Taskable {
      * tasked by or null if not being tasked.
      * @return a TaskThread object or null.
      */
+    @Override
     public TaskThread getTasker() {
         return this.tt;
     }
@@ -45,6 +48,7 @@ public abstract class Tasking implements Taskable {
      * the currently set default TaskThread and ensuring that this TaskThread
      * object is started.
      */
+    @Override
     public void startTasking() {
         this.defTasker.addAndStart(this);
     }
@@ -53,6 +57,7 @@ public abstract class Tasking implements Taskable {
      * This will stop tasking the Tasking object by removing it from its existing
      * TaskThread.
      */
+    @Override
     public void stopTasking() {
         if (getTasker() != null) {
             getTasker().removeMember(this);

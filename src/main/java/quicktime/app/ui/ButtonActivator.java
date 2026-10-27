@@ -2,16 +2,19 @@ package quicktime.app.ui;
 
 import quicktime.app.event.QTMouseEvent;
 
+
 /**
- * Deprecated.
  * The ButtonActivator class responds only to the QTMouseEvents on the QTButton object.
+ *
+ * @deprecated
  */
 public class ButtonActivator extends quicktime.app.event.MouseButtonAdapter implements quicktime.app.event.MouseTargetListener {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * This is the Transformable target of the action
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     protected Object target;
 
@@ -22,13 +25,14 @@ public class ButtonActivator extends quicktime.app.event.MouseButtonAdapter impl
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Invoked when the mouse has been pressed on a found and valid QTButton within the enclosing space.
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
+    @Override
     public void mousePressed(QTMouseEvent paramQTMouseEvent) {
-        if ((paramQTMouseEvent.getTarget() instanceof QTButton)) {
-            QTButton localQTButton = (QTButton) paramQTMouseEvent.getTarget();
+        if ((paramQTMouseEvent.getTarget() instanceof QTButton localQTButton)) {
             try {
                 localQTButton.pressed();
             } catch (quicktime.QTException localQTException) {
@@ -38,13 +42,14 @@ public class ButtonActivator extends quicktime.app.event.MouseButtonAdapter impl
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Invoked when the mouse has been released on a found and valid QTButton within the enclosing space.
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
+    @Override
     public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
-        if ((paramQTMouseEvent.getTarget() instanceof QTButton)) {
-            QTButton localQTButton = (QTButton) paramQTMouseEvent.getTarget();
+        if ((paramQTMouseEvent.getTarget() instanceof QTButton localQTButton)) {
             try {
                 localQTButton.released();
             } catch (quicktime.QTException localQTException) {
@@ -54,16 +59,17 @@ public class ButtonActivator extends quicktime.app.event.MouseButtonAdapter impl
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Invoked when a mouseMoved event enters a QTButton within an enclosing space. The QTButton is set for events of this kind.
+     *
      * @param event the QTMouseEvent that triggered this event
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public void mouseTargetEntered(QTMouseEvent paramQTMouseEvent) {
-        if ((paramQTMouseEvent.getTarget() instanceof QTButton)) {
-            QTButton localQTButton = (QTButton) paramQTMouseEvent.getTarget();
+    @Override
+    public void mouseTargetEntered(QTMouseEvent event) {
+        if ((event.getTarget() instanceof QTButton localQTButton)) {
             try {
-                localQTButton.entered(paramQTMouseEvent);
+                localQTButton.entered(event);
             } catch (quicktime.QTException localQTException) {
                 quicktime.QTRuntimeException.handleOrThrow(new quicktime.QTRuntimeException(localQTException), localQTButton, "pressed");
             }
@@ -71,16 +77,17 @@ public class ButtonActivator extends quicktime.app.event.MouseButtonAdapter impl
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
      * Invoked when a mouseMoved event exits the QTButton within an enclosing space. The QTButton is set for events of this kind.
+     *
      * @param event the QTMouseEvent that triggered this event
+     * @since QTJava 6.1
+     * @deprecated
      */
-    public void mouseTargetExited(QTMouseEvent paramQTMouseEvent) {
-        if ((paramQTMouseEvent.getTarget() instanceof QTButton)) {
-            QTButton localQTButton = (QTButton) paramQTMouseEvent.getTarget();
+    @Override
+    public void mouseTargetExited(QTMouseEvent event) {
+        if ((event.getTarget() instanceof QTButton localQTButton)) {
             try {
-                localQTButton.exited(paramQTMouseEvent);
+                localQTButton.exited(event);
             } catch (quicktime.QTException localQTException) {
                 quicktime.QTRuntimeException.handleOrThrow(new quicktime.QTRuntimeException(localQTException), localQTButton, "pressed");
             }

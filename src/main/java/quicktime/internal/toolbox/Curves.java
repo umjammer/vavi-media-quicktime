@@ -127,7 +127,7 @@ final class Curves {
         int start = c.onCurve.indexOf(true);
         double[] first;
         if (start < 0) {
-            double[] a = c.points.get(0), b = c.points.get(n > 1 ? 1 : 0);
+            double[] a = c.points.getFirst(), b = c.points.get(n > 1 ? 1 : 0);
             first = new double[] {(a[0] + b[0]) / 2, (a[1] + b[1]) / 2};
             start = 0;
         } else {
@@ -199,7 +199,7 @@ final class Curves {
             }
             d -= seg;
         }
-        return new double[][] {l.get(0), {1, 0}};
+        return new double[][] {l.getFirst(), {1, 0}};
     }
 
     /** @return the distance along the contour, between start and end, of the point nearest to x, y */
@@ -210,7 +210,7 @@ final class Curves {
         for (int i = 1; i < l.size(); i++) {
             double[] a = l.get(i - 1), b = l.get(i);
             double seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
-            double t = seg == 0 ? 0 : Math.max(0, Math.min(1, ((x - a[0]) * (b[0] - a[0]) + (y - a[1]) * (b[1] - a[1])) / (seg * seg)));
+            double t = seg == 0 ? 0 : Math.clamp(((x - a[0]) * (b[0] - a[0]) + (y - a[1]) * (b[1] - a[1])) / (seg * seg), 0, 1);
             double px = a[0] + (b[0] - a[0]) * t, py = a[1] + (b[1] - a[1]) * t;
             double at = len + seg * t;
             double dist = Math.hypot(px - x, py - y);

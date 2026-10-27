@@ -47,7 +47,7 @@ public final class MatrixManager {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 double v = c == 2 ? d[r][c] * (1 << 30) : d[r][c] * 65536.0;
-                m[r * 3 + c] = (int) Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, Math.round(v)));
+                m[r * 3 + c] = (int) Math.clamp(Math.round(v), Integer.MIN_VALUE, Integer.MAX_VALUE);
             }
         }
         return m;
@@ -254,7 +254,7 @@ public final class MatrixManager {
     }
 
     public static byte TransformRect(byte[] m, byte[] rect, int points) {
-        return TransformRect(m, rect, (int[]) null);
+        return TransformRect(m, rect, null);
     }
 
     public static byte TransformRect(byte[] m, byte[] rect, int[] points) {
@@ -275,7 +275,7 @@ public final class MatrixManager {
     }
 
     public static byte TransformFixedRect(byte[] m, byte[] rect, int points) {
-        return TransformFixedRect(m, rect, (int[]) null);
+        return TransformFixedRect(m, rect, null);
     }
 
     /** fixed rects are left, top, right, bottom */

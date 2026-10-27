@@ -9,15 +9,15 @@ import quicktime.util.QTHandle;
 /**
  * This class represents a description of QTVR media.
  *
- * offset	size
- * UInt32 	descSize;		0		4			/* total size of the QTVRSampleDescription
- * UInt32	descType;		4		4			/* must be 'qtvr'
+ * offset size
+ * UInt32  descSize;  0  4   /* total size of the QTVRSampleDescription
+ * UInt32 descType;  4  4   /* must be 'qtvr'
  *
- * UInt32	reserved1;		8		4			/* must be zero
- * UInt16	reserved2;		12		2			/* must be zero
- * UInt16	dataRefIndex;	14		2			/* must be zero
+ * UInt32 reserved1;  8  4   /* must be zero
+ * UInt16 reserved2;  12  2   /* must be zero
+ * UInt16 dataRefIndex; 14  2   /* must be zero
  *
- * UInt32	data;			16		4			/* Will be extended to hold vrWorld QTAtomContainer
+ * UInt32 data;   16  4   /* Will be extended to hold vrWorld QTAtomContainer
  * => 20
  */
 public final class QTVRSampleDescription extends SampleDescription {

@@ -78,6 +78,7 @@ public final class ViewAngleAspectCameraData extends CameraData implements Primi
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         return new ViewAngleAspectCameraData(this.bytes);
     }

@@ -3,6 +3,8 @@ package quicktime.vr;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.util.EndianDescriptor;
@@ -12,7 +14,8 @@ public final class QTVRWorldHeader extends QTVRAtom {
 
     private static final int kNativeSize = 24;
 
-    static final long serialVersionUID = -8701506970872651584L;
+    @Serial
+    private static final long serialVersionUID = -8701506970872651584L;
 
     private static EndianDescriptor ed;
 
@@ -31,10 +34,12 @@ public final class QTVRWorldHeader extends QTVRAtom {
         super(paramArrayOfByte, kNativeSize);
     }
 
+    @Override
     protected int getNativeSize() {
         return kNativeSize;
     }
 
+    @Override
     protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[kNativeSize];
         QTVRWorldHeader localQTVRWorldHeader = new QTVRWorldHeader();
@@ -42,6 +47,7 @@ public final class QTVRWorldHeader extends QTVRAtom {
         System.arraycopy(localQTVRWorldHeader.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
+    @Override
     protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         QTVRWorldHeader localQTVRWorldHeader = (QTVRWorldHeader) clone();
         paramObjectOutputStream.write(localQTVRWorldHeader.getBytes());
@@ -50,6 +56,7 @@ public final class QTVRWorldHeader extends QTVRAtom {
     /**
      * Returns a copy of this class.
      */
+    @Override
     public Object clone() {
         try {
             return new QTVRWorldHeader(this.bytes);

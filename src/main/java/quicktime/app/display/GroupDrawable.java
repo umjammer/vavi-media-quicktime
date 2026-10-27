@@ -18,7 +18,7 @@ import quicktime.std.StdQTException;
 import quicktime.std.image.Matrix;
 
 /**
- * Deprecated.
+ * @deprecated
  * This forms the base class for grouping QTDrawable objects within a single
  * display space that is controlled by this group.
  *
@@ -37,7 +37,7 @@ import quicktime.std.image.Matrix;
  * contain any sense of layering, so the GroupDrawable uses the GroupMember objects to contain the information
  * about a member's layer characteristics.
  *
- * @see {@link quicktime.app.display.DirectGroup}
+ * @see quicktime.app.display.DirectGroup
  */
 public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpace {
 
@@ -50,7 +50,7 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * Provided for subclasses to create a group drawable.
      * @param initialSize initial size of the Drawable object
@@ -64,8 +64,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Provided for subclasses to create a group drawable.
      * @param initialSize initial size of the Drawable object
      * @param bc the background color
@@ -95,41 +95,43 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     QDColor bgColor;
 
     /**
-     * Deprecated.
+     * @deprecated
      * The current clip region of the group * @deprecated since QTJava 6.1
      */
     protected Region clip;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * THis vector is used to store the members in. It is kept sorted by
      * layer with the frontmost member in the first slot of the vector.
      */
-    protected Vector<Object> vec = new Vector<>(8);
+    protected final Vector<Object> vec = new Vector<>(8);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public QDGraphics getGWorld() throws StdQTException {
         return this.port;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
      * If a client is unable to set the graphics world it should throw an exception.
      *
      * @param cgp a QDGraphics object
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
         this.port = paramQDGraphics;
         boolean bool = this.visible;
@@ -137,13 +139,14 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setLocation(int paramInt1, int paramInt2) throws QTException {
         this.displayBounds.setX(paramInt1);
         this.displayBounds.setY(paramInt2);
@@ -151,34 +154,36 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called automatically via the QTCanvas object associated with
      * this client to set its boundary.
      *
      * @param bounds a QDRect object describing the boundary
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setDisplayBounds(QDRect paramQDRect) throws QTException {
         this.displayBounds = paramQDRect;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called automatically via the QTCanvas object associated with
      * this client to set the boundary of the movie.
      *
      * @return the display boundary of the client
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public QDRect getDisplayBounds() throws StdQTException {
         return this.displayBounds;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current background colour or null if no background colour.
      */
     public QDColor getBackgroundColor() {
@@ -186,8 +191,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Sets the background color. This will force a redraw of the Compositor.
      */
     public void setBackgroundColor(QDColor paramQDColor) throws QTException {
@@ -201,20 +206,21 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Remove a QTDrawable object from the Group of drawn items.
      * @param member the object to remove from the collection
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public synchronized void removeMember(Object paramObject) throws QTException {
+    @Override
+    public synchronized void removeMember(Object member) throws QTException {
         for (int i = 0; i < this.vec.size(); i++) {
             GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
             QTDrawable localQTDrawable = localGroupMember.drawer;
-            if (localQTDrawable.equals(paramObject)) {
+            if (localQTDrawable.equals(member)) {
                 localQTDrawable.setGWorld(QDGraphics.scratch);
                 this.vec.removeElementAt(i);
-                memberRemoved(paramObject);
+                memberRemoved(member);
                 if (!this.visible) {
                     break;
                 }
@@ -226,12 +232,13 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns an iterator of QTDrawable members that are the items that are
      * currently contained within the DirectGroup.
      * @return an Enumeration
      */
+    @Override
     public synchronized Enumeration members() {
         Vector<Object> localVector = new Vector<>();
         Enumeration<?> localEnumeration = this.vec.elements();
@@ -243,18 +250,19 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the space does not have any members.
      * @return a boolean
      */
+    @Override
     public boolean isEmpty() {
         return this.vec.isEmpty();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns a GroupMember that contains the specified QTDrawable object or null
      * if the requested item is not a member of this group.
      * @return a GroupMember that contains the layer and alignment information for the member in this group
@@ -270,18 +278,19 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the number of members in the collection, ie. the collection's size.
      * @return the size of the collection.
      */
+    @Override
     public int size() {
         return this.vec.size();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will reset an item's alignment and redraw the group.
      * Internally the group uses alignment values to recall where an
      * item is in relation to the other members and the group's display space.
@@ -291,7 +300,7 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @param xAlign the new x alignment value for the member
      * @param yAlign the new y alignemen value for the member
      * @return true if the drawer is a member of the group
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean setMemberAlignment(QTDrawable paramQTDrawable, float paramFloat1, float paramFloat2) throws QTException {
         GroupMember localGroupMember = getGroupMember(paramQTDrawable);
@@ -302,14 +311,14 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This sets the layer of the incoming drawable to the new layer.
      * It returns true if the drawable is a member of the group and
      * was reset, false otherwise.
      * @param layer the new layer
      * @return true if d is a member of the group
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public boolean setMemberLayer(QTDrawable paramQTDrawable, int paramInt) throws QTException {
         if (!isAppropriate(paramQTDrawable))
@@ -344,33 +353,35 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the back most layer of any object in the group.
      * @return the current back most layer
      */
+    @Override
     public int getBackLayer() {
-        if (this.vec.size() == 0)
+        if (this.vec.isEmpty())
             return -1;
         GroupMember localGroupMember = (GroupMember) this.vec.elementAt(this.vec.size() - 1);
         return localGroupMember.getLayer();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the current front most layer of any object in the group.
      * @return the current front most layer
      */
+    @Override
     public int getFrontLayer() {
-        if (this.vec.size() == 0)
+        if (this.vec.isEmpty())
             return -1;
         GroupMember localGroupMember = (GroupMember) this.vec.elementAt(0);
         return localGroupMember.getLayer();
     }
 
     /**
-     * Deprecated.
+     * @deprecated
      * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
@@ -381,28 +392,30 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the original size of the GroupDrawable
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public QDDimension getOriginalSize() throws QTException {
         return this.initSize.copy();
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public synchronized void redraw(Region paramRegion) throws QTException {
         if (!this.eraseRegion.empty()) {
             this.port.setBackColor(this.bgColor);
@@ -414,8 +427,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Layerable object for a member (or null if the Object is not a member)
      * that allows the application to get and set the layer of a member. This may or may
      * not be the member itself, depending both on the type of the object of the member
@@ -423,13 +436,14 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @param member the member
      * @return a Layerable object to interact with the display layer of a member.
      */
+    @Override
     public Layerable getLayerable(Object paramObject) {
         return getGroupMember(paramObject);
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the Transformable object that represents the member in the DisplaySpace.
      * The Transformable object allows the application to get and set the TwoD display
      * characteristics of a member (position, size, rotation, skewing, perspective).
@@ -440,6 +454,7 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @return a Transformable object that allows the application to manipulate the two d
      *  display characteristics of the member or null if the object is not a member.
      */
+    @Override
     public Transformable getTransformable(Object paramObject) {
         if (hasMember(paramObject) == true)
             return (Transformable) paramObject;
@@ -447,15 +462,16 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns the front most object located at the specified x and y
      * pixel location or null if there is no object at the location
      * @param x the x pixel to test
      * @param y the y pixel to test
      * @return front most object or null
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Object hitTest(int paramInt1, int paramInt2) throws QTException {
         if (this.vec != null) {
             if (!this.displayBounds.inside(paramInt1, paramInt2))
@@ -470,15 +486,16 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This will return the client's current display transformations.
      * A GroupDrawable object does not by default support any transformation
      * but location.
      *
      * @return the display transformations of the client
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
+    @Override
     public Matrix getMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
         localMatrix.setTx(this.displayBounds.getX());
@@ -487,15 +504,16 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      * A GroupDrawable object does not by default support any transformation
      * but location.
      * @param matrix the new location
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
         int i = (int) (paramMatrix.getTx() + 0.5F);
         int j = (int) (paramMatrix.getTy() + 0.5F);
@@ -503,19 +521,20 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method allows you to get the current clipped Region of the Transformable.
      * @return the clipping region
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public Region getClip() throws QTException {
         return this.clip;
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method returns the clip that contains any space within
      * the GroupDrawable that is not drawn upon by one of the members.
      * This region is contains the pixels that will be filled in
@@ -554,15 +573,15 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * A helper method that is used to set the
      * location of the member based on the x and y alignment.
      * The alignment values must be between 0 and 1.
      * @param drawer The drawer to locate based on the current size of the GroupDrawable and the alignment values
      * @param xAlign the x alignment
      * @param yAlign the y alignment
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     protected void setAlignedMemberLocation(QTDrawable paramQTDrawable, float paramFloat1, float paramFloat2) throws QTException {
         if (paramFloat1 < 0.0F) {
@@ -593,8 +612,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This tells the group that the position or display size of the
      * drawer has changed and it should do whatever actions are appropriate
      * to reestablish the display integrity of the group.
@@ -603,13 +622,13 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * characteristics of the drawer.
      * @param d the drawer that has changed
      * @return the GroupMember object that is associated with that drawer.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public abstract GroupMember memberChanged(QTDrawable paramQTDrawable) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * An optimized redraw that will redraw only those objects that it needs to
      * based on the fact that the supplied drawer has changed but those behind or in front
      * of it have not.
@@ -618,16 +637,17 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      *  member. Generally this Region should encompass the area of the Group's display space that
      *  was occupied before the member was changed as this call will result in the member
      *  itself being redrawn.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public abstract void redrawMember(QTDrawable paramQTDrawable, Region paramRegion) throws QTException;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method allows you to set a Transformable's clipping region.
      * @param theClip a Region that defines the new clipping region.
-     * @param {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
+    @Override
     public abstract void setClip(Region paramRegion) throws QTException;
 }

@@ -1,29 +1,11 @@
 
 package quicktime.std.clocks;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ClockManager;
-import quicktime.jdirect.QTNative;
 
 
 final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
-    private static Object linkage;
-
-    static {
-        class PrivelegedAction {
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CBRunner.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     private static int activeCallbacks = 0;
 
@@ -34,6 +16,7 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
     private static String privActStrCached;
 
     static class MRJIdler implements Runnable {
+        @Override
         public void run() {
             try {
                 while (activeCallbacks >= 1) {
@@ -74,16 +57,7 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
             this.cbThread = new Thread(this, privActStrCached);
 
         } else {
-
-            this.cbThread = (Thread) new Object() {
-                Object doPrivelegedAction() {
-                    return AccessController.doPrivileged(new PrivilegedAction<Thread>() {
-                        public Thread run() {
-                            return new Thread(CBRunner.this, privActStrCached);
-                        }
-                    });
-                }
-            }.doPrivelegedAction();
+            this.cbThread =  new Thread(CBRunner.this, privActStrCached);
         }
 
         this.cbThread.setPriority(10);
@@ -96,11 +70,11 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
 
     private InterruptClosure mInterruptClosure;
 
-    private QTCallBack cb;
+    private final QTCallBack cb;
 
     private boolean callbackDone = false;
 
-    private int callBackTimeBase;
+    private final int callBackTimeBase;
 
     private boolean notified = false;
 
@@ -127,10 +101,11 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
         throw new quicktime.QTRuntimeException("No Method Closure object created");
     }
 
-    private final void callBackProc(int paramInt1, int paramInt2) {
+    private void callBackProc(int paramInt1, int paramInt2) {
         doNotify();
     }
 
+    @Override
     public void run() {
         doWait();
         if (!this.callbackDone) {

@@ -1,7 +1,7 @@
 package quicktime.app.spaces;
 
 /**
- * Deprecated.
+ * @deprecated
  * Objects that implement this interface are declaring an interest that
  * is derived or sourced from the object that is supplied as the argument
  * to the addedTo interest. For instance java.awt.Components are a source
@@ -18,26 +18,26 @@ package quicktime.app.spaces;
  * Generally the container and member relationship will enforce the appropriateness
  * of a member for its container.
  */
-public abstract interface Listener {
+public interface Listener {
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by some kind of container object when the Listener
      * is added to the object that is the source of the interest.
      * @param source the object that is to be the source of interest for the
      *  the Listener object.
      */
-    public abstract void addedTo(Object paramObject);
+    void addedTo(Object paramObject);
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is called by the specified object when the Listener object
      * is removed from the object that is the source of the interest.
      * @param source the object that is to be the source of interest for the
      *  the Listener object.
      */
-    public abstract void removedFrom(Object paramObject);
+    void removedFrom(Object paramObject);
 }
 

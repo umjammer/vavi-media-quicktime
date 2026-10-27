@@ -1,53 +1,35 @@
 package quicktime.sound;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.jdirect.InterfaceLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.SoundLib;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
+
 
 /**
  * Contains information about the compression format of sound data.
  */
 public final class CompressionInfo extends QTByteObject implements SoundLib, InterfaceLib {
 
-    private static Object linkage;
-
     /**
      * This is the size of this class
      */
     public static final int kNativeSize = 20;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CompressionInfo.class);
-                    }
-                });
-            }
-        }.establish();
-    }
-
     /**
      * Gets the CompressionInfo structure given the supplied information
-     * QuickTime::GetCompressionInfo
+     * @see "QuickTime::GetCompressionInfo"
      * @param compressionID the id of the compression type
      * @param format the OSType that describes the compression used
      * @param numChannels the number of channels in the sound data
      * @param sampleSize the size of the sample
      * @return a CompressionInfo object
-     * @return {@link quicktime.sound.SoundException}
+     * @throws quicktime.sound.SoundException
      */
-    public static CompressionInfo get(int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws SoundException {
+    public static CompressionInfo get(int compressionID, int format, int numChannels, int sampleSize) throws SoundException {
         CompressionInfo localCompressionInfo = new CompressionInfo();
-        SoundException.checkError(GetCompressionInfo((short) paramInt1, paramInt2, (short) paramInt3, (short) paramInt4, localCompressionInfo.getBytes()));
+        SoundException.checkError(GetCompressionInfo((short) compressionID, format, (short) numChannels, (short) sampleSize, localCompressionInfo.getBytes()));
         return localCompressionInfo;
     }
 
@@ -72,8 +54,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The recordSize.
      * @param recordSize -
      */
-    public void setRecordSize(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setRecordSize(int recordSize) {
+        setIntAt(0, recordSize);
     }
 
     /**
@@ -88,8 +70,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The format.
      * @param format -
      */
-    public void setFormat(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFormat(int format) {
+        setIntAt(4, format);
     }
 
     /**
@@ -104,8 +86,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The compressionID.
      * @param compressionID -
      */
-    public void setCompressionID(int paramInt) {
-        setShortAt(8, (short) paramInt);
+    public void setCompressionID(int compressionID) {
+        setShortAt(8, (short) compressionID);
     }
 
     /**
@@ -120,8 +102,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The samplesPerPacket.
      * @param samplesPerPacket -
      */
-    public void setSamplesPerPacket(int paramInt) {
-        setShortAt(10, (short) paramInt);
+    public void setSamplesPerPacket(int samplesPerPacket) {
+        setShortAt(10, (short) samplesPerPacket);
     }
 
     /**
@@ -136,8 +118,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The bytesPerPacket.
      * @param bytesPerPacket -
      */
-    public void setBytesPerPacket(int paramInt) {
-        setShortAt(12, (short) paramInt);
+    public void setBytesPerPacket(int bytesPerPacket) {
+        setShortAt(12, (short) bytesPerPacket);
     }
 
     /**
@@ -152,8 +134,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The bytesPerFrame.
      * @param bytesPerFrame -
      */
-    public void setBytesPerFrame(int paramInt) {
-        setShortAt(14, (short) paramInt);
+    public void setBytesPerFrame(int bytesPerFrame) {
+        setShortAt(14, (short) bytesPerFrame);
     }
 
     /**
@@ -168,8 +150,8 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * The bytesPerSample.
      * @param bytesPerSample -
      */
-    public void setBytesPerSample(int paramInt) {
-        setShortAt(16, (short) paramInt);
+    public void setBytesPerSample(int bytesPerSample) {
+        setShortAt(16, (short) bytesPerSample);
     }
 
     /**
@@ -177,11 +159,19 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * @return a String
      */
     public String toString() {
-        return getClass().getName() + "[recordSize=" + getRecordSize() + ",format=" + QTUtils.fromOSType(getFormat()) + ",compressionID=" + getCompressionID() + ",samplesPerPacket=" + getSamplesPerPacket() + ",bytesPerPacket=" + getBytesPerPacket() + ",bytesPerFrame=" + getBytesPerFrame() + ",bytesPerSample=" + getBytesPerSample() + "]";
+        return getClass().getName() +
+                "[recordSize=" + getRecordSize() +
+                ",format=" + QTUtils.fromOSType(getFormat()) +
+                ",compressionID=" + getCompressionID() +
+                ",samplesPerPacket=" + getSamplesPerPacket() +
+                ",bytesPerPacket=" + getBytesPerPacket() +
+                ",bytesPerFrame=" + getBytesPerFrame() +
+                ",bytesPerSample=" + getBytesPerSample() +
+                "]";
     }
 
-    private static short GetCompressionInfo(short paramShort1, int paramInt, short paramShort2, short paramShort3, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GetCompressionInfo(paramShort1, paramInt, paramShort2, paramShort3, paramArrayOfByte);
+    private static short GetCompressionInfo(short compressionID, int paramInt, short paramShort2, short paramShort3, byte[] paramArrayOfByte) {
+        return ImageCompressionManager.GetCompressionInfo(compressionID, paramInt, paramShort2, paramShort3, paramArrayOfByte);
     }
 }
 

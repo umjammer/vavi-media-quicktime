@@ -3,6 +3,7 @@ package quicktime.std.music;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -23,22 +24,19 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
      */
     public static final int kNativeSize = 255;
 
-    static final long serialVersionUID = -3977273754888819406L;
+    @Serial
+    private static final long serialVersionUID = -3977273754888819406L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(MusicMIDIPacket.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MusicMIDIPacket.class));
             }
         }.establish();
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[255];
         paramObjectInputStream.read(getBytes());
@@ -46,6 +44,7 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
         setIntInArray(getBytes(), 2, EndianOrder.flipBigEndianToNative32(getIntFromArray(getBytes(), 2)));
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[255];
         System.arraycopy(getBytes(), 0, arrayOfByte, 0, 255);
@@ -90,7 +89,7 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
      * @param mData the MIDI data
      */
     public void setMIDIData(byte[] paramArrayOfByte) {
-        int i = paramArrayOfByte.length > 249 ? 249 : paramArrayOfByte.length;
+        int i = Math.min(paramArrayOfByte.length, 249);
         setShortAt(0, (short) i);
         setIntAt(2, 0);
         setBytesAt(6, i, paramArrayOfByte, 0);
@@ -125,6 +124,7 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
     /**
      * Make a copy of the MusicMIDIPacket.
      */
+    @Override
     public Object clone() {
         return new MusicMIDIPacket(this.bytes);
     }
@@ -145,8 +145,3 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
         MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/music
- * /MusicMIDIPacket.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */

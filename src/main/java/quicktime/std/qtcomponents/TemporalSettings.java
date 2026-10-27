@@ -3,6 +3,7 @@ package quicktime.std.qtcomponents;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -21,18 +22,14 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
      */
     public static final int kNativeSize = 12;
 
+    @Serial
     private static final long serialVersionUID = -5866822543021494879L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(TemporalSettings.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(TemporalSettings.class));
             }
         }.establish();
     }
@@ -62,6 +59,7 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[12];
         paramObjectInputStream.read(this.bytes);
@@ -70,6 +68,7 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[12];
         for (int i = 0; i < 12; i += 4) {

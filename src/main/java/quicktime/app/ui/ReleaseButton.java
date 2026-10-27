@@ -6,7 +6,7 @@ import quicktime.QTSession;
 import quicktime.app.image.ImageSpec;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class represents a normal button which fires the action event
  * when the button is released.
  */
@@ -19,8 +19,8 @@ public class ReleaseButton extends QTButton {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * sets the current image of the QTButton and creates a TwoDSprite button
      * @param releasedImage the image to be displayed when the mouse is not pressed
      * @param pressedImage the image to be displayed when the mouse is pressed
@@ -31,8 +31,8 @@ public class ReleaseButton extends QTButton {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * sets the current image of the QTButton and creates a TwoDSprite button
      * @param releasedImage the image to be displayed when the mouse is not pressed
      * @param pressedImage the image to be displayed when the mouse is pressed
@@ -44,10 +44,11 @@ public class ReleaseButton extends QTButton {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * This method is invoked by the button responder when the mouse is released
      */
+    @Override
     public void released() throws QTException {
         super.released();
         if (isMouseInButton()) {

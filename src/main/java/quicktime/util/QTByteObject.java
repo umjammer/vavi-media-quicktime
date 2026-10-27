@@ -29,12 +29,7 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(QTByteObject.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTByteObject.class));
             }
         }.establish();
     }

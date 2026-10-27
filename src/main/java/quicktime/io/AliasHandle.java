@@ -1,39 +1,20 @@
 package quicktime.io;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.FileManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.movies.media.DataRef;
 import quicktime.util.QTHandleRef;
 
+
 /**
  * An alias handle represents a file - it maybe a minimal alias or an alias that
- * will attempted to be resolved when used.
+ * will attempt to be resolved when used.
  */
 public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
 
-    private static Object linkage;
-
     private boolean minimal;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(AliasHandle.class);
-                    }
-                });
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     static AliasHandle fromQTFile(QTFile paramQTFile, boolean paramBoolean) throws QTException {
         int[] arrayOfInt = { 0 };
@@ -57,9 +38,9 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
     /**
      * Converts an aliasDataRef type DataRef into an AliasHandle. This does not
      * copy the alias DataRef so any changes that are made to the Alias will
-     * effect the DataRef as well.
+     * affect the DataRef as well.
      * @return the AliasHandle
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public static AliasHandle fromDataRef(DataRef paramDataRef) throws QTException {
         if (paramDataRef.getType() != 1634494835)
@@ -71,11 +52,11 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
      * Creates an AliasHandle from the given byte array containing AliasHandle data
      * @param srcArray byte array containing AliasHandle data
      * @return AliasHandle object pointing to the data contained in srcArray
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
-    public static AliasHandle fromArray(byte[] paramArrayOfByte) throws QTException {
-        AliasHandle localAliasHandle = new AliasHandle(paramArrayOfByte.length, false);
-        localAliasHandle.copyFromArray(0, paramArrayOfByte, 0, paramArrayOfByte.length);
+    public static AliasHandle fromArray(byte[] srcArray) throws QTException {
+        AliasHandle localAliasHandle = new AliasHandle(srcArray.length, false);
+        localAliasHandle.copyFromArray(0, srcArray, 0, srcArray.length);
         return localAliasHandle;
     }
 
@@ -98,9 +79,9 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
     /**
      * This method will take an alias and will resolve it,
      * returning the full path name of the resolved file.
-     * QuickTime::ResolveAlias
+     * @see "QuickTime::ResolveAlias"
      * @return the QTFile object of the resolved alias
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public QTFile resolve() throws QTException {
         return QTFile.resolveAlias(this);

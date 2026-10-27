@@ -6,7 +6,7 @@ import quicktime.QTSession;
 import quicktime.app.spaces.Sequencer;
 
 /**
- * Deprecated.
+ * @deprecated
  * This class is an abstract class for actions that interact with some kind of Sequencer.
  * The doAction method is left for the subclass to define so that it can define the type
  * of a Sequencer the action deals with. The constraining conditions of the Sequencer are dealt with by
@@ -15,27 +15,27 @@ import quicktime.app.spaces.Sequencer;
 public abstract class SequencerAction extends PeriodicAction {
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kConstraintAny = 4;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kConstraintFirst = 1;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kConstraintLast = 2;
 
     /**
-     * Deprecated.
+     * @deprecated
      */
     public static final int kConstraintFirstOrLast = 3;
 
     /**
-     * Deprecated.
+     * @deprecated
      * This is the Sequencer the action uses * @deprecated since QTJava 6.1
      */
     protected Sequencer seq;
@@ -47,8 +47,8 @@ public abstract class SequencerAction extends PeriodicAction {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Create a SequencerAction.
      * @param scale the amount with which a second is divided into at a rate of one
      * @param period the number of scale ticks that elapse between invocations of the action.
@@ -62,8 +62,8 @@ public abstract class SequencerAction extends PeriodicAction {
     private int cons = 0;
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Set the constraining condition that determines the cirumstances of when
      * the attached actionable object is triggered.
      * @param cons the constraint
@@ -73,8 +73,8 @@ public abstract class SequencerAction extends PeriodicAction {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Gets the constraining condition of the actionable doAction method
      * @return the constraint
      */
@@ -83,21 +83,22 @@ public abstract class SequencerAction extends PeriodicAction {
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Subclasses should return true if after an action is triggered (the doAction
      * method is called) the action has reached one of its specified constraint conditions
      * and the actionable object should be triggered. How this is defined is determined
      * totally by the subclass.
      * @return true if the actionable object (if set) should be triggered
      */
+    @Override
     protected boolean constraintReached() {
         return (this.cons == 4) || ((this.seq.getCurrentFrame() == 1) && ((this.cons | 0x1) != 0)) || ((this.seq.getCurrentFrame() == this.seq.size()) && ((this.cons | 0x2) != 0));
     }
 
     /**
-     * Deprecated.
-     * <I>since QTJava 6.1</I>
+     * @deprecated
+     * @since QTJava 6.1
      * Returns true if the objects are equal or false otherwise.
      * @param obj the object to test
      * @return a boolean

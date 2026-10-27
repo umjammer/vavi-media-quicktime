@@ -3,6 +3,7 @@ package quicktime.qd;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
@@ -27,18 +28,14 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
      */
     public static final int kNativeSize = 24;
 
-    static final long serialVersionUID = -5429124066722306588L;
+    @Serial
+    private static final long serialVersionUID = -5429124066722306588L;
 
     static {
         new Object() {
 
             void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(OpenCPicParams.class);
-                    }
-                });
+                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(OpenCPicParams.class));
             }
         }.establish();
     }
@@ -67,6 +64,7 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[24];
         paramObjectInputStream.read(this.bytes);
@@ -79,6 +77,7 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
         setShortInArray(getBytes(), 16, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, 16)));
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[24];
         for (int i = 0; i < 8; i += 2) {
@@ -132,6 +131,7 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
     /**
      * Return a copy of the OpenCPicParams.
      */
+    @Override
     public Object clone() {
         return new OpenCPicParams(this.bytes);
     }

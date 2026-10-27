@@ -26,7 +26,7 @@ public abstract class TimeCallBack extends QTCallBack {
 
     /**
      * This allows your application to obtain a new callback.
-     * QuickTime::NewCallBack()
+     * @see "QuickTime::NewCallBack()"
      * @param tb the time base that the callback is attached too.
      * @param scale the scale that is used to determine the value in seconds of the value parametre
      * @param value the value in units as specified by the scale
@@ -41,8 +41,9 @@ public abstract class TimeCallBack extends QTCallBack {
 
     /**
      * Specifies the time when the callback sholud be called.
-     * QuickTime::CallMeWhen
+     * @see "QuickTime::CallMeWhen"
      */
+    @Override
     public final void callMeWhen() throws StdQTException {
         super.callMeWhen(this.flags, this.value, this.scale);
     }

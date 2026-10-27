@@ -42,7 +42,7 @@ final class ExportDialog {
             if (c.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) {
                 return;
             }
-            ImageFormats.Format f = formats.get(0);
+            ImageFormats.Format f = formats.getFirst();
             if (c.getFileFilter() instanceof FileNameExtensionFilter e) {
                 for (ImageFormats.Format g : formats) {
                     if (g.name().equals(e.getDescription())) {

@@ -3,9 +3,9 @@ package quicktime.vr;
 /**
  * This interface is defined by an application to receive and process
  * interactions with a VR movie's nodes
- * @see {@link quicktime.vr.QTVRInstance}
+ * @see quicktime.vr.QTVRInstance
  */
-public abstract interface QTVREnteringNode {
+public interface QTVREnteringNode {
 
     /**
      * This method is called by MoviesTask when a user is entering a new node
@@ -13,8 +13,8 @@ public abstract interface QTVREnteringNode {
      * @param vr the QTVRInstance
      * @param nodeID the nodeID that the user is entering
      * @return an error code or zero if no error
-     * @see {@link quicktime.std.clocks.QTCallBack}
+     * @see quicktime.std.clocks.QTCallBack
      */
-    public abstract int execute(QTVRInstance paramQTVRInstance, int paramInt);
+    int execute(QTVRInstance vr, int nodeID);
 }
 

@@ -19,20 +19,15 @@ public final class SCSequence implements QuickTimeLib {
 
     private static Object linkage;
 
-    private ImageDescription desc;
+    private final ImageDescription desc;
 
-    private ImageCompressionDialog dialog;
+    private final ImageCompressionDialog dialog;
 
     static {
         class PrivelegedAction {
 
             void establish() {
-                AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(SCSequence.class);
-                    }
-                });
+                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SCSequence.class));
             }
         }
         new PrivelegedAction().establish();
@@ -60,7 +55,7 @@ public final class SCSequence implements QuickTimeLib {
         };
     }
 
-    private boolean ended = false;
+    private final boolean ended = false;
 
     /**
      * Return the description
@@ -79,17 +74,18 @@ public final class SCSequence implements QuickTimeLib {
     /**
      * Compresses a frame that is sourced by a PixMap from the supplied QDGraphics, returning
      * the compressed data.
-     * QuickTime::SCCompressImage()
+     * @see "QuickTime::SCCompressImage()"
      * @param src the source PixMap from the QDGraphics.
      * @param srcRect you can specify to compress just a part of the pix map by specifying
      *  a rectangle - or pass in null to compress the entire pix map.
      * @return an image data object.
-     * @return {@link quicktime.QTException}
+     * @throws quicktime.QTException
      */
     public SCInfo compressFrame(QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
         return QTHandleRef.fromSCSequence(this, paramQDGraphics, paramQDRect);
     }
 
+    @Override
     protected final void finalize() throws Throwable {
         SCCompressSequenceEnd(QTObject.ID(this.dialog));
         super.finalize();

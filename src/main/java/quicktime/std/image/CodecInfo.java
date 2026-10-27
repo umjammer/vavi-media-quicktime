@@ -3,12 +3,11 @@ package quicktime.std.image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.io.Serial;
+
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.EndianOrder;
@@ -16,44 +15,30 @@ import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
 
+
 /**
  * Corresponds to the Compressor Information Structure which describes
  * the capabilities of compressors.
  */
 public final class CodecInfo extends QTByteObject implements QuickTimeLib, Cloneable {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 72;
 
-    static final long serialVersionUID = 1284575243605950382L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-                    public Object run() {
-                        return QTNative.linkNativeMethods(CodecInfo.class);
-                    }
-                });
-            }
-        }.establish();
-    }
+    @Serial
+    private static final long serialVersionUID = 1284575243605950382L;
 
     /**
-     * Consturcts a CodecInfo.
-     * QuickTime::GetCodecInfo
+     * Constructs a CodecInfo.
+     * @see "QuickTime::GetCodecInfo"
      * @param cType specifies the compressor type.
      * @param codec specifies a compressor identifier.
      */
-    public CodecInfo(int paramInt, CodecComponent paramCodecComponent) throws StdQTException {
+    public CodecInfo(int cType, CodecComponent codec) throws StdQTException {
         super(72);
-        int i = GetCodecInfo(this.bytes, paramInt, QTObject.ID(paramCodecComponent));
+        int i = GetCodecInfo(this.bytes, cType, QTObject.ID(codec));
         StdQTException.checkError(i);
     }
 
@@ -61,6 +46,7 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
         super(paramArrayOfByte);
     }
 
+    @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
         this.bytes = new byte[72];
         paramObjectInputStream.read(this.bytes);
@@ -78,6 +64,7 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[72];
         System.arraycopy(getBytes(), 0, arrayOfByte, 0, 72);
@@ -99,9 +86,9 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
 
     /**
      * determines the version of the installed image compression manager.
-     * see QuickTime::CodecManagerVersion
+     * @see "see QuickTime::CodecManagerVersion"
      * @return version.
-     * @return {@link quicktime.std.StdQTException}
+     * @throws quicktime.std.StdQTException
      */
     public static int codecVersion() throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -113,7 +100,7 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
     /**
      * Get the compression algorithm used by the component.
      * @return the name of the compression algorithm.
-     * @return {@link quicktime.util.UtilException}
+     * @throws quicktime.util.UtilException
      */
     public String getTypeName() throws UtilException {
         return getPStringAt(0);
@@ -236,6 +223,7 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
     /**
      * Return a copy of the CodecInfo.
      */
+    @Override
     public Object clone() {
         return new CodecInfo(this.bytes);
     }
@@ -264,8 +252,3 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
         return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
     }
 }
-/* Location:
- * /Users/nsano/src/win32/QTJava_6.1_Win_SDK/tmp/QTJava.zip!/quicktime/std/image
- * /CodecInfo.class
- * Java compiler version: 2 (46.0)
- * JD-Core Version: 0.7.1 */
