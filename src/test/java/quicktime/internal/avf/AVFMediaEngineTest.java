@@ -39,6 +39,9 @@ class AVFMediaEngineTest implements StdQTConstants {
 
     static final String MEDIA = "src/test/resources/media/";
 
+    /** volume of the played sound, 0.0 ~ 1.0 */
+    static final float VOLUME = Float.parseFloat(System.getProperty("vavi.test.volume", "0.2"));
+
     @TempDir
     Path temp;
 
@@ -82,6 +85,7 @@ class AVFMediaEngineTest implements StdQTConstants {
     @Test
     void testPlay() throws Exception {
         Movie movie = Movie.fromFile(OpenMovieFile.asRead(new QTFile(MEDIA + "sin440.aif")));
+        movie.setVolume(VOLUME);
         movie.start();
         for (int i = 0; i < 20; i++) {
             Thread.sleep(25);

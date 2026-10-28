@@ -22,6 +22,11 @@
     <url>https://bitbucket.org/umjammer/quicktime4java</url>
   </issueManagement>
 
+  <properties>
+    <!-- volume of the sound played by the tests, 0.0 ~ 1.0, override by -Dvavi.test.volume=... -->
+    <vavi.test.volume>0.2</vavi.test.volume>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
