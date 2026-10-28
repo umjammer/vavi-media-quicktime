@@ -40,8 +40,8 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param size how many bytes to allocate
      * @param clear if true the handle's memory is cleared to zeroes.
      */
-    public SndHandle(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, paramBoolean);
+    public SndHandle(int size, boolean clear) throws QTException {
+        super(size, clear);
     }
 
     /**
@@ -54,8 +54,8 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param sampleSize The sample size for the original sound (that is, bits per sample).
      * @param compressionType The compression type for the sound ('NONE', 'MAC3', 'MAC6', or other third-party types).
      */
-    public SndHandle(int paramInt1, float paramFloat, int paramInt2, int paramInt3) throws QTException {
-        this(paramInt1, paramFloat, paramInt2, paramInt3, 60);
+    public SndHandle(int numChannels, float sampleRate, int sampleSize, int compressionType) throws QTException {
+        this(numChannels, sampleRate, sampleSize, compressionType, 60);
     }
 
     /**
@@ -69,9 +69,9 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param compressionType The compression type for the sound ('NONE', 'MAC3', 'MAC6', or other third-party types).
      * @param baseNote The base note for the sound, expressed as a MIDI note value.
      */
-    public SndHandle(int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4) throws QTException {
+    public SndHandle(int numChannels, float sampleRate, int sampleSize, int compressionType, int baseNote) throws QTException {
         super(100, false);
-        int i = setupHeader(paramInt1, paramFloat, paramInt2, paramInt3, paramInt4, 0);
+        int i = setupHeader(numChannels, sampleRate, sampleSize, compressionType, baseNote, 0);
         setSize(i);
     }
 
@@ -86,8 +86,8 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @return the size (in bytes) of the 'snd ' resource header that is created
      * @throws quicktime.sound.SoundException
      */
-    public int setupHeader(int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4) throws SoundException {
-        return setupHeader(paramInt1, paramFloat, paramInt2, paramInt3, 60, paramInt4);
+    public int setupHeader(int numChannels, float sampleRate, int sampleSize, int compressionType, int numBytes) throws SoundException {
+        return setupHeader(numChannels, sampleRate, sampleSize, compressionType, 60, 0);
     }
 
     /**
@@ -102,9 +102,9 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @return the size (in bytes) of the 'snd ' resource header that is created
      * @throws quicktime.sound.SoundException
      */
-    public int setupHeader(int paramInt1, float paramFloat, int paramInt2, int paramInt3, int paramInt4, int paramInt5) throws SoundException {
+    public int setupHeader(int numChannels, float sampleRate, int sampleSize, int compressionType, int baseNote, int numBytes) throws SoundException {
         short[] arrayOfShort = { 0 };
-        SoundException.checkError(SetupSndHeader(_ID(), (short) paramInt1, QTUtils.X2UFix(paramFloat), (short) paramInt2, paramInt3, (short) paramInt4, paramInt5, arrayOfShort));
+        SoundException.checkError(SetupSndHeader(_ID(), (short) numChannels, QTUtils.X2UFix(sampleRate), (short) sampleSize, compressionType, (short) baseNote, numBytes, arrayOfShort));
         return arrayOfShort[0];
     }
 
@@ -149,14 +149,14 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param buffer the buffer that contains the actual sound data.
      * @throws quicktime.QTException
      */
-    public void appendSoundData(QTPointerRef paramQTPointerRef) throws QTException {
+    public void appendSoundData(QTPointerRef buffer) throws QTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         SoundComponentData localSoundComponentData = new SoundComponentData();
         SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        if (paramQTPointerRef != null) {
-            setSize(arrayOfInt2[0] + paramQTPointerRef.getSize());
-            BlockMove(QTObject.ID(paramQTPointerRef), lockAndDeref(arrayOfInt2[0]), paramQTPointerRef.getSize());
+        if (buffer != null) {
+            setSize(arrayOfInt2[0] + buffer.getSize());
+            BlockMove(QTObject.ID(buffer), lockAndDeref(arrayOfInt2[0]), buffer.getSize());
         } else {
             setSize(getSoundHeaderOffset());
         }
@@ -170,12 +170,12 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param bufferSize the number of bytes to append for the sound buffer
      * @throws quicktime.QTException
      */
-    public void appendSoundBuffer(int paramInt) throws QTException {
+    public void appendSoundBuffer(int bufferSize) throws QTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         SoundComponentData localSoundComponentData = new SoundComponentData();
         SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        setSize(arrayOfInt2[0] + paramInt);
+        setSize(arrayOfInt2[0] + bufferSize);
         this.buf = null;
         setIntAt(getSoundHeaderOffset(), 0);
     }
@@ -186,10 +186,10 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @param buffer the buffer that contains the actual sound data.
      * @throws quicktime.QTException
      */
-    public void setSoundData(QTPointerRef paramQTPointerRef) throws QTException {
+    public void setSoundData(QTPointerRef buffer) throws QTException {
         int i = getSoundHeaderOffset();
-        setIntAt(i, QTObject.ID(paramQTPointerRef));
-        this.buf = paramQTPointerRef;
+        setIntAt(i, QTObject.ID(buffer));
+        this.buf = buffer;
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         SoundComponentData localSoundComponentData = new SoundComponentData();

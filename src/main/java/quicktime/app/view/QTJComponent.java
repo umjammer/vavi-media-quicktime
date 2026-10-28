@@ -15,7 +15,7 @@ public interface QTJComponent {
      *  current image is removed.
      * @throws quicktime.QTException
      */
-    void setGraphicsImporterDrawer(GraphicsImporterDrawer paramGraphicsImporterDrawer) throws QTException;
+    void setGraphicsImporterDrawer(GraphicsImporterDrawer img) throws QTException;
 
     /**
      * Sets the current movie for this QTJComponent to the specified movie represented by the MoviePlayer object.
@@ -23,7 +23,7 @@ public interface QTJComponent {
      *  current movie is removed.
      * @throws quicktime.QTException
      */
-    void setMoviePlayer(MoviePlayer paramMoviePlayer) throws QTException;
+    void setMoviePlayer(MoviePlayer movPlayer) throws QTException;
 
     /**
      * Gets the currently displayed MoviePlayer object of this component.

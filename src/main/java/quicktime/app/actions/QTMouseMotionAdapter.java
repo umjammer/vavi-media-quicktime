@@ -33,7 +33,7 @@ public abstract class QTMouseMotionAdapter implements QTMouseMotionListener {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
+    public void mouseEnteredTarget(MouseEvent e) {
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class QTMouseMotionAdapter implements QTMouseMotionListener {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseExitedTarget(MouseEvent paramMouseEvent) {
+    public void mouseExitedTarget(MouseEvent e) {
     }
 
     static {

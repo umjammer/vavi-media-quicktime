@@ -32,10 +32,10 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
     /**
      * @param count the count of bands
      */
-    public MediaEQSpectrumBands(int paramInt) {
+    public MediaEQSpectrumBands(int count) {
         super(6);
-        setShortAt(0, (short) paramInt);
-        setIntAt(2, NewPtrClear(paramInt * 4));
+        setShortAt(0, (short) count);
+        setIntAt(2, NewPtrClear(count * 4));
     }
 
     /**
@@ -49,18 +49,18 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
      * @param whichBand the band to query.
      * @return the frequency at specified band
      */
-    public float getFrequency(int paramInt) {
+    public float getFrequency(int whichBand) {
         int i = getIntAt(2);
-        return QTUtils.UFix2X(getIntFromPointer(i, paramInt * 4));
+        return QTUtils.UFix2X(getIntFromPointer(i, whichBand * 4));
     }
 
     /**
      * @param whichBand the band to set.
      * @param freq the frequency at specified band
      */
-    public void setFrequency(int paramInt, float paramFloat) {
+    public void setFrequency(int whichBand, float freq) {
         int i = getIntAt(2);
-        setIntInPointer(i, paramInt * 4, QTUtils.X2UFix(paramFloat));
+        setIntInPointer(i, whichBand * 4, QTUtils.X2UFix(freq));
     }
 
     /**

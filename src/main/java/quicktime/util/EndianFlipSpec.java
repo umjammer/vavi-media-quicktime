@@ -50,10 +50,10 @@ public class EndianFlipSpec {
      * @param sizeFlag the size of the flipping that should be applied
      * @param num the number of sizeFlag flips that should be applied.
      */
-    public EndianFlipSpec(int paramInt1, int paramInt2, int paramInt3) {
-        this.offset = paramInt1;
-        this.sizeFlag = paramInt2;
-        this.num = paramInt3;
+    public EndianFlipSpec(int offset, int sizeFlag, int num) {
+        this.offset = offset;
+        this.sizeFlag = sizeFlag;
+        this.num = num;
     }
 
     /**

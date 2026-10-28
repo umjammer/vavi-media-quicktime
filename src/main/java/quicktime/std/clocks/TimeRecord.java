@@ -29,10 +29,10 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
      * @param scale the scale that is used to interpret the meaning of the supplied value
      * @param value the value as expressed in scale untis.
      */
-    public TimeRecord(int paramInt, long paramLong) throws QTException {
+    public TimeRecord(int scale, long value) throws QTException {
         super(16, true);
-        setValue(paramLong);
-        setScale(paramInt);
+        setValue(value);
+        setScale(scale);
     }
 
     protected TimeRecord(int paramInt, Object paramObject) {
@@ -59,16 +59,16 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
      * Sets the time value of the time record.
      * @param value the data to store in the field.
      */
-    public final void setValue(long paramLong) {
-        setLongAt(0, paramLong);
+    public final void setValue(long value) {
+        setLongAt(0, value);
     }
 
     /**
      * Sets the time scale of the time record.
      * @param scale the data to store in the field.
      */
-    public final void setScale(int paramInt) {
-        setIntAt(8, paramInt);
+    public final void setScale(int scale) {
+        setIntAt(8, scale);
     }
 
     /**
@@ -76,8 +76,8 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
      * @see "QuickTime::ConvertTime"
      * @param newBase Specifies the time base for this operation
      */
-    public final void convertTime(TimeBase paramTimeBase) {
-        ConvertTime(_ID(), QTObject.ID(paramTimeBase));
+    public final void convertTime(TimeBase newBase) {
+        ConvertTime(_ID(), QTObject.ID(newBase));
     }
 
     /**
@@ -85,8 +85,8 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
      * @see "QuickTime::ConvertTimeScale"
      * @param newScale The time scale
      */
-    public final void convertTimeScale(int paramInt) {
-        ConvertTimeScale(_ID(), paramInt);
+    public final void convertTimeScale(int newScale) {
+        ConvertTimeScale(_ID(), newScale);
     }
 
     /**
@@ -94,8 +94,8 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
      * @see "QuickTime::AddTime"
      * @param source The source operand time base with a time value to add
      */
-    public final void addTime(TimeRecord paramTimeRecord) {
-        AddTime(_ID(), QTObject.ID(paramTimeRecord));
+    public final void addTime(TimeRecord source) {
+        AddTime(_ID(), QTObject.ID(source));
     }
 
     /**
@@ -103,8 +103,8 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
      * @see "QuickTime::SubtractTime"
      * @param source The source operand time base with a time value to subtract
      */
-    public final void subtractTime(TimeRecord paramTimeRecord) {
-        SubtractTime(_ID(), QTObject.ID(paramTimeRecord));
+    public final void subtractTime(TimeRecord source) {
+        SubtractTime(_ID(), QTObject.ID(source));
     }
 
     /**

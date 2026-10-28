@@ -108,8 +108,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param imageRefTrackIndex the track reference index of the full res image track
      */
-    public void setImageRefTrackIndex(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setImageRefTrackIndex(int imageRefTrackIndex) {
+        setIntAt(4, imageRefTrackIndex);
     }
 
     /**
@@ -133,8 +133,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param minPan the minPan
      */
-    public void setMinPan(float paramFloat) {
-        setFloatAt(12, paramFloat);
+    public void setMinPan(float minPan) {
+        setFloatAt(12, minPan);
     }
 
     /**
@@ -147,8 +147,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param maxPan the maxPan
      */
-    public void setMaxPan(float paramFloat) {
-        setFloatAt(16, paramFloat);
+    public void setMaxPan(float maxPan) {
+        setFloatAt(16, maxPan);
     }
 
     /**
@@ -161,8 +161,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param minTilt the minTilt
      */
-    public void setMinTilt(float paramFloat) {
-        setFloatAt(20, paramFloat);
+    public void setMinTilt(float minTilt) {
+        setFloatAt(20, minTilt);
     }
 
     /**
@@ -175,8 +175,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param maxTilt the maxTilt
      */
-    public void setMaxTilt(float paramFloat) {
-        setFloatAt(24, paramFloat);
+    public void setMaxTilt(float maxTilt) {
+        setFloatAt(24, maxTilt);
     }
 
     /**
@@ -189,8 +189,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param minFieldOfView the minFieldOfView
      */
-    public void setMinFieldOfView(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setMinFieldOfView(float minFieldOfView) {
+        setFloatAt(28, minFieldOfView);
     }
 
     /**
@@ -203,8 +203,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param maxFieldOfView the maxFieldOfView
      */
-    public void setMaxFieldOfView(float paramFloat) {
-        setFloatAt(32, paramFloat);
+    public void setMaxFieldOfView(float maxFieldOfView) {
+        setFloatAt(32, maxFieldOfView);
     }
 
     /**
@@ -217,8 +217,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param defaultPan the defaultPan
      */
-    public void setDefaultPan(float paramFloat) {
-        setFloatAt(36, paramFloat);
+    public void setDefaultPan(float defaultPan) {
+        setFloatAt(36, defaultPan);
     }
 
     /**
@@ -231,8 +231,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param defaultTilt the defaultTilt
      */
-    public void setDefaultTilt(float paramFloat) {
-        setFloatAt(40, paramFloat);
+    public void setDefaultTilt(float defaultTilt) {
+        setFloatAt(40, defaultTilt);
     }
 
     /**
@@ -245,8 +245,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param defaultFieldOfView the defaultFieldOfView
      */
-    public void setDefaultFieldOfView(float paramFloat) {
-        setFloatAt(44, paramFloat);
+    public void setDefaultFieldOfView(float defaultFieldOfView) {
+        setFloatAt(44, defaultFieldOfView);
     }
 
     /**
@@ -259,9 +259,9 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param imageSize the pixel width and height of the panorama
      */
-    public void setImageSize(QDPoint paramQDPoint) {
-        setIntAt(48, paramQDPoint.getX());
-        setIntAt(52, paramQDPoint.getY());
+    public void setImageSize(QDPoint imageSize) {
+        setIntAt(48, imageSize.getX());
+        setIntAt(52, imageSize.getY());
     }
 
     /**
@@ -274,9 +274,9 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param imageNumFrames the number of diced image frames wide and high
      */
-    public void setNumFrames(QDPoint paramQDPoint) {
-        setShortAt(56, (short) paramQDPoint.getX());
-        setShortAt(58, (short) paramQDPoint.getY());
+    public void setNumFrames(QDPoint imageNumFrames) {
+        setShortAt(56, (short) imageNumFrames.getX());
+        setShortAt(58, (short) imageNumFrames.getY());
     }
 
     /**
@@ -286,9 +286,9 @@ public final class QTVRPanoSample extends QTVRAtom {
         return new QDPoint(getIntAt(60), getIntAt(64));
     }
 
-    public void setHotSpotSize(QDPoint paramQDPoint) {
-        setIntAt(60, paramQDPoint.getX());
-        setIntAt(64, paramQDPoint.getY());
+    public void setHotSpotSize(QDPoint hotSpotSize) {
+        setIntAt(60, hotSpotSize.getX());
+        setIntAt(64, hotSpotSize.getY());
     }
 
     /**
@@ -301,9 +301,9 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param hotSpotNumFrames the number of diced hotspot frames wide and high
      */
-    public void setHotSpotNumFrames(QDPoint paramQDPoint) {
-        setShortAt(68, (short) paramQDPoint.getX());
-        setShortAt(70, (short) paramQDPoint.getY());
+    public void setHotSpotNumFrames(QDPoint hotSpotNumFrames) {
+        setShortAt(68, (short) hotSpotNumFrames.getX());
+        setShortAt(70, (short) hotSpotNumFrames.getY());
     }
 
     /**
@@ -316,8 +316,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param flags -
      */
-    public void setFlags(int paramInt) {
-        setIntAt(72, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(72, flags);
     }
 
     /**
@@ -330,16 +330,16 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param panoType (reserved1)
      */
-    public void setPanoType(int paramInt) {
-        setIntAt(76, paramInt);
+    public void setPanoType(int panoType) {
+        setIntAt(76, panoType);
     }
 
     /**
      * Sets the type of the panorama
      * @param panoType String
      */
-    public void setPanoType(String paramString) {
-        setIntAt(76, QTUtils.toOSType(paramString));
+    public void setPanoType(String panoType) {
+        setIntAt(76, QTUtils.toOSType(panoType));
     }
 
     /**
@@ -352,8 +352,8 @@ public final class QTVRPanoSample extends QTVRAtom {
     /**
      * @param reserved2 -
      */
-    public void setReserved2(int paramInt) {
-        setIntAt(80, paramInt);
+    public void setReserved2(int reserved2) {
+        setIntAt(80, reserved2);
     }
 
     /**

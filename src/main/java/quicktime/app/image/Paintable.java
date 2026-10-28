@@ -28,7 +28,7 @@ public interface Paintable {
      * @param drawer the QTImageDrawer that is notifiying the Paintable object that its size has changed.
      * @param d the new size of the offscreen image that the painter can paint into.
      */
-    void newSizeNotified(QTImageDrawer paramQTImageDrawer, Dimension paramDimension);
+    void newSizeNotified(QTImageDrawer drawer, Dimension d);
 
     /**
      * @deprecated
@@ -44,5 +44,5 @@ public interface Paintable {
      * Intelligent usage of this can improve drawing performance.
      * @param g the graphics to paint on.
      */
-    Rectangle[] paint(Graphics paramGraphics);
+    Rectangle[] paint(Graphics g);
 }

@@ -47,8 +47,8 @@ public class QTFilter extends QTEffect {
      * Creates a QTFilter which is a singleFrame filter and specified initialSize.
      * @param d the initSize of the effect.
      */
-    public QTFilter(Dimension paramDimension) throws QTException {
-        this(1, paramDimension);
+    public QTFilter(Dimension d) throws QTException {
+        this(1, d);
     }
 
     /**
@@ -57,8 +57,8 @@ public class QTFilter extends QTEffect {
      * Creates a QTFilter which is a singleFrame filter and specified initialSize.
      * @param d the initSize of the effect.
      */
-    public QTFilter(QDDimension paramQDDimension) throws QTException {
-        this(1, paramQDDimension);
+    public QTFilter(QDDimension d) throws QTException {
+        this(1, d);
     }
 
     /**
@@ -158,11 +158,11 @@ public class QTFilter extends QTEffect {
      * @param image the image to use as the source of the filter
      * @throws quicktime.QTException
      */
-    public void setSourceImage(ImageSpec paramImageSpec) throws QTException {
-        if (paramImageSpec != null) {
+    public void setSourceImage(ImageSpec image) throws QTException {
+        if (image != null) {
             if (this.drawSourceListener != null)
                 this.drawSourceListener.dispose();
-            this.drawSourceListener = new ImageContainer(paramImageSpec);
+            this.drawSourceListener = new ImageContainer(image);
             this.initSize = new QDDimension(this.drawSourceListener.imgDesc.getWidth(), this.drawSourceListener.imgDesc.getHeight());
         } else {
             this.drawSourceListener.dispose();

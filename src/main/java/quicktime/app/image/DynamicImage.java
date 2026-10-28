@@ -38,7 +38,7 @@ public interface DynamicImage extends Compositable {
      * @throws quicktime.QTException
      * @see quicktime.app.display.SWCompositor
      */
-    Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException;
+    Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) throws QTException;
 
     /**
      * @deprecated
@@ -49,5 +49,5 @@ public interface DynamicImage extends Compositable {
      * @param c the SWCompositor it is being removed from
      * @throws quicktime.QTException
      */
-    void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException;
+    void removedFromCompositor(SWCompositor c) throws QTException;
 }

@@ -29,24 +29,24 @@ public class GraphicsImporterDrawer implements Presentable {
      * This constructor creates an GraphicsImporterDrawer object from an existing GraphicsImporter.
      * @param gi the GraphicsImporter
      */
-    public GraphicsImporterDrawer(GraphicsImporter paramGraphicsImporter) {
-        this.mGraphicsImporter = paramGraphicsImporter;
+    public GraphicsImporterDrawer(GraphicsImporter gi) {
+        this.mGraphicsImporter = gi;
     }
 
     /**
      * This constructor creates an GraphicsImporterDrawer object from a file.
      * @param file the QTFile.
      */
-    public GraphicsImporterDrawer(QTFile paramQTFile) throws QTException {
-        this.mGraphicsImporter = new GraphicsImporter(paramQTFile);
+    public GraphicsImporterDrawer(QTFile file) throws QTException {
+        this.mGraphicsImporter = new GraphicsImporter(file);
     }
 
     /**
      * This constructor creates an GraphicsImporterDrawer object from a data ref.
      * @param dataRef the dataRef that contains the locations of the image data.
      */
-    public GraphicsImporterDrawer(DataRef paramDataRef) throws QTException {
-        this.mGraphicsImporter = new GraphicsImporter(paramDataRef);
+    public GraphicsImporterDrawer(DataRef dataRef) throws QTException {
+        this.mGraphicsImporter = new GraphicsImporter(dataRef);
     }
 
     /**
@@ -73,8 +73,8 @@ public class GraphicsImporterDrawer implements Presentable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setClip(Region paramRegion) throws StdQTException {
-        this.mGraphicsImporter.setClip(paramRegion);
+    public void setClip(Region reg) throws StdQTException {
+        this.mGraphicsImporter.setClip(reg);
     }
 
     /**
@@ -109,7 +109,7 @@ public class GraphicsImporterDrawer implements Presentable {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
+    public void addedTo(Object interest) {
     }
 
     /**
@@ -120,7 +120,7 @@ public class GraphicsImporterDrawer implements Presentable {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
     }
 
     /**
@@ -143,8 +143,8 @@ public class GraphicsImporterDrawer implements Presentable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setGWorld(QDGraphics paramQDGraphics) throws StdQTException {
-        this.mGraphicsImporter.setGWorld(paramQDGraphics, null);
+    public void setGWorld(QDGraphics cgp) throws StdQTException {
+        this.mGraphicsImporter.setGWorld(cgp, null);
     }
 
     /**
@@ -199,8 +199,8 @@ public class GraphicsImporterDrawer implements Presentable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
-        this.mGraphicsImporter.setBoundsRect(paramQDRect);
+    public void setDisplayBounds(QDRect bounds) throws StdQTException {
+        this.mGraphicsImporter.setBoundsRect(bounds);
     }
 
     /**
@@ -210,10 +210,10 @@ public class GraphicsImporterDrawer implements Presentable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -239,10 +239,10 @@ public class GraphicsImporterDrawer implements Presentable {
      * @throws quicktime.QTException
      */
     @Override
-    public final synchronized void redraw(Region paramRegion) throws QTException {
-        if (paramRegion != null) {
+    public final synchronized void redraw(Region invalidRgn) throws QTException {
+        if (invalidRgn != null) {
             Region localRegion = this.mGraphicsImporter.getClip();
-            this.mGraphicsImporter.setClip(paramRegion);
+            this.mGraphicsImporter.setClip(invalidRgn);
             this.mGraphicsImporter.draw();
             this.mGraphicsImporter.setClip(localRegion);
         } else {

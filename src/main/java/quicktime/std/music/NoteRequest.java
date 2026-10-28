@@ -26,9 +26,9 @@ public final class NoteRequest extends NoteRequestInfo implements Cloneable {
      * Create a NoteRequest from the given ToneDescription value.
      * @param td a ToneDescription that describes the tone characteristics of the NoteRequest
      */
-    public NoteRequest(ToneDescription paramToneDescription) {
+    public NoteRequest(ToneDescription td) {
         this();
-        setToneDescription(paramToneDescription);
+        setToneDescription(td);
     }
 
     /**
@@ -38,10 +38,10 @@ public final class NoteRequest extends NoteRequestInfo implements Cloneable {
      *  value is a suggestion to the music toolbox that is used to estimate the resources
      *  a NoteChannel will be required to utilise.
      */
-    public NoteRequest(ToneDescription paramToneDescription, int paramInt) {
+    public NoteRequest(ToneDescription td, int poly) {
         this();
-        setToneDescription(paramToneDescription);
-        setPolyphony(paramInt);
+        setToneDescription(td);
+        setPolyphony(poly);
     }
 
     /**
@@ -51,10 +51,10 @@ public final class NoteRequest extends NoteRequestInfo implements Cloneable {
      *  value is a suggestion to the music toolbox that is used to estimate the resources
      *  a NoteChannel will be required to utilise.
      */
-    public NoteRequest(int paramInt1, int paramInt2) throws QTException {
+    public NoteRequest(int gmNumber, int poly) throws QTException {
         this();
-        setToneDescription(new ToneDescription(paramInt1));
-        setPolyphony(paramInt2);
+        setToneDescription(new ToneDescription(gmNumber));
+        setPolyphony(poly);
     }
 
     private NoteRequest(byte[] paramArrayOfByte) {

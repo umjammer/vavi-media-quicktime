@@ -35,8 +35,8 @@ public class SettingsDialog implements QTStreamingLib {
      * @param p the presentation to configure
      * @see " QuickTime::QTSPresSettingsDialog"
      */
-    public SettingsDialog(Presentation paramPresentation) throws QTException {
-        Presentation localPresentation = paramPresentation;
+    public SettingsDialog(Presentation p) throws QTException {
+        Presentation localPresentation = p;
         if (QTSession.isCurrentOS(4)) {
             StdQTException.checkError((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
 
@@ -48,7 +48,7 @@ public class SettingsDialog implements QTStreamingLib {
             }));
         } else {
             synchronized (QTNative.globalsLock) {
-                StdQTException.checkError(QTSPresSettingsDialog(QTObject.ID(paramPresentation), 0, 0, 0, 0));
+                StdQTException.checkError(QTSPresSettingsDialog(QTObject.ID(p), 0, 0, 0, 0));
             }
         }
     }
@@ -59,9 +59,9 @@ public class SettingsDialog implements QTStreamingLib {
      * @param s the stream to configure
      * @see " QuickTime::QTSPresSettingsDialog"
      */
-    public SettingsDialog(Presentation paramPresentation, Stream paramStream) throws QTException {
+    public SettingsDialog(Presentation p, Stream s) throws QTException {
         synchronized (QTNative.globalsLock) {
-            QTException.checkError(QTSPresSettingsDialog(QTObject.ID(paramPresentation), QTObject.ID(paramStream), 0, 0, 0));
+            QTException.checkError(QTSPresSettingsDialog(QTObject.ID(p), QTObject.ID(s), 0, 0, 0));
         }
     }
 

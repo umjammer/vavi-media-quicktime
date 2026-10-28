@@ -13,8 +13,8 @@ public class QTIOException extends QTException {
      * Creates an exception with a string representation.
      * @param errorString a description of the exception
      */
-    public QTIOException(String paramString) {
-        super(paramString);
+    public QTIOException(String errorString) {
+        super(errorString);
         this.path = "";
     }
 

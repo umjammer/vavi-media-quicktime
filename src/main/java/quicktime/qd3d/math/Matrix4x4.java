@@ -121,8 +121,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt00(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setAt00(float val) {
+        setFloatAt(0, val);
     }
 
     /**
@@ -137,8 +137,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt01(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setAt01(float val) {
+        setFloatAt(4, val);
     }
 
     /**
@@ -153,8 +153,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt02(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setAt02(float val) {
+        setFloatAt(8, val);
     }
 
     /**
@@ -169,8 +169,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt03(float paramFloat) {
-        setFloatAt(12, paramFloat);
+    public void setAt03(float val) {
+        setFloatAt(12, val);
     }
 
     /**
@@ -185,8 +185,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt10(float paramFloat) {
-        setFloatAt(16, paramFloat);
+    public void setAt10(float val) {
+        setFloatAt(16, val);
     }
 
     /**
@@ -201,8 +201,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt11(float paramFloat) {
-        setFloatAt(20, paramFloat);
+    public void setAt11(float val) {
+        setFloatAt(20, val);
     }
 
     /**
@@ -217,8 +217,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt12(float paramFloat) {
-        setFloatAt(24, paramFloat);
+    public void setAt12(float val) {
+        setFloatAt(24, val);
     }
 
     /**
@@ -233,8 +233,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt13(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setAt13(float val) {
+        setFloatAt(28, val);
     }
 
     /**
@@ -249,8 +249,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt20(float paramFloat) {
-        setFloatAt(32, paramFloat);
+    public void setAt20(float val) {
+        setFloatAt(32, val);
     }
 
     /**
@@ -265,8 +265,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt21(float paramFloat) {
-        setFloatAt(36, paramFloat);
+    public void setAt21(float val) {
+        setFloatAt(36, val);
     }
 
     /**
@@ -281,8 +281,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt22(float paramFloat) {
-        setFloatAt(40, paramFloat);
+    public void setAt22(float val) {
+        setFloatAt(40, val);
     }
 
     /**
@@ -297,8 +297,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt23(float paramFloat) {
-        setFloatAt(44, paramFloat);
+    public void setAt23(float val) {
+        setFloatAt(44, val);
     }
 
     /**
@@ -313,8 +313,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt30(float paramFloat) {
-        setFloatAt(48, paramFloat);
+    public void setAt30(float val) {
+        setFloatAt(48, val);
     }
 
     /**
@@ -329,8 +329,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt31(float paramFloat) {
-        setFloatAt(52, paramFloat);
+    public void setAt31(float val) {
+        setFloatAt(52, val);
     }
 
     /**
@@ -345,8 +345,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt32(float paramFloat) {
-        setFloatAt(56, paramFloat);
+    public void setAt32(float val) {
+        setFloatAt(56, val);
     }
 
     /**
@@ -361,8 +361,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt33(float paramFloat) {
-        setFloatAt(60, paramFloat);
+    public void setAt33(float val) {
+        setFloatAt(60, val);
     }
 
     /**
@@ -412,9 +412,9 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param matrixB a matrix
      * @return the product
      */
-    public Matrix4x4 multiply(Matrix4x4 paramMatrix4x4) {
+    public Matrix4x4 multiply(Matrix4x4 matrixB) {
         Matrix4x4 localMatrix4x4 = new Matrix4x4(null);
-        int i = Q3Matrix4x4_Multiply(getBytes(), paramMatrix4x4.getBytes(), localMatrix4x4.getBytes());
+        int i = Q3Matrix4x4_Multiply(getBytes(), matrixB.getBytes(), localMatrix4x4.getBytes());
         return localMatrix4x4;
     }
 
@@ -435,8 +435,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param yTrans The desired amount of translation along the y coordinate axis.
      * @param zTrans The desired amount of translation along the z coordinate axis.
      */
-    public void setTranslate(float paramFloat1, float paramFloat2, float paramFloat3) {
-        int i = Q3Matrix4x4_SetTranslate(getBytes(), paramFloat1, paramFloat2, paramFloat3);
+    public void setTranslate(float xTrans, float yTrans, float zTrans) {
+        int i = Q3Matrix4x4_SetTranslate(getBytes(), xTrans, yTrans, zTrans);
     }
 
     /**
@@ -448,8 +448,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param yScale The desired amount of scaling along the y coordinate axis.
      * @param zScale The desired amount of scaling along the z coordinate axis.
      */
-    public void setScale(float paramFloat1, float paramFloat2, float paramFloat3) {
-        int i = Q3Matrix4x4_SetScale(getBytes(), paramFloat1, paramFloat2, paramFloat3);
+    public void setScale(float xScale, float yScale, float zScale) {
+        int i = Q3Matrix4x4_SetScale(getBytes(), xScale, yScale, zScale);
     }
 
     /**
@@ -460,8 +460,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param yAngle The desired angle of rotation around the y component of origin, in radians.
      * @param zAngle The desired angle of rotation around the z component of origin, in radians.
      */
-    public void setRotateAboutPoint(Point3D paramPoint3D, float paramFloat1, float paramFloat2, float paramFloat3) {
-        int i = Q3Matrix4x4_SetRotateAboutPoint(getBytes(), paramPoint3D.getBytes(), paramFloat1, paramFloat2, paramFloat3);
+    public void setRotateAboutPoint(Point3D origin, float xAngle, float yAngle, float zAngle) {
+        int i = Q3Matrix4x4_SetRotateAboutPoint(getBytes(), origin.getBytes(), xAngle, yAngle, zAngle);
     }
 
     /**
@@ -472,8 +472,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param orientation The desired orientation of the axis of rotation.
      * @param angle The desired angle of rotation, in radians.
      */
-    public void setRotateAboutAxis(Point3D paramPoint3D, Vector3D paramVector3D, float paramFloat) {
-        int i = Q3Matrix4x4_SetRotateAboutAxis(getBytes(), paramPoint3D.getBytes(), paramVector3D.getBytes(), paramFloat);
+    public void setRotateAboutAxis(Point3D origin, Vector3D orientation, float angle) {
+        int i = Q3Matrix4x4_SetRotateAboutAxis(getBytes(), origin.getBytes(), orientation.getBytes(), angle);
     }
 
     /**
@@ -481,8 +481,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_X"
      * @param angle The desired angle of rotation around the x coordinate axis, in radians.
      */
-    public void setRotateX(float paramFloat) {
-        int i = Q3Matrix4x4_SetRotate_X(getBytes(), paramFloat);
+    public void setRotateX(float angle) {
+        int i = Q3Matrix4x4_SetRotate_X(getBytes(), angle);
     }
 
     /**
@@ -490,8 +490,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_Y"
      * @param angle The desired angle of rotation around the y coordinate axis, in radians.
      */
-    public void setRotateY(float paramFloat) {
-        int i = Q3Matrix4x4_SetRotate_Y(getBytes(), paramFloat);
+    public void setRotateY(float angle) {
+        int i = Q3Matrix4x4_SetRotate_Y(getBytes(), angle);
     }
 
     /**
@@ -499,8 +499,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @see "QuickDraw3D::Q3Matrix4x4_SetRotate_Z"
      * @param angle The desired angle of rotation around the z coordinate axis, in radians.
      */
-    public void setRotateZ(float paramFloat) {
-        int i = Q3Matrix4x4_SetRotate_Z(getBytes(), paramFloat);
+    public void setRotateZ(float angle) {
+        int i = Q3Matrix4x4_SetRotate_Z(getBytes(), angle);
     }
 
     /**
@@ -511,8 +511,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param yAngle The desired angle of rotation around the y coordinate axis, in radians.
      * @param zAngle The desired angle of rotation around the z coordinate axis, in radians.
      */
-    public void setRotateXYZ(float paramFloat1, float paramFloat2, float paramFloat3) {
-        int i = Q3Matrix4x4_SetRotate_XYZ(getBytes(), paramFloat1, paramFloat2, paramFloat3);
+    public void setRotateXYZ(float xAngle, float yAngle, float zAngle) {
+        int i = Q3Matrix4x4_SetRotate_XYZ(getBytes(), xAngle, yAngle, zAngle);
     }
 
     /**
@@ -523,8 +523,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @param v1 A three-dimensional vector.
      * @param v2 A three-dimensional vector.
      */
-    public void setRotateVectorToVector(Vector3D paramVector3D1, Vector3D paramVector3D2) {
-        int i = Q3Matrix4x4_SetRotateVectorToVector(getBytes(), paramVector3D1.getBytes(), paramVector3D2.getBytes());
+    public void setRotateVectorToVector(Vector3D v1, Vector3D v2) {
+        int i = Q3Matrix4x4_SetRotateVectorToVector(getBytes(), v1.getBytes(), v2.getBytes());
     }
 
     /**
@@ -532,8 +532,8 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * @see "QuickDraw3D::Q3Matrix4x4_SetQuaternion"
      * @param quaternion A quaternion.
      */
-    public void setQuaternion(Quaternion paramQuaternion) {
-        int i = Q3Matrix4x4_SetQuaternion(getBytes(), paramQuaternion.getBytes());
+    public void setQuaternion(Quaternion quaternion) {
+        int i = Q3Matrix4x4_SetQuaternion(getBytes(), quaternion.getBytes());
     }
 
     /**

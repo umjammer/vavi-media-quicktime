@@ -212,11 +212,11 @@ public class QTCanvas extends Canvas {
      * @param yAlignment a value between 0 and 1 that sets the position of the drawable client within the
      *  space that AWT will give to the canvas when layed out. 0 means top, 1 means bottom, 0.5 means centre.
      */
-    public QTCanvas(int paramInt, float paramFloat1, float paramFloat2) {
-        this.resizeFlag = paramInt;
+    public QTCanvas(int resizeFlag, float xAlignment, float yAlignment) {
+        this.resizeFlag = resizeFlag;
         this.initialWidth = 1;
         this.initialHeight = 1;
-        setAlignmentValues(paramFloat1, paramFloat2);
+        setAlignmentValues(xAlignment, yAlignment);
         this.minWidth = 1;
         this.minHeight = 1;
         this.maxWidth = Integer.MAX_VALUE;
@@ -327,9 +327,9 @@ public class QTCanvas extends Canvas {
      * @throws quicktime.QTUnknownOSException
      * @throws quicktime.qd.NativeGraphicsException
      */
-    public final QDPoint translatePoint(int paramInt1, int paramInt2) throws QTUnknownOSException, NativeGraphicsException {
+    public final QDPoint translatePoint(int x, int y) throws QTUnknownOSException, NativeGraphicsException {
         Point localPoint = getNGLocation();
-        return new QDPoint(paramInt1 + localPoint.x, paramInt2 + localPoint.y);
+        return new QDPoint(x + localPoint.x, y + localPoint.y);
     }
 
     /**
@@ -364,8 +364,8 @@ public class QTCanvas extends Canvas {
      *  have occured to honour the layout flag setting with respect to the different size of the new client.
      * @throws quicktime.QTException
      */
-    public synchronized void setClient(Drawable paramDrawable, boolean paramBoolean) throws QTException {
-        this.qtcHelper.doSetClient(paramDrawable, paramDrawable != null ? paramDrawable.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), paramBoolean);
+    public synchronized void setClient(Drawable client, boolean layoutFlag) throws QTException {
+        this.qtcHelper.doSetClient(client, client != null ? client.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), layoutFlag);
     }
 
     /**
@@ -382,8 +382,8 @@ public class QTCanvas extends Canvas {
      * @param initialBounds the best size of the client
      * @throws quicktime.QTException
      */
-    public synchronized void setClient(Drawable paramDrawable, QDRect paramQDRect) throws QTException {
-        this.qtcHelper.doSetClient(paramDrawable, paramQDRect, getMinimumSize(), getMaximumSize(), true);
+    public synchronized void setClient(Drawable client, QDRect initialBounds) throws QTException {
+        this.qtcHelper.doSetClient(client, initialBounds, getMinimumSize(), getMaximumSize(), true);
     }
 
     /**
@@ -451,9 +451,9 @@ public class QTCanvas extends Canvas {
      * @param xAlignment a float between 0.0 and 1.0 representing the x position alignment
      * @param yAlignment a float between 0.0 and 1.0 representing the y position alignment
      */
-    public void setAlignment(float paramFloat1, float paramFloat2) {
+    public void setAlignment(float xAlignment, float yAlignment) {
         Rectangle localRectangle = getBounds();
-        setAlignmentValues(paramFloat1, paramFloat2);
+        setAlignmentValues(xAlignment, yAlignment);
         doParentLayout();
         this.doRedrawForQTPlayer = this.qtcHelper.shouldRedrawQTPlayer(localRectangle);
     }
@@ -509,8 +509,8 @@ public class QTCanvas extends Canvas {
      * Reset the resize flag and re-layout the component.
      * @param rFlag the new value for the resizeFlag
      */
-    public void setResizeFlag(int paramInt) {
-        this.resizeFlag = paramInt;
+    public void setResizeFlag(int rFlag) {
+        this.resizeFlag = rFlag;
         Rectangle localRectangle = getBounds();
         doParentLayout();
         this.doRedrawForQTPlayer = this.qtcHelper.shouldRedrawQTPlayer(localRectangle);
@@ -535,11 +535,11 @@ public class QTCanvas extends Canvas {
      * @param minSize a Dimension object
      */
     @Override
-    public void setMinimumSize(Dimension paramDimension) {
-        if (paramDimension == null) {
+    public void setMinimumSize(Dimension minSize) {
+        if (minSize == null) {
             setMinimumSize(0, 0);
         } else {
-            setMinimumSize(paramDimension.width, paramDimension.height);
+            setMinimumSize(minSize.width, minSize.height);
         }
     }
 
@@ -550,9 +550,9 @@ public class QTCanvas extends Canvas {
      * @param width the minimum width
      * @param height the minimum height
      */
-    public void setMinimumSize(int paramInt1, int paramInt2) {
-        this.minWidth = Math.max(paramInt1, 0);
-        this.minHeight = Math.max(paramInt2, 0);
+    public void setMinimumSize(int width, int height) {
+        this.minWidth = Math.max(width, 0);
+        this.minHeight = Math.max(height, 0);
         if ((this.currentWidth < this.minWidth) || (this.currentHeight < this.minHeight)) {
             doParentLayout();
         }
@@ -603,8 +603,8 @@ public class QTCanvas extends Canvas {
      * In the normal operation of a QTCanvas and its client there is no need for an application to use this method.
      * @param bestSize the client's new best width and height
      */
-    public void clientChanged(Dimension paramDimension) {
-        clientChanged(paramDimension.width, paramDimension.height);
+    public void clientChanged(Dimension bestSize) {
+        clientChanged(bestSize.width, bestSize.height);
     }
 
     /**
@@ -628,10 +628,10 @@ public class QTCanvas extends Canvas {
      * @param bestWidth the client's new best width
      * @param bestHeight the client's new actual height
      */
-    public void clientChanged(int paramInt1, int paramInt2) {
+    public void clientChanged(int bestWidth, int bestHeight) {
         Rectangle localRectangle = new Rectangle(getLocation(), new Dimension(this.initialWidth, this.initialHeight));
-        this.initialWidth = Math.max(paramInt1, 0);
-        this.initialHeight = Math.max(paramInt2, 0);
+        this.initialWidth = Math.max(bestWidth, 0);
+        this.initialHeight = Math.max(bestHeight, 0);
         if (!this.appHasSetPreferredSize) {
             this.prefWidth = this.initialWidth;
             this.prefHeight = this.initialHeight;
@@ -676,19 +676,19 @@ public class QTCanvas extends Canvas {
      * @param width the minimum width
      * @param height the minimum height
      */
-    public void setPreferredSize(int paramInt1, int paramInt2) {
-        if (paramInt1 < 0) {
+    public void setPreferredSize(int width, int height) {
+        if (width < 0) {
             this.prefWidth = this.initialWidth;
             this.appHasSetPreferredSize = false;
         } else {
-            this.prefWidth = paramInt1;
+            this.prefWidth = width;
             this.appHasSetPreferredSize = true;
         }
-        if (paramInt2 < 0) {
+        if (height < 0) {
             this.prefHeight = this.initialHeight;
             this.appHasSetPreferredSize = false;
         } else {
-            this.prefHeight = paramInt2;
+            this.prefHeight = height;
             this.appHasSetPreferredSize = true;
         }
         if ((this.currentWidth != this.prefWidth) || (this.currentHeight != this.prefHeight)) {
@@ -717,12 +717,12 @@ public class QTCanvas extends Canvas {
      * @param maxSize a Dimension object
      */
     @Override
-    public void setMaximumSize(Dimension paramDimension) {
-        if (paramDimension == null) {
+    public void setMaximumSize(Dimension maxSize) {
+        if (maxSize == null) {
             Dimension localDimension = Toolkit.getDefaultToolkit().getScreenSize();
             setMaximumSize(localDimension.width, localDimension.height);
         } else {
-            setMaximumSize(paramDimension.width, paramDimension.height);
+            setMaximumSize(maxSize.width, maxSize.height);
         }
     }
 
@@ -733,9 +733,9 @@ public class QTCanvas extends Canvas {
      * @param width the minimum width
      * @param height the minimum height
      */
-    public void setMaximumSize(int paramInt1, int paramInt2) {
-        this.maxWidth = Math.max(paramInt1, 0);
-        this.maxHeight = Math.max(paramInt2, 0);
+    public void setMaximumSize(int width, int height) {
+        this.maxWidth = Math.max(width, 0);
+        this.maxHeight = Math.max(height, 0);
         if ((this.currentWidth > this.maxWidth) || (this.currentHeight > this.maxHeight)) {
             doParentLayout();
         }
@@ -968,8 +968,8 @@ public class QTCanvas extends Canvas {
      */
     @Override
     @Deprecated
-    public void setSize(Dimension paramDimension) {
-        setSize(paramDimension.width, paramDimension.height);
+    public void setSize(Dimension dim) {
+        setSize(dim.width, dim.height);
     }
 
     /**
@@ -980,8 +980,8 @@ public class QTCanvas extends Canvas {
      * @param height the height, in pixels, to make this component
      */
     @Override
-    public void setSize(int paramInt1, int paramInt2) {
-        setBounds(this.currentX, this.currentY, paramInt1, paramInt2);
+    public void setSize(int width, int height) {
+        setBounds(this.currentX, this.currentY, width, height);
     }
 
     /**
@@ -1007,15 +1007,15 @@ public class QTCanvas extends Canvas {
      * @param height the height, in pixels, to make this component
      */
     @Override
-    public final synchronized void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public final synchronized void setBounds(int x, int y, int width, int height) {
         boolean bool = isValid();
         int i = this.currentWidth;
         int j = this.currentHeight;
-        setCurrentWidthHeight(paramInt3, paramInt4);
+        setCurrentWidthHeight(width, height);
         int k = (i != this.currentWidth) || (j != this.currentHeight) ? 1 : 0;
         int m = this.currentX;
         int n = this.currentY;
-        setCurrentXY(paramInt1, paramInt2, paramInt3, paramInt4);
+        setCurrentXY(x, y, width, height);
         super.reshape(this.currentX, this.currentY, this.currentWidth, this.currentHeight);
         if (this.qtcHelper.mClient != null) {
             this.deferResize = ((this.deferResize) || (k != 0));
@@ -1055,10 +1055,10 @@ public class QTCanvas extends Canvas {
      * @param b if true canvas is visible, if false then its not
      */
     @Override
-    public synchronized void setVisible(boolean paramBoolean) {
-        super.setVisible(paramBoolean);
+    public synchronized void setVisible(boolean b) {
+        super.setVisible(b);
         try {
-            if (paramBoolean) {
+            if (b) {
                 this.qtcHelper.doSetGWorld(true);
                 doParentLayout();
             } else {

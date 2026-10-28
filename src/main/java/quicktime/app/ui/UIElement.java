@@ -54,12 +54,12 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @param layer the back to front layer of the UIElement when added to the Compositor
      * @param mode if specified, a GraphicsMode that is used to render the UIElement
      */
-    protected UIElement(ImageSpec paramImageSpec1, ImageSpec paramImageSpec2, Matrix paramMatrix, int paramInt, GraphicsMode paramGraphicsMode) throws QTException {
-        super(paramMatrix, paramInt, paramGraphicsMode);
-        this.deactiveImage = paramImageSpec2;
-        if (paramImageSpec1 == null)
+    protected UIElement(ImageSpec currentImage, ImageSpec deactiveImage, Matrix matrix, int layer, GraphicsMode mode) throws QTException {
+        super(matrix, layer, mode);
+        this.deactiveImage = deactiveImage;
+        if (currentImage == null)
             throw new QTAppException("QTButton:released and pressed images must be specified");
-        setCurrentImage(paramImageSpec1);
+        setCurrentImage(currentImage);
     }
 
     private boolean active = true;
@@ -72,11 +72,11 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @param ty the y coordinate
      * @throws quicktime.QTException
      */
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int tx, int ty) throws QTException {
         Matrix localMatrix = getMatrix();
         if (localMatrix != null) {
-            localMatrix.setTx(paramInt1);
-            localMatrix.setTy(paramInt2);
+            localMatrix.setTx(tx);
+            localMatrix.setTy(ty);
             setMatrix(localMatrix);
         }
     }
@@ -88,14 +88,14 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @param size the Dimension size in pixel values
      * @throws quicktime.QTException
      */
-    public void setSize(QDDimension paramQDDimension) throws QTException {
+    public void setSize(QDDimension size) throws QTException {
         Matrix localMatrix1 = getMatrix();
         float f1 = localMatrix1.getTx();
         float f2 = localMatrix1.getTy();
         if (localMatrix1 != null) {
             Matrix localMatrix2 = new Matrix();
             QDDimension localQDDimension = getOriginalSize();
-            localMatrix2.map(new QDRect(localQDDimension), new QDRect(paramQDDimension));
+            localMatrix2.map(new QDRect(localQDDimension), new QDRect(size));
             localMatrix2.translate(f1, f2);
             setMatrix(localMatrix2);
         }
@@ -121,20 +121,20 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      *  the UIElement is deactivated.
      * @throws quicktime.QTException
      */
-    protected void setCurrentImage(ImageSpec paramImageSpec) throws QTException {
+    protected void setCurrentImage(ImageSpec newCurrentImage) throws QTException {
         if ((this.c != null) && ((this.currentImage instanceof DynamicImage))) {
             ((DynamicImage) this.currentImage).removedFromCompositor(this.c);
         }
-        if (paramImageSpec == null) {
+        if (newCurrentImage == null) {
             setVisible(false);
         } else {
-            setImageData(paramImageSpec.getImage(), paramImageSpec.getDescription());
-            if ((this.c != null) && ((paramImageSpec instanceof DynamicImage)))
-                this.currentInvalidator = ((DynamicImage) paramImageSpec).addedToCompositor(this.c, this);
+            setImageData(newCurrentImage.getImage(), newCurrentImage.getDescription());
+            if ((this.c != null) && ((newCurrentImage instanceof DynamicImage)))
+                this.currentInvalidator = ((DynamicImage) newCurrentImage).addedToCompositor(this.c, this);
             if (this.currentImage == null)
                 setVisible(true);
         }
-        this.currentImage = paramImageSpec;
+        this.currentImage = newCurrentImage;
     }
 
     /**
@@ -144,9 +144,9 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @param active true will set the state to active
      * @throws quicktime.QTException
      */
-    public void setActive(boolean paramBoolean) throws QTException {
-        this.active = paramBoolean;
-        if (paramBoolean) {
+    public void setActive(boolean active) throws QTException {
+        this.active = active;
+        if (active) {
             setCurrentImage(this.currentImage);
         } else if (this.deactiveImage != null) {
             setCurrentImage(this.deactiveImage);
@@ -187,8 +187,8 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @see quicktime.app.anim.SWCompositor
      */
     @Override
-    public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException {
-        this.c = paramSWCompositor;
+    public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) throws QTException {
+        this.c = c;
         setCurrentImage(this.currentImage);
         return new UIInvalidator(this);
     }
@@ -204,7 +204,7 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @see quicktime.app.anim.SWCompositor
      */
     @Override
-    public void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException {
+    public void removedFromCompositor(SWCompositor c) throws QTException {
         this.c = null;
         this.currentInvalidator = null;
     }

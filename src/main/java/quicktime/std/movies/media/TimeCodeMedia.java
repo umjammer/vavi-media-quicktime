@@ -18,8 +18,8 @@ public final class TimeCodeMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public TimeCodeMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1953325924, paramInt, paramDataRef);
+    public TimeCodeMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1953325924, timeScale, dataRef);
     }
 
     /**
@@ -28,8 +28,8 @@ public final class TimeCodeMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public TimeCodeMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public TimeCodeMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     TimeCodeMedia(int paramInt, Track paramTrack) throws QTException {
@@ -65,9 +65,9 @@ public final class TimeCodeMedia extends Media {
      * @return an TimeCodeDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public TimeCodeDescription getTimeCodeDescription(int paramInt) throws QTException {
+    public TimeCodeDescription getTimeCodeDescription(int index) throws QTException {
         TimeCodeDescription localTimeCodeDescription = new TimeCodeDescription();
-        getNativeSampleDescription(paramInt, localTimeCodeDescription);
+        getNativeSampleDescription(index, localTimeCodeDescription);
         return localTimeCodeDescription;
     }
 }

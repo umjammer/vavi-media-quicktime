@@ -16,8 +16,8 @@ public final class TweenMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public TweenMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1953981806, paramInt, paramDataRef);
+    public TweenMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1953981806, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class TweenMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public TweenMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public TweenMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     TweenMedia(int paramInt, Track paramTrack) throws QTException {

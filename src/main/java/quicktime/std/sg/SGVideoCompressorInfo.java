@@ -32,13 +32,13 @@ public class SGVideoCompressorInfo {
      * @param temporalQuality format of the sound Data.
      * @param keyFrameRate format of the sound Data.
      */
-    public SGVideoCompressorInfo(int paramInt1, Compressor paramCompressor, int paramInt2, int paramInt3, int paramInt4) {
-        this.mDepth = paramInt1;
+    public SGVideoCompressorInfo(int depth, Compressor compressor, int spatialQuality, int temporalQuality, int keyFrameRate) {
+        this.mDepth = depth;
         this.mCompressor = 0;
-        this.mSpatialQuality = paramInt2;
-        this.mTemporalQuality = paramInt3;
-        this.mKeyFrameRate = paramInt4;
-        this.theCompressor = paramCompressor;
+        this.mSpatialQuality = spatialQuality;
+        this.mTemporalQuality = temporalQuality;
+        this.mKeyFrameRate = keyFrameRate;
+        this.theCompressor = compressor;
     }
 }
 

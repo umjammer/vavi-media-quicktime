@@ -24,8 +24,8 @@ public class SpriteInvalidException extends QTRuntimeException {
      * Creates the exception.
      * @param s a message
      */
-    public SpriteInvalidException(String paramString) {
-        super(paramString);
+    public SpriteInvalidException(String s) {
+        super(s);
     }
 }
 

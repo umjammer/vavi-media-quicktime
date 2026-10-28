@@ -39,9 +39,9 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
      * Creates a SndCommand object and performs initialization
      * @param cmd the sound command (from StdQTConstants)
      */
-    public SndCommand(int paramInt) throws QTException {
+    public SndCommand(int cmd) throws QTException {
         super(8, true);
-        setCmd(paramInt);
+        setCmd(cmd);
     }
 
     /**
@@ -50,19 +50,19 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
      * @param param1 optional command parameter
      * @param param2 optional command parameter
      */
-    public SndCommand(int paramInt1, int paramInt2, int paramInt3) throws QTException {
+    public SndCommand(int cmd, int param1, int param2) throws QTException {
         super(8, true);
-        setCmd(paramInt1);
-        setParam1(paramInt2);
-        setParam2(paramInt3);
+        setCmd(cmd);
+        setParam1(param1);
+        setParam2(param2);
     }
 
     /**
      * Sets the command.
      * @param cmd the sound command (from StdQTConstants)
      */
-    public void setCmd(int paramInt) {
-        setShortAt(0, (short) paramInt);
+    public void setCmd(int cmd) {
+        setShortAt(0, (short) cmd);
     }
 
     /**
@@ -77,8 +77,8 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
      * Sets the first optional parameter.
      * @param param1 optional command parameter
      */
-    public void setParam1(int paramInt) {
-        setShortAt(2, (short) paramInt);
+    public void setParam1(int param1) {
+        setShortAt(2, (short) param1);
     }
 
     /**
@@ -93,8 +93,8 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
      * Sets the second optional parameter.
      * @param param2 optional command parameter
      */
-    public void setParam2(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setParam2(int param2) {
+        setIntAt(4, param2);
     }
 
     /**

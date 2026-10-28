@@ -54,12 +54,12 @@ public final class TimeCodeInfo {
      * @param time TimeCode object using hours,minutes,seconds.
      * @param userData Handle to the data.
      */
-    public TimeCodeInfo(int paramInt, TimeCodeDef paramTimeCodeDef, TimeCodeTime paramTimeCodeTime, QTHandleRef paramQTHandleRef) {
-        this.frameNumber = paramInt;
-        this.definition = paramTimeCodeDef;
-        this.time = paramTimeCodeTime;
+    public TimeCodeInfo(int frameNumber, TimeCodeDef definition, TimeCodeTime time, QTHandleRef userData) {
+        this.frameNumber = frameNumber;
+        this.definition = definition;
+        this.time = time;
         this.counter = 0;
-        this.userData = paramQTHandleRef;
+        this.userData = userData;
     }
 
     /**
@@ -70,12 +70,12 @@ public final class TimeCodeInfo {
      * @param counter Number of frames
      * @param userData Handle to the data.
      */
-    public TimeCodeInfo(int paramInt1, TimeCodeDef paramTimeCodeDef, int paramInt2, QTHandleRef paramQTHandleRef) {
-        this.frameNumber = paramInt1;
-        this.definition = paramTimeCodeDef;
+    public TimeCodeInfo(int frameNumber, TimeCodeDef definition, int counter, QTHandleRef userData) {
+        this.frameNumber = frameNumber;
+        this.definition = definition;
         this.time = null;
-        this.counter = paramInt2;
-        this.userData = paramQTHandleRef;
+        this.counter = counter;
+        this.userData = userData;
     }
 
     /**

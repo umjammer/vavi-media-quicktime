@@ -35,8 +35,8 @@ public class DragAction extends DragAdapter {
      * @param transformer this is the object that will apply the matrix transformations in reponse
      *  to a mouseDragged event.
      */
-    public DragAction(TransformMatrix paramTransformMatrix) {
-        this.transformer = paramTransformMatrix;
+    public DragAction(TransformMatrix transformer) {
+        this.transformer = transformer;
     }
 
     /**
@@ -83,9 +83,9 @@ public class DragAction extends DragAdapter {
      * @param event the mouse event that triggers the drag action
      */
     @Override
-    public void mousePressed(QTMouseEvent paramQTMouseEvent) {
+    public void mousePressed(QTMouseEvent event) {
         try {
-            this.transformer.initialize((QTDisplaySpace) paramQTMouseEvent.getSource(), (Transformable) paramQTMouseEvent.getTarget(), paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
+            this.transformer.initialize((QTDisplaySpace) event.getSource(), (Transformable) event.getTarget(), event.getX(), event.getY());
         } catch (QTException localQTException) {
             QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mousePressed");
         }
@@ -99,9 +99,9 @@ public class DragAction extends DragAdapter {
      * @param event the mouse event that triggers the drag action
      */
     @Override
-    public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
+    public void mouseDragged(QTMouseEvent event) {
         try {
-            if ((this.transformer.transformTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY())) && (this.actor != null))
+            if ((this.transformer.transformTarget(event.getX(), event.getY())) && (this.actor != null))
                 this.actor.trigger();
         } catch (QTException localQTException) {
             QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mouseDragged");

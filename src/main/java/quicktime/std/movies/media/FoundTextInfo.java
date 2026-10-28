@@ -18,9 +18,9 @@ public final class FoundTextInfo extends TimeInfo {
      * @param foundDuration Specifies the duration of the found text in track.
      * @param offset Specifies the offset of the found text in track.
      */
-    public FoundTextInfo(int paramInt1, int paramInt2, int paramInt3) {
-        super(paramInt1, paramInt2);
-        this.offset = paramInt3;
+    public FoundTextInfo(int foundTime, int foundDuration, int offset) {
+        super(foundTime, foundDuration);
+        this.offset = offset;
     }
 }
 

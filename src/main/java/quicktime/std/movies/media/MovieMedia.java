@@ -16,8 +16,8 @@ public final class MovieMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public MovieMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1836019574, paramInt, paramDataRef);
+    public MovieMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1836019574, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class MovieMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public MovieMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public MovieMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     MovieMedia(int paramInt, Track paramTrack) throws QTException {

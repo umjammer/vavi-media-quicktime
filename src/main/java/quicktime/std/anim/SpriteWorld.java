@@ -57,11 +57,11 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @param background Specifies the background QDGraphics that can be used for better performance when
      *  you have background sprites
      */
-    public SpriteWorld(QDGraphics paramQDGraphics1, QDGraphics paramQDGraphics2, QDColor paramQDColor, QDGraphics paramQDGraphics3) throws QTException {
-        super(allocate(paramQDGraphics1, paramQDGraphics2, paramQDColor, paramQDGraphics3));
-        setWidthHeight(paramQDGraphics2);
+    public SpriteWorld(QDGraphics port, QDGraphics spriteLayer, QDColor backgroundColor, QDGraphics background) throws QTException {
+        super(allocate(port, spriteLayer, backgroundColor, background));
+        setWidthHeight(spriteLayer);
         setMatrix(this.mMatrix);
-        this.destPort = QTObject.ID(paramQDGraphics1);
+        this.destPort = QTObject.ID(port);
     }
 
     private Matrix mMatrix = new Matrix();
@@ -89,12 +89,12 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @param bounds the new size of the SpriteWorld
      * @throws quicktime.std.StdQTException
      */
-    public final void setBounds(QDRect paramQDRect) throws StdQTException {
+    public final void setBounds(QDRect bounds) throws StdQTException {
         Matrix localMatrix = new Matrix();
-        localMatrix.setTx(paramQDRect.getX());
-        localMatrix.setTy(paramQDRect.getY());
-        localMatrix.setSx(paramQDRect.getWidth() / this.mWidth);
-        localMatrix.setSy(paramQDRect.getHeight() / this.mHeight);
+        localMatrix.setTx(bounds.getX());
+        localMatrix.setTy(bounds.getY());
+        localMatrix.setSx(bounds.getWidth() / this.mWidth);
+        localMatrix.setSy(bounds.getHeight() / this.mHeight);
         setMatrix(localMatrix);
     }
 
@@ -119,9 +119,9 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @param clipRgn Specifies the clipping region.
      * @throws quicktime.std.StdQTException
      */
-    public final void setClip(Region paramRegion) throws StdQTException {
+    public final void setClip(Region clipRgn) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SetSpriteWorldClip(_ID(), QTObject.ID(paramRegion)));
+            StdQTException.checkError(SetSpriteWorldClip(_ID(), QTObject.ID(clipRgn)));
         }
     }
 
@@ -131,10 +131,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @param gMode the new graphic's mode for the SpriteWorld
      * @throws quicktime.std.StdQTException
      */
-    public final void setGraphicsMode(GraphicsMode paramGraphicsMode) throws StdQTException {
-        paramGraphicsMode = paramGraphicsMode == null ? new GraphicsMode() : paramGraphicsMode;
+    public final void setGraphicsMode(GraphicsMode gMode) throws StdQTException {
+        gMode = gMode == null ? new GraphicsMode() : gMode;
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SetSpriteWorldGraphicsMode(_ID(), paramGraphicsMode.getGraphicsMode(), paramGraphicsMode.getColor().getRGBColor()));
+            StdQTException.checkError(SetSpriteWorldGraphicsMode(_ID(), gMode.getGraphicsMode(), gMode.getColor().getRGBColor()));
         }
     }
 
@@ -152,9 +152,9 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @param matrix Specifies the Matrix.
      * @throws quicktime.std.StdQTException
      */
-    public final void setMatrix(Matrix paramMatrix) throws StdQTException {
+    public final void setMatrix(Matrix matrix) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            this.mMatrix = (paramMatrix == null ? new Matrix() : paramMatrix);
+            this.mMatrix = (matrix == null ? new Matrix() : matrix);
             StdQTException.checkError(SetSpriteWorldMatrix(_ID(), this.mMatrix.getBytes()));
         }
     }
@@ -167,10 +167,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @return Flags describing what type of actions took place during the idle, such as if any drawing took place.
      * @throws quicktime.std.StdQTException
      */
-    public final int idle(int paramInt) throws StdQTException {
+    public final int idle(int flagsIn) throws StdQTException {
         int[] arrayOfInt = new int[1];
         synchronized (QTNative.globalsLock) {
-            int i = SpriteWorldIdle(_ID(), paramInt, arrayOfInt);
+            int i = SpriteWorldIdle(_ID(), flagsIn, arrayOfInt);
             StdQTException.checkError(i);
         }
         return arrayOfInt[0];
@@ -183,9 +183,9 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @param invalidArea A Rectangle which describes the invalid rectangle in sprite world source space.
      * @throws quicktime.std.StdQTException
      */
-    public final void invalidate(QDRect paramQDRect) throws StdQTException {
+    public final void invalidate(QDRect invalidArea) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(InvalidateSpriteWorld(_ID(), paramQDRect == null ? null : paramQDRect.getRect()));
+            StdQTException.checkError(InvalidateSpriteWorld(_ID(), invalidArea == null ? null : invalidArea.getRect()));
         }
     }
 
@@ -197,10 +197,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @return the Sprite object which received the hit, or null if no sprite at that location.
      * @throws quicktime.QTException
      */
-    public final Sprite hitTest(int paramInt, QDPoint paramQDPoint) throws QTException {
+    public final Sprite hitTest(int flags, QDPoint loc) throws QTException {
         int[] arrayOfInt = new int[1];
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SpriteWorldHitTest(_ID(), paramInt, paramQDPoint.getPoint(), arrayOfInt));
+            StdQTException.checkError(SpriteWorldHitTest(_ID(), flags, loc.getPoint(), arrayOfInt));
         }
         return arrayOfInt[0] == 0 ? null : new Sprite(arrayOfInt[0], this);
     }

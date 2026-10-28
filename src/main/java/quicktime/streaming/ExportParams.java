@@ -45,8 +45,8 @@ public final class ExportParams extends QTByteObject {
      * Sets the version of the export params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -61,8 +61,8 @@ public final class ExportParams extends QTByteObject {
      * Sets the type of the export object
      * @param type export type
      */
-    public void setExportType(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setExportType(int type) {
+        setIntAt(4, type);
     }
 
     /**
@@ -76,8 +76,8 @@ public final class ExportParams extends QTByteObject {
      * Sets the type of the target container
      * @param type target container type
      */
-    public void setDestinationContainerType(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setDestinationContainerType(int type) {
+        setIntAt(12, type);
     }
 
     /**
@@ -91,12 +91,12 @@ public final class ExportParams extends QTByteObject {
      * Sets the target container data
      * @param data target container data
      */
-    public void setDestinationContainerData(QTPointer paramQTPointer) {
-        if (paramQTPointer != null) {
-            setIntAt(16, QTObject.ID(paramQTPointer));
+    public void setDestinationContainerData(QTPointer data) {
+        if (data != null) {
+            setIntAt(16, QTObject.ID(data));
         } else
             setIntAt(16, 0);
-        this.destData = paramQTPointer;
+        this.destData = data;
     }
 
     /**
@@ -110,12 +110,12 @@ public final class ExportParams extends QTByteObject {
      * Sets the destination container extras
      * @param data container extras data
      */
-    public void setDestinationContainerExtras(QTPointer paramQTPointer) {
-        if (paramQTPointer != null) {
-            setIntAt(20, QTObject.ID(paramQTPointer));
+    public void setDestinationContainerExtras(QTPointer data) {
+        if (data != null) {
+            setIntAt(20, QTObject.ID(data));
         } else
             setIntAt(20, 0);
-        this.destExtras = paramQTPointer;
+        this.destExtras = data;
     }
 
     /**
@@ -129,8 +129,8 @@ public final class ExportParams extends QTByteObject {
      * Sets the input flags
      * @param flags the input flags
      */
-    public void setFlagsIn(int paramInt) {
-        setIntAt(24, paramInt);
+    public void setFlagsIn(int flags) {
+        setIntAt(24, flags);
     }
 
     /**
@@ -144,8 +144,8 @@ public final class ExportParams extends QTByteObject {
      * Sets the output flags
      * @param flags output flags
      */
-    public void setFlagsOut(int paramInt) {
-        setIntAt(28, paramInt);
+    public void setFlagsOut(int flags) {
+        setIntAt(28, flags);
     }
 
     /**

@@ -62,17 +62,17 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @return the encoded image data as a Pointer
      * @throws quicktime.QTException
      */
-    public static QTPointer fromEncodedImage(EncodedImage paramEncodedImage) throws QTException {
-        if ((paramEncodedImage instanceof ByteEncodedImage))
-            return new QTPointer(((ByteEncodedImage) paramEncodedImage).getBytes());
-        if ((paramEncodedImage instanceof IntEncodedImage)) {
-            QTPointer localQTPointer = new QTPointer(paramEncodedImage.getSize(), false);
-            int[] arrayOfInt = ((IntEncodedImage) paramEncodedImage).getInts();
+    public static QTPointer fromEncodedImage(EncodedImage image) throws QTException {
+        if ((image instanceof ByteEncodedImage))
+            return new QTPointer(((ByteEncodedImage) image).getBytes());
+        if ((image instanceof IntEncodedImage)) {
+            QTPointer localQTPointer = new QTPointer(image.getSize(), false);
+            int[] arrayOfInt = ((IntEncodedImage) image).getInts();
             localQTPointer.copyFromArray(0, arrayOfInt, 0, arrayOfInt.length);
             return localQTPointer;
         }
-        if ((paramEncodedImage instanceof RawEncodedImage)) {
-            return (RawEncodedImage) paramEncodedImage;
+        if ((image instanceof RawEncodedImage)) {
+            return (RawEncodedImage) image;
         }
         return null;
     }
@@ -82,17 +82,17 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @param size the size of the pointer to create.
      * @param clear clear the pointer upon creation.
      */
-    public QTPointer(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, paramBoolean);
+    public QTPointer(int size, boolean clear) throws QTException {
+        super(size, clear);
     }
 
     /**
      * Construct a pointer from input data.
      * @param byteArray the input data.
      */
-    public QTPointer(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte.length, false);
-        setBytesAt(0, paramArrayOfByte.length, paramArrayOfByte, 0);
+    public QTPointer(byte[] byteArray) throws QTException {
+        super(byteArray.length, false);
+        setBytesAt(0, byteArray.length, byteArray, 0);
     }
 
     /**
@@ -104,12 +104,12 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @param offset you can specify an offset within the handle from which to copy the data
      * @param size the amount of bytes to copy
      */
-    public QTPointer(QTHandleRef paramQTHandleRef, int paramInt1, int paramInt2) throws QTException {
-        super(paramInt2 + paramInt1 > paramQTHandleRef.getSize() ? paramQTHandleRef.getSize() - paramInt1 : paramInt2, false);
-        int i = paramQTHandleRef.lockAndDeref(paramInt1);
-        BlockMove(i + 0, _ID() + 0, paramInt2);
-        if (!paramQTHandleRef.isLocked()) {
-            paramQTHandleRef.unlock();
+    public QTPointer(QTHandleRef hdl, int offset, int size) throws QTException {
+        super(size + offset > hdl.getSize() ? hdl.getSize() - offset : size, false);
+        int i = hdl.lockAndDeref(offset);
+        BlockMove(i + 0, _ID() + 0, size);
+        if (!hdl.isLocked()) {
+            hdl.unlock();
         }
     }
 
@@ -119,10 +119,10 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @param firstPtr the first Pointer
      * @param secondPtr the second Pointer
      */
-    public QTPointer(QTPointerRef paramQTPointerRef1, QTPointerRef paramQTPointerRef2) throws QTException {
-        super(paramQTPointerRef1.getSize() + paramQTPointerRef2.getSize(), false);
-        BlockMove(QTObject.ID(paramQTPointerRef1) + 0, _ID() + 0, paramQTPointerRef1.getSize());
-        BlockMove(QTObject.ID(paramQTPointerRef2) + 0, _ID() + paramQTPointerRef1.getSize(), paramQTPointerRef2.getSize());
+    public QTPointer(QTPointerRef firstPtr, QTPointerRef secondPtr) throws QTException {
+        super(firstPtr.getSize() + secondPtr.getSize(), false);
+        BlockMove(QTObject.ID(firstPtr) + 0, _ID() + 0, firstPtr.getSize());
+        BlockMove(QTObject.ID(secondPtr) + 0, _ID() + firstPtr.getSize(), secondPtr.getSize());
     }
 
     QTPointer(int paramInt1, int paramInt2, Object paramObject) {
@@ -144,10 +144,10 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @param newSize the new size
      * @throws quicktime.util.UtilException
      */
-    public void setSize(int paramInt) throws UtilException {
-        SetPtrSize(_ID(), paramInt);
+    public void setSize(int newSize) throws UtilException {
+        SetPtrSize(_ID(), newSize);
         UtilException.checkError(MemError());
-        setSizeField(paramInt);
+        setSizeField(newSize);
     }
 
     /**

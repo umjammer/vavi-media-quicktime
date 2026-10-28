@@ -20,5 +20,5 @@ public interface ImageSettable {
      * @param desc this is the description that describes the image data
      * @throws quicktime.QTException
      */
-    void setImageData(EncodedImage paramEncodedImage, ImageDescription paramImageDescription) throws QTException;
+    void setImageData(EncodedImage imageData, ImageDescription desc) throws QTException;
 }

@@ -47,10 +47,10 @@ public final class QTFactory {
      *  in fullscreen mode.
      * @throws quicktime.QTException
      */
-    public static QTComponent makeQTComponent(Movie mov) throws QTException {
+    public static QTComponent makeQTComponent(Movie movie) throws QTException {
         if (QTSession.isCurrentOS(4)) {
             // the toolbox is emulated, components draw with Java 2D
-            return new QTJavaJ2DCanvas(mov);
+            return new QTJavaJ2DCanvas(movie);
         }
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
             class PrivelegedAction {
@@ -59,7 +59,7 @@ public final class QTFactory {
 
                 void establish() {
                     AccessController.doPrivileged((PrivilegedAction<QTComponent>) () -> {
-                        comp = new QTJavaCocoaCanvas(mov);
+                        comp = new QTJavaCocoaCanvas(movie);
                         return comp;
                     });
                 }
@@ -72,7 +72,7 @@ public final class QTFactory {
             privelegedAction.establish();
             return privelegedAction.getComponent();
         }
-        return new QTJavaAWTCanvas(mov);
+        return new QTJavaAWTCanvas(movie);
     }
 
     /**
@@ -82,9 +82,9 @@ public final class QTFactory {
      * @return QTComponent displaying the movie and the controller attached to it.
      * @throws quicktime.QTException
      */
-    public static QTComponent makeQTComponent(MovieController controller) throws QTException {
+    public static QTComponent makeQTComponent(MovieController ctlr) throws QTException {
         if (QTSession.isCurrentOS(4)) {
-            return new QTJavaJ2DCanvas(controller);
+            return new QTJavaJ2DCanvas(ctlr);
         }
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
             class PrivelegedAction {
@@ -94,7 +94,7 @@ public final class QTFactory {
                 void establish() {
                     AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
                         try {
-                            comp = new QTJavaCocoaCanvas(controller);
+                            comp = new QTJavaCocoaCanvas(ctlr);
                         } catch (QTException e) {
                         }
                         return comp;
@@ -109,7 +109,7 @@ public final class QTFactory {
             privelegedAction.establish();
             return privelegedAction.getComponent();
         }
-        return new QTJavaAWTCanvas(controller);
+        return new QTJavaAWTCanvas(ctlr);
     }
 
     /**
@@ -118,9 +118,9 @@ public final class QTFactory {
      * @return QTComponent displaying the image represented by the GraphicsImporter component.
      * @throws quicktime.QTException
      */
-    public static QTComponent makeQTComponent(GraphicsImporter gi) throws QTException {
+    public static QTComponent makeQTComponent(GraphicsImporter graphicsImporter) throws QTException {
         if (QTSession.isCurrentOS(4)) {
-            return new QTJavaJ2DCanvas(gi);
+            return new QTJavaJ2DCanvas(graphicsImporter);
         }
         if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() >= 65540) {
             class PrivelegedAction {
@@ -129,7 +129,7 @@ public final class QTFactory {
 
                 void establish() {
                     AccessController.doPrivileged((PrivilegedAction<QTComponent>) () -> {
-                        comp = new QTJavaCocoaCanvas(gi);
+                        comp = new QTJavaCocoaCanvas(graphicsImporter);
                         return comp;
                     });
                 }
@@ -142,7 +142,7 @@ public final class QTFactory {
             privelegedAction.establish();
             return privelegedAction.getComponent();
         }
-        return new QTJavaAWTCanvas(gi);
+        return new QTJavaAWTCanvas(graphicsImporter);
     }
 
     /**
@@ -150,8 +150,8 @@ public final class QTFactory {
      * @return javax.swing.JComponent displaying the image represented by the GraphicsImporter component.
      * @throws quicktime.QTException
      */
-    public static QTJComponent makeQTJComponent(GraphicsImporterDrawer paramGraphicsImporterDrawer) throws QTException {
-        return new JQTCanvas(paramGraphicsImporterDrawer);
+    public static QTJComponent makeQTJComponent(GraphicsImporterDrawer graphicsImporterDrawer) throws QTException {
+        return new JQTCanvas(graphicsImporterDrawer);
     }
 
     /**
@@ -160,8 +160,8 @@ public final class QTFactory {
      * @return javax.swing.JComponent displaying the movie represented by the MoviePlayer object.
      * @throws quicktime.QTException
      */
-    public static QTJComponent makeQTJComponent(MoviePlayer paramMoviePlayer) throws QTException {
-        return new JQTCanvas(paramMoviePlayer);
+    public static QTJComponent makeQTJComponent(MoviePlayer moviePlayer) throws QTException {
+        return new JQTCanvas(moviePlayer);
     }
 
     /**
@@ -240,20 +240,20 @@ public final class QTFactory {
      *  applet to position and locate files at run time.
      * @throws java.io.IOException the file cannot be found in any of the class path locations.
      */
-    public static File findAbsolutePath(String paramString) throws IOException {
-        paramString = paramString.replace('/', File.separatorChar);
+    public static File findAbsolutePath(String fileName) throws IOException {
+        fileName = fileName.replace('/', File.separatorChar);
         if (classPaths == null) {
             buildClassPathsVector();
         }
         Enumeration<String> e = classPaths.elements();
         while (e.hasMoreElements()) {
             String path = e.nextElement();
-            String file = returnExistingFile(path + paramString);
+            String file = returnExistingFile(path + fileName);
             if (file != null) {
                 return new File(file);
             }
         }
-        throw new FileNotFoundException(paramString);
+        throw new FileNotFoundException(fileName);
     }
 
     private static File _doFISP(String paramString, boolean paramBoolean) throws IOException {

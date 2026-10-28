@@ -59,8 +59,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @param period the period of the Space's Timer.
      * @param p the Protocol that is enforced on candidate member objects of this group
      */
-    protected GroupDrawable(Dimension paramDimension, QDColor paramQDColor, int paramInt1, int paramInt2, Protocol paramProtocol) throws QTException {
-        this(new QDDimension(paramDimension.width, paramDimension.height), paramQDColor, paramInt1, paramInt2, paramProtocol);
+    protected GroupDrawable(Dimension initialSize, QDColor bc, int scale, int period, Protocol p) throws QTException {
+        this(new QDDimension(initialSize.width, initialSize.height), bc, scale, period, p);
     }
 
     /**
@@ -73,13 +73,13 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @param period the period of the Space's Timer.
      * @param p the Protocol that is enforced on candidate member objects of this group
      */
-    protected GroupDrawable(QDDimension paramQDDimension, QDColor paramQDColor, int paramInt1, int paramInt2, Protocol paramProtocol) throws QTException {
-        super(paramProtocol, paramInt1, paramInt2);
-        this.displayBounds = new QDRect(paramQDDimension);
-        this.initSize = paramQDDimension;
+    protected GroupDrawable(QDDimension initialSize, QDColor bc, int scale, int period, Protocol p) throws QTException {
+        super(p, scale, period);
+        this.displayBounds = new QDRect(initialSize);
+        this.initSize = initialSize;
         this.eraseRegion = new Region(this.displayBounds);
         this.clip = this.eraseRegion;
-        setBackgroundColor(paramQDColor);
+        setBackgroundColor(bc);
     }
 
     QDGraphics port = QDGraphics.scratch;
@@ -132,10 +132,10 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        this.port = paramQDGraphics;
+    public void setGWorld(QDGraphics cgp) throws QTException {
+        this.port = cgp;
         boolean bool = this.visible;
-        this.visible = (!QDGraphics.scratch.equals(paramQDGraphics));
+        this.visible = (!QDGraphics.scratch.equals(cgp));
     }
 
     /**
@@ -147,9 +147,9 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
-        this.displayBounds.setX(paramInt1);
-        this.displayBounds.setY(paramInt2);
+    public void setLocation(int x, int y) throws QTException {
+        this.displayBounds.setX(x);
+        this.displayBounds.setY(y);
         setDisplayBounds(this.displayBounds);
     }
 
@@ -163,8 +163,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public void setDisplayBounds(QDRect paramQDRect) throws QTException {
-        this.displayBounds = paramQDRect;
+    public void setDisplayBounds(QDRect bounds) throws QTException {
+        this.displayBounds = bounds;
     }
 
     /**
@@ -302,10 +302,10 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @return true if the drawer is a member of the group
      * @throws quicktime.QTException
      */
-    public boolean setMemberAlignment(QTDrawable paramQTDrawable, float paramFloat1, float paramFloat2) throws QTException {
-        GroupMember localGroupMember = getGroupMember(paramQTDrawable);
+    public boolean setMemberAlignment(QTDrawable d, float xAlign, float yAlign) throws QTException {
+        GroupMember localGroupMember = getGroupMember(d);
         if (localGroupMember != null) {
-            setAlignedMemberLocation(localGroupMember.drawer, paramFloat1, paramFloat2);
+            setAlignedMemberLocation(localGroupMember.drawer, xAlign, yAlign);
         }
         return localGroupMember != null;
     }
@@ -416,13 +416,13 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void redraw(Region paramRegion) throws QTException {
+    public synchronized void redraw(Region invalidRgn) throws QTException {
         if (!this.eraseRegion.empty()) {
             this.port.setBackColor(this.bgColor);
             this.port.eraseRgn(this.eraseRegion);
         }
         for (int i = this.vec.size() - 1; i >= 0; i--) {
-            ((GroupMember) this.vec.elementAt(i)).drawer.redraw(paramRegion);
+            ((GroupMember) this.vec.elementAt(i)).drawer.redraw(invalidRgn);
         }
     }
 
@@ -437,8 +437,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @return a Layerable object to interact with the display layer of a member.
      */
     @Override
-    public Layerable getLayerable(Object paramObject) {
-        return getGroupMember(paramObject);
+    public Layerable getLayerable(Object member) {
+        return getGroupMember(member);
     }
 
     /**
@@ -455,9 +455,9 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      *  display characteristics of the member or null if the object is not a member.
      */
     @Override
-    public Transformable getTransformable(Object paramObject) {
-        if (hasMember(paramObject) == true)
-            return (Transformable) paramObject;
+    public Transformable getTransformable(Object member) {
+        if (hasMember(member) == true)
+            return (Transformable) member;
         return null;
     }
 
@@ -472,13 +472,13 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public Object hitTest(int paramInt1, int paramInt2) throws QTException {
+    public Object hitTest(int x, int y) throws QTException {
         if (this.vec != null) {
-            if (!this.displayBounds.inside(paramInt1, paramInt2))
+            if (!this.displayBounds.inside(x, y))
                 return null;
             for (int i = 0; i < this.vec.size(); i++) {
                 GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
-                if (localGroupMember.drawer.getDisplayBounds().inside(paramInt1, paramInt2))
+                if (localGroupMember.drawer.getDisplayBounds().inside(x, y))
                     return localGroupMember.drawer;
             }
         }
@@ -514,9 +514,9 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        int i = (int) (paramMatrix.getTx() + 0.5F);
-        int j = (int) (paramMatrix.getTy() + 0.5F);
+    public void setMatrix(Matrix matrix) throws QTException {
+        int i = (int) (matrix.getTx() + 0.5F);
+        int j = (int) (matrix.getTy() + 0.5F);
         setDisplayBounds(new QDRect(i, j, this.displayBounds.getWidth(), this.displayBounds.getHeight()));
     }
 
@@ -583,22 +583,22 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @param yAlign the y alignment
      * @throws quicktime.QTException
      */
-    protected void setAlignedMemberLocation(QTDrawable paramQTDrawable, float paramFloat1, float paramFloat2) throws QTException {
-        if (paramFloat1 < 0.0F) {
-            paramFloat1 = 1.0F;
-        } else if (paramFloat1 > 1.0F)
-            paramFloat1 = 1.0F;
-        if (paramFloat2 < 0.0F) {
-            paramFloat2 = 1.0F;
-        } else if (paramFloat2 > 1.0F) {
-            paramFloat2 = 1.0F;
+    protected void setAlignedMemberLocation(QTDrawable drawer, float xAlign, float yAlign) throws QTException {
+        if (xAlign < 0.0F) {
+            xAlign = 1.0F;
+        } else if (xAlign > 1.0F)
+            xAlign = 1.0F;
+        if (yAlign < 0.0F) {
+            yAlign = 1.0F;
+        } else if (yAlign > 1.0F) {
+            yAlign = 1.0F;
         }
         QDRect localQDRect1 = getDisplayBounds();
         int i = localQDRect1.getX();
         int j = localQDRect1.getY();
         int k = localQDRect1.getWidth();
         int m = localQDRect1.getHeight();
-        QDRect localQDRect2 = paramQTDrawable.getDisplayBounds();
+        QDRect localQDRect2 = drawer.getDisplayBounds();
         int n = k - localQDRect2.getWidth();
         int i1 = m - localQDRect2.getHeight();
         if (n < 0)
@@ -606,9 +606,9 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
         if (i1 < 0) {
             i1 = 0;
         }
-        int i2 = (int) (n * paramFloat1);
-        int i3 = (int) (i1 * paramFloat2);
-        paramQTDrawable.setLocation(i + i2, j + i3);
+        int i2 = (int) (n * xAlign);
+        int i3 = (int) (i1 * yAlign);
+        drawer.setLocation(i + i2, j + i3);
     }
 
     /**
@@ -624,7 +624,7 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @return the GroupMember object that is associated with that drawer.
      * @throws quicktime.QTException
      */
-    public abstract GroupMember memberChanged(QTDrawable paramQTDrawable) throws QTException;
+    public abstract GroupMember memberChanged(QTDrawable d) throws QTException;
 
     /**
      * @deprecated
@@ -639,7 +639,7 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      *  itself being redrawn.
      * @throws quicktime.QTException
      */
-    public abstract void redrawMember(QTDrawable paramQTDrawable, Region paramRegion) throws QTException;
+    public abstract void redrawMember(QTDrawable d, Region invalidRgn) throws QTException;
 
     /**
      * @deprecated
@@ -649,5 +649,5 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @throws quicktime.QTException
      */
     @Override
-    public abstract void setClip(Region paramRegion) throws QTException;
+    public abstract void setClip(Region theClip) throws QTException;
 }

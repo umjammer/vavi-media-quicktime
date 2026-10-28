@@ -154,10 +154,10 @@ public abstract class MouseResponder {
      * @param eventTypes the mouse events the responder will respond to. This is a read-only
      *  property of the responder and determines the kinds of mouse events the responder responds to.
      */
-    protected MouseResponder(int paramInt1, int paramInt2, int paramInt3) {
-        this.modifierKeyMask = paramInt1;
-        this.modifierTestConditions = paramInt2;
-        this.eventInterests = paramInt3;
+    protected MouseResponder(int modifierKeyMask, int modifierTestConditions, int eventTypes) {
+        this.modifierKeyMask = modifierKeyMask;
+        this.modifierTestConditions = modifierTestConditions;
+        this.eventInterests = eventTypes;
     }
 
     private int activationEvent = 0;
@@ -197,8 +197,8 @@ public abstract class MouseResponder {
      * @param eventType to test interest
      * @return true if interested, false if not
      */
-    public boolean isInterested(int paramInt) {
-        return (this.eventInterests & paramInt) != 0;
+    public boolean isInterested(int eventType) {
+        return (this.eventInterests & eventType) != 0;
     }
 
     /**
@@ -209,8 +209,8 @@ public abstract class MouseResponder {
      * @param eventModifiers modifier keys of mouse event
      * @return true if interested, false if not
      */
-    public boolean isInterested(int paramInt1, int paramInt2) {
-        return ((this.eventInterests & paramInt1) != 0) && (doModifiersTest(paramInt2));
+    public boolean isInterested(int eventType, int eventModifiers) {
+        return ((this.eventInterests & eventType) != 0) && (doModifiersTest(eventModifiers));
     }
 
     /**
@@ -278,7 +278,7 @@ public abstract class MouseResponder {
      * will not be added to the Space.
      * @param s the Space to which the responder's controller has been added.
      */
-    protected abstract void setTargetSpace(Object paramObject);
+    protected abstract void setTargetSpace(Object s);
 
     /**
      * @deprecated
@@ -288,7 +288,7 @@ public abstract class MouseResponder {
      * MouseResponder will then respond to.
      * @param target the object that is the selected target of the MouseEvent
      */
-    protected abstract void setTarget(Object paramObject);
+    protected abstract void setTarget(Object target);
 
     /**
      * @deprecated
@@ -308,7 +308,7 @@ public abstract class MouseResponder {
      * @param object the object to test
      * @return true if the object is the type of object that the Responder can control
      */
-    public abstract boolean isAppropriate(Object paramObject);
+    public abstract boolean isAppropriate(Object object);
 
     /**
      * @deprecated
@@ -316,7 +316,7 @@ public abstract class MouseResponder {
      * Invoked when the mouse has been clicked on a found and valid target within the enclosing space.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseClicked(MouseEvent paramMouseEvent) {
+    public void mouseClicked(MouseEvent e) {
     }
 
     /**
@@ -325,7 +325,7 @@ public abstract class MouseResponder {
      * Invoked when the mouse enters a QTDrawable space. There is no target set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseEntered(MouseEvent paramMouseEvent) {
+    public void mouseEntered(MouseEvent e) {
     }
 
     /**
@@ -334,7 +334,7 @@ public abstract class MouseResponder {
      * Invoked when the mouse exits a QTDrawable space. There is no target set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseExited(MouseEvent paramMouseEvent) {
+    public void mouseExited(MouseEvent e) {
     }
 
     /**
@@ -343,7 +343,7 @@ public abstract class MouseResponder {
      * Invoked when a mouseMoved event enters a Target within an enclosing space. The Target is set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
+    public void mouseEnteredTarget(MouseEvent e) {
     }
 
     /**
@@ -352,7 +352,7 @@ public abstract class MouseResponder {
      * Invoked when a mouseMoved event exits a Target within an enclosing space. The Target is set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseExitedTarget(MouseEvent paramMouseEvent) {
+    public void mouseExitedTarget(MouseEvent e) {
     }
 
     /**
@@ -362,7 +362,7 @@ public abstract class MouseResponder {
      * (with no buttons no down).
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseMoved(MouseEvent paramMouseEvent) {
+    public void mouseMoved(MouseEvent e) {
     }
 
     /**
@@ -371,7 +371,7 @@ public abstract class MouseResponder {
      * Invoked when the mouse has been pressed on a found and valid target within the enclosing space.
      * @param e the MouseEvent that triggered this event
      */
-    public void mousePressed(MouseEvent paramMouseEvent) {
+    public void mousePressed(MouseEvent e) {
     }
 
     /**
@@ -381,7 +381,7 @@ public abstract class MouseResponder {
      * This method is only called if the responder has been activated by a mouse pressed event.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseDragged(MouseEvent paramMouseEvent) {
+    public void mouseDragged(MouseEvent e) {
     }
 
     /**
@@ -390,7 +390,7 @@ public abstract class MouseResponder {
      * Invoked when the mouse has been released after being pressed on a found and valid target within the enclosing space.
      * @param e the MouseEvent that triggered this event
      */
-    public void mouseReleased(MouseEvent paramMouseEvent) {
+    public void mouseReleased(MouseEvent e) {
     }
 }
 

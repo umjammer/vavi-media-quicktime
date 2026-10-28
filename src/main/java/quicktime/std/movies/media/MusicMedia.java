@@ -16,8 +16,8 @@ public final class MusicMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public MusicMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1836413801, paramInt, paramDataRef);
+    public MusicMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1836413801, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class MusicMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public MusicMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public MusicMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     MusicMedia(int paramInt, Track paramTrack) throws QTException {
@@ -63,9 +63,9 @@ public final class MusicMedia extends Media {
      * @return a MusicDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public MusicDescription getMusicDescription(int paramInt) throws QTException {
+    public MusicDescription getMusicDescription(int index) throws QTException {
         MusicDescription localMusicDescription = new MusicDescription();
-        getNativeSampleDescription(paramInt, localMusicDescription);
+        getNativeSampleDescription(index, localMusicDescription);
         return localMusicDescription;
     }
 }

@@ -162,8 +162,8 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
      * @param dv The vertical distance to move the polygon.
      * @throws quicktime.qd.QDException
      */
-    public void offset(int paramInt1, int paramInt2) throws QDException {
-        OffsetPoly(_ID(), (short) paramInt1, (short) paramInt2);
+    public void offset(int dh, int dv) throws QDException {
+        OffsetPoly(_ID(), (short) dh, (short) dv);
     }
 
     private static int OpenPoly() {

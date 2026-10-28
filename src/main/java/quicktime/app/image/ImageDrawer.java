@@ -102,9 +102,9 @@ public class ImageDrawer implements Drawable {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
-        if ((paramObject instanceof Component)) {
-            this.canv = ((Component) paramObject);
+    public void addedTo(Object interest) {
+        if ((interest instanceof Component)) {
+            this.canv = ((Component) interest);
             if (this.im != null) {
                 this.canv.prepareImage(this.im, this.canv);
             }
@@ -123,8 +123,8 @@ public class ImageDrawer implements Drawable {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
-        if ((paramObject instanceof Component))
+    public void removedFrom(Object interest) {
+        if ((interest instanceof Component))
             this.canv = null;
     }
 
@@ -147,8 +147,8 @@ public class ImageDrawer implements Drawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setDisplayBounds(QDRect paramQDRect) throws QTException {
-        this.bounds = paramQDRect;
+    public void setDisplayBounds(QDRect bounds) throws QTException {
+        this.bounds = bounds;
     }
 
     /**
@@ -177,7 +177,7 @@ public class ImageDrawer implements Drawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void redraw(Region paramRegion) throws QTException {
+    public void redraw(Region invalidRgn) throws QTException {
         if ((this.canv != null) && (this.im != null)) {
             Graphics localGraphics = this.canv.getGraphics();
             QDRect localQDRect = this.bounds;

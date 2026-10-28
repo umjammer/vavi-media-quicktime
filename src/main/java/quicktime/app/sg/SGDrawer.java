@@ -41,8 +41,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * If the channel is set to useVideo then it will throw a paramErr QTException.
      * @param sg the SequenceGrabber component channel to present.
      */
-    public SGDrawer(SGVideoChannel paramSGVideoChannel) throws QTException {
-        this.chan = paramSGVideoChannel;
+    public SGDrawer(SGVideoChannel sg) throws QTException {
+        this.chan = sg;
         setDefaultTasker(sgTasker);
     }
 
@@ -90,9 +90,9 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        this.chan.getSequenceGrabber().setGWorld(paramQDGraphics, null);
-        if (!QDGraphics.scratch.equals(paramQDGraphics)) {
+    public synchronized void setGWorld(QDGraphics cgp) throws QTException {
+        this.chan.getSequenceGrabber().setGWorld(cgp, null);
+        if (!QDGraphics.scratch.equals(cgp)) {
             this.deferTasking = true;
         } else {
             stopTasking();
@@ -154,8 +154,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.chan.setMatrix(paramMatrix);
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.chan.setMatrix(matrix);
     }
 
     /**
@@ -166,8 +166,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
-        this.chan.setBounds(paramQDRect);
+    public synchronized void setDisplayBounds(QDRect bounds) throws StdQTException {
+        this.chan.setBounds(bounds);
         if (this.deferTasking) {
             this.deferTasking = false;
             startTasking();
@@ -183,10 +183,10 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -215,8 +215,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public final synchronized void redraw(Region paramRegion) throws StdQTException {
-        this.chan.getSequenceGrabber().update(paramRegion);
+    public final synchronized void redraw(Region invalidRgn) throws StdQTException {
+        this.chan.getSequenceGrabber().update(invalidRgn);
     }
 
     /**
@@ -239,8 +239,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setClip(Region paramRegion) throws StdQTException {
-        this.chan.setClip(paramRegion);
+    public void setClip(Region reg) throws StdQTException {
+        this.chan.setClip(reg);
     }
 
     /**
@@ -275,8 +275,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * has completed.
      * @param callback can be null to de-register notification
      */
-    public void setSGCaptureCallback(SGCaptureCallback paramSGCaptureCallback) {
-        this.stopTimeCallback = paramSGCaptureCallback;
+    public void setSGCaptureCallback(SGCaptureCallback callback) {
+        this.stopTimeCallback = callback;
     }
 
     /**
@@ -309,7 +309,7 @@ public class SGDrawer extends Tasking implements QTDrawable {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
+    public void addedTo(Object interest) {
     }
 
     /**
@@ -322,7 +322,7 @@ public class SGDrawer extends Tasking implements QTDrawable {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
     }
 }
 

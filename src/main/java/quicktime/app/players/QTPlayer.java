@@ -46,8 +46,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * This constructor creates a QTPlayer object given a QuickTime MovieController object.
      * @param mc a MovieController object
      */
-    public QTPlayer(MovieController paramMovieController) throws StdQTException {
-        this.controller = paramMovieController;
+    public QTPlayer(MovieController mc) throws StdQTException {
+        this.controller = mc;
     }
 
     private boolean setControllerVisibleFlag = false;
@@ -69,9 +69,9 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
+    public void addedTo(Object interest) {
         if (this.eventHandler == null)
-            this.eventHandler = QTPlayerEventHandler.make(this, paramObject);
+            this.eventHandler = QTPlayerEventHandler.make(this, interest);
         if (this.eventHandler != null) {
             this.eventHandler.addedTo();
         }
@@ -90,7 +90,7 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
         if (this.eventHandler != null)
             this.eventHandler.removedFrom();
         this.eventHandler = null;
@@ -182,11 +182,11 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QDException, StdQTException {
-        if (getGWorld().equals(paramQDGraphics))
+    public synchronized void setGWorld(QDGraphics cgp) throws QDException, StdQTException {
+        if (getGWorld().equals(cgp))
             return;
-        this.controller.setPort(paramQDGraphics);
-        if (!QDGraphics.scratch.equals(paramQDGraphics)) {
+        this.controller.setPort(cgp);
+        if (!QDGraphics.scratch.equals(cgp)) {
             startTasking();
             this.redrawRequired = true;
             this.controller.getMovie().setActive(true);
@@ -211,10 +211,10 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.QTException
      */
     @Override
-    public final void redraw(Region paramRegion) throws QTException {
-        if (paramRegion != null) {
+    public final void redraw(Region invalidRgn) throws QTException {
+        if (invalidRgn != null) {
             try {
-                this.controller.invalidate(getGWorld(), paramRegion);
+                this.controller.invalidate(getGWorld(), invalidRgn);
                 this.controller.idle();
             } catch (StdQTException localStdQTException) {
                 this.controller.draw();
@@ -234,26 +234,26 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws QTException {
+    public synchronized void setDisplayBounds(QDRect bounds) throws QTException {
         QDDimension localQDDimension = this.controller.getRequiredSize();
-        if ((paramQDRect.getHeight() < localQDDimension.getHeight()) || (paramQDRect.getWidth() < localQDDimension.getWidth())) {
+        if ((bounds.getHeight() < localQDDimension.getHeight()) || (bounds.getWidth() < localQDDimension.getWidth())) {
             if (this.controller.getVisible()) {
                 this.controller.setVisible(false);
                 this.setControllerVisibleFlag = true;
             }
-            paramQDRect.setHeight(paramQDRect.getHeight() + localQDDimension.getHeight());
-            paramQDRect.setWidth(paramQDRect.getWidth() + localQDDimension.getWidth());
+            bounds.setHeight(bounds.getHeight() + localQDDimension.getHeight());
+            bounds.setWidth(bounds.getWidth() + localQDDimension.getWidth());
         } else {
             if (this.setControllerVisibleFlag) {
                 this.controller.setVisible(true);
                 this.setControllerVisibleFlag = false;
             }
             if ((!this.reserveSize) && (!this.controller.getVisible())) {
-                paramQDRect.setHeight(paramQDRect.getHeight() + localQDDimension.getHeight());
-                paramQDRect.setWidth(paramQDRect.getWidth() + localQDDimension.getWidth());
+                bounds.setHeight(bounds.getHeight() + localQDDimension.getHeight());
+                bounds.setWidth(bounds.getWidth() + localQDDimension.getWidth());
             }
         }
-        this.controller.setBounds(paramQDRect);
+        this.controller.setBounds(bounds);
         if (this.redrawRequired) {
             this.redrawRequired = false;
             if (this.controller.getVisible()) {
@@ -271,10 +271,10 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -312,8 +312,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.QTException
      */
     @Override
-    public void setClip(Region paramRegion) throws QTException {
-        this.controller.setClip(paramRegion);
+    public void setClip(Region theClip) throws QTException {
+        this.controller.setClip(theClip);
     }
 
     /**
@@ -339,8 +339,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setTime(int paramInt) throws StdQTException {
-        this.controller.getMovie().setTimeValue(paramInt);
+    public void setTime(int time) throws StdQTException {
+        this.controller.getMovie().setTimeValue(time);
         this.controller.movieChanged();
     }
 
@@ -392,11 +392,11 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setRate(float paramFloat) throws StdQTException {
-        if (paramFloat != 0.0F) {
-            this.controller.prerollAndPlay(paramFloat);
+    public void setRate(float rate) throws StdQTException {
+        if (rate != 0.0F) {
+            this.controller.prerollAndPlay(rate);
         } else {
-            this.controller.play(paramFloat);
+            this.controller.play(rate);
         }
     }
 
@@ -504,8 +504,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @param flag the resize flag
      * @throws quicktime.QTException
      */
-    public void setControllerSizeReserved(boolean paramBoolean) throws QTException {
-        this.reserveSize = paramBoolean;
+    public void setControllerSizeReserved(boolean flag) throws QTException {
+        this.reserveSize = flag;
         setDisplayBounds(getDisplayBounds());
     }
 

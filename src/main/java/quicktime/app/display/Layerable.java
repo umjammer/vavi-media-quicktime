@@ -37,6 +37,6 @@ public interface Layerable {
      * @param layer the new layer
      * @throws quicktime.QTException
      */
-    void setLayer(int paramInt) throws QTException;
+    void setLayer(int layer) throws QTException;
 }
 

@@ -46,8 +46,8 @@ public final class Stream extends QTObject implements QTStreamingLib {
      * @param dataType OSType specifying type of stream data
      * @param data data
      */
-    public Stream(Presentation paramPresentation, int paramInt, QTPointerRef paramQTPointerRef) throws QTException {
-        super(allocate(paramPresentation, paramInt, paramQTPointerRef, 0));
+    public Stream(Presentation pres, int dataType, QTPointerRef data) throws QTException {
+        super(allocate(pres, dataType, data, 0));
     }
 
     /**
@@ -58,8 +58,8 @@ public final class Stream extends QTObject implements QTStreamingLib {
      * @param data data
      * @param flags stream flags
      */
-    public Stream(Presentation paramPresentation, int paramInt1, QTPointerRef paramQTPointerRef, int paramInt2) throws QTException {
-        super(allocate(paramPresentation, paramInt1, paramQTPointerRef, paramInt2));
+    public Stream(Presentation pres, int dataType, QTPointerRef data, int flags) throws QTException {
+        super(allocate(pres, dataType, data, flags));
     }
 
     private static int allocate(Presentation paramPresentation, int paramInt1, QTPointerRef paramQTPointerRef, int paramInt2) throws QTException {

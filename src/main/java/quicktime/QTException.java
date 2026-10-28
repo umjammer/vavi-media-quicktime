@@ -36,16 +36,16 @@ public class QTException extends Exception {
      * that could be displayed to the user.
      * @param str The message that could be displayed to the user
      */
-    public QTException(String paramString) {
-        super(paramString);
+    public QTException(String str) {
+        super(str);
     }
 
     /**
      * Creates an exception with a specific error number
      * @param val the error number
      */
-    public QTException(int paramInt) {
-        this(Integer.valueOf(paramInt).toString());
+    public QTException(int val) {
+        this(Integer.valueOf(val).toString());
     }
 
     /**
@@ -54,9 +54,9 @@ public class QTException extends Exception {
      * @param err the result or error code if non-zero an exception is thrown
      * @throws quicktime.QTException
      */
-    public static void checkError(int paramInt) throws QTException {
-        if ((paramInt < 0) && (isDrawingError(paramInt) < 0)) {
-            throw new QTException(paramInt);
+    public static void checkError(int err) throws QTException {
+        if ((err < 0) && (isDrawingError(err) < 0)) {
+            throw new QTException(err);
         }
     }
 

@@ -93,16 +93,16 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
      * @param data the new encoded image data for the DataSource.
      * @throws quicktime.std.StdQTException
      */
-    public void setSourceData(EncodedImage paramEncodedImage) throws StdQTException {
+    public void setSourceData(EncodedImage data) throws StdQTException {
         if (!this.isValid)
             throw new StdQTException(-50);
         int i = -50;
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            i = CDSequenceSetSourceData(_ID(), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramEncodedImage.getSize());
-        } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-            i = CDSequenceSetSourceData(_ID(), ((IntEncodedImage) paramEncodedImage).getInts(), paramEncodedImage.getSize());
-        } else if ((paramEncodedImage instanceof RawEncodedImage))
-            i = CDSequenceSetSourceData(_ID(), QTObject.ID((RawEncodedImage) paramEncodedImage), paramEncodedImage.getSize());
+        if ((data instanceof ByteEncodedImage)) {
+            i = CDSequenceSetSourceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize());
+        } else if ((data instanceof IntEncodedImage)) {
+            i = CDSequenceSetSourceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize());
+        } else if ((data instanceof RawEncodedImage))
+            i = CDSequenceSetSourceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize());
         StdQTException.checkError(i);
     }
 

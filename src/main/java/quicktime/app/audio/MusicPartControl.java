@@ -40,9 +40,9 @@ public class MusicPartControl implements MusicPart {
      * @param mh the MusicMediaHandler to extract the part from
      * @param partNumber the part number within the MusicMedia to control
      */
-    public MusicPartControl(MusicMediaHandler paramMusicMediaHandler, int paramInt) throws QTException {
-        this.tp = paramMusicMediaHandler.getIndexedTunePlayer(1);
-        this.part = paramInt;
+    public MusicPartControl(MusicMediaHandler mh, int partNumber) throws QTException {
+        this.tp = mh.getIndexedTunePlayer(1);
+        this.part = partNumber;
         this.muted = (getNoteChannel().getController(7) <= 0.0F);
         this.vol = getVolume();
     }
@@ -84,8 +84,8 @@ public class MusicPartControl implements MusicPart {
      * @throws quicktime.QTException
      */
     @Override
-    public void setVolume(float paramFloat) throws QTException {
-        this.vol = paramFloat;
+    public void setVolume(float volume) throws QTException {
+        this.vol = volume;
         getNoteChannel().setController(7, this.vol * 128.0F);
     }
 
@@ -109,11 +109,11 @@ public class MusicPartControl implements MusicPart {
      * @throws quicktime.QTException
      */
     @Override
-    public void setBalance(float paramFloat) throws QTException {
-        if (paramFloat == 0.0F) {
-            getNoteChannel().setController(10, paramFloat);
+    public void setBalance(float val) throws QTException {
+        if (val == 0.0F) {
+            getNoteChannel().setController(10, val);
         } else {
-            getNoteChannel().setController(10, paramFloat / 2.0F + 1.5F);
+            getNoteChannel().setController(10, val / 2.0F + 1.5F);
         }
     }
 
@@ -156,8 +156,8 @@ public class MusicPartControl implements MusicPart {
      * @throws quicktime.QTException
      */
     @Override
-    public void selectInstrument(String paramString) throws QTException {
-        getNoteChannel().pickEditInstrument(paramString, 16);
+    public void selectInstrument(String prompt) throws QTException {
+        getNoteChannel().pickEditInstrument(prompt, 16);
     }
 
     /**

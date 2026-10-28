@@ -62,8 +62,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * Creates a new presentation object from the presentation parameters
      * @param params NewPresentationParams object containing information about the specified presentation
      */
-    public Presentation(NewPresentationParams paramNewPresentationParams) throws QTException {
-        super(allocate(paramNewPresentationParams));
+    public Presentation(NewPresentationParams params) throws QTException {
+        super(allocate(params));
     }
 
     private static int allocate(NewPresentationParams paramNewPresentationParams) throws QTException {
@@ -79,10 +79,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @param params the PresParams object containing additional configuration information
      * @throws quicktime.QTException
      */
-    public static Presentation fromData(int paramInt, QTPointerRef paramQTPointerRef, PresParams paramPresParams) throws QTException {
-        long[] arrayOfLong = { paramQTPointerRef.getSize() };
+    public static Presentation fromData(int dataType, QTPointerRef data, PresParams params) throws QTException {
+        long[] arrayOfLong = { data.getSize() };
         int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSNewPresentationFromData(paramInt, QTObject.ID(paramQTPointerRef), arrayOfLong, QTObject.ID(paramPresParams), arrayOfInt));
+        QTException.checkError(QTSNewPresentationFromData(dataType, QTObject.ID(data), arrayOfLong, QTObject.ID(params), arrayOfInt));
         return new Presentation(arrayOfInt[0]);
     }
 
@@ -111,8 +111,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @param params ExportParams object
      * @throws quicktime.QTException
      */
-    public void export(ExportParams paramExportParams) throws QTException {
-        QTException.checkError(QTSPresExport(_ID(), 0, paramExportParams.getBytes()));
+    public void export(ExportParams params) throws QTException {
+        QTException.checkError(QTSPresExport(_ID(), 0, params.getBytes()));
     }
 
     /**
@@ -122,8 +122,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresExport"
      * @throws quicktime.QTException
      */
-    public void export(ExportParams paramExportParams, Stream paramStream) throws QTException {
-        QTException.checkError(QTSPresExport(_ID(), QTObject.ID(paramStream), paramExportParams.getBytes()));
+    public void export(ExportParams params, Stream s) throws QTException {
+        QTException.checkError(QTSPresExport(_ID(), QTObject.ID(s), params.getBytes()));
     }
 
     /**
@@ -223,9 +223,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see "@param flags QuickTime::QTSPresPreview"
      * @throws quicktime.QTException
      */
-    public void preview(long paramLong, float paramFloat, int paramInt) throws QTException {
-        long[] arrayOfLong = { paramLong };
-        QTException.checkError(QTSPresPreview(_ID(), 0, arrayOfLong, QTUtils.X2Fix(paramFloat), paramInt));
+    public void preview(long timeValue, float rate, int flags) throws QTException {
+        long[] arrayOfLong = { timeValue };
+        QTException.checkError(QTSPresPreview(_ID(), 0, arrayOfLong, QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -236,9 +236,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see "@param flags QuickTime::QTSPresPreview"
      * @throws quicktime.QTException
      */
-    public void preview(Stream paramStream, long paramLong, float paramFloat, int paramInt) throws QTException {
-        long[] arrayOfLong = { paramLong };
-        QTException.checkError(QTSPresPreview(_ID(), QTObject.ID(paramStream), arrayOfLong, QTUtils.X2Fix(paramFloat), paramInt));
+    public void preview(Stream s, long timeValue, float rate, int flags) throws QTException {
+        long[] arrayOfLong = { timeValue };
+        QTException.checkError(QTSPresPreview(_ID(), QTObject.ID(s), arrayOfLong, QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -256,8 +256,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see "@param flags QuickTime::QTSPresPreroll"
      * @throws quicktime.QTException
      */
-    public void preroll(int paramInt1, float paramFloat, int paramInt2) throws QTException {
-        QTException.checkError(QTSPresPreroll(_ID(), 0, paramInt1, QTUtils.X2Fix(paramFloat), paramInt2));
+    public void preroll(int timeValue, float rate, int flags) throws QTException {
+        QTException.checkError(QTSPresPreroll(_ID(), 0, timeValue, QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -268,8 +268,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see "@param flags QuickTime::QTSPresPreroll"
      * @throws quicktime.QTException
      */
-    public void preroll(Stream paramStream, int paramInt1, float paramFloat, int paramInt2) throws QTException {
-        QTException.checkError(QTSPresPreroll(_ID(), QTObject.ID(paramStream), paramInt1, QTUtils.X2Fix(paramFloat), paramInt2));
+    public void preroll(Stream s, int timeValue, float rate, int flags) throws QTException {
+        QTException.checkError(QTSPresPreroll(_ID(), QTObject.ID(s), timeValue, QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -280,9 +280,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see "@param flags QuickTime::QTSPresPreroll64"
      * @throws quicktime.QTException
      */
-    public void preroll(Stream paramStream, long paramLong, float paramFloat, int paramInt) throws QTException {
-        long[] arrayOfLong = { paramLong };
-        QTException.checkError(QTSPresPreroll64(_ID(), QTObject.ID(paramStream), arrayOfLong, QTUtils.X2Fix(paramFloat), paramInt));
+    public void preroll(Stream s, long timeValue, float rate, int flags) throws QTException {
+        long[] arrayOfLong = { timeValue };
+        QTException.checkError(QTSPresPreroll64(_ID(), QTObject.ID(s), arrayOfLong, QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -299,8 +299,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresStart"
      * @throws quicktime.QTException
      */
-    public void start(int paramInt) throws QTException {
-        QTSPresStart(_ID(), 0, paramInt);
+    public void start(int flags) throws QTException {
+        QTSPresStart(_ID(), 0, flags);
     }
 
     /**
@@ -310,8 +310,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresStart"
      * @throws quicktime.QTException
      */
-    public void start(Stream paramStream, int paramInt) throws QTException {
-        QTException.checkError(QTSPresStart(_ID(), QTObject.ID(paramStream), paramInt));
+    public void start(Stream s, int flags) throws QTException {
+        QTException.checkError(QTSPresStart(_ID(), QTObject.ID(s), flags));
     }
 
     /**
@@ -321,8 +321,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @param params PresIdleParams
      * @see " QuickTime::QTSPresIdle"
      */
-    public void idle(PresIdleParams paramPresIdleParams) {
-        QTSPresIdle(_ID(), QTObject.ID(paramPresIdleParams));
+    public void idle(PresIdleParams params) {
+        QTSPresIdle(_ID(), QTObject.ID(params));
     }
 
     /**
@@ -332,8 +332,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      *  If you set this parameter to null, the presentation uses the current visible region
      * @throws quicktime.QTException
      */
-    public void invalidateRegion(Region paramRegion) throws QTException {
-        QTException.checkError(QTSPresInvalidateRegion(_ID(), QTObject.ID(paramRegion)));
+    public void invalidateRegion(Region updateRgn) throws QTException {
+        QTException.checkError(QTSPresInvalidateRegion(_ID(), QTObject.ID(updateRgn)));
     }
 
     /**
@@ -342,8 +342,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSkipTo"
      * @throws quicktime.QTException
      */
-    public void skipTo(int paramInt) throws QTException {
-        QTException.checkError(QTSPresSkipTo(_ID(), paramInt));
+    public void skipTo(int timeValue) throws QTException {
+        QTException.checkError(QTSPresSkipTo(_ID(), timeValue));
     }
 
     /**
@@ -352,8 +352,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSkipTo64"
      * @throws quicktime.QTException
      */
-    public void skipTo(long paramLong) throws QTException {
-        long[] arrayOfLong = { paramLong };
+    public void skipTo(long timeValue) throws QTException {
+        long[] arrayOfLong = { timeValue };
         QTException.checkError(QTSPresSkipTo64(_ID(), arrayOfLong));
     }
 
@@ -372,8 +372,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresStop"
      * @throws quicktime.QTException
      */
-    public void stop(Stream paramStream, int paramInt) throws QTException {
-        QTException.checkError(QTSPresStop(_ID(), QTObject.ID(paramStream), paramInt));
+    public void stop(Stream s, int flags) throws QTException {
+        QTException.checkError(QTSPresStop(_ID(), QTObject.ID(s), flags));
     }
 
     /**
@@ -392,8 +392,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetIndStream"
      * @throws quicktime.QTException
      */
-    public Stream getIndStream(int paramInt) throws QTException {
-        int i = QTSPresGetIndStream(_ID(), paramInt);
+    public Stream getIndStream(int index) throws QTException {
+        int i = QTSPresGetIndStream(_ID(), index);
         return new Stream(i, this);
     }
 
@@ -404,8 +404,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetPreferredRate"
      * @throws quicktime.QTException
      */
-    public void setPreferredRate(float paramFloat, int paramInt) throws QTException {
-        QTException.checkError(QTSPresSetPreferredRate(_ID(), QTUtils.X2Fix(paramFloat), paramInt));
+    public void setPreferredRate(float rate, int flags) throws QTException {
+        QTException.checkError(QTSPresSetPreferredRate(_ID(), QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -427,8 +427,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetEnable"
      * @throws quicktime.QTException
      */
-    public void setEnable(Stream paramStream, boolean paramBoolean) throws QTException {
-        QTException.checkError(QTSPresSetEnable(_ID(), QTObject.ID(paramStream), (byte) (paramBoolean == true ? 1 : 0)));
+    public void setEnable(Stream s, boolean enableMode) throws QTException {
+        QTException.checkError(QTSPresSetEnable(_ID(), QTObject.ID(s), (byte) (enableMode == true ? 1 : 0)));
     }
 
     /**
@@ -438,9 +438,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetEnable"
      * @throws quicktime.QTException
      */
-    public boolean getEnable(Stream paramStream) throws QTException {
+    public boolean getEnable(Stream s) throws QTException {
         byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresGetEnable(_ID(), QTObject.ID(paramStream), arrayOfByte));
+        QTException.checkError(QTSPresGetEnable(_ID(), QTObject.ID(s), arrayOfByte));
         return arrayOfByte[0] != 0;
     }
 
@@ -451,8 +451,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetPresenting"
      * @throws quicktime.QTException
      */
-    public void setPresenting(Stream paramStream, boolean paramBoolean) throws QTException {
-        QTException.checkError(QTSPresSetPresenting(_ID(), QTObject.ID(paramStream), (byte) (paramBoolean == true ? 1 : 0)));
+    public void setPresenting(Stream s, boolean inPresentingMode) throws QTException {
+        QTException.checkError(QTSPresSetPresenting(_ID(), QTObject.ID(s), (byte) (inPresentingMode == true ? 1 : 0)));
     }
 
     /**
@@ -462,9 +462,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetPresenting"
      * @throws quicktime.QTException
      */
-    public boolean getPresenting(Stream paramStream) throws QTException {
+    public boolean getPresenting(Stream s) throws QTException {
         byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresGetPresenting(_ID(), QTObject.ID(paramStream), arrayOfByte));
+        QTException.checkError(QTSPresGetPresenting(_ID(), QTObject.ID(s), arrayOfByte));
         return arrayOfByte[0] != 0;
     }
 
@@ -476,10 +476,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetActiveSegment"
      * @throws quicktime.QTException
      */
-    public void setActiveSegment(Stream paramStream, long paramLong1, long paramLong2) throws QTException {
-        long[] arrayOfLong1 = { paramLong1 };
-        long[] arrayOfLong2 = { paramLong2 };
-        QTException.checkError(QTSPresSetActiveSegment(_ID(), QTObject.ID(paramStream), arrayOfLong1, arrayOfLong2));
+    public void setActiveSegment(Stream s, long startTime, long duration) throws QTException {
+        long[] arrayOfLong1 = { startTime };
+        long[] arrayOfLong2 = { duration };
+        QTException.checkError(QTSPresSetActiveSegment(_ID(), QTObject.ID(s), arrayOfLong1, arrayOfLong2));
     }
 
     /**
@@ -489,10 +489,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetActiveSegment"
      * @throws quicktime.QTException
      */
-    public long getActiveSegmentStart(Stream paramStream) throws QTException {
+    public long getActiveSegmentStart(Stream s) throws QTException {
         long[] arrayOfLong1 = { 0L };
         long[] arrayOfLong2 = { 0L };
-        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(paramStream), arrayOfLong1, arrayOfLong2));
+        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(s), arrayOfLong1, arrayOfLong2));
         return arrayOfLong1[0];
     }
 
@@ -503,10 +503,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetActiveSegment"
      * @throws quicktime.QTException
      */
-    public long getActiveSegmentDuration(Stream paramStream) throws QTException {
+    public long getActiveSegmentDuration(Stream s) throws QTException {
         long[] arrayOfLong1 = { 0L };
         long[] arrayOfLong2 = { 0L };
-        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(paramStream), arrayOfLong1, arrayOfLong2));
+        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(s), arrayOfLong1, arrayOfLong2));
         return arrayOfLong2[0];
     }
 
@@ -518,8 +518,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetPlayHints"
      * @throws quicktime.QTException
      */
-    public void setPlayHints(Stream paramStream, int paramInt1, int paramInt2) throws QTException {
-        QTException.checkError(QTSPresSetPlayHints(_ID(), QTObject.ID(paramStream), paramInt1, paramInt2));
+    public void setPlayHints(Stream s, int flags, int mask) throws QTException {
+        QTException.checkError(QTSPresSetPlayHints(_ID(), QTObject.ID(s), flags, mask));
     }
 
     /**
@@ -529,9 +529,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetPlayHints"
      * @throws quicktime.QTException
      */
-    public int getPlayHints(Stream paramStream) throws QTException {
+    public int getPlayHints(Stream s) throws QTException {
         int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetPlayHints(_ID(), QTObject.ID(paramStream), arrayOfInt));
+        QTException.checkError(QTSPresGetPlayHints(_ID(), QTObject.ID(s), arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -543,8 +543,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetGWorld"
      * @throws quicktime.QTException
      */
-    public void setGWorld(Stream paramStream, QDGraphics paramQDGraphics, GDevice paramGDevice) throws QTException {
-        QTException.checkError(QTSPresSetGWorld(_ID(), QTObject.ID(paramStream), QTObject.ID(paramQDGraphics), QTObject.ID(paramGDevice)));
+    public void setGWorld(Stream s, QDGraphics gWorld, GDevice gd) throws QTException {
+        QTException.checkError(QTSPresSetGWorld(_ID(), QTObject.ID(s), QTObject.ID(gWorld), QTObject.ID(gd)));
     }
 
     /**
@@ -554,8 +554,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetGWorld"
      * @throws quicktime.QTException
      */
-    public void setGWorld(Stream paramStream, QDGraphics paramQDGraphics) throws QTException {
-        setGWorld(paramStream, paramQDGraphics, GDevice.getMain());
+    public void setGWorld(Stream s, QDGraphics gWorld) throws QTException {
+        setGWorld(s, gWorld, GDevice.getMain());
     }
 
     /**
@@ -572,8 +572,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @return qdGraphics object representing the gWorld
      * @throws quicktime.QTException
      */
-    public QDGraphics getGWorld(Stream paramStream) throws QTException {
-        return QDGraphics.fromPresentation(this, paramStream);
+    public QDGraphics getGWorld(Stream s) throws QTException {
+        return QDGraphics.fromPresentation(this, s);
     }
 
     /**
@@ -593,8 +593,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetClip"
      * @throws quicktime.QTException
      */
-    public void setClip(Stream paramStream, Region paramRegion) throws QTException {
-        QTException.checkError(QTSPresSetClip(_ID(), QTObject.ID(paramStream), QTObject.ID(paramRegion)));
+    public void setClip(Stream s, Region rgn) throws QTException {
+        QTException.checkError(QTSPresSetClip(_ID(), QTObject.ID(s), QTObject.ID(rgn)));
     }
 
     /**
@@ -603,8 +603,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @return the clipping region
      * @throws quicktime.QTException
      */
-    public Region getClip(Stream paramStream) throws QTException {
-        return Region.fromPresentationClip(this, paramStream);
+    public Region getClip(Stream s) throws QTException {
+        return Region.fromPresentationClip(this, s);
     }
 
     /**
@@ -614,8 +614,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetMatrix"
      * @throws quicktime.QTException
      */
-    public void setMatrix(Stream paramStream, Matrix paramMatrix) throws QTException {
-        QTException.checkError(QTSPresSetMatrix(_ID(), QTObject.ID(paramStream), paramMatrix.getBytes()));
+    public void setMatrix(Stream s, Matrix matrix) throws QTException {
+        QTException.checkError(QTSPresSetMatrix(_ID(), QTObject.ID(s), matrix.getBytes()));
     }
 
     /**
@@ -625,9 +625,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetMatrix"
      * @throws quicktime.QTException
      */
-    public Matrix getMatrix(Stream paramStream) throws QTException {
+    public Matrix getMatrix(Stream s) throws QTException {
         Matrix localMatrix = new Matrix();
-        QTException.checkError(QTSPresSetMatrix(_ID(), QTObject.ID(paramStream), localMatrix.getBytes()));
+        QTException.checkError(QTSPresSetMatrix(_ID(), QTObject.ID(s), localMatrix.getBytes()));
         return localMatrix;
     }
 
@@ -639,8 +639,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetDimensions"
      * @throws quicktime.QTException
      */
-    public void setDimensions(Stream paramStream, float paramFloat1, float paramFloat2) throws QTException {
-        QTException.checkError(QTSPresSetDimensions(_ID(), QTObject.ID(paramStream), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2)));
+    public void setDimensions(Stream s, float width, float height) throws QTException {
+        QTException.checkError(QTSPresSetDimensions(_ID(), QTObject.ID(s), QTUtils.X2Fix(width), QTUtils.X2Fix(height)));
     }
 
     /**
@@ -650,8 +650,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetDimensions"
      * @throws quicktime.QTException
      */
-    public void setDimensions(Stream paramStream, QDDimension paramQDDimension) throws QTException {
-        setDimensions(paramStream, paramQDDimension.getWidthF(), paramQDDimension.getHeightF());
+    public void setDimensions(Stream s, QDDimension dim) throws QTException {
+        setDimensions(s, dim.getWidthF(), dim.getHeightF());
     }
 
     /**
@@ -661,10 +661,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetDimensions"
      * @throws quicktime.QTException
      */
-    public QDDimension getDimensions(Stream paramStream) throws QTException {
+    public QDDimension getDimensions(Stream s) throws QTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        QTException.checkError(QTSPresGetDimensions(_ID(), QTObject.ID(paramStream), arrayOfInt1, arrayOfInt2));
+        QTException.checkError(QTSPresGetDimensions(_ID(), QTObject.ID(s), arrayOfInt1, arrayOfInt2));
         return new QDDimension(QTUtils.Fix2X(arrayOfInt1[0]), QTUtils.Fix2X(arrayOfInt2[0]));
     }
 
@@ -676,8 +676,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetGraphicsMode"
      * @throws quicktime.QTException
      */
-    public void setGraphicsMode(Stream paramStream, int paramInt, QDColor paramQDColor) throws QTException {
-        QTException.checkError(QTSPresSetGraphicsMode(_ID(), QTObject.ID(paramStream), (short) paramInt, paramQDColor.getRGBColor()));
+    public void setGraphicsMode(Stream s, int mode, QDColor opColor) throws QTException {
+        QTException.checkError(QTSPresSetGraphicsMode(_ID(), QTObject.ID(s), (short) mode, opColor.getRGBColor()));
     }
 
     /**
@@ -687,10 +687,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetGraphicsMode"
      * @throws quicktime.QTException
      */
-    public GraphicsMode getGraphicsMode(Stream paramStream) throws QTException {
+    public GraphicsMode getGraphicsMode(Stream s) throws QTException {
         byte[] arrayOfByte = { 0 };
         short[] arrayOfShort = { 0 };
-        QTException.checkError(QTSPresGetGraphicsMode(_ID(), QTObject.ID(paramStream), arrayOfShort, arrayOfByte));
+        QTException.checkError(QTSPresGetGraphicsMode(_ID(), QTObject.ID(s), arrayOfShort, arrayOfByte));
         return new GraphicsMode(arrayOfShort[0], QDColor.fromArray(arrayOfByte, 6));
     }
 
@@ -700,8 +700,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @return the picture of the presenter
      * @throws quicktime.QTException
      */
-    public Pict getPicture(Stream paramStream) throws QTException {
-        return Pict.fromPresentation(this, paramStream);
+    public Pict getPicture(Stream s) throws QTException {
+        return Pict.fromPresentation(this, s);
     }
 
     /**
@@ -712,8 +712,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresSetVolumes"
      * @throws quicktime.QTException
      */
-    public void setVolumes(Stream paramStream, int paramInt1, int paramInt2) throws QTException {
-        QTException.checkError(QTSPresSetVolumes(_ID(), QTObject.ID(paramStream), (short) paramInt1, (short) paramInt2));
+    public void setVolumes(Stream s, int leftVol, int rightVol) throws QTException {
+        QTException.checkError(QTSPresSetVolumes(_ID(), QTObject.ID(s), (short) leftVol, (short) rightVol));
     }
 
     /**
@@ -723,10 +723,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetVolumes"
      * @throws quicktime.QTException
      */
-    public int getRightVolume(Stream paramStream) throws QTException {
+    public int getRightVolume(Stream s) throws QTException {
         short[] arrayOfShort1 = { 0 };
         short[] arrayOfShort2 = { 0 };
-        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(paramStream), arrayOfShort1, arrayOfShort2));
+        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(s), arrayOfShort1, arrayOfShort2));
         return arrayOfShort2[0];
     }
 
@@ -737,10 +737,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetVolumes"
      * @throws quicktime.QTException
      */
-    public int getLeftVolume(Stream paramStream) throws QTException {
+    public int getLeftVolume(Stream s) throws QTException {
         short[] arrayOfShort1 = { 0 };
         short[] arrayOfShort2 = { 0 };
-        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(paramStream), arrayOfShort1, arrayOfShort2));
+        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(s), arrayOfShort1, arrayOfShort2));
         return arrayOfShort1[0];
     }
 
@@ -754,8 +754,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresAddSourcer"
      * @throws quicktime.QTException
      */
-    public void addSource(Stream paramStream, Component paramComponent, int paramInt) throws QTException {
-        addSourcer(paramStream, (Sourcer) paramComponent, paramInt);
+    public void addSource(Stream s, Component sourcer, int flags) throws QTException {
+        addSourcer(s, (Sourcer) sourcer, flags);
     }
 
     /**
@@ -768,8 +768,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresRemoveSourcer"
      * @throws quicktime.QTException
      */
-    public void removeSource(Stream paramStream, Component paramComponent, int paramInt) throws QTException {
-        removeSourcer(paramStream, (Sourcer) paramComponent, paramInt);
+    public void removeSource(Stream s, Component sourcer, int flags) throws QTException {
+        removeSourcer(s, (Sourcer) sourcer, flags);
     }
 
     /**
@@ -780,8 +780,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresAddSourcer"
      * @throws quicktime.QTException
      */
-    public void addSourcer(Stream paramStream, Sourcer paramSourcer, int paramInt) throws QTException {
-        QTException.checkError(QTSPresAddSourcer(_ID(), QTObject.ID(paramStream), QTObject.ID(paramSourcer), paramInt));
+    public void addSourcer(Stream s, Sourcer sourcer, int flags) throws QTException {
+        QTException.checkError(QTSPresAddSourcer(_ID(), QTObject.ID(s), QTObject.ID(sourcer), flags));
     }
 
     /**
@@ -794,8 +794,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresRemoveSourcer"
      * @throws quicktime.QTException
      */
-    public void removeSourcer(Stream paramStream, Sourcer paramSourcer, int paramInt) throws QTException {
-        QTException.checkError(QTSPresRemoveSourcer(_ID(), QTObject.ID(paramStream), QTObject.ID(paramSourcer), paramInt));
+    public void removeSourcer(Stream s, Sourcer sourcer, int flags) throws QTException {
+        QTException.checkError(QTSPresRemoveSourcer(_ID(), QTObject.ID(s), QTObject.ID(sourcer), flags));
     }
 
     /**
@@ -806,8 +806,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @return number of sources
      * @see " QuickTime::QTSPresGetNumSourcers"
      */
-    public int getNumSources(Stream paramStream) {
-        return getNumSourcers(paramStream);
+    public int getNumSources(Stream s) {
+        return getNumSourcers(s);
     }
 
     /**
@@ -816,8 +816,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @return number of sources
      * @see " QuickTime::QTSPresGetNumSourcers"
      */
-    public int getNumSourcers(Stream paramStream) {
-        return QTSPresGetNumSourcers(_ID(), QTObject.ID(paramStream));
+    public int getNumSourcers(Stream s) {
+        return QTSPresGetNumSourcers(_ID(), QTObject.ID(s));
     }
 
     /**
@@ -828,9 +828,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetIndSourcer"
      * @throws quicktime.QTException
      */
-    public Sourcer getIndSourcer(Stream paramStream, int paramInt) throws QTException {
+    public Sourcer getIndSourcer(Stream s, int index) throws QTException {
         int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetIndSourcer(_ID(), QTObject.ID(paramStream), paramInt, arrayOfInt));
+        QTException.checkError(QTSPresGetIndSourcer(_ID(), QTObject.ID(s), index, arrayOfInt));
         return new Sourcer(arrayOfInt[0]);
     }
 

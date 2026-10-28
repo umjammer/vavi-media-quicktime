@@ -88,8 +88,8 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
      * Sets the values from the incoming TimeCode definition into the existing description.
      * @param tcd the incoming definitions.
      */
-    public void setTimeCodeDef(TimeCodeDef paramTimeCodeDef) {
-        copyArrayToPointer(paramTimeCodeDef.getBytes(), 0, lockAndDeref(20), 0, 14);
+    public void setTimeCodeDef(TimeCodeDef tcd) {
+        copyArrayToPointer(tcd.getBytes(), 0, lockAndDeref(20), 0, 14);
         if (!isLocked())
             unlock();
     }

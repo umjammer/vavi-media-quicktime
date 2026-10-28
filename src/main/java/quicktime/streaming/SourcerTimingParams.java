@@ -33,8 +33,8 @@ public final class SourcerTimingParams extends QTPointer {
      * @param localEndTime local end time
      * @param localCurrTime local current time
      */
-    public SourcerTimingParams(int paramInt1, int paramInt2, long paramLong1, long paramLong2, long paramLong3, long paramLong4, long paramLong5, long paramLong6) throws QTException {
-        this(1, paramInt1, paramInt2, paramLong1, paramLong2, paramLong3, paramLong4, paramLong5, paramLong6);
+    public SourcerTimingParams(int flags, int timeScale, long presStartTime, long presEndTime, long presCurrTime, long localStartTime, long localEndTime, long localCurrTime) throws QTException {
+        this(1, flags, timeScale, presStartTime, presEndTime, presCurrTime, localStartTime, localEndTime, localCurrTime);
     }
 
     /**
@@ -49,25 +49,25 @@ public final class SourcerTimingParams extends QTPointer {
      * @param localEndTime local end time
      * @param localCurrTime local current time
      */
-    public SourcerTimingParams(int paramInt1, int paramInt2, int paramInt3, long paramLong1, long paramLong2, long paramLong3, long paramLong4, long paramLong5, long paramLong6) throws QTException {
+    public SourcerTimingParams(int vers, int flags, int timeScale, long presStartTime, long presEndTime, long presCurrTime, long localStartTime, long localEndTime, long localCurrTime) throws QTException {
         super(60, true);
-        setVersion(paramInt1);
-        setFlags(paramInt2);
-        setTimeScale(paramInt3);
-        setPresentationStartTime(paramLong1);
-        setPresentationEndTime(paramLong2);
-        setPresentationCurrentTime(paramLong3);
-        setLocalStartTime(paramLong4);
-        setLocalEndTime(paramLong5);
-        setLocalCurrentTime(paramLong6);
+        setVersion(vers);
+        setFlags(flags);
+        setTimeScale(timeScale);
+        setPresentationStartTime(presStartTime);
+        setPresentationEndTime(presEndTime);
+        setPresentationCurrentTime(presCurrTime);
+        setLocalStartTime(localStartTime);
+        setLocalEndTime(localEndTime);
+        setLocalCurrentTime(localCurrTime);
     }
 
     /**
      * Sets the version of the sourcer timing params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -82,8 +82,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the flags of the sourcer timing object
      * @param flags sourcer timing flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(4, flags);
     }
 
     /**
@@ -97,8 +97,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the time scale of the sourcer timing object
      * @param timeScale time scale
      */
-    public void setTimeScale(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setTimeScale(int timeScale) {
+        setIntAt(8, timeScale);
     }
 
     /**
@@ -112,8 +112,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the presentation start time
      * @param startTime presentation start time
      */
-    public void setPresentationStartTime(long paramLong) {
-        setLongAt(12, paramLong);
+    public void setPresentationStartTime(long startTime) {
+        setLongAt(12, startTime);
     }
 
     /**
@@ -127,8 +127,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the presentation end time
      * @param endTime presentation end time
      */
-    public void setPresentationEndTime(long paramLong) {
-        setLongAt(20, paramLong);
+    public void setPresentationEndTime(long endTime) {
+        setLongAt(20, endTime);
     }
 
     /**
@@ -142,8 +142,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the presentation current time
      * @param currTime presentation current time
      */
-    public void setPresentationCurrentTime(long paramLong) {
-        setLongAt(28, paramLong);
+    public void setPresentationCurrentTime(long currTime) {
+        setLongAt(28, currTime);
     }
 
     /**
@@ -157,8 +157,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the local start time
      * @param localStartTime local start time
      */
-    public void setLocalStartTime(long paramLong) {
-        setLongAt(36, paramLong);
+    public void setLocalStartTime(long localStartTime) {
+        setLongAt(36, localStartTime);
     }
 
     /**
@@ -172,8 +172,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the local end time
      * @param localEndTime local end time
      */
-    public void setLocalEndTime(long paramLong) {
-        setLongAt(44, paramLong);
+    public void setLocalEndTime(long localEndTime) {
+        setLongAt(44, localEndTime);
     }
 
     /**
@@ -187,8 +187,8 @@ public final class SourcerTimingParams extends QTPointer {
      * Sets the local current time
      * @param localCurrTime local current time
      */
-    public void setLocalCurrentTime(long paramLong) {
-        setLongAt(52, paramLong);
+    public void setLocalCurrentTime(long localCurrTime) {
+        setLongAt(52, localCurrTime);
     }
 
     /**

@@ -25,13 +25,13 @@ public final class QTMIDIPortList extends QTHandleRef implements Cloneable {
      * @return a QTMIDIPort found at the specified index.
      * @throws quicktime.std.StdQTException
      */
-    public QTMIDIPort getPort(int paramInt) throws StdQTException {
-        if (paramInt > getShortAt(0))
+    public QTMIDIPort getPort(int index) throws StdQTException {
+        if (index > getShortAt(0))
             StdQTException.checkError(63461);
-        paramInt--;
+        index--;
         QTMIDIPort localQTMIDIPort = new QTMIDIPort();
         byte[] arrayOfByte = localQTMIDIPort.getBytes();
-        int i = 2 + paramInt * 96;
+        int i = 2 + index * 96;
         for (int j = 0; j < 96; j++) {
             arrayOfByte[j] = getByteAt(j + i);
         }

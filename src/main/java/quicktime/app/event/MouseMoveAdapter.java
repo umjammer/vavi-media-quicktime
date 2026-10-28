@@ -26,7 +26,7 @@ public class MouseMoveAdapter implements MouseMoveListener {
      *  it is interested in with the given modifier state, or false if otherwise.
      */
     @Override
-    public boolean matchModifierFilter(int paramInt) {
+    public boolean matchModifierFilter(int mods) {
         return true;
     }
 

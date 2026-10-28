@@ -27,11 +27,11 @@ public final class EditEntry extends QTPointerRef {
      * @param startTime the start time of the stream
      * @param rate the rate of the stream
      */
-    public EditEntry(long paramLong1, long paramLong2, float paramFloat) throws QTException {
+    public EditEntry(long duration, long startTime, float rate) throws QTException {
         this();
-        setPresentationDuration(paramLong1);
-        setStreamStartTime(paramLong2);
-        setStreamRate(paramFloat);
+        setPresentationDuration(duration);
+        setStreamStartTime(startTime);
+        setStreamRate(rate);
     }
 
     /**
@@ -62,16 +62,16 @@ public final class EditEntry extends QTPointerRef {
      * Sets the presentation duration of the entry.
      * @param duration the presentation duration
      */
-    public void setPresentationDuration(long paramLong) {
-        setLongAt(0, paramLong);
+    public void setPresentationDuration(long duration) {
+        setLongAt(0, duration);
     }
 
     /**
      * Sets the start time of the entry's stream.
      * @param startTime stream start time
      */
-    public void setStreamStartTime(long paramLong) {
-        setLongAt(8, paramLong);
+    public void setStreamStartTime(long startTime) {
+        setLongAt(8, startTime);
     }
 
     /**

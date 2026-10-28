@@ -37,8 +37,8 @@ public final class ThreeDDescription extends SampleDescription {
      * This constructor makes an empty SoundDescription object.
      * @param format the format of the ThreeD data that the description describes.
      */
-    public ThreeDDescription(int paramInt) throws QTException {
-        super(kThreeDDescriptionSize, true, paramInt);
+    public ThreeDDescription(int format) throws QTException {
+        super(kThreeDDescriptionSize, true, format);
     }
 
     private ThreeDDescription(int paramInt, Object paramObject) {

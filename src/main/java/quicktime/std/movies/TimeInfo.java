@@ -21,9 +21,9 @@ public class TimeInfo {
      * @param time Specifies the a time value.
      * @param duration Specifies a duration value.
      */
-    public TimeInfo(int paramInt1, int paramInt2) {
-        this.time = paramInt1;
-        this.duration = paramInt2;
+    public TimeInfo(int time, int duration) {
+        this.time = time;
+        this.duration = duration;
     }
 
     /**

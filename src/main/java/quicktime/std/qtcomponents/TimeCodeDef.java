@@ -87,8 +87,8 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
      * Sets the flags - dropFrame, etc
      * @param flags new flag value
      */
-    public void setFlags(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(0, flags);
     }
 
     /**
@@ -105,8 +105,8 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
      * TimeScale / frameDuration = actual number of frames per second
      * @param timeScale the new time scale value
      */
-    public void setTimeScale(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setTimeScale(int timeScale) {
+        setIntAt(4, timeScale);
     }
 
     /**
@@ -123,8 +123,8 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
      * TimeScale / frameDuration = actual number of frames per second
      * @param frameDuration new frame duration value
      */
-    public void setFrameDuration(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setFrameDuration(int frameDuration) {
+        setIntAt(8, frameDuration);
     }
 
     /**
@@ -143,8 +143,8 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
      * TimeScale / frameDuration = actual number of frames per second
      * @param fps the specified, integral, frames per second
      */
-    public void setFramesPerSecond(int paramInt) {
-        this.bytes[12] = ((byte) paramInt);
+    public void setFramesPerSecond(int fps) {
+        this.bytes[12] = ((byte) fps);
     }
 
     /**

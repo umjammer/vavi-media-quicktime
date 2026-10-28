@@ -61,8 +61,8 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      * @return a PixMap object
      * @see quicktime.std.qd.QDGraphics#getPixMap
      */
-    public static PixMap fromQDGraphics(QDGraphics paramQDGraphics) {
-        return new PixMap(GetGWorldPixMap(QTObject.ID(paramQDGraphics)), paramQDGraphics, paramQDGraphics.isOffscreen());
+    public static PixMap fromQDGraphics(QDGraphics g) {
+        return new PixMap(GetGWorldPixMap(QTObject.ID(g)), g, g.isOffscreen());
     }
 
     /**
@@ -70,8 +70,8 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      * @param g the GDevice object
      * @return a PixMap object
      */
-    public static PixMap fromGDevice(GDevice paramGDevice) {
-        return new PixMap(getIntFromHandle(QTObject.ID(paramGDevice), 22), paramGDevice, !paramGDevice.testAttribute(13));
+    public static PixMap fromGDevice(GDevice g) {
+        return new PixMap(getIntFromHandle(QTObject.ID(g), 22), g, !g.testAttribute(13));
     }
 
     /**
@@ -82,10 +82,10 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.Track#getMatte()
      */
-    public static PixMap fromTrack(Track paramTrack) throws StdQTException {
+    public static PixMap fromTrack(Track t) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = GetTrackMatte(QTObject.ID(paramTrack));
+            i = GetTrackMatte(QTObject.ID(t));
             StdQTException.checkError(GetMoviesError());
         }
         if (i == 0)

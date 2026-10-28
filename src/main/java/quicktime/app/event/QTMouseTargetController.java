@@ -73,8 +73,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * Creates a QTMouseTargetController.
      * @param wholespace the initial setting of the wholespace variable.
      */
-    public QTMouseTargetController(boolean paramBoolean) {
-        this.wholespace = paramBoolean;
+    public QTMouseTargetController(boolean wholespace) {
+        this.wholespace = wholespace;
         this.memberVec = new Vector();
     }
 
@@ -101,8 +101,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @see setTargetSpace()
      */
     @Override
-    public synchronized void addedToSpace(Space paramSpace) {
-        super.addedToSpace(paramSpace);
+    public synchronized void addedToSpace(Space s) {
+        super.addedToSpace(s);
         for (int i = 0; i < this.memberVec.size(); i++) {
             Object localObject = this.memberVec.elementAt(i);
             if (this.compSpace != null) {
@@ -172,8 +172,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * Sets the new value of the wholespace flag.
      * @param flag if true all objects in the controller's space are potentially controllable.
      */
-    public void setWholespace(boolean paramBoolean) {
-        this.wholespace = paramBoolean;
+    public void setWholespace(boolean flag) {
+        this.wholespace = flag;
     }
 
     /**
@@ -301,8 +301,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @return a boolean
      */
     @Override
-    public boolean hasMember(Object member) {
-        return member == null ? false : this.memberVec.contains(member);
+    public boolean hasMember(Object object) {
+        return object == null ? false : this.memberVec.contains(object);
     }
 
     /**
@@ -314,10 +314,10 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param l a new QTMouseListener
      */
     @Override
-    public void addQTMouseListener(QTMouseListener paramQTMouseListener) {
-        if ((paramQTMouseListener instanceof MouseTargetListener))
-            addMouseTargetListener((MouseTargetListener) paramQTMouseListener);
-        super.addQTMouseListener(paramQTMouseListener);
+    public void addQTMouseListener(QTMouseListener l) {
+        if ((l instanceof MouseTargetListener))
+            addMouseTargetListener((MouseTargetListener) l);
+        super.addQTMouseListener(l);
     }
 
     /**
@@ -327,10 +327,10 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param l a new QTMouseListener
      */
     @Override
-    public void removeQTMouseListener(QTMouseListener paramQTMouseListener) {
-        if ((paramQTMouseListener instanceof MouseTargetListener))
-            removeMouseTargetListener((MouseTargetListener) paramQTMouseListener);
-        super.removeQTMouseListener(paramQTMouseListener);
+    public void removeQTMouseListener(QTMouseListener l) {
+        if ((l instanceof MouseTargetListener))
+            removeMouseTargetListener((MouseTargetListener) l);
+        super.removeQTMouseListener(l);
     }
 
     void addMouseTargetListener(MouseTargetListener paramMouseTargetListener) {
@@ -345,11 +345,11 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         updateMouseTargetListener(bool);
     }
 
-    void updateMouseTargetListener(boolean paramBoolean) {
+    void updateMouseTargetListener(boolean flag) {
         if (this.handler != null) {
-            if ((paramBoolean) && (!hasMouseTargetListener())) {
+            if ((flag) && (!hasMouseTargetListener())) {
                 this.handler.removeMouseTargetListener();
-            } else if ((hasMouseTargetListener()) && (!paramBoolean))
+            } else if ((hasMouseTargetListener()) && (!flag))
                 this.handler.addMouseTargetListener();
         }
     }
@@ -371,12 +371,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the translated mouse event
      */
     @Override
-    protected void doMousePressed(QTMouseEvent paramQTMouseEvent) {
-        this.mousePressTarget = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
+    protected void doMousePressed(QTMouseEvent e) {
+        this.mousePressTarget = getHitTarget(e.getX(), e.getY());
         if (this.mousePressTarget != null) {
             this.inPressDraggingTarget = true;
-            paramQTMouseEvent.setTarget(this.mousePressTarget);
-            this.mouseButtonListener.mousePressed(paramQTMouseEvent);
+            e.setTarget(this.mousePressTarget);
+            this.mouseButtonListener.mousePressed(e);
             this.currentMouseMovedTarget = null;
         }
     }
@@ -389,12 +389,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the QTMouseEvent of this type.
      */
     @Override
-    public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
-            if (translateAndIsWithin(paramQTMouseEvent)) {
-                doMouseReleased(paramQTMouseEvent, true);
+    public void mouseReleased(QTMouseEvent e) {
+        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(e.getModifiers()))) {
+            if (translateAndIsWithin(e)) {
+                doMouseReleased(e, true);
             } else if (this.mousePressTarget != null) {
-                doMouseReleased(paramQTMouseEvent, false);
+                doMouseReleased(e, false);
             }
         }
     }
@@ -439,12 +439,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the translated mouse event
      */
     @Override
-    protected void doMouseClicked(QTMouseEvent paramQTMouseEvent) {
-        Object localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
+    protected void doMouseClicked(QTMouseEvent e) {
+        Object localObject = getHitTarget(e.getX(), e.getY());
         if (localObject != null) {
-            paramQTMouseEvent.setTarget(localObject);
-            this.mouseButtonListener.mouseClicked(paramQTMouseEvent);
-            paramQTMouseEvent.setTarget(null);
+            e.setTarget(localObject);
+            this.mouseButtonListener.mouseClicked(e);
+            e.setTarget(null);
         }
     }
 
@@ -459,11 +459,11 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the QTMouseEvent of this type.
      */
     @Override
-    public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
+    public void mouseDragged(QTMouseEvent e) {
         if (this.mousePressTarget == null) {
             return;
         }
-        super.mouseDragged(paramQTMouseEvent);
+        super.mouseDragged(e);
     }
 
     /**
@@ -474,15 +474,15 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the translated mouse event
      */
     @Override
-    protected void doMouseDragged(QTMouseEvent paramQTMouseEvent) {
-        paramQTMouseEvent.setTarget(this.mousePressTarget);
-        if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
+    protected void doMouseDragged(QTMouseEvent e) {
+        e.setTarget(this.mousePressTarget);
+        if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(e.getModifiers()))) {
             if (this.drawSpace != null) {
                 try {
                     QTDrawable localQTDrawable = (QTDrawable) this.mousePressTarget;
                     Region localRegion1 = null;
                     localRegion1 = new Region(localQTDrawable.getDisplayBounds());
-                    this.mouseMoveListener.mouseDragged(paramQTMouseEvent);
+                    this.mouseMoveListener.mouseDragged(e);
                     Region localRegion2 = new Region(localQTDrawable.getDisplayBounds());
                     Region localRegion3 = localRegion1.union(localRegion2).diff(localRegion2);
                     if (!localRegion3.empty())
@@ -491,26 +491,26 @@ public class QTMouseTargetController extends QTMouseController implements Collec
                     QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mouseDragged");
                 }
             } else {
-                this.mouseMoveListener.mouseDragged(paramQTMouseEvent);
+                this.mouseMoveListener.mouseDragged(e);
             }
         }
-        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
-            Object localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
+        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(e.getModifiers()))) {
+            Object localObject = getHitTarget(e.getX(), e.getY());
             if ((localObject == null) && (this.inPressDraggingTarget)) {
-                paramQTMouseEvent.setEventType(508);
-                doMouseTargetExit(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(506);
+                e.setEventType(508);
+                doMouseTargetExit(e);
+                e.setEventType(506);
                 this.inPressDraggingTarget = false;
             } else if (localObject != null) {
                 if ((this.inPressDraggingTarget) && (localObject != this.mousePressTarget)) {
-                    paramQTMouseEvent.setEventType(508);
-                    doMouseTargetExit(paramQTMouseEvent);
-                    paramQTMouseEvent.setEventType(506);
+                    e.setEventType(508);
+                    doMouseTargetExit(e);
+                    e.setEventType(506);
                     this.inPressDraggingTarget = false;
                 } else if ((!this.inPressDraggingTarget) && (localObject == this.mousePressTarget)) {
-                    paramQTMouseEvent.setEventType(507);
-                    doMouseTargetEnter(paramQTMouseEvent);
-                    paramQTMouseEvent.setEventType(506);
+                    e.setEventType(507);
+                    doMouseTargetEnter(e);
+                    e.setEventType(506);
                     this.inPressDraggingTarget = true;
                 }
             }
@@ -524,8 +524,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMouseTargetExit(QTMouseEvent paramQTMouseEvent) {
-        this.mouseTargetListener.mouseTargetExited(paramQTMouseEvent);
+    protected void doMouseTargetExit(QTMouseEvent e) {
+        this.mouseTargetListener.mouseTargetExited(e);
     }
 
     /**
@@ -535,8 +535,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMouseTargetEnter(QTMouseEvent paramQTMouseEvent) {
-        this.mouseTargetListener.mouseTargetEntered(paramQTMouseEvent);
+    protected void doMouseTargetEnter(QTMouseEvent e) {
+        this.mouseTargetListener.mouseTargetEntered(e);
     }
 
     /**
@@ -549,43 +549,43 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      *  it isn't.
      */
     @Override
-    protected void doMouseMoved(QTMouseEvent paramQTMouseEvent, boolean paramBoolean) {
-        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
-            if ((!paramBoolean) && (this.currentMouseMovedTarget != null)) {
-                paramQTMouseEvent.setEventType(508);
-                paramQTMouseEvent.setTarget(this.currentMouseMovedTarget);
-                doMouseTargetExit(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(503);
+    protected void doMouseMoved(QTMouseEvent e, boolean isWithinItsSpace) {
+        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(e.getModifiers()))) {
+            if ((!isWithinItsSpace) && (this.currentMouseMovedTarget != null)) {
+                e.setEventType(508);
+                e.setTarget(this.currentMouseMovedTarget);
+                doMouseTargetExit(e);
+                e.setEventType(503);
                 this.currentMouseMovedTarget = null;
                 return;
             }
-            Object localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
+            Object localObject = getHitTarget(e.getX(), e.getY());
             if (localObject == null) {
                 if (this.currentMouseMovedTarget != null) {
-                    paramQTMouseEvent.setEventType(508);
-                    paramQTMouseEvent.setTarget(this.currentMouseMovedTarget);
-                    doMouseTargetExit(paramQTMouseEvent);
-                    paramQTMouseEvent.setEventType(503);
+                    e.setEventType(508);
+                    e.setTarget(this.currentMouseMovedTarget);
+                    doMouseTargetExit(e);
+                    e.setEventType(503);
                     this.currentMouseMovedTarget = null;
                 }
             } else if (this.currentMouseMovedTarget == null) {
-                paramQTMouseEvent.setEventType(507);
-                paramQTMouseEvent.setTarget(localObject);
-                doMouseTargetEnter(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(503);
+                e.setEventType(507);
+                e.setTarget(localObject);
+                doMouseTargetEnter(e);
+                e.setEventType(503);
                 this.currentMouseMovedTarget = localObject;
             } else if (this.currentMouseMovedTarget != localObject) {
-                paramQTMouseEvent.setEventType(508);
-                paramQTMouseEvent.setTarget(this.currentMouseMovedTarget);
-                doMouseTargetExit(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(507);
-                paramQTMouseEvent.setTarget(localObject);
-                doMouseTargetEnter(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(503);
+                e.setEventType(508);
+                e.setTarget(this.currentMouseMovedTarget);
+                doMouseTargetExit(e);
+                e.setEventType(507);
+                e.setTarget(localObject);
+                doMouseTargetEnter(e);
+                e.setEventType(503);
                 this.currentMouseMovedTarget = localObject;
-            } else if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
-                paramQTMouseEvent.setTarget(this.currentMouseMovedTarget);
-                this.mouseMoveListener.mouseMoved(paramQTMouseEvent);
+            } else if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(e.getModifiers()))) {
+                e.setTarget(this.currentMouseMovedTarget);
+                this.mouseMoveListener.mouseMoved(e);
             }
         }
     }
@@ -598,10 +598,10 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the QTMouseEvent of this type.
      */
     @Override
-    public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
-        super.mouseEntered(paramQTMouseEvent);
-        if (((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) ? 1 : 0) == 0) {
-            doMouseEnter_Target(paramQTMouseEvent);
+    public void mouseEntered(QTMouseEvent e) {
+        super.mouseEntered(e);
+        if (((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(e.getModifiers())) ? 1 : 0) == 0) {
+            doMouseEnter_Target(e);
         }
     }
 
@@ -613,9 +613,9 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the translated mouse event
      */
     @Override
-    protected void doMouseEntered(QTMouseEvent paramQTMouseEvent) {
-        super.doMouseEntered(paramQTMouseEvent);
-        doMouseEnter_Target(paramQTMouseEvent);
+    protected void doMouseEntered(QTMouseEvent e) {
+        super.doMouseEntered(e);
+        doMouseEnter_Target(e);
     }
 
     /**
@@ -626,11 +626,11 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the QTMouseEvent of this type.
      */
     @Override
-    public void mouseExited(QTMouseEvent paramQTMouseEvent) {
-        if (((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) ? 1 : 0) == 0) {
-            doMouseExit_Target(paramQTMouseEvent);
+    public void mouseExited(QTMouseEvent e) {
+        if (((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(e.getModifiers())) ? 1 : 0) == 0) {
+            doMouseExit_Target(e);
         }
-        super.mouseExited(paramQTMouseEvent);
+        super.mouseExited(e);
     }
 
     /**
@@ -641,9 +641,9 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param e the translated mouse event
      */
     @Override
-    protected void doMouseExited(QTMouseEvent paramQTMouseEvent) {
-        doMouseExit_Target(paramQTMouseEvent);
-        super.doMouseExited(paramQTMouseEvent);
+    protected void doMouseExited(QTMouseEvent e) {
+        doMouseExit_Target(e);
+        super.doMouseExited(e);
     }
 
     private void doMouseEnter_Target(QTMouseEvent paramQTMouseEvent) {
@@ -701,12 +701,12 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @param x the x location in the local coordinates of the space.
      * @param y the y location in the local coordinates of the space.
      */
-    protected Object getHitTarget(int paramInt1, int paramInt2) {
+    protected Object getHitTarget(int x, int y) {
         if (this.displaySpace != null) {
             try {
                 QDRect localQDRect = this.displaySpace.getDisplayBounds();
-                int i = paramInt1 + localQDRect.getX();
-                int j = paramInt2 + localQDRect.getY();
+                int i = x + localQDRect.getX();
+                int j = y + localQDRect.getY();
                 if (!localQDRect.inside(i, j)) {
                     return null;
                 }

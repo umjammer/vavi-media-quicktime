@@ -38,7 +38,7 @@ public interface MusicPart extends ExtendedAudioSpec {
      *  to the user to aid in the selection process.
      * @throws quicktime.QTException
      */
-    void selectInstrument(String paramString) throws QTException;
+    void selectInstrument(String prompt) throws QTException;
 
     /**
      * @deprecated

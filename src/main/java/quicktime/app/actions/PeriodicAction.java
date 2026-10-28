@@ -53,9 +53,9 @@ public abstract class PeriodicAction implements Ticklish {
      * @param scale the amount with which a second is divided into at a rate of one
      * @param period the number of scale ticks that elapse between invocations of the action.
      */
-    protected PeriodicAction(int paramInt1, int paramInt2) {
-        setScale(paramInt1);
-        setPeriod(paramInt2);
+    protected PeriodicAction(int scale, int period) {
+        setScale(scale);
+        setPeriod(period);
     }
 
     /**
@@ -103,19 +103,19 @@ public abstract class PeriodicAction implements Ticklish {
      * @throws quicktime.QTException
      */
     @Override
-    public boolean tickle(float paramFloat, int paramInt) throws QTException {
+    public boolean tickle(float effectiveRate, int currentTime) throws QTException {
         if (this.period == 0) {
-            this.lastTime = paramInt;
-            doAction(paramFloat, paramInt);
+            this.lastTime = currentTime;
+            doAction(effectiveRate, currentTime);
             if ((this.actor != null) && (constraintReached()))
                 this.actor.trigger();
             return this.reschedule;
         }
-        int i = (int) (this.multiplier / paramFloat);
+        int i = (int) (this.multiplier / effectiveRate);
         int j = this.lastTime + i;
-        if (((i < 0) && (paramInt <= j) && ((this.triggerCondition | 0x2) != 0)) || ((i > 0) && (paramInt >= j) && ((this.triggerCondition | 0x1) != 0))) {
-            this.lastTime = paramInt;
-            doAction(paramFloat, paramInt);
+        if (((i < 0) && (currentTime <= j) && ((this.triggerCondition | 0x2) != 0)) || ((i > 0) && (currentTime >= j) && ((this.triggerCondition | 0x1) != 0))) {
+            this.lastTime = currentTime;
+            doAction(effectiveRate, currentTime);
             if ((this.actor != null) && (constraintReached())) {
                 this.actor.trigger();
             }
@@ -149,8 +149,8 @@ public abstract class PeriodicAction implements Ticklish {
      * is called whenever the PeriodicAction is tickled.
      * @param period the new period
      */
-    public void setPeriod(int paramInt) {
-        this.period = paramInt;
+    public void setPeriod(int period) {
+        this.period = period;
         doMultiplier();
     }
 
@@ -172,10 +172,10 @@ public abstract class PeriodicAction implements Ticklish {
      * must be greater than zero.
      * @param s the new scale or resolution of the action
      */
-    public void setScale(int paramInt) {
-        if (paramInt < 1)
-            paramInt = 1;
-        this.scale = paramInt;
+    public void setScale(int s) {
+        if (s < 1)
+            s = 1;
+        this.scale = s;
         doMultiplier();
     }
 
@@ -213,8 +213,8 @@ public abstract class PeriodicAction implements Ticklish {
      * quicktime.std.StdConstants.triggerTimeBwd,
      * quicktime.std.StdConstants.triggerTimeEither
      */
-    public void setTriggerCondition(int paramInt) {
-        this.triggerCondition = paramInt;
+    public void setTriggerCondition(int cond) {
+        this.triggerCondition = cond;
     }
 
     /**
@@ -234,14 +234,14 @@ public abstract class PeriodicAction implements Ticklish {
      * @param obj the object to test
      * @return a boolean
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ((paramObject instanceof PeriodicAction localPeriodicAction)) {
+        if ((obj instanceof PeriodicAction localPeriodicAction)) {
             if ((this.reschedule != localPeriodicAction.reschedule) || (this.lastTime != localPeriodicAction.lastTime) || (this.scale != localPeriodicAction.scale) || (this.period != localPeriodicAction.period) || (this.triggerCondition != localPeriodicAction.triggerCondition)) {
                 return false;
             }
-            if (this != paramObject)
+            if (this != obj)
                 return false;
             return true;
         }
@@ -262,7 +262,7 @@ public abstract class PeriodicAction implements Ticklish {
      * @param t the time in Ticklish.kScale that the action has been triggered
      * @throws quicktime.QTException
      */
-    protected abstract void doAction(float paramFloat, int paramInt) throws QTException;
+    protected abstract void doAction(float er, int t) throws QTException;
 
     /**
      * @deprecated

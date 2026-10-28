@@ -54,8 +54,8 @@ public final class InstSampleDesc extends QTByteObject {
      * or 'raw ', for unsigned data.
      * @param dataFormat -
      */
-    public void setDataFormat(int paramInt) {
-        setIntAt(0, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setDataFormat(int dataFormat) {
+        setIntAt(0, EndianOrder.flipNativeToBigEndian32(dataFormat));
     }
 
     /**
@@ -70,8 +70,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The number of channels of data present in the sample.
      * @param numChannels -
      */
-    public void setNumChannels(int paramInt) {
-        setShortAt(4, EndianOrder.flipNativeToBigEndian16((short) paramInt));
+    public void setNumChannels(int numChannels) {
+        setShortAt(4, EndianOrder.flipNativeToBigEndian16((short) numChannels));
     }
 
     /**
@@ -86,8 +86,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The size of the sampleÑ 8-bit or 16-bit.
      * @param sampleSize -
      */
-    public void setSampleSize(int paramInt) {
-        setShortAt(6, EndianOrder.flipNativeToBigEndian16((short) paramInt));
+    public void setSampleSize(int sampleSize) {
+        setShortAt(6, EndianOrder.flipNativeToBigEndian16((short) sampleSize));
     }
 
     /**
@@ -102,8 +102,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The rate at which to play the sample.
      * @param sampleRate -
      */
-    public void setSampleRate(float paramFloat) {
-        setSampleRateRaw(QTUtils.X2Fix(paramFloat));
+    public void setSampleRate(float sampleRate) {
+        setSampleRateRaw(QTUtils.X2Fix(sampleRate));
     }
 
     /**
@@ -118,8 +118,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The rate at which to play the sample in unsigned 16.16 format
      * @param sampleRate -
      */
-    public void setSampleRateRaw(int paramInt) {
-        setIntAt(8, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setSampleRateRaw(int sampleRate) {
+        setIntAt(8, EndianOrder.flipNativeToBigEndian32(sampleRate));
     }
 
     /**
@@ -134,8 +134,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The ID number of a sample data atom that contains the sample audio data.
      * @param sampleDataID -
      */
-    public void setSampleDataID(int paramInt) {
-        setShortAt(12, EndianOrder.flipNativeToBigEndian16((short) paramInt));
+    public void setSampleDataID(int sampleDataID) {
+        setShortAt(12, EndianOrder.flipNativeToBigEndian16((short) sampleDataID));
     }
 
     /**
@@ -150,8 +150,8 @@ public final class InstSampleDesc extends QTByteObject {
      * Set to zero - this is the default.
      * @param offset -
      */
-    public void setOffset(int paramInt) {
-        setIntAt(14, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setOffset(int offset) {
+        setIntAt(14, EndianOrder.flipNativeToBigEndian32(offset));
     }
 
     /**
@@ -166,8 +166,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The number of data samples in the sound.
      * @param numSamples -
      */
-    public void setNumSamples(int paramInt) {
-        setIntAt(18, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setNumSamples(int numSamples) {
+        setIntAt(18, EndianOrder.flipNativeToBigEndian32(numSamples));
     }
 
     /**
@@ -182,8 +182,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The type of loop.
      * @param loopType -
      */
-    public void setLoopType(int paramInt) {
-        setIntAt(22, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setLoopType(int loopType) {
+        setIntAt(22, EndianOrder.flipNativeToBigEndian32(loopType));
     }
 
     /**
@@ -202,8 +202,8 @@ public final class InstSampleDesc extends QTByteObject {
      * the number of data samples from the start of the sound.
      * @param loopStart -
      */
-    public void setLoopStart(int paramInt) {
-        setIntAt(26, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setLoopStart(int loopStart) {
+        setIntAt(26, EndianOrder.flipNativeToBigEndian32(loopStart));
     }
 
     /**
@@ -222,8 +222,8 @@ public final class InstSampleDesc extends QTByteObject {
      * the number of data samples from the start of the sound.
      * @param loopEnd -
      */
-    public void setLoopEnd(int paramInt) {
-        setIntAt(30, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setLoopEnd(int loopEnd) {
+        setIntAt(30, EndianOrder.flipNativeToBigEndian32(loopEnd));
     }
 
     /**
@@ -238,8 +238,8 @@ public final class InstSampleDesc extends QTByteObject {
      * The number of the MIDI note produced if the sample is played at the rate specified in sampleRate.
      * @param pitchNormal -
      */
-    public void setPitchNormal(int paramInt) {
-        setIntAt(34, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setPitchNormal(int pitchNormal) {
+        setIntAt(34, EndianOrder.flipNativeToBigEndian32(pitchNormal));
     }
 
     /**
@@ -258,8 +258,8 @@ public final class InstSampleDesc extends QTByteObject {
      * use for different pitch ranges.
      * @param pitchLow -
      */
-    public void setPitchLow(int paramInt) {
-        setIntAt(38, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setPitchLow(int pitchLow) {
+        setIntAt(38, EndianOrder.flipNativeToBigEndian32(pitchLow));
     }
 
     /**
@@ -278,8 +278,8 @@ public final class InstSampleDesc extends QTByteObject {
      * use for different pitch ranges.
      * @param pitchHigh -
      */
-    public void setPitchHigh(int paramInt) {
-        setIntAt(42, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setPitchHigh(int pitchHigh) {
+        setIntAt(42, EndianOrder.flipNativeToBigEndian32(pitchHigh));
     }
 
     /**

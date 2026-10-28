@@ -59,12 +59,12 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @return the pixels
      * @see quicktime.qd.PixMap#getPixelData()
      */
-    public static RawEncodedImage fromPixMap(PixMap paramPixMap) {
-        int i = getShortFromHandle(QTObject.ID(paramPixMap), 10) - getShortFromHandle(QTObject.ID(paramPixMap), 6);
-        int j = getShortFromHandle(QTObject.ID(paramPixMap), 4) & 0x3FFF;
+    public static RawEncodedImage fromPixMap(PixMap pm) {
+        int i = getShortFromHandle(QTObject.ID(pm), 10) - getShortFromHandle(QTObject.ID(pm), 6);
+        int j = getShortFromHandle(QTObject.ID(pm), 4) & 0x3FFF;
         int k = i * j;
-        int m = paramPixMap.isOffscreen() ? GetPixBaseAddr(QTObject.ID(paramPixMap)) : getIntFromHandle(QTObject.ID(paramPixMap), 0);
-        return new RawEncodedImage(m, k, paramPixMap, j);
+        int m = pm.isOffscreen() ? GetPixBaseAddr(QTObject.ID(pm)) : getIntFromHandle(QTObject.ID(pm), 0);
+        return new RawEncodedImage(m, k, pm, j);
     }
 
     /**
@@ -95,9 +95,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * the ints.
      * @param ints the int array containing the image data
      */
-    public RawEncodedImage(int[] paramArrayOfInt) throws QTException {
-        this(paramArrayOfInt.length * 4, false);
-        copyFromArray(0, paramArrayOfInt, 0, paramArrayOfInt.length);
+    public RawEncodedImage(int[] ints) throws QTException {
+        this(ints.length * 4, false);
+        copyFromArray(0, ints, 0, ints.length);
     }
 
     /**
@@ -106,9 +106,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param ints the int array containing the image data
      * @param rowBytes the row bytes of the image data
      */
-    public RawEncodedImage(int[] paramArrayOfInt, int paramInt) throws QTException {
-        this(paramArrayOfInt.length * 4, false, paramInt);
-        copyFromArray(0, paramArrayOfInt, 0, paramArrayOfInt.length);
+    public RawEncodedImage(int[] ints, int rowBytes) throws QTException {
+        this(ints.length * 4, false, rowBytes);
+        copyFromArray(0, ints, 0, ints.length);
     }
 
     /**
@@ -116,8 +116,8 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param size the size of the pointer to create.
      * @param clear clear the pointer upon creation.
      */
-    public RawEncodedImage(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, paramBoolean);
+    public RawEncodedImage(int size, boolean clear) throws QTException {
+        super(size, clear);
         this.rowBytes = -1;
     }
 
@@ -127,9 +127,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param clear clear the pointer upon creation.
      * @param rowBytes the rowbytes of the encoded image.
      */
-    public RawEncodedImage(int paramInt1, boolean paramBoolean, int paramInt2) throws QTException {
-        super(paramInt1, paramBoolean);
-        this.rowBytes = paramInt2;
+    public RawEncodedImage(int size, boolean clear, int rowBytes) throws QTException {
+        super(size, clear);
+        this.rowBytes = rowBytes;
     }
 
     private RawEncodedImage(int paramInt1, int paramInt2, Object paramObject, int paramInt3) {
@@ -151,10 +151,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @return a byte
      */
     @Override
-    public byte getByte(int paramInt) {
-        if ((paramInt > getSize()) || (paramInt < 0))
+    public byte getByte(int offset) {
+        if ((offset > getSize()) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        return getByteAt(paramInt);
+        return getByteAt(offset);
     }
 
     /**
@@ -162,10 +162,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param offset The offset is specified in bytes into the encoded image object.
      * @param value the new value.
      */
-    public void setByte(int paramInt, byte paramByte) {
-        if ((paramInt > getSize()) || (paramInt < 0))
+    public void setByte(int offset, byte value) {
+        if ((offset > getSize()) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        setByteAt(paramInt, paramByte);
+        setByteAt(offset, value);
     }
 
     /**
@@ -174,10 +174,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @return a short
      */
     @Override
-    public short getShort(int paramInt) {
-        if ((paramInt > getSize() - 1) || (paramInt < 0))
+    public short getShort(int offset) {
+        if ((offset > getSize() - 1) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        return getShortAt(paramInt);
+        return getShortAt(offset);
     }
 
     /**
@@ -185,10 +185,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param offset The offset is specified in bytes into the encoded image object.
      * @param value the new value.
      */
-    public void setShort(int paramInt, short paramShort) {
-        if ((paramInt > getSize()) || (paramInt < 0))
+    public void setShort(int offset, short value) {
+        if ((offset > getSize()) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        setShortAt(paramInt, paramShort);
+        setShortAt(offset, value);
     }
 
     /**
@@ -197,10 +197,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @return an int
      */
     @Override
-    public int getInt(int paramInt) {
-        if ((paramInt > getSize() - 3) || (paramInt < 0))
+    public int getInt(int offset) {
+        if ((offset > getSize() - 3) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        return getIntAt(paramInt);
+        return getIntAt(offset);
     }
 
     /**
@@ -208,10 +208,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param offset The offset is specified in bytes into the encoded image object.
      * @param value the new value.
      */
-    public void setInt(int paramInt1, int paramInt2) {
-        if ((paramInt1 > getSize()) || (paramInt1 < 0))
+    public void setInt(int offset, int value) {
+        if ((offset > getSize()) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        setIntAt(paramInt1, paramInt2);
+        setIntAt(offset, value);
     }
 
     /**
@@ -219,10 +219,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @param offset The offset is specified in bytes into the encoded image object.
      * @param value an array of ints
      */
-    public void setInts(int paramInt, int[] paramArrayOfInt) {
-        if ((paramInt + paramArrayOfInt.length * 4 > getSize()) || (paramInt < 0))
+    public void setInts(int offset, int[] value) {
+        if ((offset + value.length * 4 > getSize()) || (offset < 0))
             throw new ArrayIndexOutOfBoundsException();
-        copyArrayToPointer(paramArrayOfInt, 0, _ID(), paramInt, paramArrayOfInt.length * 4);
+        copyArrayToPointer(value, 0, _ID(), offset, value.length * 4);
     }
 
     /**
@@ -240,8 +240,8 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * Sets the row bytes of the encoded image data
      * @param rowBytes the rowBytes of the encoded image data
      */
-    public void setRowBytes(int paramInt) {
-        this.rowBytes = paramInt;
+    public void setRowBytes(int rowBytes) {
+        this.rowBytes = rowBytes;
     }
 
     private static int GetPixBaseAddr(int paramInt) {

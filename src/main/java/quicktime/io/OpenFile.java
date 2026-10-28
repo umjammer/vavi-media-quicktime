@@ -16,8 +16,8 @@ public final class OpenFile extends OpenedFile {
      * @return the opened file.
      * @throws quicktime.QTException
      */
-    public static OpenFile asRead(QTFile paramQTFile) throws QTException {
-        return new OpenFile(paramQTFile, 256);
+    public static OpenFile asRead(QTFile f) throws QTException {
+        return new OpenFile(f, 256);
     }
 
     /**
@@ -27,8 +27,8 @@ public final class OpenFile extends OpenedFile {
      * @return the opened file.
      * @throws quicktime.QTException
      */
-    public static OpenFile asWrite(QTFile paramQTFile) throws QTException {
-        return new OpenFile(paramQTFile, 512);
+    public static OpenFile asWrite(QTFile f) throws QTException {
+        return new OpenFile(f, 512);
     }
 
     private OpenFile(QTFile paramQTFile, int paramInt) throws QTException {

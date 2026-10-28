@@ -17,5 +17,5 @@ public interface QTMouseListener extends EventListener {
      * @return true if a particular listener is interested in receiving the mouse event(s)
      *  it is interested in with the given modifier state, or false if otherwise.
      */
-    boolean matchModifierFilter(int paramInt);
+    boolean matchModifierFilter(int mods);
 }

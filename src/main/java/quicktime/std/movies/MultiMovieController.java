@@ -39,8 +39,8 @@ public final class MultiMovieController extends MovieController implements Quick
      * @see "QuickTime::NewMovieController()"
      * @param itsMovie Identifies the movie to be associated with the movie controller.
      */
-    public MultiMovieController(Movie paramMovie) throws QTException {
-        this(paramMovie, 0);
+    public MultiMovieController(Movie itsMovie) throws QTException {
+        this(itsMovie, 0);
     }
 
     /**
@@ -51,8 +51,8 @@ public final class MultiMovieController extends MovieController implements Quick
      * @param itsMovie Identifies the movie to be associated with the movie controller.
      * @param someFlags Contains flags that control the operation.
      */
-    public MultiMovieController(Movie paramMovie, int paramInt) throws QTException {
-        super(paramMovie, paramInt);
+    public MultiMovieController(Movie itsMovie, int someFlags) throws QTException {
+        super(itsMovie, someFlags);
     }
 
     /**
@@ -65,8 +65,8 @@ public final class MultiMovieController extends MovieController implements Quick
      * @param location Specifies the upper-left corner of the movie within the window
      *                  specified by the w parameter.
      */
-    public MultiMovieController(int paramInt, Movie paramMovie, QDGraphics paramQDGraphics, QDPoint paramQDPoint) throws QTException {
-        super(paramInt, paramMovie, paramQDGraphics, paramQDPoint);
+    public MultiMovieController(int subType, Movie theMovie, QDGraphics window, QDPoint location) throws QTException {
+        super(subType, theMovie, window, location);
     }
 
     /**
@@ -76,9 +76,9 @@ public final class MultiMovieController extends MovieController implements Quick
      * @param changedMovie Specifies the changed movie.
      * @throws quicktime.std.StdQTException
      */
-    public final void movieChanged(Movie paramMovie) throws StdQTException {
+    public final void movieChanged(Movie changedMovie) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(MCMovieChanged(_ID(), QTObject.ID(paramMovie)));
+            StdQTException.checkError(MCMovieChanged(_ID(), QTObject.ID(changedMovie)));
         }
     }
 
@@ -124,8 +124,8 @@ public final class MultiMovieController extends MovieController implements Quick
      *                     specified by the movieWindow parameter.
      * @throws quicktime.std.StdQTException
      */
-    public final void addMovie(Movie paramMovie, QDGraphics paramQDGraphics, QDPoint paramQDPoint) throws StdQTException {
-        setMovie(paramMovie, paramQDGraphics, paramQDPoint);
+    public final void addMovie(Movie aMovie, QDGraphics movieWindow, QDPoint location) throws StdQTException {
+        setMovie(aMovie, movieWindow, location);
     }
 
     /**
@@ -135,10 +135,10 @@ public final class MultiMovieController extends MovieController implements Quick
      * @return a Movie object.
      * @throws quicktime.QTException
      */
-    public final Movie getIndMovie(int paramInt) throws QTException {
+    public final Movie getIndMovie(int index) throws QTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCGetIndMovie(_ID(), (short) paramInt);
+            i = MCGetIndMovie(_ID(), (short) index);
         }
         StdQTException.checkError(GetMoviesError());
         return new Movie(i, this);
@@ -164,13 +164,13 @@ public final class MultiMovieController extends MovieController implements Quick
      * @param movie Specifies the movie to be removed.
      * @throws quicktime.std.StdQTException
      */
-    public final void removeAMovie(Movie paramMovie) throws StdQTException {
+    public final void removeAMovie(Movie movie) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(MCRemoveAMovie(_ID(), QTObject.ID(paramMovie)));
+            StdQTException.checkError(MCRemoveAMovie(_ID(), QTObject.ID(movie)));
         }
         Vector<Movie> x = mcHashtable.get(_ID());
-        if ((paramMovie != null) && (x != null)) {
-            x.removeElement(paramMovie);
+        if ((movie != null) && (x != null)) {
+            x.removeElement(movie);
         }
     }
 

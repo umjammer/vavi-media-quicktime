@@ -76,8 +76,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::OpenADefaultComponent"
      * @param subType The movie import component sub type
      */
-    public MovieImporter(int paramInt) throws QTException {
-        super(1700885536, paramInt);
+    public MovieImporter(int subType) throws QTException {
+        super(1700885536, subType);
     }
 
     /**
@@ -86,8 +86,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::OpenAComponent"
      * @param comp the component identifier to open
      */
-    public MovieImporter(ComponentIdentifier paramComponentIdentifier) throws QTException {
-        super(paramComponentIdentifier, 1700885536);
+    public MovieImporter(ComponentIdentifier comp) throws QTException {
+        super(comp, 1700885536);
     }
 
     /**
@@ -137,10 +137,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return The results pertinent to the operation.
      * @throws quicktime.QTException
      */
-    public MovieImportInfo fromFile(QTFile paramQTFile, Movie paramMovie, Track paramTrack, int paramInt1, int paramInt2) throws QTException {
+    public MovieImportInfo fromFile(QTFile fileIn, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
         if (this.progUPP != null)
-            this.progUPP.theCurrentMov = paramMovie;
-        return Track.fromMovieImporterFile(this, paramQTFile, paramMovie, paramTrack, paramInt1, paramInt2);
+            this.progUPP.theCurrentMov = theMovie;
+        return Track.fromMovieImporterFile(this, fileIn, theMovie, targetTrack, atTime, inFlags);
     }
 
     /**
@@ -154,10 +154,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return The results pertinent to the operation.
      * @throws quicktime.QTException
      */
-    public MovieImportInfo fromHandle(QTHandleRef paramQTHandleRef, Movie paramMovie, Track paramTrack, int paramInt1, int paramInt2) throws QTException {
+    public MovieImportInfo fromHandle(QTHandleRef dataRef, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
         if (this.progUPP != null)
-            this.progUPP.theCurrentMov = paramMovie;
-        return Track.fromMovieImporterHandle(this, paramQTHandleRef, paramMovie, paramTrack, paramInt1, paramInt2);
+            this.progUPP.theCurrentMov = theMovie;
+        return Track.fromMovieImporterHandle(this, dataRef, theMovie, targetTrack, atTime, inFlags);
     }
 
     /**
@@ -172,10 +172,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return The results returned from the query operation.
      * @throws quicktime.QTException
      */
-    public MovieImportInfo fromDataRef(DataRef paramDataRef, Movie paramMovie, Track paramTrack, int paramInt1, int paramInt2) throws QTException {
+    public MovieImportInfo fromDataRef(DataRef dataRef, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
         if (this.progUPP != null)
-            this.progUPP.theCurrentMov = paramMovie;
-        return Track.fromMovieImporterDataRef(this, paramDataRef, paramMovie, paramTrack, paramInt1, paramInt2);
+            this.progUPP.theCurrentMov = theMovie;
+        return Track.fromMovieImporterDataRef(this, dataRef, theMovie, targetTrack, atTime, inFlags);
     }
 
     /**
@@ -185,8 +185,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param scale Specifies the time base scale.
      * @throws quicktime.std.StdQTException
      */
-    public void setSampleDuration(int paramInt1, int paramInt2) throws StdQTException {
-        int i = MovieImportSetSampleDuration(_ID(), paramInt1, paramInt2);
+    public void setSampleDuration(int duration, int scale) throws StdQTException {
+        int i = MovieImportSetSampleDuration(_ID(), duration, scale);
         StdQTException.checkError(i);
     }
 
@@ -197,8 +197,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param mediaType Specifies the media type.
      * @throws quicktime.std.StdQTException
      */
-    public void setSampleDescription(SampleDescription paramSampleDescription, int paramInt) throws StdQTException {
-        int i = MovieImportSetSampleDescription(_ID(), QTObject.ID(paramSampleDescription), paramInt);
+    public void setSampleDescription(SampleDescription desc, int mediaType) throws StdQTException {
+        int i = MovieImportSetSampleDescription(_ID(), QTObject.ID(desc), mediaType);
         StdQTException.checkError(i);
     }
 
@@ -208,8 +208,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param alias the media file that is to receive the imported movie data.
      * @throws quicktime.QTException
      */
-    public void setMediaFile(AliasHandle paramAliasHandle) throws QTException {
-        int i = MovieImportSetMediaFile(_ID(), QTObject.ID(paramAliasHandle));
+    public void setMediaFile(AliasHandle alias) throws QTException {
+        int i = MovieImportSetMediaFile(_ID(), QTObject.ID(alias));
         StdQTException.checkError(i);
     }
 
@@ -220,8 +220,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param height Specifies the height.
      * @throws quicktime.std.StdQTException
      */
-    public void setDimensions(float paramFloat1, float paramFloat2) throws StdQTException {
-        int i = MovieImportSetDimensions(_ID(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2));
+    public void setDimensions(float width, float height) throws StdQTException {
+        int i = MovieImportSetDimensions(_ID(), QTUtils.X2Fix(width), QTUtils.X2Fix(height));
         StdQTException.checkError(i);
     }
 
@@ -231,8 +231,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param chunkSize Specifies the size.
      * @throws quicktime.std.StdQTException
      */
-    public void setChunkSize(int paramInt) throws StdQTException {
-        int i = MovieImportSetChunkSize(_ID(), paramInt);
+    public void setChunkSize(int chunkSize) throws StdQTException {
+        int i = MovieImportSetChunkSize(_ID(), chunkSize);
         StdQTException.checkError(i);
     }
 
@@ -244,15 +244,15 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param mp the MovieProgress object, or null for no progress object
      * @throws quicktime.std.StdQTException
      */
-    public void setProgressProc(MovieProgress paramMovieProgress) throws StdQTException {
-        if (paramMovieProgress == null) {
+    public void setProgressProc(MovieProgress mp) throws StdQTException {
+        if (mp == null) {
             removeProgressProc();
             return;
         }
         if (this.progUPP != null) {
             removeProgressProc();
         }
-        this.progUPP = new QTCompDispatcher(paramMovieProgress);
+        this.progUPP = new QTCompDispatcher(mp);
         int i = MovieImportSetProgressProc(_ID(), this.progUPP.ID(), 0);
         StdQTException.checkError(i);
     }
@@ -277,8 +277,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param handleType Specifies the handle type.
      * @throws quicktime.std.StdQTException
      */
-    public void setAuxiliaryData(QTHandleRef paramQTHandleRef, int paramInt) throws StdQTException {
-        int i = MovieImportSetAuxiliaryData(_ID(), QTObject.ID(paramQTHandleRef), paramInt);
+    public void setAuxiliaryData(QTHandleRef data, int handleType) throws StdQTException {
+        int i = MovieImportSetAuxiliaryData(_ID(), QTObject.ID(data), handleType);
         StdQTException.checkError(i);
     }
 
@@ -288,8 +288,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param fromScrap Specifies weather to use the scrap manager.
      * @throws quicktime.std.StdQTException
      */
-    public void setFromScrap(boolean paramBoolean) throws StdQTException {
-        byte b = (byte) (paramBoolean ? 1 : 0);
+    public void setFromScrap(boolean fromScrap) throws StdQTException {
+        byte b = (byte) (fromScrap ? 1 : 0);
         int i = MovieImportSetFromScrap(_ID(), b);
         StdQTException.checkError(i);
     }
@@ -303,9 +303,9 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return True, if the user canceled the operation, false otherwise.
      * @throws quicktime.QTException
      */
-    public boolean doUserDialog(QTFile paramQTFile) throws QTException {
+    public boolean doUserDialog(QTFile fileIn) throws QTException {
         byte[] arrayOfByte1 = new byte[1];
-        byte[] arrayOfByte2 = paramQTFile.getFSSpec(true, 256);
+        byte[] arrayOfByte2 = fileIn.getFSSpec(true, 256);
         int i = _ID();
         int j = 0;
         if (QTSession.isCurrentOS(4)) {
@@ -324,7 +324,7 @@ public final class MovieImporter extends Component implements QuickTimeLib {
             return arrayOfByte1[0] != 0;
         }
         synchronized (QTNative.globalsLock) {
-            j = MovieImportDoUserDialog(_ID(), paramQTFile.getFSSpec(true, 256), 0, arrayOfByte1);
+            j = MovieImportDoUserDialog(_ID(), fileIn.getFSSpec(true, 256), 0, arrayOfByte1);
             StdQTException.checkError(j);
         }
         return arrayOfByte1[0] != 0;
@@ -337,10 +337,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return True, if the user canceled the operation, false otherwise.
      * @throws quicktime.QTException
      */
-    public boolean doUserDialog(QTHandleRef paramQTHandleRef) throws QTException {
+    public boolean doUserDialog(QTHandleRef theData) throws QTException {
         byte[] arrayOfByte = new byte[1];
         synchronized (QTNative.globalsLock) {
-            int i = MovieImportDoUserDialog(_ID(), null, QTObject.ID(paramQTHandleRef), arrayOfByte);
+            int i = MovieImportDoUserDialog(_ID(), null, QTObject.ID(theData), arrayOfByte);
             StdQTException.checkError(i);
         }
         return arrayOfByte[0] != 0;
@@ -352,8 +352,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param duration Specifies the time base duration.
      * @throws quicktime.std.StdQTException
      */
-    public void setDuration(int paramInt) throws StdQTException {
-        int i = MovieImportSetDuration(_ID(), paramInt);
+    public void setDuration(int duration) throws StdQTException {
+        int i = MovieImportSetDuration(_ID(), duration);
         StdQTException.checkError(i);
     }
 
@@ -377,9 +377,9 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return True, if the handle data or file from stream is valid, otherwise false.
      * @throws quicktime.QTException
      */
-    public boolean validate(QTFile paramQTFile) throws QTException {
+    public boolean validate(QTFile fileIn) throws QTException {
         byte[] arrayOfByte = new byte[1];
-        int i = MovieImportValidate(_ID(), paramQTFile.getFSSpec(true, 256), 0, arrayOfByte);
+        int i = MovieImportValidate(_ID(), fileIn.getFSSpec(true, 256), 0, arrayOfByte);
         StdQTException.checkError(i);
         return arrayOfByte[0] != 0;
     }
@@ -391,9 +391,9 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @return True, if the handle data or file from stream is valid, otherwise false.
      * @throws quicktime.QTException
      */
-    public boolean validate(QTHandleRef paramQTHandleRef) throws QTException {
+    public boolean validate(QTHandleRef theData) throws QTException {
         byte[] arrayOfByte = new byte[1];
-        int i = MovieImportValidate(_ID(), null, QTObject.ID(paramQTHandleRef), arrayOfByte);
+        int i = MovieImportValidate(_ID(), null, QTObject.ID(theData), arrayOfByte);
         StdQTException.checkError(i);
         return arrayOfByte[0] != 0;
     }
@@ -452,8 +452,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param limit how many bytes from the offset to import.
      * @throws quicktime.std.StdQTException
      */
-    public void setOffsetAndLimit(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(MovieImportSetOffsetAndLimit(_ID(), paramInt1, paramInt2));
+    public void setOffsetAndLimit(int offset, int limit) throws StdQTException {
+        StdQTException.checkError(MovieImportSetOffsetAndLimit(_ID(), offset, limit));
     }
 
     /**
@@ -481,8 +481,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param newMovieFlags Flags that control the characteristics of the new imported movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setNewMovieFlags(int paramInt) throws StdQTException {
-        int i = MovieImportSetNewMovieFlags(_ID(), paramInt);
+    public void setNewMovieFlags(int newMovieFlags) throws StdQTException {
+        int i = MovieImportSetNewMovieFlags(_ID(), newMovieFlags);
         StdQTException.checkError(i);
     }
 

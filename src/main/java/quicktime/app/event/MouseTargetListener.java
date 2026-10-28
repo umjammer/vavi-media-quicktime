@@ -15,7 +15,7 @@ public interface MouseTargetListener extends QTMouseListener {
      * The target of the QTMouseEvent is set for events of this kind.
      * @param e the QTMouseEvent that triggered this event
      */
-    void mouseTargetEntered(QTMouseEvent paramQTMouseEvent);
+    void mouseTargetEntered(QTMouseEvent e);
 
     /**
      * @deprecated
@@ -24,5 +24,5 @@ public interface MouseTargetListener extends QTMouseListener {
      * The target of the QTMouseEvent is set for events of this kind.
      * @param e the QTMouseEvent that triggered this event
      */
-    void mouseTargetExited(QTMouseEvent paramQTMouseEvent);
+    void mouseTargetExited(QTMouseEvent e);
 }

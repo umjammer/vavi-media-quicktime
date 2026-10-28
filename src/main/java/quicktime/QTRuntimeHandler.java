@@ -35,6 +35,6 @@ public interface QTRuntimeHandler {
      *  problem will occur for the user. For example there is no memory left to complete an operation and
      *  the application cannot free up any memory resources it is holding.
      */
-    void exceptionOccurred(QTRuntimeException paramQTRuntimeException, Object paramObject, String paramString, boolean paramBoolean);
+    void exceptionOccurred(QTRuntimeException e, Object eGenerator, String methodNameIfKnown, boolean unrecoverableFlag);
 }
 

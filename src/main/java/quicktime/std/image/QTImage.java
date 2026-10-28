@@ -56,9 +56,9 @@ public class QTImage implements QuickTimeLib {
      * @param id the image description
      * @param im the image data
      */
-    public QTImage(ImageDescription paramImageDescription, EncodedImage paramEncodedImage) {
-        this.data = paramEncodedImage;
-        this.desc = paramImageDescription;
+    public QTImage(ImageDescription id, EncodedImage im) {
+        this.data = im;
+        this.desc = id;
     }
 
     /**
@@ -92,22 +92,22 @@ public class QTImage implements QuickTimeLib {
      *          image description with the compressed image data.
      * @throws quicktime.QTException
      */
-    public static ImageDescription compress(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, EncodedImage paramEncodedImage) throws QTException {
+    public static ImageDescription compress(QDGraphics src, QDRect srcRect, int quality, int cType, EncodedImage data) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
-        if (paramQDGraphics == null) {
+        if (src == null) {
             throw new StdQTException(-50);
         }
         int i = -50;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = CompressImage(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), paramInt1, paramInt2, QTObject.ID(localImageDescription), ((ByteEncodedImage) paramEncodedImage).getBytes());
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = CompressImage(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), paramInt1, paramInt2, QTObject.ID(localImageDescription), ((IntEncodedImage) paramEncodedImage).getInts());
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = CompressImage(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), paramInt1, paramInt2, QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage));
+            SetGWorld(QTObject.ID(src), 0);
+            if ((data instanceof ByteEncodedImage)) {
+                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(localImageDescription), ((ByteEncodedImage) data).getBytes());
+            } else if ((data instanceof IntEncodedImage)) {
+                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(localImageDescription), ((IntEncodedImage) data).getInts());
+            } else if ((data instanceof RawEncodedImage)) {
+                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) data));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
@@ -137,22 +137,22 @@ public class QTImage implements QuickTimeLib {
      *          image description with the compressed image data.
      * @throws quicktime.QTException
      */
-    public static ImageDescription fCompress(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, int paramInt3, CodecComponent paramCodecComponent, ColorTable paramColorTable, int paramInt4, EncodedImage paramEncodedImage) throws QTException {
+    public static ImageDescription fCompress(QDGraphics src, QDRect srcRect, int colorDepth, int quality, int cType, CodecComponent c, ColorTable clut, int flags, EncodedImage data) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
-        if (paramQDGraphics == null) {
+        if (src == null) {
             throw new StdQTException(-50);
         }
         int i = -50;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = FCompressImage(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), (short) paramInt1, paramInt2, paramInt3, QTObject.ID(paramCodecComponent), QTObject.ID(paramColorTable), (short) paramInt4, 0, 0, 0, QTObject.ID(localImageDescription), ((ByteEncodedImage) paramEncodedImage).getBytes());
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = FCompressImage(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), (short) paramInt1, paramInt2, paramInt3, QTObject.ID(paramCodecComponent), QTObject.ID(paramColorTable), (short) paramInt4, 0, 0, 0, QTObject.ID(localImageDescription), ((IntEncodedImage) paramEncodedImage).getInts());
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = FCompressImage(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), (short) paramInt1, paramInt2, paramInt3, QTObject.ID(paramCodecComponent), QTObject.ID(paramColorTable), (short) paramInt4, 0, 0, 0, QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage));
+            SetGWorld(QTObject.ID(src), 0);
+            if ((data instanceof ByteEncodedImage)) {
+                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(localImageDescription), ((ByteEncodedImage) data).getBytes());
+            } else if ((data instanceof IntEncodedImage)) {
+                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(localImageDescription), ((IntEncodedImage) data).getInts());
+            } else if ((data instanceof RawEncodedImage)) {
+                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) data));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
@@ -177,32 +177,32 @@ public class QTImage implements QuickTimeLib {
      *          image data.
      * @throws quicktime.QTException
      */
-    public static ImageDescription convert(ImageDescription paramImageDescription, EncodedImage paramEncodedImage1, int paramInt1, ColorTable paramColorTable, int paramInt2, int paramInt3, int paramInt4, CodecComponent paramCodecComponent, EncodedImage paramEncodedImage2) throws QTException {
+    public static ImageDescription convert(ImageDescription srcDD, EncodedImage srcData, int colorDepth, ColorTable clut, int accuracy, int quality, int cType, CodecComponent codec, EncodedImage outData) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
         int i = -50;
-        if ((paramEncodedImage1 instanceof ByteEncodedImage)) {
-            if ((paramEncodedImage2 instanceof ByteEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage1).getBytes(), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), ((ByteEncodedImage) paramEncodedImage2).getBytes());
-            } else if ((paramEncodedImage2 instanceof IntEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage1).getBytes(), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), ((IntEncodedImage) paramEncodedImage2).getInts());
-            } else if ((paramEncodedImage2 instanceof RawEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage1).getBytes(), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage2));
+        if ((srcData instanceof ByteEncodedImage)) {
+            if ((outData instanceof ByteEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((ByteEncodedImage) outData).getBytes());
+            } else if ((outData instanceof IntEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((IntEncodedImage) outData).getInts());
+            } else if ((outData instanceof RawEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) outData));
             }
-        } else if ((paramEncodedImage1 instanceof IntEncodedImage)) {
-            if ((paramEncodedImage2 instanceof ByteEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage1).getInts(), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), ((ByteEncodedImage) paramEncodedImage2).getBytes());
-            } else if ((paramEncodedImage2 instanceof IntEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage1).getInts(), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), ((IntEncodedImage) paramEncodedImage2).getInts());
-            } else if ((paramEncodedImage2 instanceof RawEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage1).getInts(), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage2));
+        } else if ((srcData instanceof IntEncodedImage)) {
+            if ((outData instanceof ByteEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((ByteEncodedImage) outData).getBytes());
+            } else if ((outData instanceof IntEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((IntEncodedImage) outData).getInts());
+            } else if ((outData instanceof RawEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) outData));
             }
-        } else if ((paramEncodedImage1 instanceof RawEncodedImage)) {
-            if ((paramEncodedImage2 instanceof ByteEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage1), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), ((ByteEncodedImage) paramEncodedImage2).getBytes());
-            } else if ((paramEncodedImage2 instanceof IntEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage1), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), ((IntEncodedImage) paramEncodedImage2).getInts());
-            } else if ((paramEncodedImage2 instanceof RawEncodedImage)) {
-                i = ConvertImage(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage1), (short) paramInt1, QTObject.ID(paramColorTable), paramInt2, paramInt3, paramInt4, QTObject.ID(paramCodecComponent), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage2));
+        } else if ((srcData instanceof RawEncodedImage)) {
+            if ((outData instanceof ByteEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((ByteEncodedImage) outData).getBytes());
+            } else if ((outData instanceof IntEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((IntEncodedImage) outData).getInts());
+            } else if ((outData instanceof RawEncodedImage)) {
+                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) outData));
             }
         }
         StdQTException.checkError(i);
@@ -222,31 +222,31 @@ public class QTImage implements QuickTimeLib {
      * @param trimRect defines the desired dimensions of the trimmed image
      * @throws quicktime.std.StdQTException
      */
-    public static void trim(ImageDescription paramImageDescription, EncodedImage paramEncodedImage1, EncodedImage paramEncodedImage2, QDRect paramQDRect) throws StdQTException {
+    public static void trim(ImageDescription desc, EncodedImage inData, EncodedImage outData, QDRect trimRect) throws StdQTException {
         int i = -50;
-        if ((paramEncodedImage1 instanceof ByteEncodedImage)) {
-            if ((paramEncodedImage2 instanceof ByteEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage1).getBytes(), 0, 0, ((ByteEncodedImage) paramEncodedImage2).getBytes(), 0, 0, paramQDRect.getRect(), 0);
-            } else if ((paramEncodedImage2 instanceof IntEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage1).getBytes(), 0, 0, ((IntEncodedImage) paramEncodedImage2).getInts(), 0, 0, paramQDRect.getRect(), 0);
-            } else if ((paramEncodedImage2 instanceof RawEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage1).getBytes(), 0, 0, QTObject.ID((RawEncodedImage) paramEncodedImage2), 0, 0, paramQDRect.getRect(), 0);
+        if ((inData instanceof ByteEncodedImage)) {
+            if ((outData instanceof ByteEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), ((ByteEncodedImage) inData).getBytes(), 0, 0, ((ByteEncodedImage) outData).getBytes(), 0, 0, trimRect.getRect(), 0);
+            } else if ((outData instanceof IntEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), ((ByteEncodedImage) inData).getBytes(), 0, 0, ((IntEncodedImage) outData).getInts(), 0, 0, trimRect.getRect(), 0);
+            } else if ((outData instanceof RawEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), ((ByteEncodedImage) inData).getBytes(), 0, 0, QTObject.ID((RawEncodedImage) outData), 0, 0, trimRect.getRect(), 0);
             }
-        } else if ((paramEncodedImage1 instanceof IntEncodedImage)) {
-            if ((paramEncodedImage2 instanceof ByteEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage1).getInts(), 0, 0, ((ByteEncodedImage) paramEncodedImage2).getBytes(), 0, 0, paramQDRect.getBytes(), 0);
-            } else if ((paramEncodedImage2 instanceof IntEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage1).getInts(), 0, 0, ((IntEncodedImage) paramEncodedImage2).getInts(), 0, 0, paramQDRect.getBytes(), 0);
-            } else if ((paramEncodedImage2 instanceof RawEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage1).getInts(), 0, 0, QTObject.ID((RawEncodedImage) paramEncodedImage2), 0, 0, paramQDRect.getBytes(), 0);
+        } else if ((inData instanceof IntEncodedImage)) {
+            if ((outData instanceof ByteEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), ((IntEncodedImage) inData).getInts(), 0, 0, ((ByteEncodedImage) outData).getBytes(), 0, 0, trimRect.getBytes(), 0);
+            } else if ((outData instanceof IntEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), ((IntEncodedImage) inData).getInts(), 0, 0, ((IntEncodedImage) outData).getInts(), 0, 0, trimRect.getBytes(), 0);
+            } else if ((outData instanceof RawEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), ((IntEncodedImage) inData).getInts(), 0, 0, QTObject.ID((RawEncodedImage) outData), 0, 0, trimRect.getBytes(), 0);
             }
-        } else if ((paramEncodedImage1 instanceof RawEncodedImage)) {
-            if ((paramEncodedImage2 instanceof ByteEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage1), 0, 0, ((ByteEncodedImage) paramEncodedImage2).getBytes(), 0, 0, paramQDRect.getBytes(), 0);
-            } else if ((paramEncodedImage2 instanceof IntEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage1), 0, 0, ((IntEncodedImage) paramEncodedImage2).getInts(), 0, 0, paramQDRect.getBytes(), 0);
-            } else if ((paramEncodedImage2 instanceof RawEncodedImage)) {
-                i = TrimImage(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage1), 0, 0, QTObject.ID((RawEncodedImage) paramEncodedImage2), 0, 0, paramQDRect.getBytes(), 0);
+        } else if ((inData instanceof RawEncodedImage)) {
+            if ((outData instanceof ByteEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), QTObject.ID((RawEncodedImage) inData), 0, 0, ((ByteEncodedImage) outData).getBytes(), 0, 0, trimRect.getBytes(), 0);
+            } else if ((outData instanceof IntEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), QTObject.ID((RawEncodedImage) inData), 0, 0, ((IntEncodedImage) outData).getInts(), 0, 0, trimRect.getBytes(), 0);
+            } else if ((outData instanceof RawEncodedImage)) {
+                i = TrimImage(QTObject.ID(desc), QTObject.ID((RawEncodedImage) inData), 0, 0, QTObject.ID((RawEncodedImage) outData), 0, 0, trimRect.getBytes(), 0);
             }
         }
         StdQTException.checkError(i);
@@ -263,8 +263,8 @@ public class QTImage implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
      */
-    public static void decompress(EncodedImage paramEncodedImage, ImageDescription paramImageDescription, QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt) throws StdQTException, QDException {
-        decompress(paramEncodedImage, paramImageDescription, paramQDGraphics, null, paramQDRect, paramInt, null);
+    public static void decompress(EncodedImage data, ImageDescription desc, QDGraphics dst, QDRect dstRect, int mode) throws StdQTException, QDException {
+        decompress(data, desc, dst, null, dstRect, mode, null);
     }
 
     /**
@@ -280,21 +280,21 @@ public class QTImage implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
      */
-    public static void decompress(EncodedImage paramEncodedImage, ImageDescription paramImageDescription, QDGraphics paramQDGraphics, QDRect paramQDRect1, QDRect paramQDRect2, int paramInt, Region paramRegion) throws StdQTException, QDException {
-        if (paramQDGraphics == null) {
+    public static void decompress(EncodedImage data, ImageDescription desc, QDGraphics dst, QDRect srcRect, QDRect dstRect, int mode, Region mask) throws StdQTException, QDException {
+        if (dst == null) {
             throw new StdQTException(-50);
         }
         int i = -50;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = DecompressImage(((ByteEncodedImage) paramEncodedImage).getBytes(), QTObject.ID(paramImageDescription), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect1 == null ? null : paramQDRect1.getRect(), paramQDRect2.getRect(), (short) paramInt, QTObject.ID(paramRegion));
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = DecompressImage(((IntEncodedImage) paramEncodedImage).getInts(), QTObject.ID(paramImageDescription), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect1 == null ? null : paramQDRect1.getRect(), paramQDRect2.getRect(), (short) paramInt, QTObject.ID(paramRegion));
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = DecompressImage(QTObject.ID((RawEncodedImage) paramEncodedImage), QTObject.ID(paramImageDescription), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect1 == null ? null : paramQDRect1.getRect(), paramQDRect2.getRect(), (short) paramInt, QTObject.ID(paramRegion));
+            SetGWorld(QTObject.ID(dst), 0);
+            if ((data instanceof ByteEncodedImage)) {
+                i = DecompressImage(((ByteEncodedImage) data).getBytes(), QTObject.ID(desc), QTObject.ID(dst.getPixMap()), srcRect == null ? null : srcRect.getRect(), dstRect.getRect(), (short) mode, QTObject.ID(mask));
+            } else if ((data instanceof IntEncodedImage)) {
+                i = DecompressImage(((IntEncodedImage) data).getInts(), QTObject.ID(desc), QTObject.ID(dst.getPixMap()), srcRect == null ? null : srcRect.getRect(), dstRect.getRect(), (short) mode, QTObject.ID(mask));
+            } else if ((data instanceof RawEncodedImage)) {
+                i = DecompressImage(QTObject.ID((RawEncodedImage) data), QTObject.ID(desc), QTObject.ID(dst.getPixMap()), srcRect == null ? null : srcRect.getRect(), dstRect.getRect(), (short) mode, QTObject.ID(mask));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
@@ -319,16 +319,16 @@ public class QTImage implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
      */
-    public static void fDecompress(EncodedImage paramEncodedImage, ImageDescription paramImageDescription, QDGraphics paramQDGraphics, QDRect paramQDRect1, Matrix paramMatrix, int paramInt1, Region paramRegion, PixMap paramPixMap, QDRect paramQDRect2, int paramInt2, CodecComponent paramCodecComponent) throws StdQTException, QDException {
-        if (paramQDGraphics == null) {
+    public static void fDecompress(EncodedImage data, ImageDescription desc, QDGraphics dst, QDRect srcRect, Matrix matrix, int mode, Region mask, PixMap matte, QDRect matteRect, int accuracy, CodecComponent codec) throws StdQTException, QDException {
+        if (dst == null) {
             throw new StdQTException(-50);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = FDecompressImage(QTObject.ID((RawEncodedImage) paramEncodedImage), QTObject.ID(paramImageDescription), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect1 == null ? null : paramQDRect1.getRect(), paramMatrix == null ? null : paramMatrix.getBytes(), (short) paramInt1, QTObject.ID(paramRegion), QTObject.ID(paramPixMap), paramQDRect2 == null ? null : paramQDRect2.getRect(), paramInt2, QTObject.ID(paramCodecComponent), 0, 0, 0);
+            SetGWorld(QTObject.ID(dst), 0);
+            i = FDecompressImage(QTObject.ID((RawEncodedImage) data), QTObject.ID(desc), QTObject.ID(dst.getPixMap()), srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) mode, QTObject.ID(mask), QTObject.ID(matte), matteRect == null ? null : matteRect.getRect(), accuracy, QTObject.ID(codec), 0, 0, 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -350,17 +350,17 @@ public class QTImage implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
      */
-    public static int getMaxCompressionSize(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, int paramInt3, CodecComponent paramCodecComponent) throws StdQTException, QDException {
+    public static int getMaxCompressionSize(QDGraphics src, QDRect srcRect, int colorDepth, int quality, int cType, CodecComponent c) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];
-        if (paramQDGraphics == null) {
+        if (src == null) {
             throw new StdQTException(-50);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = GetMaxCompressionSize(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect == null ? null : paramQDRect.getRect(), (short) paramInt1, paramInt2, paramInt3, QTObject.ID(paramCodecComponent), arrayOfInt);
+            SetGWorld(QTObject.ID(src), 0);
+            i = GetMaxCompressionSize(QTObject.ID(src.getPixMap()), srcRect == null ? null : srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), arrayOfInt);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -376,15 +376,15 @@ public class QTImage implements QuickTimeLib {
      * @return the size of the compressed image in bytes
      * @throws quicktime.std.StdQTException
      */
-    public static int getCompressedSize(ImageDescription paramImageDescription, EncodedImage paramEncodedImage) throws StdQTException {
+    public static int getCompressedSize(ImageDescription desc, EncodedImage data) throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = -50;
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            i = GetCompressedImageSize(QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage).getBytes(), 0, 0, arrayOfInt);
-        } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-            i = GetCompressedImageSize(QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage).getInts(), 0, 0, arrayOfInt);
-        } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-            i = GetCompressedImageSize(QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage), 0, 0, arrayOfInt);
+        if ((data instanceof ByteEncodedImage)) {
+            i = GetCompressedImageSize(QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), 0, 0, arrayOfInt);
+        } else if ((data instanceof IntEncodedImage)) {
+            i = GetCompressedImageSize(QTObject.ID(desc), ((IntEncodedImage) data).getInts(), 0, 0, arrayOfInt);
+        } else if ((data instanceof RawEncodedImage)) {
+            i = GetCompressedImageSize(QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), 0, 0, arrayOfInt);
         }
         StdQTException.checkError(i);
         return arrayOfInt[0];
@@ -405,18 +405,18 @@ public class QTImage implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
      */
-    public static int getCompressionTime(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, CodecComponent paramCodecComponent, int paramInt3, int paramInt4) throws StdQTException, QDException {
+    public static int getCompressionTime(QDGraphics src, QDRect srcRect, int colorDepth, int cType, CodecComponent c, int spatialQuality, int temporalQuality) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];
         int i = 0;
         int j = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            if (paramQDGraphics != null) {
-                SetGWorld(QTObject.ID(paramQDGraphics), 0);
-                i = QTObject.ID(paramQDGraphics.getPixMap());
+            if (src != null) {
+                SetGWorld(QTObject.ID(src), 0);
+                i = QTObject.ID(src.getPixMap());
             }
-            j = GetCompressionTime(i, paramQDRect == null ? null : paramQDRect.getRect(), (short) paramInt1, paramInt2, QTObject.ID(paramCodecComponent), paramInt3, paramInt4, arrayOfInt);
+            j = GetCompressionTime(i, srcRect == null ? null : srcRect.getRect(), (short) colorDepth, cType, QTObject.ID(c), spatialQuality, temporalQuality, arrayOfInt);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -438,22 +438,22 @@ public class QTImage implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
      */
-    public static float getSimilarity(QDGraphics paramQDGraphics, QDRect paramQDRect, ImageDescription paramImageDescription, EncodedImage paramEncodedImage) throws StdQTException, QDException {
+    public static float getSimilarity(QDGraphics src, QDRect srcRect, ImageDescription desc, EncodedImage data) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];
-        if (paramQDGraphics == null) {
+        if (src == null) {
             throw new StdQTException(-50);
         }
         int i = -50;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = GetSimilarity(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getRect(), QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage).getBytes(), arrayOfInt);
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = GetSimilarity(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getBytes(), QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage).getInts(), arrayOfInt);
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = GetSimilarity(QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect.getBytes(), QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage), arrayOfInt);
+            SetGWorld(QTObject.ID(src), 0);
+            if ((data instanceof ByteEncodedImage)) {
+                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getRect(), QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), arrayOfInt);
+            } else if ((data instanceof IntEncodedImage)) {
+                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getBytes(), QTObject.ID(desc), ((IntEncodedImage) data).getInts(), arrayOfInt);
+            } else if ((data instanceof RawEncodedImage)) {
+                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getBytes(), QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), arrayOfInt);
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);

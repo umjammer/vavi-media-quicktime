@@ -56,10 +56,10 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * @param width the specified width dimension
      * @param height the specified height dimension
      */
-    public QDDimension(int paramInt1, int paramInt2) {
+    public QDDimension(int width, int height) {
         super(8);
-        setWidth(paramInt1);
-        setHeight(paramInt2);
+        setWidth(width);
+        setHeight(height);
     }
 
     /**
@@ -68,10 +68,10 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * @param width the specified width dimension
      * @param height the specified height dimension
      */
-    public QDDimension(float paramFloat1, float paramFloat2) {
+    public QDDimension(float width, float height) {
         super(8);
-        setWidth(paramFloat1);
-        setHeight(paramFloat2);
+        setWidth(width);
+        setHeight(height);
     }
 
     @Serial
@@ -131,32 +131,32 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * Set the width.
      * @param width the new width for this QDDimension object.
      */
-    public void setWidth(int paramInt) {
-        setFloatAt(0, paramInt);
+    public void setWidth(int width) {
+        setFloatAt(0, width);
     }
 
     /**
      * Set the width.
      * @param width the new width for this QDDimension object.
      */
-    public void setWidth(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setWidth(float width) {
+        setFloatAt(0, width);
     }
 
     /**
      * Set the height.
      * @param height the new height for this QDDimension object.
      */
-    public void setHeight(int paramInt) {
-        setFloatAt(4, paramInt);
+    public void setHeight(int height) {
+        setFloatAt(4, height);
     }
 
     /**
      * Set the height.
      * @param height the new height for this QDDimension object.
      */
-    public void setHeight(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setHeight(float height) {
+        setFloatAt(4, height);
     }
 
     /**

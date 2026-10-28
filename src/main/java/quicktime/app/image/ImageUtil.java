@@ -229,8 +229,8 @@ public final class ImageUtil {
      *  that defines the compression, bounds, etc. that is common to all of the image data objects
      * @throws quicktime.QTException
      */
-    public static ImageDataSequence createSequence(quicktime.std.movies.Track paramTrack) throws QTException {
-        Media localMedia = Media.getTrackMedia(paramTrack);
+    public static ImageDataSequence createSequence(quicktime.std.movies.Track imageTrack) throws QTException {
+        Media localMedia = Media.getTrackMedia(imageTrack);
         int i = localMedia.getSampleCount();
         int j = 0;
         ImageDataSequence localImageDataSequence = new ImageDataSequence((ImageDescription) localMedia.getSampleDescription(1));
@@ -265,8 +265,8 @@ public final class ImageUtil {
      * @see <A href="../../../quicktime/app/image/FileFilter.html">for a description of the format of the file name
      *  that this filter will deal with.</A>
      */
-    public static ImageDataSequence createSequence(File paramFile) throws IOException, QTException {
-        return createSequence(paramFile, new FileFilter());
+    public static ImageDataSequence createSequence(File matchFile) throws IOException, QTException {
+        return createSequence(matchFile, new FileFilter());
     }
 
     /**
@@ -287,23 +287,23 @@ public final class ImageUtil {
      * @see <A href="../../../quicktime/app/image/FileFilter.html">for a description of the format of the file name
      *  that this filter will deal with and the methods that can be overridden or extended.</A>
      */
-    public static ImageDataSequence createSequence(File paramFile, FileFilter paramFileFilter) throws IOException, QTException {
-        if (!paramFile.exists()) {
-            throw new java.io.FileNotFoundException(paramFile.getAbsolutePath());
+    public static ImageDataSequence createSequence(File matchFile, FileFilter ff) throws IOException, QTException {
+        if (!matchFile.exists()) {
+            throw new java.io.FileNotFoundException(matchFile.getAbsolutePath());
         }
-        String str1 = paramFile.getParent();
+        String str1 = matchFile.getParent();
         if (str1.charAt(str1.length() - 1) != File.separatorChar) {
             str1 = str1 + File.separatorChar;
         }
-        String str2 = paramFile.getName();
-        paramFileFilter.extractPrefixAndSuffix(str2);
+        String str2 = matchFile.getName();
+        ff.extractPrefixAndSuffix(str2);
         File localFile = new File(str1);
         if (!localFile.isDirectory()) {
             throw new IOException(str1);
         }
-        String[] arrayOfString = localFile.list(paramFileFilter);
-        if (paramFileFilter != null) {
-            arrayOfString = paramFileFilter.postProcess(arrayOfString);
+        String[] arrayOfString = localFile.list(ff);
+        if (ff != null) {
+            arrayOfString = ff.postProcess(arrayOfString);
         }
         ImageDataSequence localImageDataSequence = new ImageDataSequence();
         int i = 0;
@@ -318,7 +318,7 @@ public final class ImageUtil {
             i++;
         }
         if (localImageDataSequence == null)
-            throw new java.io.FileNotFoundException(paramFile.getAbsolutePath());
+            throw new java.io.FileNotFoundException(matchFile.getAbsolutePath());
         localImageDataSequence.getDescription().setFrameCount(i);
         return localImageDataSequence;
     }

@@ -56,9 +56,9 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
      * sample information to a soft-synth music component.
      * @param soundBankFile the file
      */
-    public SynthesizerConnections(QTFile paramQTFile) throws QTException {
+    public SynthesizerConnections(QTFile soundBankFile) throws QTException {
         this();
-        setSoundBankFile(paramQTFile);
+        setSoundBankFile(soundBankFile);
     }
 
     protected SynthesizerConnections(int paramInt) {
@@ -97,8 +97,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
      * @param soundBankFile the file
      * @throws quicktime.QTException
      */
-    public void setSoundBankFile(QTFile paramQTFile) throws QTException {
-        byte[] arrayOfByte = paramQTFile.getFSSpec(true, 256);
+    public void setSoundBankFile(QTFile soundBankFile) throws QTException {
+        byte[] arrayOfByte = soundBankFile.getFSSpec(true, 256);
         this.spec = new QTPointer(arrayOfByte);
         setIntAt(24, QTObject.ID(this.spec));
     }

@@ -28,8 +28,8 @@ public class TickleNode {
      * Create a TickleNode for the supplied Ticklish
      * @param action the Ticklish member
      */
-    protected TickleNode(Ticklish paramTicklish) {
-        this.action = paramTicklish;
+    protected TickleNode(Ticklish action) {
+        this.action = action;
     }
 
     boolean active = true;
@@ -71,8 +71,8 @@ public class TickleNode {
      * currently a member of a list.
      * @param flag a boolean
      */
-    public void setActive(boolean paramBoolean) {
-        this.active = paramBoolean;
+    public void setActive(boolean flag) {
+        this.active = flag;
     }
 
     /**

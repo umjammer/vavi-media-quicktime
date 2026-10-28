@@ -85,8 +85,8 @@ public class EndianDescriptor {
      * Create an EndianDescriptor class with the supplied format.
      * @param formatFlag specifies the mode of the EndianDescriptor object.
      */
-    public EndianDescriptor(int paramInt) {
-        this.flag = paramInt;
+    public EndianDescriptor(int formatFlag) {
+        this.flag = formatFlag;
     }
 
     /**
@@ -117,7 +117,7 @@ public class EndianDescriptor {
      *
      * @param spec the new spec to add to the EndianDescriptor's collection.
      */
-    public void addFlipSpec(EndianFlipSpec paramEndianFlipSpec) {
+    public void addFlipSpec(EndianFlipSpec spec) {
         if (this.flag != 0) {
             throw new QTRuntimeException("Can't specify endian flip with " + this.flag + " format flag");
         }
@@ -126,14 +126,14 @@ public class EndianDescriptor {
         }
         for (int i = 0; i < this.vec.size(); i++) {
             EndianFlipSpec localEndianFlipSpec = this.vec.elementAt(i);
-            if (paramEndianFlipSpec.offset == localEndianFlipSpec.offset)
+            if (spec.offset == localEndianFlipSpec.offset)
                 throw new QTRuntimeException("Each offset must be unique");
-            if (paramEndianFlipSpec.offset < localEndianFlipSpec.offset) {
-                this.vec.insertElementAt(paramEndianFlipSpec, i);
+            if (spec.offset < localEndianFlipSpec.offset) {
+                this.vec.insertElementAt(spec, i);
                 return;
             }
         }
-        this.vec.addElement(paramEndianFlipSpec);
+        this.vec.addElement(spec);
     }
 
     /**
@@ -152,14 +152,14 @@ public class EndianDescriptor {
      * @return the EndianFlipSpec with the specified offset value or null if no
      *  spec with that offset value
      */
-    public EndianFlipSpec getFlipSpec(int paramInt) {
+    public EndianFlipSpec getFlipSpec(int offset) {
         if (this.vec == null)
             return null;
         for (int i = 0; i < this.vec.size(); i++) {
             EndianFlipSpec localEndianFlipSpec = this.vec.elementAt(i);
-            if (paramInt == localEndianFlipSpec.offset)
+            if (offset == localEndianFlipSpec.offset)
                 return localEndianFlipSpec;
-            if (localEndianFlipSpec.offset > paramInt)
+            if (localEndianFlipSpec.offset > offset)
                 return null;
         }
         return null;

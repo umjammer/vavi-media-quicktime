@@ -62,8 +62,8 @@ public abstract class QTButton extends UIElement {
      * @param deactiveImage will be the deactiveImage of the UIElement
      * @param rolloverImage will be the releasedImage of the UIElement when the mouse is over the button
      */
-    protected QTButton(ImageSpec paramImageSpec1, ImageSpec paramImageSpec2, ImageSpec paramImageSpec3, ImageSpec paramImageSpec4) throws QTException {
-        this(paramImageSpec1, paramImageSpec2, paramImageSpec3, paramImageSpec4, new Matrix(), 1, null);
+    protected QTButton(ImageSpec releasedImage, ImageSpec pressedImage, ImageSpec deactiveImage, ImageSpec rolloverImage) throws QTException {
+        this(releasedImage, pressedImage, deactiveImage, rolloverImage, new Matrix(), 1, null);
     }
 
     /**
@@ -78,14 +78,14 @@ public abstract class QTButton extends UIElement {
      * @param layer the layer in which the UIElement will be presented
      * @param mode the GraphicsMode of the UIElement.
      */
-    protected QTButton(ImageSpec paramImageSpec1, ImageSpec paramImageSpec2, ImageSpec paramImageSpec3, ImageSpec paramImageSpec4, Matrix paramMatrix, int paramInt, GraphicsMode paramGraphicsMode) throws QTException {
-        super(paramImageSpec1, paramImageSpec3, paramMatrix, paramInt, paramGraphicsMode);
-        if (paramImageSpec2 == null) {
+    protected QTButton(ImageSpec releasedImage, ImageSpec pressedImage, ImageSpec deactiveImage, ImageSpec rolloverImage, Matrix matrix, int layer, GraphicsMode mode) throws QTException {
+        super(releasedImage, deactiveImage, matrix, layer, mode);
+        if (pressedImage == null) {
             throw new QTAppException("QTButton:released and pressed images must be specified");
         }
-        this.releasedImage = paramImageSpec1;
-        this.pressedImage = paramImageSpec2;
-        this.rolloverImage = paramImageSpec4;
+        this.releasedImage = releasedImage;
+        this.pressedImage = pressedImage;
+        this.rolloverImage = rolloverImage;
     }
 
     /**
@@ -129,11 +129,11 @@ public abstract class QTButton extends UIElement {
      * @param image the new released image
      * @throws quicktime.QTException
      */
-    public void setReleasedImage(ImageSpec paramImageSpec) throws QTException {
-        if (paramImageSpec == null) {
+    public void setReleasedImage(ImageSpec image) throws QTException {
+        if (image == null) {
             throw new QTAppException("QTButton:released image cannot be null");
         }
-        this.releasedImage = paramImageSpec;
+        this.releasedImage = image;
         setImageOnRelease();
     }
 
@@ -153,8 +153,8 @@ public abstract class QTButton extends UIElement {
      * @param image the new rollover image
      * @throws quicktime.QTException
      */
-    public void setRolloverImage(ImageSpec paramImageSpec) throws QTException {
-        this.rolloverImage = paramImageSpec;
+    public void setRolloverImage(ImageSpec image) throws QTException {
+        this.rolloverImage = image;
         if ((!this.pressedFlag) && (!this.outOfBounds) && (this.rolloverImage != null)) {
             setCurrentImage(this.rolloverImage);
         }
@@ -176,11 +176,11 @@ public abstract class QTButton extends UIElement {
      * @param image the new pressed image
      * @throws quicktime.QTException
      */
-    public void setPressedImage(ImageSpec paramImageSpec) throws QTException {
-        if (paramImageSpec == null) {
+    public void setPressedImage(ImageSpec image) throws QTException {
+        if (image == null) {
             throw new QTAppException("QTButton:pressed image cannot be null");
         }
-        this.pressedImage = paramImageSpec;
+        this.pressedImage = image;
         if ((this.pressedFlag) && (!this.outOfBounds)) {
             setCurrentImage(this.pressedImage);
         }
@@ -202,8 +202,8 @@ public abstract class QTButton extends UIElement {
      * @param image the new deactive image
      * @throws quicktime.QTException
      */
-    public void setDeactiveImage(ImageSpec paramImageSpec) throws QTException {
-        this.deactiveImage = paramImageSpec;
+    public void setDeactiveImage(ImageSpec image) throws QTException {
+        this.deactiveImage = image;
         if ((this.deactiveImage != null) && (!isActive())) {
             setCurrentImage(this.deactiveImage);
         }
@@ -252,8 +252,8 @@ public abstract class QTButton extends UIElement {
      * Add an QTActionListeners to this button.
      * @param l a new ActionListener
      */
-    public void addActionListener(QTActionListener paramQTActionListener) {
-        this.actionListener = QTEventCaster.add(this.actionListener, paramQTActionListener);
+    public void addActionListener(QTActionListener l) {
+        this.actionListener = QTEventCaster.add(this.actionListener, l);
     }
 
     /**
@@ -262,8 +262,8 @@ public abstract class QTButton extends UIElement {
      * Remove an ActionListener from this button.
      * @param l a new QTActionListeners
      */
-    public void removeActionListener(QTActionListener paramQTActionListener) {
-        this.actionListener = QTEventCaster.remove(this.actionListener, paramQTActionListener);
+    public void removeActionListener(QTActionListener l) {
+        this.actionListener = QTEventCaster.remove(this.actionListener, l);
     }
 
     /**
@@ -273,8 +273,8 @@ public abstract class QTButton extends UIElement {
      * will fire when the mouse enters or exits the button.
      * @param l a new MouseTargetListener
      */
-    public void addMouseTargetListener(MouseTargetListener paramMouseTargetListener) {
-        this.mouseTargetListener = QTEventCaster.add(this.mouseTargetListener, paramMouseTargetListener);
+    public void addMouseTargetListener(MouseTargetListener l) {
+        this.mouseTargetListener = QTEventCaster.add(this.mouseTargetListener, l);
     }
 
     /**
@@ -283,8 +283,8 @@ public abstract class QTButton extends UIElement {
      * Remove a MouseTargetListener for this QTButton.
      * @param l a MouseTargetListener to remove
      */
-    public void removeMouseTargetListener(MouseTargetListener paramMouseTargetListener) {
-        this.mouseTargetListener = QTEventCaster.remove(this.mouseTargetListener, paramMouseTargetListener);
+    public void removeMouseTargetListener(MouseTargetListener l) {
+        this.mouseTargetListener = QTEventCaster.remove(this.mouseTargetListener, l);
     }
 
     /**

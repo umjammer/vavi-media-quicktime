@@ -30,7 +30,7 @@ public interface Drawable extends Listener {
      * @param bounds the new size and location.
      * @throws quicktime.QTException
      */
-    void setDisplayBounds(QDRect paramQDRect) throws QTException;
+    void setDisplayBounds(QDRect bounds) throws QTException;
 
     /**
      * @deprecated
@@ -54,6 +54,6 @@ public interface Drawable extends Listener {
      * @param invalidRgn the invalidRgn that the client should redraw
      * @throws quicktime.QTException
      */
-    void redraw(Region paramRegion) throws QTException;
+    void redraw(Region invalidRgn) throws QTException;
 }
 

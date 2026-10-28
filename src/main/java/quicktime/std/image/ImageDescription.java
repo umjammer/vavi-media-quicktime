@@ -179,7 +179,7 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @param height height of image
      * @throws quicktime.QTException
      */
-    public static ImageDescription getJavaDefaultPixelDescription(int i, int j) throws QTException {
+    public static ImageDescription getJavaDefaultPixelDescription(int width, int height) throws QTException {
         ImageDescription imagedescription = null;
         if (QTSession.isCurrentOS(2))
             imagedescription = new ImageDescription(QDGraphics.kDefaultPixelFormat);
@@ -187,8 +187,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
             imagedescription = new ImageDescription(0x72617720);
         imagedescription.setDepth(32);
         imagedescription.setSpatialQuality(512);
-        imagedescription.setWidth(i);
-        imagedescription.setHeight(j);
+        imagedescription.setWidth(width);
+        imagedescription.setHeight(height);
         imagedescription.setHRes(72F);
         imagedescription.setVRes(72F);
         imagedescription.setFrameCount(1);
@@ -203,16 +203,16 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @return the ImageDescription for the given Effect type.
      * @throws quicktime.QTException
      */
-    public static ImageDescription forEffect(int i) throws QTException {
-        return new ImageDescription(allocate(i), null);
+    public static ImageDescription forEffect(int effectType) throws QTException {
+        return new ImageDescription(allocate(effectType), null);
     }
 
     /**
      * Create an ImageDescription structure
      * @param format the dataFormat
      */
-    public ImageDescription(int i) throws QTException {
-        super(86, true, i);
+    public ImageDescription(int format) throws QTException {
+        super(86, true, format);
     }
 
     /**
@@ -254,8 +254,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @param cTable a color table.
      * @throws quicktime.std.StdQTException
      */
-    public void setCTable(ColorTable colortable) throws StdQTException {
-        StdQTException.checkError(SetImageDescriptionCTable(_ID(), QTObject.ID(colortable)));
+    public void setCTable(ColorTable cTable) throws StdQTException {
+        StdQTException.checkError(SetImageDescriptionCTable(_ID(), QTObject.ID(cTable)));
     }
 
     /**
@@ -275,9 +275,9 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @return the number of extensions of the specified type
      * @throws quicktime.std.StdQTException
      */
-    public int countExtensionType(int i) throws StdQTException {
+    public int countExtensionType(int idType) throws StdQTException {
         int[] ai = new int[1];
-        StdQTException.checkError(CountImageDescriptionExtensionType(_ID(), i, ai));
+        StdQTException.checkError(CountImageDescriptionExtensionType(_ID(), idType, ai));
         return ai[0];
     }
 
@@ -300,8 +300,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @param extension The handle containing the extension data.
      * @throws quicktime.std.StdQTException
      */
-    public void addExtension(int i, QTHandle qthandle) throws StdQTException {
-        StdQTException.checkError(AddImageDescriptionExtension(_ID(), QTObject.ID(qthandle), i));
+    public void addExtension(int idType, QTHandle extension) throws StdQTException {
+        StdQTException.checkError(AddImageDescriptionExtension(_ID(), QTObject.ID(extension), idType));
     }
 
     /**
@@ -311,8 +311,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @param index The index (from 1 to the count as returned by countExtensionType) of the extension to remove..
      * @throws quicktime.std.StdQTException
      */
-    public void removeExtension(int i, int j) throws StdQTException {
-        StdQTException.checkError(RemoveImageDescriptionExtension(_ID(), i, j));
+    public void removeExtension(int idType, int index) throws StdQTException {
+        StdQTException.checkError(RemoveImageDescriptionExtension(_ID(), idType, index));
     }
 
     /**
@@ -324,8 +324,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @throws quicktime.std.StdQTException
      */
     @Deprecated
-    public QTHandle getExtension(int i, int j) throws StdQTException {
-        return QTHandle.fromImageDescription(this, i, j);
+    public QTHandle getExtension(int idType, int index) throws StdQTException {
+        return QTHandle.fromImageDescription(this, idType, index);
     }
 
     /**
@@ -336,8 +336,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @return a QDGraphics.
      * @throws quicktime.QTException
      */
-    public QDGraphics newGWorld(int i) throws QTException {
-        return new QDGraphics(this, i);
+    public QDGraphics newGWorld(int flags) throws QTException {
+        return new QDGraphics(this, flags);
     }
 
     /**
@@ -463,40 +463,40 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * Set the compressor creator type.
      * @param cType a compressor type.
      */
-    public void setCType(int i) {
-        setIntAt(4, i);
+    public void setCType(int cType) {
+        setIntAt(4, cType);
     }
 
     /**
      * Set the version.
      * @param version a version number.
      */
-    public void setVersion(int i) {
-        setShortAt(16, (short) i);
+    public void setVersion(int version) {
+        setShortAt(16, (short) version);
     }
 
     /**
      * Set the revision level.
      * @param revision a revision number.
      */
-    public void setRevisionLevel(int i) {
-        setShortAt(18, (short) i);
+    public void setRevisionLevel(int revision) {
+        setShortAt(18, (short) revision);
     }
 
     /**
      * Set the vendor.
      * @param vendor a developer of the compressor.
      */
-    public void setVendor(int i) {
-        setIntAt(20, i);
+    public void setVendor(int vendor) {
+        setIntAt(20, vendor);
     }
 
     /**
      * Set temporal quality.
      * @param temporalQuality a degree of temporal compression.
      */
-    public void setTemporalQuality(int i) {
-        setIntAt(24, i);
+    public void setTemporalQuality(int temporalQuality) {
+        setIntAt(24, temporalQuality);
     }
 
     /**
@@ -510,48 +510,48 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * Set width of source image in pixels.
      * @param width the width of the source image in pixels.
      */
-    public void setWidth(int i) {
-        setShortAt(32, (short) i);
+    public void setWidth(int width) {
+        setShortAt(32, (short) width);
     }
 
     /**
      * Set height of source image in pixels.
      * @param height the height of the source image in pixels.
      */
-    public void setHeight(int i) {
-        setShortAt(34, (short) i);
+    public void setHeight(int height) {
+        setShortAt(34, (short) height);
     }
 
     /**
      * Set horizontal resolution.
      * @param hRes the horizontal resolution of the source image.
      */
-    public void setHRes(float f) {
-        setIntAt(36, QTUtils.X2Fix(f));
+    public void setHRes(float hRes) {
+        setIntAt(36, QTUtils.X2Fix(hRes));
     }
 
     /**
      * Set vertical resolution.
      * @param vRes the vertical resolution of the source image.
      */
-    public void setVRes(float f) {
-        setIntAt(40, QTUtils.X2Fix(f));
+    public void setVRes(float vRes) {
+        setIntAt(40, QTUtils.X2Fix(vRes));
     }
 
     /**
      * Set the data size.
      * @param dataSize the size of the compressed image.
      */
-    public void setDataSize(int i) {
-        setIntAt(44, i);
+    public void setDataSize(int dataSize) {
+        setIntAt(44, dataSize);
     }
 
     /**
      * Set the frame count.
      * @param frameCount the number of frames in the image data.
      */
-    public void setFrameCount(int i) {
-        setShortAt(48, (short) i);
+    public void setFrameCount(int frameCount) {
+        setShortAt(48, (short) frameCount);
     }
 
     /**
@@ -559,24 +559,24 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @param name indicates the compression algorithm.
      * @throws quicktime.util.UtilException
      */
-    public void setName(String s) throws UtilException {
-        setPStringAt(50, 31, s);
+    public void setName(String name) throws UtilException {
+        setPStringAt(50, 31, name);
     }
 
     /**
      * Set the pixel depth.
      * @param depth is the pixel depth specified for the compressed image.
      */
-    public void setDepth(int i) {
-        setShortAt(82, (short) i);
+    public void setDepth(int depth) {
+        setShortAt(82, (short) depth);
     }
 
     /**
      * Set the id number of the color table.
      * @param clutID contains the ID of the color table for the compressed image.
      */
-    public void setClutID(int i) {
-        setShortAt(84, (short) i);
+    public void setClutID(int clutID) {
+        setShortAt(84, (short) clutID);
     }
 
     /**

@@ -18,7 +18,7 @@ public interface QTComponent {
      *  current image is removed.
      * @throws quicktime.QTException
      */
-    void setImage(GraphicsImporter paramGraphicsImporter) throws QTException;
+    void setImage(GraphicsImporter img) throws QTException;
 
     /**
      * Sets the current movie for this QTComponent to the specified movie represented by the Movie object.
@@ -26,7 +26,7 @@ public interface QTComponent {
      *  current mov is removed.
      * @throws quicktime.QTException
      */
-    void setMovie(Movie paramMovie) throws QTException;
+    void setMovie(Movie mov) throws QTException;
 
     /**
      * Sets the movie for this QTComponent to the specified movie represented by the MovieController object.
@@ -35,7 +35,7 @@ public interface QTComponent {
      *  current Movie &amp; its controller is removed.
      * @throws quicktime.QTException
      */
-    void setMovieController(MovieController paramMovieController) throws QTException;
+    void setMovieController(MovieController movieController) throws QTException;
 
     /**
      * Gets the currently displayed movie of this component.

@@ -13,8 +13,8 @@ public class SampleReferenceVector extends QTVector {
      * Creates a SampleReferenceVector which is an array of SampleReference objects.
      * @param numberOfElements This is the number of elements the Vector will hold - it is NOT growable
      */
-    public SampleReferenceVector(int paramInt) throws QTException {
-        super(18, paramInt > 0 ? paramInt : 1);
+    public SampleReferenceVector(int numberOfElements) throws QTException {
+        super(18, numberOfElements > 0 ? numberOfElements : 1);
     }
 
     void _setNumSamples(int paramInt) {

@@ -18,6 +18,6 @@ public interface QDDrawer {
      * @param g the QDGraphics that is currently set up to draw upon.
      * @throws quicktime.QTException
      */
-    void draw(QDGraphics paramQDGraphics) throws QTException;
+    void draw(QDGraphics g) throws QTException;
 }
 

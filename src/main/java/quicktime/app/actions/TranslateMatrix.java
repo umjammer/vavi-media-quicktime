@@ -42,9 +42,9 @@ public class TranslateMatrix extends TransformMatrix {
      * @param deltaX the amount of pixels on the x axis the target will be translated.
      * @param deltaY the amount of pixels on the y axis the target will be translated.
      */
-    public TranslateMatrix(float paramFloat1, float paramFloat2) {
-        this.deltaX = paramFloat1;
-        this.deltaY = paramFloat2;
+    public TranslateMatrix(float deltaX, float deltaY) {
+        this.deltaX = deltaX;
+        this.deltaY = deltaY;
         setConstraint(4369);
     }
 
@@ -60,8 +60,8 @@ public class TranslateMatrix extends TransformMatrix {
      * @deprecated
      * @param x the new delta x to apply when the doTransformation(Matrix) method is called. * @deprecated since QTJava 6.1
      */
-    public void setDeltaX(float paramFloat) {
-        this.deltaX = paramFloat;
+    public void setDeltaX(float x) {
+        this.deltaX = x;
     }
 
     /**
@@ -76,8 +76,8 @@ public class TranslateMatrix extends TransformMatrix {
      * @deprecated
      * @param y the new delta y to apply when the doTransformation(Matrix) method is called. * @deprecated since QTJava 6.1
      */
-    public void setDeltaY(float paramFloat) {
-        this.deltaY = paramFloat;
+    public void setDeltaY(float y) {
+        this.deltaY = y;
     }
 
     /**
@@ -93,8 +93,8 @@ public class TranslateMatrix extends TransformMatrix {
      * @throws quicktime.QTException
      */
     @Override
-    protected void doTransformation(Matrix paramMatrix, int paramInt1, int paramInt2) throws QTException {
-        paramMatrix.translate(paramInt1, paramInt2);
+    protected void doTransformation(Matrix theMatrix, int deltaX, int deltaY) throws QTException {
+        theMatrix.translate(deltaX, deltaY);
     }
 
     /**
@@ -105,8 +105,8 @@ public class TranslateMatrix extends TransformMatrix {
      * @throws quicktime.QTException
      */
     @Override
-    protected void doTransformation(Matrix paramMatrix) throws QTException {
-        paramMatrix.translate(this.deltaX, this.deltaY);
+    protected void doTransformation(Matrix theMatrix) throws QTException {
+        theMatrix.translate(this.deltaX, this.deltaY);
     }
 
     /**
@@ -116,8 +116,8 @@ public class TranslateMatrix extends TransformMatrix {
      * @param whichSide specifies which side of the enclosing bounds the target hit.
      */
     @Override
-    protected void boundsReached(int paramInt) {
-        if ((paramInt & 0x11) != 0) {
+    protected void boundsReached(int whichSide) {
+        if ((whichSide & 0x11) != 0) {
             this.deltaX = (-this.deltaX);
         } else {
             this.deltaY = (-this.deltaY);

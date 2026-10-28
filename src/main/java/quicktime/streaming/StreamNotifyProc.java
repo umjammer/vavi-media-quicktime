@@ -23,7 +23,7 @@ public abstract class StreamNotifyProc {
      * @param type the type of notification
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt) {
+    public int execute(int type) {
         return 0;
     }
 
@@ -42,7 +42,7 @@ public abstract class StreamNotifyProc {
      * @param s the stream that originated the notification
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt, Stream paramStream) {
+    public int execute(int type, Stream s) {
         return 0;
     }
 
@@ -55,7 +55,7 @@ public abstract class StreamNotifyProc {
      * @param pres the Presentation that originated the notification
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt, Presentation paramPresentation) {
+    public int execute(int type, Presentation pres) {
         return 0;
     }
 
@@ -68,7 +68,7 @@ public abstract class StreamNotifyProc {
      * @param comp the component that changed
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt, Stream paramStream, Component paramComponent) {
+    public int execute(int type, Stream s, Component comp) {
         return 0;
     }
 
@@ -80,7 +80,7 @@ public abstract class StreamNotifyProc {
      * @param status the StatusParams containing the notification
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt, StatusParams paramStatusParams) {
+    public int execute(int type, StatusParams status) {
         return 0;
     }
 
@@ -92,7 +92,7 @@ public abstract class StreamNotifyProc {
      * @param s the String containing the notification information
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt, String paramString) {
+    public int execute(int type, String s) {
         return 0;
     }
 
@@ -106,7 +106,7 @@ public abstract class StreamNotifyProc {
      * @param flags the error flags
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt1, int paramInt2, String paramString, int paramInt3) {
+    public int execute(int err, int type, String s, int flags) {
         return 0;
     }
 
@@ -132,7 +132,7 @@ public abstract class StreamNotifyProc {
      * @param restartAt time which the alert occurred
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt1, int paramInt2, int paramInt3) {
+    public int execute(int type, int flags, int restartAt) {
         return 0;
     }
 
@@ -145,7 +145,7 @@ public abstract class StreamNotifyProc {
      * @param data a pointer to the data delivered by the notification
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt1, int paramInt2, QTPointer paramQTPointer) {
+    public int execute(int type, int flags, QTPointer data) {
         return 0;
     }
 }

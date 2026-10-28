@@ -27,7 +27,7 @@ public interface Playable extends Timeable {
      * @param time the new time value
      * @throws quicktime.QTException
      */
-    void setTime(int paramInt) throws QTException;
+    void setTime(int time) throws QTException;
 
     /**
      * @deprecated

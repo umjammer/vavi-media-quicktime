@@ -60,12 +60,12 @@ public class SimpleActionList extends TickleList {
      * Removes any and all actions that target the supplied target.
      * @param target the target which determines which actions to remove
      */
-    public synchronized void removeTarget(Object paramObject) {
+    public synchronized void removeTarget(Object target) {
         if (this.list != null) {
             Object localObject1;
             do {
                 localObject1 = ((Targetable) this.list.action).getTarget();
-                if ((localObject1 == null) || (!localObject1.equals(paramObject)))
+                if ((localObject1 == null) || (!localObject1.equals(target)))
                     break;
                 this.list = this.list.next;
             } while (this.list != null);
@@ -73,7 +73,7 @@ public class SimpleActionList extends TickleList {
             TickleNode localTickleNode = localObject1 != null ? ((TickleNode) localObject1).next : null;
             while (localTickleNode != null) {
                 Object localObject2 = ((Targetable) localTickleNode.action).getTarget();
-                if ((localObject2 != null) && (localObject2.equals(paramObject))) {
+                if ((localObject2 != null) && (localObject2.equals(target))) {
                     ((TickleNode) localObject1).next = localTickleNode.next;
                     localTickleNode = localTickleNode.next;
                 } else {

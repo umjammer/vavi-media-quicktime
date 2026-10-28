@@ -87,8 +87,8 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * @return a QDPoint
      * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
      */
-    public static QDPoint fromArray(byte[] paramArrayOfByte, int paramInt) {
-        return fromArray(paramArrayOfByte, paramInt, 0);
+    public static QDPoint fromArray(byte[] ptBytes, int ptType) {
+        return fromArray(ptBytes, ptType, 0);
     }
 
     /**
@@ -100,18 +100,18 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * @return a QDPoint
      * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
      */
-    public static QDPoint fromArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        if (paramArrayOfByte.length - paramInt2 < 8) {
+    public static QDPoint fromArray(byte[] ptBytes, int ptType, int offset) {
+        if (ptBytes.length - offset < 8) {
             throw new IllegalArgumentException("Mismatch between flag and supplied ptBytes");
         }
-        if (paramInt1 == 8) {
-            int i = getIntFromArray(paramArrayOfByte, paramInt2);
-            int j = getIntFromArray(paramArrayOfByte, paramInt2 + 4);
+        if (ptType == 8) {
+            int i = getIntFromArray(ptBytes, offset);
+            int j = getIntFromArray(ptBytes, offset + 4);
             return new QDPoint(QTUtils.Fix2X(i), QTUtils.Fix2X(j));
         }
-        if ((paramInt1 == -8) || (paramInt1 == -16)) {
-            float f1 = getFloatFromArray(paramArrayOfByte, paramInt2);
-            float f2 = getFloatFromArray(paramArrayOfByte, paramInt2 + 4);
+        if ((ptType == -8) || (ptType == -16)) {
+            float f1 = getFloatFromArray(ptBytes, offset);
+            float f2 = getFloatFromArray(ptBytes, offset + 4);
             return new QDPoint(f1, f2);
         }
         throw new IllegalArgumentException("Unknown point bytes format");
@@ -122,9 +122,9 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * @param x x location
      * @param y y location
      */
-    public QDPoint(int paramInt1, int paramInt2) {
-        setX(paramInt1);
-        setY(paramInt2);
+    public QDPoint(int x, int y) {
+        setX(x);
+        setY(y);
     }
 
     /**
@@ -132,9 +132,9 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * @param x x location
      * @param y y location
      */
-    public QDPoint(float paramFloat1, float paramFloat2) {
-        setX(paramFloat1);
-        setY(paramFloat2);
+    public QDPoint(float x, float y) {
+        setX(x);
+        setY(y);
     }
 
     /**
@@ -220,11 +220,11 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Set the x location of the point.
      * @param x the new x location
      */
-    public void setX(int paramInt) {
+    public void setX(int x) {
         if (this.floatPt == null)
-            this.x = ((short) paramInt);
+            this.x = ((short) x);
         else {
-            setX(paramInt);
+            setX(x);
         }
     }
 
@@ -232,11 +232,11 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Set the x location of the point.
      * @param x the new x location
      */
-    public void setX(float paramFloat) {
+    public void setX(float x) {
         if (this.floatPt == null)
             this.floatPt = new byte[8];
-        setFloatInArray(this.floatPt, 0, paramFloat);
-        this.x = ((short) (int) paramFloat);
+        setFloatInArray(this.floatPt, 0, x);
+        this.x = ((short) (int) x);
     }
 
     /**
@@ -259,11 +259,11 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Set the y location of the point.
      * @param y the new y location
      */
-    public void setY(int paramInt) {
+    public void setY(int y) {
         if (this.floatPt == null)
-            this.y = ((short) paramInt);
+            this.y = ((short) y);
         else {
-            setY(paramInt);
+            setY(y);
         }
     }
 
@@ -271,11 +271,11 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Set the y location of the point.
      * @param y the new y location
      */
-    public void setY(float paramFloat) {
+    public void setY(float y) {
         if (this.floatPt == null)
             this.floatPt = new byte[8];
-        setFloatInArray(this.floatPt, 4, paramFloat);
-        this.y = ((short) (int) paramFloat);
+        setFloatInArray(this.floatPt, 4, y);
+        this.y = ((short) (int) y);
     }
 
     /**

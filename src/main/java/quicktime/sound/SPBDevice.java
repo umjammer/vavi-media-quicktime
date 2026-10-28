@@ -35,10 +35,10 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      *  2return the name of the sound input device specified by the count parameter or null if there isn't a device at that index.
      * @throws quicktime.sound.SoundException
      */
-    public static String getIndexedDevice(int paramInt) throws SoundException {
+    public static String getIndexedDevice(int count) throws SoundException {
         byte[] arrayOfByte = new byte[256];
         int[] arrayOfInt = { 0 };
-        int i = SPBGetIndexedDevice((short) paramInt, arrayOfByte, arrayOfInt);
+        int i = SPBGetIndexedDevice((short) count, arrayOfByte, arrayOfInt);
         if (i == 65315)
             return null;
         DisposeHandle(arrayOfInt[0]);
@@ -64,8 +64,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param deviceName The name of the sound input device to open, or the empty string if the default sound input device is to be opened.
      * @param permission A flag that indicates whether subsequent operations with that device are to be read/write or read-only.
      */
-    public SPBDevice(String paramString, int paramInt) throws SoundException {
-        super(allocate(paramString, paramInt), null);
+    public SPBDevice(String deviceName, int permission) throws SoundException {
+        super(allocate(deviceName, permission), null);
     }
 
     private static int allocate(String paramString, int paramInt) throws SoundException {
@@ -112,8 +112,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @return how many bytes you would require to record the specifiec milliseconds.
      * @throws quicktime.sound.SoundException
      */
-    public int millisecondsToBytes(int paramInt) throws SoundException {
-        int[] arrayOfInt = { paramInt };
+    public int millisecondsToBytes(int msecs) throws SoundException {
+        int[] arrayOfInt = { msecs };
         SoundException.checkError(SPBMillisecondsToBytes(_ID(), arrayOfInt));
         return arrayOfInt[0];
     }
@@ -125,8 +125,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @return how many milliseconds.
      * @throws quicktime.sound.SoundException
      */
-    public int bytesToMilliseconds(int paramInt) throws SoundException {
-        int[] arrayOfInt = { paramInt };
+    public int bytesToMilliseconds(int bytes) throws SoundException {
+        int[] arrayOfInt = { bytes };
         SoundException.checkError(SPBBytesToMilliseconds(_ID(), arrayOfInt));
         return arrayOfInt[0];
     }
@@ -137,8 +137,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param flag set to true to turn the channel on, false to turn it off.
      * @throws quicktime.sound.SoundException
      */
-    public void setLevelMeterOnOff(boolean paramBoolean) throws SoundException {
-        short[] arrayOfShort = { (short) (paramBoolean ? 1 : 0) };
+    public void setLevelMeterOnOff(boolean flag) throws SoundException {
+        short[] arrayOfShort = { (short) (flag ? 1 : 0) };
         setDeviceInfo(1819108724, arrayOfShort);
     }
 
@@ -172,8 +172,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param flag set to true to turn automatic gain on, false to turn it off.
      * @throws quicktime.sound.SoundException
      */
-    public void setAutomaticGainControl(boolean paramBoolean) throws SoundException {
-        short[] arrayOfShort = { (short) (paramBoolean ? 1 : 0) };
+    public void setAutomaticGainControl(boolean flag) throws SoundException {
+        short[] arrayOfShort = { (short) (flag ? 1 : 0) };
         setDeviceInfo(1634165536, arrayOfShort);
     }
 
@@ -195,8 +195,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param gain a float (fixed value) to set the gain to.
      * @throws quicktime.sound.SoundException
      */
-    public void setInputGain(float paramFloat) throws SoundException {
-        int[] arrayOfInt = { QTUtils.X2Fix(paramFloat) };
+    public void setInputGain(float gain) throws SoundException {
+        int[] arrayOfInt = { QTUtils.X2Fix(gain) };
         setDeviceInfo(1734437230, arrayOfInt);
     }
 
@@ -285,8 +285,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param channels number of channels
      * @throws quicktime.sound.SoundException
      */
-    public void setNumberChannels(int paramInt) throws SoundException {
-        short[] arrayOfShort = { (short) paramInt };
+    public void setNumberChannels(int channels) throws SoundException {
+        short[] arrayOfShort = { (short) channels };
         setDeviceInfo(1667785070, arrayOfShort);
     }
 
@@ -317,8 +317,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param rate the rate of the device
      * @throws quicktime.sound.SoundException
      */
-    public void setSampleRate(float paramFloat) throws SoundException {
-        int[] arrayOfInt = { QTUtils.X2UFix(paramFloat) };
+    public void setSampleRate(float rate) throws SoundException {
+        int[] arrayOfInt = { QTUtils.X2UFix(rate) };
         setDeviceInfo(1936875892, arrayOfInt);
     }
 
@@ -364,8 +364,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param sampleSize is the number of bits in an individual sample.
      * @throws quicktime.sound.SoundException
      */
-    public void setSampleSize(int paramInt) throws SoundException {
-        short[] arrayOfShort = { (short) paramInt };
+    public void setSampleSize(int sampleSize) throws SoundException {
+        short[] arrayOfShort = { (short) sampleSize };
         setDeviceInfo(1936943482, arrayOfShort);
     }
 
@@ -404,8 +404,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param rightChannel the gain for the right channel (range 0.5 to 1.5)
      * @throws quicktime.sound.SoundException
      */
-    public void setStereoInputGain(float paramFloat1, float paramFloat2) throws SoundException {
-        int[] arrayOfInt = { QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2) };
+    public void setStereoInputGain(float leftChannel, float rightChannel) throws SoundException {
+        int[] arrayOfInt = { QTUtils.X2Fix(leftChannel), QTUtils.X2Fix(rightChannel) };
         setDeviceInfo(1936154985, arrayOfInt);
     }
 
@@ -452,8 +452,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param isContinuous the state of continuous recording (false is off, true is on)
      * @throws quicktime.sound.SoundException
      */
-    public void setContinuousRecording(boolean paramBoolean) throws SoundException {
-        short[] arrayOfShort = { (short) (paramBoolean ? 1 : 0) };
+    public void setContinuousRecording(boolean isContinuous) throws SoundException {
+        short[] arrayOfShort = { (short) (isContinuous ? 1 : 0) };
         setDeviceInfo(1668247156, arrayOfShort);
     }
 
@@ -463,8 +463,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @param compType the compressor type.
      * @throws quicktime.sound.SoundException
      */
-    public void setCompressionType(int paramInt) throws SoundException {
-        int[] arrayOfInt = { paramInt };
+    public void setCompressionType(int compType) throws SoundException {
+        int[] arrayOfInt = { compType };
         setDeviceInfo(1668246896, arrayOfInt);
     }
 

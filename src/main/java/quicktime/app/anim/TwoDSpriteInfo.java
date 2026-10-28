@@ -44,12 +44,12 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
      * @param v if true the sprite is/was visible
      * @param l the layer of the sprite in its sprite world
      */
-    public TwoDSpriteInfo(quicktime.util.EncodedImage paramEncodedImage, ImageDescription paramImageDescription, quicktime.std.image.Matrix paramMatrix, boolean paramBoolean, int paramInt) {
-        this.image = paramEncodedImage;
-        this.desc = paramImageDescription;
-        this.matrix = paramMatrix;
-        this.layer = paramInt;
-        this.visible = paramBoolean;
+    public TwoDSpriteInfo(quicktime.util.EncodedImage im, ImageDescription d, quicktime.std.image.Matrix m, boolean v, int l) {
+        this.image = im;
+        this.desc = d;
+        this.matrix = m;
+        this.layer = l;
+        this.visible = v;
     }
 
     /**
@@ -63,13 +63,13 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
      * @param v if true the sprite is/was visible
      * @param gm the GraphicsMode (or null)
      */
-    public TwoDSpriteInfo(quicktime.util.EncodedImage paramEncodedImage, ImageDescription paramImageDescription, quicktime.std.image.Matrix paramMatrix, boolean paramBoolean, int paramInt, quicktime.std.image.GraphicsMode paramGraphicsMode) {
-        this.image = paramEncodedImage;
-        this.desc = paramImageDescription;
-        this.matrix = paramMatrix;
-        this.layer = paramInt;
-        this.visible = paramBoolean;
-        this.graphicsMode = paramGraphicsMode;
+    public TwoDSpriteInfo(quicktime.util.EncodedImage im, ImageDescription d, quicktime.std.image.Matrix m, boolean v, int l, quicktime.std.image.GraphicsMode gm) {
+        this.image = im;
+        this.desc = d;
+        this.matrix = m;
+        this.layer = l;
+        this.visible = v;
+        this.graphicsMode = gm;
     }
 
     /**

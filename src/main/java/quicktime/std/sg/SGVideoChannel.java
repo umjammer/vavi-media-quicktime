@@ -44,8 +44,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @see "QuickTime::SGNewChannel"
      * @param owner specifies the sequence grabber component the channel is attached to.
      */
-    public SGVideoChannel(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramSequenceGrabber, 1986618469);
+    public SGVideoChannel(SequenceGrabber owner) throws StdQTException {
+        super(owner, 1986618469);
     }
 
     @Override
@@ -69,8 +69,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @param compressorType sets the type of compressor to use on the channel.
      * @throws quicktime.std.StdQTException
      */
-    public void setCompressorType(int paramInt) throws StdQTException {
-        int i = SGSetVideoCompressorType(_ID(), paramInt);
+    public void setCompressorType(int compressorType) throws StdQTException {
+        int i = SGSetVideoCompressorType(_ID(), compressorType);
         StdQTException.checkError(i);
     }
 
@@ -97,8 +97,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @param keyFrameRate Specifies the maximum number of frames allowed between key frames.
      * @throws quicktime.std.StdQTException
      */
-    public void setCompressor(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) throws StdQTException {
-        int i = SGSetVideoCompressor(_ID(), (short) paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    public void setCompressor(int depth, int compressor, int spatialQuality, int temporalQuality, int keyFrameRate) throws StdQTException {
+        int i = SGSetVideoCompressor(_ID(), (short) depth, compressor, spatialQuality, temporalQuality, keyFrameRate);
         StdQTException.checkError(i);
     }
 
@@ -112,8 +112,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @param keyFrameRate Specifies the maximum number of frames allowed between key frames.
      * @throws quicktime.std.StdQTException
      */
-    public void setCompressor(int paramInt1, Compressor paramCompressor, int paramInt2, int paramInt3, int paramInt4) throws StdQTException {
-        int i = SGSetVideoCompressor(_ID(), (short) paramInt1, QTObject.ID(paramCompressor), paramInt2, paramInt3, paramInt4);
+    public void setCompressor(int depth, Compressor compressor, int spatialQuality, int temporalQuality, int keyFrameRate) throws StdQTException {
+        int i = SGSetVideoCompressor(_ID(), (short) depth, QTObject.ID(compressor), spatialQuality, temporalQuality, keyFrameRate);
         StdQTException.checkError(i);
     }
 
@@ -142,8 +142,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @param vdig the digitizer component that identifies a connection to a video digitizer component.
      * @throws quicktime.std.StdQTException
      */
-    public void setDigitizerComponent(VideoDigitizer paramVideoDigitizer) throws StdQTException {
-        StdQTException.checkError(SGSetVideoDigitizerComponent(_ID(), QTObject.ID(paramVideoDigitizer)));
+    public void setDigitizerComponent(VideoDigitizer vdig) throws StdQTException {
+        StdQTException.checkError(SGSetVideoDigitizerComponent(_ID(), QTObject.ID(vdig)));
     }
 
     /**
@@ -161,8 +161,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @param r the rectangle that defines the potion of the source video image to be captured.
      * @throws quicktime.std.StdQTException
      */
-    public void setVideoRect(QDRect paramQDRect) throws StdQTException {
-        int i = SGSetVideoRect(_ID(), paramQDRect.getRect());
+    public void setVideoRect(QDRect r) throws StdQTException {
+        int i = SGSetVideoRect(_ID(), r.getRect());
         StdQTException.checkError(i);
     }
 
@@ -198,8 +198,8 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @param frameRate Specifies the desired frame rate. Set this parameter to 0 to select the channelÕs default frame rate. Typically, this corresponds to the fastest rate that the channel can support.
      * @throws quicktime.std.StdQTException
      */
-    public void setFrameRate(float paramFloat) throws StdQTException {
-        int i = SGSetFrameRate(_ID(), QTUtils.X2Fix(paramFloat));
+    public void setFrameRate(float frameRate) throws StdQTException {
+        int i = SGSetFrameRate(_ID(), QTUtils.X2Fix(frameRate));
         StdQTException.checkError(i);
     }
 

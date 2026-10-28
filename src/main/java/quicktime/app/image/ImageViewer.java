@@ -65,11 +65,11 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setImageData(EncodedImage paramEncodedImage, ImageDescription paramImageDescription) throws QTException, StdQTException {
+    public void setImageData(EncodedImage imageData, ImageDescription desc) throws QTException, StdQTException {
         if (this.imagePresenter == null) {
-            this.imagePresenter = new ImagePresenter(new QDRect(paramImageDescription.getWidth(), paramImageDescription.getHeight()));
+            this.imagePresenter = new ImagePresenter(new QDRect(desc.getWidth(), desc.getHeight()));
         }
-        this.imagePresenter.setImageData(paramEncodedImage, paramImageDescription);
+        this.imagePresenter.setImageData(imageData, desc);
         this.imagePresenter.redraw(null);
     }
 
@@ -98,8 +98,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        this.imagePresenter.setGWorld(paramQDGraphics);
+    public void setGWorld(QDGraphics cgp) throws QTException {
+        this.imagePresenter.setGWorld(cgp);
     }
 
     /**
@@ -123,8 +123,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
-        this.imagePresenter.setDisplayBounds(paramQDRect);
+    public void setDisplayBounds(QDRect bounds) throws StdQTException {
+        this.imagePresenter.setDisplayBounds(bounds);
     }
 
     /**
@@ -136,10 +136,10 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -164,8 +164,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setClip(Region paramRegion) throws QTException {
-        this.imagePresenter.setClip(paramRegion);
+    public void setClip(Region theClip) throws QTException {
+        this.imagePresenter.setClip(theClip);
     }
 
     /**
@@ -226,8 +226,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.imagePresenter.setMatrix(paramMatrix);
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.imagePresenter.setMatrix(matrix);
     }
 
     /**
@@ -238,8 +238,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @param mode the Graphics mode for the Compositor
      * @throws quicktime.QTException
      */
-    public void setGraphicsMode(GraphicsMode paramGraphicsMode) throws QTException {
-        this.imagePresenter.setGraphicsMode(paramGraphicsMode);
+    public void setGraphicsMode(GraphicsMode mode) throws QTException {
+        this.imagePresenter.setGraphicsMode(mode);
     }
 
     /**
@@ -264,8 +264,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @throws quicktime.QTException
      */
     @Override
-    public final synchronized void redraw(Region paramRegion) throws QTException {
-        this.imagePresenter.redraw(paramRegion);
+    public final synchronized void redraw(Region invalidRgn) throws QTException {
+        this.imagePresenter.redraw(invalidRgn);
     }
 
     /**
@@ -278,7 +278,7 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
+    public void addedTo(Object interest) {
     }
 
     /**
@@ -291,6 +291,6 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
     }
 }

@@ -107,8 +107,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         this.locked = paramBoolean;
     }
 
-    protected QTHandleRef(int paramInt1, Object paramObject, boolean paramBoolean, int paramInt2) {
-        super(paramInt1, paramObject, paramInt2);
+    protected QTHandleRef(int handleOffset, Object paramObject, boolean paramBoolean, int destOffset) {
+        super(handleOffset, paramObject, destOffset);
         this.locked = paramBoolean;
     }
 
@@ -141,8 +141,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return arrayOfByte;
     }
 
-    protected final void getBytesAt(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfByte, paramInt3, paramInt2);
+    protected final void getBytesAt(int handleOffset, int destOffset, byte[] destArray, int length) {
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, length, destOffset);
         if (!this.locked) {
             unlock();
         }
@@ -156,9 +156,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the byte array to start copying to
      * @param length the number of bytes to copy
      */
-    public final void copyToArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 1, paramInt2, paramArrayOfByte.length);
-        getBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
+    public final void copyToArray(int handleOffset, byte[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 1, destOffset, destArray.length);
+        getBytesAt(handleOffset, length, destArray, destOffset);
     }
 
     /**
@@ -169,9 +169,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the short array to start copying to
      * @param length the number of shorts to copy
      */
-    public final void copyToArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfShort.length);
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfShort, paramInt2 * 2, paramInt3 * 2);
+    public final void copyToArray(int handleOffset, short[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 2, destOffset, destArray.length);
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, destOffset * 2, length * 2);
         if (!this.locked) {
             unlock();
         }
@@ -185,9 +185,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the char array to start copying to
      * @param length the number of chars to copy
      */
-    public final void copyToArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfChar.length);
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfChar, paramInt2 * 2, paramInt3 * 2);
+    public final void copyToArray(int handleOffset, char[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 2, destOffset, destArray.length);
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, destOffset * 2, length * 2);
         if (!this.locked) {
             unlock();
         }
@@ -201,9 +201,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the int array to start copying to
      * @param length the number of ints to copy
      */
-    public final void copyToArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfInt.length);
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfInt, paramInt2 * 4, paramInt3 * 4);
+    public final void copyToArray(int handleOffset, int[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 4, destOffset, destArray.length);
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, destOffset * 4, length * 4);
         if (!this.locked) {
             unlock();
         }
@@ -217,9 +217,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the float array to start copying to
      * @param length the number of floats to copy
      */
-    public final void copyToArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfFloat.length);
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfFloat, paramInt2 * 4, paramInt3 * 4);
+    public final void copyToArray(int handleOffset, float[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 4, destOffset, destArray.length);
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, destOffset * 4, length * 4);
         if (!this.locked) {
             unlock();
         }
@@ -233,9 +233,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the long array to start copying to
      * @param length the number of longs to copy
      */
-    public final void copyToArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfLong.length);
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfLong, paramInt2 * 8, paramInt3 * 8);
+    public final void copyToArray(int handleOffset, long[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 8, destOffset, destArray.length);
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, destOffset * 8, length * 8);
         if (!this.locked) {
             unlock();
         }
@@ -249,15 +249,15 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param destOffset the offset within the double array to start copying to
      * @param length the number of doubles to copy
      */
-    public final void copyToArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfDouble.length);
-        copyPointerToArray(lockAndDeref(0), paramInt1, paramArrayOfDouble, paramInt2 * 8, paramInt3 * 8);
+    public final void copyToArray(int handleOffset, double[] destArray, int destOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 8, destOffset, destArray.length);
+        copyPointerToArray(lockAndDeref(0), handleOffset, destArray, destOffset * 8, length * 8);
         if (!this.locked)
             unlock();
     }
 
-    protected final void setBytesAt(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        copyArrayToPointer(paramArrayOfByte, paramInt3, lockAndDeref(0), paramInt1, paramInt2);
+    protected final void setBytesAt(int handleOffset, int destOffset, byte[] destArray, int length) {
+        copyArrayToPointer(destArray, length, lockAndDeref(0), handleOffset, destOffset);
         if (!this.locked) {
             unlock();
         }
@@ -271,9 +271,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the byte [] to start copying from
      * @param length how many elements of the byte array to copy
      */
-    public final void copyFromArray(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 1, paramInt2, paramArrayOfByte.length);
-        setBytesAt(paramInt1, paramInt3, paramArrayOfByte, paramInt2);
+    public final void copyFromArray(int handleOffset, byte[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 1, srcOffset, srcArray.length);
+        setBytesAt(handleOffset, length, srcArray, srcOffset);
     }
 
     /**
@@ -284,9 +284,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the short array to start copying from
      * @param length how many elements of the short array to copy
      */
-    public final void copyFromArray(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfShort.length);
-        copyArrayToPointer(paramArrayOfShort, paramInt2 * 2, lockAndDeref(0), paramInt1, paramInt3 * 2);
+    public final void copyFromArray(int handleOffset, short[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 2, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 2, lockAndDeref(0), handleOffset, length * 2);
         if (!this.locked) {
             unlock();
         }
@@ -300,9 +300,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the char array to start copying from
      * @param length how many elements of the char array to copy
      */
-    public final void copyFromArray(int paramInt1, char[] paramArrayOfChar, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 2, paramInt2, paramArrayOfChar.length);
-        copyArrayToPointer(paramArrayOfChar, paramInt2 * 2, lockAndDeref(0), paramInt1, paramInt3 * 2);
+    public final void copyFromArray(int handleOffset, char[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 2, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 2, lockAndDeref(0), handleOffset, length * 2);
         if (!this.locked) {
             unlock();
         }
@@ -316,9 +316,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the int array to start copying from
      * @param length how many elements of the int array to copy
      */
-    public final void copyFromArray(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfInt.length);
-        copyArrayToPointer(paramArrayOfInt, paramInt2 * 4, lockAndDeref(0), paramInt1, paramInt3 * 4);
+    public final void copyFromArray(int handleOffset, int[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 4, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 4, lockAndDeref(0), handleOffset, length * 4);
         if (!this.locked) {
             unlock();
         }
@@ -332,9 +332,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the float array to start copying from
      * @param length how many elements of the float array to copy
      */
-    public final void copyFromArray(int paramInt1, float[] paramArrayOfFloat, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 4, paramInt2, paramArrayOfFloat.length);
-        copyArrayToPointer(paramArrayOfFloat, paramInt2 * 4, lockAndDeref(0), paramInt1, paramInt3 * 4);
+    public final void copyFromArray(int handleOffset, float[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 4, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 4, lockAndDeref(0), handleOffset, length * 4);
         if (!this.locked) {
             unlock();
         }
@@ -348,9 +348,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the long array to start copying from
      * @param length how many elements of the long array to copy
      */
-    public final void copyFromArray(int paramInt1, long[] paramArrayOfLong, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfLong.length);
-        copyArrayToPointer(paramArrayOfLong, paramInt2 * 8, lockAndDeref(0), paramInt1, paramInt3 * 8);
+    public final void copyFromArray(int handleOffset, long[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 8, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 8, lockAndDeref(0), handleOffset, length * 8);
         if (!this.locked) {
             unlock();
         }
@@ -364,9 +364,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param srcOffset the nth index within the double array to start copying from
      * @param length how many elements of the double array to copy
      */
-    public final void copyFromArray(int paramInt1, double[] paramArrayOfDouble, int paramInt2, int paramInt3) {
-        QTUtils.doBoundsChecks(paramInt1, getSize(), paramInt3, 8, paramInt2, paramArrayOfDouble.length);
-        copyArrayToPointer(paramArrayOfDouble, paramInt2 * 8, lockAndDeref(0), paramInt1, paramInt3 * 8);
+    public final void copyFromArray(int handleOffset, double[] srcArray, int srcOffset, int length) {
+        QTUtils.doBoundsChecks(handleOffset, getSize(), length, 8, srcOffset, srcArray.length);
+        copyArrayToPointer(srcArray, srcOffset * 8, lockAndDeref(0), handleOffset, length * 8);
         if (!this.locked) {
             unlock();
         }
@@ -445,23 +445,23 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return makeAndCopyHandle(0, GetHandleSize(_ID()));
     }
 
-    protected int makeAndCopyHandle(int paramInt1, int paramInt2) {
+    protected int makeAndCopyHandle(int handleOffset, int destOffset) {
         int i = 0;
         try {
-            i = allocate(paramInt2, false);
+            i = allocate(destOffset, false);
         } catch (UtilException localUtilException) {
             throw new QTRuntimeException(localUtilException);
         }
         HLock(i);
-        BlockMove(lockAndDeref(0) + paramInt1, getIntFromPointer(i, 0) + 0, paramInt2);
+        BlockMove(lockAndDeref(0) + handleOffset, getIntFromPointer(i, 0) + 0, destOffset);
         if (!this.locked)
             unlock();
         HUnlock(i);
         return i;
     }
 
-    protected void copyFromHandle(int paramInt1, QTHandleRef paramQTHandleRef, int paramInt2, int paramInt3) {
-        BlockMove(paramQTHandleRef.lockAndDeref(0) + paramInt2, getIntFromPointer(_ID(), 0) + paramInt1, paramInt3);
+    protected void copyFromHandle(int handleOffset, QTHandleRef paramQTHandleRef, int destOffset, int length) {
+        BlockMove(paramQTHandleRef.lockAndDeref(0) + destOffset, getIntFromPointer(_ID(), 0) + handleOffset, length);
         if (!paramQTHandleRef.isLocked()) {
             paramQTHandleRef.unlock();
         }
@@ -485,10 +485,10 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @param size the number of bytes the pointer has valid access to.
      * @return an object representing the pointer.
      */
-    public QTPointerRef toQTPointer(int paramInt1, int paramInt2) {
-        paramInt2 = paramInt2 + paramInt1 > getSize() ? getSize() - paramInt1 : paramInt2;
+    public QTPointerRef toQTPointer(int offset, int size) {
+        offset = offset + size > getSize() ? getSize() - size : offset;
         lock();
-        return new QTPointerRef(lockAndDeref(paramInt1), paramInt2, this);
+        return new QTPointerRef(lockAndDeref(offset), offset, this);
     }
 
     protected byte getByteAt(int paramInt) {
@@ -523,8 +523,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         setShortInHandle(_ID(), paramInt, paramShort);
     }
 
-    protected void setIntAt(int paramInt1, int paramInt2) {
-        setIntInHandle(_ID(), paramInt1, paramInt2);
+    protected void setIntAt(int handleOffset, int destOffset) {
+        setIntInHandle(_ID(), handleOffset, destOffset);
     }
 
     protected void setLongAt(int paramInt, long paramLong) {
@@ -555,14 +555,14 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return new String(arrayOfByte);
     }
 
-    protected void setCStringAt(int paramInt1, int paramInt2, String paramString) throws UtilException {
-        paramInt2 = Math.min(paramInt2, paramString.length());
-        if (paramInt2 + paramInt1 > getSize()) {
+    protected void setCStringAt(int handleOffset, int destOffset, String paramString) throws UtilException {
+        destOffset = Math.min(destOffset, paramString.length());
+        if (destOffset + handleOffset > getSize()) {
             throw new UtilException(-50);
         }
         byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
-        setByteAt(paramInt1 + paramInt2, (byte) 0);
+        setBytesAt(handleOffset, destOffset, arrayOfByte, 0);
+        setByteAt(handleOffset + destOffset, (byte) 0);
     }
 
     protected String getPStringAt(int paramInt) throws UtilException {
@@ -578,22 +578,22 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return "";
     }
 
-    protected void setPStringAt(int paramInt1, int paramInt2, String paramString) throws UtilException {
-        paramInt2 = Math.min(Math.min(paramInt2, paramString.length()), 255);
-        if (paramInt2 + paramInt1 > getSize()) {
+    protected void setPStringAt(int handleOffset, int destOffset, String paramString) throws UtilException {
+        destOffset = Math.min(Math.min(destOffset, paramString.length()), 255);
+        if (destOffset + handleOffset > getSize()) {
             throw new UtilException(-50);
         }
-        setByteAt(paramInt1++, (byte) paramInt2);
+        setByteAt(handleOffset++, (byte) destOffset);
         byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
+        setBytesAt(handleOffset, destOffset, arrayOfByte, 0);
     }
 
-    private static int SCCompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCCompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfShort);
+    private static int SCCompressSequenceFrame(int handleOffset, int destOffset, byte[] srcArray, int[] destArray1, int[] destArray2, short[] destArray) {
+        return ImageCompressionManager.SCCompressSequenceFrame(handleOffset, destOffset, srcArray, destArray1, destArray2, destArray);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCGetInfo(int handleOffset, int destOffset, int[] destArray) {
+        return ImageCompressionManager.SCGetInfo(handleOffset, destOffset, destArray);
     }
 
     private static int GetHandleSize(int paramInt) {
@@ -628,124 +628,124 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return MemoryManager.NewHandle(paramInt);
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int handleOffset, int destOffset, int length) {
+        MemoryManager.BlockMove(handleOffset, destOffset, length);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int handleOffset, int destOffset) {
+        QuickDrawManager.SetGWorld(handleOffset, destOffset);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] destArray1, int[] destArray2) {
+        QuickDrawManager.GetGWorld(destArray1, destArray2);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, byte[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, short[] paramArrayOfShort, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfShort, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, short[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, char[] paramArrayOfChar, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfChar, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, char[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfInt, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, int[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfFloat, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, float[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, long[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, double[] paramArrayOfDouble, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfDouble, paramInt3, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, double[] destArray, int length, int paramInt4) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(byte[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(short[] paramArrayOfShort, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfShort, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(short[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(char[] paramArrayOfChar, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfChar, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(char[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(int[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(float[] paramArrayOfFloat, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfFloat, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(float[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(long[] paramArrayOfLong, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfLong, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(long[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static void copyArrayToPointer(double[] paramArrayOfDouble, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfDouble, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(double[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int handleOffset, int destOffset) {
+        return MemoryManager.getIntFromPointer(handleOffset, destOffset);
     }
 
-    private static byte getByteFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
+    private static byte getByteFromHandle(int handleOffset, int destOffset) {
+        return MemoryManager.getByteFromHandle(handleOffset, destOffset);
     }
 
-    private static short getShortFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    private static short getShortFromHandle(int handleOffset, int destOffset) {
+        return MemoryManager.getShortFromHandle(handleOffset, destOffset);
     }
 
-    private static int getIntFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    private static int getIntFromHandle(int handleOffset, int destOffset) {
+        return MemoryManager.getIntFromHandle(handleOffset, destOffset);
     }
 
-    private static long getLongFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getLongFromHandle(paramInt1, paramInt2);
+    private static long getLongFromHandle(int handleOffset, int destOffset) {
+        return MemoryManager.getLongFromHandle(handleOffset, destOffset);
     }
 
-    private static float getFloatFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getFloatFromHandle(paramInt1, paramInt2);
+    private static float getFloatFromHandle(int handleOffset, int destOffset) {
+        return MemoryManager.getFloatFromHandle(handleOffset, destOffset);
     }
 
-    private static double getDoubleFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getDoubleFromHandle(paramInt1, paramInt2);
+    private static double getDoubleFromHandle(int handleOffset, int destOffset) {
+        return MemoryManager.getDoubleFromHandle(handleOffset, destOffset);
     }
 
-    private static void setByteInHandle(int paramInt1, int paramInt2, byte paramByte) {
-        MemoryManager.setByteInHandle(paramInt1, paramInt2, paramByte);
+    private static void setByteInHandle(int handleOffset, int destOffset, byte paramByte) {
+        MemoryManager.setByteInHandle(handleOffset, destOffset, paramByte);
     }
 
-    private static void setShortInHandle(int paramInt1, int paramInt2, short paramShort) {
-        MemoryManager.setShortInHandle(paramInt1, paramInt2, paramShort);
+    private static void setShortInHandle(int handleOffset, int destOffset, short paramShort) {
+        MemoryManager.setShortInHandle(handleOffset, destOffset, paramShort);
     }
 
-    private static void setIntInHandle(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInHandle(paramInt1, paramInt2, paramInt3);
+    private static void setIntInHandle(int handleOffset, int destOffset, int length) {
+        MemoryManager.setIntInHandle(handleOffset, destOffset, length);
     }
 
-    private static void setLongInHandle(int paramInt1, int paramInt2, long paramLong) {
-        MemoryManager.setLongInHandle(paramInt1, paramInt2, paramLong);
+    private static void setLongInHandle(int handleOffset, int destOffset, long paramLong) {
+        MemoryManager.setLongInHandle(handleOffset, destOffset, paramLong);
     }
 
-    private static void setFloatInHandle(int paramInt1, int paramInt2, float paramFloat) {
-        MemoryManager.setFloatInHandle(paramInt1, paramInt2, paramFloat);
+    private static void setFloatInHandle(int handleOffset, int destOffset, float paramFloat) {
+        MemoryManager.setFloatInHandle(handleOffset, destOffset, paramFloat);
     }
 
-    private static void setDoubleInHandle(int paramInt1, int paramInt2, double paramDouble) {
-        MemoryManager.setDoubleInHandle(paramInt1, paramInt2, paramDouble);
+    private static void setDoubleInHandle(int handleOffset, int destOffset, double paramDouble) {
+        MemoryManager.setDoubleInHandle(handleOffset, destOffset, paramDouble);
     }
 }
 

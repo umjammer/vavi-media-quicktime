@@ -41,8 +41,8 @@ public class SWController extends MouseController {
      * @param wholeSpace if true all object that are in the space will be dragged. If false
      *  then you must explicitly add the object to the controller.
      */
-    public SWController(MouseResponder paramMouseResponder, boolean paramBoolean) {
-        this(paramMouseResponder, paramBoolean, 10);
+    public SWController(MouseResponder mr, boolean wholeSpace) {
+        this(mr, wholeSpace, 10);
     }
 
     /**
@@ -54,9 +54,9 @@ public class SWController extends MouseController {
      *  then you must explicitly add the object to the controller.
      * @param flags that will control the hit test parameters of the SpriteWorld
      */
-    public SWController(MouseResponder paramMouseResponder, boolean paramBoolean, int paramInt) {
-        super(paramMouseResponder, paramBoolean);
-        this.flags = paramInt;
+    public SWController(MouseResponder mr, boolean wholeSpace, int flags) {
+        super(mr, wholeSpace);
+        this.flags = flags;
     }
 
     /**
@@ -79,8 +79,8 @@ public class SWController extends MouseController {
      * @param target the potential target space for the SWController.
      */
     @Override
-    protected void setTargetSpace(Space paramSpace) {
-        this.sd = ((SWCompositor) paramSpace);
+    protected void setTargetSpace(Space target) {
+        this.sd = ((SWCompositor) target);
     }
 
     /**
@@ -168,10 +168,10 @@ public class SWController extends MouseController {
      * @throws quicktime.QTException
      */
     @Override
-    protected Object getSelected(MouseEvent paramMouseEvent) throws QTException {
+    protected Object getSelected(MouseEvent event) throws QTException {
         QDRect localQDRect = this.sd.getDisplayBounds();
-        this.p.setX(paramMouseEvent.getX() + localQDRect.getX());
-        this.p.setY(paramMouseEvent.getY() + localQDRect.getY());
+        this.p.setX(event.getX() + localQDRect.getX());
+        this.p.setY(event.getY() + localQDRect.getY());
         if (!localQDRect.inside(this.p.getX(), this.p.getY())) {
             return null;
         }
@@ -182,8 +182,8 @@ public class SWController extends MouseController {
         TwoDSprite localObject = null;
         Enumeration localEnumeration = members();
         while (localEnumeration.hasMoreElements()) {
-            this.p.setX(paramMouseEvent.getX());
-            this.p.setY(paramMouseEvent.getY());
+            this.p.setX(event.getX());
+            this.p.setY(event.getY());
             TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
             if (localTwoDSprite.hitTest(this.flags, this.p)) {
                 if (localObject != null) {

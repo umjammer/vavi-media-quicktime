@@ -84,11 +84,11 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @return a FoundTextInfo object
      * @throws quicktime.std.StdQTException
      */
-    public FoundTextInfo findNextText(QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2) throws StdQTException {
+    public FoundTextInfo findNextText(QTPointerRef text, int findFlags, int startTime) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
-        int i = TextMediaFindNextText(_ID(), QTObject.ID(paramQTPointerRef), paramQTPointerRef.getSize(), (short) paramInt1, paramInt2, arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int i = TextMediaFindNextText(_ID(), QTObject.ID(text), text.getSize(), (short) findFlags, startTime, arrayOfInt1, arrayOfInt2, arrayOfInt3);
         StdQTException.checkError(i);
         return new FoundTextInfo(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0]);
     }
@@ -102,8 +102,8 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @param hiliteColor Contains a pointer to the RGB color for highlighting.
      * @throws quicktime.std.StdQTException
      */
-    public void hiliteTextSample(int paramInt1, int paramInt2, int paramInt3, QDColor paramQDColor) throws StdQTException {
-        int i = TextMediaHiliteTextSample(_ID(), paramInt1, (short) paramInt2, (short) paramInt3, paramQDColor != null ? paramQDColor.getRGBColor() : null);
+    public void hiliteTextSample(int sampleTime, int hiliteStart, int hiliteEnd, QDColor hiliteColor) throws StdQTException {
+        int i = TextMediaHiliteTextSample(_ID(), sampleTime, (short) hiliteStart, (short) hiliteEnd, hiliteColor != null ? hiliteColor.getRGBColor() : null);
         StdQTException.checkError(i);
     }
 
@@ -113,9 +113,9 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @param offset Specifies the offset.
      * @throws quicktime.std.StdQTException
      */
-    public void setDropShadowOffset(QDPoint paramQDPoint) throws StdQTException {
+    public void setDropShadowOffset(QDPoint offset) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        arrayOfInt[0] = paramQDPoint.getPoint();
+        arrayOfInt[0] = offset.getPoint();
         StdQTException.checkError(TextMediaSetTextSampleData(_ID(), arrayOfInt, 1685221487));
     }
 
@@ -125,9 +125,9 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @param translucency Specifies the translucency.
      * @throws quicktime.std.StdQTException
      */
-    public void setDropShadowTranslucency(int paramInt) throws StdQTException {
+    public void setDropShadowTranslucency(int translucency) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        arrayOfInt[0] = paramInt;
+        arrayOfInt[0] = translucency;
         int i = TextMediaSetTextSampleData(_ID(), arrayOfInt, 1685221492);
         StdQTException.checkError(i);
     }

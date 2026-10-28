@@ -12,16 +12,16 @@ public class UtilException extends QTException {
      * that could be displayed to the user.
      * @param str The message that could be displayed to the user
      */
-    public UtilException(String paramString) {
-        super(paramString);
+    public UtilException(String str) {
+        super(str);
     }
 
     /**
      * Creates an exception with a specific error number
      * @param val the error number
      */
-    public UtilException(int paramInt) {
-        super(paramInt);
+    public UtilException(int val) {
+        super(val);
     }
 
     /**
@@ -30,9 +30,9 @@ public class UtilException extends QTException {
      * @param err the result or error code if non-zero an exception is thrown
      * @throws quicktime.util.UtilException
      */
-    public static void checkError(int paramInt) throws UtilException {
-        if (paramInt < 0) {
-            throw new UtilException(paramInt);
+    public static void checkError(int err) throws UtilException {
+        if (err < 0) {
+            throw new UtilException(err);
         }
     }
 }

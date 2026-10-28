@@ -105,8 +105,8 @@ public class Protocol implements Collection {
      * @return a boolean
      */
     @Override
-    public boolean hasMember(Object member) {
-        return this.protocolsVec.contains(member);
+    public boolean hasMember(Object object) {
+        return this.protocolsVec.contains(object);
     }
 
     /**
@@ -174,10 +174,10 @@ public class Protocol implements Collection {
      * @param object the Object to test
      * @return a boolean
      */
-    public boolean passProtocol(Object paramObject) {
+    public boolean passProtocol(Object object) {
         for (Enumeration localEnumeration = members(); localEnumeration.hasMoreElements(); ) {
             Class localClass = (Class) localEnumeration.nextElement();
-            if (!localClass.isInstance(paramObject))
+            if (!localClass.isInstance(object))
                 return false;
         }
         return true;

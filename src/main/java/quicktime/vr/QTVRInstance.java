@@ -55,8 +55,8 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      *        calling QTVRGetQTVRTrack
      * @param mc A movie controller that is associated with the new QuickTime VR movie
      */
-    public QTVRInstance(Track paramTrack, MovieController paramMovieController) throws QTException {
-        super(allocate(paramTrack, paramMovieController));
+    public QTVRInstance(Track qtvrTrack, MovieController mc) throws QTException {
+        super(allocate(qtvrTrack, mc));
     }
 
     private static int allocate(Track paramTrack, MovieController paramMovieController) throws QTException {
@@ -97,8 +97,8 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      *        specified node.
      * @throws quicktime.vr.QTVRException
      */
-    public AtomContainer getNodeInfo(int paramInt) throws QTVRException {
-        return AtomContainer.fromQTVRInstanceNode(this, paramInt);
+    public AtomContainer getNodeInfo(int nodeID) throws QTVRException {
+        return AtomContainer.fromQTVRInstanceNode(this, nodeID);
     }
 
     /**
@@ -117,10 +117,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      *                 the appropriate hot spot atom.
      * @throws quicktime.vr.QTVRException
      */
-    public void triggerHotSpot(int paramInt, AtomContainer paramAtomContainer, Atom paramAtom) throws QTVRException {
+    public void triggerHotSpot(int hotSpotID, AtomContainer nodeInfo, Atom selectedAtom) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRTriggerHotSpot(_ID(), paramInt, QTObject.ID(paramAtomContainer), paramAtom == null ? 0 : paramAtom.getAtom());
+            i = QTVRTriggerHotSpot(_ID(), hotSpotID, QTObject.ID(nodeInfo), selectedAtom == null ? 0 : selectedAtom.getAtom());
         }
         QTVRException.checkError(i);
     }
@@ -134,10 +134,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param enable A Boolean value that indicates whether the specified hot spots are to be enabled (true) or disabled (false).
      * @throws quicktime.vr.QTVRException
      */
-    public void enableHotSpot(int paramInt1, int paramInt2, boolean paramBoolean) throws QTVRException {
+    public void enableHotSpot(int enableFlag, int hotSpotValue, boolean enable) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVREnableHotSpot(_ID(), paramInt1, paramInt2, (byte) (paramBoolean ? 1 : 0));
+            i = QTVREnableHotSpot(_ID(), enableFlag, hotSpotValue, (byte) (enable ? 1 : 0));
         }
         QTVRException.checkError(i);
     }
@@ -151,10 +151,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      *                 imaging mode.
      * @throws quicktime.vr.QTVRException
      */
-    public void update(int paramInt) throws QTVRException {
+    public void update(int imagingMode) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRUpdate(_ID(), paramInt);
+            i = QTVRUpdate(_ID(), imagingMode);
         }
         QTVRException.checkError(i);
     }
@@ -165,10 +165,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param nodeID The ID of the node you want to be the current node.
      * @throws quicktime.vr.QTVRException
      */
-    public void goToNodeID(int paramInt) throws QTVRException {
+    public void goToNodeID(int nodeID) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGoToNodeID(_ID(), paramInt);
+            i = QTVRGoToNodeID(_ID(), nodeID);
         }
         QTVRException.checkError(i);
     }
@@ -180,10 +180,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param direction The direction of the nudge.
      * @throws quicktime.vr.QTVRException
      */
-    public void nudge(int paramInt) throws QTVRException {
+    public void nudge(int direction) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRNudge(_ID(), paramInt);
+            i = QTVRNudge(_ID(), direction);
         }
         QTVRException.checkError(i);
     }
@@ -195,10 +195,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param panAngle The desired pan angle of the specified movie.
      * @throws quicktime.vr.QTVRException
      */
-    public void setPanAngle(float paramFloat) throws QTVRException {
+    public void setPanAngle(float panAngle) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetPanAngle(_ID(), paramFloat);
+            i = QTVRSetPanAngle(_ID(), panAngle);
         }
         QTVRException.checkError(i);
     }
@@ -210,10 +210,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param tiltAngle The desired tilt angle of the specified movie.
      * @throws quicktime.vr.QTVRException
      */
-    public void setTiltAngle(float paramFloat) throws QTVRException {
+    public void setTiltAngle(float tiltAngle) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetTiltAngle(_ID(), paramFloat);
+            i = QTVRSetTiltAngle(_ID(), tiltAngle);
         }
         QTVRException.checkError(i);
     }
@@ -225,10 +225,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param fieldOfView The desired vertical field of view for the specified movie.
      * @throws quicktime.vr.QTVRException
      */
-    public void setFieldOfView(float paramFloat) throws QTVRException {
+    public void setFieldOfView(float fieldOfView) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetFieldOfView(_ID(), paramFloat);
+            i = QTVRSetFieldOfView(_ID(), fieldOfView);
         }
         QTVRException.checkError(i);
     }
@@ -240,12 +240,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param kind The type of constraints to be returned.
      * @throws quicktime.vr.QTVRException
      */
-    public float getConstraints_min(int paramInt) throws QTVRException {
+    public float getConstraints_min(int kind) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
         float[] arrayOfFloat2 = { 0.0F };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetConstraints(_ID(), (short) paramInt, arrayOfFloat1, arrayOfFloat2);
+            i = QTVRGetConstraints(_ID(), (short) kind, arrayOfFloat1, arrayOfFloat2);
         }
         QTVRException.checkError(i);
         return arrayOfFloat1[0];
@@ -258,12 +258,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param kind The type of constraints to be returned.
      * @throws quicktime.vr.QTVRException
      */
-    public float getConstraints_max(int paramInt) throws QTVRException {
+    public float getConstraints_max(int kind) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
         float[] arrayOfFloat2 = { 0.0F };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetConstraints(_ID(), (short) paramInt, arrayOfFloat1, arrayOfFloat2);
+            i = QTVRGetConstraints(_ID(), (short) kind, arrayOfFloat1, arrayOfFloat2);
         }
         QTVRException.checkError(i);
         return arrayOfFloat2[0];
@@ -277,10 +277,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param maxValue A floating-point value that contains the desired maximum constraint of the specified type.
      * @throws quicktime.vr.QTVRException
      */
-    public void setConstraints(int paramInt, float paramFloat1, float paramFloat2) throws QTVRException {
+    public void setConstraints(int kind, float minValue, float maxValue) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetConstraints(_ID(), (short) paramInt, paramFloat1, paramFloat2);
+            i = QTVRSetConstraints(_ID(), (short) kind, minValue, maxValue);
         }
         QTVRException.checkError(i);
     }
@@ -294,10 +294,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param propertyValue sets the current value of the specified imaging property for the specified mode.
      * @throws quicktime.vr.QTVRException
      */
-    public void setImagingProperty(int paramInt1, int paramInt2, int paramInt3) throws QTVRException {
+    public void setImagingProperty(int imagingMode, int imagingProperty, int propertyValue) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetImagingProperty(_ID(), paramInt1, paramInt2, paramInt3);
+            i = QTVRSetImagingProperty(_ID(), imagingMode, imagingProperty, propertyValue);
         }
         QTVRException.checkError(i);
     }
@@ -311,11 +311,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @return the current value of the specified imaging property for the specified mode.
      * @throws quicktime.vr.QTVRException
      */
-    public int getImagingProperty(int paramInt1, int paramInt2) throws QTVRException {
+    public int getImagingProperty(int imagingMode, int imagingProperty) throws QTVRException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetImagingProperty(_ID(), paramInt1, paramInt2, arrayOfInt);
+            i = QTVRGetImagingProperty(_ID(), imagingMode, imagingProperty, arrayOfInt);
         }
         QTVRException.checkError(i);
         return arrayOfInt[0];
@@ -327,10 +327,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param units A constant that indicates the type of angular units to use.
      * @throws quicktime.vr.QTVRException
      */
-    public void setAngularUnits(int paramInt) throws QTVRException {
+    public void setAngularUnits(int units) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetAngularUnits(_ID(), paramInt);
+            i = QTVRSetAngularUnits(_ID(), units);
         }
         QTVRException.checkError(i);
     }
@@ -341,12 +341,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param pt A point, in the local coordinates of the graphics world of the specified movie.
      * @throws quicktime.vr.QTVRException
      */
-    public float ptToPanAngle(QDPoint paramQDPoint) throws QTVRException {
+    public float ptToPanAngle(QDPoint pt) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
         float[] arrayOfFloat2 = { 0.0F };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRPtToAngles(_ID(), paramQDPoint.getPoint(), arrayOfFloat1, arrayOfFloat2);
+            i = QTVRPtToAngles(_ID(), pt.getPoint(), arrayOfFloat1, arrayOfFloat2);
         }
         QTVRException.checkError(i);
         return arrayOfFloat1[0];
@@ -358,12 +358,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param pt A point, in the local coordinates of the graphics world of the specified movie.
      * @throws quicktime.vr.QTVRException
      */
-    public float ptToTiltAngle(QDPoint paramQDPoint) throws QTVRException {
+    public float ptToTiltAngle(QDPoint pt) throws QTVRException {
         float[] arrayOfFloat1 = { 0.0F };
         float[] arrayOfFloat2 = { 0.0F };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRPtToAngles(_ID(), paramQDPoint.getPoint(), arrayOfFloat1, arrayOfFloat2);
+            i = QTVRPtToAngles(_ID(), pt.getPoint(), arrayOfFloat1, arrayOfFloat2);
         }
         QTVRException.checkError(i);
         return arrayOfFloat2[0];
@@ -377,11 +377,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param value the desired value of the specified viewing characteristic.
      * @throws quicktime.vr.QTVRException
      */
-    public float wrapAndConstrain(int paramInt, float paramFloat) throws QTVRException {
+    public float wrapAndConstrain(int kind, float value) throws QTVRException {
         float[] arrayOfFloat = { 0.0F };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRWrapAndConstrain(_ID(), (short) paramInt, paramFloat, arrayOfFloat);
+            i = QTVRWrapAndConstrain(_ID(), (short) kind, value, arrayOfFloat);
         }
         QTVRException.checkError(i);
         return arrayOfFloat[0];
@@ -396,18 +396,18 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @throws quicktime.vr.QTVRException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void setEnteringNodeProc(QTVREnteringNode paramQTVREnteringNode, int paramInt) throws QTVRException {
-        if (paramQTVREnteringNode == null) {
+    public void setEnteringNodeProc(QTVREnteringNode enteringNodeProc, int flags) throws QTVRException {
+        if (enteringNodeProc == null) {
             removeEnteringNodeProc();
             return;
         }
         if (this.enUPP != null) {
             removeEnteringNodeProc();
         }
-        this.enUPP = new VRDispatcher(this, paramQTVREnteringNode);
+        this.enUPP = new VRDispatcher(this, enteringNodeProc);
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetEnteringNodeProc(_ID(), this.enUPP.ID(), 0, paramInt);
+            i = QTVRSetEnteringNodeProc(_ID(), this.enUPP.ID(), 0, flags);
         }
         QTVRException.checkError(i);
     }
@@ -436,18 +436,18 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @throws quicktime.vr.QTVRException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void setLeavingNodeProc(QTVRLeavingNode paramQTVRLeavingNode, int paramInt) throws QTVRException {
-        if (paramQTVRLeavingNode == null) {
+    public void setLeavingNodeProc(QTVRLeavingNode leavingNodeProc, int flags) throws QTVRException {
+        if (leavingNodeProc == null) {
             removeLeavingNodeProc();
             return;
         }
         if (this.leaveUPP != null) {
             removeLeavingNodeProc();
         }
-        this.leaveUPP = new VRDispatcher(this, paramQTVRLeavingNode);
+        this.leaveUPP = new VRDispatcher(this, leavingNodeProc);
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetLeavingNodeProc(_ID(), this.leaveUPP.ID(), 0, paramInt);
+            i = QTVRSetLeavingNodeProc(_ID(), this.leaveUPP.ID(), 0, flags);
         }
         QTVRException.checkError(i);
     }
@@ -476,18 +476,18 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @throws quicktime.vr.QTVRException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void setMouseOverHotSpotProc(QTVRMouseOverHotSpot paramQTVRMouseOverHotSpot, int paramInt) throws QTVRException {
-        if (paramQTVRMouseOverHotSpot == null) {
+    public void setMouseOverHotSpotProc(QTVRMouseOverHotSpot mouseOverHotSpotProc, int flags) throws QTVRException {
+        if (mouseOverHotSpotProc == null) {
             removeMouseOverHotSpotProc();
             return;
         }
         if (this.mohsUPP != null) {
             removeMouseOverHotSpotProc();
         }
-        this.mohsUPP = new VRDispatcher(this, paramQTVRMouseOverHotSpot);
+        this.mohsUPP = new VRDispatcher(this, mouseOverHotSpotProc);
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetMouseOverHotSpotProc(_ID(), this.mohsUPP.ID(), 0, paramInt);
+            i = QTVRSetMouseOverHotSpotProc(_ID(), this.mohsUPP.ID(), 0, flags);
         }
         QTVRException.checkError(i);
     }
@@ -517,19 +517,19 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @throws quicktime.vr.QTVRException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void installInterceptProc(int paramInt1, QTVRInterceptor paramQTVRInterceptor, int paramInt2) throws QTVRException {
-        removeInterceptProc(paramInt1);
-        if (paramQTVRInterceptor == null) {
+    public void installInterceptProc(int selector, QTVRInterceptor interceptProc, int flags) throws QTVRException {
+        removeInterceptProc(selector);
+        if (interceptProc == null) {
             return;
         }
-        VRDispatcher localVRDispatcher = new VRDispatcher(this, paramQTVRInterceptor);
+        VRDispatcher localVRDispatcher = new VRDispatcher(this, interceptProc);
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRInstallInterceptProc(_ID(), paramInt1, localVRDispatcher.ID(), 0, paramInt2);
+            i = QTVRInstallInterceptProc(_ID(), selector, localVRDispatcher.ID(), 0, flags);
         }
         QTVRException.checkError(i);
         if (localVRDispatcher != null) {
-            this.ipProcs.put(paramInt1, localVRDispatcher);
+            this.ipProcs.put(selector, localVRDispatcher);
         }
     }
 
@@ -541,13 +541,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @throws quicktime.vr.QTVRException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void removeInterceptProc(int paramInt) throws QTVRException {
-        VRDispatcher localVRDispatcher = this.ipProcs.remove(paramInt);
+    public void removeInterceptProc(int selector) throws QTVRException {
+        VRDispatcher localVRDispatcher = this.ipProcs.remove(selector);
         if (localVRDispatcher != null) {
             localVRDispatcher.cleanupMethodClosure();
             int i = 0;
             synchronized (QTNative.globalsLock) {
-                i = QTVRInstallInterceptProc(_ID(), paramInt, 0, 0, 0);
+                i = QTVRInstallInterceptProc(_ID(), selector, 0, 0, 0);
             }
             QTVRException.checkError(i);
         }
@@ -585,10 +585,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param viewCenter A QDPoint structure that contains the desired view center of the specified movie.
      * @throws quicktime.vr.QTVRException
      */
-    public void setViewCenter(QDPoint paramQDPoint) throws QTVRException {
+    public void setViewCenter(QDPoint viewCenter) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetViewCenter(_ID(), paramQDPoint.getQTVRFloatPoint());
+            i = QTVRSetViewCenter(_ID(), viewCenter.getQTVRFloatPoint());
         }
         QTVRException.checkError(i);
     }
@@ -616,11 +616,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @return the OSType of the hot spot specified by the hot spot ID.
      * @throws quicktime.vr.QTVRException
      */
-    public int getHotSpotType(int paramInt) throws QTVRException {
+    public int getHotSpotType(int hotSpotID) throws QTVRException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetHotSpotType(_ID(), paramInt, arrayOfInt);
+            i = QTVRGetHotSpotType(_ID(), hotSpotID, arrayOfInt);
         }
         QTVRException.checkError(i);
         return arrayOfInt[0];
@@ -676,11 +676,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @return the region occupied by the hot spot having the specified ID
      * @throws quicktime.QTException
      */
-    public Region getHotSpotRegion(int paramInt) throws QTException {
+    public Region getHotSpotRegion(int hotSpotID) throws QTException {
         Region localRegion = new Region();
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetHotSpotRegion(_ID(), paramInt, QTObject.ID(localRegion));
+            i = QTVRGetHotSpotRegion(_ID(), hotSpotID, QTObject.ID(localRegion));
         }
         QTVRException.checkError(i);
         return localRegion;
@@ -715,11 +715,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @return the hot spot ID or 0
      * @throws quicktime.vr.QTVRException
      */
-    public int ptToHotSpotID(QDPoint paramQDPoint) throws QTVRException {
+    public int ptToHotSpotID(QDPoint pt) throws QTVRException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRPtToHotSpotID(_ID(), paramQDPoint.getPoint(), arrayOfInt);
+            i = QTVRPtToHotSpotID(_ID(), pt.getPoint(), arrayOfInt);
         }
         QTVRException.checkError(i);
         return arrayOfInt[0];
@@ -733,10 +733,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param enable a boolean specified whether tracking should be disabled (false) or enabled (true)
      * @throws quicktime.vr.QTVRException
      */
-    public void setMouseOverTracking(boolean paramBoolean) throws QTVRException {
+    public void setMouseOverTracking(boolean enable) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetMouseOverTracking(_ID(), (byte) (paramBoolean ? 1 : 0));
+            i = QTVRSetMouseOverTracking(_ID(), (byte) (enable ? 1 : 0));
         }
         QTVRException.checkError(i);
     }
@@ -766,10 +766,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param enable a boolean specified whether tracking should be disabled (false) or enabled (true)
      * @throws quicktime.vr.QTVRException
      */
-    public void setMouseDownTracking(boolean paramBoolean) throws QTVRException {
+    public void setMouseDownTracking(boolean enable) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetMouseDownTracking(_ID(), (byte) (paramBoolean ? 1 : 0));
+            i = QTVRSetMouseDownTracking(_ID(), (byte) (enable ? 1 : 0));
         }
         QTVRException.checkError(i);
     }
@@ -802,10 +802,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param hysteresis the mouse-click hysteresis
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionMouseClickHysteresis(int paramInt) throws QTVRException {
+    public void setInteractionMouseClickHysteresis(int hysteresis) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 1, (short) paramInt);
+            i = QTVRSetInteractionProperty(_ID(), 1, (short) hysteresis);
         }
         QTVRException.checkError(i);
     }
@@ -837,10 +837,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param timeout the mouse-click timeout
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionMouseClickTimeout(int paramInt) throws QTVRException {
+    public void setInteractionMouseClickTimeout(int timeout) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 2, paramInt);
+            i = QTVRSetInteractionProperty(_ID(), 2, timeout);
         }
         QTVRException.checkError(i);
     }
@@ -871,10 +871,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param speed the pan and tilt speed
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionPanTiltSpeed(int paramInt) throws QTVRException {
+    public void setInteractionPanTiltSpeed(int speed) throws QTVRException {
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 3, paramInt);
+            i = QTVRSetInteractionProperty(_ID(), 3, speed);
         }
         QTVRException.checkError(i);
     }
@@ -904,10 +904,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param speed the zoom speed
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionZoomSpeed(int paramInt) throws QTVRException {
+    public void setInteractionZoomSpeed(int speed) throws QTVRException {
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 4, paramInt);
+            i = QTVRSetInteractionProperty(_ID(), 4, speed);
         }
         QTVRException.checkError(i);
     }
@@ -937,10 +937,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param translate sets the mouseDown translation property
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionTranslateOnMouseDown(boolean paramBoolean) throws QTVRException {
+    public void setInteractionTranslateOnMouseDown(boolean translate) throws QTVRException {
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 101, (byte) (paramBoolean ? 1 : 0));
+            i = QTVRSetInteractionProperty(_ID(), 101, (byte) (translate ? 1 : 0));
         }
         QTVRException.checkError(i);
     }
@@ -970,8 +970,8 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param scale sets the mouse motion scale property
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionMouseMotionScale(float paramFloat) throws QTVRException {
-        float[] arrayOfFloat = { paramFloat };
+    public void setInteractionMouseMotionScale(float scale) throws QTVRException {
+        float[] arrayOfFloat = { scale };
         int i;
         synchronized (QTNative.globalsLock) {
             i = QTVRSetInteractionProperty(_ID(), 102, arrayOfFloat);
@@ -1002,10 +1002,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param mode sets the nudge mode property (use kQTVRNudgeRotate, kQTVRNudgeTranslate, or kQTVRNudgeSameAsMouse)
      * @throws quicktime.vr.QTVRException
      */
-    public void setInteractionNudgeMode(int paramInt) throws QTVRException {
+    public void setInteractionNudgeMode(int mode) throws QTVRException {
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 103, paramInt);
+            i = QTVRSetInteractionProperty(_ID(), 103, mode);
         }
         QTVRException.checkError(i);
     }
@@ -1040,11 +1040,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param value value of the view angle
      * @throws quicktime.vr.QTVRException
      */
-    public void setViewAngle(int paramInt1, int paramInt2, float paramFloat) throws QTVRException {
+    public void setViewAngle(int viewParameter, int flagsIn, float value) throws QTVRException {
         int i = 0;
-        float[] arrayOfFloat = { paramFloat };
+        float[] arrayOfFloat = { value };
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetViewParameter(_ID(), paramInt1, arrayOfFloat, paramInt2);
+            i = QTVRSetViewParameter(_ID(), viewParameter, arrayOfFloat, flagsIn);
         }
         QTVRException.checkError(i);
     }
@@ -1058,13 +1058,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @return the viewParameter value
      * @throws quicktime.vr.QTVRException
      */
-    public float getViewAngle(int paramInt) throws QTVRException {
+    public float getViewAngle(int viewParameter) throws QTVRException {
         int i = 0;
         int j = 0;
         int[] arrayOfInt = { 0 };
         float[] arrayOfFloat = { 0.0F };
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetViewParameter(_ID(), paramInt, arrayOfFloat, j, arrayOfInt);
+            i = QTVRGetViewParameter(_ID(), viewParameter, arrayOfFloat, j, arrayOfInt);
         }
         QTVRException.checkError(i);
         return arrayOfFloat[0];
@@ -1080,11 +1080,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param center point specifying the center
      * @throws quicktime.vr.QTVRException
      */
-    public void setViewCentre(int paramInt, QDPoint paramQDPoint) throws QTVRException {
+    public void setViewCentre(int flagsIn, QDPoint center) throws QTVRException {
         int i = 0;
-        float[] arrayOfFloat = { paramQDPoint.getXF(), paramQDPoint.getYF() };
+        float[] arrayOfFloat = { center.getXF(), center.getYF() };
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetViewParameter(_ID(), 260, arrayOfFloat, paramInt);
+            i = QTVRSetViewParameter(_ID(), 260, arrayOfFloat, flagsIn);
         }
         QTVRException.checkError(i);
     }
@@ -1117,11 +1117,11 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param value true if visible
      * @throws quicktime.vr.QTVRException
      */
-    public void setHotSpotsVisible(boolean paramBoolean) throws QTVRException {
+    public void setHotSpotsVisible(boolean value) throws QTVRException {
         int i = 0;
         int j = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetViewParameter(_ID(), 512, (byte) (paramBoolean ? 1 : 0), j);
+            i = QTVRSetViewParameter(_ID(), 512, (byte) (value ? 1 : 0), j);
         }
         QTVRException.checkError(i);
     }
@@ -1154,8 +1154,8 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param cursRecord the object pointing to the CursorRecord
      * @throws quicktime.vr.QTVRException
      */
-    public void replaceCursor(CursorRecord paramCursorRecord) throws QTVRException {
-        int i = QTVRReplaceCursor(_ID(), paramCursorRecord.getBytes());
+    public void replaceCursor(CursorRecord cursRecord) throws QTVRException {
+        int i = QTVRReplaceCursor(_ID(), cursRecord.getBytes());
         QTVRException.checkError(i);
     }
 
@@ -1177,9 +1177,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param nodeID A node ID. Pass kQTVRCurrentNode for the current node.
      * @return the type of the specified node.
      */
-    public int getNodeType(int paramInt) {
+    public int getNodeType(int nodeID) {
         synchronized (QTNative.globalsLock) {
-            return QTVRGetNodeType(_ID(), paramInt);
+            return QTVRGetNodeType(_ID(), nodeID);
         }
     }
 
@@ -1237,9 +1237,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param panAngle a pan angle.
      * @return the column number in the object image array that corresponds to the specified pan angle.
      */
-    public int panToColumn(float paramFloat) {
+    public int panToColumn(float panAngle) {
         synchronized (QTNative.globalsLock) {
-            return QTVRPanToColumn(_ID(), paramFloat);
+            return QTVRPanToColumn(_ID(), panAngle);
         }
     }
 
@@ -1249,9 +1249,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param column A column number.
      * @return the pan angle that corresponds to the specified column number in the object image array.
      */
-    public float columnToPan(int paramInt) {
+    public float columnToPan(int column) {
         synchronized (QTNative.globalsLock) {
-            return QTVRColumnToPan(_ID(), (short) paramInt);
+            return QTVRColumnToPan(_ID(), (short) column);
         }
     }
 
@@ -1261,9 +1261,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param tiltAngle a tilt angle.
      * @return The row number in the object image array that corresponds to the specified tilt angle.
      */
-    public int tiltToRow(float paramFloat) {
+    public int tiltToRow(float tiltAngle) {
         synchronized (QTNative.globalsLock) {
-            return QTVRTiltToRow(_ID(), paramFloat);
+            return QTVRTiltToRow(_ID(), tiltAngle);
         }
     }
 
@@ -1273,9 +1273,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @param row a row number.
      * @return the tilt angle that corresponds to the specified row number in the object image array.
      */
-    public float rowToTilt(int paramInt) {
+    public float rowToTilt(int row) {
         synchronized (QTNative.globalsLock) {
-            return QTVRRowToTilt(_ID(), (short) paramInt);
+            return QTVRRowToTilt(_ID(), (short) row);
         }
     }
 

@@ -38,9 +38,9 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param p2 A two-dimensional point
      * @return a Vector2D object
      */
-    public static Vector2D subtract(QDPoint paramQDPoint1, QDPoint paramQDPoint2) {
+    public static Vector2D subtract(QDPoint p1, QDPoint p2) {
         Vector2D localVector2D = new Vector2D();
-        int i = Q3Point2D_Subtract(paramQDPoint1.getQ3Point2D(), paramQDPoint2.getQ3Point2D(), localVector2D.getBytes());
+        int i = Q3Point2D_Subtract(p1.getQ3Point2D(), p2.getQ3Point2D(), localVector2D.getBytes());
         return localVector2D;
     }
 
@@ -51,8 +51,8 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param p2 A two-dimensional point
      * @return the distance
      */
-    public static float distance(QDPoint paramQDPoint1, QDPoint paramQDPoint2) {
-        return Q3Point2D_Distance(paramQDPoint1.getQ3Point2D(), paramQDPoint2.getQ3Point2D());
+    public static float distance(QDPoint p1, QDPoint p2) {
+        return Q3Point2D_Distance(p1.getQ3Point2D(), p2.getQ3Point2D());
     }
 
     /**
@@ -62,8 +62,8 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param p2 A two-dimensional point
      * @return the distance
      */
-    public static float distanceSquared(QDPoint paramQDPoint1, QDPoint paramQDPoint2) {
-        return Q3Point2D_DistanceSquared(paramQDPoint1.getQ3Point2D(), paramQDPoint2.getQ3Point2D());
+    public static float distanceSquared(QDPoint p1, QDPoint p2) {
+        return Q3Point2D_DistanceSquared(p1.getQ3Point2D(), p2.getQ3Point2D());
     }
 
     /**
@@ -89,9 +89,9 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param v a two-dimensional vector
      * @return a point that is the result of the add.
      */
-    public static QDPoint add(QDPoint paramQDPoint, Vector2D paramVector2D) {
+    public static QDPoint add(QDPoint point2D, Vector2D v) {
         byte[] arrayOfByte = new byte[8];
-        int i = Q3Point2D_Vector2D_Add(paramQDPoint.getQ3Point2D(), paramVector2D.getBytes(), arrayOfByte);
+        int i = Q3Point2D_Vector2D_Add(point2D.getQ3Point2D(), v.getBytes(), arrayOfByte);
         return QDPoint.fromArray(arrayOfByte, -8);
     }
 
@@ -102,9 +102,9 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param v a two-dimensional vector
      * @return a point that is the result of the add.
      */
-    public static QDPoint subtract(QDPoint paramQDPoint, Vector2D paramVector2D) {
+    public static QDPoint subtract(QDPoint point2D, Vector2D v) {
         byte[] arrayOfByte = new byte[8];
-        int i = Q3Point2D_Vector2D_Subtract(paramQDPoint.getQ3Point2D(), paramVector2D.getBytes(), arrayOfByte);
+        int i = Q3Point2D_Vector2D_Subtract(point2D.getQ3Point2D(), v.getBytes(), arrayOfByte);
         return QDPoint.fromArray(arrayOfByte, -8);
     }
 

@@ -26,6 +26,6 @@ public interface Targetable extends Ticklish {
      * Set the target.
      * @param target the new target for the action list
      */
-    void setTarget(Object paramObject);
+    void setTarget(Object target);
 }
 

@@ -51,8 +51,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * that this presenter presents.
      * @param ef the effect that is rendered
      */
-    public QTEffectPresenter(QTEffect paramQTEffect) throws QTException {
-        this(paramQTEffect, new QDGraphics(32, paramQTEffect.getDisplayBounds(), 4096));
+    public QTEffectPresenter(QTEffect ef) throws QTException {
+        this(ef, new QDGraphics(32, ef.getDisplayBounds(), 4096));
     }
 
     /**
@@ -65,16 +65,16 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @param ef the effect that is rendered
      * @param g the offscreen QDGraphics that the effect is rendered into.
      */
-    public QTEffectPresenter(QTEffect paramQTEffect, QDGraphics paramQDGraphics) throws QTException {
-        super(moveToZero(paramQTEffect.getDisplayBounds()));
-        this.ef = paramQTEffect;
-        this.g = paramQDGraphics;
-        paramQTEffect.setGWorld(paramQDGraphics);
-        paramQTEffect.redraw(null);
-        PixMap localPixMap = paramQDGraphics.getPixMap();
+    public QTEffectPresenter(QTEffect ef, QDGraphics g) throws QTException {
+        super(moveToZero(ef.getDisplayBounds()));
+        this.ef = ef;
+        this.g = g;
+        ef.setGWorld(g);
+        ef.redraw(null);
+        PixMap localPixMap = g.getPixMap();
         setImageData(localPixMap.getPixelData(), new ImageDescription(localPixMap));
-        if ((paramQTEffect instanceof QTTransition)) {
-            ((QTTransition) paramQTEffect).thePresenter = this;
+        if ((ef instanceof QTTransition)) {
+            ((QTTransition) ef).thePresenter = this;
         }
     }
 
@@ -90,10 +90,10 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @throws quicktime.QTException
      */
     @Override
-    public void redraw(Region paramRegion) throws QTException {
+    public void redraw(Region invalidRgn) throws QTException {
         if (this.ef.isRedrawing())
-            this.ef.redraw(paramRegion);
-        super.redraw(paramRegion);
+            this.ef.redraw(invalidRgn);
+        super.redraw(invalidRgn);
     }
 
     class EFInvalidator extends Invalidator {
@@ -167,9 +167,9 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @see quicktime.app.display.SWCompositor
      */
     @Override
-    public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) {
-        this.sprite = paramTwoDSprite;
-        return this.ef.isSingleFrame() ? null : new EFInvalidator(paramTwoDSprite, this);
+    public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) {
+        this.sprite = s;
+        return this.ef.isSingleFrame() ? null : new EFInvalidator(s, this);
     }
 
     /**
@@ -181,7 +181,7 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @param c the SWCompositor it is being removed from
      */
     @Override
-    public void removedFromCompositor(SWCompositor paramSWCompositor) {
+    public void removedFromCompositor(SWCompositor c) {
         this.sprite = null;
     }
 

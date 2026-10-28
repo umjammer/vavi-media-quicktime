@@ -16,8 +16,8 @@ public final class ThreeDMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public ThreeDMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1902392164, paramInt, paramDataRef);
+    public ThreeDMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1902392164, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class ThreeDMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public ThreeDMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public ThreeDMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     ThreeDMedia(int paramInt, Track paramTrack) throws QTException {
@@ -63,9 +63,9 @@ public final class ThreeDMedia extends Media {
      * @return an ThreeDDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public ThreeDDescription getThreeDDescription(int paramInt) throws QTException {
+    public ThreeDDescription getThreeDDescription(int index) throws QTException {
         ThreeDDescription localThreeDDescription = new ThreeDDescription(1902392164);
-        getNativeSampleDescription(paramInt, localThreeDDescription);
+        getNativeSampleDescription(index, localThreeDDescription);
         return localThreeDDescription;
     }
 }

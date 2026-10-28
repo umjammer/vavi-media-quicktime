@@ -11,8 +11,8 @@ public class QTNullPointerException extends NullPointerException {
      * a QuickTime native call being made without the QuickTime session being initialized.
      * @param str The name of the class that has a null pointer.
      */
-    public QTNullPointerException(String paramString) {
-        super(paramString);
+    public QTNullPointerException(String str) {
+        super(str);
     }
 }
 

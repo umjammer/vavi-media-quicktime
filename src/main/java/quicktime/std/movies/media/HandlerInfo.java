@@ -29,10 +29,10 @@ public class HandlerInfo {
      * @param name the name of the handler's manufacturer.
      * @param manufacturerID the ID of the handler's manufacturer.
      */
-    public HandlerInfo(int paramInt1, String paramString, int paramInt2) {
-        this.subType = paramInt1;
-        this.name = paramString;
-        this.manufacturerID = paramInt2;
+    public HandlerInfo(int subType, String name, int manufacturerID) {
+        this.subType = subType;
+        this.name = name;
+        this.manufacturerID = manufacturerID;
     }
 
     /**

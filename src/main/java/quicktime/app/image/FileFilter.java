@@ -93,22 +93,22 @@ public class FileFilter implements FilenameFilter {
      * set with the appropriate values.
      * @param fName the name of the file that is to be disected.
      */
-    protected void extractPrefixAndSuffix(String paramString) {
-        int i = paramString.length() - 1;
+    protected void extractPrefixAndSuffix(String fName) {
+        int i = fName.length() - 1;
         int j = 0;
         for (int k = i; k >= 0; k--) {
-            if (Character.isDigit(paramString.charAt(k))) {
+            if (Character.isDigit(fName.charAt(k))) {
                 i = k + 1;
                 for (int m = k - 1; m >= 0; m--) {
-                    if (!Character.isDigit(paramString.charAt(m))) {
+                    if (!Character.isDigit(fName.charAt(m))) {
                         j = m + 1;
                         break;
                     }
                 }
             }
         }
-        this.prefix = paramString.substring(0, j);
-        this.suffix = paramString.substring(i);
+        this.prefix = fName.substring(0, j);
+        this.suffix = fName.substring(i);
     }
 
     /**
@@ -138,11 +138,11 @@ public class FileFilter implements FilenameFilter {
      * @return true if the file matches the conditions otherwise false
      */
     @Override
-    public boolean accept(File paramFile, String paramString) {
+    public boolean accept(File dir, String fName) {
         boolean bool = false;
-        if ((paramString.startsWith(this.prefix)) && ((!this.testSuffix) || (paramString.endsWith(this.suffix)))) {
+        if ((fName.startsWith(this.prefix)) && ((!this.testSuffix) || (fName.endsWith(this.suffix)))) {
             try {
-                testFrameNumber(paramString);
+                testFrameNumber(fName);
                 bool = true;
             } catch (NumberFormatException localNumberFormatException) {
                 bool = false;

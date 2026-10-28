@@ -55,10 +55,10 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @param x The final x coordinate.
      * @param y The final y coordinate.
      */
-    public Vector2D(float paramFloat1, float paramFloat2) {
+    public Vector2D(float x, float y) {
         this();
-        setX(paramFloat1);
-        setY(paramFloat2);
+        setX(x);
+        setY(y);
     }
 
     private Vector2D(byte[] paramArrayOfByte) {
@@ -123,9 +123,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @param scalar A floating-point number.
      * @return a new scaled vector.
      */
-    public Vector2D scale(float paramFloat) {
+    public Vector2D scale(float scalar) {
         Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Scale(getBytes(), paramFloat, localVector2D.getBytes());
+        int i = Q3Vector2D_Scale(getBytes(), scalar, localVector2D.getBytes());
         return localVector2D;
     }
 
@@ -155,9 +155,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @param v2 A two-dimensional vector.
      * @return the sum of v1 and v2.
      */
-    public Vector2D add(Vector2D paramVector2D) {
+    public Vector2D add(Vector2D v2) {
         Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Add(getBytes(), paramVector2D.getBytes(), localVector2D.getBytes());
+        int i = Q3Vector2D_Add(getBytes(), v2.getBytes(), localVector2D.getBytes());
         return localVector2D;
     }
 
@@ -167,9 +167,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @param v2 A two-dimensional vector.
      * @return the result of subtracting v2 from this.
      */
-    public Vector2D subtract(Vector2D paramVector2D) {
+    public Vector2D subtract(Vector2D v2) {
         Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Subtract(getBytes(), paramVector2D.getBytes(), localVector2D.getBytes());
+        int i = Q3Vector2D_Subtract(getBytes(), v2.getBytes(), localVector2D.getBytes());
         return localVector2D;
     }
 
@@ -179,8 +179,8 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @param v2 A two-dimensional vector.
      * @return a float
      */
-    public float cross(Vector2D paramVector2D) {
-        return Q3Vector2D_Cross(getBytes(), paramVector2D.getBytes());
+    public float cross(Vector2D v2) {
+        return Q3Vector2D_Cross(getBytes(), v2.getBytes());
     }
 
     /**
@@ -189,8 +189,8 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @param v2 A two-dimensional vector.
      * @return a float
      */
-    public float dot(Vector2D paramVector2D) {
-        return Q3Vector2D_Dot(getBytes(), paramVector2D.getBytes());
+    public float dot(Vector2D v2) {
+        return Q3Vector2D_Dot(getBytes(), v2.getBytes());
     }
 
     /**

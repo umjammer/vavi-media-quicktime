@@ -34,8 +34,8 @@ public class JImagePainter implements Paintable {
      * @param image the java.awt.Image to draw.
      * {@link quicktime.app.image.QTImageDrawer}
      */
-    public JImagePainter(Image paramImage) {
-        this.image = paramImage;
+    public JImagePainter(Image image) {
+        this.image = image;
     }
 
     private int width = -1;
@@ -53,8 +53,8 @@ public class JImagePainter implements Paintable {
      * data is available and present.
      * @param javaComponent the java.awt.Component
      */
-    public void prepareImage(Component paramComponent) {
-        paramComponent.prepareImage(this.image, this.width, this.height, paramComponent);
+    public void prepareImage(Component javaComponent) {
+        javaComponent.prepareImage(this.image, this.width, this.height, javaComponent);
     }
 
     /**
@@ -71,9 +71,9 @@ public class JImagePainter implements Paintable {
      * @param d the new size of the offscreen image that the painter can paint into.
      */
     @Override
-    public void newSizeNotified(QTImageDrawer paramQTImageDrawer, Dimension paramDimension) {
-        this.width = paramDimension.width;
-        this.height = paramDimension.height;
+    public void newSizeNotified(QTImageDrawer drawer, Dimension d) {
+        this.width = d.width;
+        this.height = d.height;
         this.r[0] = new Rectangle(this.width, this.height);
     }
 
@@ -90,8 +90,8 @@ public class JImagePainter implements Paintable {
      * @param g the graphics to paint on.
      */
     @Override
-    public Rectangle[] paint(Graphics paramGraphics) {
-        paramGraphics.drawImage(this.image, 0, 0, this.width, this.height, null);
+    public Rectangle[] paint(Graphics g) {
+        g.drawImage(this.image, 0, 0, this.width, this.height, null);
         return this.r;
     }
 }

@@ -40,8 +40,8 @@ public class NoteChannelControl implements MusicPart {
      * NoteChannel maybe able to play more than one note simultaneously.
      * @param gmNumber the specified general MIDI instrument number
      */
-    public NoteChannelControl(int paramInt) throws QTException {
-        this(paramInt, 1);
+    public NoteChannelControl(int gmNumber) throws QTException {
+        this(gmNumber, 1);
     }
 
     /**
@@ -53,8 +53,8 @@ public class NoteChannelControl implements MusicPart {
      * @param poly the maximum number of notes that are expected to be played
      *  by the NoteChannel at the same time.
      */
-    public NoteChannelControl(int paramInt1, int paramInt2) throws QTException {
-        this(new NoteChannel(paramInt1, paramInt2));
+    public NoteChannelControl(int gmNumber, int poly) throws QTException {
+        this(new NoteChannel(gmNumber, poly));
     }
 
     /**
@@ -63,8 +63,8 @@ public class NoteChannelControl implements MusicPart {
      * Create a new NoteChannelControl from the given NoteChannel
      * @param nc the given NoteChannel
      */
-    public NoteChannelControl(NoteChannel paramNoteChannel) throws QTException {
-        this.channel = paramNoteChannel;
+    public NoteChannelControl(NoteChannel nc) throws QTException {
+        this.channel = nc;
         this.muted = (this.channel.getController(7) <= 0.0F);
         this.vol = getVolume();
     }
@@ -108,8 +108,8 @@ public class NoteChannelControl implements MusicPart {
      * @throws quicktime.QTException
      */
     @Override
-    public void setVolume(float paramFloat) throws QTException {
-        this.vol = paramFloat;
+    public void setVolume(float volume) throws QTException {
+        this.vol = volume;
         if (!this.muted) {
             this.channel.setController(7, this.vol * 128.0F);
         }
@@ -135,11 +135,11 @@ public class NoteChannelControl implements MusicPart {
      * @throws quicktime.QTException
      */
     @Override
-    public void setBalance(float paramFloat) throws QTException {
-        if (paramFloat == 0.0F) {
-            this.channel.setController(10, paramFloat);
+    public void setBalance(float val) throws QTException {
+        if (val == 0.0F) {
+            this.channel.setController(10, val);
         } else {
-            this.channel.setController(10, paramFloat / 2.0F + 1.5F);
+            this.channel.setController(10, val / 2.0F + 1.5F);
         }
     }
 
@@ -170,8 +170,8 @@ public class NoteChannelControl implements MusicPart {
      * @throws quicktime.QTException
      */
     @Override
-    public void selectInstrument(String paramString) throws QTException {
-        this.channel.pickEditInstrument(paramString, 16);
+    public void selectInstrument(String prompt) throws QTException {
+        this.channel.pickEditInstrument(prompt, 16);
     }
 
     /**
@@ -206,7 +206,7 @@ public class NoteChannelControl implements MusicPart {
      * @param duration the number of milliseconds the note should play for
      * @throws quicktime.QTException
      */
-    public void playNoteFor(float paramFloat, int paramInt1, int paramInt2) throws QTException {
+    public void playNoteFor(float note, int velocity, int duration) throws QTException {
         if (this.t == null) {
             this.t = new Timer(1, 1, new TurnOffNotes());
             this.t.setTickling(false);
@@ -216,8 +216,8 @@ public class NoteChannelControl implements MusicPart {
             this.t.setActive(true);
         }
         int i = this.t.getTimeBase().getTime(1000);
-        this.channel.playNote(paramFloat, paramInt1);
-        EndNote localEndNote = new EndNote(this.t.getTimeBase(), 1000, i + paramInt2, 1, this.channel, paramFloat);
+        this.channel.playNote(note, velocity);
+        EndNote localEndNote = new EndNote(this.t.getTimeBase(), 1000, i + duration, 1, this.channel, note);
         localEndNote.callMeWhen();
         this.activeNotes.addElement(localEndNote);
     }

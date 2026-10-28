@@ -82,12 +82,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param maxMilliSecToUse Determines the maximum number of milliseconds that MoviesTask can work before returning.
      * @throws quicktime.QTException
      */
-    public static void taskAll(int paramInt) throws QTException {
+    public static void taskAll(int maxMilliSecToUse) throws QTException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             if (QTSession.isInitialized()) {
-                MoviesTask(0, paramInt);
+                MoviesTask(0, maxMilliSecToUse);
             } else
                 throw new QTException("QuickTime is NOT initialized");
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
@@ -106,24 +106,24 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return QTFile object that specifies the newly created movie file.
      * @throws quicktime.QTException
      */
-    public static Movie createMovieFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
-        if ((paramInt2 & 0x80000000) != 0) {
+    public static Movie createMovieFile(QTFile pathName, int fCreator, int flags) throws QTException {
+        if ((flags & 0x80000000) != 0) {
             try {
-                QTFile.checkSecurity(paramQTFile.getCanonicalPath(), 1024);
+                QTFile.checkSecurity(pathName.getCanonicalPath(), 1024);
             } catch (IOException localIOException) {
                 throw new QTIOException(localIOException.getMessage());
             }
         }
         int[] arrayOfInt = { 0 };
-        if ((paramInt2 & 0x40000000) != 0) {
-            paramInt2 ^= 0x40000000;
+        if ((flags & 0x40000000) != 0) {
+            flags ^= 0x40000000;
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = CreateMovieFile(paramQTFile.getFSSpec(false, 512), paramInt1, (short) -1, paramInt2 | 0x20000000, null, arrayOfInt);
+            i = CreateMovieFile(pathName.getFSSpec(false, 512), fCreator, (short) -1, flags | 0x20000000, null, arrayOfInt);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -150,13 +150,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param newMovieFlags Controls the operation of this method.
      * @throws quicktime.QTException
      */
-    public static Movie fromScrap(int paramInt) throws QTException {
+    public static Movie fromScrap(int newMovieFlags) throws QTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovieFromScrap(paramInt);
+            i = NewMovieFromScrap(newMovieFlags);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -179,8 +179,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param fileIn identifies the open movie file from which the movie is to be loaded.
      * @throws quicktime.QTException
      */
-    public static Movie fromFile(OpenMovieFile paramOpenMovieFile) throws QTException {
-        return fromFile(paramOpenMovieFile, 1, null);
+    public static Movie fromFile(OpenMovieFile fileIn) throws QTException {
+        return fromFile(fileIn, 1, null);
     }
 
     /**
@@ -195,9 +195,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param info a MovieInfo object to receive state information about the movie.
      * @throws quicktime.QTException
      */
-    public static Movie fromFile(OpenMovieFile paramOpenMovieFile, int paramInt, MovieInfo paramMovieInfo) throws QTException {
+    public static Movie fromFile(OpenMovieFile fileIn, int flags, MovieInfo info) throws QTException {
         int[] arrayOfInt = new int[1];
-        short s = (short) QTObject.ID(paramOpenMovieFile);
+        short s = (short) QTObject.ID(fileIn);
         short[] arrayOfShort = new short[1];
         byte[] arrayOfByte1 = new byte[255];
         byte[] arrayOfByte2 = new byte[1];
@@ -206,7 +206,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovieFromFile(arrayOfInt, s, arrayOfShort, arrayOfByte1, (short) paramInt, arrayOfByte2);
+            i = NewMovieFromFile(arrayOfInt, s, arrayOfShort, arrayOfByte1, (short) flags, arrayOfByte2);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -214,8 +214,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (arrayOfInt[0] == 0) {
             throw new StdQTException(63526);
         }
-        if (paramMovieInfo != null) {
-            paramMovieInfo.setMovieInfo(arrayOfShort[0], arrayOfByte2[0] == 1, new String(arrayOfByte1, 1, arrayOfByte1.length - 1));
+        if (info != null) {
+            info.setMovieInfo(arrayOfShort[0], arrayOfByte2[0] == 1, new String(arrayOfByte1, 1, arrayOfByte1.length - 1));
         }
         Movie x = new Movie(arrayOfInt[0], null);
         x.init();
@@ -229,8 +229,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param hand contains a handle to the movie resource from which the movie is to be loaded.
      * @throws quicktime.QTException
      */
-    public static Movie fromHandle(QTHandle paramQTHandle) throws QTException {
-        return fromHandle(paramQTHandle, 1, null);
+    public static Movie fromHandle(QTHandle hand) throws QTException {
+        return fromHandle(hand, 1, null);
     }
 
     /**
@@ -242,16 +242,16 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param info a MovieInfo object to receive state information about the movie.
      * @throws quicktime.QTException
      */
-    public static Movie fromHandle(QTHandle paramQTHandle, int paramInt, MovieInfo paramMovieInfo) throws QTException {
+    public static Movie fromHandle(QTHandle hand, int flags, MovieInfo info) throws QTException {
         int[] arrayOfInt = new int[1];
-        int i = QTObject.ID(paramQTHandle);
+        int i = QTObject.ID(hand);
         byte[] arrayOfByte = new byte[1];
         int j = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            j = NewMovieFromHandle(arrayOfInt, i, (short) paramInt, arrayOfByte);
+            j = NewMovieFromHandle(arrayOfInt, i, (short) flags, arrayOfByte);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -260,12 +260,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (arrayOfInt[0] == 0) {
             throw new StdQTException(63526);
         }
-        if (paramMovieInfo != null) {
-            paramMovieInfo.setMovieInfo(0, arrayOfByte[0] == 1, null);
+        if (info != null) {
+            info.setMovieInfo(0, arrayOfByte[0] == 1, null);
         }
         Movie x = new Movie(arrayOfInt[0], null);
         x.init();
-        x.dataRef = paramQTHandle;
+        x.dataRef = hand;
         return x;
     }
 
@@ -281,16 +281,16 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @throws quicktime.QTException
      * @throws quicktime.qd.QDException
      */
-    public static Movie fromDataFork(OpenFile paramOpenFile, int paramInt1, int paramInt2, MovieInfo paramMovieInfo) throws QTException, QDException {
+    public static Movie fromDataFork(OpenFile fileIn, int fileOffset, int flags, MovieInfo info) throws QTException, QDException {
         int[] arrayOfInt = { 0 };
-        short s = (short) QTObject.ID(paramOpenFile);
+        short s = (short) QTObject.ID(fileIn);
         byte[] arrayOfByte = new byte[1];
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovieFromDataFork(arrayOfInt, s, paramInt1, (short) paramInt2, arrayOfByte);
+            i = NewMovieFromDataFork(arrayOfInt, s, fileOffset, (short) flags, arrayOfByte);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -299,8 +299,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (arrayOfInt[0] == 0) {
             throw new StdQTException(63526);
         }
-        if (paramMovieInfo != null) {
-            paramMovieInfo.setMovieInfo(0, arrayOfByte[0] == 1, "");
+        if (info != null) {
+            info.setMovieInfo(0, arrayOfByte[0] == 1, "");
         }
         Movie x = new Movie(arrayOfInt[0], null);
         x.init();
@@ -317,7 +317,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  blocking (in the case of no network connection, or a bad URL)
      * @throws quicktime.QTException
      */
-    public static Movie fromDataRef(DataRef paramDataRef, int paramInt) throws QTException {
+    public static Movie fromDataRef(DataRef defaultDataRef, int flags) throws QTException {
         int[] arrayOfInt = { 0 };
         short[] arrayOfShort = { 0 };
         int i = 0;
@@ -325,7 +325,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovieFromDataRef(arrayOfInt, (short) paramInt, arrayOfShort, QTObject.ID(paramDataRef), paramDataRef == null ? 0 : paramDataRef.getType());
+            i = NewMovieFromDataRef(arrayOfInt, (short) flags, arrayOfShort, QTObject.ID(defaultDataRef), defaultDataRef == null ? 0 : defaultDataRef.getType());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -335,12 +335,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         StdQTException.checkError(i);
         Movie x = new Movie(arrayOfInt[0], null);
         x.init();
-        x.dataRef = paramDataRef;
+        x.dataRef = defaultDataRef;
         return x;
     }
 
-    Movie(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    Movie(int time, Object paramObject) {
+        super(time, paramObject);
     }
 
     /**
@@ -362,18 +362,18 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @see "QuickTime::NewMovie()"
      * @param flags flags to control settings when creating the movie.
      */
-    public Movie(int paramInt) throws QTException {
-        super(allocate(paramInt));
+    public Movie(int flags) throws QTException {
+        super(allocate(flags));
         init();
     }
 
-    private static int allocate(int paramInt) throws StdQTException, QDException {
+    private static int allocate(int time) throws StdQTException, QDException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovie(paramInt);
+            i = NewMovie(time);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -401,8 +401,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         setBounds(localQDRect);
     }
 
-    void _setNR(int paramInt) {
-        setNR(paramInt);
+    void _setNR(int time) {
+        setNR(time);
     }
 
     /**
@@ -416,10 +416,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  If you set the resourceName parameter to null, the toolbox creates an unnamed resource.
      * @throws quicktime.std.StdQTException
      */
-    public int addResource(OpenMovieFile paramOpenMovieFile, int paramInt, String paramString) throws StdQTException {
-        short[] arrayOfShort = { (short) paramInt };
-        byte[] arrayOfByte = paramString != null ? QTUtils.String2PString(paramString, 255) : null;
-        int i = AddMovieResource(_ID(), (short) QTObject.ID(paramOpenMovieFile), arrayOfShort, arrayOfByte);
+    public int addResource(OpenMovieFile fileOut, int resID, String resourceName) throws StdQTException {
+        short[] arrayOfShort = { (short) resID };
+        byte[] arrayOfByte = resourceName != null ? QTUtils.String2PString(resourceName, 255) : null;
+        int i = AddMovieResource(_ID(), (short) QTObject.ID(fileOut), arrayOfShort, arrayOfByte);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -433,9 +433,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  set this parameter to null.
      * @throws quicktime.std.StdQTException
      */
-    public void updateResource(OpenMovieFile paramOpenMovieFile, int paramInt, String paramString) throws StdQTException {
-        byte[] arrayOfByte = paramString != null ? QTUtils.String2PString(paramString, 255) : null;
-        int i = UpdateMovieResource(_ID(), (short) QTObject.ID(paramOpenMovieFile), (short) paramInt, arrayOfByte);
+    public void updateResource(OpenMovieFile fileOut, int resID, String resourceName) throws StdQTException {
+        byte[] arrayOfByte = resourceName != null ? QTUtils.String2PString(resourceName, 255) : null;
+        int i = UpdateMovieResource(_ID(), (short) QTObject.ID(fileOut), (short) resID, arrayOfByte);
         StdQTException.checkError(i);
     }
 
@@ -446,8 +446,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param resID Specifies the resource number for the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void removeResource(OpenMovieFile paramOpenMovieFile, int paramInt) throws StdQTException {
-        int i = RemoveMovieResource((short) QTObject.ID(paramOpenMovieFile), (short) paramInt);
+    public void removeResource(OpenMovieFile fileOut, int resID) throws StdQTException {
+        int i = RemoveMovieResource((short) QTObject.ID(fileOut), (short) resID);
         StdQTException.checkError(i);
     }
 
@@ -458,11 +458,11 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param maxMilliSecToUse Determines the maximum number of milliseconds that MoviesTask can work before returning.
      * @throws quicktime.QTException
      */
-    public void task(int paramInt) throws QTException {
+    public void task(int maxMilliSecToUse) throws QTException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            MoviesTask(_ID(), paramInt);
+            MoviesTask(_ID(), maxMilliSecToUse);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -478,15 +478,15 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void setDrawingCompleteProc(int paramInt, MovieDrawingComplete paramMovieDrawingComplete) throws StdQTException {
-        if (paramMovieDrawingComplete == null) {
+    public void setDrawingCompleteProc(int flags, MovieDrawingComplete proc) throws StdQTException {
+        if (proc == null) {
             removeDrawingCompleteProc();
             return;
         }
         if (this.drawingUPP != null)
             removeDrawingCompleteProc();
-        this.drawingUPP = new MoviesDispatcher(this, paramMovieDrawingComplete);
-        SetMovieDrawingCompleteProc(_ID(), paramInt, this.drawingUPP.ID(), 0);
+        this.drawingUPP = new MoviesDispatcher(this, proc);
+        SetMovieDrawingCompleteProc(_ID(), flags, this.drawingUPP.ID(), 0);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -510,14 +510,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  Positive values indicate forward rates and negative values indicate reverse rates.
      * @throws quicktime.std.StdQTException
      */
-    public void preroll(int paramInt, float paramFloat) throws StdQTException {
+    public void preroll(int time, float rate) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
             synchronized (QTNative.globalsLock) {
-                int j = PrerollMovie(_ID(), paramInt, QTUtils.X2Fix(paramFloat));
+                int j = PrerollMovie(_ID(), time, QTUtils.X2Fix(rate));
                 StdQTException.checkError(j);
             }
         }
-        int i = PrerollMovie(_ID(), paramInt, QTUtils.X2Fix(paramFloat));
+        int i = PrerollMovie(_ID(), time, QTUtils.X2Fix(rate));
         StdQTException.checkError(i);
     }
 
@@ -530,9 +530,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  Positive values indicate forward rates and negative values indicate reverse rates.
      * @throws quicktime.std.StdQTException
      */
-    public void prePreroll(int paramInt, float paramFloat) throws StdQTException {
+    public void prePreroll(int time, float rate) throws StdQTException {
         this.preUPP = null;
-        prePreroll(paramInt, paramFloat, null);
+        prePreroll(time, rate, null);
     }
 
     /**
@@ -545,19 +545,19 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param proc the MoviePrePreroll object that will be invoked by this call. This can be null.
      * @throws quicktime.std.StdQTException
      */
-    public void prePreroll(int paramInt, float paramFloat, MoviePrePreroll paramMoviePrePreroll) throws StdQTException {
+    public void prePreroll(int time, float rate, MoviePrePreroll proc) throws StdQTException {
         if (QTSession.getQTMajorVersion() == 3) {
-            if (paramMoviePrePreroll != null)
-                paramMoviePrePreroll.execute(this, 0);
+            if (proc != null)
+                proc.execute(this, 0);
             return;
         }
-        if (paramMoviePrePreroll == null) {
-            paramMoviePrePreroll = (paramAnonymousMovie, paramAnonymousInt) -> {
+        if (proc == null) {
+            proc = (aMovie, aInt) -> {
             };
         }
-        this.preUPP = new MoviesDispatcher(this, paramMoviePrePreroll);
+        this.preUPP = new MoviesDispatcher(this, proc);
         synchronized (QTNative.globalsLock) {
-            int i = PrePrerollMovie(_ID(), paramInt, QTUtils.X2Fix(paramFloat), this.preUPP.ID(), 0);
+            int i = PrePrerollMovie(_ID(), time, QTUtils.X2Fix(rate), this.preUPP.ID(), 0);
             StdQTException.checkError(i);
         }
     }
@@ -569,10 +569,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * be called back when the movie is pre-preRolled
      * @see "QuickTime::AbortPrePrerollMovie()"
      */
-    public void abortPrePreroll(int paramInt) throws StdQTException {
+    public void abortPrePreroll(int time) throws StdQTException {
         if (QTSession.getQTMajorVersion() == 3)
             return;
-        AbortPrePrerollMovie(_ID(), (short) paramInt);
+        AbortPrePrerollMovie(_ID(), (short) time);
         if (this.preUPP != null) {
             this.preUPP.cleanupMethodClosure();
             this.preUPP = null;
@@ -587,8 +587,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param flags Gives you explicit control over what is loaded into memory and how long to keep it around.
      * @throws quicktime.std.StdQTException
      */
-    public void loadIntoRam(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int i = LoadMovieIntoRam(_ID(), paramInt1, paramInt2, paramInt3);
+    public void loadIntoRam(int time, int duration, int flags) throws StdQTException {
+        int i = LoadMovieIntoRam(_ID(), time, flags, duration);
         StdQTException.checkError(i);
     }
 
@@ -598,15 +598,15 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param active Activates or deactivates the movie. Set this parameter to true to activate the movie; set this parameter to false to deactivate the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setActive(boolean paramBoolean) throws StdQTException {
+    public void setActive(boolean active) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
             synchronized (QTNative.globalsLock) {
-                byte b2 = (byte) (paramBoolean ? 1 : 0);
+                byte b2 = (byte) (active ? 1 : 0);
                 SetMovieActive(_ID(), b2);
                 StdQTException.checkError(GetMoviesError());
             }
         }
-        byte b1 = (byte) (paramBoolean ? 1 : 0);
+        byte b1 = (byte) (active ? 1 : 0);
         SetMovieActive(_ID(), b1);
         StdQTException.checkError(GetMoviesError());
     }
@@ -733,9 +733,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param gdh the graphics device or null to use the current device
      * @throws quicktime.std.StdQTException
      */
-    public void setGWorld(QDGraphics paramQDGraphics, GDevice paramGDevice) throws StdQTException {
+    public void setGWorld(QDGraphics port, GDevice gdh) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            SetMovieGWorld(_ID(), QTObject.ID(paramQDGraphics), QTObject.ID(paramGDevice));
+            SetMovieGWorld(_ID(), QTObject.ID(port), QTObject.ID(gdh));
             StdQTException.checkError(GetMoviesError());
         }
     }
@@ -780,8 +780,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Pict
      * @throws quicktime.QTException
      */
-    public Pict getPict(int paramInt) throws QTException {
-        return Pict.fromMovie(this, paramInt);
+    public Pict getPict(int time) throws QTException {
+        return Pict.fromMovie(this, time);
     }
 
     /**
@@ -812,8 +812,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param invalidRgn a Region object to specify the invalid part of the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void invalidateRegion(Region paramRegion) throws StdQTException {
-        int i = InvalidateMovieRegion(_ID(), QTObject.ID(paramRegion));
+    public void invalidateRegion(Region invalidRgn) throws StdQTException {
+        int i = InvalidateMovieRegion(_ID(), QTObject.ID(invalidRgn));
         StdQTException.checkError(i);
     }
 
@@ -864,14 +864,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param boxRect the coordinates of the new boundary rectangle.
      * @throws quicktime.std.StdQTException
      */
-    public void setBounds(QDRect paramQDRect) throws StdQTException {
+    public void setBounds(QDRect boxRect) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
             synchronized (QTNative.globalsLock) {
-                SetMovieBox(_ID(), paramQDRect.getRect());
+                SetMovieBox(_ID(), boxRect.getRect());
                 StdQTException.checkError(GetMoviesError());
             }
         }
-        SetMovieBox(_ID(), paramQDRect.getRect());
+        SetMovieBox(_ID(), boxRect.getRect());
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -883,8 +883,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param boxRect the coordinates of the new boundary rectangle.
      * @throws quicktime.std.StdQTException
      */
-    public void setBox(QDRect paramQDRect) throws StdQTException {
-        setBounds(paramQDRect);
+    public void setBox(QDRect boxRect) throws StdQTException {
+        setBounds(boxRect);
     }
 
     /**
@@ -903,8 +903,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param theClip a Region object.
      * @throws quicktime.std.StdQTException
      */
-    public void setDisplayClipRgn(Region paramRegion) throws StdQTException {
-        SetMovieDisplayClipRgn(_ID(), QTObject.ID(paramRegion));
+    public void setDisplayClipRgn(Region theClip) throws StdQTException {
+        SetMovieDisplayClipRgn(_ID(), QTObject.ID(theClip));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -924,8 +924,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param theClip a Region object specifying the new clip region.
      * @throws quicktime.std.StdQTException
      */
-    public void setClipRgn(Region paramRegion) throws StdQTException {
-        SetMovieClipRgn(_ID(), QTObject.ID(paramRegion));
+    public void setClipRgn(Region theClip) throws StdQTException {
+        SetMovieClipRgn(_ID(), QTObject.ID(theClip));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -964,8 +964,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param intoThisHandle Specifies the handle where the movie will be placed into.
      * @throws quicktime.std.StdQTException
      */
-    public void putIntoHandle(QTHandle paramQTHandle) throws StdQTException {
-        int i = PutMovieIntoHandle(_ID(), QTObject.ID(paramQTHandle));
+    public void putIntoHandle(QTHandle intoThisHandle) throws StdQTException {
+        int i = PutMovieIntoHandle(_ID(), QTObject.ID(intoThisHandle));
         StdQTException.checkError(i);
     }
 
@@ -977,9 +977,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param maxSize Indicates the largest number of bytes that may be written.
      * @throws quicktime.std.StdQTException
      */
-    public void putIntoDataFork(OpenMovieFile paramOpenMovieFile, int paramInt1, int paramInt2) throws StdQTException {
-        short s = (short) QTObject.ID(paramOpenMovieFile);
-        int i = PutMovieIntoDataFork(_ID(), s, paramInt1, paramInt2);
+    public void putIntoDataFork(OpenMovieFile fileOut, int offset, int maxSize) throws StdQTException {
+        short s = (short) QTObject.ID(fileOut);
+        int i = PutMovieIntoDataFork(_ID(), s, offset, maxSize);
         StdQTException.checkError(i);
     }
 
@@ -1025,8 +1025,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param timeScale Specifies the movie's new time scale.
      * @throws quicktime.std.StdQTException
      */
-    public void setTimeScale(int paramInt) throws StdQTException {
-        SetMovieTimeScale(_ID(), paramInt);
+    public void setTimeScale(int timeScale) throws StdQTException {
+        SetMovieTimeScale(_ID(), timeScale);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1059,14 +1059,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param rate Specifies the rate.
      * @throws quicktime.std.StdQTException
      */
-    public void setRate(float paramFloat) throws StdQTException {
+    public void setRate(float rate) throws StdQTException {
         if (QTSession.isCurrentOS(4)) {
             synchronized (QTNative.globalsLock) {
-                SetMovieRate(_ID(), QTUtils.X2Fix(paramFloat));
+                SetMovieRate(_ID(), QTUtils.X2Fix(rate));
                 StdQTException.checkError(GetMoviesError());
             }
         }
-        SetMovieRate(_ID(), QTUtils.X2Fix(paramFloat));
+        SetMovieRate(_ID(), QTUtils.X2Fix(rate));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1088,8 +1088,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param rate Specifies the rate.
      * @throws quicktime.std.StdQTException
      */
-    public void setPreferredRate(float paramFloat) throws StdQTException {
-        SetMoviePreferredRate(_ID(), QTUtils.X2Fix(paramFloat));
+    public void setPreferredRate(float rate) throws StdQTException {
+        SetMoviePreferredRate(_ID(), QTUtils.X2Fix(rate));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1111,8 +1111,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param volume Specifies the preferred volume setting of the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setPreferredVolume(float paramFloat) throws StdQTException {
-        SetMoviePreferredVolume(_ID(), QTUtils.X2ShortFix(paramFloat));
+    public void setPreferredVolume(float volume) throws StdQTException {
+        SetMoviePreferredVolume(_ID(), QTUtils.X2ShortFix(volume));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1134,8 +1134,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param volume Specifies the current volume setting of the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setVolume(float paramFloat) throws StdQTException {
-        SetMovieVolume(_ID(), QTUtils.X2ShortFix(paramFloat));
+    public void setVolume(float volume) throws StdQTException {
+        SetMovieVolume(_ID(), QTUtils.X2ShortFix(volume));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1161,8 +1161,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param matrix the matrix to set
      * @throws quicktime.std.StdQTException
      */
-    public void setMatrix(Matrix paramMatrix) throws StdQTException {
-        SetMovieMatrix(_ID(), paramMatrix.getBytes());
+    public void setMatrix(Matrix matrix) throws StdQTException {
+        SetMovieMatrix(_ID(), matrix.getBytes());
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1186,8 +1186,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param previewTimeInfo a TimeInfo object.
      * @throws quicktime.std.StdQTException
      */
-    public void setPreviewTime(TimeInfo paramTimeInfo) throws StdQTException {
-        SetMoviePreviewTime(_ID(), paramTimeInfo.time, paramTimeInfo.duration);
+    public void setPreviewTime(TimeInfo previewTimeInfo) throws StdQTException {
+        SetMoviePreviewTime(_ID(), previewTimeInfo.time, previewTimeInfo.duration);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1195,8 +1195,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method allows your application to define the starting time and duration of the movie's preview.
      * @see "QuickTime::SetMoviePreviewTime()"
      */
-    public void setPreviewTime(int paramInt1, int paramInt2) throws StdQTException {
-        SetMoviePreviewTime(_ID(), paramInt1, paramInt2);
+    public void setPreviewTime(int fCreator, int flags) throws StdQTException {
+        SetMoviePreviewTime(_ID(), fCreator, flags);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1218,8 +1218,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param posterTime the poster time.
      * @throws quicktime.std.StdQTException
      */
-    public void setPosterTime(int paramInt) throws StdQTException {
-        SetMoviePosterTime(_ID(), paramInt);
+    public void setPosterTime(int posterTime) throws StdQTException {
+        SetMoviePosterTime(_ID(), posterTime);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1243,8 +1243,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param selectionTimeInfo a TimeInfo object specifying the time information for movie's new selection.
      * @throws quicktime.std.StdQTException
      */
-    public void setSelection(TimeInfo paramTimeInfo) throws StdQTException {
-        SetMovieSelection(_ID(), paramTimeInfo.time, paramTimeInfo.duration);
+    public void setSelection(TimeInfo selectionTimeInfo) throws StdQTException {
+        SetMovieSelection(_ID(), selectionTimeInfo.time, selectionTimeInfo.duration);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1255,8 +1255,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param selectionDuration Contains a time value that specifies the duration of the current selection.
      * @throws quicktime.std.StdQTException
      */
-    public void setSelection(int paramInt1, int paramInt2) throws StdQTException {
-        SetMovieSelection(_ID(), paramInt1, paramInt2);
+    public void setSelection(int selectionTime, int selectionDuration) throws StdQTException {
+        SetMovieSelection(_ID(), selectionTime, selectionDuration);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1266,8 +1266,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param activeSegmentTimeInfo a TimeInfo object specifying the time information of the active segment.
      * @throws quicktime.std.StdQTException
      */
-    public void setActiveSegment(TimeInfo paramTimeInfo) throws StdQTException {
-        SetMovieActiveSegment(_ID(), paramTimeInfo.time, paramTimeInfo.duration);
+    public void setActiveSegment(TimeInfo activeSegmentTimeInfo) throws StdQTException {
+        SetMovieActiveSegment(_ID(), activeSegmentTimeInfo.time, activeSegmentTimeInfo.duration);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1316,9 +1316,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param newtime A TimeRecord object specifying the new time for the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setTime(TimeRecord paramTimeRecord) throws StdQTException {
+    public void setTime(TimeRecord newtime) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            SetMovieTime(_ID(), QTObject.ID(paramTimeRecord));
+            SetMovieTime(_ID(), QTObject.ID(newtime));
         }
         StdQTException.checkError(GetMoviesError());
     }
@@ -1327,9 +1327,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method allows your application to set a movie's time value.
      * @see "QuickTime::SetMovieTimeValue()"
      */
-    public void setTimeValue(int paramInt) throws StdQTException {
+    public void setTimeValue(int time) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            SetMovieTimeValue(_ID(), paramInt);
+            SetMovieTimeValue(_ID(), time);
         }
         StdQTException.checkError(GetMoviesError());
     }
@@ -1363,8 +1363,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Track object for the trackID.
      * @throws quicktime.QTException
      */
-    public Track getTrack(int paramInt) throws QTException {
-        int i = GetMovieTrack(_ID(), paramInt);
+    public Track getTrack(int trackID) throws QTException {
+        int i = GetMovieTrack(_ID(), trackID);
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Track(i, this);
     }
@@ -1376,8 +1376,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Track object for the specified index.
      * @throws quicktime.QTException
      */
-    public Track getIndTrack(int paramInt) throws QTException {
-        int i = GetMovieIndTrack(_ID(), paramInt);
+    public Track getIndTrack(int index) throws QTException {
+        int i = GetMovieIndTrack(_ID(), index);
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Track(i, this);
     }
@@ -1391,8 +1391,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Track object for the specified index with in the tracks with the specified track type.
      * @throws quicktime.QTException
      */
-    public Track getIndTrackType(int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        int i = GetMovieIndTrackType(_ID(), paramInt1, paramInt2, paramInt3);
+    public Track getIndTrackType(int index, int trackType, int flags) throws QTException {
+        int i = GetMovieIndTrackType(_ID(), index, trackType, flags);
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Track(i, this);
     }
@@ -1403,19 +1403,19 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param track the track to remove from this movie.
      * @throws quicktime.std.StdQTException
      */
-    public void removeTrack(Track paramTrack) throws StdQTException {
-        if (QTObject.ID(paramTrack) == 0) {
+    public void removeTrack(Track track) throws StdQTException {
+        if (QTObject.ID(track) == 0) {
             throw new StdQTException(63527);
         }
-        int i = GetTrackMovie(QTObject.ID(paramTrack));
+        int i = GetTrackMovie(QTObject.ID(track));
         StdQTException.checkError(GetMoviesError());
         if (i != _ID()) {
             throw new StdQTException(63526);
         }
-        DisposeMovieTrack(QTObject.ID(paramTrack));
+        DisposeMovieTrack(QTObject.ID(track));
         StdQTException.checkError(GetMoviesError());
-        paramTrack.owner = null;
-        paramTrack._setNR(0);
+        track.owner = null;
+        track._setNR(0);
     }
 
     /**
@@ -1424,8 +1424,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param enable Controls automatic track selection.
      * @throws quicktime.std.StdQTException
      */
-    public void setAutoTrackAlternatesEnabled(boolean paramBoolean) throws StdQTException {
-        byte b = (byte) (paramBoolean ? 1 : 0);
+    public void setAutoTrackAlternatesEnabled(boolean enable) throws StdQTException {
+        byte b = (byte) (enable ? 1 : 0);
         SetAutoTrackAlternatesEnabled(_ID(), b);
         StdQTException.checkError(GetMoviesError());
     }
@@ -1449,14 +1449,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a TimeInfo object specifying the interesting time.
      * @throws quicktime.std.StdQTException
      */
-    public TimeInfo getNextInterestingTime(int paramInt1, int[] paramArrayOfInt, int paramInt2, float paramFloat) throws StdQTException {
+    public TimeInfo getNextInterestingTime(int interestingTimeFlags, int[] mediaTypes, int time, float rate) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         short s = 0;
-        if (paramArrayOfInt != null) {
-            s = (short) paramArrayOfInt.length;
+        if (mediaTypes != null) {
+            s = (short) mediaTypes.length;
         }
-        GetMovieNextInterestingTime(_ID(), (short) paramInt1, s, paramArrayOfInt, paramInt2, QTUtils.X2Fix(paramFloat), arrayOfInt1, arrayOfInt2);
+        GetMovieNextInterestingTime(_ID(), (short) interestingTimeFlags, s, mediaTypes, time, QTUtils.X2Fix(rate), arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(GetMoviesError());
         return new TimeInfo(arrayOfInt1[0], arrayOfInt2[0]);
     }
@@ -1465,8 +1465,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * This method adds an empty segment to a movie.
      * @see "QuickTime::InsertEmptyMovieSegment()"
      */
-    public void insertEmptySegment(int paramInt1, int paramInt2) throws StdQTException {
-        int i = InsertEmptyMovieSegment(_ID(), paramInt1, paramInt2);
+    public void insertEmptySegment(int fCreator, int flags) throws StdQTException {
+        int i = InsertEmptyMovieSegment(_ID(), fCreator, flags);
         StdQTException.checkError(i);
     }
 
@@ -1479,8 +1479,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  Contains a time value specifying where the segment is to be inserted.
      * @throws quicktime.std.StdQTException
      */
-    public void insertSegment(Movie paramMovie, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int i = InsertMovieSegment(_ID(), QTObject.ID(paramMovie), paramInt1, paramInt2, paramInt3);
+    public void insertSegment(Movie paramMovie, int fCreator, int flags, int duration) throws StdQTException {
+        int i = InsertMovieSegment(_ID(), QTObject.ID(paramMovie), fCreator, flags, duration);
         StdQTException.checkError(i);
     }
 
@@ -1491,8 +1491,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param duration Contains a time value that specifies the duration of the segment to be deleted.
      * @throws quicktime.std.StdQTException
      */
-    public void deleteSegment(int paramInt1, int paramInt2) throws StdQTException {
-        int i = DeleteMovieSegment(_ID(), paramInt1, paramInt2);
+    public void deleteSegment(int startTime, int duration) throws StdQTException {
+        int i = DeleteMovieSegment(_ID(), startTime, duration);
         StdQTException.checkError(i);
     }
 
@@ -1504,8 +1504,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param newDuration Specifies the new duration of the segment.
      * @throws quicktime.std.StdQTException
      */
-    public void scaleSegment(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int i = ScaleMovieSegment(_ID(), paramInt1, paramInt2, paramInt3);
+    public void scaleSegment(int startTime, int oldDuration, int newDuration) throws StdQTException {
+        int i = ScaleMovieSegment(_ID(), startTime, oldDuration, newDuration);
         StdQTException.checkError(i);
     }
 
@@ -1539,8 +1539,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param srcMovie Specifies the source movie for this operation.
      * @throws quicktime.std.StdQTException
      */
-    public void pasteSelection(Movie paramMovie) throws StdQTException {
-        PasteMovieSelection(_ID(), QTObject.ID(paramMovie));
+    public void pasteSelection(Movie srcMovie) throws StdQTException {
+        PasteMovieSelection(_ID(), QTObject.ID(srcMovie));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1550,8 +1550,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param srcMovie Specifies the source movie for this operation.
      * @throws quicktime.std.StdQTException
      */
-    public void addSelection(Movie paramMovie) throws StdQTException {
-        AddMovieSelection(_ID(), QTObject.ID(paramMovie));
+    public void addSelection(Movie srcMovie) throws StdQTException {
+        AddMovieSelection(_ID(), QTObject.ID(srcMovie));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1573,8 +1573,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param userComp Specifies the component or an instance of the component that is to perform the conversion of the data into a QuickTime movie.
      * @throws quicktime.std.StdQTException
      */
-    public void pasteHandle(QTHandle paramQTHandle, int paramInt1, int paramInt2, MovieImporter paramMovieImporter) throws StdQTException {
-        int i = PasteHandleIntoMovie(QTObject.ID(paramQTHandle), paramInt1, _ID(), paramInt2, QTObject.ID(paramMovieImporter));
+    public void pasteHandle(QTHandle handle, int handleType, int flags, MovieImporter userComp) throws StdQTException {
+        int i = PasteHandleIntoMovie(QTObject.ID(handle), handleType, _ID(), flags, QTObject.ID(userComp));
         StdQTException.checkError(i);
     }
 
@@ -1592,13 +1592,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a QTHandle object.
      * @throws quicktime.QTException
      */
-    public QTHandle putIntoTypedHandle(Track paramTrack, int paramInt1, int paramInt2, int paramInt3, int paramInt4, MovieExporter paramMovieExporter) throws QTException {
+    public QTHandle putIntoTypedHandle(Track targetTrack, int handleType, int start, int dur, int flags, MovieExporter userComp) throws QTException {
         int i = 0;
-        if (paramTrack != null) {
-            i = QTObject.ID(paramTrack);
+        if (targetTrack != null) {
+            i = QTObject.ID(targetTrack);
         }
         QTHandle localQTHandle = new QTHandle(0, true);
-        int j = PutMovieIntoTypedHandle(_ID(), i, paramInt1, QTObject.ID(localQTHandle), paramInt2, paramInt3, paramInt4, QTObject.ID(paramMovieExporter));
+        int j = PutMovieIntoTypedHandle(_ID(), i, handleType, QTObject.ID(localQTHandle), flags, start, dur, QTObject.ID(userComp));
         StdQTException.checkError(j);
         return localQTHandle;
     }
@@ -1609,8 +1609,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param dstMovie Specifies the destination movie for this operation.
      * @throws quicktime.std.StdQTException
      */
-    public void copySettings(Movie paramMovie) throws StdQTException {
-        int i = CopyMovieSettings(_ID(), QTObject.ID(paramMovie));
+    public void copySettings(Movie dstMovie) throws StdQTException {
+        int i = CopyMovieSettings(_ID(), QTObject.ID(dstMovie));
         StdQTException.checkError(i);
     }
 
@@ -1623,9 +1623,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Track object.
      * @throws quicktime.QTException
      */
-    public Track addEmptyTrack(Track paramTrack, DataRef paramDataRef) throws QTException {
+    public Track addEmptyTrack(Track srcTrack, DataRef dataRef) throws QTException {
         int[] arrayOfInt = new int[1];
-        int i = AddEmptyTrackToMovie(QTObject.ID(paramTrack), _ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), arrayOfInt);
+        int i = AddEmptyTrackToMovie(QTObject.ID(srcTrack), _ID(), QTObject.ID(dataRef), dataRef.getType(), arrayOfInt);
         StdQTException.checkError(i);
         return new Track(arrayOfInt[0], this);
     }
@@ -1638,8 +1638,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param trackVolume Specifies the volume setting of the track.
      * @throws quicktime.QTException
      */
-    public Track newTrack(float paramFloat1, float paramFloat2, float paramFloat3) throws QTException {
-        return addTrack(paramFloat1, paramFloat2, paramFloat3);
+    public Track newTrack(float width, float height, float trackVolume) throws QTException {
+        return addTrack(width, height, trackVolume);
     }
 
     /**
@@ -1650,8 +1650,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param trackVolume Specifies the volume setting of the track.
      * @throws quicktime.QTException
      */
-    public Track addTrack(float paramFloat1, float paramFloat2, float paramFloat3) throws QTException {
-        return new Track(this, paramFloat1, paramFloat2, paramFloat3);
+    public Track addTrack(float width, float height, float trackVolume) throws QTException {
+        return new Track(this, width, height, trackVolume);
     }
 
     /**
@@ -1673,8 +1673,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param anEditState Specifies the edit state for this operation.
      * @throws quicktime.std.StdQTException
      */
-    public void useEditState(MovieEditState paramMovieEditState) throws StdQTException {
-        int i = UseMovieEditState(_ID(), QTObject.ID(paramMovieEditState));
+    public void useEditState(MovieEditState anEditState) throws StdQTException {
+        int i = UseMovieEditState(_ID(), QTObject.ID(anEditState));
         StdQTException.checkError(i);
     }
 
@@ -1686,8 +1686,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the data size.
      * @throws quicktime.std.StdQTException
      */
-    public int getDataSize(int paramInt1, int paramInt2) throws StdQTException {
-        int i = GetMovieDataSize(_ID(), paramInt1, paramInt2);
+    public int getDataSize(int startTime, int duration) throws StdQTException {
+        int i = GetMovieDataSize(_ID(), startTime, duration);
         StdQTException.checkError(GetMoviesError());
         return i;
     }
@@ -1701,8 +1701,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return whether the point is in the movie or not.
      * @throws quicktime.std.StdQTException
      */
-    public boolean pointInMovie(QDPoint paramQDPoint) throws StdQTException {
-        int i = PtInMovie(_ID(), paramQDPoint.getPoint());
+    public boolean pointInMovie(QDPoint pt) throws StdQTException {
+        int i = PtInMovie(_ID(), pt.getPoint());
         StdQTException.checkError(GetMoviesError());
         return i == 1;
     }
@@ -1713,8 +1713,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param language Specifies the movie's language or region code.
      * @throws quicktime.std.StdQTException
      */
-    public void setLanguage(int paramInt) throws StdQTException {
-        SetMovieLanguage(_ID(), paramInt);
+    public void setLanguage(int language) throws StdQTException {
+        SetMovieLanguage(_ID(), language);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -1745,10 +1745,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param newRef Specifies the default data reference object.
      * @throws quicktime.std.StdQTException
      */
-    public void setDefaultDataRef(DataRef paramDataRef) throws StdQTException {
-        int i = SetMovieDefaultDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType());
+    public void setDefaultDataRef(DataRef newRef) throws StdQTException {
+        int i = SetMovieDefaultDataRef(_ID(), QTObject.ID(newRef), newRef.getType());
         StdQTException.checkError(i);
-        this.dataRef = paramDataRef;
+        this.dataRef = newRef;
     }
 
     /**
@@ -1767,8 +1767,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param ctab Specifies the new color table.
      * @throws quicktime.std.StdQTException
      */
-    public void setColorTable(ColorTable paramColorTable) throws StdQTException {
-        int i = SetMovieColorTable(_ID(), QTObject.ID(paramColorTable));
+    public void setColorTable(ColorTable ctab) throws StdQTException {
+        int i = SetMovieColorTable(_ID(), QTObject.ID(ctab));
         StdQTException.checkError(i);
     }
 
@@ -1795,14 +1795,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the resource ID number of the new resource
      * @throws quicktime.QTException
      */
-    public int flatten(int paramInt1, QTFile paramQTFile, int paramInt2, int paramInt3, int paramInt4, int paramInt5, String paramString) throws QTException {
+    public int flatten(int fCreator, QTFile pathName, int flags, int duration, int time4, int time5, String paramString) throws QTException {
         short[] arrayOfShort = new short[1];
-        arrayOfShort[0] = ((short) paramInt5);
+        arrayOfShort[0] = ((short) fCreator);
         byte[] arrayOfByte = null;
         if (paramString != null) {
             arrayOfByte = QTUtils.String2PString(paramString, 255);
         }
-        FlattenMovie(_ID(), paramInt1, paramQTFile.getFSSpec(false, 512), paramInt2, (short) paramInt3, paramInt4, arrayOfShort, arrayOfByte);
+        FlattenMovie(_ID(), fCreator, pathName.getFSSpec(false, 512), flags, (short) time5, time4, arrayOfShort, arrayOfByte);
         StdQTException.checkError(GetMoviesError());
         return arrayOfShort[0];
     }
@@ -1818,7 +1818,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Movie object for the new movie.
      * @throws quicktime.QTException
      */
-    public Movie flattenData(int paramInt1, QTFile paramQTFile, int paramInt2, int paramInt3, int paramInt4) throws QTException {
+    public Movie flattenData(int movieFlattenFlags, QTFile fileOut, int creator, int scriptTag, int createQTFileFlags) throws QTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
@@ -1827,7 +1827,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             int[] arrayOfInt2 = { 0 };
             GetMovieGWorld(_ID(), arrayOfInt1, arrayOfInt2);
             SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
-            i = FlattenMovieData(_ID(), paramInt1, paramQTFile.getFSSpec(false, 512), paramInt2, (short) paramInt3, paramInt4);
+            i = FlattenMovieData(_ID(), creator, fileOut.getFSSpec(false, 512), createQTFileFlags, (short) scriptTag, movieFlattenFlags);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -1844,10 +1844,10 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Movie object for the new movie.
      * @throws quicktime.QTException
      */
-    public Movie flattenData(int paramInt, QTHandle paramQTHandle) throws QTException {
+    public Movie flattenData(int movieFlattenFlags, QTHandle handle) throws QTException {
         byte[] arrayOfByte = new byte[8];
         setIntInArray(arrayOfByte, 0, 1752065132);
-        setIntInArray(arrayOfByte, 4, QTObject.ID(paramQTHandle));
+        setIntInArray(arrayOfByte, 4, QTObject.ID(handle));
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
@@ -1856,7 +1856,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             int[] arrayOfInt2 = { 0 };
             GetMovieGWorld(_ID(), arrayOfInt1, arrayOfInt2);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = FlattenMovieData(_ID(), paramInt | 0x10, arrayOfByte, 0, (short) -1, 0);
+            i = FlattenMovieData(_ID(), movieFlattenFlags | 0x10, arrayOfByte, 0, (short) -1, 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1865,7 +1865,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         Movie x = null;
         if (i != 0) {
             x = new Movie(i, null);
-            x.dataRef = paramQTHandle;
+            x.dataRef = handle;
             x.setActive(true);
         }
         return x;
@@ -1910,15 +1910,15 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param mp the new MovieProgress object
      * @throws quicktime.std.StdQTException
      */
-    public void setProgressProc(MovieProgress paramMovieProgress) throws StdQTException {
+    public void setProgressProc(MovieProgress mp) throws StdQTException {
         int i = 0;
-        if (paramMovieProgress == null) {
+        if (mp == null) {
             setProgressProc();
             return;
         }
         if (this.progUPP != null)
             this.progUPP.cleanupMethodClosure();
-        this.progUPP = new MoviesDispatcher(this, paramMovieProgress);
+        this.progUPP = new MoviesDispatcher(this, mp);
         synchronized (QTNative.globalsLock) {
             SetMovieProgressProc(_ID(), this.progUPP.ID(), 0);
         }
@@ -1931,15 +1931,15 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param wa the new ExecutingWiredActions object
      * @throws quicktime.std.StdQTException
      */
-    public void addExecuteWiredActionsProc(ExecutingWiredAction paramExecutingWiredAction) throws StdQTException {
-        if (paramExecutingWiredAction == null) {
+    public void addExecuteWiredActionsProc(ExecutingWiredAction wa) throws StdQTException {
+        if (wa == null) {
             throw new StdQTException(-50);
         }
         if (this.wiredUPP != null) {
             RemoveMovieExecuteWiredActionsProc(_ID(), this.wiredUPP.ID(), 0);
             this.wiredUPP.cleanupMethodClosure();
         }
-        this.wiredUPP = new MoviesDispatcher(this, paramExecutingWiredAction);
+        this.wiredUPP = new MoviesDispatcher(this, wa);
         StdQTException.checkError(AddMovieExecuteWiredActionsProc(_ID(), this.wiredUPP.ID(), 0));
     }
 
@@ -1962,8 +1962,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param flags execution flags
      * @throws quicktime.std.StdQTException
      */
-    public void executeWiredActions(int paramInt, AtomContainer paramAtomContainer) throws StdQTException {
-        StdQTException.checkError(MovieExecuteWiredActions(_ID(), paramInt, QTObject.ID(paramAtomContainer)));
+    public void executeWiredActions(int time, AtomContainer paramAtomContainer) throws StdQTException {
+        StdQTException.checkError(MovieExecuteWiredActions(_ID(), time, QTObject.ID(paramAtomContainer)));
     }
 
     /**
@@ -1977,14 +1977,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a SearchResult object.
      * @throws quicktime.QTException
      */
-    public SearchResult searchText(QTPointer paramQTPointer, int paramInt1, Track paramTrack, int paramInt2, int paramInt3) throws QTException {
+    public SearchResult searchText(QTPointer text, int searchFlags, Track searchTrack, int searchTime, int searchOffset) throws QTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
-        arrayOfInt1[0] = QTObject.ID(paramTrack);
-        arrayOfInt2[0] = paramInt2;
-        arrayOfInt3[0] = paramInt3;
-        int i = MovieSearchText(_ID(), QTObject.ID(paramQTPointer), paramQTPointer.getSize(), paramInt1, arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        arrayOfInt1[0] = QTObject.ID(searchTrack);
+        arrayOfInt2[0] = searchFlags;
+        arrayOfInt3[0] = searchTime;
+        int i = MovieSearchText(_ID(), QTObject.ID(text), text.getSize(), searchOffset, arrayOfInt1, arrayOfInt2, arrayOfInt3);
         StdQTException.checkError(i);
         return new SearchResult(new Track(arrayOfInt1[0], this), arrayOfInt2[0], arrayOfInt3[0]);
     }
@@ -1999,14 +1999,14 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a SearchResult object.
      * @throws quicktime.QTException
      */
-    public SearchResult searchText(QTPointer paramQTPointer, int paramInt1, int paramInt2, int paramInt3) throws QTException {
+    public SearchResult searchText(QTPointer text, int searchFlags, int searchTime, int searchOffset) throws QTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
         arrayOfInt1[0] = 0;
-        arrayOfInt2[0] = paramInt2;
-        arrayOfInt3[0] = paramInt3;
-        int i = MovieSearchText(_ID(), QTObject.ID(paramQTPointer), paramQTPointer.getSize(), paramInt1, arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        arrayOfInt2[0] = searchFlags;
+        arrayOfInt3[0] = searchTime;
+        int i = MovieSearchText(_ID(), QTObject.ID(text), text.getSize(), searchOffset, arrayOfInt1, arrayOfInt2, arrayOfInt3);
         StdQTException.checkError(i);
         return new SearchResult(new Track(arrayOfInt1[0], this), arrayOfInt2[0], arrayOfInt3[0]);
     }
@@ -2030,8 +2030,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param boxRect a Rectangle object specifying the poster box for the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setPosterBox(QDRect paramQDRect) throws StdQTException {
-        SetPosterBox(_ID(), paramQDRect.getRect());
+    public void setPosterBox(QDRect boxRect) throws StdQTException {
+        SetPosterBox(_ID(), boxRect.getRect());
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -2043,8 +2043,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a Region object.
      * @throws quicktime.QTException
      */
-    public Region getSegmentDisplayBoundsRgn(int paramInt1, int paramInt2) throws QTException {
-        return Region.fromMovieSegment(this, paramInt1, paramInt2);
+    public Region getSegmentDisplayBoundsRgn(int time, int duration) throws QTException {
+        return Region.fromMovieSegment(this, time, duration);
     }
 
     /**
@@ -2090,8 +2090,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param movieScrapFlags Flags that control the operation.
      * @throws quicktime.std.StdQTException
      */
-    public void putOnScrap(int paramInt) throws StdQTException {
-        int i = PutMovieOnScrap(_ID(), paramInt);
+    public void putOnScrap(int movieScrapFlags) throws StdQTException {
+        int i = PutMovieOnScrap(_ID(), movieScrapFlags);
         StdQTException.checkError(i);
     }
 
@@ -2102,8 +2102,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param flagsMask Indicates which flags in the flags parameter are to be considered in this operation.
      * @throws quicktime.std.StdQTException
      */
-    public void setPlayHints(int paramInt1, int paramInt2) throws StdQTException {
-        SetMoviePlayHints(_ID(), paramInt1, paramInt2);
+    public void setPlayHints(int flags, int flagsMask) throws StdQTException {
+        SetMoviePlayHints(_ID(), flagsMask, flags);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -2124,8 +2124,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param slaveZero Specifies the time, in the time scale of the master time base, that corresponds to a 0 time value for the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setMasterTimeBase(TimeBase paramTimeBase, TimeRecord paramTimeRecord) throws StdQTException {
-        SetMovieMasterTimeBase(_ID(), QTObject.ID(paramTimeBase), QTObject.ID(paramTimeRecord));
+    public void setMasterTimeBase(TimeBase tb, TimeRecord slaveZero) throws StdQTException {
+        SetMovieMasterTimeBase(_ID(), QTObject.ID(tb), QTObject.ID(slaveZero));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -2151,8 +2151,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the resource id of the movie created.
      * @throws quicktime.QTException
      */
-    public int convertToFile(Track paramTrack, QTFile paramQTFile, int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        return convertToFile(paramTrack, paramQTFile, paramInt1, paramInt2, paramInt3, 0, null);
+    public int convertToFile(Track onlyTrack, QTFile outputFile, int fileType, int creator, int scriptTag) throws QTException {
+        return convertToFile(onlyTrack, outputFile, fileType, creator, scriptTag, 0, null);
     }
 
     /**
@@ -2165,8 +2165,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the resource id of the movie created.
      * @throws quicktime.QTException
      */
-    public int convertToFile(QTFile paramQTFile, int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        return convertToFile(null, paramQTFile, paramInt1, paramInt2, paramInt3, 0, null);
+    public int convertToFile(QTFile outputFile, int fileType, int creator, int scriptTag) throws QTException {
+        return convertToFile(null, outputFile, fileType, creator, scriptTag, 0, null);
     }
 
     /**
@@ -2180,8 +2180,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the resource id of the movie created.
      * @throws quicktime.QTException
      */
-    public int convertToFile(QTFile paramQTFile, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException {
-        return convertToFile(null, paramQTFile, paramInt1, paramInt2, paramInt3, paramInt4, null);
+    public int convertToFile(QTFile outputFile, int fileType, int creator, int scriptTag, int flags) throws QTException {
+        return convertToFile(null, outputFile, fileType, creator, scriptTag, flags, null);
     }
 
     /**
@@ -2198,9 +2198,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @throws quicktime.QTException
      * @throws quicktime.std.StdQTException
      */
-    public int convertToFile(Track onlyTrack, QTFile paramQTFile, int fileType, int creator, int scriptTag, int flags, MovieExporter userComp) throws QTException, StdQTException {
+    public int convertToFile(Track onlyTrack, QTFile pathName, int fileType, int creator, int scriptTag, int flags, MovieExporter userComp) throws QTException, StdQTException {
         short[] resID_native = new short[1];
-        byte[] fsspec = paramQTFile.getFSSpec(false, 512);
+        byte[] fsspec = pathName.getFSSpec(false, 512);
         int i1;
         if (QTSession.isCurrentOS(4)) {
             i1 = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
@@ -2219,7 +2219,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             return resID_native[0];
         }
         synchronized (QTNative.globalsLock) {
-            i1 = ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), paramQTFile.getFSSpec(false, 512), fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
+            i1 = ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), pathName.getFSSpec(false, 512), fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
         }
         StdQTException.checkError(i1);
         return resID_native[0];
@@ -2234,8 +2234,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  value should be set to 1.
      * @throws quicktime.QTException
      */
-    public Track getQTVRTrack(int paramInt) throws QTException {
-        int i = QTVRGetQTVRTrack(_ID(), paramInt);
+    public Track getQTVRTrack(int index) throws QTException {
+        int i = QTVRGetQTVRTrack(_ID(), index);
         return i == 0 ? null : new Track(i, this);
     }
 
@@ -2283,8 +2283,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param replace true if the user data should be replaced; false if you want the data merged
      * @throws quicktime.std.StdQTException
      */
-    public void copyUserDataToMovie(Movie paramMovie, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(CopyMovieUserData(_ID(), QTObject.ID(paramMovie), paramBoolean == true ? 1919970403 : 1835361639));
+    public void copyUserDataToMovie(Movie destMovie, boolean replace) throws StdQTException {
+        StdQTException.checkError(CopyMovieUserData(_ID(), QTObject.ID(destMovie), replace == true ? 1919970403 : 1835361639));
     }
 
     /**
@@ -2294,8 +2294,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param replace true if the user data should be replaced; false if you want the data merged
      * @throws quicktime.std.StdQTException
      */
-    public void copyUserDataFromMovie(Movie paramMovie, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(CopyMovieUserData(QTObject.ID(paramMovie), _ID(), paramBoolean == true ? 1919970403 : 1835361639));
+    public void copyUserDataFromMovie(Movie srcMovie, boolean replace) throws StdQTException {
+        StdQTException.checkError(CopyMovieUserData(QTObject.ID(srcMovie), _ID(), replace == true ? 1919970403 : 1835361639));
     }
 
     /**
@@ -2307,8 +2307,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *     use StdQTConstants5_1.kQTCopyUserDataReplace or StdQTConstants5_1.kQTCopyUserDataMerge
      * @throws quicktime.std.StdQTException
      */
-    public static void copyUserData(Movie paramMovie1, Movie paramMovie2, int paramInt) throws StdQTException {
-        StdQTException.checkError(CopyMovieUserData(QTObject.ID(paramMovie1), QTObject.ID(paramMovie2), paramInt));
+    public static void copyUserData(Movie srcMovie, Movie destMovie, int copyRule) throws StdQTException {
+        StdQTException.checkError(CopyMovieUserData(QTObject.ID(srcMovie), QTObject.ID(destMovie), copyRule));
     }
 
     /**
@@ -2319,8 +2319,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @see "QuickTime::ChooseMovieClock()"
      * @param flags the movie flags
      */
-    public void chooseClock(int paramInt) {
-        ChooseMovieClock(_ID(), paramInt);
+    public void chooseClock(int flags) {
+        ChooseMovieClock(_ID(), flags);
     }
 
     /**
@@ -2331,8 +2331,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param handle the handle
      * @throws quicktime.std.StdQTException
      */
-    public void putDataRefIntoHandle(DataRef paramDataRef, QTHandle paramQTHandle) throws StdQTException {
-        StdQTException.checkError(PutMovieForDataRefIntoHandle(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), QTObject.ID(paramQTHandle)));
+    public void putDataRefIntoHandle(DataRef ref, QTHandle handle) throws StdQTException {
+        StdQTException.checkError(PutMovieForDataRefIntoHandle(_ID(), QTObject.ID(ref), ref.getType(), QTObject.ID(handle)));
     }
 
     /**
@@ -2346,7 +2346,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return movie
      * @throws quicktime.std.StdQTException
      */
-    public Movie forDataRefFromHandle(DataRef paramDataRef, QTHandle paramQTHandle, int paramInt, MovieInfo paramMovieInfo) throws StdQTException {
+    public Movie forDataRefFromHandle(DataRef dataRef, QTHandle publicHandle, int flags, MovieInfo info) throws StdQTException {
         int[] arrayOfInt = new int[1];
         byte[] arrayOfByte = new byte[1];
         int i = 0;
@@ -2354,7 +2354,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = NewMovieForDataRefFromHandle(arrayOfInt, QTObject.ID(paramQTHandle), (short) paramInt, arrayOfByte, QTObject.ID(paramDataRef), paramDataRef.getType());
+            i = NewMovieForDataRefFromHandle(arrayOfInt, QTObject.ID(publicHandle), (short) flags, arrayOfByte, QTObject.ID(dataRef), dataRef.getType());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -2363,12 +2363,12 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (arrayOfInt[0] == 0) {
             throw new StdQTException(63526);
         }
-        if (paramMovieInfo != null) {
-            paramMovieInfo.setMovieInfo(0, arrayOfByte[0] == 1, null);
+        if (info != null) {
+            info.setMovieInfo(0, arrayOfByte[0] == 1, null);
         }
         Movie x = new Movie(arrayOfInt[0], null);
         x.init();
-        x.dataRef = paramDataRef;
+        x.dataRef = dataRef;
         return x;
     }
 
@@ -2381,9 +2381,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  QuickTime's idling mechanism needs to be called
      * @throws quicktime.std.StdQTException
      */
-    public static int getTimeUntilNextTask(int paramInt) throws StdQTException {
+    public static int getTimeUntilNextTask(int scale) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(QTGetTimeUntilNextTask(arrayOfInt, paramInt));
+        StdQTException.checkError(QTGetTimeUntilNextTask(arrayOfInt, scale));
         return arrayOfInt[0];
     }
 
@@ -2392,13 +2392,13 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * needs tasking. (Requires QT 6)
      * @see "QuickTime::QTInstallNextTaskNeededSoonerCallback()"
      */
-    public static void setNextTaskNeededSoonerCallback(NextTaskNeededSooner paramNextTaskNeededSooner, int paramInt1, int paramInt2) throws StdQTException {
+    public static void setNextTaskNeededSoonerCallback(NextTaskNeededSooner paramNextTaskNeededSooner, int fCreator, int flags) throws StdQTException {
         if (paramNextTaskNeededSooner == null) {
             return;
         }
         IdleDispatcher localIdleDispatcher = new IdleDispatcher(paramNextTaskNeededSooner);
         Object localObject = dispatchers.put(paramNextTaskNeededSooner, localIdleDispatcher);
-        StdQTException.checkError(QTInstallNextTaskNeededSoonerCallback(localIdleDispatcher.ID(), paramInt1, paramInt2, 0));
+        StdQTException.checkError(QTInstallNextTaskNeededSoonerCallback(localIdleDispatcher.ID(), fCreator, flags, 0));
     }
 
     /**
@@ -2429,7 +2429,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the new movie
      * @throws quicktime.QTException
      */
-    public Movie flattenDataToDataRef(DataRef paramDataRef, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException {
+    public Movie flattenDataToDataRef(DataRef dataRef, int movieFlattenFlags, int creator, int scriptTag, int createMovieFileFlags) throws QTException {
         int i = 0;
         Movie localMovie = null;
         synchronized (QTNative.globalsLock) {
@@ -2440,7 +2440,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             int[] arrayOfInt2 = { 0 };
             GetMovieGWorld(_ID(), arrayOfInt1, arrayOfInt2);
             SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
-            i = FlattenMovieDataToDataRef(_ID(), paramInt1, QTObject.ID(paramDataRef), paramDataRef.getType(), paramInt2, (short) paramInt3, paramInt4);
+            i = FlattenMovieDataToDataRef(_ID(), creator, QTObject.ID(dataRef), dataRef.getType(), movieFlattenFlags, (short) scriptTag, createMovieFileFlags);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -2448,7 +2448,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         if (i != 0) {
             localMovie = new Movie(i, null);
             localMovie.init();
-            localMovie.dataRef = paramDataRef;
+            localMovie.dataRef = dataRef;
         }
         return localMovie;
     }
@@ -2460,9 +2460,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param dataRef the dataref to the movie
      * @throws quicktime.std.StdQTException
      */
-    public void setMovieAnchorDataRef(DataRef paramDataRef) throws StdQTException {
+    public void setMovieAnchorDataRef(DataRef dataRef) throws StdQTException {
         int i = 0;
-        i = SetMovieAnchorDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType());
+        i = SetMovieAnchorDataRef(_ID(), QTObject.ID(dataRef), dataRef.getType());
         StdQTException.checkError(i);
     }
 
@@ -2488,532 +2488,532 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         return arrayOfInt3[0] == 1;
     }
 
-    private static void MoviesTask(int paramInt1, int paramInt2) {
-        MovieToolbox.MoviesTask(paramInt1, paramInt2);
+    private static void MoviesTask(int fCreator, int flags) {
+        MovieToolbox.MoviesTask(fCreator, flags);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static short CreateMovieFile(byte[] paramArrayOfByte, int paramInt1, short paramShort, int paramInt2, short[] paramArrayOfShort, int[] paramArrayOfInt) {
-        return MovieToolbox.CreateMovieFile(paramArrayOfByte, paramInt1, paramShort, paramInt2, paramArrayOfShort, paramArrayOfInt);
+    private static short CreateMovieFile(byte[] paramArrayOfByte, int fCreator, short paramShort, int flags, short[] paramArrayOfShort, int[] paramArrayOfInt) {
+        return MovieToolbox.CreateMovieFile(paramArrayOfByte, fCreator, paramShort, flags, paramArrayOfShort, paramArrayOfInt);
     }
 
-    private static int SGGetMovie(int paramInt) {
-        return SequenceGrabberManager.SGGetMovie(paramInt);
+    private static int SGGetMovie(int time) {
+        return SequenceGrabberManager.SGGetMovie(time);
     }
 
-    private static int NewMovieFromScrap(int paramInt) {
-        return MovieToolbox.NewMovieFromScrap(paramInt);
+    private static int NewMovieFromScrap(int time) {
+        return MovieToolbox.NewMovieFromScrap(time);
     }
 
-    private static short NewMovieFromFile(int[] paramArrayOfInt, short paramShort1, short[] paramArrayOfShort, byte[] paramArrayOfByte1, short paramShort2, byte[] paramArrayOfByte2) {
-        return MovieToolbox.NewMovieFromFile(paramArrayOfInt, paramShort1, paramArrayOfShort, paramArrayOfByte1, paramShort2, paramArrayOfByte2);
+    private static short NewMovieFromFile(int[] paramArrayOfInt, short fCreator, short[] paramArrayOfShort, byte[] paramArrayOfByte1, short resID, byte[] paramArrayOfByte2) {
+        return MovieToolbox.NewMovieFromFile(paramArrayOfInt, fCreator, paramArrayOfShort, paramArrayOfByte1, resID, paramArrayOfByte2);
     }
 
-    private static short NewMovieFromHandle(int[] paramArrayOfInt, int paramInt, short paramShort, byte[] paramArrayOfByte) {
-        return MovieToolbox.NewMovieFromHandle(paramArrayOfInt, paramInt, paramShort, paramArrayOfByte);
+    private static short NewMovieFromHandle(int[] paramArrayOfInt, int time, short paramShort, byte[] paramArrayOfByte) {
+        return MovieToolbox.NewMovieFromHandle(paramArrayOfInt, time, paramShort, paramArrayOfByte);
     }
 
-    private static short NewMovieFromDataFork(int[] paramArrayOfInt, short paramShort1, int paramInt, short paramShort2, byte[] paramArrayOfByte) {
-        return MovieToolbox.NewMovieFromDataFork(paramArrayOfInt, paramShort1, paramInt, paramShort2, paramArrayOfByte);
+    private static short NewMovieFromDataFork(int[] paramArrayOfInt, short fCreator, int time, short resID, byte[] paramArrayOfByte) {
+        return MovieToolbox.NewMovieFromDataFork(paramArrayOfInt, fCreator, time, resID, paramArrayOfByte);
     }
 
-    private static short NewMovieFromDataRef(int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int paramInt1, int paramInt2) {
-        return MovieToolbox.NewMovieFromDataRef(paramArrayOfInt, paramShort, paramArrayOfShort, paramInt1, paramInt2);
+    private static short NewMovieFromDataRef(int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int fCreator, int flags) {
+        return MovieToolbox.NewMovieFromDataRef(paramArrayOfInt, paramShort, paramArrayOfShort, fCreator, flags);
     }
 
-    private static int NewMovie(int paramInt) {
-        return MovieToolbox.NewMovie(paramInt);
+    private static int NewMovie(int time) {
+        return MovieToolbox.NewMovie(time);
     }
 
-    private static short AddMovieResource(int paramInt, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte) {
-        return MovieToolbox.AddMovieResource(paramInt, paramShort, paramArrayOfShort, paramArrayOfByte);
+    private static short AddMovieResource(int time, short paramShort, short[] paramArrayOfShort, byte[] paramArrayOfByte) {
+        return MovieToolbox.AddMovieResource(time, paramShort, paramArrayOfShort, paramArrayOfByte);
     }
 
-    private static short UpdateMovieResource(int paramInt, short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
-        return MovieToolbox.UpdateMovieResource(paramInt, paramShort1, paramShort2, paramArrayOfByte);
+    private static short UpdateMovieResource(int time, short fCreator, short resID, byte[] paramArrayOfByte) {
+        return MovieToolbox.UpdateMovieResource(time, fCreator, resID, paramArrayOfByte);
     }
 
-    private static short RemoveMovieResource(short paramShort1, short paramShort2) {
-        return MovieToolbox.RemoveMovieResource(paramShort1, paramShort2);
+    private static short RemoveMovieResource(short fCreator, short resID) {
+        return MovieToolbox.RemoveMovieResource(fCreator, resID);
     }
 
-    private static short PrerollMovie(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.PrerollMovie(paramInt1, paramInt2, paramInt3);
+    private static short PrerollMovie(int fCreator, int flags, int duration) {
+        return MovieToolbox.PrerollMovie(fCreator, flags, duration);
     }
 
-    private static short LoadMovieIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.LoadMovieIntoRam(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short LoadMovieIntoRam(int fCreator, int flags, int duration, int time4) {
+        return MovieToolbox.LoadMovieIntoRam(fCreator, flags, duration, time4);
     }
 
-    private static void SetMovieActive(int paramInt, byte paramByte) {
-        MovieToolbox.SetMovieActive(paramInt, paramByte);
+    private static void SetMovieActive(int time, byte paramByte) {
+        MovieToolbox.SetMovieActive(time, paramByte);
     }
 
-    private static byte GetMovieActive(int paramInt) {
-        return MovieToolbox.GetMovieActive(paramInt);
+    private static byte GetMovieActive(int time) {
+        return MovieToolbox.GetMovieActive(time);
     }
 
-    private static void StartMovie(int paramInt) {
-        MovieToolbox.StartMovie(paramInt);
+    private static void StartMovie(int time) {
+        MovieToolbox.StartMovie(time);
     }
 
-    private static void StopMovie(int paramInt) {
-        MovieToolbox.StopMovie(paramInt);
+    private static void StopMovie(int time) {
+        MovieToolbox.StopMovie(time);
     }
 
-    private static void GoToBeginningOfMovie(int paramInt) {
-        MovieToolbox.GoToBeginningOfMovie(paramInt);
+    private static void GoToBeginningOfMovie(int time) {
+        MovieToolbox.GoToBeginningOfMovie(time);
     }
 
-    private static void GoToEndOfMovie(int paramInt) {
-        MovieToolbox.GoToEndOfMovie(paramInt);
+    private static void GoToEndOfMovie(int time) {
+        MovieToolbox.GoToEndOfMovie(time);
     }
 
-    private static byte IsMovieDone(int paramInt) {
-        return MovieToolbox.IsMovieDone(paramInt);
+    private static byte IsMovieDone(int time) {
+        return MovieToolbox.IsMovieDone(time);
     }
 
-    private static byte GetMoviePreviewMode(int paramInt) {
-        return MovieToolbox.GetMoviePreviewMode(paramInt);
+    private static byte GetMoviePreviewMode(int time) {
+        return MovieToolbox.GetMoviePreviewMode(time);
     }
 
-    private static void SetMoviePreviewMode(int paramInt, byte paramByte) {
-        MovieToolbox.SetMoviePreviewMode(paramInt, paramByte);
+    private static void SetMoviePreviewMode(int time, byte paramByte) {
+        MovieToolbox.SetMoviePreviewMode(time, paramByte);
     }
 
-    private static void ShowMoviePoster(int paramInt) {
-        MovieToolbox.ShowMoviePoster(paramInt);
+    private static void ShowMoviePoster(int time) {
+        MovieToolbox.ShowMoviePoster(time);
     }
 
-    private static void PlayMoviePreview(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.PlayMoviePreview(paramInt1, paramInt2, paramInt3);
+    private static void PlayMoviePreview(int fCreator, int flags, int duration) {
+        MovieToolbox.PlayMoviePreview(fCreator, flags, duration);
     }
 
-    private static void SetMovieGWorld(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMovieGWorld(paramInt1, paramInt2, paramInt3);
+    private static void SetMovieGWorld(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMovieGWorld(fCreator, flags, duration);
     }
 
-    private static void GetMovieNaturalBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.GetMovieNaturalBoundsRect(paramInt, paramArrayOfByte);
+    private static void GetMovieNaturalBoundsRect(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.GetMovieNaturalBoundsRect(time, paramArrayOfByte);
     }
 
-    private static int GetNextTrackForCompositing(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetNextTrackForCompositing(paramInt1, paramInt2);
+    private static int GetNextTrackForCompositing(int fCreator, int flags) {
+        return MovieToolbox.GetNextTrackForCompositing(fCreator, flags);
     }
 
-    private static int GetPrevTrackForCompositing(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetPrevTrackForCompositing(paramInt1, paramInt2);
+    private static int GetPrevTrackForCompositing(int fCreator, int flags) {
+        return MovieToolbox.GetPrevTrackForCompositing(fCreator, flags);
     }
 
-    private static short UpdateMovie(int paramInt) {
-        return MovieToolbox.UpdateMovie(paramInt);
+    private static short UpdateMovie(int time) {
+        return MovieToolbox.UpdateMovie(time);
     }
 
-    private static short InvalidateMovieRegion(int paramInt1, int paramInt2) {
-        return MovieToolbox.InvalidateMovieRegion(paramInt1, paramInt2);
+    private static short InvalidateMovieRegion(int fCreator, int flags) {
+        return MovieToolbox.InvalidateMovieRegion(fCreator, flags);
     }
 
-    private static void GetMovieBox(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.GetMovieBox(paramInt, paramArrayOfByte);
+    private static void GetMovieBox(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.GetMovieBox(time, paramArrayOfByte);
     }
 
-    private static void SetMovieBox(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.SetMovieBox(paramInt, paramArrayOfByte);
+    private static void SetMovieBox(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.SetMovieBox(time, paramArrayOfByte);
     }
 
-    private static void SetMovieDisplayClipRgn(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieDisplayClipRgn(paramInt1, paramInt2);
+    private static void SetMovieDisplayClipRgn(int fCreator, int flags) {
+        MovieToolbox.SetMovieDisplayClipRgn(fCreator, flags);
     }
 
-    private static void SetMovieClipRgn(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieClipRgn(paramInt1, paramInt2);
+    private static void SetMovieClipRgn(int fCreator, int flags) {
+        MovieToolbox.SetMovieClipRgn(fCreator, flags);
     }
 
-    private static short PutMovieIntoHandle(int paramInt1, int paramInt2) {
-        return MovieToolbox.PutMovieIntoHandle(paramInt1, paramInt2);
+    private static short PutMovieIntoHandle(int fCreator, int flags) {
+        return MovieToolbox.PutMovieIntoHandle(fCreator, flags);
     }
 
-    private static short PutMovieIntoDataFork(int paramInt1, short paramShort, int paramInt2, int paramInt3) {
-        return MovieToolbox.PutMovieIntoDataFork(paramInt1, paramShort, paramInt2, paramInt3);
+    private static short PutMovieIntoDataFork(int fCreator, short paramShort, int flags, int duration) {
+        return MovieToolbox.PutMovieIntoDataFork(fCreator, paramShort, flags, duration);
     }
 
-    private static int GetMovieCreationTime(int paramInt) {
-        return MovieToolbox.GetMovieCreationTime(paramInt);
+    private static int GetMovieCreationTime(int time) {
+        return MovieToolbox.GetMovieCreationTime(time);
     }
 
-    private static int GetMovieModificationTime(int paramInt) {
-        return MovieToolbox.GetMovieModificationTime(paramInt);
+    private static int GetMovieModificationTime(int time) {
+        return MovieToolbox.GetMovieModificationTime(time);
     }
 
-    private static int GetMovieTimeScale(int paramInt) {
-        return MovieToolbox.GetMovieTimeScale(paramInt);
+    private static int GetMovieTimeScale(int time) {
+        return MovieToolbox.GetMovieTimeScale(time);
     }
 
-    private static void SetMovieTimeScale(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieTimeScale(paramInt1, paramInt2);
+    private static void SetMovieTimeScale(int fCreator, int flags) {
+        MovieToolbox.SetMovieTimeScale(fCreator, flags);
     }
 
-    private static int GetMovieDuration(int paramInt) {
-        return MovieToolbox.GetMovieDuration(paramInt);
+    private static int GetMovieDuration(int time) {
+        return MovieToolbox.GetMovieDuration(time);
     }
 
-    private static int GetMovieRate(int paramInt) {
-        return MovieToolbox.GetMovieRate(paramInt);
+    private static int GetMovieRate(int time) {
+        return MovieToolbox.GetMovieRate(time);
     }
 
-    private static void SetMovieRate(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieRate(paramInt1, paramInt2);
+    private static void SetMovieRate(int fCreator, int flags) {
+        MovieToolbox.SetMovieRate(fCreator, flags);
     }
 
-    private static int GetMoviePreferredRate(int paramInt) {
-        return MovieToolbox.GetMoviePreferredRate(paramInt);
+    private static int GetMoviePreferredRate(int time) {
+        return MovieToolbox.GetMoviePreferredRate(time);
     }
 
-    private static void SetMoviePreferredRate(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMoviePreferredRate(paramInt1, paramInt2);
+    private static void SetMoviePreferredRate(int fCreator, int flags) {
+        MovieToolbox.SetMoviePreferredRate(fCreator, flags);
     }
 
-    private static short GetMoviePreferredVolume(int paramInt) {
-        return MovieToolbox.GetMoviePreferredVolume(paramInt);
+    private static short GetMoviePreferredVolume(int time) {
+        return MovieToolbox.GetMoviePreferredVolume(time);
     }
 
-    private static void SetMoviePreferredVolume(int paramInt, short paramShort) {
-        MovieToolbox.SetMoviePreferredVolume(paramInt, paramShort);
+    private static void SetMoviePreferredVolume(int time, short paramShort) {
+        MovieToolbox.SetMoviePreferredVolume(time, paramShort);
     }
 
-    private static short GetMovieVolume(int paramInt) {
-        return MovieToolbox.GetMovieVolume(paramInt);
+    private static short GetMovieVolume(int time) {
+        return MovieToolbox.GetMovieVolume(time);
     }
 
-    private static void SetMovieVolume(int paramInt, short paramShort) {
-        MovieToolbox.SetMovieVolume(paramInt, paramShort);
+    private static void SetMovieVolume(int time, short paramShort) {
+        MovieToolbox.SetMovieVolume(time, paramShort);
     }
 
-    private static void GetMovieMatrix(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.GetMovieMatrix(paramInt, paramArrayOfByte);
+    private static void GetMovieMatrix(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.GetMovieMatrix(time, paramArrayOfByte);
     }
 
-    private static void SetMovieMatrix(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.SetMovieMatrix(paramInt, paramArrayOfByte);
+    private static void SetMovieMatrix(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.SetMovieMatrix(time, paramArrayOfByte);
     }
 
-    private static void GetMoviePreviewTime(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMoviePreviewTime(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMoviePreviewTime(int time, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMoviePreviewTime(time, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static void SetMoviePreviewTime(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMoviePreviewTime(paramInt1, paramInt2, paramInt3);
+    private static void SetMoviePreviewTime(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMoviePreviewTime(fCreator, flags, duration);
     }
 
-    private static int GetMoviePosterTime(int paramInt) {
-        return MovieToolbox.GetMoviePosterTime(paramInt);
+    private static int GetMoviePosterTime(int time) {
+        return MovieToolbox.GetMoviePosterTime(time);
     }
 
-    private static void SetMoviePosterTime(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMoviePosterTime(paramInt1, paramInt2);
+    private static void SetMoviePosterTime(int fCreator, int flags) {
+        MovieToolbox.SetMoviePosterTime(fCreator, flags);
     }
 
-    private static void GetMovieSelection(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMovieSelection(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMovieSelection(int time, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieSelection(time, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static void SetMovieSelection(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMovieSelection(paramInt1, paramInt2, paramInt3);
+    private static void SetMovieSelection(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMovieSelection(fCreator, flags, duration);
     }
 
-    private static void SetMovieActiveSegment(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMovieActiveSegment(paramInt1, paramInt2, paramInt3);
+    private static void SetMovieActiveSegment(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMovieActiveSegment(fCreator, flags, duration);
     }
 
-    private static void GetMovieActiveSegment(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMovieActiveSegment(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMovieActiveSegment(int time, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieActiveSegment(time, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static int GetMovieTime(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetMovieTime(paramInt1, paramInt2);
+    private static int GetMovieTime(int fCreator, int flags) {
+        return MovieToolbox.GetMovieTime(fCreator, flags);
     }
 
-    private static void SetMovieTime(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieTime(paramInt1, paramInt2);
+    private static void SetMovieTime(int fCreator, int flags) {
+        MovieToolbox.SetMovieTime(fCreator, flags);
     }
 
-    private static void SetMovieTimeValue(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieTimeValue(paramInt1, paramInt2);
+    private static void SetMovieTimeValue(int fCreator, int flags) {
+        MovieToolbox.SetMovieTimeValue(fCreator, flags);
     }
 
-    private static int GetMovieTrackCount(int paramInt) {
-        return MovieToolbox.GetMovieTrackCount(paramInt);
+    private static int GetMovieTrackCount(int time) {
+        return MovieToolbox.GetMovieTrackCount(time);
     }
 
-    private static int GetMovieTrack(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetMovieTrack(paramInt1, paramInt2);
+    private static int GetMovieTrack(int fCreator, int flags) {
+        return MovieToolbox.GetMovieTrack(fCreator, flags);
     }
 
-    private static int GetMovieIndTrack(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetMovieIndTrack(paramInt1, paramInt2);
+    private static int GetMovieIndTrack(int fCreator, int flags) {
+        return MovieToolbox.GetMovieIndTrack(fCreator, flags);
     }
 
-    private static int GetMovieIndTrackType(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.GetMovieIndTrackType(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int GetMovieIndTrackType(int fCreator, int flags, int duration, int time4) {
+        return MovieToolbox.GetMovieIndTrackType(fCreator, flags, duration, time4);
     }
 
-    private static int GetTrackMovie(int paramInt) {
-        return MovieToolbox.GetTrackMovie(paramInt);
+    private static int GetTrackMovie(int time) {
+        return MovieToolbox.GetTrackMovie(time);
     }
 
-    private static void DisposeMovieTrack(int paramInt) {
-        MovieToolbox.DisposeMovieTrack(paramInt);
+    private static void DisposeMovieTrack(int time) {
+        MovieToolbox.DisposeMovieTrack(time);
     }
 
-    private static void SetAutoTrackAlternatesEnabled(int paramInt, byte paramByte) {
-        MovieToolbox.SetAutoTrackAlternatesEnabled(paramInt, paramByte);
+    private static void SetAutoTrackAlternatesEnabled(int time, byte paramByte) {
+        MovieToolbox.SetAutoTrackAlternatesEnabled(time, paramByte);
     }
 
-    private static void SelectMovieAlternates(int paramInt) {
-        MovieToolbox.SelectMovieAlternates(paramInt);
+    private static void SelectMovieAlternates(int time) {
+        MovieToolbox.SelectMovieAlternates(time);
     }
 
-    private static void GetMovieNextInterestingTime(int paramInt1, short paramShort1, short paramShort2, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        MovieToolbox.GetMovieNextInterestingTime(paramInt1, paramShort1, paramShort2, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2, paramArrayOfInt3);
+    private static void GetMovieNextInterestingTime(int interestingTimeFlags, short flags, short resID, int[] paramArrayOfInt1, int startTime, int duration, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        MovieToolbox.GetMovieNextInterestingTime(interestingTimeFlags, flags, resID, paramArrayOfInt1, flags, duration, paramArrayOfInt2, paramArrayOfInt3);
     }
 
-    private static short InsertEmptyMovieSegment(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.InsertEmptyMovieSegment(paramInt1, paramInt2, paramInt3);
+    private static short InsertEmptyMovieSegment(int fCreator, int flags, int duration) {
+        return MovieToolbox.InsertEmptyMovieSegment(fCreator, flags, duration);
     }
 
-    private static short InsertMovieSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.InsertMovieSegment(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short InsertMovieSegment(int fCreator, int flags, int duration, int time4, int time5) {
+        return MovieToolbox.InsertMovieSegment(fCreator, flags, duration, time4, time5);
     }
 
-    private static short DeleteMovieSegment(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.DeleteMovieSegment(paramInt1, paramInt2, paramInt3);
+    private static short DeleteMovieSegment(int fCreator, int flags, int duration) {
+        return MovieToolbox.DeleteMovieSegment(fCreator, flags, duration);
     }
 
-    private static short ScaleMovieSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.ScaleMovieSegment(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short ScaleMovieSegment(int fCreator, int flags, int duration, int time4) {
+        return MovieToolbox.ScaleMovieSegment(fCreator, flags, duration, time4);
     }
 
-    private static int CutMovieSelection(int paramInt) {
-        return MovieToolbox.CutMovieSelection(paramInt);
+    private static int CutMovieSelection(int time) {
+        return MovieToolbox.CutMovieSelection(time);
     }
 
-    private static int CopyMovieSelection(int paramInt) {
-        return MovieToolbox.CopyMovieSelection(paramInt);
+    private static int CopyMovieSelection(int time) {
+        return MovieToolbox.CopyMovieSelection(time);
     }
 
-    private static void PasteMovieSelection(int paramInt1, int paramInt2) {
-        MovieToolbox.PasteMovieSelection(paramInt1, paramInt2);
+    private static void PasteMovieSelection(int fCreator, int flags) {
+        MovieToolbox.PasteMovieSelection(fCreator, flags);
     }
 
-    private static void AddMovieSelection(int paramInt1, int paramInt2) {
-        MovieToolbox.AddMovieSelection(paramInt1, paramInt2);
+    private static void AddMovieSelection(int fCreator, int flags) {
+        MovieToolbox.AddMovieSelection(fCreator, flags);
     }
 
-    private static void ClearMovieSelection(int paramInt) {
-        MovieToolbox.ClearMovieSelection(paramInt);
+    private static void ClearMovieSelection(int time) {
+        MovieToolbox.ClearMovieSelection(time);
     }
 
-    private static short PasteHandleIntoMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.PasteHandleIntoMovie(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short PasteHandleIntoMovie(int fCreator, int flags, int duration, int time4, int time5) {
+        return MovieToolbox.PasteHandleIntoMovie(fCreator, flags, duration, time4, time5);
     }
 
-    private static short PutMovieIntoTypedHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
-        return MovieToolbox.PutMovieIntoTypedHandle(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    private static short PutMovieIntoTypedHandle(int fCreator, int flags, int duration, int time4, int time5, int time6, int time7, int time8) {
+        return MovieToolbox.PutMovieIntoTypedHandle(fCreator, flags, duration, time4, time5, time6, time7, time8);
     }
 
-    private static short CopyMovieSettings(int paramInt1, int paramInt2) {
-        return MovieToolbox.CopyMovieSettings(paramInt1, paramInt2);
+    private static short CopyMovieSettings(int fCreator, int flags) {
+        return MovieToolbox.CopyMovieSettings(fCreator, flags);
     }
 
-    private static short AddEmptyTrackToMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
-        return MovieToolbox.AddEmptyTrackToMovie(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    private static short AddEmptyTrackToMovie(int fCreator, int flags, int duration, int time4, int[] paramArrayOfInt) {
+        return MovieToolbox.AddEmptyTrackToMovie(fCreator, flags, duration, time4, paramArrayOfInt);
     }
 
-    private static int NewMovieEditState(int paramInt) {
-        return MovieToolbox.NewMovieEditState(paramInt);
+    private static int NewMovieEditState(int time) {
+        return MovieToolbox.NewMovieEditState(time);
     }
 
-    private static short UseMovieEditState(int paramInt1, int paramInt2) {
-        return MovieToolbox.UseMovieEditState(paramInt1, paramInt2);
+    private static short UseMovieEditState(int fCreator, int flags) {
+        return MovieToolbox.UseMovieEditState(fCreator, flags);
     }
 
-    private static int GetMovieDataSize(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.GetMovieDataSize(paramInt1, paramInt2, paramInt3);
+    private static int GetMovieDataSize(int fCreator, int flags, int duration) {
+        return MovieToolbox.GetMovieDataSize(fCreator, flags, duration);
     }
 
-    private static byte PtInMovie(int paramInt1, int paramInt2) {
-        return MovieToolbox.PtInMovie(paramInt1, paramInt2);
+    private static byte PtInMovie(int fCreator, int flags) {
+        return MovieToolbox.PtInMovie(fCreator, flags);
     }
 
-    private static void SetMovieLanguage(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMovieLanguage(paramInt1, paramInt2);
+    private static void SetMovieLanguage(int fCreator, int flags) {
+        MovieToolbox.SetMovieLanguage(fCreator, flags);
     }
 
-    private static byte HasMovieChanged(int paramInt) {
-        return MovieToolbox.HasMovieChanged(paramInt);
+    private static byte HasMovieChanged(int time) {
+        return MovieToolbox.HasMovieChanged(time);
     }
 
-    private static void ClearMovieChanged(int paramInt) {
-        MovieToolbox.ClearMovieChanged(paramInt);
+    private static void ClearMovieChanged(int time) {
+        MovieToolbox.ClearMovieChanged(time);
     }
 
-    private static short SetMovieDefaultDataRef(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.SetMovieDefaultDataRef(paramInt1, paramInt2, paramInt3);
+    private static short SetMovieDefaultDataRef(int fCreator, int flags, int duration) {
+        return MovieToolbox.SetMovieDefaultDataRef(fCreator, flags, duration);
     }
 
-    private static short SetMovieColorTable(int paramInt1, int paramInt2) {
-        return MovieToolbox.SetMovieColorTable(paramInt1, paramInt2);
+    private static short SetMovieColorTable(int fCreator, int flags) {
+        return MovieToolbox.SetMovieColorTable(fCreator, flags);
     }
 
-    private static void FlattenMovie(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, int paramInt3, short paramShort, int paramInt4, short[] paramArrayOfShort, byte[] paramArrayOfByte2) {
-        MovieToolbox.FlattenMovie(paramInt1, paramInt2, paramArrayOfByte1, paramInt3, paramShort, paramInt4, paramArrayOfShort, paramArrayOfByte2);
+    private static void FlattenMovie(int fCreator, int flags, byte[] paramArrayOfByte1, int duration, short paramShort, int time4, short[] paramArrayOfShort, byte[] paramArrayOfByte2) {
+        MovieToolbox.FlattenMovie(fCreator, flags, paramArrayOfByte1, duration, paramShort, time4, paramArrayOfShort, paramArrayOfByte2);
     }
 
-    private static int FlattenMovieData(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, short paramShort, int paramInt4) {
-        return MovieToolbox.FlattenMovieData(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramShort, paramInt4);
+    private static int FlattenMovieData(int fCreator, int flags, byte[] paramArrayOfByte, int duration, short paramShort, int time4) {
+        return MovieToolbox.FlattenMovieData(fCreator, flags, paramArrayOfByte, duration, paramShort, time4);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] paramArrayOfByte, int fCreator, int flags) {
+        MemoryManager.setIntInArray(paramArrayOfByte, fCreator, flags);
     }
 
-    private static void SetMovieProgressProc(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMovieProgressProc(paramInt1, paramInt2, paramInt3);
+    private static void SetMovieProgressProc(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMovieProgressProc(fCreator, flags, duration);
     }
 
-    private static void GetMovieProgressProc(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMovieProgressProc(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMovieProgressProc(int time, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieProgressProc(time, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static short MovieSearchText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return MovieToolbox.MovieSearchText(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static short MovieSearchText(int fCreator, int flags, int duration, int time4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MovieToolbox.MovieSearchText(fCreator, flags, duration, time4, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
     }
 
-    private static void GetPosterBox(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.GetPosterBox(paramInt, paramArrayOfByte);
+    private static void GetPosterBox(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.GetPosterBox(time, paramArrayOfByte);
     }
 
-    private static void SetPosterBox(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.SetPosterBox(paramInt, paramArrayOfByte);
+    private static void SetPosterBox(int time, byte[] paramArrayOfByte) {
+        MovieToolbox.SetPosterBox(time, paramArrayOfByte);
     }
 
-    private static int GetMovieStatus(int paramInt, int[] paramArrayOfInt) {
-        return MovieToolbox.GetMovieStatus(paramInt, paramArrayOfInt);
+    private static int GetMovieStatus(int time, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMovieStatus(time, paramArrayOfInt);
     }
 
-    private static void ShowMovieInformation(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.ShowMovieInformation(paramInt1, paramInt2, paramInt3);
+    private static void ShowMovieInformation(int fCreator, int flags, int duration) {
+        MovieToolbox.ShowMovieInformation(fCreator, flags, duration);
     }
 
-    private static short PutMovieOnScrap(int paramInt1, int paramInt2) {
-        return MovieToolbox.PutMovieOnScrap(paramInt1, paramInt2);
+    private static short PutMovieOnScrap(int fCreator, int flags) {
+        return MovieToolbox.PutMovieOnScrap(fCreator, flags);
     }
 
-    private static void SetMoviePlayHints(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMoviePlayHints(paramInt1, paramInt2, paramInt3);
+    private static void SetMoviePlayHints(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMoviePlayHints(fCreator, flags, duration);
     }
 
-    private static void SetMovieMasterTimeBase(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMovieMasterTimeBase(paramInt1, paramInt2, paramInt3);
+    private static void SetMovieMasterTimeBase(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMovieMasterTimeBase(fCreator, flags, duration);
     }
 
-    private static void SetMovieMasterClock(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMovieMasterClock(paramInt1, paramInt2, paramInt3);
+    private static void SetMovieMasterClock(int fCreator, int flags, int duration) {
+        MovieToolbox.SetMovieMasterClock(fCreator, flags, duration);
     }
 
-    private static short ConvertMovieToFile(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, short paramShort, short[] paramArrayOfShort, int paramInt5, int paramInt6) {
-        return MovieToolbox.ConvertMovieToFile(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4, paramShort, paramArrayOfShort, paramInt5, paramInt6);
+    private static short ConvertMovieToFile(int fCreator, int flags, byte[] paramArrayOfByte, int duration, int time4, short paramShort, short[] paramArrayOfShort, int time5, int time6) {
+        return MovieToolbox.ConvertMovieToFile(fCreator, flags, paramArrayOfByte, duration, time4, paramShort, paramArrayOfShort, time5, time6);
     }
 
-    private static int QTVRGetQTVRTrack(int paramInt1, int paramInt2) {
-        return VRManager.QTVRGetQTVRTrack(paramInt1, paramInt2);
+    private static int QTVRGetQTVRTrack(int fCreator, int flags) {
+        return VRManager.QTVRGetQTVRTrack(fCreator, flags);
     }
 
-    private static short QTMovieNeedsTimeTable(int paramInt, byte[] paramArrayOfByte) {
-        return MovieToolbox.QTMovieNeedsTimeTable(paramInt, paramArrayOfByte);
+    private static short QTMovieNeedsTimeTable(int time, byte[] paramArrayOfByte) {
+        return MovieToolbox.QTMovieNeedsTimeTable(time, paramArrayOfByte);
     }
 
-    private static short GetMaxLoadedTimeInMovie(int paramInt, int[] paramArrayOfInt) {
-        return MovieToolbox.GetMaxLoadedTimeInMovie(paramInt, paramArrayOfInt);
+    private static short GetMaxLoadedTimeInMovie(int time, int[] paramArrayOfInt) {
+        return MovieToolbox.GetMaxLoadedTimeInMovie(time, paramArrayOfInt);
     }
 
-    private static short PrePrerollMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.PrePrerollMovie(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short PrePrerollMovie(int fCreator, int flags, int duration, int time4, int time5) {
+        return MovieToolbox.PrePrerollMovie(fCreator, flags, duration, time4, time5);
     }
 
-    private static void AbortPrePrerollMovie(int paramInt, short paramShort) {
-        MovieToolbox.AbortPrePrerollMovie(paramInt, paramShort);
+    private static void AbortPrePrerollMovie(int time, short paramShort) {
+        MovieToolbox.AbortPrePrerollMovie(time, paramShort);
     }
 
-    private static void SetMovieDrawingCompleteProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MovieToolbox.SetMovieDrawingCompleteProc(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void SetMovieDrawingCompleteProc(int fCreator, int flags, int duration, int time4) {
+        MovieToolbox.SetMovieDrawingCompleteProc(fCreator, flags, duration, time4);
     }
 
-    private static short AddMovieExecuteWiredActionsProc(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.AddMovieExecuteWiredActionsProc(paramInt1, paramInt2, paramInt3);
+    private static short AddMovieExecuteWiredActionsProc(int fCreator, int flags, int duration) {
+        return MovieToolbox.AddMovieExecuteWiredActionsProc(fCreator, flags, duration);
     }
 
-    private static short RemoveMovieExecuteWiredActionsProc(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.RemoveMovieExecuteWiredActionsProc(paramInt1, paramInt2, paramInt3);
+    private static short RemoveMovieExecuteWiredActionsProc(int fCreator, int flags, int duration) {
+        return MovieToolbox.RemoveMovieExecuteWiredActionsProc(fCreator, flags, duration);
     }
 
-    private static short MovieExecuteWiredActions(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.MovieExecuteWiredActions(paramInt1, paramInt2, paramInt3);
+    private static short MovieExecuteWiredActions(int fCreator, int flags, int duration) {
+        return MovieToolbox.MovieExecuteWiredActions(fCreator, flags, duration);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int fCreator, int flags) {
+        QuickDrawManager.SetGWorld(fCreator, flags);
     }
 
     private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
         QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMovieGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMovieGWorld(int time, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        MovieToolbox.GetMovieGWorld(time, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static short CopyMovieUserData(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.CopyMovieUserData(paramInt1, paramInt2, paramInt3);
+    private static short CopyMovieUserData(int fCreator, int flags, int duration) {
+        return MovieToolbox.CopyMovieUserData(fCreator, flags, duration);
     }
 
-    private static void ChooseMovieClock(int paramInt1, int paramInt2) {
-        MovieToolbox.ChooseMovieClock(paramInt1, paramInt2);
+    private static void ChooseMovieClock(int fCreator, int flags) {
+        MovieToolbox.ChooseMovieClock(fCreator, flags);
     }
 
-    private static short NewMovieForDataRefFromHandle(int[] paramArrayOfInt, int paramInt1, short paramShort, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        return MovieToolbox.NewMovieForDataRefFromHandle(paramArrayOfInt, paramInt1, paramShort, paramArrayOfByte, paramInt2, paramInt3);
+    private static short NewMovieForDataRefFromHandle(int[] paramArrayOfInt, int fCreator, short paramShort, byte[] paramArrayOfByte, int flags, int duration) {
+        return MovieToolbox.NewMovieForDataRefFromHandle(paramArrayOfInt, fCreator, paramShort, paramArrayOfByte, flags, duration);
     }
 
-    private static short PutMovieForDataRefIntoHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.PutMovieForDataRefIntoHandle(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short PutMovieForDataRefIntoHandle(int fCreator, int flags, int duration, int time4) {
+        return MovieToolbox.PutMovieForDataRefIntoHandle(fCreator, flags, duration, time4);
     }
 
-    private static int FlattenMovieDataToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort, int paramInt6) {
-        return MovieToolbox.FlattenMovieDataToDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort, paramInt6);
+    private static int FlattenMovieDataToDataRef(int fCreator, int flags, int duration, int time4, int time5, short paramShort, int time6) {
+        return MovieToolbox.FlattenMovieDataToDataRef(fCreator, flags, duration, time4, time5, paramShort, time6);
     }
 
-    private static short QTGetTimeUntilNextTask(int[] paramArrayOfInt, int paramInt) {
-        return MovieToolbox.QTGetTimeUntilNextTask(paramArrayOfInt, paramInt);
+    private static short QTGetTimeUntilNextTask(int[] paramArrayOfInt, int time) {
+        return MovieToolbox.QTGetTimeUntilNextTask(paramArrayOfInt, time);
     }
 
-    private static short QTInstallNextTaskNeededSoonerCallback(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.QTInstallNextTaskNeededSoonerCallback(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTInstallNextTaskNeededSoonerCallback(int fCreator, int flags, int duration, int time4) {
+        return MovieToolbox.QTInstallNextTaskNeededSoonerCallback(fCreator, flags, duration, time4);
     }
 
-    private static short QTUninstallNextTaskNeededSoonerCallback(int paramInt1, int paramInt2) {
-        return MovieToolbox.QTUninstallNextTaskNeededSoonerCallback(paramInt1, paramInt2);
+    private static short QTUninstallNextTaskNeededSoonerCallback(int fCreator, int flags) {
+        return MovieToolbox.QTUninstallNextTaskNeededSoonerCallback(fCreator, flags);
     }
 
-    private static short SetMovieAnchorDataRef(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.SetMovieAnchorDataRef(paramInt1, paramInt2, paramInt3);
+    private static short SetMovieAnchorDataRef(int fCreator, int flags, int duration) {
+        return MovieToolbox.SetMovieAnchorDataRef(fCreator, flags, duration);
     }
 
-    private static short GetMovieAnchorDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return MovieToolbox.GetMovieAnchorDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static short GetMovieAnchorDataRef(int time, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
+        return MovieToolbox.GetMovieAnchorDataRef(time, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
     }
 }
 

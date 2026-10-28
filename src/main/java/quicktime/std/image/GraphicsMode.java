@@ -51,10 +51,10 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
      * @param gMode Specifies the graphics mode.
      * @param opColor Specifies the operand color.
      */
-    public GraphicsMode(int paramInt, QDColor paramQDColor) {
+    public GraphicsMode(int gMode, QDColor opColor) {
         this();
-        setGraphicsMode(paramInt);
-        setColor(paramQDColor);
+        setGraphicsMode(gMode);
+        setColor(opColor);
     }
 
     private GraphicsMode(byte[] paramArrayOfByte) {
@@ -91,8 +91,8 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
      * This method sets the graphics mode (such as srcCopy, srcOr, etc)
      * @param mode Specifies the new graphics mode.
      */
-    public void setGraphicsMode(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setGraphicsMode(int mode) {
+        setIntAt(0, mode);
     }
 
     /**
@@ -115,11 +115,11 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
      * This method sets the operand color.
      * @param newColor Specifies the new color.
      */
-    public void setColor(QDColor paramQDColor) {
-        if (paramQDColor == null) {
+    public void setColor(QDColor newColor) {
+        if (newColor == null) {
             System.arraycopy(new byte[6], 0, getBytes(), 4, 6);
         } else {
-            System.arraycopy(paramQDColor.getRGBColor(), 0, getBytes(), 4, 6);
+            System.arraycopy(newColor.getRGBColor(), 0, getBytes(), 4, 6);
         }
     }
 

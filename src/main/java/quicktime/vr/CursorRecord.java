@@ -68,8 +68,8 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
      * Sets the cursor ID
      * @param cursorID -
      */
-    public void setCursorID(short paramShort) {
-        setShortAt(2, paramShort);
+    public void setCursorID(short cursorID) {
+        setShortAt(2, cursorID);
     }
 
     /**
@@ -90,10 +90,10 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
      * then this field should contain null.
      * @param data cursor data that is to replace the cursor
      */
-    public void setData(QTHandle paramQTHandle) {
+    public void setData(QTHandle data) {
         int i = 0;
-        if (paramQTHandle != null) {
-            i = getIntFromHandle(QTObject.ID(paramQTHandle), 0);
+        if (data != null) {
+            i = getIntFromHandle(QTObject.ID(data), 0);
         } else
             i = 0;
         setIntAt(4, i);

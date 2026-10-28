@@ -56,8 +56,8 @@ public final class SndInfo implements SoundLib, InterfaceLib {
      * @param numFrames The number of sample frames for the sample sound. If you are using a compression type defined by Apple, you can pass 0 in this field and the appropriate value for this field will be computed automatically. Max value is a 32-bit unsigned int.
      * @throws quicktime.sound.SoundException
      */
-    public static void setupAIFFHeader(OpenFile paramOpenFile, int paramInt1, float paramFloat, int paramInt2, int paramInt3, long paramLong1, long paramLong2) throws SoundException {
-        int i = SetupAIFFHeader((short) QTObject.ID(paramOpenFile), (short) paramInt1, QTUtils.X2UFix(paramFloat), (short) paramInt2, paramInt3, (int) paramLong1, (int) paramLong2);
+    public static void setupAIFFHeader(OpenFile file, int numChannels, float sampleRate, int sampleSize, int compressionType, long numBytes, long numFrames) throws SoundException {
+        int i = SetupAIFFHeader((short) QTObject.ID(file), (short) numChannels, QTUtils.X2UFix(sampleRate), (short) sampleSize, compressionType, (int) numBytes, (int) numFrames);
         SoundException.checkError(i);
     }
 
@@ -68,11 +68,11 @@ public final class SndInfo implements SoundLib, InterfaceLib {
      * @return a SndInfo object
      * @throws quicktime.sound.SoundException
      */
-    public static SndInfo parseAIFFHeader(OpenFile paramOpenFile) throws SoundException {
+    public static SndInfo parseAIFFHeader(OpenFile file) throws SoundException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseAIFFHeader((short) QTObject.ID(paramOpenFile), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
+        SoundException.checkError(ParseAIFFHeader((short) QTObject.ID(file), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
         return new SndInfo(localSoundComponentData, arrayOfInt1[0], arrayOfInt2[0]);
     }
 

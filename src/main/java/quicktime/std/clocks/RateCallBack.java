@@ -19,10 +19,10 @@ public abstract class RateCallBack extends QTCallBack {
      * @param rate the specified rate which will invoke the Callback
      * @param flags the conditions under which the Callback will be executed
      */
-    public RateCallBack(TimeBase paramTimeBase, float paramFloat, int paramInt) throws QTException {
-        super(paramTimeBase, 2);
-        this.rate = paramFloat;
-        this.flags = paramInt;
+    public RateCallBack(TimeBase tb, float rate, int flags) throws QTException {
+        super(tb, 2);
+        this.rate = rate;
+        this.flags = flags;
     }
 
     /**

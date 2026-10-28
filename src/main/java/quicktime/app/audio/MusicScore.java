@@ -28,5 +28,5 @@ public interface MusicScore extends ExtendedAudioSpec {
      * @return the MusicPart.
      * @throws quicktime.QTException
      */
-    MusicPart getPart(int paramInt) throws QTException;
+    MusicPart getPart(int part) throws QTException;
 }

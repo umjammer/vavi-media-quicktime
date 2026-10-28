@@ -226,16 +226,16 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @return the maximum size an image in this sequence will be after compression
      * @throws quicktime.std.StdQTException
      */
-    public int getMaxCompressionSize(QDGraphics paramQDGraphics) throws StdQTException {
+    public int getMaxCompressionSize(QDGraphics src) throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = 0;
-        if (paramQDGraphics == null)
+        if (src == null)
             throw new StdQTException(-50);
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = GetCSequenceMaxCompressionSize(_ID(), QTObject.ID(paramQDGraphics.getPixMap()), arrayOfInt);
+            SetGWorld(QTObject.ID(src), 0);
+            i = GetCSequenceMaxCompressionSize(_ID(), QTObject.ID(src.getPixMap()), arrayOfInt);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }

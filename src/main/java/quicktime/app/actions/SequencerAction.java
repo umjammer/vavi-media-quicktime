@@ -54,9 +54,9 @@ public abstract class SequencerAction extends PeriodicAction {
      * @param period the number of scale ticks that elapse between invocations of the action.
      * @param seq the Sequencer.
      */
-    protected SequencerAction(int paramInt1, int paramInt2, Sequencer paramSequencer) throws QTException {
-        super(paramInt1, paramInt2);
-        this.seq = paramSequencer;
+    protected SequencerAction(int scale, int period, Sequencer seq) throws QTException {
+        super(scale, period);
+        this.seq = seq;
     }
 
     private int cons = 0;
@@ -68,8 +68,8 @@ public abstract class SequencerAction extends PeriodicAction {
      * the attached actionable object is triggered.
      * @param cons the constraint
      */
-    public void setConstraint(int paramInt) {
-        this.cons = paramInt;
+    public void setConstraint(int cons) {
+        this.cons = cons;
     }
 
     /**
@@ -103,9 +103,9 @@ public abstract class SequencerAction extends PeriodicAction {
      * @param obj the object to test
      * @return a boolean
      */
-    public boolean equals(Object paramObject) {
-        if ((paramObject instanceof SequencerAction))
-            return super.equals(paramObject);
+    public boolean equals(Object obj) {
+        if ((obj instanceof SequencerAction))
+            return super.equals(obj);
         return false;
     }
 }

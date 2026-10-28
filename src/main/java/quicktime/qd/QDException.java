@@ -12,16 +12,16 @@ public class QDException extends QTException {
      * that could be displayed to the user.
      * @param str The message that could be displayed to the user
      */
-    public QDException(String paramString) {
-        super(paramString);
+    public QDException(String str) {
+        super(str);
     }
 
     /**
      * Creates an exception with a specific error number
      * @param val the error number
      */
-    public QDException(int paramInt) {
-        super(paramInt);
+    public QDException(int val) {
+        super(val);
     }
 
     /**
@@ -30,9 +30,9 @@ public class QDException extends QTException {
      * @param err the result or error code if non-zero an exception is thrown
      * @throws quicktime.qd.QDException
      */
-    public static void checkError(int paramInt) throws QDException {
-        if ((paramInt < 0) && (QTException.isDrawingError(paramInt) < 0))
-            throw new QDException(paramInt);
+    public static void checkError(int err) throws QDException {
+        if ((err < 0) && (QTException.isDrawingError(err) < 0))
+            throw new QDException(err);
     }
 }
 

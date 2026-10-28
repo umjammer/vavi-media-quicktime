@@ -12,16 +12,16 @@ public class StdQTException extends QTException {
      * that could be displayed to the user.
      * @param str The message that could be displayed to the user
      */
-    public StdQTException(String paramString) {
-        super(paramString);
+    public StdQTException(String str) {
+        super(str);
     }
 
     /**
      * Creates an exception with a specific error number
      * @param val the error number
      */
-    public StdQTException(int paramInt) {
-        super(paramInt);
+    public StdQTException(int val) {
+        super(val);
     }
 
     /**
@@ -30,9 +30,9 @@ public class StdQTException extends QTException {
      * @param err the result or error code if non-zero an exception is thrown
      * @throws quicktime.std.StdQTException
      */
-    public static void checkError(int paramInt) throws StdQTException {
-        if ((paramInt < 0) && (QTException.isDrawingError(paramInt) < 0))
-            throw new StdQTException(paramInt);
+    public static void checkError(int err) throws StdQTException {
+        if ((err < 0) && (QTException.isDrawingError(err) < 0))
+            throw new StdQTException(err);
     }
 }
 

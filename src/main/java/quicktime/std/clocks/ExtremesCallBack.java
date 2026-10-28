@@ -20,9 +20,9 @@ public abstract class ExtremesCallBack extends QTCallBack {
      * @param tb the time base that the callback is attached too.
      * @param flags the conditions under which the Callback will be executed
      */
-    public ExtremesCallBack(TimeBase paramTimeBase, int paramInt) throws QTException {
-        super(paramTimeBase, 4);
-        this.flags = paramInt;
+    public ExtremesCallBack(TimeBase tb, int flags) throws QTException {
+        super(tb, 4);
+        this.flags = flags;
     }
 
     /**

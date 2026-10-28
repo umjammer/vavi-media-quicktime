@@ -115,8 +115,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt00(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setAt00(float val) {
+        setFloatAt(0, val);
     }
 
     /**
@@ -131,8 +131,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt01(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setAt01(float val) {
+        setFloatAt(4, val);
     }
 
     /**
@@ -147,8 +147,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt02(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setAt02(float val) {
+        setFloatAt(8, val);
     }
 
     /**
@@ -163,8 +163,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt10(float paramFloat) {
-        setFloatAt(12, paramFloat);
+    public void setAt10(float val) {
+        setFloatAt(12, val);
     }
 
     /**
@@ -179,8 +179,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt11(float paramFloat) {
-        setFloatAt(16, paramFloat);
+    public void setAt11(float val) {
+        setFloatAt(16, val);
     }
 
     /**
@@ -195,8 +195,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt12(float paramFloat) {
-        setFloatAt(20, paramFloat);
+    public void setAt12(float val) {
+        setFloatAt(20, val);
     }
 
     /**
@@ -211,8 +211,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt20(float paramFloat) {
-        setFloatAt(24, paramFloat);
+    public void setAt20(float val) {
+        setFloatAt(24, val);
     }
 
     /**
@@ -227,8 +227,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt21(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setAt21(float val) {
+        setFloatAt(28, val);
     }
 
     /**
@@ -243,8 +243,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * Sets the value at the specified index.
      * @param val the new float value
      */
-    public void setAt22(float paramFloat) {
-        setFloatAt(32, paramFloat);
+    public void setAt22(float val) {
+        setFloatAt(32, val);
     }
 
     /**
@@ -305,9 +305,9 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @param matrixB a matrix
      * @return the product
      */
-    public Matrix3x3 multiply(Matrix3x3 paramMatrix3x3) {
+    public Matrix3x3 multiply(Matrix3x3 matrixB) {
         Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
-        int i = Q3Matrix3x3_Multiply(getBytes(), paramMatrix3x3.getBytes(), localMatrix3x3.getBytes());
+        int i = Q3Matrix3x3_Multiply(getBytes(), matrixB.getBytes(), localMatrix3x3.getBytes());
         return localMatrix3x3;
     }
 
@@ -327,8 +327,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @param xTrans The desired amount of translation along the x coordinate axis.
      * @param yTrans The desired amount of translation along the y coordinate axis.
      */
-    public void setTranslate(float paramFloat1, float paramFloat2) {
-        int i = Q3Matrix3x3_SetTranslate(getBytes(), paramFloat1, paramFloat2);
+    public void setTranslate(float xTrans, float yTrans) {
+        int i = Q3Matrix3x3_SetTranslate(getBytes(), xTrans, yTrans);
     }
 
     /**
@@ -338,8 +338,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @param xScale The desired amount of scaling along the x coordinate axis.
      * @param yScale The desired amount of scaling along the y coordinate axis.
      */
-    public void setScale(float paramFloat1, float paramFloat2) {
-        int i = Q3Matrix3x3_SetScale(getBytes(), paramFloat1, paramFloat2);
+    public void setScale(float xScale, float yScale) {
+        int i = Q3Matrix3x3_SetScale(getBytes(), xScale, yScale);
     }
 
     /**
@@ -348,8 +348,8 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @param origin The desired origin of rotation.
      * @param angle The desired angle of rotation, in radians.
      */
-    public void setRotateAboutPoint(QDPoint paramQDPoint, float paramFloat) {
-        int i = Q3Matrix3x3_SetRotateAboutPoint(getBytes(), paramQDPoint.getQ3Point2D(), paramFloat);
+    public void setRotateAboutPoint(QDPoint origin, float angle) {
+        int i = Q3Matrix3x3_SetRotateAboutPoint(getBytes(), origin.getQ3Point2D(), angle);
     }
 
     /**

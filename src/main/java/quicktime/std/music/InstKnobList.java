@@ -28,12 +28,12 @@ public final class InstKnobList extends QTByteObject {
      * @param knobFlags the knobFlags
      * @param knobs the array of knobs
      */
-    public InstKnobList(int paramInt, InstKnob[] paramArrayOfInstKnob) {
-        super(8 + paramArrayOfInstKnob.length * 8);
-        setIntAt(0, EndianOrder.flipNativeToBigEndian32(paramArrayOfInstKnob.length));
-        setKnobFlags(paramInt);
-        for (int i = 0; i < paramArrayOfInstKnob.length; i++) {
-            setKnob(i, paramArrayOfInstKnob[i]);
+    public InstKnobList(int knobFlags, InstKnob[] knobs) {
+        super(8 + knobs.length * 8);
+        setIntAt(0, EndianOrder.flipNativeToBigEndian32(knobs.length));
+        setKnobFlags(knobFlags);
+        for (int i = 0; i < knobs.length; i++) {
+            setKnob(i, knobs[i]);
         }
     }
 

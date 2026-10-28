@@ -248,8 +248,8 @@ public class QTTransition extends QTFilter {
      * the transition.
      * @param frame the frame to be rendered
      */
-    public void setCurrentFrame(int paramInt) {
-        this.currentFrame = paramInt;
+    public void setCurrentFrame(int frame) {
+        this.currentFrame = frame;
         if (this.currentFrame > this.mNumberOfFrames)
             this.currentFrame = this.mNumberOfFrames;
     }
@@ -261,8 +261,8 @@ public class QTTransition extends QTFilter {
      * @param time the time in milliseconds for the effect to run for in time mode
      * @throws quicktime.QTException
      */
-    public synchronized void setTime(int paramInt) throws QTException {
-        this.mEffectDuration = (Math.max(paramInt, 1));
+    public synchronized void setTime(int time) throws QTException {
+        this.mEffectDuration = (Math.max(time, 1));
         this.mNumberOfFrames = ((int) (this.mEffectDuration / 1000.0D * getFramesPerSecond() + 0.5D));
         if (this.mNumberOfFrames < 1)
             this.mNumberOfFrames = 1;
@@ -290,8 +290,8 @@ public class QTTransition extends QTFilter {
      * If false then the effect will run for the specified frames.
      * @param flag a boolean
      */
-    public synchronized void doTime(boolean paramBoolean) {
-        this.mDoTime = paramBoolean;
+    public synchronized void doTime(boolean flag) {
+        this.mDoTime = flag;
     }
 
     /**
@@ -396,8 +396,8 @@ public class QTTransition extends QTFilter {
      * of the doTransition() method.
      * @param flag if true will profile
      */
-    public void setProfiled(boolean paramBoolean) {
-        this.doProfile = paramBoolean;
+    public void setProfiled(boolean flag) {
+        this.doProfile = flag;
     }
 
     /**

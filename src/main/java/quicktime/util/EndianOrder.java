@@ -43,8 +43,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is little endian, otherwise
      *  the original value
      */
-    public static short flipNativeToBigEndian16(short paramShort) {
-        return isNativeLittleEndian() ? QTUtils.endianFlip16(paramShort) : paramShort;
+    public static short flipNativeToBigEndian16(short s) {
+        return isNativeLittleEndian() ? QTUtils.endianFlip16(s) : s;
     }
 
     /**
@@ -54,8 +54,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is little endian, otherwise
      *  the original value
      */
-    public static short flipBigEndianToNative16(short paramShort) {
-        return isNativeLittleEndian() ? QTUtils.endianFlip16(paramShort) : paramShort;
+    public static short flipBigEndianToNative16(short s) {
+        return isNativeLittleEndian() ? QTUtils.endianFlip16(s) : s;
     }
 
     /**
@@ -65,8 +65,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is big endian, otherwise
      *  the original value
      */
-    public static short flipNativeToLittleEndian16(short paramShort) {
-        return isNativeBigEndian() ? QTUtils.endianFlip16(paramShort) : paramShort;
+    public static short flipNativeToLittleEndian16(short s) {
+        return isNativeBigEndian() ? QTUtils.endianFlip16(s) : s;
     }
 
     /**
@@ -76,8 +76,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is big endian, otherwise
      *  the original value
      */
-    public static short flipLittleEndianToNative16(short paramShort) {
-        return isNativeBigEndian() ? QTUtils.endianFlip16(paramShort) : paramShort;
+    public static short flipLittleEndianToNative16(short s) {
+        return isNativeBigEndian() ? QTUtils.endianFlip16(s) : s;
     }
 
     /**
@@ -87,8 +87,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is little endian, otherwise
      *  the original value
      */
-    public static int flipNativeToBigEndian32(int paramInt) {
-        return isNativeLittleEndian() ? QTUtils.endianFlip32(paramInt) : paramInt;
+    public static int flipNativeToBigEndian32(int i) {
+        return isNativeLittleEndian() ? QTUtils.endianFlip32(i) : i;
     }
 
     /**
@@ -98,8 +98,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is little endian, otherwise
      *  the original value
      */
-    public static int flipBigEndianToNative32(int paramInt) {
-        return isNativeLittleEndian() ? QTUtils.endianFlip32(paramInt) : paramInt;
+    public static int flipBigEndianToNative32(int i) {
+        return isNativeLittleEndian() ? QTUtils.endianFlip32(i) : i;
     }
 
     /**
@@ -109,8 +109,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is big endian, otherwise
      *  the original value
      */
-    public static int flipNativeToLittleEndian32(int paramInt) {
-        return isNativeBigEndian() ? QTUtils.endianFlip32(paramInt) : paramInt;
+    public static int flipNativeToLittleEndian32(int i) {
+        return isNativeBigEndian() ? QTUtils.endianFlip32(i) : i;
     }
 
     /**
@@ -120,8 +120,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is big endian, otherwise
      *  the original value
      */
-    public static int flipLittleEndianToNative32(int paramInt) {
-        return isNativeBigEndian() ? QTUtils.endianFlip32(paramInt) : paramInt;
+    public static int flipLittleEndianToNative32(int i) {
+        return isNativeBigEndian() ? QTUtils.endianFlip32(i) : i;
     }
 
     /**
@@ -131,8 +131,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is little endian, otherwise
      *  the original value
      */
-    public static long flipNativeToBigEndian64(long paramLong) {
-        return isNativeLittleEndian() ? QTUtils.endianFlip64(paramLong) : paramLong;
+    public static long flipNativeToBigEndian64(long l) {
+        return isNativeLittleEndian() ? QTUtils.endianFlip64(l) : l;
     }
 
     /**
@@ -142,8 +142,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is little endian, otherwise
      *  the original value
      */
-    public static long flipBigEndianToNative64(long paramLong) {
-        return isNativeLittleEndian() ? QTUtils.endianFlip64(paramLong) : paramLong;
+    public static long flipBigEndianToNative64(long l) {
+        return isNativeLittleEndian() ? QTUtils.endianFlip64(l) : l;
     }
 
     /**
@@ -153,8 +153,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is big endian, otherwise
      *  the original value
      */
-    public static long flipNativeToLittleEndian64(long paramLong) {
-        return isNativeBigEndian() ? QTUtils.endianFlip64(paramLong) : paramLong;
+    public static long flipNativeToLittleEndian64(long l) {
+        return isNativeBigEndian() ? QTUtils.endianFlip64(l) : l;
     }
 
     /**
@@ -164,8 +164,8 @@ public final class EndianOrder {
      * @return the flipped value if the runtime architecture is big endian, otherwise
      *  the original value
      */
-    public static long flipLittleEndianToNative64(long paramLong) {
-        return isNativeBigEndian() ? QTUtils.endianFlip64(paramLong) : paramLong;
+    public static long flipLittleEndianToNative64(long l) {
+        return isNativeBigEndian() ? QTUtils.endianFlip64(l) : l;
     }
 
     /**
@@ -182,9 +182,9 @@ public final class EndianOrder {
      * @throws quicktime.util.UtilException
      * @see quicktime.util.EndianOrder
      */
-    public static void flipNativeToBigEndian(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipNativeToBigEndian(Object src, int srcOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeLittleEndian()) {
-            QTUtils.endianFlip(paramObject, paramInt, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, ed);
         }
     }
 
@@ -203,9 +203,9 @@ public final class EndianOrder {
      * @throws quicktime.util.UtilException
      * @see quicktime.util.EndianOrder
      */
-    public static void flipBigEndianToNative(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipBigEndianToNative(Object src, int srcOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeLittleEndian()) {
-            QTUtils.endianFlip(paramObject, paramInt, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, ed);
         }
     }
 
@@ -223,9 +223,9 @@ public final class EndianOrder {
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
      * @throws quicktime.util.UtilException
      */
-    public static void flipNativeToLittleEndian(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipNativeToLittleEndian(Object src, int srcOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeBigEndian()) {
-            QTUtils.endianFlip(paramObject, paramInt, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, ed);
         }
     }
 
@@ -243,9 +243,9 @@ public final class EndianOrder {
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
      * @throws quicktime.util.UtilException
      */
-    public static void flipLittleEndianToNative(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipLittleEndianToNative(Object src, int srcOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeBigEndian()) {
-            QTUtils.endianFlip(paramObject, paramInt, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, ed);
         }
     }
 
@@ -266,9 +266,9 @@ public final class EndianOrder {
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
      * @throws quicktime.util.UtilException
      */
-    public static void flipNativeToBigEndian(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipNativeToBigEndian(Object src, int srcOffset, Object dest, int destOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeLittleEndian()) {
-            QTUtils.endianFlip(paramObject1, paramInt1, paramObject2, paramInt2, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, dest, destOffset, ed);
         }
     }
 
@@ -289,9 +289,9 @@ public final class EndianOrder {
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
      * @throws quicktime.util.UtilException
      */
-    public static void flipBigEndianToNative(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipBigEndianToNative(Object src, int srcOffset, Object dest, int destOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeLittleEndian()) {
-            QTUtils.endianFlip(paramObject1, paramInt1, paramObject2, paramInt2, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, dest, destOffset, ed);
         }
     }
 
@@ -312,9 +312,9 @@ public final class EndianOrder {
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
      * @throws quicktime.util.UtilException
      */
-    public static void flipNativeToLittleEndian(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipNativeToLittleEndian(Object src, int srcOffset, Object dest, int destOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeBigEndian()) {
-            QTUtils.endianFlip(paramObject1, paramInt1, paramObject2, paramInt2, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, dest, destOffset, ed);
         }
     }
 
@@ -335,9 +335,9 @@ public final class EndianOrder {
      * @param ed the EndianDescriptor that will describe how the object should be flipped. This may NOT be null.
      * @throws quicktime.util.UtilException
      */
-    public static void flipLittleEndianToNative(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
+    public static void flipLittleEndianToNative(Object src, int srcOffset, Object dest, int destOffset, EndianDescriptor ed) throws UtilException {
         if (isNativeBigEndian()) {
-            QTUtils.endianFlip(paramObject1, paramInt1, paramObject2, paramInt2, paramEndianDescriptor);
+            QTUtils.endianFlip(src, srcOffset, dest, destOffset, ed);
         }
     }
 }

@@ -13,6 +13,6 @@ public interface MovieDrawingComplete {
      * @see quicktime.std.clocks.QTCallBack,
      * {@link quicktime.std.movies.Movie#setDrawingCompleteProc(int, quicktime.std.movies.MovieDrawingComplete)}
      */
-    int execute(Movie paramMovie);
+    int execute(Movie m);
 }
 

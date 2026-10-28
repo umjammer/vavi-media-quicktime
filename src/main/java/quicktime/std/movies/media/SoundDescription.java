@@ -65,8 +65,8 @@ public final class SoundDescription extends SampleDescription implements QuickTi
      * This constructor makes an empty SoundDescription object.
      * @param format the format of the sound data that the object describes
      */
-    public SoundDescription(int paramInt) throws QTException {
-        super(kNativeSize, true, paramInt);
+    public SoundDescription(int format) throws QTException {
+        super(kNativeSize, true, format);
     }
 
     private SoundDescription(int paramInt, Object paramObject) {
@@ -172,8 +172,8 @@ public final class SoundDescription extends SampleDescription implements QuickTi
      * @param idType an OSType used to tag the information for later retrieval or removal
      * @throws quicktime.QTException
      */
-    public void addExtension(QTHandleRef paramQTHandleRef, int paramInt) throws QTException {
-        int i = AddSoundDescriptionExtension(_ID(), QTObject.ID(paramQTHandleRef), paramInt);
+    public void addExtension(QTHandleRef extension, int idType) throws QTException {
+        int i = AddSoundDescriptionExtension(_ID(), QTObject.ID(extension), idType);
         StdQTException.checkError(i);
     }
 
@@ -183,8 +183,8 @@ public final class SoundDescription extends SampleDescription implements QuickTi
      * @param idType an OSType identifying the information for removal
      * @throws quicktime.QTException
      */
-    public void removeExtension(int paramInt) throws QTException {
-        int i = RemoveSoundDescriptionExtension(_ID(), paramInt);
+    public void removeExtension(int idType) throws QTException {
+        int i = RemoveSoundDescriptionExtension(_ID(), idType);
         StdQTException.checkError(i);
     }
 
@@ -195,8 +195,8 @@ public final class SoundDescription extends SampleDescription implements QuickTi
      * @return a dataref to the Extension
      * @throws quicktime.QTException
      */
-    public QTHandle getExtension(int paramInt) throws QTException {
-        return QTHandle.fromSoundDescription(this, paramInt);
+    public QTHandle getExtension(int idType) throws QTException {
+        return QTHandle.fromSoundDescription(this, idType);
     }
 
     private static short AddSoundDescriptionExtension(int paramInt1, int paramInt2, int paramInt3) {

@@ -39,8 +39,8 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
      * @see "QuickTime::SGNewChannel"
      * @param owner specifies the sequence grabber component the channel is attached to.
      */
-    public SGMusicChannel(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramSequenceGrabber, 1836413801);
+    public SGMusicChannel(SequenceGrabber owner) throws StdQTException {
+        super(owner, 1836413801);
     }
 
     @Override
@@ -75,8 +75,8 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
      * @param td specifies the instrument to set the channel to.
      * @throws quicktime.std.StdQTException
      */
-    public void setInstrument(ToneDescription paramToneDescription) throws StdQTException {
-        int i = SGSetInstrument(_ID(), paramToneDescription.getBytes());
+    public void setInstrument(ToneDescription td) throws StdQTException {
+        int i = SGSetInstrument(_ID(), td.getBytes());
         StdQTException.checkError(i);
     }
 

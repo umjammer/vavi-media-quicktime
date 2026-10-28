@@ -40,8 +40,8 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @see "QuickTime::OpenADefaultComponent"
      * @param subType The video component sub type
      */
-    public VideoDigitizer(int paramInt) throws QTException {
-        super(1986618471, paramInt);
+    public VideoDigitizer(int subType) throws QTException {
+        super(1986618471, subType);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @param input the input video source.
      * @throws quicktime.std.StdQTException
      */
-    public void setInput(int paramInt) throws StdQTException {
-        int i = VDSetInput(_ID(), (short) paramInt);
+    public void setInput(int input) throws StdQTException {
+        int i = VDSetInput(_ID(), (short) input);
         StdQTException.checkError(i);
     }
 
@@ -88,8 +88,8 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @param clipRegion specifies the clip region
      * @throws quicktime.std.StdQTException
      */
-    public void setClipRgn(Region paramRegion) throws StdQTException {
-        int i = VDSetClipRgn(_ID(), QTObject.ID(paramRegion));
+    public void setClipRgn(Region clipRegion) throws StdQTException {
+        int i = VDSetClipRgn(_ID(), QTObject.ID(clipRegion));
         StdQTException.checkError(i);
     }
 
@@ -100,8 +100,8 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      *  or part of a previously set clip region.
      * @throws quicktime.std.StdQTException
      */
-    public void clearClipRgn(Region paramRegion) throws StdQTException {
-        int i = VDClearClipRgn(_ID(), QTObject.ID(paramRegion));
+    public void clearClipRgn(Region clipRegion) throws StdQTException {
+        int i = VDClearClipRgn(_ID(), QTObject.ID(clipRegion));
         StdQTException.checkError(i);
     }
 
@@ -111,8 +111,8 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @param clipEnable if true clipping is enabled, otherwise it is disabled.
      * @throws quicktime.std.StdQTException
      */
-    public void setClipState(boolean paramBoolean) throws StdQTException {
-        int i = VDSetClipState(_ID(), (short) (paramBoolean ? 1 : 0));
+    public void setClipState(boolean clipEnable) throws StdQTException {
+        int i = VDSetClipState(_ID(), (short) (clipEnable ? 1 : 0));
         StdQTException.checkError(i);
     }
 
@@ -152,9 +152,9 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @return the video format of the specified input source.
      * @throws quicktime.std.StdQTException
      */
-    public int getInputFormat(int paramInt) throws StdQTException {
+    public int getInputFormat(int input) throws StdQTException {
         short[] arrayOfShort = { 0 };
-        int i = VDGetInputFormat(_ID(), (short) paramInt, arrayOfShort);
+        int i = VDGetInputFormat(_ID(), (short) input, arrayOfShort);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -165,8 +165,8 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @param input the input signaling standard. (ntscIn, palIn, secamIn)
      * @throws quicktime.std.StdQTException
      */
-    public void setInputStandard(int paramInt) throws StdQTException {
-        int i = VDSetInputStandard(_ID(), (short) paramInt);
+    public void setInputStandard(int input) throws StdQTException {
+        int i = VDSetInputStandard(_ID(), (short) input);
         StdQTException.checkError(i);
     }
 

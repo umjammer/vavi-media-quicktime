@@ -22,10 +22,10 @@ public final class LoadSettings extends TimeInfo {
      * @param preloadFlags Specifies some flags for preloading.
      * @param defaultHints Specifies the default hints for preloading.
      */
-    public LoadSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        super(paramInt1, paramInt2);
-        this.preloadFlags = paramInt3;
-        this.defaultHints = paramInt4;
+    public LoadSettings(int preloadTime, int preloadDuration, int preloadFlags, int defaultHints) {
+        super(preloadTime, preloadDuration);
+        this.preloadFlags = preloadFlags;
+        this.defaultHints = defaultHints;
     }
 }
 

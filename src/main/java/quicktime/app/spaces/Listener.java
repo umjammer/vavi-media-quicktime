@@ -28,7 +28,7 @@ public interface Listener {
      * @param source the object that is to be the source of interest for the
      *  the Listener object.
      */
-    void addedTo(Object paramObject);
+    void addedTo(Object source);
 
     /**
      * @deprecated
@@ -38,6 +38,6 @@ public interface Listener {
      * @param source the object that is to be the source of interest for the
      *  the Listener object.
      */
-    void removedFrom(Object paramObject);
+    void removedFrom(Object source);
 }
 

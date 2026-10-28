@@ -45,8 +45,8 @@ public class MPEGMediaHandler extends VideoMediaHandler implements QuickTimeLib,
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public final void setBalance(float paramFloat) throws StdQTException {
-        StdQTException.checkError(MediaSetSoundBalance(_ID(), QTUtils.X2ShortFix(paramFloat)));
+    public final void setBalance(float balance) throws StdQTException {
+        StdQTException.checkError(MediaSetSoundBalance(_ID(), QTUtils.X2ShortFix(balance)));
     }
 
     /**
@@ -69,8 +69,8 @@ public class MPEGMediaHandler extends VideoMediaHandler implements QuickTimeLib,
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public final void setSoundLevelMeteringEnabled(boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(MediaSetSoundLevelMeteringEnabled(_ID(), (byte) (paramBoolean ? 1 : 0)));
+    public final void setSoundLevelMeteringEnabled(boolean enabled) throws StdQTException {
+        StdQTException.checkError(MediaSetSoundLevelMeteringEnabled(_ID(), (byte) (enabled ? 1 : 0)));
     }
 
     /**
@@ -122,8 +122,8 @@ public class MPEGMediaHandler extends VideoMediaHandler implements QuickTimeLib,
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public final void setSoundBassAndTreble(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(MediaSetSoundBassAndTreble(_ID(), (short) paramInt1, (short) paramInt2));
+    public final void setSoundBassAndTreble(int bass, int treble) throws StdQTException {
+        StdQTException.checkError(MediaSetSoundBassAndTreble(_ID(), (short) bass, (short) treble));
     }
 
     /**

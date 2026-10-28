@@ -42,8 +42,8 @@ public class MusicData extends QTHandle {
      *  of the size of the general event. This size is in bytes.
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffGeneralEvent_Header(int paramInt1, int paramInt2) {
-        int i = 0xF0000000 | paramInt1 << 16 | paramInt2 << 0;
+    public static int stuffGeneralEvent_Header(int part, int length) {
+        int i = 0xF0000000 | part << 16 | length << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -63,8 +63,8 @@ public class MusicData extends QTHandle {
      * @param duration the duration in the time scale of the TunePlayer or the MusicMedia
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffRestEvent(int paramInt) {
-        int i = 0x0 | paramInt << 0;
+    public static int stuffRestEvent(int duration) {
+        int i = 0x0 | duration << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -76,8 +76,8 @@ public class MusicData extends QTHandle {
      * @param duration the duration in the time scale of the TunePlayer or the MusicMedia
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffNoteEvent(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        int i = 0x20000000 | paramInt1 << 24 | paramInt2 - 32 << 18 | paramInt3 - 0 << 11 | paramInt4 << 0;
+    public static int stuffNoteEvent(int part, int pitch, int velocity, int duration) {
+        int i = 0x20000000 | part << 24 | pitch - 32 << 18 | velocity - 0 << 11 | duration << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -88,8 +88,8 @@ public class MusicData extends QTHandle {
      * @param value 8.8 bit fixed point signed controller specific value
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffControlEvent(int paramInt1, int paramInt2, int paramInt3) {
-        int i = 0x40000000 | paramInt1 << 24 | paramInt2 << 16 | (paramInt3 & qtma_MASK(16)) << 0;
+    public static int stuffControlEvent(int part, int control, int value) {
+        int i = 0x40000000 | part << 24 | control << 16 | (value & qtma_MASK(16)) << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -99,8 +99,8 @@ public class MusicData extends QTHandle {
      * @param markerValue the value applied to the specified marker
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffMarkerEvent(int paramInt1, int paramInt2) {
-        int i = 0x60000000 | paramInt1 << 16 | paramInt2 << 0;
+    public static int stuffMarkerEvent(int markerType, int markerValue) {
+        int i = 0x60000000 | markerType << 16 | markerValue << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -130,10 +130,10 @@ public class MusicData extends QTHandle {
      * @param value 8.8 bit fixed point signed controller specific value
      * @return the stuffed representation of this type of extended music event.
      */
-    public static long stuffXControlEvent(int paramInt1, int paramInt2, int paramInt3) {
-        long l1 = 0xA0000000 | (long) paramInt1 << 16 | (paramInt3 & qtma_MASK(16)) << 0;
+    public static long stuffXControlEvent(int part, int control, int value) {
+        long l1 = 0xA0000000 | (long) part << 16 | (value & qtma_MASK(16)) << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000 | paramInt2 << 0;
+        long l2 = 0x80000000 | control << 0;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
         l1 &= 0xFFFFFFFF;
         l2 &= 0xFFFFFFFF;
@@ -148,10 +148,10 @@ public class MusicData extends QTHandle {
      * @param value the new value for the specified knob
      * @return the stuffed representation of this type of extended music event.
      */
-    public static long stuffXKnobEvent(int paramInt1, int paramInt2, int paramInt3) {
-        long l1 = 0xB0000000 | (long) paramInt1 << 16 | paramInt3 >> 16 << 0;
+    public static long stuffXKnobEvent(int part, int knob, int value) {
+        long l1 = 0xB0000000 | (long) part << 16 | value >> 16 << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000 | (long) paramInt2 << 16 | (paramInt3 & 0xFFFF) << 0;
+        long l2 = 0x80000000 | (long) knob << 16 | (value & 0xFFFF) << 0;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
         l1 &= 0xFFFFFFFF;
         l2 &= 0xFFFFFFFF;
@@ -164,8 +164,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int eventType(int paramInt) {
-        return qtma_EXT(paramInt, 29, 3) > 3 ? qtma_EXT(paramInt, 28, 4) : qtma_EXT(paramInt, 29, 3);
+    public static int eventType(int x) {
+        return qtma_EXT(x, 29, 3) > 3 ? qtma_EXT(x, 28, 4) : qtma_EXT(x, 29, 3);
     }
 
     /**
@@ -174,8 +174,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int part(int paramInt) {
-        return qtma_EXT(paramInt, 24, 5);
+    public static int part(int x) {
+        return qtma_EXT(x, 24, 5);
     }
 
     /**
@@ -184,8 +184,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xPart(long paramLong) {
-        long l = paramLong >>> 32;
+    public static int xPart(long x) {
+        long l = x >>> 32;
         return qtma_EXT((int) l, 16, 12);
     }
 
@@ -195,8 +195,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int restDuration(int paramInt) {
-        return qtma_EXT(paramInt, 0, 24);
+    public static int restDuration(int x) {
+        return qtma_EXT(x, 0, 24);
     }
 
     /**
@@ -205,8 +205,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int notePitch(int paramInt) {
-        return qtma_EXT(paramInt, 18, 6) + 32;
+    public static int notePitch(int x) {
+        return qtma_EXT(x, 18, 6) + 32;
     }
 
     /**
@@ -215,8 +215,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int noteVelocity(int paramInt) {
-        return qtma_EXT(paramInt, 11, 7) + 0;
+    public static int noteVelocity(int x) {
+        return qtma_EXT(x, 11, 7) + 0;
     }
 
     /**
@@ -225,8 +225,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int noteDuration(int paramInt) {
-        return qtma_EXT(paramInt, 0, 11);
+    public static int noteDuration(int x) {
+        return qtma_EXT(x, 0, 11);
     }
 
     /**
@@ -235,8 +235,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xNotePitch(long paramLong) {
-        long l = paramLong >>> 32;
+    public static int xNotePitch(long x) {
+        long l = x >>> 32;
         return qtma_EXT((int) l, 0, 16);
     }
 
@@ -246,8 +246,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xNoteVelocity(long paramLong) {
-        return qtma_EXT((int) paramLong, 22, 7);
+    public static int xNoteVelocity(long x) {
+        return qtma_EXT((int) x, 22, 7);
     }
 
     /**
@@ -256,8 +256,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xNoteDuration(long paramLong) {
-        return qtma_EXT((int) paramLong, 0, 22);
+    public static int xNoteDuration(long x) {
+        return qtma_EXT((int) x, 0, 22);
     }
 
     /**
@@ -266,8 +266,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int controlController(int paramInt) {
-        return qtma_EXT(paramInt, 16, 8);
+    public static int controlController(int x) {
+        return qtma_EXT(x, 16, 8);
     }
 
     /**
@@ -276,8 +276,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int controlValue(int paramInt) {
-        return qtma_EXT(paramInt, 0, 16);
+    public static int controlValue(int x) {
+        return qtma_EXT(x, 0, 16);
     }
 
     /**
@@ -286,8 +286,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xControlController(long paramLong) {
-        return qtma_EXT((int) paramLong, 0, 16);
+    public static int xControlController(long x) {
+        return qtma_EXT((int) x, 0, 16);
     }
 
     /**
@@ -296,8 +296,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xControlValue(long paramLong) {
-        long l = paramLong >>> 32;
+    public static int xControlValue(long x) {
+        long l = x >>> 32;
         return qtma_EXT((int) l, 0, 16);
     }
 
@@ -307,8 +307,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int markerSubtype(int paramInt) {
-        return qtma_EXT(paramInt, 16, 8);
+    public static int markerSubtype(int x) {
+        return qtma_EXT(x, 16, 8);
     }
 
     /**
@@ -317,8 +317,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int markerValue(int paramInt) {
-        return qtma_EXT(paramInt, 0, 16);
+    public static int markerValue(int x) {
+        return qtma_EXT(x, 0, 16);
     }
 
     /**
@@ -327,9 +327,9 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xKnobValue(long paramLong) {
-        int i = (int) (paramLong >>> 32);
-        int j = (int) paramLong;
+    public static int xKnobValue(long x) {
+        int i = (int) (x >>> 32);
+        int j = (int) x;
         return qtma_EXT(i, 0, 16) << 16 | qtma_EXT(j, 0, 16);
     }
 
@@ -339,8 +339,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the extended music event
      */
-    public static int xKnobID(long paramLong) {
-        return qtma_EXT((int) paramLong, 16, 14);
+    public static int xKnobID(long x) {
+        return qtma_EXT((int) x, 16, 14);
     }
 
     /**
@@ -349,8 +349,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int generalSubtype_Footer(int paramInt) {
-        return qtma_EXT(paramInt, 16, 14);
+    public static int generalSubtype_Footer(int x) {
+        return qtma_EXT(x, 16, 14);
     }
 
     /**
@@ -359,8 +359,8 @@ public class MusicData extends QTHandle {
      * @param x the stuffed big-endian music event
      * @return the desired sub field of the music event
      */
-    public static int generalLength(int paramInt) {
-        return qtma_EXT(paramInt, 0, 16);
+    public static int generalLength(int x) {
+        return qtma_EXT(x, 0, 16);
     }
 
     private static int qtma_MASK(int paramInt) {
@@ -376,9 +376,9 @@ public class MusicData extends QTHandle {
      * The end of sequence marker is inserted in the last four bytes of the MusicData object.
      * @param size the size in bytes of the required MusicData object
      */
-    public MusicData(int paramInt) throws QTException {
-        super(paramInt, true);
-        setIntAt(paramInt - 4, EndianOrder.flipNativeToBigEndian32(1610612736));
+    public MusicData(int size) throws QTException {
+        super(size, true);
+        setIntAt(size - 4, EndianOrder.flipNativeToBigEndian32(1610612736));
     }
 
     /**
@@ -388,9 +388,9 @@ public class MusicData extends QTHandle {
      * @throws quicktime.util.UtilException
      */
     @Override
-    public void setSize(int paramInt) throws UtilException {
-        super.setSize(paramInt);
-        setIntAt(paramInt - 4, EndianOrder.flipNativeToBigEndian32(1610612736));
+    public void setSize(int newSize) throws UtilException {
+        super.setSize(newSize);
+        setIntAt(newSize - 4, EndianOrder.flipNativeToBigEndian32(1610612736));
     }
 
     /**
@@ -400,10 +400,10 @@ public class MusicData extends QTHandle {
      * @return the big endian ordered music event
      * @throws quicktime.QTException if the offset would get data past the end of the MusicData
      */
-    public int getMusicEvent(int paramInt) throws QTException {
-        if (paramInt * 4 >= getSize() - 4)
+    public int getMusicEvent(int offset) throws QTException {
+        if (offset * 4 >= getSize() - 4)
             throw new QTException(-50);
-        return getIntAt(paramInt * 4);
+        return getIntAt(offset * 4);
     }
 
     /**
@@ -417,13 +417,13 @@ public class MusicData extends QTHandle {
      * @param musicData the big endian ordered music event
      * @throws quicktime.QTException if the offset would set data past the end of the MusicData
      */
-    public void setMusicEvent(int paramInt1, int paramInt2) throws QTException {
-        if (paramInt1 * 4 >= getSize())
+    public void setMusicEvent(int offset, int musicData) throws QTException {
+        if (offset * 4 >= getSize())
             throw new QTException(-50);
-        if ((paramInt1 * 4 == getSize() - 4) && (paramInt2 != EndianOrder.flipNativeToBigEndian32(1610612736))) {
+        if ((offset * 4 == getSize() - 4) && (musicData != EndianOrder.flipNativeToBigEndian32(1610612736))) {
             throw new QTException(-50);
         }
-        setIntAt(paramInt1 * 4, paramInt2);
+        setIntAt(offset * 4, musicData);
     }
 
     /**
@@ -434,10 +434,10 @@ public class MusicData extends QTHandle {
      * @throws quicktime.QTException if the offset would get data past the end of the MusicData
      *  minus 4 bytes which is the end of sequence marker - which is not an extended music event.
      */
-    public long getXMusicEvent(int paramInt) throws QTException {
-        if (paramInt * 4 >= getSize() - 8)
+    public long getXMusicEvent(int offset) throws QTException {
+        if (offset * 4 >= getSize() - 8)
             throw new QTException(-50);
-        return getLongAt(paramInt * 4);
+        return getLongAt(offset * 4);
     }
 
     /**
@@ -448,10 +448,10 @@ public class MusicData extends QTHandle {
      * @throws quicktime.QTException if the offset would set data past the end of the MusicData
      *  minus 4 bytes which is the end of sequence marker - which is not an extended music event.
      */
-    public void setXMusicEvent(int paramInt, long paramLong) throws QTException {
-        if (paramInt * 4 >= getSize() - 8)
+    public void setXMusicEvent(int offset, long musicData) throws QTException {
+        if (offset * 4 >= getSize() - 8)
             throw new QTException(-50);
-        setLongAt(paramInt * 4, paramLong);
+        setLongAt(offset * 4, musicData);
     }
 
     /**
@@ -479,13 +479,13 @@ public class MusicData extends QTHandle {
      * @throws quicktime.QTException if the offset would set data past the end of the MusicData
      *  minus 4 bytes which is the end of sequence marker - which is not a general music event.
      */
-    public void setNoteRequest(int paramInt1, int paramInt2, NoteRequest paramNoteRequest) throws QTException {
-        if (paramInt1 * 4 >= getSize() - 92) {
+    public void setNoteRequest(int offset, int partNumber, NoteRequest nr) throws QTException {
+        if (offset * 4 >= getSize() - 92) {
             throw new QTException(-50);
         }
-        setIntAt(paramInt1 * 4, stuffGeneralEvent_Header(paramInt2, 23));
-        copyFromArray(paramInt1 * 4 + 4, paramNoteRequest.getBytes(), 0, paramNoteRequest.getSize());
-        setIntAt(paramInt1 * 4 + 4 + paramNoteRequest.getSize(), stuffGeneralEvent_Footer(1, 23));
+        setIntAt(offset * 4, stuffGeneralEvent_Header(partNumber, 23));
+        copyFromArray(offset * 4 + 4, nr.getBytes(), 0, nr.getSize());
+        setIntAt(offset * 4 + 4 + nr.getSize(), stuffGeneralEvent_Footer(1, 23));
     }
 
     /**
@@ -499,16 +499,16 @@ public class MusicData extends QTHandle {
      * @throws quicktime.QTException if the offset would get data past the end of the MusicData
      *  minus 4 bytes which is the end of sequence marker - which is not a general music event.
      */
-    public NoteRequest getNoteRequest(int paramInt) throws QTException {
-        if (paramInt * 4 >= getSize() - 92) {
+    public NoteRequest getNoteRequest(int offset) throws QTException {
+        if (offset * 4 >= getSize() - 92) {
             throw new QTException(-50);
         }
-        int i = getIntAt(paramInt * 4 + 84);
+        int i = getIntAt(offset * 4 + 84);
         if (generalSubtype_Footer(i) != 1) {
             throw new QTException(-50);
         }
         NoteRequest localNoteRequest = new NoteRequest();
-        copyToArray(paramInt * 4, localNoteRequest.getBytes(), 0, localNoteRequest.getSize());
+        copyToArray(offset * 4, localNoteRequest.getBytes(), 0, localNoteRequest.getSize());
         return localNoteRequest;
     }
 
@@ -536,18 +536,18 @@ public class MusicData extends QTHandle {
      * @throws quicktime.QTException if the offset would set data past the end of the MusicData
      *  minus 4 bytes which is the end of sequence marker - which is not a general music event.
      */
-    public void setAtomicInstrument(int paramInt1, int paramInt2, AtomicInstrument paramAtomicInstrument) throws QTException {
-        int i = paramAtomicInstrument.getSize() / 4;
-        if (paramAtomicInstrument.getSize() % 4 != 0) {
+    public void setAtomicInstrument(int offset, int partNumber, AtomicInstrument ai) throws QTException {
+        int i = ai.getSize() / 4;
+        if (ai.getSize() % 4 != 0) {
             i++;
         }
         int j = i + 2;
-        if (paramInt1 * 4 >= getSize() - j * 4) {
+        if (offset * 4 >= getSize() - j * 4) {
             throw new QTException(-50);
         }
-        setIntAt(paramInt1 * 4, stuffGeneralEvent_Header(paramInt2, j));
-        copyFromHandle(paramInt1 * 4 + 4, paramAtomicInstrument, 0, paramAtomicInstrument.getSize());
-        setIntAt(paramInt1 * 4 + 4 + i * 4, stuffGeneralEvent_Footer(6, j));
+        setIntAt(offset * 4, stuffGeneralEvent_Header(partNumber, j));
+        copyFromHandle(offset * 4 + 4, ai, 0, ai.getSize());
+        setIntAt(offset * 4 + 4 + i * 4, stuffGeneralEvent_Footer(6, j));
     }
 
     /**
@@ -561,20 +561,20 @@ public class MusicData extends QTHandle {
      * @throws quicktime.QTException if the offset would get data past the end of the MusicData
      *  minus 4 bytes which is the end of sequence marker - which is not a general music event.
      */
-    public AtomicInstrument getAtomicInstrument(int paramInt) throws QTException {
-        if (paramInt * 4 > getSize() - 4) {
+    public AtomicInstrument getAtomicInstrument(int offset) throws QTException {
+        if (offset * 4 > getSize() - 4) {
             throw new QTException(-50);
         }
-        int i = getIntAt(paramInt * 4 - 4);
+        int i = getIntAt(offset * 4 - 4);
         int j = generalLength(i) * 4;
-        if (paramInt * 4 - 4 + j > getSize()) {
+        if (offset * 4 - 4 + j > getSize()) {
             throw new QTException(-50);
         }
-        int k = getIntAt(paramInt * 4 - 4 + j - 4);
+        int k = getIntAt(offset * 4 - 4 + j - 4);
         if (generalSubtype_Footer(k) != 6) {
             throw new QTException(-50);
         }
-        int m = makeAndCopyHandle(paramInt * 4, j - 8);
+        int m = makeAndCopyHandle(offset * 4, j - 8);
         return new AtomicInstrument(m, null);
     }
 }

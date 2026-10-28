@@ -56,8 +56,8 @@ public class FullScreenWindow extends Window {
      * FullScreen object which enables the screen to be placed into full screen mode.
      * @param fs the QuickTime FullScreen object
      */
-    public FullScreenWindow(FullScreen paramFullScreen) throws QTException {
-        this(paramFullScreen, _getFrame());
+    public FullScreenWindow(FullScreen fs) throws QTException {
+        this(fs, _getFrame());
     }
 
     /**
@@ -68,9 +68,9 @@ public class FullScreenWindow extends Window {
      * @param fs the QuickTime FullScreen object
      * @param f the Frame that owns the Window object.
      */
-    public FullScreenWindow(FullScreen paramFullScreen, Frame paramFrame) throws QTException {
-        super(paramFrame);
-        this.fs = paramFullScreen;
+    public FullScreenWindow(FullScreen fs, Frame f) throws QTException {
+        super(f);
+        this.fs = fs;
     }
 
     private int w;
@@ -142,9 +142,9 @@ public class FullScreenWindow extends Window {
      * @param height the requested height or 0 to leave the screen at its current resolution when full screen
      *  mode is activated with the show method.
      */
-    public void setPreferredSize(int paramInt1, int paramInt2) {
-        this.w = paramInt1;
-        this.h = paramInt2;
+    public void setPreferredSize(int width, int height) {
+        this.w = width;
+        this.h = height;
     }
 
     /**
@@ -163,8 +163,8 @@ public class FullScreenWindow extends Window {
      * Sets the flags that will be used when the screen is placed in full screen mode with the show method.
      * @param flags the full screen flags
      */
-    public void setFlags(int paramInt) {
-        this.f = paramInt;
+    public void setFlags(int flags) {
+        this.f = flags;
     }
 
     /**
@@ -173,8 +173,8 @@ public class FullScreenWindow extends Window {
      * Sets the device that corresponds to the screen that will be placed in full screen mode with the show method.
      * @param gDevice the gDevice of a screen of null to set the main screen
      */
-    public void setGDevice(GDevice paramGDevice) {
-        this.gd = paramGDevice;
+    public void setGDevice(GDevice gDevice) {
+        this.gd = gDevice;
     }
 
     /**

@@ -16,8 +16,8 @@ public final class StreamMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public StreamMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1937011309, paramInt, paramDataRef);
+    public StreamMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1937011309, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class StreamMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public StreamMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public StreamMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     StreamMedia(int paramInt, Track paramTrack) throws QTException {
@@ -63,9 +63,9 @@ public final class StreamMedia extends Media {
      * @return a StreamDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public StreamDescription getStreamDescription(int paramInt) throws QTException {
+    public StreamDescription getStreamDescription(int index) throws QTException {
         StreamDescription localStreamDescription = new StreamDescription();
-        getNativeSampleDescription(paramInt, localStreamDescription);
+        getNativeSampleDescription(index, localStreamDescription);
         return localStreamDescription;
     }
 }

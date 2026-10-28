@@ -69,19 +69,19 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @return a Pict object representing the thumbnail
      * @throws quicktime.QTException
      */
-    public static Pict thumbnailFromQDGraphics(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt) throws QTException {
+    public static Pict thumbnailFromQDGraphics(QDGraphics qd, QDRect src, int colorDepth) throws QTException {
         Pict localPict = new Pict(4, false);
-        if (paramQDGraphics == null) {
+        if (qd == null) {
             throw new StdQTException(-50);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            int j = GetGWorldPixMap(QTObject.ID(paramQDGraphics));
+            SetGWorld(QTObject.ID(qd), 0);
+            int j = GetGWorldPixMap(QTObject.ID(qd));
             LockPixels(j);
-            i = MakeThumbnailFromPixMap(j, paramQDRect.getRect(), (short) paramInt, QTObject.ID(localPict), 0);
+            i = MakeThumbnailFromPixMap(j, src.getRect(), (short) colorDepth, QTObject.ID(localPict), 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -98,8 +98,8 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Track#getPict(int)
      */
-    public static Pict fromTrack(Track paramTrack, int paramInt) throws QTException {
-        int i = GetTrackPict(QTObject.ID(paramTrack), paramInt);
+    public static Pict fromTrack(Track t, int time) throws QTException {
+        int i = GetTrackPict(QTObject.ID(t), time);
         StdQTException.checkError(GetMoviesError());
         return new Pict(i);
     }
@@ -115,8 +115,8 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getPict(int)
      */
-    public static Pict fromMovie(Movie paramMovie, int paramInt) throws QTException {
-        int i = GetMoviePict(QTObject.ID(paramMovie), paramInt);
+    public static Pict fromMovie(Movie time, int m) throws QTException {
+        int i = GetMoviePict(QTObject.ID(time), m);
         StdQTException.checkError(GetMoviesError());
         return new Pict(i);
     }
@@ -130,8 +130,8 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getPosterPict()
      */
-    public static Pict fromMovie(Movie paramMovie) throws QTException {
-        int i = GetMoviePosterPict(QTObject.ID(paramMovie));
+    public static Pict fromMovie(Movie m) throws QTException {
+        int i = GetMoviePosterPict(QTObject.ID(m));
         StdQTException.checkError(GetMoviesError());
         return new Pict(i);
     }
@@ -146,9 +146,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.streaming.Presentation#getPicture(quicktime.streaming.Stream)
      */
-    public static Pict fromPresentation(Presentation paramPresentation, Stream paramStream) throws QTException {
+    public static Pict fromPresentation(Presentation p, Stream s) throws QTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTSPresGetPicture(QTObject.ID(paramPresentation), QTObject.ID(paramStream), arrayOfInt));
+        StdQTException.checkError(QTSPresGetPicture(QTObject.ID(p), QTObject.ID(s), arrayOfInt));
         return arrayOfInt[0] == 0 ? null : new Pict(arrayOfInt[0]);
     }
 
@@ -228,8 +228,8 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @return java.io.IOException
      */
-    public static Pict fromFile(File paramFile) throws QTException, IOException {
-        FileInputStream localFileInputStream = new FileInputStream(paramFile);
+    public static Pict fromFile(File file) throws QTException, IOException {
+        FileInputStream localFileInputStream = new FileInputStream(file);
         byte[] arrayOfByte = new byte[localFileInputStream.available() - 512];
         localFileInputStream.skip(512L);
         localFileInputStream.read(arrayOfByte, 0, arrayOfByte.length);
@@ -249,16 +249,16 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @return a Pict
      * @throws quicktime.QTException
      */
-    public static Pict open(QDGraphics paramQDGraphics, OpenCPicParams paramOpenCPicParams) throws QTException {
+    public static Pict open(QDGraphics port, OpenCPicParams params) throws QTException {
         if (gw != null)
             throw new QDException(-9);
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            gw = paramQDGraphics;
-            i = OpenCPicture(paramOpenCPicParams.getBytes());
+            SetGWorld(QTObject.ID(port), 0);
+            gw = port;
+            i = OpenCPicture(params.getBytes());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
             try {
@@ -279,9 +279,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * you must drop the first 512 bytes from the file.
      * @param pictBytes the bytes of the pict handle
      */
-    public Pict(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte.length, false);
-        copyFromArray(0, paramArrayOfByte, 0, paramArrayOfByte.length);
+    public Pict(byte[] pictBytes) throws QTException {
+        super(pictBytes.length, false);
+        copyFromArray(0, pictBytes, 0, pictBytes.length);
     }
 
     private Pict(int paramInt) throws QTException {
@@ -339,11 +339,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @return dstPicture The destination compressed image
      * @throws quicktime.QTException
      */
-    public Pict compress(int paramInt1, int paramInt2) throws QTException {
+    public Pict compress(int quality, int cType) throws QTException {
         if (isOpen())
             throw new QDException(-9);
         Pict localPict = new Pict(4, true);
-        QDException.checkError(CompressPicture(_ID(), QTObject.ID(localPict), paramInt1, paramInt2));
+        QDException.checkError(CompressPicture(_ID(), QTObject.ID(localPict), quality, cType));
         return localPict;
     }
 
@@ -376,17 +376,17 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @param frameRect Specified rectangle with the coordinates in which to draw the picture.
      * @throws quicktime.QTException
      */
-    public void draw(QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
+    public void draw(QDGraphics cg, QDRect frameRect) throws QTException {
         if (isOpen())
             throw new QDException(-9);
-        if (paramQDGraphics == null) {
+        if (cg == null) {
             throw new StdQTException(-50);
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            DrawPicture(_ID(), paramQDRect.getBytes());
+            SetGWorld(QTObject.ID(cg), 0);
+            DrawPicture(_ID(), frameRect.getBytes());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -403,18 +403,18 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @param doDither Specifies whether to dither or not
      * @throws quicktime.QTException
      */
-    public void drawTrimmed(QDGraphics paramQDGraphics, QDRect paramQDRect, Region paramRegion, int paramInt) throws QTException {
+    public void drawTrimmed(QDGraphics cg, QDRect frameRect, Region trimMask, int doDither) throws QTException {
         if (isOpen())
             throw new QDException(-9);
-        if (paramQDGraphics == null) {
+        if (cg == null) {
             throw new StdQTException(-50);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = DrawTrimmedPicture(_ID(), paramQDRect.getBytes(), QTObject.ID(paramRegion), (short) paramInt, 0);
+            SetGWorld(QTObject.ID(cg), 0);
+            i = DrawTrimmedPicture(_ID(), frameRect.getBytes(), QTObject.ID(trimMask), (short) doDither, 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -428,11 +428,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @return The desired thumbnail picture
      * @throws quicktime.QTException
      */
-    public Pict makeThumbnail(int paramInt) throws QTException {
+    public Pict makeThumbnail(int colorDepth) throws QTException {
         if (isOpen())
             throw new QDException(-9);
         Pict localPict = new Pict(4, false);
-        QDException.checkError(MakeThumbnailFromPicture(_ID(), (short) paramInt, QTObject.ID(localPict), 0));
+        QDException.checkError(MakeThumbnailFromPicture(_ID(), (short) colorDepth, QTObject.ID(localPict), 0));
         return localPict;
     }
 

@@ -39,9 +39,9 @@ public final class PresIdleParams extends QTPointerRef {
      * @param s the stream of the params
      * @throws quicktime.QTException
      */
-    public void setStream(Stream paramStream) throws QTException {
-        setIntAt(0, QTObject.ID(paramStream));
-        this.stream = paramStream;
+    public void setStream(Stream s) throws QTException {
+        setIntAt(0, QTObject.ID(stream));
+        this.stream = stream;
     }
 
     /**
@@ -57,8 +57,8 @@ public final class PresIdleParams extends QTPointerRef {
      * @param time the time of the params
      * @throws quicktime.QTException
      */
-    public void setMovieTimeToDisplay(long paramLong) throws QTException {
-        setLongAt(4, paramLong);
+    public void setMovieTimeToDisplay(long time) throws QTException {
+        setLongAt(4, time);
     }
 
     /**
@@ -66,8 +66,8 @@ public final class PresIdleParams extends QTPointerRef {
      * @param flags input flags
      * @throws quicktime.QTException
      */
-    public void setFlagsIn(int paramInt) throws QTException {
-        setIntAt(12, paramInt);
+    public void setFlagsIn(int flags) throws QTException {
+        setIntAt(12, flags);
     }
 
     /**

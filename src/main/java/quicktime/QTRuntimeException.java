@@ -31,26 +31,26 @@ public class QTRuntimeException extends RuntimeException {
      * be generated through the (ab)normal running of a QTJava application or applet.
      * @param h the QTRuntimeHandler that will handle or throw QTRuntimeExceptions or null to remove handler.
      */
-    public static void registerHandler(QTRuntimeHandler paramQTRuntimeHandler) {
-        handler = paramQTRuntimeHandler;
+    public static void registerHandler(QTRuntimeHandler h) {
+        handler = h;
     }
 
     /**
      * Creates a QTRuntimeException
      * @param e the QTException that created the runtime error
      */
-    public QTRuntimeException(QTException paramQTException) {
-        this(paramQTException.errorCode());
-        this.exception = paramQTException;
+    public QTRuntimeException(QTException e) {
+        this(e.errorCode());
+        this.exception = e;
     }
 
     /**
      * Creates a QTRuntimeException
      * @param e the Exception that created the runtime error
      */
-    public QTRuntimeException(Exception paramException) {
-        this(paramException.toString());
-        this.exception = paramException;
+    public QTRuntimeException(Exception e) {
+        this(e.toString());
+        this.exception = e;
     }
 
     /**
@@ -58,8 +58,8 @@ public class QTRuntimeException extends RuntimeException {
      * that could be displayed to the user.
      * @param val typically some error code
      */
-    public QTRuntimeException(int paramInt) {
-        this(Integer.valueOf(paramInt).toString());
+    public QTRuntimeException(int val) {
+        this(Integer.valueOf(val).toString());
     }
 
     /**
@@ -67,8 +67,8 @@ public class QTRuntimeException extends RuntimeException {
      * that could be displayed to the user.
      * @param str The message that could be displayed to the user
      */
-    public QTRuntimeException(String paramString) {
-        super(paramString);
+    public QTRuntimeException(String str) {
+        super(str);
     }
 
     private final int eCode = 0;

@@ -54,9 +54,9 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      *  value is a suggestion to the music toolbox that is used to estimate the resources
      *  a NoteChannel will be required to utilise.
      */
-    public NoteRequestInfo(int paramInt) throws QTException {
+    public NoteRequestInfo(int poly) throws QTException {
         this(8, null);
-        setPolyphony(paramInt);
+        setPolyphony(poly);
     }
 
     NoteRequestInfo(byte[] paramArrayOfByte) {
@@ -96,8 +96,8 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      * Sets the flags of the NoteRequestInfo
      * @param flags flags to set
      */
-    public final void setFlags(int paramInt) {
-        setByteAt(0, (byte) paramInt);
+    public final void setFlags(int flags) {
+        setByteAt(0, (byte) flags);
     }
 
     /**
@@ -120,9 +120,9 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      * and QTMA will then use the first free channel if required.
      * @param chan MIDIChannel
      */
-    public final void setMIDIChannel(int paramInt) {
-        paramInt |= 0x80;
-        setByteAt(1, (byte) paramInt);
+    public final void setMIDIChannel(int chan) {
+        chan |= 0x80;
+        setByteAt(1, (byte) chan);
     }
 
     /**
@@ -137,8 +137,8 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      * Sets the polyphony of the NoteRequestInfo
      * @param poly polyphony to set
      */
-    public final void setPolyphony(int paramInt) {
-        setShortAt(2, EndianOrder.flipNativeToBigEndian16((short) paramInt));
+    public final void setPolyphony(int poly) {
+        setShortAt(2, EndianOrder.flipNativeToBigEndian16((short) poly));
     }
 
     /**
@@ -153,8 +153,8 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
      * Sets the typicalPolyphony of the NoteRequestInfo
      * @param poly typicalPolyphony to set
      */
-    public final void setTypicalPolyphony(float paramFloat) {
-        setIntAt(4, EndianOrder.flipNativeToBigEndian32(QTUtils.X2Fix(paramFloat)));
+    public final void setTypicalPolyphony(float poly) {
+        setIntAt(4, EndianOrder.flipNativeToBigEndian32(QTUtils.X2Fix(poly)));
     }
 
     /**

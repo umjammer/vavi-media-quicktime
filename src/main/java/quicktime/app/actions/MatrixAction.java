@@ -96,10 +96,10 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @param t a transformable object that will have its display matrix altered by the deltaMatrix
      * {@link quicktime.app.actions.TransformMatrix}
      */
-    protected MatrixAction(int paramInt1, int paramInt2, QTDrawable paramQTDrawable, Transformable paramTransformable) throws QTException {
-        super(paramInt1, paramInt2);
-        this.target = paramTransformable;
-        this.space = paramQTDrawable;
+    protected MatrixAction(int scale, int period, QTDrawable space, Transformable t) throws QTException {
+        super(scale, period);
+        this.target = t;
+        this.space = space;
     }
 
     /**
@@ -113,12 +113,12 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @param t a transformable object that will have its display matrix altered by the deltaMatrix
      * @param transformMatrixAction the transformation that will be applied to the target's matrix every time this action is invoked.
      */
-    public MatrixAction(int paramInt1, int paramInt2, QTDisplaySpace paramQTDisplaySpace, Transformable paramTransformable, TransformMatrix paramTransformMatrix) throws QTException {
-        super(paramInt1, paramInt2);
-        this.target = paramTransformable;
-        this.space = paramQTDisplaySpace;
-        this.transMatrix = paramTransformMatrix;
-        this.transMatrix.initialize(paramQTDisplaySpace, paramTransformable);
+    public MatrixAction(int scale, int period, QTDisplaySpace space, Transformable t, TransformMatrix transformMatrixAction) throws QTException {
+        super(scale, period);
+        this.target = t;
+        this.space = space;
+        this.transMatrix = transformMatrixAction;
+        this.transMatrix.initialize(space, t);
     }
 
     /**
@@ -144,8 +144,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @see quicktime.app.actions.TransformMatrix
      */
     @Override
-    public void setTarget(Object paramObject) {
-        this.target = ((Transformable) paramObject);
+    public void setTarget(Object target) {
+        this.target = ((Transformable) target);
     }
 
     /**
@@ -180,8 +180,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @param space the enclosing space.
      * @see quicktime.app.actions.TransformMatrix
      */
-    public void setSpace(QTDrawable paramQTDrawable) {
-        this.space = paramQTDrawable;
+    public void setSpace(QTDrawable space) {
+        this.space = space;
     }
 
     /**
@@ -201,10 +201,10 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @throws quicktime.QTException
      */
     @Override
-    protected void doAction(float paramFloat, int paramInt) throws QTException {
+    protected void doAction(float er, int t) throws QTException {
         this.consReached = false;
-        if (((paramFloat > 0.0F) && (!this.forwards)) || ((paramFloat < 0.0F) && (this.forwards))) {
-            this.forwards = (paramFloat > 0.0F);
+        if (((er > 0.0F) && (!this.forwards)) || ((er < 0.0F) && (this.forwards))) {
+            this.forwards = (er > 0.0F);
             if (this.transMatrix != null) {
                 this.transMatrix.flipTransformationSettings();
             } else {
@@ -277,8 +277,8 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @throws quicktime.QTException
      * @see quicktime.app.actions.TransformMatrix
      */
-    protected void setTargetMatrix(Matrix paramMatrix) throws QTException {
-        this.target.setMatrix(paramMatrix);
+    protected void setTargetMatrix(Matrix transformedMatrix) throws QTException {
+        this.target.setMatrix(transformedMatrix);
     }
 
     /**
@@ -312,18 +312,18 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @param obj the object to test
      * @return true if equal, false if not
      */
-    public boolean equals(Object paramObject) {
-        if ((paramObject instanceof MatrixAction localMatrixAction)) {
+    public boolean equals(Object obj) {
+        if ((obj instanceof MatrixAction localMatrixAction)) {
             if (this.transMatrix != null) {
                 if (!this.transMatrix.equals(localMatrixAction.transMatrix)) {
                     return false;
                 }
-                return super.equals(paramObject);
+                return super.equals(obj);
             }
             if (!this.target.equals(localMatrixAction.target)) {
                 return false;
             }
-            return super.equals(paramObject);
+            return super.equals(obj);
         }
         return false;
     }
@@ -347,7 +347,7 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @throws quicktime.QTException
      * @see quicktime.app.actions.TransformMatrix
      */
-    protected void transformMatrix(Matrix paramMatrix) throws QTException {
+    protected void transformMatrix(Matrix theMatrix) throws QTException {
     }
 
     /**
@@ -359,7 +359,7 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @param whichSide a flag that indicates which side
      * @see quicktime.app.actions.TransformMatrix
      */
-    protected void boundsReached(int paramInt) {
+    protected void boundsReached(int whichSide) {
     }
 }
 

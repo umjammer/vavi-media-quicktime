@@ -181,11 +181,11 @@ public final class QTUtils implements QuickTimeLib {
      * Convert a java.lang.String to a CString byte array.
      * @param str the String to convert
      */
-    public static byte[] String2CString(String paramString) {
-        byte[] arrayOfByte1 = new byte[paramString.length() + 1];
-        byte[] arrayOfByte2 = paramString.getBytes();
-        System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 0, paramString.length());
-        arrayOfByte1[paramString.length()] = 0;
+    public static byte[] String2CString(String str) {
+        byte[] arrayOfByte1 = new byte[str.length() + 1];
+        byte[] arrayOfByte2 = str.getBytes();
+        System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 0, str.length());
+        arrayOfByte1[str.length()] = 0;
         return arrayOfByte1;
     }
 
@@ -194,13 +194,13 @@ public final class QTUtils implements QuickTimeLib {
      * @param str the String to convert
      * @param len the maximum length of the Pstring, max length is 255.
      */
-    public static byte[] String2PString(String paramString, int paramInt) {
-        byte[] arrayOfByte1 = paramString.getBytes();
+    public static byte[] String2PString(String str, int len) {
+        byte[] arrayOfByte1 = str.getBytes();
         int i;
         if (QTSession.isCurrentOS(1)) {
-            i = arrayOfByte1.length > paramInt ? paramInt : paramInt > 255 ? 255 : arrayOfByte1.length;
+            i = arrayOfByte1.length > len ? len : len > 255 ? 255 : arrayOfByte1.length;
         } else
-            i = paramString.length() > paramInt ? paramInt : paramInt > 255 ? 255 : paramString.length();
+            i = str.length() > len ? len : len > 255 ? 255 : str.length();
         byte[] arrayOfByte2 = new byte[i + 1];
         arrayOfByte2[0] = ((byte) i);
         System.arraycopy(arrayOfByte1, 0, arrayOfByte2, 1, i);
@@ -292,8 +292,8 @@ public final class QTUtils implements QuickTimeLib {
      * @return the flipped value
      * @see quicktime.util.EndianOrder
      */
-    public static short endianFlip16(short paramShort) {
-        return (short) (paramShort << 8 & 0xFF00 | paramShort >>> 8 & 0xFF);
+    public static short endianFlip16(short s) {
+        return (short) (s << 8 & 0xFF00 | s >>> 8 & 0xFF);
     }
 
     /**
@@ -302,8 +302,8 @@ public final class QTUtils implements QuickTimeLib {
      * @return the flipped value
      * @see quicktime.util.EndianOrder
      */
-    public static int endianFlip32(int paramInt) {
-        return paramInt << 24 & 0xFF000000 | paramInt << 8 & 0xFF0000 | paramInt >>> 8 & 0xFF00 | paramInt >>> 24 & 0xFF;
+    public static int endianFlip32(int i) {
+        return i << 24 & 0xFF000000 | i << 8 & 0xFF0000 | i >>> 8 & 0xFF00 | i >>> 24 & 0xFF;
     }
 
     /**
@@ -312,8 +312,8 @@ public final class QTUtils implements QuickTimeLib {
      * @return the flipped value
      * @see quicktime.util.EndianOrder
      */
-    public static long endianFlip64(long paramLong) {
-        return paramLong << 56 & 0xFF00000000000000L | paramLong << 40 & 0xFF000000000000L | paramLong << 24 & 0xFF0000000000L | paramLong << 8 & 0xFF00000000L | paramLong >>> 8 & 0xFF000000 | paramLong >>> 24 & 0xFF0000 | paramLong >>> 40 & 0xFF00 | paramLong >>> 56 & 0xFF;
+    public static long endianFlip64(long l) {
+        return l << 56 & 0xFF00000000000000L | l << 40 & 0xFF000000000000L | l << 24 & 0xFF0000000000L | l << 8 & 0xFF00000000L | l >>> 8 & 0xFF000000 | l >>> 24 & 0xFF0000 | l >>> 40 & 0xFF00 | l >>> 56 & 0xFF;
     }
 
     /**
@@ -329,8 +329,8 @@ public final class QTUtils implements QuickTimeLib {
      * @throws quicktime.util.UtilException
      * @see quicktime.util.EndianOrder
      */
-    public static void endianFlip(Object paramObject, int paramInt, EndianDescriptor paramEndianDescriptor) throws UtilException {
-        endianFlip(paramObject, paramInt, paramObject, paramInt, paramEndianDescriptor);
+    public static void endianFlip(Object src, int srcOffset, EndianDescriptor ed) throws UtilException {
+        endianFlip(src, srcOffset, src, srcOffset, ed);
     }
 
     /**
@@ -349,69 +349,69 @@ public final class QTUtils implements QuickTimeLib {
      * @throws quicktime.util.UtilException
      * @see quicktime.util.EndianOrder
      */
-    public static void endianFlip(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, EndianDescriptor paramEndianDescriptor) throws UtilException {
-        if (paramEndianDescriptor == null) {
+    public static void endianFlip(Object src, int srcOffset, Object dest, int destOffset, EndianDescriptor ed) throws UtilException {
+        if (ed == null) {
             throw new UtilException("EndianDescriptor is not specified");
         }
         int i = 0;
         int j = 0;
         int k = 0;
-        if ((paramObject1 instanceof QTPointerRef)) {
-            if (!(paramObject2 instanceof QTPointerRef))
+        if ((src instanceof QTPointerRef)) {
+            if (!(dest instanceof QTPointerRef))
                 throw new UtilException("src and dest must be same Type");
             i = 1;
-            j = ((QTPointerRef) paramObject1).getSize();
-            k = ((QTPointerRef) paramObject2).getSize();
-        } else if ((paramObject1 instanceof QTHandleRef)) {
-            if (!(paramObject2 instanceof QTHandleRef))
+            j = ((QTPointerRef) src).getSize();
+            k = ((QTPointerRef) dest).getSize();
+        } else if ((src instanceof QTHandleRef)) {
+            if (!(dest instanceof QTHandleRef))
                 throw new UtilException("src and dest must be same Type");
             i = 1;
-            j = ((QTHandleRef) paramObject1).getSize();
-            k = ((QTHandleRef) paramObject2).getSize();
-            paramObject1 = ((QTHandleRef) paramObject1).toQTPointer();
-            paramObject2 = ((QTHandleRef) paramObject2).toQTPointer();
-        } else if ((paramObject1 instanceof QTByteObject)) {
-            if (!(paramObject2 instanceof QTByteObject))
+            j = ((QTHandleRef) src).getSize();
+            k = ((QTHandleRef) dest).getSize();
+            src = ((QTHandleRef) src).toQTPointer();
+            dest = ((QTHandleRef) dest).toQTPointer();
+        } else if ((src instanceof QTByteObject)) {
+            if (!(dest instanceof QTByteObject))
                 throw new UtilException("src and dest must be same Type");
             i = 16;
-            j = ((QTByteObject) paramObject1).getSize();
-            k = ((QTByteObject) paramObject2).getSize();
-            paramObject1 = ((QTByteObject) paramObject1).getBytes();
-            paramObject2 = ((QTByteObject) paramObject2).getBytes();
-        } else if ((paramObject1 instanceof byte[])) {
-            if (!(paramObject2 instanceof byte[]))
+            j = ((QTByteObject) src).getSize();
+            k = ((QTByteObject) dest).getSize();
+            src = ((QTByteObject) src).getBytes();
+            dest = ((QTByteObject) dest).getBytes();
+        } else if ((src instanceof byte[])) {
+            if (!(dest instanceof byte[]))
                 throw new UtilException("src and dest must be same Type");
             i = 16;
-            j = ((byte[]) paramObject1).length;
-            k = ((byte[]) paramObject2).length;
-        } else if ((paramObject1 instanceof int[])) {
-            if (!(paramObject2 instanceof int[]))
+            j = ((byte[]) src).length;
+            k = ((byte[]) dest).length;
+        } else if ((src instanceof int[])) {
+            if (!(dest instanceof int[]))
                 throw new UtilException("src and dest must be same Type");
             i = 256;
-            j = ((int[]) paramObject1).length;
-            k = ((int[]) paramObject2).length;
-        } else if ((paramObject1 instanceof IntEncodedImage)) {
-            if (!(paramObject2 instanceof IntEncodedImage))
+            j = ((int[]) src).length;
+            k = ((int[]) dest).length;
+        } else if ((src instanceof IntEncodedImage)) {
+            if (!(dest instanceof IntEncodedImage))
                 throw new UtilException("src and dest must be same Type");
             i = 256;
-            j = ((IntEncodedImage) paramObject1).getInts().length;
-            k = ((IntEncodedImage) paramObject2).getInts().length;
-            paramObject1 = ((IntEncodedImage) paramObject1).getInts();
-            paramObject2 = ((IntEncodedImage) paramObject2).getInts();
-        } else if ((paramObject1 instanceof float[])) {
-            if (!(paramObject2 instanceof float[]))
+            j = ((IntEncodedImage) src).getInts().length;
+            k = ((IntEncodedImage) dest).getInts().length;
+            src = ((IntEncodedImage) src).getInts();
+            dest = ((IntEncodedImage) dest).getInts();
+        } else if ((src instanceof float[])) {
+            if (!(dest instanceof float[]))
                 throw new UtilException("src and dest must be same Type");
             i = 4096;
-            j = ((float[]) paramObject1).length;
-            k = ((float[]) paramObject2).length;
+            j = ((float[]) src).length;
+            k = ((float[]) dest).length;
         }
         if (i == 0)
             throw new UtilException("unknown format");
         int i1;
         int m;
-        switch(paramEndianDescriptor.getFormatFlag()) {
+        switch(ed.getFormatFlag()) {
             case 0:
-                Enumeration<EndianFlipSpec> e = paramEndianDescriptor.flipSpecs();
+                Enumeration<EndianFlipSpec> e = ed.flipSpecs();
                 if (e.hasMoreElements()) {
                     EndianFlipSpec localEndianFlipSpec = e.nextElement();
                     int i2;
@@ -419,65 +419,65 @@ public final class QTUtils implements QuickTimeLib {
                     switch(localEndianFlipSpec.sizeFlag) {
                         case 2:
                             for (i1 = 0; i1 < localEndianFlipSpec.num; i1++) {
-                                i2 = paramInt1 + i1 * 2 + localEndianFlipSpec.offset;
-                                i3 = paramInt2 + i1 * 2 + localEndianFlipSpec.offset;
+                                i2 = srcOffset + i1 * 2 + localEndianFlipSpec.offset;
+                                i3 = destOffset + i1 * 2 + localEndianFlipSpec.offset;
                                 if ((i2 + 2 > j) || (i3 + 2 > k)) {
                                     throw new UtilException("Attempt to read or write beyond size");
                                 }
-                                flip16(paramObject1, i2, paramObject2, i3, i);
+                                flip16(src, i2, dest, i3, i);
                             }
                         case 4:
                             for (i1 = 0; i1 < localEndianFlipSpec.num; i1++) {
-                                i2 = paramInt1 + i1 * 4 + localEndianFlipSpec.offset;
-                                i3 = paramInt2 + i1 * 4 + localEndianFlipSpec.offset;
+                                i2 = srcOffset + i1 * 4 + localEndianFlipSpec.offset;
+                                i3 = destOffset + i1 * 4 + localEndianFlipSpec.offset;
                                 if ((i2 + 4 > j) || (i3 + 4 > k)) {
                                     throw new UtilException("Attempt to read or write beyond size");
                                 }
-                                flip32(paramObject1, i2, paramObject2, i3, i);
+                                flip32(src, i2, dest, i3, i);
                             }
                         case 8:
                             for (i1 = 0; i1 < localEndianFlipSpec.num; i1++) {
-                                i2 = paramInt1 + i1 * 8 + localEndianFlipSpec.offset;
-                                i3 = paramInt2 + i1 * 8 + localEndianFlipSpec.offset;
+                                i2 = srcOffset + i1 * 8 + localEndianFlipSpec.offset;
+                                i3 = destOffset + i1 * 8 + localEndianFlipSpec.offset;
                                 if ((i2 + 8 > j) || (i3 + 8 > k)) {
                                     throw new UtilException("Attempt to read or write beyond size");
                                 }
-                                flip64(paramObject1, i2, paramObject2, i3, i);
+                                flip64(src, i2, dest, i3, i);
                             }
                     }
                     throw new UtilException("Unknown Endian Flip Spec value");
                 }
                 break;
             case 1:
-                for (m = 0; m < (j - paramInt1) / 2; ) {
-                    int n = paramInt1 + m * 2;
-                    i1 = paramInt2 + m * 2;
+                for (m = 0; m < (j - srcOffset) / 2; ) {
+                    int n = srcOffset + m * 2;
+                    i1 = destOffset + m * 2;
                     if ((n + 2 > j) || (i1 + 2 > k)) {
                         throw new UtilException("Attempt to read or write beyond size");
                     }
-                    flip16(paramObject1, n, paramObject2, i1, i);
+                    flip16(src, n, dest, i1, i);
                     m++;
                 }
                 break;
             case 16:
-                for (m = 0; m < (j - paramInt1) / 4; ) {
-                    int n = paramInt1 + m * 4;
-                    i1 = paramInt2 + m * 4;
+                for (m = 0; m < (j - srcOffset) / 4; ) {
+                    int n = srcOffset + m * 4;
+                    i1 = destOffset + m * 4;
                     if ((n + 4 > j) || (i1 + 4 > k)) {
                         throw new UtilException("Attempt to read or write beyond size");
                     }
-                    flip32(paramObject1, n, paramObject2, i1, i);
+                    flip32(src, n, dest, i1, i);
                     m++;
                 }
                 break;
             case 256:
-                for (m = 0; m < (j - paramInt1) / 8; ) {
-                    int n = paramInt1 + m * 8;
-                    i1 = paramInt2 + m * 8;
+                for (m = 0; m < (j - srcOffset) / 8; ) {
+                    int n = srcOffset + m * 8;
+                    i1 = destOffset + m * 8;
                     if ((n + 8 > j) || (i1 + 8 > k)) {
                         throw new UtilException("Attempt to read or write beyond size");
                     }
-                    flip64(paramObject1, n, paramObject2, i1, i);
+                    flip64(src, n, dest, i1, i);
                     m++;
                 }
                 break;

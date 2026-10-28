@@ -17,6 +17,6 @@ public interface QTVRMouseOverHotSpot {
      * @return an error code or zero if no error
      * @see quicktime.std.clocks.QTCallBack
      */
-    int execute(QTVRInstance paramQTVRInstance, int paramInt1, int paramInt2);
+    int execute(QTVRInstance vr, int hotSpotID, int flags);
 }
 

@@ -73,8 +73,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::OpenADefaultComponent"
      * @param subType The graphics import component sub type
      */
-    public GraphicsImporter(int paramInt) throws QTException {
-        super(1735551344, paramInt);
+    public GraphicsImporter(int subType) throws QTException {
+        super(1735551344, subType);
     }
 
     /**
@@ -82,18 +82,18 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::GetGraphicsImporterForFile"
      * @param file Specifies the source file.
      */
-    public GraphicsImporter(QTFile paramQTFile) throws QTException {
-        super(allocate(paramQTFile), null);
+    public GraphicsImporter(QTFile file) throws QTException {
+        super(allocate(file), null);
     }
 
     /**
      * Determines and opens the graphics import component to use for the given file.
      * @see "QuickTime::GetGraphicsImporterForFile"
      * @param file Specifies the source file.
-     * @param flags options passed in when opening the component
+     * @param scriptTag options passed in when opening the component
      */
-    public GraphicsImporter(QTFile paramQTFile, int paramInt) throws QTException {
-        super(allocate(paramQTFile, paramInt), null);
+    public GraphicsImporter(QTFile file, int scriptTag) throws QTException {
+        super(allocate(file, scriptTag), null);
     }
 
     /**
@@ -101,20 +101,20 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::GetGraphicsImporterForDataRef"
      * @param dataRef Specifies the data reference.
      */
-    public GraphicsImporter(DataRef paramDataRef) throws QTException {
-        super(allocate(paramDataRef), null);
-        this.ref = paramDataRef;
+    public GraphicsImporter(DataRef dataRef) throws QTException {
+        super(allocate(dataRef), null);
+        this.ref = dataRef;
     }
 
     /**
      * Locates and opens a graphics importer component that can be used to draw the specified dataRef.
      * @see "QuickTime::GetGraphicsImporterForDataRefWithFlags"
      * @param dataRef Specifies the data reference.
-     * @param flags options passed in when opening the component
+     * @param scriptTag options passed in when opening the component
      */
-    public GraphicsImporter(DataRef paramDataRef, int paramInt) throws QTException {
-        super(allocate(paramDataRef, paramInt), null);
-        this.ref = paramDataRef;
+    public GraphicsImporter(DataRef dataRef, int scriptTag) throws QTException {
+        super(allocate(dataRef, scriptTag), null);
+        this.ref = dataRef;
     }
 
     private static int allocate(QTFile paramQTFile) throws QTException {
@@ -139,14 +139,14 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static int allocate(QTFile paramQTFile, int paramInt) throws QTException {
+    private static int allocate(QTFile paramQTFile, int scriptTag) throws QTException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = GetGraphicsImporterForFileWithFlags(paramQTFile.getFSSpec(true, 256), arrayOfInt, paramInt);
+            i = GetGraphicsImporterForFileWithFlags(paramQTFile.getFSSpec(true, 256), arrayOfInt, scriptTag);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -171,14 +171,14 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static int allocate(DataRef paramDataRef, int paramInt) throws QTException {
+    private static int allocate(DataRef paramDataRef, int scriptTag) throws QTException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
-            i = GetGraphicsImporterForDataRefWithFlags(QTObject.ID(paramDataRef), paramDataRef.getType(), arrayOfInt, paramInt);
+            i = GetGraphicsImporterForDataRefWithFlags(QTObject.ID(paramDataRef), paramDataRef.getType(), arrayOfInt, scriptTag);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -196,10 +196,10 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param dataRef Specifies the handle to a QuickTime data reference.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataReference(DataRef paramDataRef) throws StdQTException {
-        int i = GraphicsImportSetDataReference(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType());
+    public final void setDataReference(DataRef dataRef) throws StdQTException {
+        int i = GraphicsImportSetDataReference(_ID(), QTObject.ID(dataRef), dataRef.getType());
         StdQTException.checkError(i);
-        this.ref = paramDataRef;
+        this.ref = dataRef;
     }
 
     /**
@@ -222,8 +222,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param fileIn Specifies the source file containing the graphics data.
      * @throws quicktime.QTException
      */
-    public final void setDataFile(QTFile paramQTFile) throws QTException {
-        int i = GraphicsImportSetDataFile(_ID(), paramQTFile.getFSSpec(true, 256));
+    public final void setDataFile(QTFile fileIn) throws QTException {
+        int i = GraphicsImportSetDataFile(_ID(), fileIn.getFSSpec(true, 256));
         StdQTException.checkError(i);
         this.ref = null;
     }
@@ -244,10 +244,10 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param dataRef Specifies the handle to a QuickTime data reference.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataHandle(QTHandleRef paramQTHandleRef) throws StdQTException {
-        int i = GraphicsImportSetDataHandle(_ID(), QTObject.ID(paramQTHandleRef));
+    public final void setDataHandle(QTHandleRef dataRef) throws StdQTException {
+        int i = GraphicsImportSetDataHandle(_ID(), QTObject.ID(dataRef));
         StdQTException.checkError(i);
-        this.ref = paramQTHandleRef;
+        this.ref = dataRef;
     }
 
     /**
@@ -304,14 +304,14 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param dataSize Specifies the size of the data to be read.
      * @throws quicktime.std.StdQTException
      */
-    public final void readData(EncodedImage paramEncodedImage, int paramInt1, int paramInt2) throws StdQTException {
+    public final void readData(EncodedImage data, int dataOffset, int dataSize) throws StdQTException {
         int i = -50;
-        if ((paramEncodedImage instanceof ByteEncodedImage)) {
-            i = GraphicsImportReadData(_ID(), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramInt1, paramInt2);
-        } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-            i = GraphicsImportReadData(_ID(), ((IntEncodedImage) paramEncodedImage).getInts(), paramInt1, paramInt2);
-        } else if ((paramEncodedImage instanceof RawEncodedImage))
-            i = GraphicsImportReadData(_ID(), QTObject.ID((RawEncodedImage) paramEncodedImage), paramInt1, paramInt2);
+        if ((data instanceof ByteEncodedImage)) {
+            i = GraphicsImportReadData(_ID(), ((ByteEncodedImage) data).getBytes(), dataOffset, dataSize);
+        } else if ((data instanceof IntEncodedImage)) {
+            i = GraphicsImportReadData(_ID(), ((IntEncodedImage) data).getInts(), dataOffset, dataSize);
+        } else if ((data instanceof RawEncodedImage))
+            i = GraphicsImportReadData(_ID(), QTObject.ID((RawEncodedImage) data), dataOffset, dataSize);
         StdQTException.checkError(i);
     }
 
@@ -321,8 +321,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param clipRgn Specifies clipping region.
      * @throws quicktime.std.StdQTException
      */
-    public final void setClip(Region paramRegion) throws StdQTException {
-        int i = GraphicsImportSetClip(_ID(), QTObject.ID(paramRegion));
+    public final void setClip(Region clipRgn) throws StdQTException {
+        int i = GraphicsImportSetClip(_ID(), QTObject.ID(clipRgn));
         StdQTException.checkError(i);
     }
 
@@ -386,8 +386,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param matrix Specifies the drawing matrix.
      * @throws quicktime.std.StdQTException
      */
-    public final void setMatrix(Matrix paramMatrix) throws StdQTException {
-        int i = GraphicsImportSetMatrix(_ID(), paramMatrix.getBytes());
+    public final void setMatrix(Matrix matrix) throws StdQTException {
+        int i = GraphicsImportSetMatrix(_ID(), matrix.getBytes());
         StdQTException.checkError(i);
     }
 
@@ -410,8 +410,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param bounds Specifies the bounding rectangle.
      * @throws quicktime.std.StdQTException
      */
-    public final void setBoundsRect(QDRect paramQDRect) throws StdQTException {
-        int i = GraphicsImportSetBoundsRect(_ID(), paramQDRect.getRect());
+    public final void setBoundsRect(QDRect bounds) throws StdQTException {
+        int i = GraphicsImportSetBoundsRect(_ID(), bounds.getRect());
         StdQTException.checkError(i);
     }
 
@@ -435,8 +435,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param scriptTag Specifies the depth at which the image is to be compressed.
      * @throws quicktime.QTException
      */
-    public final void saveAsPicture(QTFile paramQTFile, int paramInt) throws QTException {
-        int i = GraphicsImportSaveAsPicture(_ID(), paramQTFile.getFSSpec(false, 512), paramInt);
+    public final void saveAsPicture(QTFile file, int scriptTag) throws QTException {
+        int i = GraphicsImportSaveAsPicture(_ID(), file.getFSSpec(false, 512), scriptTag);
         StdQTException.checkError(i);
     }
 
@@ -446,8 +446,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param scriptTag Specifies
      * @throws quicktime.QTException
      */
-    public final void saveAsQuickTimeImageFile(QTFile paramQTFile, int paramInt) throws QTException {
-        int i = GraphicsImportSaveAsQuickTimeImageFile(_ID(), paramQTFile.getFSSpec(false, 512), paramInt);
+    public final void saveAsQuickTimeImageFile(QTFile paramQTFile, int scriptTag) throws QTException {
+        int i = GraphicsImportSaveAsQuickTimeImageFile(_ID(), paramQTFile.getFSSpec(false, 512), scriptTag);
         StdQTException.checkError(i);
     }
 
@@ -457,8 +457,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param graphicsMode Specifies the graphics transfer mode.
      * @throws quicktime.std.StdQTException
      */
-    public final void setGraphicsMode(GraphicsMode paramGraphicsMode) throws StdQTException {
-        int i = GraphicsImportSetGraphicsMode(_ID(), paramGraphicsMode.getGraphicsMode(), paramGraphicsMode.getColor().getRGBColor());
+    public final void setGraphicsMode(GraphicsMode graphicsMode) throws StdQTException {
+        int i = GraphicsImportSetGraphicsMode(_ID(), graphicsMode.getGraphicsMode(), graphicsMode.getColor().getRGBColor());
         StdQTException.checkError(i);
     }
 
@@ -482,8 +482,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param quality Specifies a quality CodecQ value
      * @throws quicktime.std.StdQTException
      */
-    public final void setQuality(int paramInt) throws StdQTException {
-        int i = GraphicsImportSetQuality(_ID(), paramInt);
+    public final void setQuality(int quality) throws StdQTException {
+        int i = GraphicsImportSetQuality(_ID(), quality);
         StdQTException.checkError(i);
     }
 
@@ -532,8 +532,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param gdh a GDevice object or null to use current device
      * @throws quicktime.std.StdQTException
      */
-    public final void setGWorld(QDGraphics paramQDGraphics, GDevice paramGDevice) throws StdQTException {
-        int i = GraphicsImportSetGWorld(_ID(), QTObject.ID(paramQDGraphics), QTObject.ID(paramGDevice));
+    public final void setGWorld(QDGraphics port, GDevice gdh) throws StdQTException {
+        int i = GraphicsImportSetGWorld(_ID(), QTObject.ID(port), QTObject.ID(gdh));
         StdQTException.checkError(i);
     }
 
@@ -619,8 +619,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param theFile the output file to write to.
      * @throws quicktime.QTException
      */
-    public void exportImageFile(int paramInt1, int paramInt2, QTFile paramQTFile, int paramInt3) throws QTException {
-        int i = GraphicsImportExportImageFile(_ID(), paramInt1, paramInt2, paramQTFile.getFSSpec(false, 512), (short) paramInt3);
+    public void exportImageFile(int scriptTag1, int limit, QTFile paramQTFile, int paramInt3) throws QTException {
+        int i = GraphicsImportExportImageFile(_ID(), scriptTag1, limit, paramQTFile.getFSSpec(false, 512), (short) paramInt3);
         StdQTException.checkError(i);
     }
 
@@ -651,9 +651,9 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param qtAtomContainer the atomcontainer with the export settings.
      * @throws quicktime.std.StdQTException
      */
-    public final void setExportSettingsFromAtomContainer(AtomContainer paramAtomContainer) throws StdQTException {
+    public final void setExportSettingsFromAtomContainer(AtomContainer qtAtomContainer) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        arrayOfInt[0] = QTObject.ID(paramAtomContainer);
+        arrayOfInt[0] = QTObject.ID(qtAtomContainer);
         int i = GraphicsImportSetExportSettingsFromAtomContainer(_ID(), arrayOfInt);
         StdQTException.checkError(i);
     }
@@ -665,8 +665,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param prompt A prompt that appears in the standard put dialog box; it may be nil, in which case a default string is used.
      * @throws quicktime.QTException
      */
-    public final GraphicsImporterInfo doExportImageFileDialog(QTFile paramQTFile, String paramString) throws QTException {
-        return QTFile.fromGraphicsImporter(this, paramQTFile, paramString);
+    public final GraphicsImporterInfo doExportImageFileDialog(QTFile inDefaultSpec, String prompt) throws QTException {
+        return QTFile.fromGraphicsImporter(this, inDefaultSpec, prompt);
     }
 
     /**
@@ -676,8 +676,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param limit the offset of the byte following the last byte of the image data.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataReferenceOffsetAndLimit(int paramInt1, int paramInt2) throws StdQTException {
-        int i = GraphicsImportSetDataReferenceOffsetAndLimit(_ID(), paramInt1, paramInt2);
+    public final void setDataReferenceOffsetAndLimit(int offset, int limit) throws StdQTException {
+        int i = GraphicsImportSetDataReferenceOffsetAndLimit(_ID(), offset, limit);
         StdQTException.checkError(i);
     }
 
@@ -720,8 +720,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param imageIndex Specifies the image index.
      * @throws quicktime.std.StdQTException
      */
-    public final void setImageIndex(int paramInt) throws StdQTException {
-        int i = GraphicsImportSetImageIndex(_ID(), paramInt);
+    public final void setImageIndex(int imageIndex) throws StdQTException {
+        int i = GraphicsImportSetImageIndex(_ID(), imageIndex);
         StdQTException.checkError(i);
     }
 
@@ -811,19 +811,19 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
     }
 
     /**
-     * Sets the current flags.
+     * Sets the current scriptTag.
      * @see "QuickTime::GraphicsImportSetFlags"
-     * @param flags the flag
+     * @param scriptTag the flag
      * @throws quicktime.QTException
      */
-    public final void setFlags(int paramInt) throws QTException {
-        int i = GraphicsImportSetFlags(_ID(), paramInt);
+    public final void setFlags(int scriptTag) throws QTException {
+        int i = GraphicsImportSetFlags(_ID(), scriptTag);
     }
 
     /**
-     * Returns the current flags..
+     * Returns the current scriptTag..
      * @see "QuickTime::GraphicsImportGetFlags"
-     * @return Returns the current flags.
+     * @return Returns the current scriptTag.
      * @throws quicktime.QTException
      */
     public final int getFlags() throws QTException {
@@ -832,199 +832,199 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
         return arrayOfInt[0];
     }
 
-    private static int GraphicsExportGetInputGraphicsImporter(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputGraphicsImporter(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputGraphicsImporter(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsExportManager.GraphicsExportGetInputGraphicsImporter(scriptTag, paramArrayOfInt);
     }
 
     private static short GetGraphicsImporterForFile(byte[] paramArrayOfByte, int[] paramArrayOfInt) {
         return GraphicsImportManager.GetGraphicsImporterForFile(paramArrayOfByte, paramArrayOfInt);
     }
 
-    private static short GetGraphicsImporterForFileWithFlags(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
-        return GraphicsImportManager.GetGraphicsImporterForFileWithFlags(paramArrayOfByte, paramArrayOfInt, paramInt);
+    private static short GetGraphicsImporterForFileWithFlags(byte[] paramArrayOfByte, int[] paramArrayOfInt, int scriptTag) {
+        return GraphicsImportManager.GetGraphicsImporterForFileWithFlags(paramArrayOfByte, paramArrayOfInt, scriptTag);
     }
 
-    private static short GetGraphicsImporterForDataRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GetGraphicsImporterForDataRef(paramInt1, paramInt2, paramArrayOfInt);
+    private static short GetGraphicsImporterForDataRef(int scriptTag1, int limit, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GetGraphicsImporterForDataRef(scriptTag1, limit, paramArrayOfInt);
     }
 
-    private static short GetGraphicsImporterForDataRefWithFlags(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
-        return GraphicsImportManager.GetGraphicsImporterForDataRefWithFlags(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    private static short GetGraphicsImporterForDataRefWithFlags(int scriptTag1, int limit, int[] paramArrayOfInt, int paramInt3) {
+        return GraphicsImportManager.GetGraphicsImporterForDataRefWithFlags(scriptTag1, limit, paramArrayOfInt, paramInt3);
     }
 
-    private static int GraphicsImportSetDataReference(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsImportManager.GraphicsImportSetDataReference(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsImportSetDataReference(int scriptTag1, int limit, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportSetDataReference(scriptTag1, limit, paramInt3);
     }
 
-    private static int GraphicsImportGetDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsImportManager.GraphicsImportGetDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsImportGetDataReference(int scriptTag, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetDataReference(scriptTag, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static int GraphicsImportSetDataFile(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportSetDataFile(paramInt, paramArrayOfByte);
+    private static int GraphicsImportSetDataFile(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetDataFile(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportSetDataHandle(int paramInt1, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSetDataHandle(paramInt1, paramInt2);
+    private static int GraphicsImportSetDataHandle(int scriptTag1, int limit) {
+        return GraphicsImportManager.GraphicsImportSetDataHandle(scriptTag1, limit);
     }
 
-    private static int GraphicsImportGetDataOffsetAndSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsImportManager.GraphicsImportGetDataOffsetAndSize(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsImportGetDataOffsetAndSize(int scriptTag, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetDataOffsetAndSize(scriptTag, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static int GraphicsImportReadData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int GraphicsImportReadData(int scriptTag1, int limit, int paramInt3, int paramInt4) {
+        return GraphicsImportManager.GraphicsImportReadData(scriptTag1, limit, paramInt3, paramInt4);
     }
 
-    private static int GraphicsImportReadData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+    private static int GraphicsImportReadData(int scriptTag1, byte[] paramArrayOfByte, int limit, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportReadData(scriptTag1, paramArrayOfByte, limit, paramInt3);
     }
 
-    private static int GraphicsImportReadData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        return GraphicsImportManager.GraphicsImportReadData(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
+    private static int GraphicsImportReadData(int scriptTag1, int[] paramArrayOfInt, int limit, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportReadData(scriptTag1, paramArrayOfInt, limit, paramInt3);
     }
 
-    private static int GraphicsImportSetClip(int paramInt1, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSetClip(paramInt1, paramInt2);
+    private static int GraphicsImportSetClip(int scriptTag1, int limit) {
+        return GraphicsImportManager.GraphicsImportSetClip(scriptTag1, limit);
     }
 
-    private static int GraphicsImportSetSourceRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportSetSourceRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportSetSourceRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetSourceRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetSourceRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetSourceRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetSourceRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetSourceRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetNaturalBounds(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetNaturalBounds(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetNaturalBounds(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetNaturalBounds(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportDraw(int paramInt) {
-        return GraphicsImportManager.GraphicsImportDraw(paramInt);
+    private static int GraphicsImportDraw(int scriptTag) {
+        return GraphicsImportManager.GraphicsImportDraw(scriptTag);
     }
 
-    private static int GraphicsImportSetMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportSetMatrix(paramInt, paramArrayOfByte);
+    private static int GraphicsImportSetMatrix(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetMatrix(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetMatrix(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetMatrix(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetMatrix(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportSetBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportSetBoundsRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportSetBoundsRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetBoundsRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetBoundsRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetBoundsRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetBoundsRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportSaveAsPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSaveAsPicture(paramInt1, paramArrayOfByte, paramInt2);
+    private static int GraphicsImportSaveAsPicture(int scriptTag1, byte[] paramArrayOfByte, int limit) {
+        return GraphicsImportManager.GraphicsImportSaveAsPicture(scriptTag1, paramArrayOfByte, limit);
     }
 
-    private static int GraphicsImportSaveAsQuickTimeImageFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSaveAsQuickTimeImageFile(paramInt1, paramArrayOfByte, paramInt2);
+    private static int GraphicsImportSaveAsQuickTimeImageFile(int scriptTag1, byte[] paramArrayOfByte, int limit) {
+        return GraphicsImportManager.GraphicsImportSaveAsQuickTimeImageFile(scriptTag1, paramArrayOfByte, limit);
     }
 
-    private static int GraphicsImportSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    private static int GraphicsImportSetGraphicsMode(int scriptTag1, int limit, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetGraphicsMode(scriptTag1, limit, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    private static int GraphicsImportGetGraphicsMode(int scriptTag, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetGraphicsMode(scriptTag, paramArrayOfInt, paramArrayOfByte);
     }
 
-    private static int GraphicsImportSetQuality(int paramInt1, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSetQuality(paramInt1, paramInt2);
+    private static int GraphicsImportSetQuality(int scriptTag1, int limit) {
+        return GraphicsImportManager.GraphicsImportSetQuality(scriptTag1, limit);
     }
 
-    private static int GraphicsImportGetQuality(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetQuality(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetQuality(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetQuality(scriptTag, paramArrayOfInt);
     }
 
-    private static int GraphicsImportGetAliasedDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsImportManager.GraphicsImportGetAliasedDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsImportGetAliasedDataReference(int scriptTag, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetAliasedDataReference(scriptTag, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static int GraphicsImportSetGWorld(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsImportManager.GraphicsImportSetGWorld(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsImportSetGWorld(int scriptTag1, int limit, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportSetGWorld(scriptTag1, limit, paramInt3);
     }
 
-    private static int GraphicsImportValidate(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportValidate(paramInt, paramArrayOfInt);
+    private static int GraphicsImportValidate(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportValidate(scriptTag, paramArrayOfInt);
     }
 
-    private static int GraphicsImportDoesDrawAllPixels(int paramInt, short[] paramArrayOfShort) {
-        return GraphicsImportManager.GraphicsImportDoesDrawAllPixels(paramInt, paramArrayOfShort);
+    private static int GraphicsImportDoesDrawAllPixels(int scriptTag, short[] paramArrayOfShort) {
+        return GraphicsImportManager.GraphicsImportDoesDrawAllPixels(scriptTag, paramArrayOfShort);
     }
 
-    private static int GraphicsImportGetMetaData(int paramInt1, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportGetMetaData(paramInt1, paramInt2);
+    private static int GraphicsImportGetMetaData(int scriptTag1, int limit) {
+        return GraphicsImportManager.GraphicsImportGetMetaData(scriptTag1, limit);
     }
 
-    private static short GraphicsImportExportImageFile(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, short paramShort) {
-        return GraphicsImportManager.GraphicsImportExportImageFile(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramShort);
+    private static short GraphicsImportExportImageFile(int scriptTag1, int limit, int paramInt3, byte[] paramArrayOfByte, short paramShort) {
+        return GraphicsImportManager.GraphicsImportExportImageFile(scriptTag1, limit, paramInt3, paramArrayOfByte, paramShort);
     }
 
-    private static int GraphicsImportSetExportSettingsFromAtomContainer(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportSetExportSettingsFromAtomContainer(paramInt, paramArrayOfInt);
+    private static int GraphicsImportSetExportSettingsFromAtomContainer(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportSetExportSettingsFromAtomContainer(scriptTag, paramArrayOfInt);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int scriptTag1, int limit) {
+        QuickDrawManager.SetGWorld(scriptTag1, limit);
     }
 
     private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
         QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static int GraphicsImportSetDataReferenceOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsImportManager.GraphicsImportSetDataReferenceOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsImportSetDataReferenceOffsetAndLimit(int scriptTag1, int limit, int paramInt3) {
+        return GraphicsImportManager.GraphicsImportSetDataReferenceOffsetAndLimit(scriptTag1, limit, paramInt3);
     }
 
-    private static int GraphicsImportGetDataReferenceOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsImportManager.GraphicsImportGetDataReferenceOffsetAndLimit(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsImportGetDataReferenceOffsetAndLimit(int scriptTag, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return GraphicsImportManager.GraphicsImportGetDataReferenceOffsetAndLimit(scriptTag, paramArrayOfInt1, paramArrayOfInt2);
     }
 
-    private static int GraphicsImportGetImageCount(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetImageCount(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetImageCount(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetImageCount(scriptTag, paramArrayOfInt);
     }
 
-    private static int GraphicsImportSetImageIndex(int paramInt1, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSetImageIndex(paramInt1, paramInt2);
+    private static int GraphicsImportSetImageIndex(int scriptTag1, int limit) {
+        return GraphicsImportManager.GraphicsImportSetImageIndex(scriptTag1, limit);
     }
 
-    private static int GraphicsImportGetImageIndex(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetImageIndex(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetImageIndex(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetImageIndex(scriptTag, paramArrayOfInt);
     }
 
-    private static int GraphicsImportGetDefaultMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetDefaultMatrix(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetDefaultMatrix(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDefaultMatrix(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetDefaultGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetDefaultGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    private static int GraphicsImportGetDefaultGraphicsMode(int scriptTag, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDefaultGraphicsMode(scriptTag, paramArrayOfInt, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetDefaultSourceRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetDefaultSourceRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetDefaultSourceRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDefaultSourceRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportSetDestRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportSetDestRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportSetDestRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportSetDestRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportGetDestRect(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsImportManager.GraphicsImportGetDestRect(paramInt, paramArrayOfByte);
+    private static int GraphicsImportGetDestRect(int scriptTag, byte[] paramArrayOfByte) {
+        return GraphicsImportManager.GraphicsImportGetDestRect(scriptTag, paramArrayOfByte);
     }
 
-    private static int GraphicsImportSetFlags(int paramInt1, int paramInt2) {
-        return GraphicsImportManager.GraphicsImportSetFlags(paramInt1, paramInt2);
+    private static int GraphicsImportSetFlags(int scriptTag1, int limit) {
+        return GraphicsImportManager.GraphicsImportSetFlags(scriptTag1, limit);
     }
 
-    private static int GraphicsImportGetFlags(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetFlags(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetFlags(int scriptTag, int[] paramArrayOfInt) {
+        return GraphicsImportManager.GraphicsImportGetFlags(scriptTag, paramArrayOfInt);
     }
 }

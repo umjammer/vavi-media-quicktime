@@ -17,6 +17,6 @@ public interface RecordMovieCallback {
      * Called when the movie is completed recording.
      * @param m the movie to which the track was added
      */
-    void finish(Movie paramMovie);
+    void finish(Movie m);
 }
 

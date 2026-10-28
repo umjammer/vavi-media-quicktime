@@ -80,12 +80,12 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param source a set of 4 points t,l t,r b,r and b,l that describes the source area
      * @param dest a set of 4 points t,l t,r b,r and b,l that describes the destination area
      */
-    public Matrix(QDPoint[] paramArrayOfQDPoint1, QDPoint[] paramArrayOfQDPoint2) throws QTException {
+    public Matrix(QDPoint[] source, QDPoint[] dest) throws QTException {
         this();
-        if ((paramArrayOfQDPoint1.length < 4) || (paramArrayOfQDPoint2.length < 4) || (QTSession.getQTMajorVersion() < 4))
+        if ((source.length < 4) || (dest.length < 4) || (QTSession.getQTMajorVersion() < 4))
             throw new StdQTException(-50);
-        int[] arrayOfInt1 = DoublePts2FixedPts(paramArrayOfQDPoint1);
-        int[] arrayOfInt2 = DoublePts2FixedPts(paramArrayOfQDPoint2);
+        int[] arrayOfInt1 = DoublePts2FixedPts(source);
+        int[] arrayOfInt2 = DoublePts2FixedPts(dest);
         int i = QuadToQuadMatrix(arrayOfInt1, arrayOfInt2, getBytes());
         StdQTException.checkError(i);
     }
@@ -155,8 +155,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set the X axis translation by specified amount.
      * @param tx amount to set x-axis translation
      */
-    public void setTx(float paramFloat) {
-        setIntAt(24, QTUtils.X2Fix(paramFloat));
+    public void setTx(float tx) {
+        setIntAt(24, QTUtils.X2Fix(tx));
     }
 
     /**
@@ -171,8 +171,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set the Y axis translation by specified amount.
      * @param ty amount to set y-axis translation
      */
-    public void setTy(float paramFloat) {
-        setIntAt(28, QTUtils.X2Fix(paramFloat));
+    public void setTy(float ty) {
+        setIntAt(28, QTUtils.X2Fix(ty));
     }
 
     /**
@@ -187,8 +187,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set the X axis Scale by specified amount.
      * @param sx amount to set x-axis scale.
      */
-    public void setSx(float paramFloat) {
-        setIntAt(0, QTUtils.X2Fix(paramFloat));
+    public void setSx(float sx) {
+        setIntAt(0, QTUtils.X2Fix(sx));
     }
 
     /**
@@ -203,8 +203,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set the Y axis Scale by specified amount.
      * @param sy amount to set x-axis scale.
      */
-    public void setSy(float paramFloat) {
-        setIntAt(16, QTUtils.X2Fix(paramFloat));
+    public void setSy(float sy) {
+        setIntAt(16, QTUtils.X2Fix(sy));
     }
 
     /**
@@ -219,8 +219,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set b by specified amount.
      * @param b amoutn specified.
      */
-    public void setB(float paramFloat) {
-        setIntAt(4, QTUtils.X2Fix(paramFloat));
+    public void setB(float b) {
+        setIntAt(4, QTUtils.X2Fix(b));
     }
 
     /**
@@ -235,8 +235,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set u by specified amount.
      * @param u amount specified.
      */
-    public void setU(float paramFloat) {
-        setIntAt(8, QTUtils.X2Fract(paramFloat));
+    public void setU(float u) {
+        setIntAt(8, QTUtils.X2Fract(u));
     }
 
     /**
@@ -251,8 +251,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set c by specified amount.
      * @param c amount specified.
      */
-    public void setC(float paramFloat) {
-        setIntAt(12, QTUtils.X2Fix(paramFloat));
+    public void setC(float c) {
+        setIntAt(12, QTUtils.X2Fix(c));
     }
 
     /**
@@ -267,8 +267,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set v by specified amount.
      * @param v amount specified.
      */
-    public void setV(float paramFloat) {
-        setIntAt(20, QTUtils.X2Fract(paramFloat));
+    public void setV(float v) {
+        setIntAt(20, QTUtils.X2Fract(v));
     }
 
     /**
@@ -283,8 +283,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * Set w by specified amount.
      * @param w amount specified.
      */
-    public void setW(float paramFloat) {
-        setIntAt(32, QTUtils.X2Fract(paramFloat));
+    public void setW(float w) {
+        setIntAt(32, QTUtils.X2Fract(w));
     }
 
     /**
@@ -335,8 +335,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param aboutX specifies the x coordinate of the anchor point of rotation.
      * @param aboutY specifies the y coordinate of the anchor point of rotation.
      */
-    public void rotate(float paramFloat1, float paramFloat2, float paramFloat3) {
-        RotateMatrix(getBytes(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2), QTUtils.X2Fix(paramFloat3));
+    public void rotate(float degrees, float aboutX, float aboutY) {
+        RotateMatrix(getBytes(), QTUtils.X2Fix(degrees), QTUtils.X2Fix(aboutX), QTUtils.X2Fix(aboutY));
     }
 
     /**
@@ -347,8 +347,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param aboutX specifies the x coordinate of the anchor point.
      * @param aboutY specifies the y coordinate of the anchor point.
      */
-    public void scale(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
-        ScaleMatrix(getBytes(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2), QTUtils.X2Fix(paramFloat3), QTUtils.X2Fix(paramFloat4));
+    public void scale(float scaleX, float scaleY, float aboutX, float aboutY) {
+        ScaleMatrix(getBytes(), QTUtils.X2Fix(scaleX), QTUtils.X2Fix(scaleY), QTUtils.X2Fix(aboutX), QTUtils.X2Fix(aboutY));
     }
 
     /**
@@ -359,8 +359,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param aboutX specifies the x coordinate of the anchor point.
      * @param aboutY specifies the y coordinate of the anchor point.
      */
-    public void skew(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
-        SkewMatrix(getBytes(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2), QTUtils.X2Fix(paramFloat3), QTUtils.X2Fix(paramFloat4));
+    public void skew(float skewX, float skewY, float aboutX, float aboutY) {
+        SkewMatrix(getBytes(), QTUtils.X2Fix(skewX), QTUtils.X2Fix(skewY), QTUtils.X2Fix(aboutX), QTUtils.X2Fix(aboutY));
     }
 
     /**
@@ -369,8 +369,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param mr specifies the new inverse matrix.
      * @return true if inverse matrix was created, else return false.
      */
-    public boolean inverse(Matrix paramMatrix) {
-        return InverseMatrix(getBytes(), paramMatrix.getBytes()) != 0;
+    public boolean inverse(Matrix mr) {
+        return InverseMatrix(getBytes(), mr.getBytes()) != 0;
     }
 
     /**
@@ -388,11 +388,11 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param dpts a set of float points.
      * @throws quicktime.QTException
      */
-    public void transformDPoints(QDPoint paramQDPoint) throws QTException {
-        int[] arrayOfInt = DoublePt2FixedPt(paramQDPoint);
+    public void transformDPoints(QDPoint dpts) throws QTException {
+        int[] arrayOfInt = DoublePt2FixedPt(dpts);
         int i = TransformFixedPoints(getBytes(), arrayOfInt, 1);
         StdQTException.checkError(i);
-        FixedPt2DoublePt(arrayOfInt, paramQDPoint);
+        FixedPt2DoublePt(arrayOfInt, dpts);
     }
 
     public void transformDPoints(QDPoint[] paramArrayOfQDPoint) throws QTException {
@@ -408,12 +408,12 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param pts an array of Points.
      * @throws quicktime.std.StdQTException
      */
-    public void transformPoints(QDPoint paramQDPoint) throws StdQTException {
+    public void transformPoints(QDPoint pts) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        arrayOfInt[0] = ((paramQDPoint.getY() << 16) + paramQDPoint.getX());
+        arrayOfInt[0] = ((pts.getY() << 16) + pts.getX());
         StdQTException.checkError(TransformPoints(getBytes(), arrayOfInt, 1));
-        paramQDPoint.setY(arrayOfInt[0] >> 16);
-        paramQDPoint.setX(arrayOfInt[0] & 0xFFFF);
+        pts.setY(arrayOfInt[0] >> 16);
+        pts.setX(arrayOfInt[0] & 0xFFFF);
     }
 
     public void transformPoints(QDPoint[] paramArrayOfQDPoint) throws StdQTException {
@@ -436,10 +436,10 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @return false if the transformation is other than scaling and translation.
      * @throws quicktime.QTException
      */
-    public boolean transformDRect(QDRect paramQDRect) throws QTException {
-        if (paramQDRect.getFixedRect() == null)
+    public boolean transformDRect(QDRect r) throws QTException {
+        if (r.getFixedRect() == null)
             throw new QTException(-50);
-        return TransformFixedRect(getBytes(), paramQDRect.getFixedRect(), 0) != 0;
+        return TransformFixedRect(getBytes(), r.getFixedRect(), 0) != 0;
     }
 
     /**
@@ -468,8 +468,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @return false if the transformation is other than scaling and translation.
      * @throws quicktime.QTException
      */
-    public boolean transformRect(QDRect paramQDRect) throws QTException {
-        return TransformRect(getBytes(), paramQDRect.getRect(), 0) != 0;
+    public boolean transformRect(QDRect r) throws QTException {
+        return TransformRect(getBytes(), r.getRect(), 0) != 0;
     }
 
     /**
@@ -494,8 +494,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param r the region to be transformed.
      * @throws quicktime.std.StdQTException
      */
-    public void transformRgn(Region paramRegion) throws StdQTException {
-        StdQTException.checkError(TransformRgn(getBytes(), QTObject.ID(paramRegion)));
+    public void transformRgn(Region r) throws StdQTException {
+        StdQTException.checkError(TransformRgn(getBytes(), QTObject.ID(r)));
     }
 
     /**
@@ -505,8 +505,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param srcRect the source rectangle.
      * @param dstRect the destination rectangle.
      */
-    public void rect(QDRect paramQDRect1, QDRect paramQDRect2) {
-        RectMatrix(getBytes(), paramQDRect1.getRect(), paramQDRect2.getRect());
+    public void rect(QDRect srcRect, QDRect dstRect) {
+        RectMatrix(getBytes(), srcRect.getRect(), dstRect.getRect());
     }
 
     /**
@@ -516,8 +516,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param fromRect the source rectangle.
      * @param toRect the destination rectangle.
      */
-    public void map(QDRect paramQDRect1, QDRect paramQDRect2) {
-        MapMatrix(getBytes(), paramQDRect1.getRect(), paramQDRect2.getRect());
+    public void map(QDRect fromRect, QDRect toRect) {
+        MapMatrix(getBytes(), fromRect.getRect(), toRect.getRect());
     }
 
     /**
@@ -552,8 +552,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @param m the Matrix you are testing for equality.
      * @return a boolean of whether the matrices are equal.
      */
-    public boolean equals(Matrix paramMatrix) {
-        return EqualMatrix(getBytes(), paramMatrix.getBytes()) != 0;
+    public boolean equals(Matrix m) {
+        return EqualMatrix(getBytes(), m.getBytes()) != 0;
     }
 
     private static short QuadToQuadMatrix(int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte) {

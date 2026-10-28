@@ -64,8 +64,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @return The information object containing the time code, its definition, and data.
      * @throws quicktime.QTException
      */
-    public TimeCodeInfo getAtTime(int paramInt) throws QTException {
-        return QTHandle.fromTimeCoderTime(this, paramInt);
+    public TimeCodeInfo getAtTime(int mediaTime) throws QTException {
+        return QTHandle.fromTimeCoderTime(this, mediaTime);
     }
 
     /**
@@ -77,9 +77,9 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @return the converted string
      * @throws quicktime.std.StdQTException
      */
-    public String timeCodeToString(TimeCodeDef paramTimeCodeDef, TimeCodeTime paramTimeCodeTime) throws StdQTException {
+    public String timeCodeToString(TimeCodeDef tcdef, TimeCodeTime tct) throws StdQTException {
         byte[] arrayOfByte = new byte[256];
-        StdQTException.checkError(TCTimeCodeToString(_ID(), paramTimeCodeDef.getBytes(), paramTimeCodeTime.getBytes(), arrayOfByte));
+        StdQTException.checkError(TCTimeCodeToString(_ID(), tcdef.getBytes(), tct.getBytes(), arrayOfByte));
         return new String(arrayOfByte, 1, arrayOfByte[0]);
     }
 
@@ -92,10 +92,10 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @return the converted string
      * @throws quicktime.std.StdQTException
      */
-    public String timeCodeToString(TimeCodeDef paramTimeCodeDef, int paramInt) throws StdQTException {
+    public String timeCodeToString(TimeCodeDef tcdef, int counter) throws StdQTException {
         byte[] arrayOfByte = new byte[256];
-        int[] arrayOfInt = { paramInt };
-        StdQTException.checkError(TCTimeCodeToString(_ID(), paramTimeCodeDef.getBytes(), arrayOfInt, arrayOfByte));
+        int[] arrayOfInt = { counter };
+        StdQTException.checkError(TCTimeCodeToString(_ID(), tcdef.getBytes(), arrayOfInt, arrayOfByte));
         return new String(arrayOfByte, 1, arrayOfByte[0]);
     }
 
@@ -107,9 +107,9 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @return The frame number.
      * @throws quicktime.std.StdQTException
      */
-    public int toFrameNumber(TimeCodeTime paramTimeCodeTime, TimeCodeDef paramTimeCodeDef) throws StdQTException {
+    public int toFrameNumber(TimeCodeTime tcrec, TimeCodeDef tcdef) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = TCTimeCodeToFrameNumber(_ID(), paramTimeCodeDef.getBytes(), paramTimeCodeTime.getBytes(), arrayOfInt);
+        int i = TCTimeCodeToFrameNumber(_ID(), tcdef.getBytes(), tcrec.getBytes(), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -122,9 +122,9 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @return The time code value structure.
      * @throws quicktime.std.StdQTException
      */
-    public TimeCodeTime toTimeCode(int paramInt, TimeCodeDef paramTimeCodeDef) throws StdQTException {
+    public TimeCodeTime toTimeCode(int frameNumber, TimeCodeDef tcdef) throws StdQTException {
         TimeCodeTime localTimeCodeTime = new TimeCodeTime();
-        int i = TCFrameNumberToTimeCode(_ID(), paramInt, paramTimeCodeDef.getBytes(), localTimeCodeTime.getBytes());
+        int i = TCFrameNumberToTimeCode(_ID(), frameNumber, tcdef.getBytes(), localTimeCodeTime.getBytes());
         StdQTException.checkError(i);
         return localTimeCodeTime;
     }
@@ -138,8 +138,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @return the source information that is found in the sample reference
      * @throws quicktime.QTException
      */
-    public QTHandle getSourceRef(TimeCodeDescription paramTimeCodeDescription) throws QTException {
-        return QTHandle.fromTimeCoderSource(this, paramTimeCodeDescription);
+    public QTHandle getSourceRef(TimeCodeDescription tcd) throws QTException {
+        return QTHandle.fromTimeCoderSource(this, tcd);
     }
 
     /**
@@ -150,8 +150,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @throws quicktime.QTException
      * @see quicktime.std.movies.media.UserData#fromTimeCoderSource(quicktime.std.qtcomponents.TimeCoder, quicktime.std.qtcomponents.TimeCodeDescription)
      */
-    public UserData getUserDataSourceRef(TimeCodeDescription paramTimeCodeDescription) throws QTException {
-        return UserData.fromTimeCoderSource(this, paramTimeCodeDescription);
+    public UserData getUserDataSourceRef(TimeCodeDescription tcd) throws QTException {
+        return UserData.fromTimeCoderSource(this, tcd);
     }
 
     /**
@@ -161,8 +161,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @param sref the source information that is placed in the sample reference
      * @throws quicktime.std.StdQTException
      */
-    public void setSourceRef(TimeCodeDescription paramTimeCodeDescription, QTHandleRef paramQTHandleRef) throws StdQTException {
-        StdQTException.checkError(TCSetSourceRef(_ID(), QTObject.ID(paramTimeCodeDescription), QTObject.ID(paramQTHandleRef)));
+    public void setSourceRef(TimeCodeDescription tcd, QTHandleRef sref) throws StdQTException {
+        StdQTException.checkError(TCSetSourceRef(_ID(), QTObject.ID(tcd), QTObject.ID(sref)));
     }
 
     /**
@@ -172,8 +172,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @param udata the userdata source that is placed in the sample reference
      * @throws quicktime.std.StdQTException
      */
-    public void setUserDataSourceRef(TimeCodeDescription paramTimeCodeDescription, UserData paramUserData) throws StdQTException {
-        StdQTException.checkError(TCSetSourceRef(_ID(), QTObject.ID(paramTimeCodeDescription), QTObject.ID(paramUserData)));
+    public void setUserDataSourceRef(TimeCodeDescription tcd, UserData udata) throws StdQTException {
+        StdQTException.checkError(TCSetSourceRef(_ID(), QTObject.ID(tcd), QTObject.ID(udata)));
     }
 
     /**
@@ -183,8 +183,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @param flagsMask specifies which of the flag values are to change.
      * @throws quicktime.std.StdQTException
      */
-    public void setFlags(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(TCSetTimeCodeFlags(_ID(), paramInt1, paramInt2));
+    public void setFlags(int flags, int flagsMask) throws StdQTException {
+        StdQTException.checkError(TCSetTimeCodeFlags(_ID(), flags, flagsMask));
     }
 
     /**
@@ -205,8 +205,8 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @param textOptions text display options
      * @throws quicktime.std.StdQTException
      */
-    public void setDisplayOptions(TCTextOptions paramTCTextOptions) throws StdQTException {
-        StdQTException.checkError(TCSetDisplayOptions(_ID(), paramTCTextOptions.getBytes()));
+    public void setDisplayOptions(TCTextOptions textOptions) throws StdQTException {
+        StdQTException.checkError(TCSetDisplayOptions(_ID(), textOptions.getBytes()));
     }
 
     /**

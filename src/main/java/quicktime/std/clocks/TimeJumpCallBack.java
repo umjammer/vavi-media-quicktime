@@ -14,8 +14,8 @@ public abstract class TimeJumpCallBack extends QTCallBack {
      * @see "QuickTime::NewCallBack()"
      * @param tb the time base that the callback is attached too.
      */
-    public TimeJumpCallBack(TimeBase paramTimeBase) throws QTException {
-        super(paramTimeBase, 3);
+    public TimeJumpCallBack(TimeBase tb) throws QTException {
+        super(tb, 3);
     }
 
     /**

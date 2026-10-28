@@ -26,12 +26,12 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
      * @param ss seconds value
      * @param ff frames value
      */
-    public TimeCodeTime(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public TimeCodeTime(int hh, int mm, int ss, int ff) {
         this();
-        setHours(paramInt1);
-        setMinutes(paramInt2);
-        setSeconds(paramInt3);
-        setFrames(paramInt4);
+        setHours(hh);
+        setMinutes(mm);
+        setSeconds(ss);
+        setFrames(ff);
     }
 
     /**
@@ -46,12 +46,12 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
      * of the TimeCodeTime structure.
      * @param counter in packed format HH:MM:SS:FF
      */
-    public TimeCodeTime(int paramInt) {
+    public TimeCodeTime(int counter) {
         this();
-        setHours((paramInt & 0xFF000000) >>> 24);
-        setMinutes((paramInt & 0xFF0000) >>> 16);
-        setSeconds((paramInt & 0xFF00) >>> 8);
-        setFrames(paramInt & 0xFF);
+        setHours((counter & 0xFF000000) >>> 24);
+        setMinutes((counter & 0xFF0000) >>> 16);
+        setSeconds((counter & 0xFF00) >>> 8);
+        setFrames(counter & 0xFF);
     }
 
     private TimeCodeTime(byte[] paramArrayOfByte) {
@@ -93,8 +93,8 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
      * Sets the hours value
      * @param hh hours value
      */
-    public void setHours(int paramInt) {
-        setByteAt(0, (byte) paramInt);
+    public void setHours(int hh) {
+        setByteAt(0, (byte) hh);
     }
 
     /**
@@ -109,8 +109,8 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
      * Sets the minutes value
      * @param mm minutes value
      */
-    public void setMinutes(int paramInt) {
-        setByteAt(1, (byte) paramInt);
+    public void setMinutes(int mm) {
+        setByteAt(1, (byte) mm);
     }
 
     /**
@@ -125,8 +125,8 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
      * Sets the seconds value
      * @param ss seconds value
      */
-    public void setSeconds(int paramInt) {
-        setByteAt(2, (byte) paramInt);
+    public void setSeconds(int ss) {
+        setByteAt(2, (byte) ss);
     }
 
     /**
@@ -141,8 +141,8 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
      * Sets the frames value
      * @param ff frames value
      */
-    public void setFrames(int paramInt) {
-        setByteAt(3, (byte) paramInt);
+    public void setFrames(int ff) {
+        setByteAt(3, (byte) ff);
     }
 
     /**

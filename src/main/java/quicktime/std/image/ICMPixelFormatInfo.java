@@ -42,8 +42,8 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
      * @param pixelFormat Specifies the pixel format.
      * @return a boolean
      */
-    public static boolean isValidPixelFormat(int paramInt) {
-        int i = ICMGetPixelFormatInfo(paramInt, ar);
+    public static boolean isValidPixelFormat(int pixelFormat) {
+        int i = ICMGetPixelFormatInfo(pixelFormat, ar);
         return i == 0;
     }
 
@@ -54,10 +54,10 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
      * @return an ICMPixelFormatInfo structure
      * @throws quicktime.std.StdQTException
      */
-    public static ICMPixelFormatInfo setPixelFormatInfo(int paramInt) throws StdQTException {
+    public static ICMPixelFormatInfo setPixelFormatInfo(int pixelFormat) throws StdQTException {
         if (!QTSession.isCurrentOS(4)) {
             ICMPixelFormatInfo localICMPixelFormatInfo = new ICMPixelFormatInfo();
-            int i = ICMSetPixelFormatInfo(paramInt, localICMPixelFormatInfo.getBytes());
+            int i = ICMSetPixelFormatInfo(pixelFormat, localICMPixelFormatInfo.getBytes());
             StdQTException.checkError(i);
             return localICMPixelFormatInfo;
         }
@@ -71,9 +71,9 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
      * @return an ICMPixelFormatInfo structure
      * @throws quicktime.std.StdQTException
      */
-    public static ICMPixelFormatInfo getPixelFormatInfo(int paramInt) throws StdQTException {
+    public static ICMPixelFormatInfo getPixelFormatInfo(int pixelFormat) throws StdQTException {
         ICMPixelFormatInfo localICMPixelFormatInfo = new ICMPixelFormatInfo();
-        int i = ICMGetPixelFormatInfo(paramInt, localICMPixelFormatInfo.getBytes());
+        int i = ICMGetPixelFormatInfo(pixelFormat, localICMPixelFormatInfo.getBytes());
         StdQTException.checkError(i);
         return localICMPixelFormatInfo;
     }

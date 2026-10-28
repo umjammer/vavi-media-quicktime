@@ -13,6 +13,6 @@ public interface ExecutingWiredAction {
      * @param actionContainer the container encapuslating the wired actions
      * @see quicktime.std.movies.Movie#addExecuteWiredActionsProc(quicktime.std.movies.ExecutingWiredAction)
      */
-    short execute(Movie paramMovie, int paramInt, AtomContainer paramAtomContainer);
+    short execute(Movie mov, int flags, AtomContainer actionContainer);
 }
 

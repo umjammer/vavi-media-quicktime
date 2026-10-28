@@ -50,11 +50,11 @@ public class MediaParams extends QTPointerRef {
      * @param dim QDDimension representing height and width of media object
      * @param g QDGraphics object representing the gWorld where the Media will be displayed
      */
-    public MediaParams(QDDimension paramQDDimension, QDGraphics paramQDGraphics) throws QTException {
+    public MediaParams(QDDimension dim, QDGraphics g) throws QTException {
         this();
-        setWidth(paramQDDimension.getWidth());
-        setHeight(paramQDDimension.getHeight());
-        setGWorld(paramQDGraphics);
+        setWidth(dim.getWidth());
+        setHeight(dim.getHeight());
+        setGWorld(g);
     }
 
     /**
@@ -67,13 +67,13 @@ public class MediaParams extends QTPointerRef {
      * @param bassLvl bass level of the audio
      * @param trebLvl treble level of the audio
      */
-    public MediaParams(QDDimension paramQDDimension, Matrix paramMatrix, QDGraphics paramQDGraphics, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException {
-        this(paramQDDimension, paramQDGraphics);
-        setMatrix(paramMatrix);
-        setLeftVolume(paramInt1);
-        setRightVolume(paramInt2);
-        setBassLevel(paramInt3);
-        setTrebleLevel(paramInt4);
+    public MediaParams(QDDimension dim, Matrix matrix, QDGraphics g, int lVol, int rVol, int bassLvl, int trebLvl) throws QTException {
+        this(dim, g);
+        setMatrix(matrix);
+        setLeftVolume(lVol);
+        setRightVolume(rVol);
+        setBassLevel(bassLvl);
+        setTrebleLevel(trebLvl);
     }
 
     private QTPointer bands = null;
@@ -88,8 +88,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the width of the video component
      * @param w width
      */
-    public void setWidth(float paramFloat) {
-        setIntAt(0, QTUtils.X2Fix(paramFloat));
+    public void setWidth(float w) {
+        setIntAt(0, QTUtils.X2Fix(w));
     }
 
     /**
@@ -117,8 +117,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the matrix associated with the video component
      * @param m Matrix
      */
-    public void setMatrix(Matrix paramMatrix) {
-        setBytesAt(8, 36, paramMatrix.getBytes(), 0);
+    public void setMatrix(Matrix m) {
+        setBytesAt(8, 36, m.getBytes(), 0);
     }
 
     /**
@@ -134,9 +134,9 @@ public class MediaParams extends QTPointerRef {
      * Sets the offscreen graphics world used by the video media
      * @param g offscreen graphics world
      */
-    public void setGWorld(QDGraphics paramQDGraphics) {
-        this.g = paramQDGraphics;
-        setIntAt(44, QTObject.ID(paramQDGraphics));
+    public void setGWorld(QDGraphics g) {
+        this.g = g;
+        setIntAt(44, QTObject.ID(g));
     }
 
     /**
@@ -150,9 +150,9 @@ public class MediaParams extends QTPointerRef {
      * Sets the graphics device used by the video media
      * @param gdh graphics device
      */
-    public void setGDHandle(GDevice paramGDevice) {
-        this.gd = paramGDevice;
-        setIntAt(48, QTObject.ID(paramGDevice));
+    public void setGDHandle(GDevice gdh) {
+        this.gd = gdh;
+        setIntAt(48, QTObject.ID(gdh));
     }
 
     /**
@@ -166,9 +166,9 @@ public class MediaParams extends QTPointerRef {
      * Sets the clip region of the video component
      * @param clip video clip region
      */
-    public void setClip(Region paramRegion) {
-        this.rgn = paramRegion;
-        setIntAt(52, QTObject.ID(paramRegion));
+    public void setClip(Region clip) {
+        this.rgn = clip;
+        setIntAt(52, QTObject.ID(clip));
     }
 
     /**
@@ -182,8 +182,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the graphics display mode of the video component
      * @param graphicsMode graphics mode
      */
-    public void setGraphicsMode(int paramInt) {
-        setShortAt(56, (short) paramInt);
+    public void setGraphicsMode(int graphicsMode) {
+        setShortAt(56, (short) graphicsMode);
     }
 
     /**
@@ -197,8 +197,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the operand color associated with the graphics mode of the video component
      * @param color operand color
      */
-    public void setOpColor(QDColor paramQDColor) {
-        setBytesAt(58, 6, paramQDColor.getBytes(), 0);
+    public void setOpColor(QDColor color) {
+        setBytesAt(58, 6, color.getBytes(), 0);
     }
 
     /**
@@ -214,8 +214,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the left volume of the sound
      * @param leftVol left volume
      */
-    public void setLeftVolume(int paramInt) {
-        setShortAt(64, (short) paramInt);
+    public void setLeftVolume(int leftVol) {
+        setShortAt(64, (short) leftVol);
     }
 
     /**
@@ -229,8 +229,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the right volume of the sound
      * @param rightVol right volume
      */
-    public void setRightVolume(int paramInt) {
-        setShortAt(66, (short) paramInt);
+    public void setRightVolume(int rightVol) {
+        setShortAt(66, (short) rightVol);
     }
 
     /**
@@ -245,17 +245,17 @@ public class MediaParams extends QTPointerRef {
      * @param left left volume
      * @param right right volume
      */
-    public void setVolumes(int paramInt1, int paramInt2) {
-        setLeftVolume(paramInt1);
-        setRightVolume(paramInt2);
+    public void setVolumes(int left, int right) {
+        setLeftVolume(left);
+        setRightVolume(right);
     }
 
     /**
      * Sets the bass level of the sound media
      * @param bassLvl base level
      */
-    public void setBassLevel(int paramInt) {
-        setShortAt(68, (short) paramInt);
+    public void setBassLevel(int bassLvl) {
+        setShortAt(68, (short) bassLvl);
     }
 
     /**
@@ -269,8 +269,8 @@ public class MediaParams extends QTPointerRef {
      * Sets the treble level of the sound media
      * @param trebleLvl treble level
      */
-    public void setTrebleLevel(int paramInt) {
-        setShortAt(70, (short) paramInt);
+    public void setTrebleLevel(int trebleLvl) {
+        setShortAt(70, (short) trebleLvl);
     }
 
     /**
@@ -285,9 +285,9 @@ public class MediaParams extends QTPointerRef {
      * @param bands frequency bands
      * @throws quicktime.QTException
      */
-    public void setFrequencyBands(QTPointer paramQTPointer) throws QTException {
-        setShortAt(72, (short) paramQTPointer.getSize());
-        this.bands = paramQTPointer;
+    public void setFrequencyBands(QTPointer bands) throws QTException {
+        setShortAt(72, (short) bands.getSize());
+        this.bands = bands;
         setIntAt(74, QTObject.ID(this.bands));
     }
 
@@ -311,8 +311,8 @@ public class MediaParams extends QTPointerRef {
      * Determines whethere the level metering is enabled or disabled
      * @param meteringEnabled true if metering is enabled
      */
-    public void setLevelMeteringEnabled(boolean paramBoolean) {
-        setByteAt(78, (byte) (paramBoolean ? 1 : 0));
+    public void setLevelMeteringEnabled(boolean meteringEnabled) {
+        setByteAt(78, (byte) (meteringEnabled ? 1 : 0));
     }
 
     /**

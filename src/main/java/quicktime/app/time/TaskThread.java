@@ -51,8 +51,8 @@ public class TaskThread implements Runnable {
      * is 100 msecs.
      * @param tName the name of the thread
      */
-    public TaskThread(String paramString) {
-        this(paramString, 100);
+    public TaskThread(String tName) {
+        this(tName, 100);
     }
 
     /**
@@ -130,8 +130,8 @@ public class TaskThread implements Runnable {
      * If the thread was stopped (because there were no objects to task) this will start the thread up.
      * @param t the Taskable object to add to the collection.
      */
-    public void addAndStart(Taskable paramTaskable) {
-        addMember(paramTaskable);
+    public void addAndStart(Taskable t) {
+        addMember(t);
         start();
     }
 
@@ -173,8 +173,8 @@ public class TaskThread implements Runnable {
      * @param object the object to test if a member
      * @return true if the object is a member
      */
-    public boolean hasMember(Object paramObject) {
-        return this.tasks.contains(paramObject);
+    public boolean hasMember(Object object) {
+        return this.tasks.contains(object);
     }
 
     /**
@@ -270,10 +270,10 @@ public class TaskThread implements Runnable {
      * Sets the priority of the thread.
      * @param newPriority the new priority of the thread or any consequent threads created.
      */
-    public void setPriority(int paramInt) {
+    public void setPriority(int newPriority) {
         if (this.theThread != null)
-            this.theThread.setPriority(paramInt);
-        this.threadPriority = paramInt;
+            this.theThread.setPriority(newPriority);
+        this.threadPriority = newPriority;
     }
 
     /**

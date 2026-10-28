@@ -29,8 +29,8 @@ public final class Sound implements QuickTimeLib {
      * @param sndHdl the handle that has the sound data in it
      * @throws quicktime.sound.SoundException
      */
-    public static void play(SndHandle paramSndHandle) throws SoundException {
-        SoundException.checkError(SndPlay(0, QTObject.ID(paramSndHandle), (byte) 0));
+    public static void play(SndHandle sndHdl) throws SoundException {
+        SoundException.checkError(SndPlay(0, QTObject.ID(sndHdl), (byte) 0));
     }
 
     private static short SndPlay(int paramInt1, int paramInt2, byte paramByte) {

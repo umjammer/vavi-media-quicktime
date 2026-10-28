@@ -34,7 +34,7 @@ public interface Space extends Listener, DynamicCollection, Ticklish {
      * @param c the Controller to add to the Space.
      * @throws quicktime.QTException
      */
-    void addController(Controller paramController) throws QTException;
+    void addController(Controller c) throws QTException;
 
     /**
      * @deprecated
@@ -43,7 +43,7 @@ public interface Space extends Listener, DynamicCollection, Ticklish {
      * @param c the Controller to remove from the Space.
      * @throws quicktime.QTException
      */
-    void removeController(Controller paramController) throws QTException;
+    void removeController(Controller c) throws QTException;
 
     /**
      * @deprecated

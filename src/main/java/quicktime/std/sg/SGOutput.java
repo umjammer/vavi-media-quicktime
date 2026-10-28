@@ -47,9 +47,9 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @param whereFlags that control the record operation. You must set either
      *  seqGrabToDisk or seqGrabToMemory to 1. Set unused flags to 0.
      */
-    public SGOutput(SequenceGrabber paramSequenceGrabber, DataRef paramDataRef, int paramInt) throws StdQTException {
-        super(allocate(paramSequenceGrabber, QTObject.ID(paramDataRef), paramDataRef.getType(), paramInt), paramSequenceGrabber);
-        setOwner(paramSequenceGrabber);
+    public SGOutput(SequenceGrabber owner, DataRef dataRef, int whereFlags) throws StdQTException {
+        super(allocate(owner, QTObject.ID(dataRef), dataRef.getType(), whereFlags), owner);
+        setOwner(owner);
     }
 
     SGOutput(SequenceGrabber paramSequenceGrabber, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
@@ -93,9 +93,9 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @param maxOffset the maximum offset for data written to this output.
      * @throws quicktime.std.StdQTException
      */
-    public void setMaximumOffset(long paramLong) throws StdQTException {
+    public void setMaximumOffset(long maxOffset) throws StdQTException {
         byte[] arrayOfByte = new byte[8];
-        setLongInArray(arrayOfByte, 0, paramLong);
+        setLongInArray(arrayOfByte, 0, maxOffset);
         int i = SGSetOutputMaximumOffset(QTObject.ID(this.owner), _ID(), arrayOfByte);
         StdQTException.checkError(i);
     }
@@ -115,8 +115,8 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @param whereFlags determines where the output is sent, eg seqGrabToDisk
      * @throws quicktime.std.StdQTException
      */
-    public void setOutputFlags(int paramInt) throws StdQTException {
-        int i = SGSetOutputFlags(QTObject.ID(this.owner), _ID(), paramInt);
+    public void setOutputFlags(int whereFlags) throws StdQTException {
+        int i = SGSetOutputFlags(QTObject.ID(this.owner), _ID(), whereFlags);
         StdQTException.checkError(i);
     }
 
@@ -125,8 +125,8 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @param c the channel you want to assign the output to
      * @throws quicktime.std.StdQTException
      */
-    public void setChannel(SGChannel paramSGChannel) throws StdQTException {
-        int i = SGSetChannelOutput(QTObject.ID(this.owner), QTObject.ID(paramSGChannel), _ID());
+    public void setChannel(SGChannel c) throws StdQTException {
+        int i = SGSetChannelOutput(QTObject.ID(this.owner), QTObject.ID(c), _ID());
         StdQTException.checkError(i);
     }
 
@@ -155,8 +155,8 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @param nextOutput specifies the next output to be used after the output represented by this object.
      * @throws quicktime.std.StdQTException
      */
-    public void setNextOutput(SGOutput paramSGOutput) throws StdQTException {
-        int i = SGSetOutputNextOutput(QTObject.ID(this.owner), _ID(), QTObject.ID(paramSGOutput));
+    public void setNextOutput(SGOutput nextOutput) throws StdQTException {
+        int i = SGSetOutputNextOutput(QTObject.ID(this.owner), _ID(), QTObject.ID(nextOutput));
         StdQTException.checkError(i);
     }
 

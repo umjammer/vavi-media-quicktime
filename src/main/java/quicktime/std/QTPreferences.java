@@ -40,9 +40,9 @@ public final class QTPreferences implements QuickTimeLib {
      * @return The AtomContainer contains atoms of type kAccessKeyAtomType at the top level.
      * @throws quicktime.std.StdQTException
      */
-    public static AtomContainer getAccessKeys(String paramString) throws StdQTException {
+    public static AtomContainer getAccessKeys(String keyType) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = QTGetAccessKeys(QTUtils.String2PString(paramString, 255), 0, arrayOfInt);
+        int i = QTGetAccessKeys(QTUtils.String2PString(keyType, 255), 0, arrayOfInt);
         StdQTException.checkError(i);
         return new AC(arrayOfInt[0]);
     }
@@ -58,10 +58,10 @@ public final class QTPreferences implements QuickTimeLib {
      * @param accessKey the key to be registered.
      * @throws quicktime.QTException
      */
-    public static void registerAccessKey(String paramString1, int paramInt, String paramString2) throws QTException {
-        QTHandle localQTHandle = new QTHandle(paramString2.length(), false);
-        localQTHandle.copyFromArray(0, paramString2.getBytes(), 0, paramString2.length());
-        int i = QTRegisterAccessKey(QTUtils.String2PString(paramString1, 255), paramInt, QTObject.ID(localQTHandle));
+    public static void registerAccessKey(String keyType, int flags, String accessKey) throws QTException {
+        QTHandle localQTHandle = new QTHandle(accessKey.length(), false);
+        localQTHandle.copyFromArray(0, accessKey.getBytes(), 0, accessKey.length());
+        int i = QTRegisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(localQTHandle));
         StdQTException.checkError(i);
     }
 
@@ -76,8 +76,8 @@ public final class QTPreferences implements QuickTimeLib {
      * @param accessKey the key to be registered.
      * @throws quicktime.QTException
      */
-    public static void registerAccessKey(String paramString, int paramInt, QTHandleRef paramQTHandleRef) throws QTException {
-        int i = QTRegisterAccessKey(QTUtils.String2PString(paramString, 255), paramInt, QTObject.ID(paramQTHandleRef));
+    public static void registerAccessKey(String keyType, int flags, QTHandleRef accessKey) throws QTException {
+        int i = QTRegisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(accessKey));
         StdQTException.checkError(i);
     }
 
@@ -91,10 +91,10 @@ public final class QTPreferences implements QuickTimeLib {
      * @param accessKey the key to be removed.
      * @throws quicktime.QTException
      */
-    public static void unregisterAccessKey(String paramString1, int paramInt, String paramString2) throws QTException {
-        QTHandle localQTHandle = new QTHandle(paramString2.length(), false);
-        localQTHandle.copyFromArray(0, paramString2.getBytes(), 0, paramString2.length());
-        int i = QTUnregisterAccessKey(QTUtils.String2PString(paramString1, 255), paramInt, QTObject.ID(localQTHandle));
+    public static void unregisterAccessKey(String keyType, int flags, String accessKey) throws QTException {
+        QTHandle localQTHandle = new QTHandle(accessKey.length(), false);
+        localQTHandle.copyFromArray(0, accessKey.getBytes(), 0, accessKey.length());
+        int i = QTUnregisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(localQTHandle));
         StdQTException.checkError(i);
     }
 
@@ -108,8 +108,8 @@ public final class QTPreferences implements QuickTimeLib {
      * @param accessKey the key to be removed.
      * @throws quicktime.QTException
      */
-    public static void unregisterAccessKey(String paramString, int paramInt, QTHandleRef paramQTHandleRef) throws QTException {
-        int i = QTUnregisterAccessKey(QTUtils.String2PString(paramString, 255), paramInt, QTObject.ID(paramQTHandleRef));
+    public static void unregisterAccessKey(String keyType, int flags, QTHandleRef accessKey) throws QTException {
+        int i = QTUnregisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(accessKey));
         StdQTException.checkError(i);
     }
 
@@ -120,9 +120,9 @@ public final class QTPreferences implements QuickTimeLib {
      * @return the atom container encapsulating the specific preference
      * @throws quicktime.QTException
      */
-    public static AtomContainer getPreference(int paramInt) throws QTException {
+    public static AtomContainer getPreference(int preferenceType) throws QTException {
         int[] arrayOfInt = { 0 };
-        int i = GetQuickTimePreference(paramInt, arrayOfInt);
+        int i = GetQuickTimePreference(preferenceType, arrayOfInt);
         StdQTException.checkError(i);
         if (arrayOfInt[0] == 0)
             return null;
@@ -136,8 +136,8 @@ public final class QTPreferences implements QuickTimeLib {
      * @param prefAtom the atom container encapsulating the values of the specified preference
      * @throws quicktime.QTException
      */
-    public static void setPreference(int paramInt, AtomContainer paramAtomContainer) throws QTException {
-        StdQTException.checkError(SetQuickTimePreference(paramInt, QTObject.ID(paramAtomContainer)));
+    public static void setPreference(int preferenceType, AtomContainer prefAtom) throws QTException {
+        StdQTException.checkError(SetQuickTimePreference(preferenceType, QTObject.ID(prefAtom)));
     }
 
     private static short QTGetAccessKeys(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt) {

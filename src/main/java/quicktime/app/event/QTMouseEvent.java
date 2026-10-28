@@ -110,8 +110,8 @@ public class QTMouseEvent extends EventObject {
      * Constructs an QTMouseEvent object with the specified source object.
      * @param source the object where the event originated
      */
-    public QTMouseEvent(Object paramObject) {
-        super(paramObject);
+    public QTMouseEvent(Object source) {
+        super(source);
     }
 
     /**
@@ -126,14 +126,14 @@ public class QTMouseEvent extends EventObject {
      * @param modifiers the modifiers held down during this action
      * @param clickCount the number of clicks within the system click time that occured.
      */
-    public QTMouseEvent(Object paramObject, int paramInt1, int paramInt2, int paramInt3, long paramLong, int paramInt4, int paramInt5) {
-        super(paramObject);
-        this.eventType = paramInt1;
-        this.modifiers = paramInt4;
-        this.x = paramInt2;
-        this.y = paramInt3;
-        this.when = paramLong;
-        this.clickCount = paramInt5;
+    public QTMouseEvent(Object source, int eventType, int x, int y, long when, int modifiers, int clickCount) {
+        super(source);
+        this.eventType = eventType;
+        this.modifiers = modifiers;
+        this.x = x;
+        this.y = y;
+        this.when = when;
+        this.clickCount = clickCount;
     }
 
     private QTMouseEvent(Object paramObject, int paramInt1, int paramInt2, int paramInt3, long paramLong, int paramInt4, int paramInt5, boolean paramBoolean) {
@@ -172,8 +172,8 @@ public class QTMouseEvent extends EventObject {
      * @since QTJava 6.1
      * @param target the target of the event
      */
-    public void setTarget(Object paramObject) {
-        this.target = paramObject;
+    public void setTarget(Object target) {
+        this.target = target;
     }
 
     /**
@@ -232,9 +232,9 @@ public class QTMouseEvent extends EventObject {
      * @param x the offset to the x coordinate position
      * @param y the offset to the y coordinate position
      */
-    public synchronized void translate(int paramInt1, int paramInt2) {
-        this.x += paramInt1;
-        this.y += paramInt2;
+    public synchronized void translate(int x, int y) {
+        this.x += x;
+        this.y += y;
     }
 
     /**
@@ -248,13 +248,13 @@ public class QTMouseEvent extends EventObject {
      * @param modifiers the modifiers held down during this action
      * @param clickCount the number of clicks within the system click time that occured.
      */
-    public synchronized void initialiseEventProfile(int paramInt1, int paramInt2, int paramInt3, long paramLong, int paramInt4, int paramInt5) {
-        this.eventType = paramInt1;
-        this.modifiers = paramInt4;
-        this.x = paramInt2;
-        this.y = paramInt3;
-        this.when = paramLong;
-        this.clickCount = paramInt5;
+    public synchronized void initialiseEventProfile(int eventType, int x, int y, long when, int modifiers, int clickCount) {
+        this.eventType = eventType;
+        this.modifiers = modifiers;
+        this.x = x;
+        this.y = y;
+        this.when = when;
+        this.clickCount = clickCount;
         this.consumed = false;
         this.target = null;
     }

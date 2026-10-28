@@ -33,7 +33,7 @@ public interface Controller {
      * method can throw an exception and the controller won't be added to the Space.
      * @param s the Space being added to
      */
-    void addedToSpace(Space paramSpace);
+    void addedToSpace(Space s);
 
     /**
      * @deprecated

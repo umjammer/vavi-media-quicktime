@@ -30,8 +30,8 @@ public class QTActionEvent extends EventObject {
      * @param source the object where the event originated
      * @param command the command string for this action event
      */
-    public QTActionEvent(Object paramObject, String paramString) {
-        this(paramObject, paramString, 0);
+    public QTActionEvent(Object source, String command) {
+        this(source, command, 0);
     }
 
     /**
@@ -42,10 +42,10 @@ public class QTActionEvent extends EventObject {
      * @param command the command string for this action event
      * @param modifiers the modifiers held down during this action
      */
-    public QTActionEvent(Object paramObject, String paramString, int paramInt) {
-        super(paramObject);
-        this.actionCommand = paramString;
-        this.modifiers = paramInt;
+    public QTActionEvent(Object source, String command, int modifiers) {
+        super(source);
+        this.actionCommand = command;
+        this.modifiers = modifiers;
     }
 
     /**

@@ -22,7 +22,7 @@ public interface AudioMediaHandler {
      * @param balance the new balance value.
      * @throws quicktime.QTException
      */
-    void setBalance(float paramFloat) throws QTException;
+    void setBalance(float balance) throws QTException;
 
     /**
      * Gets Sound Level Meter state (Not Documented).
@@ -38,7 +38,7 @@ public interface AudioMediaHandler {
      * @param enabled true if enabled
      * @throws quicktime.QTException
      */
-    void setSoundLevelMeteringEnabled(boolean paramBoolean) throws QTException;
+    void setSoundLevelMeteringEnabled(boolean enabled) throws QTException;
 
     /**
      * Gets Sound Level Meter state (Not Documented).
@@ -74,7 +74,7 @@ public interface AudioMediaHandler {
      * @param treble the sound treble
      * @throws quicktime.QTException
      */
-    void setSoundBassAndTreble(int paramInt1, int paramInt2) throws QTException;
+    void setSoundBassAndTreble(int bass, int treble) throws QTException;
 
     /**
      * Gets  Sound Bass and Treble (Not Documented).

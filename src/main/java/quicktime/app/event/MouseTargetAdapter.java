@@ -28,7 +28,7 @@ public class MouseTargetAdapter implements MouseTargetListener {
      *  it is interested in with the given modifier state, or false if otherwise.
      */
     @Override
-    public boolean matchModifierFilter(int paramInt) {
+    public boolean matchModifierFilter(int mods) {
         return true;
     }
 
@@ -40,7 +40,7 @@ public class MouseTargetAdapter implements MouseTargetListener {
      * @param e the QTMouseEvent that triggered this event
      */
     @Override
-    public void mouseTargetExited(QTMouseEvent paramQTMouseEvent) {
+    public void mouseTargetExited(QTMouseEvent e) {
     }
 
     /**
@@ -51,6 +51,6 @@ public class MouseTargetAdapter implements MouseTargetListener {
      * @param e the QTMouseEvent that triggered this event
      */
     @Override
-    public void mouseTargetEntered(QTMouseEvent paramQTMouseEvent) {
+    public void mouseTargetEntered(QTMouseEvent e) {
     }
 }

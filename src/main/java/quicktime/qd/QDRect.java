@@ -90,16 +90,16 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @return a QDRect
      * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
      */
-    public static QDRect fromArray(byte[] paramArrayOfByte, int paramInt) {
-        if (paramInt > paramArrayOfByte.length)
+    public static QDRect fromArray(byte[] rectBytes, int flag) {
+        if (flag > rectBytes.length)
             throw new IllegalArgumentException("Mismatch between flag and supplied rectBytes");
-        switch(paramInt) {
+        switch(flag) {
             case 8:
-                return new QDRect(paramArrayOfByte, null);
+                return new QDRect(rectBytes, null);
             case 16:
                 QDRect localQDRect = new QDRect();
                 localQDRect.fixedRect = new byte[16];
-                System.arraycopy(paramArrayOfByte, 0, localQDRect.fixedRect, 0, 16);
+                System.arraycopy(rectBytes, 0, localQDRect.fixedRect, 0, 16);
                 localQDRect._setXI((int) localQDRect.getXF());
                 localQDRect._setYI((int) localQDRect.getYF());
                 localQDRect._setRightI((int) localQDRect.getRightF());
@@ -124,12 +124,12 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param width the width of the rectangle
      * @param height the height of the rectangle
      */
-    public QDRect(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public QDRect(int x, int y, int width, int height) {
         this();
-        setX(paramInt1);
-        setY(paramInt2);
-        setWidth(paramInt3);
-        setHeight(paramInt4);
+        setX(x);
+        setY(y);
+        setWidth(width);
+        setHeight(height);
     }
 
     /**
@@ -139,12 +139,12 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param width the width of the rectangle
      * @param height the height of the rectangle
      */
-    public QDRect(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
+    public QDRect(float x, float y, float width, float height) {
         this();
-        setX(paramFloat1);
-        setY(paramFloat2);
-        setWidth(paramFloat3);
-        setHeight(paramFloat4);
+        setX(x);
+        setY(y);
+        setWidth(width);
+        setHeight(height);
     }
 
     /**
@@ -153,8 +153,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param width the width of the rectangle
      * @param height the height of the rectangle
      */
-    public QDRect(int paramInt1, int paramInt2) {
-        this(0, 0, paramInt1, paramInt2);
+    public QDRect(int width, int height) {
+        this(0, 0, width, height);
     }
 
     /**
@@ -163,16 +163,16 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param width the width of the rectangle
      * @param height the height of the rectangle
      */
-    public QDRect(float paramFloat1, float paramFloat2) {
-        this(0.0F, 0.0F, paramFloat1, paramFloat2);
+    public QDRect(float width, float height) {
+        this(0.0F, 0.0F, width, height);
     }
 
     /**
      * Constructs a QDRect with an origin specified and 0 width and height.
      * @param origin the origin point of the QDRect
      */
-    public QDRect(QDPoint paramQDPoint) {
-        this(paramQDPoint.getX(), paramQDPoint.getY(), 0, 0);
+    public QDRect(QDPoint origin) {
+        this(origin.getX(), origin.getY(), 0, 0);
     }
 
     /**
@@ -182,16 +182,16 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param origin the origin point of the QDRect
      * {@link quicktime.qd.QDRect#QDRect(quicktime.qd.QDPoint)}
      */
-    public QDRect(Point paramPoint) {
-        this(paramPoint.x, paramPoint.y, 0, 0);
+    public QDRect(Point origin) {
+        this(origin.x, origin.y, 0, 0);
     }
 
     /**
      * Constructs a QDRect with an origin of 0,0 and specified size.
      * @param size the size of the QDRect.
      */
-    public QDRect(QDDimension paramQDDimension) {
-        this(0, 0, paramQDDimension.getWidth(), paramQDDimension.getHeight());
+    public QDRect(QDDimension size) {
+        this(0, 0, size.getWidth(), size.getHeight());
     }
 
     /**
@@ -201,8 +201,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param size the size of the QDRect.
      * {@link quicktime.qd.QDRect#QDRect(quicktime.qd.QDDimension)}
      */
-    public QDRect(Dimension paramDimension) {
-        this(0, 0, paramDimension.width, paramDimension.height);
+    public QDRect(Dimension size) {
+        this(0, 0, size.width, size.height);
     }
 
     /**
@@ -212,8 +212,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * NOTE: This method is deprecated. There is no direct method replacement
      * @param rect the Rectangle
      */
-    public QDRect(Rectangle paramRectangle) {
-        this(paramRectangle.x, paramRectangle.y, paramRectangle.width, paramRectangle.height);
+    public QDRect(Rectangle rect) {
+        this(rect.x, rect.y, rect.width, rect.height);
     }
 
     /**
@@ -221,8 +221,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param origin the origin point of the QDRect
      * @param size the size of the QDRect.
      */
-    public QDRect(QDPoint paramQDPoint, QDDimension paramQDDimension) {
-        this(paramQDPoint.getX(), paramQDPoint.getY(), paramQDDimension.getWidth(), paramQDDimension.getHeight());
+    public QDRect(QDPoint origin, QDDimension size) {
+        this(origin.getX(), origin.getY(), size.getWidth(), size.getHeight());
     }
 
     /**
@@ -233,8 +233,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param size the size of the QDRect.
      * {@link quicktime.qd.QDRect#QDRect(quicktime.qd.QDPoint, quicktime.qd.QDDimension)}
      */
-    public QDRect(Point paramPoint, Dimension paramDimension) {
-        this(paramPoint.x, paramPoint.y, paramDimension.width, paramDimension.height);
+    public QDRect(Point origin, Dimension size) {
+        this(origin.x, origin.y, size.width, size.height);
     }
 
     private QDRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
@@ -318,11 +318,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the x location of the rect.
      * @param x the new x location
      */
-    public void setX(int paramInt) {
+    public void setX(int x) {
         if (this.fixedRect != null)
-            setX(paramInt);
+            setX(x);
         else {
-            _setXI(paramInt);
+            _setXI(x);
         }
     }
 
@@ -330,11 +330,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the x location of the rect.
      * @param x the new x location
      */
-    public void setX(float paramFloat) {
+    public void setX(float x) {
         if (this.fixedRect == null)
             this.fixedRect = new byte[16];
-        _setXF(paramFloat);
-        _setXI((int) paramFloat);
+        _setXF(x);
+        _setXI((int) x);
     }
 
     /**
@@ -357,11 +357,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the y location of the rect.
      * @param y the new y location
      */
-    public void setY(int paramInt) {
+    public void setY(int y) {
         if (this.fixedRect != null)
-            setY(paramInt);
+            setY(y);
         else {
-            _setYI(paramInt);
+            _setYI(y);
         }
     }
 
@@ -369,12 +369,12 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the y location of the rect.
      * @param y the new y location
      */
-    public void setY(float paramFloat) {
+    public void setY(float y) {
         if (this.fixedRect == null) {
             this.fixedRect = new byte[16];
         }
-        _setYF(paramFloat);
-        _setYI((int) paramFloat);
+        _setYF(y);
+        _setYI((int) y);
     }
 
     /**
@@ -411,11 +411,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the width of the QDRect.
      * @param width the new width
      */
-    public void setWidth(int paramInt) {
+    public void setWidth(int width) {
         if (this.fixedRect != null)
-            setWidth(paramInt);
+            setWidth(width);
         else {
-            setRight(Math.abs(paramInt) + getX());
+            setRight(Math.abs(width) + getX());
         }
     }
 
@@ -423,11 +423,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the width of the QDRect.
      * @param width the new width
      */
-    public void setWidth(float paramFloat) {
+    public void setWidth(float width) {
         if (this.fixedRect == null)
             this.fixedRect = new byte[16];
-        setRight(Math.abs(paramFloat) + getXF());
-        setRight(Math.abs(paramFloat) + getX());
+        setRight(Math.abs(width) + getXF());
+        setRight(Math.abs(width) + getX());
     }
 
     /**
@@ -450,11 +450,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the height of the QDRect.
      * @param height the new height
      */
-    public void setHeight(int paramInt) {
+    public void setHeight(int height) {
         if (this.fixedRect != null)
-            setHeight(paramInt);
+            setHeight(height);
         else {
-            setBottom(Math.abs(paramInt) + getY());
+            setBottom(Math.abs(height) + getY());
         }
     }
 
@@ -462,11 +462,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Set the height of the QDRect.
      * @param height the new height
      */
-    public void setHeight(float paramFloat) {
+    public void setHeight(float height) {
         if (this.fixedRect == null)
             this.fixedRect = new byte[16];
-        setBottom(Math.abs(paramFloat) + getYF());
-        setBottom(Math.abs(paramFloat) + getY());
+        setBottom(Math.abs(height) + getYF());
+        setBottom(Math.abs(height) + getY());
     }
 
     /**
@@ -538,8 +538,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param x the x coordinate
      * @param y the y coordinate
      */
-    public boolean inside(int paramInt1, int paramInt2) {
-        return (paramInt1 >= getX()) && (paramInt1 < getRight()) && (paramInt2 >= getY()) && (paramInt2 < getBottom());
+    public boolean inside(int x, int y) {
+        return (x >= getX()) && (x < getRight()) && (y >= getY()) && (y < getBottom());
     }
 
     /**
@@ -547,8 +547,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param x the x coordinate
      * @param y the y coordinate
      */
-    public boolean inside(float paramFloat1, float paramFloat2) {
-        return (paramFloat1 >= getXF()) && (paramFloat1 < getRightF()) && (paramFloat2 >= getYF()) && (paramFloat2 < getBottomF());
+    public boolean inside(float x, float y) {
+        return (x >= getXF()) && (x < getRightF()) && (y >= getYF()) && (y < getBottomF());
     }
 
     /**
@@ -567,18 +567,18 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param r the rect to intersect with
      * @return a QDRect
      */
-    public QDRect intersection(QDRect paramQDRect) {
-        if ((this.fixedRect != null) && (paramQDRect.fixedRect != null)) {
-            float f1 = Math.max(getXF(), paramQDRect.getXF());
-            float f2 = Math.min(getRightF(), paramQDRect.getRightF());
-            float f3 = Math.max(getYF(), paramQDRect.getYF());
-            float f4 = Math.min(getBottomF(), paramQDRect.getBottomF());
+    public QDRect intersection(QDRect r) {
+        if ((this.fixedRect != null) && (r.fixedRect != null)) {
+            float f1 = Math.max(getXF(), r.getXF());
+            float f2 = Math.min(getRightF(), r.getRightF());
+            float f3 = Math.max(getYF(), r.getYF());
+            float f4 = Math.min(getBottomF(), r.getBottomF());
             return new QDRect(f1, f3, f2 - f1, f4 - f3);
         }
-        int i = Math.max(getX(), paramQDRect.getX());
-        int j = Math.min(getRight(), paramQDRect.getRight());
-        int k = Math.max(getY(), paramQDRect.getY());
-        int m = Math.min(getBottom(), paramQDRect.getBottom());
+        int i = Math.max(getX(), r.getX());
+        int j = Math.min(getRight(), r.getRight());
+        int k = Math.max(getY(), r.getY());
+        int m = Math.min(getBottom(), r.getBottom());
         return new QDRect(i, k, j - i, m - k);
     }
 
@@ -588,18 +588,18 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param r the rect to unify with this
      * @return a rect
      */
-    public QDRect union(QDRect paramQDRect) {
-        if ((this.fixedRect != null) && (paramQDRect.fixedRect != null)) {
-            float f1 = Math.min(getXF(), paramQDRect.getXF());
-            float f2 = Math.max(getRightF(), paramQDRect.getRightF());
-            float f3 = Math.min(getYF(), paramQDRect.getYF());
-            float f4 = Math.max(getBottomF(), paramQDRect.getBottomF());
+    public QDRect union(QDRect r) {
+        if ((this.fixedRect != null) && (r.fixedRect != null)) {
+            float f1 = Math.min(getXF(), r.getXF());
+            float f2 = Math.max(getRightF(), r.getRightF());
+            float f3 = Math.min(getYF(), r.getYF());
+            float f4 = Math.max(getBottomF(), r.getBottomF());
             return new QDRect(f1, f3, f2 - f1, f4 - f3);
         }
-        int i = Math.min(getX(), paramQDRect.getX());
-        int j = Math.max(getRight(), paramQDRect.getRight());
-        int k = Math.min(getY(), paramQDRect.getY());
-        int m = Math.max(getBottom(), paramQDRect.getBottom());
+        int i = Math.min(getX(), r.getX());
+        int j = Math.max(getRight(), r.getRight());
+        int k = Math.min(getY(), r.getY());
+        int m = Math.max(getBottom(), r.getBottom());
         return new QDRect(i, k, j - i, m - k);
     }
 
@@ -641,8 +641,8 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * @param pt the Point to add
      * @see quicktime.qd.QDRect#add(quicktime.qd.QDPoint)
      */
-    public void add(Point paramPoint) {
-        add(paramPoint.x, paramPoint.y);
+    public void add(Point pt) {
+        add(pt.x, pt.y);
     }
 
     /**
@@ -650,11 +650,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * QDRect that contains both the existing rectangle and the new point.
      * @param pt the QDPoint to add
      */
-    public void add(QDPoint paramQDPoint) {
-        if (paramQDPoint.floatPt == null)
-            add(paramQDPoint.getX(), paramQDPoint.getY());
+    public void add(QDPoint pt) {
+        if (pt.floatPt == null)
+            add(pt.getX(), pt.getY());
         else {
-            add(paramQDPoint.getXF(), paramQDPoint.getYF());
+            add(pt.getXF(), pt.getYF());
         }
     }
 

@@ -53,10 +53,10 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
      * @param axis The axis specification: 0 - X, 1 - Y, 2 - Z.
      * @param radians The angle mesuared in radians.
      */
-    public RotateTransformData(int paramInt, float paramFloat) {
+    public RotateTransformData(int axis, float radians) {
         this();
-        setAxis(paramInt);
-        setRadian(paramFloat);
+        setAxis(axis);
+        setRadian(radians);
     }
 
     private RotateTransformData(byte[] paramArrayOfByte) {

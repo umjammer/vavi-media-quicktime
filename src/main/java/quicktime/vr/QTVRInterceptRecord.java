@@ -82,11 +82,11 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * @param angle the angle in Radians.
      * @throws quicktime.QTException
      */
-    public void setAngle(float paramFloat) throws QTException {
+    public void setAngle(float angle) throws QTException {
         int i = getSelector();
         if ((i == 8192) || (i == 8193)) {
             int j = getIntAt(20);
-            setFloatInPointer(j, 0, paramFloat);
+            setFloatInPointer(j, 0, angle);
         }
         throw new QTException(-50);
     }
@@ -113,12 +113,12 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * @param fieldOfView the field of view
      * @throws quicktime.QTException
      */
-    public void setFieldOfView(float paramFloat) throws QTException {
+    public void setFieldOfView(float fieldOfView) throws QTException {
         int i = getSelector();
         if (i != 8194)
             throw new QTException(-50);
         int j = getIntAt(20);
-        setFloatInPointer(j, 0, paramFloat);
+        setFloatInPointer(j, 0, fieldOfView);
     }
 
     /**
@@ -145,13 +145,13 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * @param viewCenter the new view center
      * @throws quicktime.QTException
      */
-    public void setViewCenter(QDPoint paramQDPoint) throws QTException {
+    public void setViewCenter(QDPoint viewCenter) throws QTException {
         int i = getSelector();
         if (i != 8195)
             throw new QTException(-50);
         int j = getIntAt(20);
-        setFloatInPointer(j, 0, paramQDPoint.getXF());
-        setFloatInPointer(j, 4, paramQDPoint.getYF());
+        setFloatInPointer(j, 0, viewCenter.getXF());
+        setFloatInPointer(j, 4, viewCenter.getYF());
     }
 
     /**
@@ -176,10 +176,10 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * @param hotSpotID the new hot spot ID
      * @throws quicktime.QTException
      */
-    public void setHotSpotID(int paramInt) throws QTException {
+    public void setHotSpotID(int hotSpotID) throws QTException {
         int i = getSelector();
         if ((i == 8202) || (i == 8203)) {
-            setIntAt(20, paramInt);
+            setIntAt(20, hotSpotID);
         }
         throw new QTException(-50);
     }
@@ -205,11 +205,11 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * @param hotSpotType the new hot spot type
      * @throws quicktime.QTException
      */
-    public void setHotSpotType(int paramInt) throws QTException {
+    public void setHotSpotType(int hotSpotType) throws QTException {
         if (getSelector() != 8203)
             throw new QTException(-50);
         int i = getIntAt(24);
-        setIntInPointer(i, 0, paramInt);
+        setIntInPointer(i, 0, hotSpotType);
     }
 
     /**

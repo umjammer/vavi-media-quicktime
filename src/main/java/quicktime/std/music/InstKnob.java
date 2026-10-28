@@ -48,8 +48,8 @@ public final class InstKnob extends QTByteObject {
      * The number of the knob.
      * @param number -
      */
-    public void setNumber(int paramInt) {
-        setIntAt(0, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setNumber(int number) {
+        setIntAt(0, EndianOrder.flipNativeToBigEndian32(number));
     }
 
     void _setNumber(int paramInt) {
@@ -68,8 +68,8 @@ public final class InstKnob extends QTByteObject {
      * The value of the knob.
      * @param value -
      */
-    public void setValue(int paramInt) {
-        setIntAt(4, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setValue(int value) {
+        setIntAt(4, EndianOrder.flipNativeToBigEndian32(value));
     }
 
     void _setValue(int paramInt) {

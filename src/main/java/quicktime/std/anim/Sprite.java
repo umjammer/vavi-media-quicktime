@@ -54,9 +54,9 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param visible True if the sprite is visible.
      * @param layer The sprite's layer.
      */
-    public Sprite(SpriteWorld paramSpriteWorld, ImageDescription paramImageDescription, EncodedImage paramEncodedImage, Matrix paramMatrix, boolean paramBoolean, int paramInt) throws QTException {
-        super(allocate(paramSpriteWorld, paramImageDescription, paramEncodedImage, paramMatrix, paramBoolean, paramInt));
-        this.sw = paramSpriteWorld;
+    public Sprite(SpriteWorld itsSpriteWorld, ImageDescription idh, EncodedImage imageData, Matrix matrix, boolean visible, int layer) throws QTException {
+        super(allocate(itsSpriteWorld, idh, imageData, matrix, visible, layer));
+        this.sw = itsSpriteWorld;
     }
 
     private static int allocate(SpriteWorld paramSpriteWorld, ImageDescription paramImageDescription, EncodedImage paramEncodedImage, Matrix paramMatrix, boolean paramBoolean, int paramInt) throws StdQTException {
@@ -102,10 +102,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @return true if the point is inside the sprite, false if not.
      * @throws quicktime.std.StdQTException
      */
-    public boolean hitTest(int paramInt, QDPoint paramQDPoint) throws StdQTException {
+    public boolean hitTest(int flags, QDPoint loc) throws StdQTException {
         byte[] arrayOfByte = { 0 };
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SpriteHitTest(_ID(), paramInt, paramQDPoint.getPoint(), arrayOfByte));
+            StdQTException.checkError(SpriteHitTest(_ID(), flags, loc.getPoint(), arrayOfByte));
         }
         return arrayOfByte[0] != 0;
     }
@@ -131,9 +131,9 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param matrix Specifies the matrix.
      * @throws quicktime.std.StdQTException
      */
-    public void setMatrix(Matrix paramMatrix) throws StdQTException {
+    public void setMatrix(Matrix matrix) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            int i = SetSpriteProperty(_ID(), 1, paramMatrix.getBytes());
+            int i = SetSpriteProperty(_ID(), 1, matrix.getBytes());
             StdQTException.checkError(i);
         }
     }
@@ -188,14 +188,14 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param idh Specifies the image description.
      * @throws quicktime.std.StdQTException
      */
-    public void setImageDescription(ImageDescription paramImageDescription) throws StdQTException {
+    public void setImageDescription(ImageDescription idh) throws StdQTException {
         int[] arrayOfInt = { 0 };
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
             StdQTException.checkError(i);
-            if (arrayOfInt[0] == QTObject.ID(paramImageDescription))
+            if (arrayOfInt[0] == QTObject.ID(idh))
                 return;
-            i = SetSpriteProperty(_ID(), 2, QTObject.ID(paramImageDescription));
+            i = SetSpriteProperty(_ID(), 2, QTObject.ID(idh));
             StdQTException.checkError(i);
         }
     }
@@ -219,19 +219,19 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param data Specifies the image data.
      * @throws quicktime.std.StdQTException
      */
-    public void setImageData(EncodedImage paramEncodedImage) throws StdQTException {
+    public void setImageData(EncodedImage data) throws StdQTException {
         int i = -50;
         synchronized (QTNative.globalsLock) {
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = SetSpriteProperty(_ID(), 3, ((ByteEncodedImage) paramEncodedImage).getBytes());
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = SetSpriteProperty(_ID(), 3, ((IntEncodedImage) paramEncodedImage).getInts());
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = SetSpriteProperty(_ID(), 3, QTObject.ID((RawEncodedImage) paramEncodedImage));
+            if ((data instanceof ByteEncodedImage)) {
+                i = SetSpriteProperty(_ID(), 3, ((ByteEncodedImage) data).getBytes());
+            } else if ((data instanceof IntEncodedImage)) {
+                i = SetSpriteProperty(_ID(), 3, ((IntEncodedImage) data).getInts());
+            } else if ((data instanceof RawEncodedImage)) {
+                i = SetSpriteProperty(_ID(), 3, QTObject.ID((RawEncodedImage) data));
             }
             StdQTException.checkError(i);
         }
-        setImageDataSize(paramEncodedImage.getSize());
+        setImageDataSize(data.getSize());
     }
 
     /**
@@ -248,7 +248,7 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      *  than the previous data the sprite was presented.
      * @throws quicktime.std.StdQTException
      */
-    public boolean setImageDataIfDifferent(EncodedImage paramEncodedImage) throws StdQTException {
+    public boolean setImageDataIfDifferent(EncodedImage data) throws StdQTException {
         int[] arrayOfInt = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
@@ -257,19 +257,19 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
         }
         i = -50;
         synchronized (QTNative.globalsLock) {
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = SetSpriteProperty(_ID(), 3, ((ByteEncodedImage) paramEncodedImage).getBytes());
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = SetSpriteProperty(_ID(), 3, ((IntEncodedImage) paramEncodedImage).getInts());
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = SetSpriteProperty(_ID(), 3, QTObject.ID((RawEncodedImage) paramEncodedImage));
+            if ((data instanceof ByteEncodedImage)) {
+                i = SetSpriteProperty(_ID(), 3, ((ByteEncodedImage) data).getBytes());
+            } else if ((data instanceof IntEncodedImage)) {
+                i = SetSpriteProperty(_ID(), 3, ((IntEncodedImage) data).getInts());
+            } else if ((data instanceof RawEncodedImage)) {
+                i = SetSpriteProperty(_ID(), 3, QTObject.ID((RawEncodedImage) data));
             }
             StdQTException.checkError(i);
         }
         int[] ai1 = new int[] { 0 };
         GetSpriteProperty(_ID(), 3, ai1);
         if (ai1[0] != arrayOfInt[0]) {
-            setImageDataSize(paramEncodedImage.getSize());
+            setImageDataSize(data.getSize());
             return true;
         }
         return false;
@@ -296,8 +296,8 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param visible Specifies the visibility.
      * @throws quicktime.std.StdQTException
      */
-    public void setVisible(boolean paramBoolean) throws StdQTException {
-        int i = (byte) (paramBoolean ? 1 : 0);
+    public void setVisible(boolean visible) throws StdQTException {
+        int i = (byte) (visible ? 1 : 0);
         synchronized (QTNative.globalsLock) {
             int j = SetSpriteProperty(_ID(), 4, (short) i);
             StdQTException.checkError(j);
@@ -325,9 +325,9 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param layer Specifies the layer.
      * @throws quicktime.std.StdQTException
      */
-    public void setLayer(int paramInt) throws StdQTException {
+    public void setLayer(int layer) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            int i = SetSpriteProperty(_ID(), 5, (short) paramInt);
+            int i = SetSpriteProperty(_ID(), 5, (short) layer);
             StdQTException.checkError(i);
         }
     }
@@ -353,10 +353,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param gMode Specifies the graphics mode.
      * @throws quicktime.std.StdQTException
      */
-    public void setGraphicsMode(GraphicsMode paramGraphicsMode) throws StdQTException {
+    public void setGraphicsMode(GraphicsMode gMode) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            if (paramGraphicsMode != null) {
-                int i = SetSpriteProperty(_ID(), 6, paramGraphicsMode.getBytes());
+            if (gMode != null) {
+                int i = SetSpriteProperty(_ID(), 6, gMode.getBytes());
                 StdQTException.checkError(i);
             }
         }
@@ -384,9 +384,9 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @param size the size of the image data
      * @throws quicktime.std.StdQTException
      */
-    public void setImageDataSize(int paramInt) throws StdQTException {
+    public void setImageDataSize(int size) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            int i = SetSpriteProperty(_ID(), 7, paramInt);
+            int i = SetSpriteProperty(_ID(), 7, size);
             StdQTException.checkError(i);
         }
     }

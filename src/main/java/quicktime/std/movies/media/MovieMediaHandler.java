@@ -118,9 +118,9 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @return the media type of the movie
      * @throws quicktime.std.StdQTException
      */
-    public int getCurrentTrackPropertyMediaType(int paramInt) throws StdQTException {
+    public int getCurrentTrackPropertyMediaType(int trackID) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = MovieMediaGetCurrentTrackProperty(_ID(), 1836349808, paramInt, arrayOfInt);
+        int i = MovieMediaGetCurrentTrackProperty(_ID(), 1836349808, trackID, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -133,10 +133,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @return the DataRef of the movie
      * @throws quicktime.QTException
      */
-    public DataRef getChildMovieDataReference(int paramInt1, int paramInt2) throws QTException {
+    public DataRef getChildMovieDataReference(int dataRefID, int dataRefIndex) throws QTException {
         int i = 0;
         byte[] arrayOfByte = { 0 };
-        int j = MovieMediaGetChildMovieDataReference(_ID(), paramInt1, paramInt2, i, arrayOfByte, paramInt1, paramInt2);
+        int j = MovieMediaGetChildMovieDataReference(_ID(), dataRefID, dataRefIndex, i, arrayOfByte, dataRefID, dataRefIndex);
         StdQTException.checkError(j);
         return new DataRef(new QTHandle(arrayOfByte));
     }
@@ -149,8 +149,8 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @param dataRef the data ref to set
      * @throws quicktime.std.StdQTException
      */
-    public void setChildMovieDataReference(int paramInt1, int paramInt2, DataRef paramDataRef) throws StdQTException {
-        int i = MovieMediaSetChildMovieDataReference(_ID(), paramInt1, paramInt2, paramDataRef.getBytes());
+    public void setChildMovieDataReference(int dataRefID, int dataRefType, DataRef dataRef) throws StdQTException {
+        int i = MovieMediaSetChildMovieDataReference(_ID(), dataRefID, dataRefType, dataRef.getBytes());
         StdQTException.checkError(i);
     }
 
@@ -160,8 +160,8 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @param dataRefID the dataReference ID to be used
      * @throws quicktime.std.StdQTException
      */
-    public void loadChildMovieFromDataReference(int paramInt) throws StdQTException {
-        int i = MovieMediaLoadChildMovieFromDataReference(_ID(), paramInt);
+    public void loadChildMovieFromDataReference(int dataRefID) throws StdQTException {
+        int i = MovieMediaLoadChildMovieFromDataReference(_ID(), dataRefID);
         StdQTException.checkError(i);
     }
 

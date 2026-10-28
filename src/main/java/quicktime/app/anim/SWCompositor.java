@@ -105,12 +105,12 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param period the initial period of the Space's timer
      * @param defaultProtocol the minimal Protocol that members of the SWCompositor must meet
      */
-    protected SWCompositor(QDGraphics paramQDGraphics1, QDColor paramQDColor, QDGraphics paramQDGraphics2, int paramInt1, int paramInt2, Protocol paramProtocol) throws QTException {
-        super(paramProtocol, paramInt1, paramInt2);
-        this.mSpriteGWorld = paramQDGraphics1;
-        this.mBGColor = paramQDColor;
-        this.mBGPict = paramQDGraphics2;
-        this.bnds = paramQDGraphics1.getPortRect();
+    protected SWCompositor(QDGraphics spriteGWorld, QDColor background, QDGraphics backgroundColor, int scale, int period, Protocol defaultProtocol) throws QTException {
+        super(defaultProtocol, scale, period);
+        this.mSpriteGWorld = spriteGWorld;
+        this.mBGColor = background;
+        this.mBGPict = backgroundColor;
+        this.bnds = spriteGWorld.getPortRect();
     }
 
     /**
@@ -257,15 +257,15 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param member a member of the Compositor
      * @return an Invalidator
      */
-    public synchronized Invalidator getMemberInvalidator(Object paramObject) {
-        if (!hasMember(paramObject))
+    public synchronized Invalidator getMemberInvalidator(Object member) {
+        if (!hasMember(member))
             return null;
         if (this.invalList == null)
             return null;
         Enumeration localEnumeration = this.invalList.members();
         while (localEnumeration.hasMoreElements()) {
             Invalidator localInvalidator = (Invalidator) localEnumeration.nextElement();
-            if (localInvalidator.getTarget().equals(paramObject))
+            if (localInvalidator.getTarget().equals(member))
                 return localInvalidator;
         }
         return null;
@@ -280,9 +280,9 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param rm the RecordMovie object
      * @throws quicktime.QTException
      */
-    public void setRecordMovie(RecordMovie paramRecordMovie) throws QTException {
-        this.rm = paramRecordMovie;
-        paramRecordMovie.addedToSource(this.mSpriteGWorld);
+    public void setRecordMovie(RecordMovie rm) throws QTException {
+        this.rm = rm;
+        rm.addedToSource(this.mSpriteGWorld);
         this.recordMovie = true;
     }
 
@@ -408,20 +408,20 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        if (paramQDGraphics == null)
-            paramQDGraphics = QDGraphics.scratch;
-        if (paramQDGraphics.equals(this.mCurrentGrafPort)) {
+    public synchronized void setGWorld(QDGraphics cgp) throws QTException {
+        if (cgp == null)
+            cgp = QDGraphics.scratch;
+        if (cgp.equals(this.mCurrentGrafPort)) {
             return;
         }
         getTimer().setActive(false);
-        if ((this.mSpriteWorld == null) && (!QDGraphics.scratch.equals(paramQDGraphics))) {
-            this.mSpriteWorld = new ASpriteWorld(paramQDGraphics, this.mSpriteGWorld, this.mBGColor, this.mBGPict, this);
+        if ((this.mSpriteWorld == null) && (!QDGraphics.scratch.equals(cgp))) {
+            this.mSpriteWorld = new ASpriteWorld(cgp, this.mSpriteGWorld, this.mBGColor, this.mBGPict, this);
             if (this.gMode != null)
                 this.mSpriteWorld.setGraphicsMode(this.gMode);
             setMatrix(this.savedMatrix);
             createMembers();
-        } else if (QDGraphics.scratch.equals(paramQDGraphics)) {
+        } else if (QDGraphics.scratch.equals(cgp)) {
             saveMembers();
             this.savedMatrix = this.mSpriteWorld.getMatrix();
             this.mSpriteWorld._cleanup();
@@ -431,13 +431,13 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
             this.savedMatrix = this.mSpriteWorld.getMatrix();
             this.mSpriteWorld._cleanup();
             this.mSpriteWorld = null;
-            this.mSpriteWorld = new ASpriteWorld(paramQDGraphics, this.mSpriteGWorld, this.mBGColor, this.mBGPict, this);
+            this.mSpriteWorld = new ASpriteWorld(cgp, this.mSpriteGWorld, this.mBGColor, this.mBGPict, this);
             if (this.gMode != null)
                 this.mSpriteWorld.setGraphicsMode(this.gMode);
             setMatrix(this.savedMatrix);
             createMembers();
         }
-        this.mCurrentGrafPort = paramQDGraphics;
+        this.mCurrentGrafPort = cgp;
         getTimer().setActive(this.mSpriteWorld != null);
     }
 
@@ -451,17 +451,17 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
+    public synchronized void setDisplayBounds(QDRect bounds) throws StdQTException {
         if (this.mSpriteWorld != null) {
-            this.mSpriteWorld.setBounds(paramQDRect);
+            this.mSpriteWorld.setBounds(bounds);
         } else {
-            this.savedMatrix.setTx(paramQDRect.getX());
-            this.savedMatrix.setTy(paramQDRect.getY());
+            this.savedMatrix.setTx(bounds.getX());
+            this.savedMatrix.setTy(bounds.getY());
             QDRect localQDRect = this.mSpriteGWorld.getPortRect();
-            this.savedMatrix.setSx(paramQDRect.getWidth() / localQDRect.getWidth());
-            this.savedMatrix.setSy(paramQDRect.getHeight() / localQDRect.getHeight());
+            this.savedMatrix.setSx(bounds.getWidth() / localQDRect.getWidth());
+            this.savedMatrix.setSy(bounds.getHeight() / localQDRect.getHeight());
         }
-        this.bnds = paramQDRect;
+        this.bnds = bounds;
     }
 
     /**
@@ -473,10 +473,10 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -507,11 +507,11 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public final void redraw(Region paramRegion) throws QTException {
+    public final void redraw(Region invalidRgn) throws QTException {
         if (this.mSpriteWorld != null) {
             QDRect localQDRect1 = null;
-            if (paramRegion != null) {
-                QDRect localQDRect2 = paramRegion.getRgnBBox();
+            if (invalidRgn != null) {
+                QDRect localQDRect2 = invalidRgn.getRgnBBox();
                 localQDRect1 = localQDRect2.union(getDisplayBounds());
                 if (localQDRect2.equals(localQDRect1)) {
                     localQDRect1 = null;
@@ -557,8 +557,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * is called. This flag only controls whether the SWCompositor's member sprites will automatically redraw their parents.
      * @param flag controls the auto redrawing capability of a SWCompositor. By default the auto-redrawing is set to true.
      */
-    public void setAutoRedrawing(boolean paramBoolean) {
-        this.autoRedraw = paramBoolean;
+    public void setAutoRedrawing(boolean flag) {
+        this.autoRedraw = flag;
     }
 
     /**
@@ -597,10 +597,10 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public Object hitTest(int paramInt1, int paramInt2) throws QTException {
+    public Object hitTest(int x, int y) throws QTException {
         if (this.mSpriteWorld != null) {
-            this.hitTestPoint.setX(paramInt1);
-            this.hitTestPoint.setY(paramInt2);
+            this.hitTestPoint.setX(x);
+            this.hitTestPoint.setY(y);
             if ((getClip() != null) && (!getClip().pointIn(this.hitTestPoint))) {
                 return null;
             }
@@ -627,11 +627,11 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public void setClip(Region paramRegion) throws QTException {
+    public void setClip(Region clipRgn) throws QTException {
         if (this.mSpriteWorld != null) {
-            this.mSpriteWorld.setClip(paramRegion);
+            this.mSpriteWorld.setClip(clipRgn);
         }
-        this.mClip = paramRegion;
+        this.mClip = clipRgn;
     }
 
     /**
@@ -679,7 +679,7 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException {
+    public synchronized void removedFromCompositor(SWCompositor c) throws QTException {
         this.spritePresenter.spriteIsCompositor = null;
         this.spritePresenter = null;
         this.parent = null;
@@ -711,14 +711,14 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @see quicktime.app.display.SWCompositor
      */
     @Override
-    public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException {
+    public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) throws QTException {
         if (this.spritePresenter != null)
             removedFromCompositor(null);
         setGWorld(QDGraphics.validScratch);
         this.taskFlag = 1;
-        this.spritePresenter = paramTwoDSprite;
+        this.spritePresenter = s;
         this.spritePresenter.spriteIsCompositor = this;
-        this.parent = paramSWCompositor;
+        this.parent = c;
         return null;
     }
 
@@ -743,7 +743,7 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @throws quicktime.QTException
      */
     @Override
-    public void setGraphicsMode(GraphicsMode gMode) throws QTException {
+    public void setGraphicsMode(GraphicsMode mode) throws QTException {
         if (this.mSpriteWorld != null)
             this.mSpriteWorld.setGraphicsMode(gMode);
         this.gMode = gMode;
@@ -757,8 +757,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param member the member object
      * @return the member's TwoDSprite presenter
      */
-    public Compositable getCompositable(Object paramObject) {
-        return getMemberSprite(paramObject);
+    public Compositable getCompositable(Object member) {
+        return getMemberSprite(member);
     }
 
     /**
@@ -770,8 +770,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @return the member's TwoDSprite presenter
      */
     @Override
-    public Layerable getLayerable(Object paramObject) {
-        return getMemberSprite(paramObject);
+    public Layerable getLayerable(Object member) {
+        return getMemberSprite(member);
     }
 
     /**
@@ -783,8 +783,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @return the member's TwoDSprite presenter
      */
     @Override
-    public Transformable getTransformable(Object paramObject) {
-        return getMemberSprite(paramObject);
+    public Transformable getTransformable(Object member) {
+        return getMemberSprite(member);
     }
 
     /**
@@ -802,15 +802,15 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param s the TwoDSprite that will present this member
      * @throws quicktime.QTException
      */
-    protected synchronized void postProcessAdd(Object paramObject, TwoDSprite paramTwoDSprite) throws QTException {
-        doDynamicImageAdd(paramObject, paramTwoDSprite);
-        paramTwoDSprite.setParent(this);
-        if ((paramObject instanceof Notifier localNotifier)) {
-            localNotifier.addNotifyListener(paramTwoDSprite);
+    protected synchronized void postProcessAdd(Object member, TwoDSprite s) throws QTException {
+        doDynamicImageAdd(member, s);
+        s.setParent(this);
+        if ((member instanceof Notifier localNotifier)) {
+            localNotifier.addNotifyListener(s);
         }
-        memberAdded(paramObject);
+        memberAdded(member);
         if (this.mSpriteWorld != null) {
-            paramTwoDSprite.createSprite(this.mSpriteWorld);
+            s.createSprite(this.mSpriteWorld);
             if (this.autoRedraw) {
                 idle();
             }
@@ -830,11 +830,11 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param s the TwoDSprite that presented this member
      * @throws quicktime.QTException
      */
-    protected synchronized void postProcessRemove(Object paramObject, TwoDSprite paramTwoDSprite) throws QTException {
-        doDynamicImageRemove(paramObject, paramTwoDSprite);
-        memberRemoved(paramObject);
-        paramTwoDSprite.remove();
-        paramTwoDSprite.setParent(null);
+    protected synchronized void postProcessRemove(Object member, TwoDSprite s) throws QTException {
+        doDynamicImageRemove(member, s);
+        memberRemoved(member);
+        s.remove();
+        s.setParent(null);
         if ((this.autoRedraw) && (this.mSpriteWorld != null)) {
             idle();
         }
@@ -970,7 +970,7 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param member the member object
      * @return the member's TwoDSprite presenter
      */
-    public abstract TwoDSprite getMemberSprite(Object paramObject);
+    public abstract TwoDSprite getMemberSprite(Object member);
 
     /**
      * @deprecated
@@ -989,6 +989,6 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @param sprite the TwoDSprite presenter
      * @return the member that is being presented by the supplied TwoDSprite presenter
      */
-    public abstract Object getSpriteMember(TwoDSprite paramTwoDSprite);
+    public abstract Object getSpriteMember(TwoDSprite sprite);
 }
 

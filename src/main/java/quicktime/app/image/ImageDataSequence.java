@@ -53,8 +53,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * Creates an ImageDataSequence with an initial description
      * @param desc the description that will describe the subsequently added image data
      */
-    public ImageDataSequence(ImageDescription paramImageDescription) {
-        this(paramImageDescription, new Vector());
+    public ImageDataSequence(ImageDescription desc) {
+        this(desc, new Vector());
     }
 
     ImageDataSequence(ImageDescription paramImageDescription, Vector paramVector) {
@@ -81,8 +81,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * data objects are to be interpreted by QT.
      * @param desc the new description
      */
-    public void setDescription(ImageDescription paramImageDescription) {
-        this.imageDescription = paramImageDescription;
+    public void setDescription(ImageDescription desc) {
+        this.imageDescription = desc;
     }
 
     /**
@@ -105,8 +105,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * @param index is the index to the data frame
      * @return the image data
      */
-    public EncodedImage getImage(int paramInt) {
-        return getNth(paramInt);
+    public EncodedImage getImage(int index) {
+        return getNth(index);
     }
 
     /**
@@ -187,8 +187,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * @return a boolean
      */
     @Override
-    public boolean hasMember(Object member) {
-        return this.imageDataVector.contains(member);
+    public boolean hasMember(Object object) {
+        return this.imageDataVector.contains(object);
     }
 
     /**
@@ -201,8 +201,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * @param index The position in the sequence to add.
      * @throws java.lang.ArrayIndexOutOfBoundsException if index value is beyond the size of the collection.
      */
-    public void insert(EncodedImage paramEncodedImage, int paramInt) {
-        this.imageDataVector.insertElementAt(paramEncodedImage, paramInt - 1);
+    public void insert(EncodedImage image, int index) {
+        this.imageDataVector.insertElementAt(image, index - 1);
     }
 
     /**
@@ -211,8 +211,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * Add the image description object as the first item in the collection
      * @param image The image data to add.
      */
-    public void prepend(EncodedImage paramEncodedImage) {
-        insert(paramEncodedImage, 1);
+    public void prepend(EncodedImage image) {
+        insert(image, 1);
     }
 
     /**
@@ -221,8 +221,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * Add the image description object to the end of the collection
      * @param image The image data to add.
      */
-    public void append(EncodedImage paramEncodedImage) {
-        insert(paramEncodedImage, size() + 1);
+    public void append(EncodedImage image) {
+        insert(image, size() + 1);
     }
 
     /**
@@ -232,8 +232,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * @param i The position in the sequence to delete.
      * @throws java.lang.ArrayIndexOutOfBoundsException if index value is beyond the size of the collection.
      */
-    public void remove(int paramInt) {
-        this.imageDataVector.removeElementAt(paramInt - 1);
+    public void remove(int i) {
+        this.imageDataVector.removeElementAt(i - 1);
     }
 
     /**
@@ -284,8 +284,8 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * @return the image data.
      * @throws java.lang.ArrayIndexOutOfBoundsException if index value is beyond the size of the collection.
      */
-    public EncodedImage getNth(int paramInt) {
-        return (EncodedImage) this.imageDataVector.elementAt(paramInt - 1);
+    public EncodedImage getNth(int index) {
+        return (EncodedImage) this.imageDataVector.elementAt(index - 1);
     }
 
     /**
@@ -309,10 +309,10 @@ public class ImageDataSequence implements ImageSpec, Collection {
      * @param framesPerSecond how many frames per second the image data should be inserted at
      * @throws quicktime.QTException
      */
-    public void addToMovie(Movie paramMovie, float paramFloat) throws QTException {
+    public void addToMovie(Movie theMovie, float framesPerSecond) throws QTException {
         int i = 0;
         int j = 600;
-        Track localTrack = paramMovie.addTrack(this.imageDescription.getWidth(), this.imageDescription.getHeight(), i);
+        Track localTrack = theMovie.addTrack(this.imageDescription.getWidth(), this.imageDescription.getHeight(), i);
         VideoMedia localVideoMedia = new VideoMedia(localTrack, j);
         localVideoMedia.beginEdits();
         for (int k = 0; k < size(); k++) {
@@ -331,7 +331,7 @@ public class ImageDataSequence implements ImageSpec, Collection {
                     localQTHandle.copyFromArray(0, localObject, 0, localObject.length);
                 }
             }
-            localVideoMedia.addSample(localQTHandle, 0, localQTHandle.getSize(), (int) (600.0F / paramFloat), this.imageDescription, 1, 0);
+            localVideoMedia.addSample(localQTHandle, 0, localQTHandle.getSize(), (int) (600.0F / framesPerSecond), this.imageDescription, 1, 0);
             if (k % 5 == 0)
                 QTUtils.reclaimMemory();
         }

@@ -28,8 +28,8 @@ public class ImageSequencer extends Sequencer implements ImageSpec {
      * Construct an ImageSequencer that will iterate over an ImageDataSequence.
      * @param images the images
      */
-    public ImageSequencer(ImageDataSequence paramImageDataSequence) {
-        setImageData(paramImageDataSequence);
+    public ImageSequencer(ImageDataSequence images) {
+        setImageData(images);
     }
 
     /**
@@ -50,8 +50,8 @@ public class ImageSequencer extends Sequencer implements ImageSpec {
      * until your next draw call
      * @param images the new image data
      */
-    public void setImageData(ImageDataSequence paramImageDataSequence) {
-        this.mImages = paramImageDataSequence;
+    public void setImageData(ImageDataSequence images) {
+        this.mImages = images;
     }
 
     /**

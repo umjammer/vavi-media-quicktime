@@ -37,9 +37,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * This constructor creates a MoviePlayer object given a QuickTime Movie object.
      * @param mov a Movie object
      */
-    public MoviePlayer(Movie paramMovie) throws StdQTException {
-        this.mMovie = paramMovie;
-        paramMovie.setPlayHints(256, 256);
+    public MoviePlayer(Movie mov) throws StdQTException {
+        this.mMovie = mov;
+        mov.setPlayHints(256, 256);
     }
 
     /**
@@ -57,7 +57,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
+    public void addedTo(Object interest) {
     }
 
     /**
@@ -68,7 +68,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
     }
 
     /**
@@ -91,11 +91,11 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public synchronized void setGWorld(QDGraphics paramQDGraphics) throws StdQTException {
-        if (getGWorld().equals(paramQDGraphics))
+    public synchronized void setGWorld(QDGraphics cgp) throws StdQTException {
+        if (getGWorld().equals(cgp))
             return;
-        this.mMovie.setGWorld(paramQDGraphics, null);
-        if (QDGraphics.scratch.equals(paramQDGraphics)) {
+        this.mMovie.setGWorld(cgp, null);
+        if (QDGraphics.scratch.equals(cgp)) {
             TaskAllMovies.removeMovie();
             setRate(0.0F);
             this.mMovie.setActive(false);
@@ -160,9 +160,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @throws quicktime.QTException
      */
     @Override
-    public final void redraw(Region paramRegion) throws QTException {
-        if (paramRegion != null) {
-            this.mMovie.invalidateRegion(paramRegion);
+    public final void redraw(Region invalidRgn) throws QTException {
+        if (invalidRgn != null) {
+            this.mMovie.invalidateRegion(invalidRgn);
         } else
             this.mMovie.invalidateRegion(new Region(this.mMovie.getBounds()));
         this.mMovie.task(0);
@@ -176,8 +176,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
-        this.mMovie.setBounds(paramQDRect);
+    public synchronized void setDisplayBounds(QDRect bounds) throws StdQTException {
+        this.mMovie.setBounds(bounds);
     }
 
     /**
@@ -187,10 +187,10 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -212,8 +212,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @throws quicktime.QTException
      */
     @Override
-    public void setClip(Region paramRegion) throws QTException {
-        this.mMovie.setDisplayClipRgn(paramRegion);
+    public void setClip(Region theClip) throws QTException {
+        this.mMovie.setDisplayClipRgn(theClip);
     }
 
     /**
@@ -234,8 +234,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @param time the new time value
      * @throws quicktime.std.StdQTException
      */
-    public void setTime(int paramInt) throws StdQTException {
-        this.mMovie.setTimeValue(paramInt);
+    public void setTime(int time) throws StdQTException {
+        this.mMovie.setTimeValue(time);
     }
 
     /**
@@ -276,14 +276,14 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setRate(float paramFloat) throws StdQTException {
+    public void setRate(float rate) throws StdQTException {
         synchronized (this) {
-            this.lastRate = paramFloat;
+            this.lastRate = rate;
         }
-        if (paramFloat == 0.0F) {
+        if (rate == 0.0F) {
             this.mMovie.stop();
         } else
-            this.mMovie.prePreroll(this.mMovie.getTime(), paramFloat, new PrerollCallback(paramFloat));
+            this.mMovie.prePreroll(this.mMovie.getTime(), rate, new PrerollCallback(rate));
     }
 
     private float lastRate = 0.0F;
@@ -400,8 +400,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @param val the new volume
      * @throws quicktime.QTException
      */
-    public void setVolume(float paramFloat) throws QTException {
-        float f = Math.abs(paramFloat);
+    public void setVolume(float val) throws QTException {
+        float f = Math.abs(val);
         if (isMuted()) {
             this.mMovie.setVolume(f * -1.0F);
         } else {
@@ -429,9 +429,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * @param flag turn muting on - true or off - false.
      * @throws quicktime.QTException
      */
-    public void setMuted(boolean paramBoolean) throws QTException {
+    public void setMuted(boolean flag) throws QTException {
         float f = Math.abs(this.mMovie.getVolume());
-        if (paramBoolean) {
+        if (flag) {
             this.mMovie.setVolume(f * -1.0F);
         } else {
             this.mMovie.setVolume(f);

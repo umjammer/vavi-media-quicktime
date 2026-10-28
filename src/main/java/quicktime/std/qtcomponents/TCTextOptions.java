@@ -72,8 +72,8 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
      * Sets the txFont field.
      * @param txFont the new font ID
      */
-    public void setTXFont(int paramInt) {
-        setShortAt(0, (short) paramInt);
+    public void setTXFont(int txFont) {
+        setShortAt(0, (short) txFont);
     }
 
     /**
@@ -88,8 +88,8 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
      * Sets the txFace field.
      * @param txFace the new font ID
      */
-    public void setTXFace(int paramInt) {
-        setShortAt(2, (short) paramInt);
+    public void setTXFace(int txFace) {
+        setShortAt(2, (short) txFace);
     }
 
     /**
@@ -104,8 +104,8 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
      * Sets the txSize field.
      * @param txSize the new font ID
      */
-    public void setTXSize(int paramInt) {
-        setShortAt(4, (short) paramInt);
+    public void setTXSize(int txSize) {
+        setShortAt(4, (short) txSize);
     }
 
     /**
@@ -122,8 +122,8 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
      * Sets the foreground Color field.
      * @param foreColor a QDColor
      */
-    public void setForeColor(QDColor paramQDColor) {
-        System.arraycopy(paramQDColor.getRGBColor(), 0, getBytes(), 8, 6);
+    public void setForeColor(QDColor foreColor) {
+        System.arraycopy(foreColor.getRGBColor(), 0, getBytes(), 8, 6);
     }
 
     /**

@@ -31,6 +31,6 @@ public interface MovieProgress {
      * @param percentDone Contains a floating pointe value indicating how far the operation has progressed. Its value is always between 0.0 and 1.0. This parameter is valid only when the message field is set to movieProgressUpdatePercent.
      * @return an error code - noErr (zero) if no error has occured, otherwise a valid error code
      */
-    int execute(Movie paramMovie, int paramInt1, int paramInt2, float paramFloat);
+    int execute(Movie theMovie, int message, int whatOperation, float percentDone);
 }
 

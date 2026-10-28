@@ -186,39 +186,39 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * @return a QDColor
      * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
      */
-    public static QDColor fromArray(byte[] paramArrayOfByte, int paramInt) {
-        if (paramInt > paramArrayOfByte.length)
+    public static QDColor fromArray(byte[] colorBytes, int flag) {
+        if (flag > colorBytes.length)
             throw new IllegalArgumentException("Mismatch between flag and supplied colorBytes");
         QDColor localQDColor;
         float f1;
         float f2;
         float f3;
-        switch(paramInt) {
+        switch(flag) {
             case 6:
                 localQDColor = new QDColor();
-                System.arraycopy(paramArrayOfByte, 0, localQDColor.bytes, 0, 6);
+                System.arraycopy(colorBytes, 0, localQDColor.bytes, 0, 6);
                 return localQDColor;
             case 8:
                 localQDColor = new QDColor();
-                System.arraycopy(paramArrayOfByte, 2, localQDColor.bytes, 0, 6);
-                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(paramArrayOfByte, 0)));
+                System.arraycopy(colorBytes, 2, localQDColor.bytes, 0, 6);
+                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(colorBytes, 0)));
                 return localQDColor;
             case 14:
                 localQDColor = new QDColor();
-                System.arraycopy(paramArrayOfByte, 2, localQDColor.bytes, 0, 6);
-                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(paramArrayOfByte, 0)));
-                localQDColor.endPercent = getIntFromArray(paramArrayOfByte, 8);
+                System.arraycopy(colorBytes, 2, localQDColor.bytes, 0, 6);
+                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(colorBytes, 0)));
+                localQDColor.endPercent = getIntFromArray(colorBytes, 8);
                 return localQDColor;
             case 12:
-                f1 = getFloatFromArray(paramArrayOfByte, 0);
-                f2 = getFloatFromArray(paramArrayOfByte, 4);
-                f3 = getFloatFromArray(paramArrayOfByte, 8);
+                f1 = getFloatFromArray(colorBytes, 0);
+                f2 = getFloatFromArray(colorBytes, 4);
+                f3 = getFloatFromArray(colorBytes, 8);
                 return new QDColor(f1, f2, f3);
             case 16:
-                f1 = getFloatFromArray(paramArrayOfByte, 0);
-                f2 = getFloatFromArray(paramArrayOfByte, 4);
-                f3 = getFloatFromArray(paramArrayOfByte, 8);
-                float f4 = getFloatFromArray(paramArrayOfByte, 12);
+                f1 = getFloatFromArray(colorBytes, 0);
+                f2 = getFloatFromArray(colorBytes, 4);
+                f3 = getFloatFromArray(colorBytes, 8);
+                float f4 = getFloatFromArray(colorBytes, 12);
                 return new QDColor(f2, f3, f4, f1);
         }
         throw new IllegalArgumentException("Unknown color format");
@@ -249,8 +249,8 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * @param green the 16bit green value
      * @param blue the 16bit blue value
      */
-    public QDColor(int paramInt1, int paramInt2, int paramInt3) {
-        this(paramInt1, paramInt2, paramInt3, 65535);
+    public QDColor(int red, int green, int blue) {
+        this(red, green, blue, 65535);
     }
 
     /**
@@ -260,12 +260,12 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * @param blue the 16bit blue value
      * @param alpha the 16bit alpha value
      */
-    public QDColor(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public QDColor(int red, int green, int blue, int alpha) {
         this();
-        setRed(paramInt1);
-        setGreen(paramInt2);
-        setBlue(paramInt3);
-        setAlpha(paramInt4);
+        setRed(red);
+        setGreen(green);
+        setBlue(blue);
+        setAlpha(alpha);
     }
 
     /**
@@ -274,8 +274,8 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * @param green the 0 to 1F green value
      * @param blue the 0 to 1F blue value
      */
-    public QDColor(float paramFloat1, float paramFloat2, float paramFloat3) {
-        this(paramFloat1, paramFloat2, paramFloat3, 1.0F);
+    public QDColor(float red, float green, float blue) {
+        this(red, green, blue, 1.0F);
     }
 
     /**
@@ -285,16 +285,16 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * @param blue the 0 to 1F blue value
      * @param alpha the 0 to 1F alpha value
      */
-    public QDColor(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
+    public QDColor(float red, float green, float blue, float alpha) {
         this();
-        paramFloat1 = checkRange(paramFloat1);
-        paramFloat2 = checkRange(paramFloat2);
-        paramFloat3 = checkRange(paramFloat3);
-        paramFloat4 = checkRange(paramFloat4);
-        setRed((int) (paramFloat1 * 65535.0F + 0.5F));
-        setGreen((int) (paramFloat2 * 65535.0F + 0.5F));
-        setBlue((int) (paramFloat3 * 65535.0F + 0.5F));
-        setAlpha((int) (paramFloat4 * 65535.0F + 0.5F));
+        red = checkRange(red);
+        green = checkRange(green);
+        blue = checkRange(blue);
+        alpha = checkRange(alpha);
+        setRed((int) (red * 65535.0F + 0.5F));
+        setGreen((int) (green * 65535.0F + 0.5F));
+        setBlue((int) (blue * 65535.0F + 0.5F));
+        setAlpha((int) (alpha * 65535.0F + 0.5F));
     }
 
     /**
@@ -306,10 +306,10 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * @param endingPercentage Specifies the percentage of the gradient (expressed as value between
      *  0 and 1 , where 0 is the beginning of the gradient) at which the specified color begins.
      */
-    public QDColor(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
-        this(paramFloat1, paramFloat2, paramFloat3, paramFloat4);
-        setAlpha((int) (paramFloat4 * 65535.0F + 0.5F));
-        this.endPercent = QTUtils.X2Fix(paramFloat5);
+    public QDColor(float red, float green, float blue, float alpha, float endingPercentage) {
+        this(red, green, blue, alpha);
+        setAlpha((int) (alpha * 65535.0F + 0.5F));
+        this.endPercent = QTUtils.X2Fix(endingPercentage);
     }
 
     /**
@@ -318,8 +318,8 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Create an instance of an QDColor class
      * @param color the java.awt.Color class to convert
      */
-    public QDColor(Color paramColor) {
-        this(convert8to16(paramColor.getRed()), convert8to16(paramColor.getGreen()), convert8to16(paramColor.getBlue()));
+    public QDColor(Color color) {
+        this(convert8to16(color.getRed()), convert8to16(color.getGreen()), convert8to16(color.getBlue()));
     }
 
     private QDColor(byte[] paramArrayOfByte, int paramInt) {

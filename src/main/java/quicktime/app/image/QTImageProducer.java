@@ -78,20 +78,20 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * @param qtSource the source of pixel data for the ImageProducer.
      * @param initSize the intial size of the source data
      */
-    public QTImageProducer(QTDrawable paramQTDrawable, Dimension paramDimension) throws QTException {
-        if ((paramQTDrawable instanceof QTPlayer))
-            paramQTDrawable = new MoviePlayer(((QTPlayer) paramQTDrawable).getMovieController().getMovie());
-        this.qtSource = paramQTDrawable;
-        setRedrawing(requiresRedrawing(paramQTDrawable));
+    public QTImageProducer(QTDrawable qtSource, Dimension initSize) throws QTException {
+        if ((qtSource instanceof QTPlayer))
+            qtSource = new MoviePlayer(((QTPlayer) qtSource).getMovieController().getMovie());
+        this.qtSource = qtSource;
+        setRedrawing(requiresRedrawing(qtSource));
         this.singleFrame = (!isRedrawing());
-        this.size = paramDimension;
+        this.size = initSize;
         this.gw = new QDGraphics(new QDRect(this.size));
-        paramQTDrawable.setDisplayBounds(new QDRect(this.size));
-        paramQTDrawable.setGWorld(this.gw);
+        qtSource.setDisplayBounds(new QDRect(this.size));
+        qtSource.setGWorld(this.gw);
         this.pm = this.gw.getPixMap();
         this.rowInts = (this.pm.getRowBytes() / 4);
         this.pixels = new int[this.rowInts * this.size.height];
-        paramQTDrawable.redraw(null);
+        qtSource.redraw(null);
         copyPixels();
         if (isSingleFrame()) {
             this.gw.disposeQTObject();
@@ -269,13 +269,13 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      *  pixels that are within the bounds of the region are sent to the consumers.
      * @throws quicktime.QTException
      */
-    public synchronized void redraw(Region paramRegion) throws QTException {
+    public synchronized void redraw(Region invalidRgn) throws QTException {
         if ((!this.consumers.isEmpty()) || (!isSingleFrame())) {
             this.qtSource.redraw(null);
         } else {
             return;
         }
-        updateConsumers(paramRegion);
+        updateConsumers(invalidRgn);
     }
 
     /**
@@ -290,15 +290,15 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      *  which can econimize the copying of the pixel data to only those areas that have changed.
      * @throws quicktime.QTException
      */
-    public synchronized void updateConsumers(Region paramRegion) throws QTException {
+    public synchronized void updateConsumers(Region invalidRgn) throws QTException {
         if (!isSingleFrame())
             copyPixels();
         int m = 0;
         int i;
         int j;
         int k;
-        if (paramRegion != null) {
-            QDRect localObject = paramRegion.getRgnBBox();
+        if (invalidRgn != null) {
+            QDRect localObject = invalidRgn.getRgnBBox();
             i = localObject.getX();
             j = localObject.getY();
             k = localObject.getWidth();
@@ -328,8 +328,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      *  of fresh or updated image data is first retrieved (true).
      */
     @Override
-    public synchronized void setRedrawing(boolean paramBoolean) {
-        this.doesRedraw = paramBoolean;
+    public synchronized void setRedrawing(boolean redrawFlag) {
+        this.doesRedraw = redrawFlag;
     }
 
     /**

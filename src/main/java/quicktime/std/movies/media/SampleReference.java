@@ -29,13 +29,13 @@ public final class SampleReference extends QTPointerRef {
      * @param numberOfSamples Specifies the number of samples.
      * @param sampleFlags Specifies flags for samples.
      */
-    public SampleReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) throws QTException {
+    public SampleReference(int dataOffset, int dataSize, int durationPerSample, int numberOfSamples, int sampleFlags) throws QTException {
         this();
-        setDataOffset(paramInt1);
-        setDataSize(paramInt2);
-        setDurationPerSample(paramInt3);
-        setNumberOfSamples(paramInt4);
-        setFlags(paramInt5);
+        setDataOffset(dataOffset);
+        setDataSize(dataSize);
+        setDurationPerSample(durationPerSample);
+        setNumberOfSamples(numberOfSamples);
+        setFlags(sampleFlags);
     }
 
     /**

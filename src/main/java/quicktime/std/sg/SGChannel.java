@@ -124,19 +124,19 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      *          SGPanel[] panelList
      * @throws quicktime.std.StdQTException
      */
-    public void settingsDialog(int paramInt, Component[] paramArrayOfComponent) throws StdQTException {
+    public void settingsDialog(int flags, Component[] panelList) throws StdQTException {
         int i = 0;
         int j = i;
         int[] arrayOfInt1 = null;
         int[] arrayOfInt2 = arrayOfInt1;
-        int k = paramInt;
+        int k = flags;
         int m = 0;
         int n = _ID();
-        if (paramArrayOfComponent != null) {
-            i = paramArrayOfComponent.length;
+        if (panelList != null) {
+            i = panelList.length;
             arrayOfInt1 = new int[i];
             for (int i1 = 0; i1 < i; i1++) {
-                arrayOfInt1[i1] = QTObject.ID(paramArrayOfComponent[i1]);
+                arrayOfInt1[i1] = QTObject.ID(panelList[i1]);
             }
         }
         if (QTSession.isCurrentOS(4)) {
@@ -151,7 +151,7 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
             StdQTException.checkError(o);
         } else {
             synchronized (QTNative.globalsLock) {
-                int o = SGSettingsDialog(QTObject.ID(this.owner), _ID(), (short) j, arrayOfInt1, paramInt, 0, 0);
+                int o = SGSettingsDialog(QTObject.ID(this.owner), _ID(), (short) j, arrayOfInt1, flags, 0, 0);
                 StdQTException.checkError(o);
             }
         }
@@ -164,8 +164,8 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @param scriptTag source informationÕs language code.
      * @throws quicktime.std.StdQTException
      */
-    public void setDataSourceName(String paramString, int paramInt) throws StdQTException {
-        int i = SGChannelSetDataSourceName(_ID(), QTUtils.String2PString(paramString, 255), paramInt);
+    public void setDataSourceName(String name, int scriptTag) throws StdQTException {
+        int i = SGChannelSetDataSourceName(_ID(), QTUtils.String2PString(name, 255), scriptTag);
         StdQTException.checkError(i);
     }
 
@@ -189,8 +189,8 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @param ud Specifies a user data list with configuration information for the sequence grabber.
      * @throws quicktime.std.StdQTException
      */
-    public void setSettings(UserData paramUserData) throws StdQTException {
-        int i = SGSetChannelSettings(QTObject.ID(this.owner), _ID(), QTObject.ID(paramUserData), 0);
+    public void setSettings(UserData ud) throws StdQTException {
+        int i = SGSetChannelSettings(QTObject.ID(this.owner), _ID(), QTObject.ID(ud), 0);
         StdQTException.checkError(i);
     }
 
@@ -209,8 +209,8 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @param usage contains flags that specify how the channel is to be used
      * @throws quicktime.std.StdQTException
      */
-    public void setUsage(int paramInt) throws StdQTException {
-        StdQTException.checkError(SGSetChannelUsage(_ID(), paramInt));
+    public void setUsage(int usage) throws StdQTException {
+        StdQTException.checkError(SGSetChannelUsage(_ID(), usage));
     }
 
     /**
@@ -232,8 +232,8 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @param playFlags the flags
      * @throws quicktime.std.StdQTException
      */
-    public void setPlayFlags(int paramInt) throws StdQTException {
-        StdQTException.checkError(SGSetChannelPlayFlags(_ID(), paramInt));
+    public void setPlayFlags(int playFlags) throws StdQTException {
+        StdQTException.checkError(SGSetChannelPlayFlags(_ID(), playFlags));
     }
 
     /**

@@ -15,6 +15,6 @@ public interface XMLPreprocessorProc {
      * @param attributes an array of attribute-value pair strings
      * @throws quicktime.QTException
      */
-    void execute(String paramString, String[] paramArrayOfString) throws QTException;
+    void execute(String name, String[] attributes) throws QTException;
 }
 

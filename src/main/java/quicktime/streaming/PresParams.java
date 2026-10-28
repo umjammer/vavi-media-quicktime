@@ -34,13 +34,13 @@ public final class PresParams extends QTPointerRef {
      * @param flags presentation flags
      * @param params MediaParams
      */
-    public PresParams(int paramInt1, int paramInt2, MediaParams paramMediaParams) throws QTException {
+    public PresParams(int scale, int flags, MediaParams params) throws QTException {
         super(28, true);
         setVersion(1);
         setEditList(null);
-        setFlags(paramInt2);
-        setTimeScale(paramInt1);
-        setMediaParams(paramMediaParams);
+        setFlags(flags);
+        setTimeScale(scale);
+        setMediaParams(params);
     }
 
     private MediaParams myMediaParams = null;
@@ -77,33 +77,33 @@ public final class PresParams extends QTPointerRef {
      * Sets the version of the Broadcaster params.
      * @param version the version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int version) {
+        setIntAt(0, version);
     }
 
     /**
      * Sets the flags of the Broadcaster params.
      * @param flags the flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(8, flags);
     }
 
     /**
      * Sets the time scale of the Broadcaster params.
      * @param scale the time scale
      */
-    public void setTimeScale(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setTimeScale(int scale) {
+        setIntAt(12, scale);
     }
 
     /**
      * Sets the media params of the presentation params.
      * @param m MediaParams
      */
-    public void setMediaParams(MediaParams paramMediaParams) {
-        setIntAt(16, QTObject.ID(paramMediaParams));
-        this.myMediaParams = paramMediaParams;
+    public void setMediaParams(MediaParams m) {
+        setIntAt(16, QTObject.ID(m));
+        this.myMediaParams = m;
     }
 
     /**
@@ -134,11 +134,11 @@ public final class PresParams extends QTPointerRef {
      * Sets the notification procedure
      * @param proc notification procedure
      */
-    public void setNotificationProc(StreamNotifyProc paramStreamNotifyProc) {
-        if (paramStreamNotifyProc == null) {
+    public void setNotificationProc(StreamNotifyProc proc) {
+        if (proc == null) {
             removeNotificationProc();
         } else {
-            this.notifyUPP = new StreamDispatcher(paramStreamNotifyProc);
+            this.notifyUPP = new StreamDispatcher(proc);
             setIntAt(20, this.notifyUPP.ID());
         }
     }

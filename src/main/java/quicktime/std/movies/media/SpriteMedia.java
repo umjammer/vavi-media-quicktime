@@ -16,8 +16,8 @@ public final class SpriteMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public SpriteMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1936749172, paramInt, paramDataRef);
+    public SpriteMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1936749172, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class SpriteMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public SpriteMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public SpriteMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     SpriteMedia(int paramInt, Track paramTrack) throws QTException {
@@ -60,9 +60,9 @@ public final class SpriteMedia extends Media {
      * <I/>
      * @see getSpriteDescription
      */
-    public SpriteDescription getSoundDescription(int paramInt) throws QTException {
+    public SpriteDescription getSoundDescription(int index) throws QTException {
         SpriteDescription localSpriteDescription = new SpriteDescription();
-        getNativeSampleDescription(paramInt, localSpriteDescription);
+        getNativeSampleDescription(index, localSpriteDescription);
         return localSpriteDescription;
     }
 
@@ -74,9 +74,9 @@ public final class SpriteMedia extends Media {
      * @return a SpriteDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public SpriteDescription getSpriteDescription(int paramInt) throws QTException {
+    public SpriteDescription getSpriteDescription(int index) throws QTException {
         SpriteDescription localSpriteDescription = new SpriteDescription();
-        getNativeSampleDescription(paramInt, localSpriteDescription);
+        getNativeSampleDescription(index, localSpriteDescription);
         return localSpriteDescription;
     }
 }

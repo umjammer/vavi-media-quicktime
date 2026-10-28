@@ -45,8 +45,8 @@ public class CSequenceToMemory {
      * @param numFrames the number of Frames that the compression will hold
      * quicktime.std.image.CSequence.begin
      */
-    public CSequenceToMemory(int paramInt) {
-        this.frames = new Vector(paramInt);
+    public CSequenceToMemory(int numFrames) {
+        this.frames = new Vector(numFrames);
     }
 
     /**
@@ -65,8 +65,8 @@ public class CSequenceToMemory {
      * @param cTab the ColorTable or null that is used in the compression
      * @param flags flags providing further control information
      */
-    public CSequenceToMemory(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, CodecComponent paramCodecComponent, int paramInt3, int paramInt4, int paramInt5, ColorTable paramColorTable, int paramInt6) throws QTException {
-        this.seq = new CSequence(paramQDGraphics, paramQDRect, paramInt1, paramInt2, paramCodecComponent, paramInt3, paramInt4, paramInt5, paramColorTable, paramInt6);
+    public CSequenceToMemory(QDGraphics src, QDRect srcRect, int depth, int cType, CodecComponent codec, int spatialQuality, int temporalQuality, int keyFrameRate, ColorTable cTab, int flags) throws QTException {
+        this.seq = new CSequence(src, srcRect, depth, cType, codec, spatialQuality, temporalQuality, keyFrameRate, cTab, flags);
         this.frames = new Vector(16);
     }
 
@@ -93,11 +93,11 @@ public class CSequenceToMemory {
      * @param flags flags providing further control information
      * @throws quicktime.QTException
      */
-    public void begin(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, CodecComponent paramCodecComponent, int paramInt3, int paramInt4, int paramInt5, ColorTable paramColorTable, int paramInt6) throws QTException {
+    public void begin(QDGraphics src, QDRect srcRect, int colorDepth, int cType, CodecComponent codec, int spatialQuality, int temporalQuality, int keyFrameRate, ColorTable clut, int flags) throws QTException {
         if (this.frames != null) {
             this.frames.removeAllElements();
         }
-        this.seq = new CSequence(paramQDGraphics, paramQDRect, paramInt1, paramInt2, paramCodecComponent, paramInt3, paramInt4, paramInt5, paramColorTable, paramInt6);
+        this.seq = new CSequence(src, srcRect, colorDepth, cType, codec, spatialQuality, temporalQuality, keyFrameRate, clut, flags);
     }
 
     /**
@@ -115,9 +115,9 @@ public class CSequenceToMemory {
      * @return the similarity value
      * @throws quicktime.QTException
      */
-    public int compressFrame(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt) throws QTException {
-        RawEncodedImage localRawEncodedImage = new RawEncodedImage(this.seq.getMaxCompressionSize(paramQDGraphics), true);
-        CompressedFrameInfo localCompressedFrameInfo = this.seq.compressFrame(paramQDGraphics, paramQDRect, paramInt, localRawEncodedImage);
+    public int compressFrame(QDGraphics src, QDRect srcRect, int flags) throws QTException {
+        RawEncodedImage localRawEncodedImage = new RawEncodedImage(this.seq.getMaxCompressionSize(src), true);
+        CompressedFrameInfo localCompressedFrameInfo = this.seq.compressFrame(src, srcRect, flags, localRawEncodedImage);
         localRawEncodedImage.setSize(localCompressedFrameInfo.getDataSize());
         try {
             int i = this.seq.getFrameNumber() - 1;

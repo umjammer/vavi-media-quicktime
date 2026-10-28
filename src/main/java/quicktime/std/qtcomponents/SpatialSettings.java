@@ -42,12 +42,12 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      * @param depth the pixel depth
      * @param spatialQuality the quality setting
      */
-    public SpatialSettings(int paramInt1, CodecComponent paramCodecComponent, int paramInt2, int paramInt3) {
+    public SpatialSettings(int codecType, CodecComponent codec, int depth, int spatialQuality) {
         this();
-        setCodecType(paramInt1);
-        setCodec(paramCodecComponent);
-        setDepth(paramInt2);
-        setSpatialQuality(paramInt3);
+        setCodecType(codecType);
+        setCodec(codec);
+        setDepth(depth);
+        setSpatialQuality(spatialQuality);
     }
 
     SpatialSettings() {
@@ -104,8 +104,8 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      * Specifies the default Codec type in the dialog box.
      * @param codecType -
      */
-    public void setCodecType(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setCodecType(int codecType) {
+        setIntAt(0, codecType);
     }
 
     /**
@@ -120,8 +120,8 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      * Specifies the default Codec in the dialog box.
      * @param codec -
      */
-    public void setCodec(CodecComponent paramCodecComponent) {
-        setIntAt(4, QTObject.ID(paramCodecComponent));
+    public void setCodec(CodecComponent codec) {
+        setIntAt(4, QTObject.ID(codec));
     }
 
     /**
@@ -136,8 +136,8 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      * Specifies the default depth of the pop-up menu in the dialog box.
      * @param depth the pixel depth
      */
-    public void setDepth(int paramInt) {
-        setShortAt(8, (short) paramInt);
+    public void setDepth(int depth) {
+        setShortAt(8, (short) depth);
     }
 
     /**
@@ -152,8 +152,8 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      * Specifies the spatial quality slider in the dialog box.
      * @param spatialQuality the quality setting
      */
-    public void setSpatialQuality(int paramInt) {
-        setIntAt(10, paramInt);
+    public void setSpatialQuality(int spatialQuality) {
+        setIntAt(10, spatialQuality);
     }
 
     private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {

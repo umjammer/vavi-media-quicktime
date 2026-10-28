@@ -66,8 +66,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      * Creates a QTEffect with kMultiFrame set and the specified initial size.
      * @param d the initialSize of the effect.
      */
-    public QTEffect(Dimension paramDimension) throws QTException {
-        this(2, new QDDimension(paramDimension.width, paramDimension.height));
+    public QTEffect(Dimension d) throws QTException {
+        this(2, new QDDimension(d.width, d.height));
     }
 
     /**
@@ -80,8 +80,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      *  not require redrawing so their default value is kSingleFrame. QTTransitions are
      *  multiframes and so do require redrawing.
      */
-    public QTEffect(int paramInt) throws QTException {
-        this(paramInt, new QDDimension());
+    public QTEffect(int multiFrameFlag) throws QTException {
+        this(multiFrameFlag, new QDDimension());
     }
 
     /**
@@ -98,8 +98,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @param d the initialSize of the effect.
      * ()
      */
-    public QTEffect(int paramInt, Dimension paramDimension) throws QTException {
-        this(paramInt, new QDDimension(paramDimension.width, paramDimension.height));
+    public QTEffect(int multiFrameFlag, Dimension d) throws QTException {
+        this(multiFrameFlag, new QDDimension(d.width, d.height));
     }
 
     /**
@@ -115,9 +115,9 @@ public class QTEffect implements QTDrawable, Redrawable {
      *  multiframes and so do require redrawing.
      * @param d the initialSize of the effect.
      */
-    public QTEffect(int paramInt, QDDimension paramQDDimension) throws QTException {
-        this.mRedrawFlag = (paramInt == 2);
-        this.singleFrameFlag = paramInt;
+    public QTEffect(int multiFrameFlag, QDDimension d) throws QTException {
+        this.mRedrawFlag = (multiFrameFlag == 2);
+        this.singleFrameFlag = multiFrameFlag;
         this.effectDesc = new ImageDescription(0);
         this.effectDesc.setTemporalQuality(512);
         this.effectDesc.setSpatialQuality(512);
@@ -127,10 +127,10 @@ public class QTEffect implements QTDrawable, Redrawable {
         this.effectDesc.setFrameCount(1);
         this.effectDesc.setClutID(-1);
         this.mat = new Matrix();
-        if ((paramQDDimension != null) && (paramQDDimension.getWidth() != 0) && (paramQDDimension.getHeight() != 0)) {
-            setDisplayBounds(new QDRect(paramQDDimension));
+        if ((d != null) && (d.getWidth() != 0) && (d.getHeight() != 0)) {
+            setDisplayBounds(new QDRect(d));
         }
-        this.initSize = paramQDDimension;
+        this.initSize = d;
     }
 
     private QDGraphics mDestPort = QDGraphics.scratch;
@@ -174,8 +174,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @param redrawFlag boolean indicating redraw behaviour
      */
     @Override
-    public void setRedrawing(boolean paramBoolean) {
-        this.mRedrawFlag = paramBoolean;
+    public void setRedrawing(boolean redrawFlag) {
+        this.mRedrawFlag = redrawFlag;
     }
 
     /**
@@ -232,8 +232,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public void setClip(Region paramRegion) throws StdQTException {
-        this.clip = paramRegion;
+    public void setClip(Region r) throws StdQTException {
+        this.clip = r;
         if (this.effectSequence != null)
             this.effectSequence.setMask(this.clip);
     }
@@ -360,9 +360,9 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        this.mDestPort = paramQDGraphics;
-        if (QDGraphics.scratch.equals(paramQDGraphics)) {
+    public synchronized void setGWorld(QDGraphics cgp) throws QTException {
+        this.mDestPort = cgp;
+        if (QDGraphics.scratch.equals(cgp)) {
             this.effectSequence = null;
         } else {
             setUpSequence();

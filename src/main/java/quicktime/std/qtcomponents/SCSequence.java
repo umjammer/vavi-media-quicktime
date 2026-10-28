@@ -81,8 +81,8 @@ public final class SCSequence implements QuickTimeLib {
      * @return an image data object.
      * @throws quicktime.QTException
      */
-    public SCInfo compressFrame(QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
-        return QTHandleRef.fromSCSequence(this, paramQDGraphics, paramQDRect);
+    public SCInfo compressFrame(QDGraphics src, QDRect srcRect) throws QTException {
+        return QTHandleRef.fromSCSequence(this, src, srcRect);
     }
 
     @Override

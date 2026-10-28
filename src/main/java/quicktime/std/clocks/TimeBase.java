@@ -194,10 +194,10 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @return the current time specified as a TimeRecord
      * @throws quicktime.QTException
      */
-    public TimeRecord getTRTime(int paramInt) throws QTException {
+    public TimeRecord getTRTime(int scale) throws QTException {
         TimeRecord localTimeRecord = new TimeRecord();
         synchronized (QTNative.globalsLock) {
-            GetTimeBaseTime(_ID(), paramInt, QTObject.ID(localTimeRecord));
+            GetTimeBaseTime(_ID(), scale, QTObject.ID(localTimeRecord));
         }
         return localTimeRecord;
     }
@@ -207,9 +207,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::SetTimeBaseTime"
      * @param tr The time structure that contains the current time
      */
-    public void setTime(TimeRecord paramTimeRecord) {
+    public void setTime(TimeRecord tr) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseTime(_ID(), QTObject.ID(paramTimeRecord));
+            SetTimeBaseTime(_ID(), QTObject.ID(tr));
         }
     }
 
@@ -219,9 +219,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param time Specifies the new time value
      * @param scale Specifies the time scale of the new time value
      */
-    public void setValue(int paramInt1, int paramInt2) {
+    public void setValue(int time, int scale) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseValue(_ID(), paramInt1, paramInt2);
+            SetTimeBaseValue(_ID(), time, scale);
         }
     }
 
@@ -230,9 +230,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::SetTimeBaseRate"
      * @param rate Specifies the time rate of the time base
      */
-    public void setRate(float paramFloat) {
+    public void setRate(float rate) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseRate(_ID(), QTUtils.X2Fix(paramFloat));
+            SetTimeBaseRate(_ID(), QTUtils.X2Fix(rate));
         }
     }
 
@@ -262,11 +262,11 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @return The time value that contains the start time from the specified time base in the specified time scale
      * @throws quicktime.QTException
      */
-    public TimeRecord getTRStartTime(int paramInt) throws QTException {
+    public TimeRecord getTRStartTime(int scale) throws QTException {
         TimeRecord localTimeRecord = null;
         synchronized (QTNative.globalsLock) {
             localTimeRecord = new TimeRecord();
-            GetTimeBaseStartTime(_ID(), paramInt, QTObject.ID(localTimeRecord));
+            GetTimeBaseStartTime(_ID(), scale, QTObject.ID(localTimeRecord));
         }
         return localTimeRecord;
     }
@@ -276,9 +276,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::SetTimeBaseStartTime"
      * @param tr The time object that contains the start time value
      */
-    public void setStartTime(TimeRecord paramTimeRecord) {
+    public void setStartTime(TimeRecord tr) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseStartTime(_ID(), QTObject.ID(paramTimeRecord));
+            SetTimeBaseStartTime(_ID(), QTObject.ID(tr));
         }
     }
 
@@ -320,9 +320,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::SetTimeBaseStopTime"
      * @param tr The time structure that contains the stop time value
      */
-    public void setStopTime(TimeRecord paramTimeRecord) {
+    public void setStopTime(TimeRecord tr) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseStopTime(_ID(), QTObject.ID(paramTimeRecord));
+            SetTimeBaseStopTime(_ID(), QTObject.ID(tr));
         }
     }
 
@@ -331,9 +331,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::SetTimeBaseFlags"
      * @param timeBaseFlags Specifies the control flags for the time base.
      */
-    public void setFlags(int paramInt) {
+    public void setFlags(int timeBaseFlags) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseFlags(_ID(), paramInt);
+            SetTimeBaseFlags(_ID(), timeBaseFlags);
         }
     }
 
@@ -342,9 +342,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::SetTimeBaseZero"
      * @param zero The time structure that corresponds to a 0 time value for the slave time scale
      */
-    public void setZero(TimeRecord paramTimeRecord) {
+    public void setZero(TimeRecord zero) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseZero(_ID(), QTObject.ID(paramTimeRecord));
+            SetTimeBaseZero(_ID(), QTObject.ID(zero));
         }
     }
 
@@ -354,9 +354,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param master Specifies the master time base to be assigned to this slaved time base
      * @param slaveZero Specifies the time, in the master time base time scale, that corresponds to a 0 time value for this slaved time base
      */
-    public void setMasterTimeBase(TimeBase paramTimeBase, TimeRecord paramTimeRecord) {
+    public void setMasterTimeBase(TimeBase master, TimeRecord slaveZero) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseMasterTimeBase(_ID(), QTObject.ID(paramTimeBase), QTObject.ID(paramTimeRecord));
+            SetTimeBaseMasterTimeBase(_ID(), QTObject.ID(master), QTObject.ID(slaveZero));
         }
     }
 
@@ -382,9 +382,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param slaveZero The specified time record used in offsetting the time value of the time base and specified clock.
      * @return A clock component instance.
      */
-    public void setMasterClock(Clock paramClock, TimeRecord paramTimeRecord) {
+    public void setMasterClock(Clock clockMeister, TimeRecord slaveZero) {
         synchronized (QTNative.globalsLock) {
-            SetTimeBaseMasterClock(_ID(), QTObject.ID(paramClock), QTObject.ID(paramTimeRecord));
+            SetTimeBaseMasterClock(_ID(), QTObject.ID(clockMeister), QTObject.ID(slaveZero));
         }
     }
 
@@ -417,9 +417,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param scale Specifies the time scale in which to return the current time value
      * @return The time value that contains the current time from the specified time base in specified time scale
      */
-    public int getTime(int paramInt) {
+    public int getTime(int scale) {
         synchronized (QTNative.globalsLock) {
-            return GetTimeBaseTime(_ID(), paramInt, 0);
+            return GetTimeBaseTime(_ID(), scale, 0);
         }
     }
 
@@ -451,9 +451,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param scale Specifies the time scale in which to return the start time
      * @return The time value that contains the start time from the specified time base in the specified time scale
      */
-    public int getStartTime(int paramInt) {
+    public int getStartTime(int scale) {
         synchronized (QTNative.globalsLock) {
-            return GetTimeBaseStartTime(_ID(), paramInt, 0);
+            return GetTimeBaseStartTime(_ID(), scale, 0);
         }
     }
 
@@ -463,9 +463,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param scale Specifies the time scale in which to return the stop time
      * @return The time value that contains the stop time from the specified time base in the specified time scale
      */
-    public int getStopTime(int paramInt) {
+    public int getStopTime(int scale) {
         synchronized (QTNative.globalsLock) {
-            return GetTimeBaseStopTime(_ID(), paramInt, 0);
+            return GetTimeBaseStopTime(_ID(), scale, 0);
         }
     }
 
@@ -487,9 +487,9 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @param unpinnedTime The time structure that will receive the current time of the time base
      * @return The flags that indicate whether the returned time value is outside the range of values specified by the start and stop times of the time base
      */
-    public int getStatus(TimeRecord timerecord) {
+    public int getStatus(TimeRecord unpinnedTime) {
         synchronized (QTNative.globalsLock) {
-            return GetTimeBaseStatus(_ID(), QTObject.ID(timerecord));
+            return GetTimeBaseStatus(_ID(), QTObject.ID(unpinnedTime));
         }
     }
 

@@ -12,6 +12,6 @@ public interface MoviePrePreroll {
      * @param err the moviePreRoll error code - or zero if no error in pre-preroll
      * @see quicktime.std.clocks.QTCallBack
      */
-    void execute(Movie paramMovie, int paramInt);
+    void execute(Movie m, int err);
 }
 

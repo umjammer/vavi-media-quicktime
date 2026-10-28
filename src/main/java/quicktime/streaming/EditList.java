@@ -13,8 +13,8 @@ public class EditList extends QTVector {
      * Creates a EditList which is an array of EditEntry objects.
      * @param numberOfElements This is the number of elements the Vector will hold - it is NOT growable
      */
-    public EditList(int paramInt) throws QTException {
-        super(20, paramInt > 0 ? paramInt : 1);
+    public EditList(int numberOfElements) throws QTException {
+        super(20, numberOfElements > 0 ? numberOfElements : 1);
     }
 
     /**

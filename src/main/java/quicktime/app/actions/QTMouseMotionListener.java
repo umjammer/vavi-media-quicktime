@@ -17,7 +17,7 @@ public interface QTMouseMotionListener extends MouseMotionListener {
      * Invoked when a mouseMoved event enters a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
-    void mouseEnteredTarget(MouseEvent paramMouseEvent);
+    void mouseEnteredTarget(MouseEvent e);
 
     /**
      * @deprecated
@@ -25,6 +25,6 @@ public interface QTMouseMotionListener extends MouseMotionListener {
      * Invoked when a mouseMoved event exits a Target within an enclosing space. The target of a MouseResponder is set for events of this kind.
      * @param e the MouseEvent that triggered this event
      */
-    void mouseExitedTarget(MouseEvent paramMouseEvent);
+    void mouseExitedTarget(MouseEvent e);
 }
 

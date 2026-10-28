@@ -174,8 +174,8 @@ public class TickleList implements TicklishController, CollectionController {
      * @param t the new Ticklish member of the list.
      * @return the TickleNode that is used to hold the Ticklish member in the list
      */
-    protected TickleNode makeTickleNode(Ticklish paramTicklish) {
-        return new TickleNode(paramTicklish);
+    protected TickleNode makeTickleNode(Ticklish t) {
+        return new TickleNode(t);
     }
 
     /**
@@ -403,7 +403,7 @@ public class TickleList implements TicklishController, CollectionController {
      * @param s the Space being added to
      */
     @Override
-    public void addedToSpace(Space paramSpace) {
+    public void addedToSpace(Space s) {
     }
 
     /**

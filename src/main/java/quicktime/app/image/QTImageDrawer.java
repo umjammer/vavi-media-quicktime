@@ -118,12 +118,12 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      *  will only be called once. If kSingleFrame is not set the Paintable's paint call will be called
      *  whenever redraw() is called and the isRedrawing flag is true.
      */
-    public QTImageDrawer(Paintable paramPaintable, Dimension paramDimension, int paramInt) {
-        this.mSize = paramDimension;
-        this.painter = paramPaintable;
+    public QTImageDrawer(Paintable painter, Dimension initialSize, int isSingleFrame) {
+        this.mSize = initialSize;
+        this.painter = painter;
         this.image = new ImagePresenter(new QDRect(this.mSize));
-        this.singleFrameFlag = paramInt;
-        this.mRedrawFlag = (paramInt != 1);
+        this.singleFrameFlag = isSingleFrame;
+        this.mRedrawFlag = (isSingleFrame != 1);
     }
 
     /**
@@ -135,14 +135,14 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      *  this constructor can be used.
      * {@link quicktime.app.image.JImagePainter}
      */
-    public QTImageDrawer(Image paramImage) throws QTAppException {
-        int i = paramImage.getWidth(null);
+    public QTImageDrawer(Image image) throws QTAppException {
+        int i = image.getWidth(null);
         if (i == -1)
             throw new QTAppException("Image size must be known");
-        int j = paramImage.getHeight(null);
+        int j = image.getHeight(null);
         this.mSize = new Dimension(i, j);
         this.image = new ImagePresenter(new QDRect(this.mSize));
-        this.painter = new JImagePainter(paramImage);
+        this.painter = new JImagePainter(image);
         this.singleFrameFlag = 1;
         this.mRedrawFlag = false;
     }
@@ -156,8 +156,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @param initialSize the scaled drawing size of the image.
      * {@link quicktime.app.image.JImagePainter}
      */
-    public QTImageDrawer(Image paramImage, Dimension paramDimension) {
-        this(new JImagePainter(paramImage), paramDimension, 1);
+    public QTImageDrawer(Image image, Dimension initialSize) {
+        this(new JImagePainter(image), initialSize, 1);
     }
 
     private boolean interruptedGrab = false;
@@ -199,9 +199,9 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @return the number of bytes that were written to the destination of the GraphicsExporter
      * @throws quicktime.QTException
      */
-    public int export(GraphicsExporter paramGraphicsExporter) throws QTException {
+    public int export(GraphicsExporter exporter) throws QTException {
         QDGraphics localQDGraphics = new QDGraphics(getDescription(), 0);
-        return export(paramGraphicsExporter, localQDGraphics);
+        return export(exporter, localQDGraphics);
     }
 
     /**
@@ -216,20 +216,20 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @return the number of bytes that were written to the destination of the GraphicsExporter
      * @throws quicktime.QTException
      */
-    public int export(GraphicsExporter paramGraphicsExporter, QDGraphics paramQDGraphics) throws QTException {
+    public int export(GraphicsExporter exporter, QDGraphics offscreenGWorld) throws QTException {
         if (this.canv == null) {
             throw new QTAppException("QTImageDrawer must be added to a QTCanvas before it can export");
         }
-        if (!paramQDGraphics.isOffscreen()) {
+        if (!offscreenGWorld.isOffscreen()) {
             throw new QTAppException("QTImageDrawer.export must be supplied an offscreen QDGraphics");
         }
         QDGraphics localQDGraphics = getGWorld();
-        setGWorld(paramQDGraphics);
+        setGWorld(offscreenGWorld);
         redraw(null);
         setGWorld(localQDGraphics);
-        paramGraphicsExporter.setInputGWorld(paramQDGraphics);
-        int i = paramGraphicsExporter.doExport();
-        paramQDGraphics = null;
+        exporter.setInputGWorld(offscreenGWorld);
+        int i = exporter.doExport();
+        offscreenGWorld = null;
         return i;
     }
 
@@ -305,8 +305,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public final void setClip(Region paramRegion) throws StdQTException {
-        this.image.setClip(paramRegion);
+    public final void setClip(Region reg) throws StdQTException {
+        this.image.setClip(reg);
     }
 
     /**
@@ -384,8 +384,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @throws quicktime.QTException
      */
     @Override
-    public final void setMatrix(Matrix paramMatrix) throws QTException {
-        this.image.setMatrix(paramMatrix);
+    public final void setMatrix(Matrix matrix) throws QTException {
+        this.image.setMatrix(matrix);
     }
 
     /**
@@ -436,8 +436,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @throws quicktime.QTException
      */
     @Override
-    public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        this.image.setGWorld(paramQDGraphics);
+    public void setGWorld(QDGraphics cgp) throws QTException {
+        this.image.setGWorld(cgp);
     }
 
     /**
@@ -450,8 +450,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @throws quicktime.std.StdQTException
      */
     @Override
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws StdQTException {
-        this.image.setDisplayBounds(paramQDRect);
+    public synchronized void setDisplayBounds(QDRect bounds) throws StdQTException {
+        this.image.setDisplayBounds(bounds);
     }
 
     /**
@@ -463,10 +463,10 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -500,23 +500,23 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @see quicktime.app.image.QTImageDrawer#setRedrawing(boolean)
      */
     @Override
-    public synchronized void redraw(Region paramRegion) throws QTException {
+    public synchronized void redraw(Region invalidRgn) throws QTException {
         if ((this.iData == null) && (this.rei == null))
             return;
         Region localRegion;
         if (this.interruptedGrab) {
             localRegion = prepaint();
-            if ((localRegion != null) && (paramRegion != null))
-                paramRegion = localRegion.union(paramRegion);
+            if ((localRegion != null) && (invalidRgn != null))
+                invalidRgn = localRegion.union(invalidRgn);
             if ((!this.interruptedGrab) && (isSingleFrame())) {
                 doSingleFrame();
             }
         } else if ((!isSingleFrame()) && (isRedrawing())) {
             localRegion = prepaint();
-            if ((localRegion != null) && (paramRegion != null))
-                paramRegion = localRegion.union(paramRegion);
+            if ((localRegion != null) && (invalidRgn != null))
+                invalidRgn = localRegion.union(invalidRgn);
         }
-        this.image.redraw(paramRegion);
+        this.image.redraw(invalidRgn);
     }
 
     /**
@@ -528,8 +528,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      *  of fresh or updated image data is first retrieved (true).
      */
     @Override
-    public void setRedrawing(boolean paramBoolean) {
-        this.mRedrawFlag = paramBoolean;
+    public void setRedrawing(boolean redrawFlag) {
+        this.mRedrawFlag = redrawFlag;
     }
 
     /**
@@ -617,8 +617,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @throws quicktime.QTException
      */
     @Override
-    public void setGraphicsMode(GraphicsMode gMode) throws QTException {
-        this.image.setGraphicsMode(gMode);
+    public void setGraphicsMode(GraphicsMode mode) throws QTException {
+        this.image.setGraphicsMode(mode);
     }
 
     /**
@@ -676,9 +676,9 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @see quicktime.app.display.SWCompositor
      */
     @Override
-    public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) {
-        this.sprite = paramTwoDSprite;
-        return isSingleFrame() ? null : new RedrawInvalidator(paramTwoDSprite);
+    public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) {
+        this.sprite = s;
+        return isSingleFrame() ? null : new RedrawInvalidator(s);
     }
 
     /**
@@ -690,7 +690,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @param c the SWCompositor it is being removed from
      */
     @Override
-    public void removedFromCompositor(SWCompositor paramSWCompositor) {
+    public void removedFromCompositor(SWCompositor c) {
         this.sprite = null;
     }
 
@@ -707,11 +707,11 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      *  the object that implements this interface.
      */
     @Override
-    public synchronized void addedTo(Object paramObject) {
-        if ((paramObject instanceof Component)) {
+    public synchronized void addedTo(Object interest) {
+        if ((interest instanceof Component)) {
             if (this.canv != null)
                 removedFrom(this.canv);
-            this.canv = ((Component) paramObject);
+            this.canv = ((Component) interest);
             setSize(this.mSize);
             if (this.nl != null) {
                 this.nl.notifyComplete();
@@ -731,8 +731,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
-        if ((paramObject instanceof Component)) {
+    public void removedFrom(Object interest) {
+        if ((interest instanceof Component)) {
             this.canv = null;
             this.offscreenImage = null;
         }

@@ -12,16 +12,16 @@ public final class SoundException extends QTException {
      * that could be displayed to the user.
      * @param str The message that could be displayed to the user
      */
-    public SoundException(String paramString) {
-        super(paramString);
+    public SoundException(String str) {
+        super(str);
     }
 
     /**
      * Creates an exception with a specific error number
      * @param val the error number
      */
-    public SoundException(int paramInt) {
-        super(paramInt);
+    public SoundException(int val) {
+        super(val);
     }
 
     /**
@@ -30,9 +30,9 @@ public final class SoundException extends QTException {
      * @param err the result or error code if non-zero an exception is thrown
      * @throws quicktime.sound.SoundException
      */
-    public static void checkError(int paramInt) throws SoundException {
-        if (paramInt < 0) {
-            throw new SoundException(paramInt);
+    public static void checkError(int err) throws SoundException {
+        if (err < 0) {
+            throw new SoundException(err);
         }
     }
 }

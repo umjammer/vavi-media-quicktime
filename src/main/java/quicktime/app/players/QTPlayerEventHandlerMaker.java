@@ -22,6 +22,6 @@ public interface QTPlayerEventHandlerMaker {
      * @return a QTPlayerEventHandler or null if can't handle events
      *  from either the specified source or the specified player.
      */
-    QTPlayerEventHandler make(QTPlayer paramQTPlayer, Object paramObject);
+    QTPlayerEventHandler make(QTPlayer p, Object addedToInterest);
 }
 

@@ -40,11 +40,11 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
      * @param frameRate the frame rate
      * @param keyFrameRate the key frame rate
      */
-    public TemporalSettings(int paramInt1, float paramFloat, int paramInt2) {
+    public TemporalSettings(int temporalQuality, float frameRate, int keyFrameRate) {
         this();
-        setTemporalQuality(paramInt1);
-        setFrameRate(paramFloat);
-        setKeyFrameRate(paramInt2);
+        setTemporalQuality(temporalQuality);
+        setFrameRate(frameRate);
+        setKeyFrameRate(keyFrameRate);
     }
 
     TemporalSettings() {
@@ -89,8 +89,8 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
      * Specifies the temporal quality slider in the dialog box.
      * @param temporalQuality the quality setting
      */
-    public void setTemporalQuality(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setTemporalQuality(int temporalQuality) {
+        setIntAt(0, temporalQuality);
     }
 
     /**
@@ -105,8 +105,8 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
      * Specifies the frame rate in the dialog box.
      * @param frameRate the frame rate
      */
-    public void setFrameRate(float paramFloat) {
-        setIntAt(4, QTUtils.X2Fix(paramFloat));
+    public void setFrameRate(float frameRate) {
+        setIntAt(4, QTUtils.X2Fix(frameRate));
     }
 
     /**
@@ -121,8 +121,8 @@ public final class TemporalSettings extends QTByteObject implements PrimitivesLi
      * Specifies the key frame rate in the dialog box.
      * @param keyFrameRate the key frame rate
      */
-    public void setKeyFrameRate(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setKeyFrameRate(int keyFrameRate) {
+        setIntAt(8, keyFrameRate);
     }
 
     private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {

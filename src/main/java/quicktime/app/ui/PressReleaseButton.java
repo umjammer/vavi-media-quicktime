@@ -29,8 +29,8 @@ public class PressReleaseButton extends PressActionButton {
      * @param pressedImage the image to be displayed when the mouse is pressed
      * @param deactiveImage the image to be displayed when the button is deactive
      */
-    public PressReleaseButton(ImageSpec paramImageSpec1, ImageSpec paramImageSpec2, ImageSpec paramImageSpec3) throws QTException {
-        this(paramImageSpec1, paramImageSpec2, paramImageSpec3, null);
+    public PressReleaseButton(ImageSpec releasedImage, ImageSpec pressedImage, ImageSpec deactiveImage) throws QTException {
+        this(releasedImage, pressedImage, deactiveImage, null);
     }
 
     /**
@@ -42,8 +42,8 @@ public class PressReleaseButton extends PressActionButton {
      * @param deactiveImage the image to be displayed when the button is deactive
      * @param rolloverImage the image to be displayed when the button is released and in the mouse.
      */
-    public PressReleaseButton(ImageSpec paramImageSpec1, ImageSpec paramImageSpec2, ImageSpec paramImageSpec3, ImageSpec paramImageSpec4) throws QTException {
-        super(paramImageSpec1, paramImageSpec2, paramImageSpec3, paramImageSpec4);
+    public PressReleaseButton(ImageSpec releasedImage, ImageSpec pressedImage, ImageSpec deactiveImage, ImageSpec rolloverImage) throws QTException {
+        super(releasedImage, pressedImage, deactiveImage, rolloverImage);
     }
 
     /**

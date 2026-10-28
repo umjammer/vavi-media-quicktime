@@ -17,8 +17,8 @@ public final class QTVRMedia extends GenericMedia {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public QTVRMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, paramInt, paramDataRef, 1903457906);
+    public QTVRMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, timeScale, dataRef, 1903457906);
     }
 
     /**
@@ -27,8 +27,8 @@ public final class QTVRMedia extends GenericMedia {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public QTVRMedia(Track paramTrack, int paramInt) throws QTException {
-        super(paramTrack, paramInt, 1903457906);
+    public QTVRMedia(Track itsTrack, int timeScale) throws QTException {
+        super(itsTrack, timeScale, 1903457906);
     }
 
     public static void registerQTVRMedia() {

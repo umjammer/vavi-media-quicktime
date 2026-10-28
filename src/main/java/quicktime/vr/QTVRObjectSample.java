@@ -152,8 +152,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param movieType One of kGrabberScrollerUI, kOldJoyStickUI, kJoystickUI, kGrabberUI or kAbsoluteUI
      */
-    public void setMovieType(short paramShort) {
-        setShortAt(4, paramShort);
+    public void setMovieType(short movieType) {
+        setShortAt(4, movieType);
     }
 
     /**
@@ -166,8 +166,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param viewStateCount The number of view states 1 based
      */
-    public void setViewStateCount(short paramShort) {
-        setShortAt(6, paramShort);
+    public void setViewStateCount(short viewStateCount) {
+        setShortAt(6, viewStateCount);
     }
 
     /**
@@ -180,8 +180,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param defaultViewState the default view state number 1 based.  The number must be 1 to viewStateCount
      */
-    public void setDefaultViewState(short paramShort) {
-        setShortAt(8, paramShort);
+    public void setDefaultViewState(short defaultViewState) {
+        setShortAt(8, defaultViewState);
     }
 
     /**
@@ -194,8 +194,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param mouseDownViewState The mouse down view state 1 based. The number must be 1 to viewStateCount
      */
-    public void setMouseDownViewState(short paramShort) {
-        setShortAt(10, paramShort);
+    public void setMouseDownViewState(short mouseDownViewState) {
+        setShortAt(10, mouseDownViewState);
     }
 
     /**
@@ -208,8 +208,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param viewDuration The duration of each view including all animation frames in a view
      */
-    public void setViewDuration(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setViewDuration(int viewDuration) {
+        setIntAt(12, viewDuration);
     }
 
     /**
@@ -222,8 +222,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param columns The number of columns in the VRObject
      */
-    public void setColumns(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setColumns(int columns) {
+        setIntAt(16, columns);
     }
 
     /**
@@ -236,8 +236,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param rows The number of rows the VRObject
      */
-    public void setRows(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setRows(int rows) {
+        setIntAt(20, rows);
     }
 
     /**
@@ -250,8 +250,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param mouseMotionScale 180.0 for kStandardObject or kQTVRObjectInScene, actual degrees for kOldNavigableMovieScene
      */
-    public void setMouseMotionScale(float paramFloat) {
-        setFloatAt(24, paramFloat);
+    public void setMouseMotionScale(float mouseMotionScale) {
+        setFloatAt(24, mouseMotionScale);
     }
 
     /**
@@ -264,8 +264,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param minPan Start horizontal pan angle in degrees
      */
-    public void setMinPan(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setMinPan(float minPan) {
+        setFloatAt(28, minPan);
     }
 
     /**
@@ -278,8 +278,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param maxPan End horizontal pan angle in degrees
      */
-    public void setMaxPan(float paramFloat) {
-        setFloatAt(32, paramFloat);
+    public void setMaxPan(float maxPan) {
+        setFloatAt(32, maxPan);
     }
 
     /**
@@ -292,8 +292,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param defaultPan Initial horizontal pan angle in degrees (poster view)
      */
-    public void setDefaultPan(float paramFloat) {
-        setFloatAt(36, paramFloat);
+    public void setDefaultPan(float defaultPan) {
+        setFloatAt(36, defaultPan);
     }
 
     /**
@@ -306,8 +306,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param minTilt Start vertical pan angle in degrees
      */
-    public void setMinTilt(float paramFloat) {
-        setFloatAt(40, paramFloat);
+    public void setMinTilt(float minTilt) {
+        setFloatAt(40, minTilt);
     }
 
     /**
@@ -320,8 +320,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param maxTilt End vertical pan angle in degrees
      */
-    public void setMaxTilt(float paramFloat) {
-        setFloatAt(44, paramFloat);
+    public void setMaxTilt(float maxTilt) {
+        setFloatAt(44, maxTilt);
     }
 
     /**
@@ -334,8 +334,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param defaultTilt Initial vertical pan angle in degrees (poster view)
      */
-    public void setDefaultTilt(float paramFloat) {
-        setFloatAt(48, paramFloat);
+    public void setDefaultTilt(float defaultTilt) {
+        setFloatAt(48, defaultTilt);
     }
 
     /**
@@ -350,10 +350,10 @@ public final class QTVRObjectSample extends QTVRAtom {
      * @throws minFieldOfView must be &gt;= 1
      * @throws quicktime.QTException
      */
-    public void setMinFieldOfView(float paramFloat) throws QTException {
-        if (paramFloat < 1.0D)
+    public void setMinFieldOfView(float minFieldOfView) throws QTException {
+        if (minFieldOfView < 1.0D)
             throw new QTException(-50);
-        setFloatAt(52, paramFloat);
+        setFloatAt(52, minFieldOfView);
     }
 
     /**
@@ -368,10 +368,10 @@ public final class QTVRObjectSample extends QTVRAtom {
      * @throws fieldOfView must be &gt;= 1
      * @throws quicktime.QTException
      */
-    public void setFieldOfView(float paramFloat) throws QTException {
-        if (paramFloat < 1.0D)
+    public void setFieldOfView(float fieldOfView) throws QTException {
+        if (fieldOfView < 1.0D)
             throw new QTException(-50);
-        setFloatAt(56, paramFloat);
+        setFloatAt(56, fieldOfView);
     }
 
     /**
@@ -384,8 +384,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param defaultFieldOfView the default field of view
      */
-    public void setDefaultFieldOfView(float paramFloat) {
-        setFloatAt(60, paramFloat);
+    public void setDefaultFieldOfView(float defaultFieldOfView) {
+        setFloatAt(60, defaultFieldOfView);
     }
 
     /**
@@ -398,9 +398,9 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param defaultViewCenter the default view center
      */
-    public void setDefaultViewCenter(QDPoint paramQDPoint) {
-        setFloatAt(64, paramQDPoint.getXF());
-        setFloatAt(68, paramQDPoint.getYF());
+    public void setDefaultViewCenter(QDPoint defaultViewCenter) {
+        setFloatAt(64, defaultViewCenter.getXF());
+        setFloatAt(68, defaultViewCenter.getYF());
     }
 
     /**
@@ -413,8 +413,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param viewRate the view rate
      */
-    public void setViewRate(float paramFloat) {
-        setFloatAt(72, paramFloat);
+    public void setViewRate(float viewRate) {
+        setFloatAt(72, viewRate);
     }
 
     /**
@@ -427,8 +427,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param frameRate the frame rate
      */
-    public void setFrameRate(float paramFloat) {
-        setFloatAt(76, paramFloat);
+    public void setFrameRate(float frameRate) {
+        setFloatAt(76, frameRate);
     }
 
     /**
@@ -441,8 +441,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param animationSettings The Animation Settings (reserved)
      */
-    public void setAnimationSettings(int paramInt) {
-        setIntAt(80, paramInt);
+    public void setAnimationSettings(int animationSettings) {
+        setIntAt(80, animationSettings);
     }
 
     /**
@@ -455,8 +455,8 @@ public final class QTVRObjectSample extends QTVRAtom {
     /**
      * @param controlSettings The Control Settings (reserved)
      */
-    public void setControlSettings(int paramInt) {
-        setIntAt(84, paramInt);
+    public void setControlSettings(int controlSettings) {
+        setIntAt(84, controlSettings);
     }
 
     /**

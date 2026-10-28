@@ -39,8 +39,8 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param matrix Specifies the new matrix.
      * @throws quicktime.std.StdQTException
      */
-    public void setMatrix(int paramInt, Matrix paramMatrix) throws StdQTException {
-        int i = SpriteMediaSetSpriteProperty(_ID(), paramInt, 1, paramMatrix.getBytes());
+    public void setMatrix(int spriteID, Matrix matrix) throws StdQTException {
+        int i = SpriteMediaSetSpriteProperty(_ID(), spriteID, 1, matrix.getBytes());
         StdQTException.checkError(i);
     }
 
@@ -51,9 +51,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param visible Specifies the new visibility property.
      * @throws quicktime.std.StdQTException
      */
-    public void setVisible(int paramInt, boolean paramBoolean) throws StdQTException {
-        short s = (byte) (paramBoolean ? 1 : 0);
-        int i = SpriteMediaSetSpriteProperty(_ID(), paramInt, 4, s);
+    public void setVisible(int spriteID, boolean visible) throws StdQTException {
+        short s = (byte) (visible ? 1 : 0);
+        int i = SpriteMediaSetSpriteProperty(_ID(), spriteID, 4, s);
         StdQTException.checkError(i);
     }
 
@@ -64,9 +64,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param layer Specifies the new layer property.
      * @throws quicktime.std.StdQTException
      */
-    public void setLayer(int paramInt1, int paramInt2) throws StdQTException {
-        short s = (short) paramInt2;
-        int i = SpriteMediaSetSpriteProperty(_ID(), paramInt1, 5, s);
+    public void setLayer(int spriteID, int layer) throws StdQTException {
+        short s = (short) layer;
+        int i = SpriteMediaSetSpriteProperty(_ID(), spriteID, 5, s);
         StdQTException.checkError(i);
     }
 
@@ -77,8 +77,8 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param gMode Specifies the new graphics mode property.
      * @throws quicktime.std.StdQTException
      */
-    public void setGraphicsMode(int paramInt, GraphicsMode paramGraphicsMode) throws StdQTException {
-        int i = SpriteMediaSetSpriteProperty(_ID(), paramInt, 6, paramGraphicsMode.getBytes());
+    public void setGraphicsMode(int spriteID, GraphicsMode gMode) throws StdQTException {
+        int i = SpriteMediaSetSpriteProperty(_ID(), spriteID, 6, gMode.getBytes());
         StdQTException.checkError(i);
     }
 
@@ -89,8 +89,8 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param index Specifies the new image index property.
      * @throws quicktime.std.StdQTException
      */
-    public void setImageIndex(int paramInt1, int paramInt2) throws StdQTException {
-        int i = SpriteMediaSetSpriteProperty(_ID(), paramInt1, 100, (short) paramInt2);
+    public void setImageIndex(int spriteID, int index) throws StdQTException {
+        int i = SpriteMediaSetSpriteProperty(_ID(), spriteID, 100, (short) index);
         StdQTException.checkError(i);
     }
 
@@ -101,9 +101,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the matrix property of the specified sprite.
      * @throws quicktime.std.StdQTException
      */
-    public Matrix getMatrix(int paramInt) throws StdQTException {
+    public Matrix getMatrix(int spriteID) throws StdQTException {
         Matrix localMatrix = new Matrix();
-        int i = SpriteMediaGetSpriteProperty(_ID(), paramInt, 1, localMatrix.getBytes());
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 1, localMatrix.getBytes());
         StdQTException.checkError(i);
         return localMatrix;
     }
@@ -115,9 +115,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the visibility property of the specified sprite.
      * @throws quicktime.std.StdQTException
      */
-    public boolean getVisible(int paramInt) throws StdQTException {
+    public boolean getVisible(int spriteID) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = SpriteMediaGetSpriteProperty(_ID(), paramInt, 4, arrayOfShort);
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 4, arrayOfShort);
         StdQTException.checkError(i);
         return arrayOfShort[0] != 0;
     }
@@ -129,9 +129,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the layer property of the specified sprite.
      * @throws quicktime.std.StdQTException
      */
-    public int getLayer(int paramInt) throws StdQTException {
+    public int getLayer(int spriteID) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = SpriteMediaGetSpriteProperty(_ID(), paramInt, 5, arrayOfShort);
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 5, arrayOfShort);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -143,9 +143,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the graphics mode property of the specified sprite.
      * @throws quicktime.std.StdQTException
      */
-    public GraphicsMode getGraphicsMode(int paramInt) throws StdQTException {
+    public GraphicsMode getGraphicsMode(int spriteID) throws StdQTException {
         GraphicsMode localGraphicsMode = new GraphicsMode();
-        int i = SpriteMediaGetSpriteProperty(_ID(), paramInt, 6, localGraphicsMode.getBytes());
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 6, localGraphicsMode.getBytes());
         StdQTException.checkError(i);
         return localGraphicsMode;
     }
@@ -157,9 +157,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the image index property of the specified sprite.
      * @throws quicktime.std.StdQTException
      */
-    public int getImageIndex(int paramInt) throws StdQTException {
+    public int getImageIndex(int spriteID) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = SpriteMediaGetSpriteProperty(_ID(), paramInt, 100, arrayOfShort);
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 100, arrayOfShort);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -172,9 +172,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the ID of the sprite which contains the point.
      * @throws quicktime.std.StdQTException
      */
-    public int hitTestAllSprites(int paramInt, QDPoint paramQDPoint) throws StdQTException {
+    public int hitTestAllSprites(int flags, QDPoint loc) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = SpriteMediaHitTestAllSprites(_ID(), paramInt, paramQDPoint.getPoint(), arrayOfInt);
+        int i = SpriteMediaHitTestAllSprites(_ID(), flags, loc.getPoint(), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -188,9 +188,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return true or false if the loc matches that of the sprite.
      * @throws quicktime.std.StdQTException
      */
-    public boolean hitTestOneSprite(int paramInt1, int paramInt2, QDPoint paramQDPoint) throws StdQTException {
+    public boolean hitTestOneSprite(int spriteID, int flags, QDPoint loc) throws StdQTException {
         byte[] arrayOfByte = new byte[1];
-        int i = SpriteMediaHitTestOneSprite(_ID(), paramInt1, paramInt2, paramQDPoint.getPoint(), arrayOfByte);
+        int i = SpriteMediaHitTestOneSprite(_ID(), spriteID, flags, loc.getPoint(), arrayOfByte);
         StdQTException.checkError(i);
         return arrayOfByte[0] != 0;
     }
@@ -228,9 +228,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the image description for the image specified by the index.
      * @throws quicktime.QTException
      */
-    public ImageDescription getIndImageDescription(int paramInt) throws QTException {
+    public ImageDescription getIndImageDescription(int imageIndex) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
-        int i = SpriteMediaGetIndImageDescription(_ID(), (short) paramInt, QTObject.ID(localImageDescription));
+        int i = SpriteMediaGetIndImageDescription(_ID(), (short) imageIndex, QTObject.ID(localImageDescription));
         StdQTException.checkError(i);
         return localImageDescription;
     }
@@ -255,9 +255,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the sprite name for a given sprite ID.
      * @throws quicktime.std.StdQTException
      */
-    public String getSpriteName(int paramInt) throws StdQTException {
+    public String getSpriteName(int spriteID) throws StdQTException {
         byte[] arrayOfByte = new byte[255];
-        int i = SpriteMediaGetSpriteName(_ID(), paramInt, arrayOfByte);
+        int i = SpriteMediaGetSpriteName(_ID(), spriteID, arrayOfByte);
         StdQTException.checkError(i);
         return QTUtils.PString2String(arrayOfByte, 0);
     }
@@ -269,9 +269,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the name of the image with the specified index from the current key frame sample.
      * @throws quicktime.std.StdQTException
      */
-    public String getImageName(int paramInt) throws StdQTException {
+    public String getImageName(int imageIndex) throws StdQTException {
         byte[] arrayOfByte = new byte[256];
-        int i = SpriteMediaGetImageName(_ID(), (short) paramInt, arrayOfByte);
+        int i = SpriteMediaGetImageName(_ID(), (short) imageIndex, arrayOfByte);
         StdQTException.checkError(i);
         return QTUtils.PString2String(arrayOfByte, 0);
     }
@@ -283,9 +283,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return sprite ID of the sprite Index.
      * @throws quicktime.std.StdQTException
      */
-    public int spriteIndexToID(int paramInt) throws StdQTException {
+    public int spriteIndexToID(int spriteIndex) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = SpriteMediaSpriteIndexToID(_ID(), (short) paramInt, arrayOfInt);
+        int i = SpriteMediaSpriteIndexToID(_ID(), (short) spriteIndex, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -297,9 +297,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return sprite ID of the sprite Index.
      * @throws quicktime.std.StdQTException
      */
-    public short spriteIDtoIndex(int paramInt) throws StdQTException {
+    public short spriteIDtoIndex(int spriteID) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        int i = SpriteMediaSpriteIDToIndex(_ID(), paramInt, arrayOfShort);
+        int i = SpriteMediaSpriteIDToIndex(_ID(), spriteID, arrayOfShort);
         StdQTException.checkError(i);
         return arrayOfShort[0];
     }
@@ -310,10 +310,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param variableID Specifies a variable ID of the sprite name.
      * @throws quicktime.std.StdQTException
      */
-    public void setActionVariable(int paramInt, float paramFloat) throws StdQTException {
+    public void setActionVariable(int variableID, float value) throws StdQTException {
         float[] arrayOfFloat = new float[1];
-        arrayOfFloat[0] = paramFloat;
-        int i = SpriteMediaSetActionVariable(_ID(), paramInt, arrayOfFloat);
+        arrayOfFloat[0] = value;
+        int i = SpriteMediaSetActionVariable(_ID(), variableID, arrayOfFloat);
         StdQTException.checkError(i);
     }
 
@@ -323,9 +323,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param variableID Specifies a variable ID of the sprite name.
      * @throws quicktime.std.StdQTException
      */
-    public float getActionVariable(int paramInt) throws StdQTException {
+    public float getActionVariable(int variableID) throws StdQTException {
         float[] arrayOfFloat = new float[1];
-        int i = SpriteMediaGetActionVariable(_ID(), paramInt, arrayOfFloat);
+        int i = SpriteMediaGetActionVariable(_ID(), variableID, arrayOfFloat);
         StdQTException.checkError(i);
         return arrayOfFloat[0];
     }
@@ -337,8 +337,8 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param theString Specifies the string value of the variableID.
      * @throws quicktime.std.StdQTException
      */
-    public void setActionVariableToString(int paramInt, String paramString) throws StdQTException {
-        int i = SpriteMediaSetActionVariableToString(_ID(), paramInt, QTUtils.String2CString(paramString));
+    public void setActionVariableToString(int variableID, String theString) throws StdQTException {
+        int i = SpriteMediaSetActionVariableToString(_ID(), variableID, QTUtils.String2CString(theString));
         StdQTException.checkError(i);
     }
 
@@ -349,9 +349,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @return the string value of the variableID sprite track
      * @throws quicktime.std.StdQTException
      */
-    public String getActionVariableAsString(int paramInt) throws StdQTException {
+    public String getActionVariableAsString(int variableID) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = SpriteMediaGetActionVariableAsString(_ID(), paramInt, arrayOfInt);
+        int i = SpriteMediaGetActionVariableAsString(_ID(), variableID, arrayOfInt);
         StdQTException.checkError(i);
         try {
             MyStringHandle localMyStringHandle = new MyStringHandle(arrayOfInt[0], this, 1);
@@ -375,9 +375,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param imageIndex Specifies the index of the image.
      * @throws quicktime.std.StdQTException
      */
-    public int getSpriteImageGroupID(int paramInt) throws StdQTException {
+    public int getSpriteImageGroupID(int imageIndex) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = SpriteMediaGetIndImageProperty(_ID(), (short) paramInt, 1001, arrayOfInt);
+        int i = SpriteMediaGetIndImageProperty(_ID(), (short) imageIndex, 1001, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -388,9 +388,9 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param imageIndex Specifies the index of the image.
      * @throws quicktime.std.StdQTException
      */
-    public QDPoint getSpriteImageRegistrationPoint(int paramInt) throws StdQTException {
+    public QDPoint getSpriteImageRegistrationPoint(int imageIndex) throws StdQTException {
         byte[] arrayOfByte = new byte[8];
-        int i = SpriteMediaGetIndImageProperty(_ID(), (short) paramInt, 1000, arrayOfByte);
+        int i = SpriteMediaGetIndImageProperty(_ID(), (short) imageIndex, 1000, arrayOfByte);
         StdQTException.checkError(i);
         return QDPoint.fromArray(arrayOfByte, 8);
     }
@@ -407,8 +407,8 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      *  the next image index unless its previously assigned
      * @throws quicktime.std.StdQTException
      */
-    public void newImage(DataRef paramDataRef, int paramInt) throws StdQTException {
-        int i = SpriteMediaNewImage(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), paramInt);
+    public void newImage(DataRef dataRef, int imageID) throws StdQTException {
+        int i = SpriteMediaNewImage(_ID(), QTObject.ID(dataRef), dataRef.getType(), imageID);
         StdQTException.checkError(i);
     }
 
@@ -419,8 +419,8 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @param imageIndex the index of image to be removed
      * @throws quicktime.std.StdQTException
      */
-    public void disposeImage(int paramInt) throws StdQTException {
-        int i = SpriteMediaDisposeImage(_ID(), (short) paramInt);
+    public void disposeImage(int imageIndex) throws StdQTException {
+        int i = SpriteMediaDisposeImage(_ID(), (short) imageIndex);
         StdQTException.checkError(i);
     }
 

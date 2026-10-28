@@ -88,11 +88,11 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
      * bytes - a longer byte array will be truncated to the first 249 bytes
      * @param mData the MIDI data
      */
-    public void setMIDIData(byte[] paramArrayOfByte) {
-        int i = Math.min(paramArrayOfByte.length, 249);
+    public void setMIDIData(byte[] mData) {
+        int i = Math.min(mData.length, 249);
         setShortAt(0, (short) i);
         setIntAt(2, 0);
-        setBytesAt(6, i, paramArrayOfByte, 0);
+        setBytesAt(6, i, mData, 0);
     }
 
     /**
@@ -100,9 +100,9 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
      * @param index the data byte to set
      * @param val the new value
      */
-    public void setDataByte(int paramInt1, int paramInt2) {
-        if (paramInt1 < getShortAt(0)) {
-            setByteAt(paramInt1 + 6, (byte) paramInt2);
+    public void setDataByte(int index, int val) {
+        if (index < getShortAt(0)) {
+            setByteAt(index + 6, (byte) val);
         }
     }
 

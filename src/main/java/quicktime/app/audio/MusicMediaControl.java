@@ -23,8 +23,8 @@ public class MusicMediaControl extends AudioMediaControl implements MusicScore {
      * The constructor needs to know which MusicMedia object is being controlled.
      * @param m the MusicMedia object being controlled
      */
-    public MusicMediaControl(quicktime.std.movies.media.MusicMedia paramMusicMedia) throws quicktime.QTException {
-        super(paramMusicMedia);
+    public MusicMediaControl(quicktime.std.movies.media.MusicMedia m) throws quicktime.QTException {
+        super(m);
         this.mh = ((MusicMediaHandler) this.audioHandler);
     }
 
@@ -50,7 +50,7 @@ public class MusicMediaControl extends AudioMediaControl implements MusicScore {
      * @throws quicktime.QTException
      */
     @Override
-    public MusicPart getPart(int paramInt) throws quicktime.QTException {
-        return new MusicPartControl(this.mh, paramInt);
+    public MusicPart getPart(int part) throws quicktime.QTException {
+        return new MusicPartControl(this.mh, part);
     }
 }

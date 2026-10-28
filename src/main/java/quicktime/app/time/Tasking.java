@@ -29,8 +29,8 @@ public abstract class Tasking implements Taskable {
      * @param t the TaskThread
      */
     @Override
-    public void addedToTasker(TaskThread paramTaskThread) {
-        this.tt = paramTaskThread;
+    public void addedToTasker(TaskThread t) {
+        this.tt = t;
     }
 
     /**
@@ -71,11 +71,11 @@ public abstract class Tasking implements Taskable {
      * start the incoming TaskThread
      * @param tasker the TaskThread to use for tasking
      */
-    public void setDefaultTasker(TaskThread paramTaskThread) {
-        if (paramTaskThread == null) {
+    public void setDefaultTasker(TaskThread tasker) {
+        if (tasker == null) {
             this.defTasker = Taskable.tasker;
         } else {
-            this.defTasker = paramTaskThread;
+            this.defTasker = tasker;
         }
         if ((this.tt != null) && (this.tt != this.defTasker)) {
             this.tt.removeMember(this);

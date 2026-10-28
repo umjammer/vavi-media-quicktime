@@ -30,8 +30,8 @@ public final class SourcerTrackParams extends QTPointer {
      * @param flags the flags of the track
      * @param track the track associated with the sourcer
      */
-    public SourcerTrackParams(int paramInt, Track paramTrack) throws QTException {
-        this(1, paramInt, paramTrack, 0L, 0L, null);
+    public SourcerTrackParams(int flags, Track track) throws QTException {
+        this(1, flags, track, 0L, 0L, null);
     }
 
     /**
@@ -42,8 +42,8 @@ public final class SourcerTrackParams extends QTPointer {
      * @param duration the limit of the track length (use 0 for no limit)
      * @param loopParams the loop properties of the track (use null for no looping)
      */
-    public SourcerTrackParams(int paramInt, Track paramTrack, long paramLong1, long paramLong2, SourcerLoopParams paramSourcerLoopParams) throws QTException {
-        this(1, paramInt, paramTrack, paramLong1, paramLong2, paramSourcerLoopParams);
+    public SourcerTrackParams(int flags, Track track, long trackStartOffset, long duration, SourcerLoopParams loopParams) throws QTException {
+        this(1, flags, track, trackStartOffset, duration, loopParams);
     }
 
     /**
@@ -55,22 +55,22 @@ public final class SourcerTrackParams extends QTPointer {
      * @param duration the limit of the track length (use 0 for no limit)
      * @param loopParams the loop properties of the track (use null for no looping)
      */
-    public SourcerTrackParams(int paramInt1, int paramInt2, Track paramTrack, long paramLong1, long paramLong2, SourcerLoopParams paramSourcerLoopParams) throws QTException {
+    public SourcerTrackParams(int version, int flags, Track track, long trackStartOffset, long duration, SourcerLoopParams loopParams) throws QTException {
         super(32, true);
-        setVersion(paramInt1);
-        setFlags(paramInt2);
-        setTrack(paramTrack);
-        setTrackStartOffset(paramLong1);
-        setDuration(paramLong2);
-        setLoopParams(paramSourcerLoopParams);
+        setVersion(version);
+        setFlags(flags);
+        setTrack(track);
+        setTrackStartOffset(trackStartOffset);
+        setDuration(duration);
+        setLoopParams(loopParams);
     }
 
     /**
      * Sets the version of the track params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -85,8 +85,8 @@ public final class SourcerTrackParams extends QTPointer {
      * Sets the flags associated with the track params object
      * @param flags flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(4, flags);
     }
 
     /**
@@ -102,10 +102,10 @@ public final class SourcerTrackParams extends QTPointer {
      * @param track track (should not be null)
      * @throws quicktime.QTRuntimeException
      */
-    public void setTrack(Track paramTrack) throws QTRuntimeException {
-        if (paramTrack != null) {
-            setIntAt(8, QTObject.ID(paramTrack));
-            this.itsTrack = paramTrack;
+    public void setTrack(Track track) throws QTRuntimeException {
+        if (track != null) {
+            setIntAt(8, QTObject.ID(track));
+            this.itsTrack = track;
         } else {
             throw new QTRuntimeException("Track must not be null");
         }
@@ -122,8 +122,8 @@ public final class SourcerTrackParams extends QTPointer {
     /**
      * Sets the track starting offset (0 indicates the start of the track)
      */
-    public void setTrackStartOffset(long paramLong) {
-        setLongAt(12, paramLong);
+    public void setTrackStartOffset(long trackStartOffset) {
+        setLongAt(12, trackStartOffset);
     }
 
     /**
@@ -137,8 +137,8 @@ public final class SourcerTrackParams extends QTPointer {
      * Sets the duration limit of the track (0 indicates no limit)
      * @param duration limit of the track duration
      */
-    public void setDuration(long paramLong) {
-        setLongAt(20, paramLong);
+    public void setDuration(long duration) {
+        setLongAt(20, duration);
     }
 
     /**
@@ -152,10 +152,10 @@ public final class SourcerTrackParams extends QTPointer {
      * Sets the loop parameters of the track parameters object
      * @param params the loop parameters
      */
-    public void setLoopParams(SourcerLoopParams paramSourcerLoopParams) {
-        if (paramSourcerLoopParams != null) {
-            setIntAt(28, QTObject.ID(paramSourcerLoopParams));
-            this.itsParams = paramSourcerLoopParams;
+    public void setLoopParams(SourcerLoopParams params) {
+        if (params != null) {
+            setIntAt(28, QTObject.ID(params));
+            this.itsParams = params;
         } else {
             setIntAt(28, 0);
             this.itsParams = null;

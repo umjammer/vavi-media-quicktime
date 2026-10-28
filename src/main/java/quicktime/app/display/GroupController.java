@@ -62,8 +62,8 @@ public class GroupController extends MouseController {
      * @param target the new GroupDrawable space for the controller.
      */
     @Override
-    protected void setTargetSpace(Space paramSpace) {
-        this.group = ((GroupDrawable) paramSpace);
+    protected void setTargetSpace(Space target) {
+        this.group = ((GroupDrawable) target);
     }
 
     /**
@@ -77,8 +77,8 @@ public class GroupController extends MouseController {
      * @throws quicktime.QTException
      */
     @Override
-    protected Object getSelected(MouseEvent paramMouseEvent) throws QTException {
-        this.current = ((QTDrawable) this.group.hitTest(paramMouseEvent.getX(), paramMouseEvent.getY()));
+    protected Object getSelected(MouseEvent event) throws QTException {
+        this.current = ((QTDrawable) this.group.hitTest(event.getX(), event.getY()));
         if ((isWholespace()) || (hasMember(this.current)))
             return this.current;
         return null;
@@ -120,7 +120,7 @@ public class GroupController extends MouseController {
      * @param e the mouse event that triggered the drag
      */
     @Override
-    public void mouseDragged(MouseEvent paramMouseEvent) {
+    public void mouseDragged(MouseEvent e) {
         if (!this.isActive)
             return;
         try {
@@ -128,10 +128,10 @@ public class GroupController extends MouseController {
                 MouseResponder localMouseResponder = getResponder();
                 if ((localMouseResponder.isInterested(4)) && (localMouseResponder.isActive())) {
                     QTDrawable localQTDrawable = this.current;
-                    doDragTarget(paramMouseEvent);
+                    doDragTarget(e);
                     this.current = localQTDrawable;
                     Region localRegion1 = new Region(this.current.getDisplayBounds());
-                    localMouseResponder.mouseDragged(paramMouseEvent);
+                    localMouseResponder.mouseDragged(e);
                     Region localRegion2 = new Region(this.current.getDisplayBounds());
                     Region localRegion3 = localRegion1.union(localRegion2).diff(localRegion2);
                     if (!localRegion3.empty()) {

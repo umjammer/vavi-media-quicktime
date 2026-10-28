@@ -57,7 +57,7 @@ public interface QTDisplaySpace extends QTDrawable, Space {
      * @param member the member
      * @return a Layerable object to interact with the display layer of a member.
      */
-    Layerable getLayerable(Object paramObject);
+    Layerable getLayerable(Object member);
 
     /**
      * @deprecated
@@ -72,7 +72,7 @@ public interface QTDisplaySpace extends QTDrawable, Space {
      * @return a Transformable object that allows the application to manipulate the two d
      *  display characteristics of the member or null if the object is not a member.
      */
-    Transformable getTransformable(Object paramObject);
+    Transformable getTransformable(Object member);
 
     /**
      * @deprecated
@@ -85,7 +85,7 @@ public interface QTDisplaySpace extends QTDrawable, Space {
      * @return true if the member was appropriate and was added to the space, otherwise false
      * @throws quicktime.QTException
      */
-    boolean addMember(Object paramObject, int paramInt) throws QTException;
+    boolean addMember(Object member, int layer) throws QTException;
 
     /**
      * @deprecated
@@ -100,6 +100,6 @@ public interface QTDisplaySpace extends QTDrawable, Space {
      * @return an Object at that coordinate or null if no object at specified coordinate
      * @throws quicktime.QTException
      */
-    Object hitTest(int paramInt1, int paramInt2) throws QTException;
+    Object hitTest(int x, int y) throws QTException;
 }
 

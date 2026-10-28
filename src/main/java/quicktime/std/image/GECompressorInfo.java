@@ -19,8 +19,8 @@ public class GECompressorInfo {
      * @param canUseCompressor true if Graphics Exporter uses compressor
      * @param atomContainer contains information related to the compression operation
      */
-    public GECompressorInfo(boolean paramBoolean, AtomContainer paramAtomContainer) {
-        paramBoolean = paramBoolean;
-        paramAtomContainer = paramAtomContainer;
+    public GECompressorInfo(boolean canUseCompressor, AtomContainer atomContainer) {
+        this.canUseCompressor = canUseCompressor;
+        this.atomContainer = atomContainer;
     }
 }

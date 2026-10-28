@@ -104,8 +104,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
      *
      * @param value -
      */
-    public void setValue(long paramLong) {
-        setLongAt(0, paramLong);
+    public void setValue(long value) {
+        setLongAt(0, value);
     }
 
     /**
@@ -113,8 +113,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
      *
      * @param scale -
      */
-    public void setScale(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setScale(int scale) {
+        setIntAt(8, scale);
     }
 
     /**
@@ -122,8 +122,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
      *
      * @param duration -
      */
-    public void setDuration(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setDuration(int duration) {
+        setIntAt(16, duration);
     }
 
     /**
@@ -131,8 +131,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
      *
      * @param rate -
      */
-    public void setRate(float paramFloat) {
-        setIntAt(20, QTUtils.X2Fix(paramFloat));
+    public void setRate(float rate) {
+        setIntAt(20, QTUtils.X2Fix(rate));
     }
 
     /**
@@ -140,8 +140,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
      *
      * @param frameNumber -
      */
-    public void setFrameNumber(int paramInt) {
-        setIntAt(28, paramInt);
+    public void setFrameNumber(int frameNumber) {
+        setIntAt(28, frameNumber);
     }
 
     /**
@@ -172,8 +172,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
     /**
      * @param base the time base that will use this object - can be null
      */
-    public void setBase(TimeBase paramTimeBase) {
-        setIntAt(12, QTObject.ID(paramTimeBase));
+    public void setBase(TimeBase base) {
+        setIntAt(12, QTObject.ID(base));
     }
 
     /**
@@ -206,8 +206,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
     /**
      * @param flags the flags for this structure
      */
-    public void setFlags(int paramInt) {
-        setIntAt(32, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(32, flags);
     }
 
     /**
@@ -220,8 +220,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
     /**
      * @param time the new virtual start time
      */
-    public void setVirtualStartTime(long paramLong) {
-        setLongAt(36, paramLong);
+    public void setVirtualStartTime(long time) {
+        setLongAt(36, time);
     }
 
     /**
@@ -234,8 +234,8 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
     /**
      * @param duration the virtual duration
      */
-    public void setVirtualDuration(int paramInt) {
-        setIntAt(44, paramInt);
+    public void setVirtualDuration(int duration) {
+        setIntAt(44, duration);
     }
 
     /**

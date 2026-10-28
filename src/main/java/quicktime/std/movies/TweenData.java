@@ -35,11 +35,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start value
      * @param end The interpolation end value
      */
-    public TweenData(short paramShort1, short paramShort2) throws QTException {
+    public TweenData(short start, short end) throws QTException {
         super(allocSize(1));
         this.type = 1;
-        setShortAt(0, paramShort1);
-        setShortAt(2, paramShort2);
+        setShortAt(0, start);
+        setShortAt(2, end);
     }
 
     /**
@@ -47,11 +47,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start value
      * @param end The interpolation end value
      */
-    public TweenData(int paramInt1, int paramInt2) throws QTException {
+    public TweenData(int start, int end) throws QTException {
         super(allocSize(2));
         this.type = 2;
-        setIntAt(0, paramInt1);
-        setIntAt(4, paramInt2);
+        setIntAt(0, start);
+        setIntAt(4, end);
     }
 
     /**
@@ -60,17 +60,17 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start value
      * @param end The interpolation end value
      */
-    public TweenData(int paramInt, float paramFloat1, float paramFloat2) throws QTException {
-        super(allocSize(paramInt));
-        this.type = paramInt;
+    public TweenData(int tweenType, float start, float end) throws QTException {
+        super(allocSize(tweenType));
+        this.type = tweenType;
         switch(this.type) {
             case 3:
-                setIntAt(0, QTUtils.X2Fix(paramFloat1));
-                setIntAt(4, QTUtils.X2Fix(paramFloat2));
+                setIntAt(0, QTUtils.X2Fix(start));
+                setIntAt(4, QTUtils.X2Fix(end));
                 break;
             case 10:
-                setFloatAt(0, paramFloat1);
-                setFloatAt(4, paramFloat2);
+                setFloatAt(0, start);
+                setFloatAt(4, end);
         }
     }
 
@@ -79,11 +79,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start value
      * @param end The interpolation end value
      */
-    public TweenData(double paramDouble1, double paramDouble2) throws QTException {
+    public TweenData(double start, double end) throws QTException {
         super(allocSize(11));
         this.type = 11;
-        setDoubleAt(0, paramDouble1);
-        setDoubleAt(8, paramDouble2);
+        setDoubleAt(0, start);
+        setDoubleAt(8, end);
     }
 
     /**
@@ -91,11 +91,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start Point
      * @param end The interpolation end Point
      */
-    public TweenData(QDPoint paramQDPoint1, QDPoint paramQDPoint2) throws QTException {
+    public TweenData(QDPoint start, QDPoint end) throws QTException {
         super(allocSize(4));
         this.type = 4;
-        setIntAt(0, paramQDPoint1.getPoint());
-        setIntAt(4, paramQDPoint2.getPoint());
+        setIntAt(0, start.getPoint());
+        setIntAt(4, end.getPoint());
     }
 
     /**
@@ -103,11 +103,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start Rect
      * @param end The interpolation end Rect
      */
-    public TweenData(QDRect paramQDRect1, QDRect paramQDRect2) throws QTException {
+    public TweenData(QDRect start, QDRect end) throws QTException {
         super(allocSize(5));
         this.type = 5;
-        setBytesAt(0, 8, paramQDRect1.getBytes(), 0);
-        setBytesAt(8, 8, paramQDRect2.getBytes(), 0);
+        setBytesAt(0, 8, start.getBytes(), 0);
+        setBytesAt(8, 8, end.getBytes(), 0);
     }
 
     /**
@@ -115,11 +115,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start matrix
      * @param end The interpolation end matrix
      */
-    public TweenData(Matrix paramMatrix1, Matrix paramMatrix2) throws QTException {
+    public TweenData(Matrix start, Matrix end) throws QTException {
         super(allocSize(7));
         this.type = 7;
-        setBytesAt(0, 36, paramMatrix1.getBytes(), 0);
-        setBytesAt(36, 36, paramMatrix2.getBytes(), 0);
+        setBytesAt(0, 36, start.getBytes(), 0);
+        setBytesAt(36, 36, end.getBytes(), 0);
     }
 
     /**
@@ -127,11 +127,11 @@ public final class TweenData extends QTByteObject {
      * @param start The interpolation start color
      * @param end The interpolation end color
      */
-    public TweenData(QDColor paramQDColor1, QDColor paramQDColor2) throws QTException {
+    public TweenData(QDColor start, QDColor end) throws QTException {
         super(allocSize(8));
         this.type = 8;
-        setBytesAt(0, 6, paramQDColor1.getBytes(), 0);
-        setBytesAt(6, 6, paramQDColor2.getBytes(), 0);
+        setBytesAt(0, 6, start.getBytes(), 0);
+        setBytesAt(6, 6, end.getBytes(), 0);
     }
 
     /**
@@ -141,13 +141,13 @@ public final class TweenData extends QTByteObject {
      * @param end The interpolation end matrix
      * @param graphicsMode The graphic mode
      */
-    public TweenData(QDColor paramQDColor1, QDColor paramQDColor2, int paramInt) throws QTException {
+    public TweenData(QDColor start, QDColor end, int graphicsMode) throws QTException {
         super(allocSize(9));
         this.type = 9;
-        setIntAt(0, paramInt);
-        setBytesAt(4, 6, paramQDColor1.getBytes(), 0);
-        setIntAt(10, paramInt);
-        setBytesAt(14, 6, paramQDColor2.getBytes(), 0);
+        setIntAt(0, graphicsMode);
+        setBytesAt(4, 6, start.getBytes(), 0);
+        setIntAt(10, graphicsMode);
+        setBytesAt(14, 6, end.getBytes(), 0);
     }
 
     /**
@@ -157,13 +157,13 @@ public final class TweenData extends QTByteObject {
      * @param endX The interpolation end x value
      * @param endY The interpolation end y value
      */
-    public TweenData(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) throws QTException {
+    public TweenData(float startX, float startY, float endX, float endY) throws QTException {
         super(allocSize(12));
         this.type = 12;
-        setFloatAt(0, paramFloat1);
-        setFloatAt(4, paramFloat2);
-        setFloatAt(8, paramFloat3);
-        setFloatAt(12, paramFloat4);
+        setFloatAt(0, startX);
+        setFloatAt(4, startY);
+        setFloatAt(8, endX);
+        setFloatAt(12, endY);
     }
 
     /**

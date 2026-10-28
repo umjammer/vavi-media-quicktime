@@ -21,7 +21,7 @@ public interface NotifyListener {
      *  has reached the state that the listener expects.
      * @return true if the Notifier is appropriate for the NotifyListener
      */
-    boolean setNotifier(Notifier paramNotifier);
+    boolean setNotifier(Notifier notifier);
 
     /**
      * @deprecated

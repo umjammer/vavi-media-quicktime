@@ -314,14 +314,14 @@ public abstract class TransformMatrix {
      * @param obj the object to test
      * @return true if equal, false if not
      */
-    public boolean equals(Object paramObject) {
-        if (paramObject == this)
+    public boolean equals(Object obj) {
+        if (obj == this)
             return true;
-        if (paramObject == null)
+        if (obj == null)
             return false;
-        if (!paramObject.getClass().getName().equals(getClass().getName()))
+        if (!obj.getClass().getName().equals(getClass().getName()))
             return false;
-        if ((paramObject instanceof TransformMatrix localTransformMatrix)) {
+        if ((obj instanceof TransformMatrix localTransformMatrix)) {
             if (this.target != null)
                 return this.target.equals(localTransformMatrix.target);
         }
@@ -343,8 +343,8 @@ public abstract class TransformMatrix {
      * Using the constrain constants transformation of the target's matrix can be constrained in any direction.
      * @param flag constraint flag
      */
-    public void setConstraint(int paramInt) {
-        this.constrained = paramInt;
+    public void setConstraint(int flag) {
+        this.constrained = flag;
     }
 
     /**
@@ -448,9 +448,9 @@ public abstract class TransformMatrix {
      * @return true if the this transformation reached a constraining condition
      * @throws quicktime.QTException
      */
-    public boolean transformTarget(int paramInt1, int paramInt2) throws quicktime.QTException {
-        this.newPt[0].setX(paramInt1);
-        this.newPt[0].setY(paramInt2);
+    public boolean transformTarget(int newX, int newY) throws quicktime.QTException {
+        this.newPt[0].setX(newX);
+        this.newPt[0].setY(newY);
         this.invSpaceMatrix.transformPoints(this.newPt);
         int i = this.newPt[0].getX() - this.origPt[0].getX();
         int j = this.newPt[0].getY() - this.origPt[0].getY();
@@ -563,7 +563,7 @@ public abstract class TransformMatrix {
      * @param deltaY the difference between the original y point when the TransformMatrix object was initialized and the current location.
      * @throws quicktime.QTException
      */
-    protected abstract void doTransformation(Matrix paramMatrix, int paramInt1, int paramInt2) throws quicktime.QTException;
+    protected abstract void doTransformation(Matrix theMatrix, int deltaX, int deltaY) throws quicktime.QTException;
 
     /**
      * @deprecated
@@ -572,7 +572,7 @@ public abstract class TransformMatrix {
      * @param theMatrix The matrix handed in is the current matrix of the target.
      * @throws quicktime.QTException
      */
-    protected abstract void doTransformation(Matrix paramMatrix) throws quicktime.QTException;
+    protected abstract void doTransformation(Matrix theMatrix) throws quicktime.QTException;
 
     /**
      * @deprecated
@@ -580,7 +580,7 @@ public abstract class TransformMatrix {
      * This method is called whenever a constraints test hits one of the sides of the enclosing space.
      * @param whichSide indicates which side the constraints test hit.
      */
-    protected void boundsReached(int paramInt) {
+    protected void boundsReached(int whichSide) {
     }
 }
 

@@ -34,10 +34,10 @@ public class GroupMember implements Layerable {
      * @param d the QTDrawable member
      * @param l the member's current layer
      */
-    protected GroupMember(GroupDrawable paramGroupDrawable, QTDrawable paramQTDrawable, int paramInt) throws QTException {
-        this.drawer = paramQTDrawable;
-        this.layer = paramInt;
-        this.group = paramGroupDrawable;
+    protected GroupMember(GroupDrawable group, QTDrawable d, int l) throws QTException {
+        this.drawer = d;
+        this.layer = l;
+        this.group = group;
     }
 
     /**
@@ -48,10 +48,10 @@ public class GroupMember implements Layerable {
      * @param obj the other object to test for equality
      * @return true if equal else false
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ((paramObject instanceof GroupMember localGroupMember)) {
+        if ((obj instanceof GroupMember localGroupMember)) {
             return (localGroupMember.layer == this.layer) && (localGroupMember.drawer == this.drawer);
         }
         return false;
@@ -78,8 +78,8 @@ public class GroupMember implements Layerable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setLayer(int paramInt) throws QTException {
-        this.group.setMemberLayer(this.drawer, paramInt);
+    public void setLayer(int l) throws QTException {
+        this.group.setMemberLayer(this.drawer, l);
     }
 
     /**

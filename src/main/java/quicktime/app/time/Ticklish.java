@@ -37,6 +37,6 @@ public interface Ticklish {
      *  if the Ticklish object should not be tickled again.
      * @throws quicktime.QTException
      */
-    boolean tickle(float paramFloat, int paramInt) throws QTException;
+    boolean tickle(float er, int time) throws QTException;
 }
 

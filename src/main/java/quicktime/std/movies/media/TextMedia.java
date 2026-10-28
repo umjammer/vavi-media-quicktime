@@ -16,8 +16,8 @@ public final class TextMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public TextMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1952807028, paramInt, paramDataRef);
+    public TextMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1952807028, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class TextMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public TextMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public TextMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     TextMedia(int paramInt, Track paramTrack) throws QTException {
@@ -63,9 +63,9 @@ public final class TextMedia extends Media {
      * @return an TextDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public TextDescription getTextDescription(int paramInt) throws QTException {
+    public TextDescription getTextDescription(int index) throws QTException {
         TextDescription localTextDescription = new TextDescription();
-        getNativeSampleDescription(paramInt, localTextDescription);
+        getNativeSampleDescription(index, localTextDescription);
         return localTextDescription;
     }
 }

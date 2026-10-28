@@ -139,8 +139,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a Media subclass
      * @throws quicktime.QTException
      */
-    public static Media fromTrack(Track paramTrack) throws QTException {
-        return getTrackMedia(paramTrack);
+    public static Media fromTrack(Track theTrack) throws QTException {
+        return getTrackMedia(theTrack);
     }
 
     /**
@@ -150,10 +150,10 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a Media subclass
      * @throws quicktime.QTException
      */
-    public static Media getTrackMedia(Track paramTrack) throws QTException {
-        int i = GetTrackMedia(QTObject.ID(paramTrack));
+    public static Media getTrackMedia(Track theTrack) throws QTException {
+        int i = GetTrackMedia(QTObject.ID(theTrack));
         StdQTException.checkError(GetMoviesError());
-        return makeMedia(i, paramTrack);
+        return makeMedia(i, theTrack);
     }
 
     protected Media(Track paramTrack, int paramInt1, int paramInt2, DataRef paramDataRef) throws QTException {
@@ -190,9 +190,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a SampleDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public SampleDescription getSampleDescription(int paramInt) throws QTException {
+    public SampleDescription getSampleDescription(int index) throws QTException {
         SampleDescription localSampleDescription = makeDescription();
-        getNativeSampleDescription(paramInt, localSampleDescription);
+        getNativeSampleDescription(index, localSampleDescription);
         return localSampleDescription;
     }
 
@@ -203,8 +203,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param descH Specifies the handle to the sample description.
      * @throws quicktime.std.StdQTException
      */
-    public final void setSampleDescription(int paramInt, SampleDescription paramSampleDescription) throws StdQTException {
-        SetMediaSampleDescription(_ID(), paramInt, QTObject.ID(paramSampleDescription));
+    public final void setSampleDescription(int index, SampleDescription descH) throws StdQTException {
+        SetMediaSampleDescription(_ID(), index, QTObject.ID(descH));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -214,8 +214,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param index Identifies the data reference.
      * @throws quicktime.std.StdQTException
      */
-    public final DataHandler getDataHandler(int paramInt) throws StdQTException {
-        int i = GetMediaDataHandler(_ID(), (short) paramInt);
+    public final DataHandler getDataHandler(int index) throws StdQTException {
+        int i = GetMediaDataHandler(_ID(), (short) index);
         StdQTException.checkError(GetMoviesError());
         return new DataHandler(i, this);
     }
@@ -246,8 +246,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param mH Contains a reference to a media handler component.
      * @throws quicktime.std.StdQTException
      */
-    public final void setHandler(MediaHandler paramMediaHandler) throws StdQTException {
-        StdQTException.checkError(SetMediaHandler(_ID(), QTObject.ID(paramMediaHandler)));
+    public final void setHandler(MediaHandler mH) throws StdQTException {
+        StdQTException.checkError(SetMediaHandler(_ID(), QTObject.ID(mH)));
     }
 
     /**
@@ -302,8 +302,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param timeScale Specifies the media's new time scale.
      * @throws quicktime.std.StdQTException
      */
-    public final void setTimeScale(int paramInt) throws StdQTException {
-        SetMediaTimeScale(_ID(), paramInt);
+    public final void setTimeScale(int timeScale) throws StdQTException {
+        SetMediaTimeScale(_ID(), timeScale);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -337,8 +337,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param language Specifies the media's language or region code.
      * @throws quicktime.std.StdQTException
      */
-    public final void setLanguage(int paramInt) throws StdQTException {
-        SetMediaLanguage(_ID(), (short) paramInt);
+    public final void setLanguage(int language) throws StdQTException {
+        SetMediaLanguage(_ID(), (short) language);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -360,8 +360,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param quality Specifies the media's quality value.
      * @throws quicktime.std.StdQTException
      */
-    public final void setQuality(int paramInt) throws StdQTException {
-        SetMediaQuality(_ID(), (short) paramInt);
+    public final void setQuality(int quality) throws StdQTException {
+        SetMediaQuality(_ID(), (short) quality);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -406,8 +406,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param inputMap Specifies the new input map.
      * @throws quicktime.std.StdQTException
      */
-    public final void setInputMap(AtomContainer paramAtomContainer) throws StdQTException {
-        StdQTException.checkError(SetMediaInputMap(_ID(), QTObject.ID(paramAtomContainer)));
+    public final void setInputMap(AtomContainer inputMap) throws StdQTException {
+        StdQTException.checkError(SetMediaInputMap(_ID(), QTObject.ID(inputMap)));
     }
 
     /**
@@ -432,8 +432,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param index Specifies the index of the data ref.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDefaultDataRefIndex(int paramInt) throws StdQTException {
-        StdQTException.checkError(SetMediaDefaultDataRefIndex(_ID(), (short) paramInt));
+    public final void setDefaultDataRefIndex(int index) throws StdQTException {
+        StdQTException.checkError(SetMediaDefaultDataRefIndex(_ID(), (short) index));
     }
 
     /**
@@ -443,11 +443,11 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a HandlerInfo object.
      * @throws quicktime.std.StdQTException
      */
-    public final HandlerInfo getDataHandlerDescription(int paramInt) throws StdQTException {
+    public final HandlerInfo getDataHandlerDescription(int index) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         byte[] arrayOfByte = new byte[255];
         int[] arrayOfInt2 = new int[1];
-        GetMediaDataHandlerDescription(_ID(), (short) paramInt, arrayOfInt1, arrayOfByte, arrayOfInt2);
+        GetMediaDataHandlerDescription(_ID(), (short) index, arrayOfInt1, arrayOfByte, arrayOfInt2);
         StdQTException.checkError(GetMoviesError());
         return new HandlerInfo(arrayOfInt1[0], new String(arrayOfByte, 1, arrayOfByte[0]), arrayOfInt2[0]);
     }
@@ -495,10 +495,10 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a TimeInfo object that contains the time and duration of the sample.
      * @throws quicktime.std.StdQTException
      */
-    public final TimeInfo sampleNumToMediaTime(int paramInt) throws StdQTException {
+    public final TimeInfo sampleNumToMediaTime(int logicalSampleNum) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
-        SampleNumToMediaTime(_ID(), paramInt, arrayOfInt1, arrayOfInt2);
+        SampleNumToMediaTime(_ID(), logicalSampleNum, arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(GetMoviesError());
         return new TimeInfo(arrayOfInt1[0], arrayOfInt2[0]);
     }
@@ -510,11 +510,11 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a SampleTimeInfo object that contains the sample time and sample duration for the specified sample.
      * @throws quicktime.std.StdQTException
      */
-    public final SampleTimeInfo timeToSampleNum(int paramInt) throws StdQTException {
+    public final SampleTimeInfo timeToSampleNum(int time) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
-        MediaTimeToSampleNum(_ID(), paramInt, arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        MediaTimeToSampleNum(_ID(), time, arrayOfInt1, arrayOfInt2, arrayOfInt3);
         StdQTException.checkError(GetMoviesError());
         return new SampleTimeInfo(arrayOfInt2[0], arrayOfInt3[0], arrayOfInt1[0]);
     }
@@ -532,9 +532,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return the time where the sample was inserted.
      * @throws quicktime.std.StdQTException
      */
-    public final int addSample(QTHandleRef paramQTHandleRef, int paramInt1, int paramInt2, int paramInt3, SampleDescription paramSampleDescription, int paramInt4, int paramInt5) throws StdQTException {
+    public final int addSample(QTHandleRef data, int dataOffset, int dataSize, int durationPerSample, SampleDescription sampleDesc, int numberOfSamples, int sampleFlags) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(AddMediaSample(_ID(), QTObject.ID(paramQTHandleRef), paramInt1, paramInt2, paramInt3, QTObject.ID(paramSampleDescription), paramInt4, (short) paramInt5, arrayOfInt));
+        StdQTException.checkError(AddMediaSample(_ID(), QTObject.ID(data), dataOffset, dataSize, durationPerSample, QTObject.ID(sampleDesc), numberOfSamples, (short) sampleFlags, arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -547,7 +547,7 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a MediaSample object specifying the media sample.
      * @throws quicktime.QTException
      */
-    public final MediaSample getSample(int paramInt1, int paramInt2, int paramInt3) throws QTException {
+    public final MediaSample getSample(int maxSizeToGrow, int time, int maxNumberOfSamples) throws QTException {
         QTHandle localQTHandle = new QTHandle();
         SampleDescription localSampleDescription = makeDescription();
         int[] arrayOfInt1 = new int[1];
@@ -556,7 +556,7 @@ public abstract class Media extends QTObject implements QuickTimeLib {
         int[] arrayOfInt4 = new int[1];
         int[] arrayOfInt5 = new int[1];
         short[] arrayOfShort = new short[1];
-        StdQTException.checkError(GetMediaSample(_ID(), QTObject.ID(localQTHandle), paramInt1, arrayOfInt1, paramInt2, arrayOfInt2, arrayOfInt3, QTObject.ID(localSampleDescription), arrayOfInt4, paramInt3, arrayOfInt5, arrayOfShort));
+        StdQTException.checkError(GetMediaSample(_ID(), QTObject.ID(localQTHandle), maxSizeToGrow, arrayOfInt1, time, arrayOfInt2, arrayOfInt3, QTObject.ID(localSampleDescription), arrayOfInt4, maxNumberOfSamples, arrayOfInt5, arrayOfShort));
         return new MediaSample(arrayOfInt2[0], arrayOfInt3[0], localQTHandle, 0, arrayOfInt1[0], arrayOfInt5[0], localSampleDescription, arrayOfInt4[0], arrayOfShort[0]);
     }
 
@@ -572,9 +572,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return the time where the reference was inserted
      * @throws quicktime.std.StdQTException
      */
-    public final int addSampleReference(int paramInt1, int paramInt2, int paramInt3, SampleDescription paramSampleDescription, int paramInt4, int paramInt5) throws StdQTException {
+    public final int addSampleReference(int dataOffset, int dataSize, int durationPerSample, SampleDescription sampleDesc, int numberOfSamples, int sampleFlags) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(AddMediaSampleReference(_ID(), paramInt1, paramInt2, paramInt3, QTObject.ID(paramSampleDescription), paramInt4, (short) paramInt5, arrayOfInt));
+        StdQTException.checkError(AddMediaSampleReference(_ID(), dataOffset, dataSize, durationPerSample, QTObject.ID(sampleDesc), numberOfSamples, (short) sampleFlags, arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -586,7 +586,7 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a SampleInfo object.
      * @throws quicktime.QTException
      */
-    public final SampleInfo getSampleReference(int paramInt1, int paramInt2) throws QTException {
+    public final SampleInfo getSampleReference(int time, int maxNumberOfSamples) throws QTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
@@ -595,7 +595,7 @@ public abstract class Media extends QTObject implements QuickTimeLib {
         int[] arrayOfInt5 = new int[1];
         int[] arrayOfInt6 = new int[1];
         short[] arrayOfShort = new short[1];
-        StdQTException.checkError(GetMediaSampleReference(_ID(), arrayOfInt1, arrayOfInt2, paramInt1, arrayOfInt3, arrayOfInt4, QTObject.ID(localSampleDescription), arrayOfInt5, paramInt2, arrayOfInt6, arrayOfShort));
+        StdQTException.checkError(GetMediaSampleReference(_ID(), arrayOfInt1, arrayOfInt2, time, arrayOfInt3, arrayOfInt4, QTObject.ID(localSampleDescription), arrayOfInt5, maxNumberOfSamples, arrayOfInt6, arrayOfShort));
         return new SampleInfo(arrayOfInt3[0], arrayOfInt4[0], arrayOfInt1[0], arrayOfInt2[0], arrayOfInt6[0], localSampleDescription, arrayOfInt5[0], arrayOfShort[0]);
     }
 
@@ -609,9 +609,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return the time where the reference was inserted
      * @throws quicktime.std.StdQTException
      */
-    public final int addSampleReference(SampleDescription paramSampleDescription, int paramInt, SampleReferenceVector paramSampleReferenceVector) throws StdQTException {
+    public final int addSampleReference(SampleDescription sampleDescription, int numOfSamples, SampleReferenceVector sampleRefs) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        int i = AddMediaSampleReferences(_ID(), QTObject.ID(paramSampleDescription), paramInt, QTObject.ID(paramSampleReferenceVector), arrayOfInt);
+        int i = AddMediaSampleReferences(_ID(), QTObject.ID(sampleDescription), numOfSamples, QTObject.ID(sampleRefs), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -624,14 +624,14 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a SampleReferenceInfo object.
      * @throws quicktime.QTException
      */
-    public final SampleReferenceInfo getSampleReferences(int paramInt1, int paramInt2) throws QTException {
+    public final SampleReferenceInfo getSampleReferences(int time, int maxNumberOfSamples) throws QTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int[] arrayOfInt3 = new int[1];
         SampleDescription localSampleDescription = makeDescription();
-        SampleReferenceVector localSampleReferenceVector = new SampleReferenceVector(paramInt2);
+        SampleReferenceVector localSampleReferenceVector = new SampleReferenceVector(maxNumberOfSamples);
         int i = QTObject.ID(localSampleReferenceVector);
-        int j = GetMediaSampleReferences(_ID(), paramInt1, arrayOfInt1, QTObject.ID(localSampleDescription), arrayOfInt2, paramInt2, arrayOfInt3, i);
+        int j = GetMediaSampleReferences(_ID(), time, arrayOfInt1, QTObject.ID(localSampleDescription), arrayOfInt2, maxNumberOfSamples, arrayOfInt3, i);
         StdQTException.checkError(j);
         localSampleReferenceVector._setNumSamples(arrayOfInt3[0]);
         return new SampleReferenceInfo(arrayOfInt1[0], localSampleDescription, arrayOfInt2[0], localSampleReferenceVector);
@@ -643,8 +643,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param maxChunkSize Specifies the prefered maximum chunk size.
      * @throws quicktime.std.StdQTException
      */
-    public final void setPreferredChunkSize(int paramInt) throws StdQTException {
-        StdQTException.checkError(SetMediaPreferredChunkSize(_ID(), paramInt));
+    public final void setPreferredChunkSize(int maxChunkSize) throws StdQTException {
+        StdQTException.checkError(SetMediaPreferredChunkSize(_ID(), maxChunkSize));
     }
 
     /**
@@ -667,8 +667,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param syncSampleNum Specifies a shadow sync sample.
      * @throws quicktime.std.StdQTException
      */
-    public final void setShadowSync(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(SetMediaShadowSync(_ID(), paramInt1, paramInt2));
+    public final void setShadowSync(int frameDiffSampleNum, int syncSampleNum) throws StdQTException {
+        StdQTException.checkError(SetMediaShadowSync(_ID(), frameDiffSampleNum, syncSampleNum));
     }
 
     /**
@@ -692,10 +692,10 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a TimeInfo object that specifies the first found interesting time.
      * @throws quicktime.std.StdQTException
      */
-    public final TimeInfo getNextInterestingTime(int paramInt1, int paramInt2, float paramFloat) throws StdQTException {
+    public final TimeInfo getNextInterestingTime(int interestingTimeFlags, int time, float rate) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
-        GetMediaNextInterestingTime(_ID(), (short) paramInt1, paramInt2, QTUtils.X2Fix(paramFloat), arrayOfInt1, arrayOfInt2);
+        GetMediaNextInterestingTime(_ID(), (short) interestingTimeFlags, time, QTUtils.X2Fix(rate), arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(GetMoviesError());
         return new TimeInfo(arrayOfInt1[0], arrayOfInt2[0]);
     }
@@ -708,8 +708,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return the data size.
      * @throws quicktime.std.StdQTException
      */
-    public final int getDataSize(int paramInt1, int paramInt2) throws StdQTException {
-        int i = GetMediaDataSize(_ID(), paramInt1, paramInt2);
+    public final int getDataSize(int startTime, int duration) throws StdQTException {
+        int i = GetMediaDataSize(_ID(), startTime, duration);
         StdQTException.checkError(GetMoviesError());
         return i;
     }
@@ -721,8 +721,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return a copy of a specified data reference.
      * @throws quicktime.QTException
      */
-    public final DataRef getDataRef(int paramInt) throws QTException {
-        return DataRef.fromMedia(this, paramInt);
+    public final DataRef getDataRef(int index) throws QTException {
+        return DataRef.fromMedia(this, index);
     }
 
     /**
@@ -750,9 +750,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return the index value that is assigned to the new data reference.
      * @throws quicktime.std.StdQTException
      */
-    public final int addDataRef(DataRef paramDataRef) throws StdQTException {
+    public final int addDataRef(DataRef dataReference) throws StdQTException {
         short[] arrayOfShort = new short[1];
-        StdQTException.checkError(AddMediaDataRef(_ID(), arrayOfShort, QTObject.ID(paramDataRef), paramDataRef.getType()));
+        StdQTException.checkError(AddMediaDataRef(_ID(), arrayOfShort, QTObject.ID(dataReference), dataReference.getType()));
         return arrayOfShort[0];
     }
 
@@ -776,8 +776,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param flagsMask Indicates which flags in the flags parameter are to be considered in this operation.
      * @throws quicktime.std.StdQTException
      */
-    public final void setPlayHints(int paramInt1, int paramInt2) throws StdQTException {
-        SetMediaPlayHints(_ID(), paramInt1, paramInt2);
+    public final void setPlayHints(int flags, int flagsMask) throws StdQTException {
+        SetMediaPlayHints(_ID(), flags, flagsMask);
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -791,7 +791,7 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param flagsMask Indicates which flags in the flags parameter are to be considered in this operation.
      * @throws quicktime.std.StdQTException
      */
-    public final int getPlayHints(int paramInt1, int paramInt2) throws StdQTException {
+    public final int getPlayHints(int flags, int flagsMask) throws StdQTException {
         int[] arrayOfInt = { 0 };
         GetMediaPlayHints(_ID(), arrayOfInt);
         StdQTException.checkError(GetMoviesError());
@@ -836,8 +836,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param flags control the loading operation
      * @throws quicktime.std.StdQTException
      */
-    public final void loadIntoRam(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        StdQTException.checkError(LoadMediaIntoRam(_ID(), paramInt1, paramInt2, paramInt3));
+    public final void loadIntoRam(int time, int duration, int flags) throws StdQTException {
+        StdQTException.checkError(LoadMediaIntoRam(_ID(), time, duration, flags));
     }
 
     /**
@@ -847,8 +847,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param replace true if the user data should be replaced; false if you want the data merged
      * @throws quicktime.std.StdQTException
      */
-    public void copyUserDataToMedia(Media paramMedia, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(CopyMediaUserData(_ID(), QTObject.ID(paramMedia), paramBoolean == true ? 1919970403 : 1835361639));
+    public void copyUserDataToMedia(Media destMedia, boolean replace) throws StdQTException {
+        StdQTException.checkError(CopyMediaUserData(_ID(), QTObject.ID(destMedia), replace == true ? 1919970403 : 1835361639));
     }
 
     /**
@@ -858,8 +858,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param replace true if the user data should be replaced; false if you want the data merged
      * @throws quicktime.std.StdQTException
      */
-    public void copyUserDataFromMedia(Media paramMedia, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(CopyMediaUserData(QTObject.ID(paramMedia), _ID(), paramBoolean == true ? 1919970403 : 1835361639));
+    public void copyUserDataFromMedia(Media srcMedia, boolean replace) throws StdQTException {
+        StdQTException.checkError(CopyMediaUserData(QTObject.ID(srcMedia), _ID(), replace == true ? 1919970403 : 1835361639));
     }
 
     /**
@@ -871,8 +871,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      *     use StdQTConstants5_1.kQTCopyUserDataReplace or StdQTConstants5_1.kQTCopyUserDataMerge
      * @throws quicktime.std.StdQTException
      */
-    public static void copyUserData(Media paramMedia1, Media paramMedia2, int paramInt) throws StdQTException {
-        StdQTException.checkError(CopyMediaUserData(QTObject.ID(paramMedia1), QTObject.ID(paramMedia2), paramInt));
+    public static void copyUserData(Media srcMedia, Media destMedia, int copyRule) throws StdQTException {
+        StdQTException.checkError(CopyMediaUserData(QTObject.ID(srcMedia), QTObject.ID(destMedia), copyRule));
     }
 
     abstract SampleDescription makeDescription() throws QTException;

@@ -15,8 +15,8 @@ public final class OpenMovieFile extends OpenedFile {
      * @return the opened movie file.
      * @throws quicktime.QTException
      */
-    public static OpenMovieFile asRead(QTFile paramQTFile) throws QTException {
-        return new OpenMovieFile(paramQTFile, 256);
+    public static OpenMovieFile asRead(QTFile f) throws QTException {
+        return new OpenMovieFile(f, 256);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class OpenMovieFile extends OpenedFile {
      * @return the opened movie file.
      * @throws quicktime.QTException
      */
-    public static OpenMovieFile asWrite(QTFile paramQTFile) throws QTException {
-        return new OpenMovieFile(paramQTFile, 512);
+    public static OpenMovieFile asWrite(QTFile f) throws QTException {
+        return new OpenMovieFile(f, 512);
     }
 
     private OpenMovieFile(QTFile paramQTFile, int paramInt) throws QTException {

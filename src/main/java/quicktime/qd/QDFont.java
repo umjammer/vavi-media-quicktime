@@ -41,8 +41,8 @@ public final class QDFont implements QuickTimeLib {
      * @param theName The font family name
      * @return the familyID that corresponds to the supplied font family name. If the font specified in the parameter theName does not exist, familyID contains 0.
      */
-    public static int getFNum(String paramString) {
-        byte[] arrayOfByte = QTUtils.String2PString(paramString, 255);
+    public static int getFNum(String theName) {
+        byte[] arrayOfByte = QTUtils.String2PString(theName, 255);
         short[] arrayOfShort = { 0 };
         GetFNum(arrayOfByte, arrayOfShort);
         return arrayOfShort[0];

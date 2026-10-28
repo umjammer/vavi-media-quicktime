@@ -13,6 +13,6 @@ public interface SoundCallBack {
      * from the doCommand calls on the SndChannel.
      * @param sc the SndChannel the callback is called from
      */
-    void execute(SndChannel paramSndChannel);
+    void execute(SndChannel sc);
 }
 

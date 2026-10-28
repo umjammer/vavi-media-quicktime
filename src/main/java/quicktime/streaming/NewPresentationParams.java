@@ -38,11 +38,11 @@ public final class NewPresentationParams extends QTPointerRef {
      * @param data data
      * @param list a handle containing a list of edit items
      */
-    public NewPresentationParams(int paramInt, QTPointer paramQTPointer, EditList paramEditList) throws QTException {
+    public NewPresentationParams(int dataType, QTPointer data, EditList list) throws QTException {
         super(36, true);
-        setDataType(paramInt);
-        setData(paramQTPointer);
-        setEditList(paramEditList);
+        setDataType(dataType);
+        setData(data);
+        setEditList(list);
     }
 
     private QTPointer data = null;
@@ -53,8 +53,8 @@ public final class NewPresentationParams extends QTPointerRef {
      * Sets the data type of the params
      * @param dataType data type
      */
-    public void setDataType(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setDataType(int dataType) {
+        setIntAt(0, dataType);
     }
 
     /**
@@ -68,10 +68,10 @@ public final class NewPresentationParams extends QTPointerRef {
      * Sets the presentation data
      * @param data presentation data
      */
-    public void setData(QTPointer paramQTPointer) {
-        setIntAt(4, QTObject.ID(paramQTPointer));
-        setIntAt(8, paramQTPointer.getSize());
-        this.data = paramQTPointer;
+    public void setData(QTPointer data) {
+        setIntAt(4, QTObject.ID(data));
+        setIntAt(8, data.getSize());
+        this.data = data;
     }
 
     /**
@@ -97,8 +97,8 @@ public final class NewPresentationParams extends QTPointerRef {
      * Sets the flags of the presentation
      * @param flags presentation flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(16, flags);
     }
 
     /**
@@ -112,8 +112,8 @@ public final class NewPresentationParams extends QTPointerRef {
      * Sets the time scale of the presentation
      * @param timeScale time scale
      */
-    public void setTimeScale(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setTimeScale(int timeScale) {
+        setIntAt(20, timeScale);
     }
 
     /**
@@ -127,8 +127,8 @@ public final class NewPresentationParams extends QTPointerRef {
      * Associates a MediaParams object with the presentation
      * @param mp MediaParams
      */
-    public void setMediaParams(MediaParams paramMediaParams) {
-        setIntAt(24, QTObject.ID(paramMediaParams));
+    public void setMediaParams(MediaParams mp) {
+        setIntAt(24, QTObject.ID(mp));
     }
 
     public void setNotificationProc(StreamNotifyProc paramStreamNotifyProc) {

@@ -60,8 +60,8 @@ public final class PushDataParams extends QTPointer {
      * Sets the version of the push data params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -76,8 +76,8 @@ public final class PushDataParams extends QTPointer {
      * Sets the flags of the push data object
      * @param flags sourcer callback flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(4, flags);
     }
 
     /**
@@ -91,9 +91,9 @@ public final class PushDataParams extends QTPointer {
      * Set the sample description of the push data
      * @param sampleDesc sample description
      */
-    public void setSampleDescription(SampleDescription paramSampleDescription) {
-        this.theSampleDescription = paramSampleDescription;
-        setIntAt(8, QTObject.ID(paramSampleDescription));
+    public void setSampleDescription(SampleDescription sampleDesc) {
+        this.theSampleDescription = sampleDesc;
+        setIntAt(8, QTObject.ID(sampleDesc));
     }
 
     /**
@@ -108,8 +108,8 @@ public final class PushDataParams extends QTPointer {
      * Set sample description seed of the push data
      * @param seed sample description seed
      */
-    public void setSampleDescSeed(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setSampleDescSeed(int seed) {
+        setIntAt(12, seed);
     }
 
     /**
@@ -125,8 +125,8 @@ public final class PushDataParams extends QTPointer {
      * @param time sample time
      *  NOTE: This function automatically adds kQTSPushDataFlag_SampleTimeIsValid to the flags
      */
-    public void setSampleTime(long paramLong) {
-        setLongAt(16, paramLong);
+    public void setSampleTime(long time) {
+        setLongAt(16, time);
         setFlags(getFlags() & 0x1);
     }
 
@@ -143,8 +143,8 @@ public final class PushDataParams extends QTPointer {
      * @param duration duration
      *  NOTE: This function automatically adds kQTSPushDataFlag_DurationIsValid to the flags
      */
-    public void setDuration(long paramLong) {
-        setLongAt(24, paramLong);
+    public void setDuration(long duration) {
+        setLongAt(24, duration);
         setFlags(getFlags() & 0x2);
     }
 
@@ -160,10 +160,10 @@ public final class PushDataParams extends QTPointer {
      * Sets the push data
      * @param data push data
      */
-    public void setDataPtr(QTPointer paramQTPointer) {
-        this.theData = paramQTPointer;
-        setIntAt(32, paramQTPointer.getSize());
-        setIntAt(36, QTObject.ID(paramQTPointer));
+    public void setDataPtr(QTPointer data) {
+        this.theData = data;
+        setIntAt(32, data.getSize());
+        setIntAt(36, QTObject.ID(data));
     }
 
     /**

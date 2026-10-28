@@ -47,8 +47,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param synth the sound data type you intend to play on this channel
      * @param init the desired initialization parameters for the channel.
      */
-    public SndChannel(int paramInt1, int paramInt2) throws QTException {
-        super(allocate((short) paramInt1, paramInt2));
+    public SndChannel(int synth, int init) throws QTException {
+        super(allocate((short) synth, init));
     }
 
     /**
@@ -57,8 +57,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @see "QuickTime::SndNewChannel"
      * @param callback the (optional) callback that can be called when a sound has completed.
      */
-    public SndChannel(SoundCallBack paramSoundCallBack) throws QTException {
-        this(5, 192, paramSoundCallBack);
+    public SndChannel(SoundCallBack callback) throws QTException {
+        this(5, 192, callback);
     }
 
     /**
@@ -69,9 +69,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param init the desired initialization parameters for the channel.
      * @param callback the (optional) callback that can be called when a sound has completed.
      */
-    public SndChannel(int paramInt1, int paramInt2, SoundCallBack paramSoundCallBack) throws QTException {
-        super(allocate((short) paramInt1, paramInt2, paramSoundCallBack));
-        if (paramSoundCallBack != null) {
+    public SndChannel(int synth, int init, SoundCallBack callback) throws QTException {
+        super(allocate((short) synth, init, callback));
+        if (callback != null) {
             this.sndUPP = tempUPP;
             this.sndUPP.setSndChannel(this);
         }
@@ -134,8 +134,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param sndHdl the handle that has the sound data in it
      * @throws quicktime.sound.SoundException
      */
-    public void play(SndHandle paramSndHandle) throws SoundException {
-        SoundException.checkError(SndPlay(_ID(), QTObject.ID(paramSndHandle), (byte) 1));
+    public void play(SndHandle sndHdl) throws SoundException {
+        SoundException.checkError(SndPlay(_ID(), QTObject.ID(sndHdl), (byte) 1));
     }
 
     /**
@@ -187,8 +187,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param cmd A sound command to be sent to the channel
      * @throws quicktime.sound.SoundException
      */
-    public void doCommand(SndCommand paramSndCommand) throws SoundException {
-        doCommand(paramSndCommand, true);
+    public void doCommand(SndCommand cmd) throws SoundException {
+        doCommand(cmd, true);
     }
 
     /**
@@ -198,8 +198,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param noWait noWait A flag indicating whether the Sound Manager should wait for a free space in a full queue (FALSE) or whether it should return immediately with a queueFull result code if the queue is full (TRUE).
      * @throws quicktime.sound.SoundException
      */
-    public void doCommand(SndCommand paramSndCommand, boolean paramBoolean) throws SoundException {
-        SoundException.checkError(SndDoCommand(_ID(), QTObject.ID(paramSndCommand), (byte) (paramBoolean ? 1 : 0)));
+    public void doCommand(SndCommand cmd, boolean noWait) throws SoundException {
+        SoundException.checkError(SndDoCommand(_ID(), QTObject.ID(cmd), (byte) (noWait ? 1 : 0)));
     }
 
     /**
@@ -208,8 +208,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param cmd A sound command to be sent to the channel
      * @throws quicktime.sound.SoundException
      */
-    public void doImmediate(SndCommand paramSndCommand) throws SoundException {
-        SoundException.checkError(SndDoImmediate(_ID(), QTObject.ID(paramSndCommand)));
+    public void doImmediate(SndCommand cmd) throws SoundException {
+        SoundException.checkError(SndDoImmediate(_ID(), QTObject.ID(cmd)));
     }
 
     /**
@@ -230,8 +230,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param enabled true if enabled
      * @throws quicktime.sound.SoundException
      */
-    public void setLevelMeterOnOff(boolean paramBoolean) throws SoundException {
-        SoundException.checkError(SndSetInfo(_ID(), 1819108724, (byte) (paramBoolean ? 1 : 0)));
+    public void setLevelMeterOnOff(boolean enabled) throws SoundException {
+        SoundException.checkError(SndSetInfo(_ID(), 1819108724, (byte) (enabled ? 1 : 0)));
     }
 
     /**
@@ -287,8 +287,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param spectrumInfo MediaEQSpectrumBandsRecord object
      * @throws quicktime.sound.SoundException
      */
-    public void setEQSpectrumBands(MediaEQSpectrumBands paramMediaEQSpectrumBands) throws SoundException {
-        SoundException.checkError(SndSetInfo(_ID(), 1701933922, paramMediaEQSpectrumBands.getBytes()));
+    public void setEQSpectrumBands(MediaEQSpectrumBands spectrumInfo) throws SoundException {
+        SoundException.checkError(SndSetInfo(_ID(), 1701933922, spectrumInfo.getBytes()));
     }
 
     /**
@@ -325,9 +325,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param flag a boolean.
      * @throws quicktime.sound.SoundException
      */
-    public void setEQToneControlOnOff(boolean paramBoolean) throws SoundException {
+    public void setEQToneControlOnOff(boolean flag) throws SoundException {
         byte[] arrayOfByte = { 0 };
-        SoundException.checkError(SndSetInfo(_ID(), 1701934179, (byte) (paramBoolean ? 1 : 0)));
+        SoundException.checkError(SndSetInfo(_ID(), 1701934179, (byte) (flag ? 1 : 0)));
     }
 
     /**
@@ -338,9 +338,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @param treble the sound treble
      * @throws quicktime.sound.SoundException
      */
-    public void setEQToneControlGain(int paramInt1, int paramInt2) throws SoundException {
-        int i = QTUtils.X2ShortFix(paramInt1);
-        int j = QTUtils.X2ShortFix(paramInt2);
+    public void setEQToneControlGain(int bass, int treble) throws SoundException {
+        int i = QTUtils.X2ShortFix(bass);
+        int j = QTUtils.X2ShortFix(treble);
         int k = j << 16 | i & 0xFFFF;
         SoundException.checkError(SndSetInfo(_ID(), 1701934183, k));
     }

@@ -45,8 +45,8 @@ public final class StreamDescription extends SampleDescription {
      *   StdQTConstants4.kQTSRTSPDataType
      *   StdQTConstants4.kQTSSDPDataType
      */
-    public StreamDescription(int paramInt) throws QTException {
-        super(28, true, paramInt);
+    public StreamDescription(int mediaType) throws QTException {
+        super(28, true, mediaType);
     }
 
     private StreamDescription(int paramInt, Object paramObject) {

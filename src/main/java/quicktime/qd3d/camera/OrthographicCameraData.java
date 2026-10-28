@@ -53,13 +53,13 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
      * @param right The right position.
      * @param bottom The bottom position.
      */
-    public OrthographicCameraData(CameraData paramCameraData, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
+    public OrthographicCameraData(CameraData cameraData, float left, float top, float right, float bottom) {
         this();
-        setCameraBytes(paramCameraData);
-        setLeft(paramFloat1);
-        setTop(paramFloat2);
-        setRight(paramFloat3);
-        setBottom(paramFloat4);
+        setCameraBytes(cameraData);
+        setLeft(left);
+        setTop(top);
+        setRight(right);
+        setBottom(bottom);
     }
 
     private OrthographicCameraData(byte[] paramArrayOfByte) {

@@ -93,8 +93,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * that this presenter presents.
      * @param m the movie that is rendered
      */
-    public MoviePresenter(Movie paramMovie) throws QTException {
-        this(paramMovie, new QDGraphics(32, paramMovie.getBounds(), 4096));
+    public MoviePresenter(Movie m) throws QTException {
+        this(m, new QDGraphics(32, m.getBounds(), 4096));
     }
 
     /**
@@ -107,15 +107,15 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @param m the movie that is rendered
      * @param g the offscreen QDGraphics that the effect is rendered into.
      */
-    public MoviePresenter(Movie paramMovie, QDGraphics paramQDGraphics) throws QTException {
-        super(moveToZero(paramMovie.getBounds()));
-        this.m = paramMovie;
-        this.g = paramQDGraphics;
-        paramMovie.setGWorld(paramQDGraphics, null);
-        PixMap localPixMap = paramQDGraphics.getPixMap();
+    public MoviePresenter(Movie m, QDGraphics g) throws QTException {
+        super(moveToZero(m.getBounds()));
+        this.m = m;
+        this.g = g;
+        m.setGWorld(g, null);
+        PixMap localPixMap = g.getPixMap();
         setImageData(localPixMap.getPixelData(), new ImageDescription(localPixMap));
         this.gModeOpaque = true;
-        paramMovie.task(0);
+        m.task(0);
     }
 
     private boolean mChanged = false;
@@ -134,17 +134,17 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @throws quicktime.QTException
      */
     @Override
-    public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        if (getGWorld().equals(paramQDGraphics))
+    public void setGWorld(QDGraphics cgp) throws QTException {
+        if (getGWorld().equals(cgp))
             return;
-        super.setGWorld(paramQDGraphics);
-        if (QDGraphics.scratch.equals(paramQDGraphics)) {
+        super.setGWorld(cgp);
+        if (QDGraphics.scratch.equals(cgp)) {
             TaskAllMovies.removeMovie();
             this.isPres = false;
             this.m.removeDrawingCompleteProc();
             this.m.setActive(false);
         } else {
-            if (QDGraphics.validScratch.equals(paramQDGraphics)) {
+        if (QDGraphics.validScratch.equals(cgp)) {
                 this.isPres = false;
             } else
                 this.isPres = true;
@@ -183,7 +183,7 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * {@link quicktime.std.movies.Movie#setDrawingCompleteProc(int, quicktime.std.movies.MovieDrawingComplete)}
      */
     @Override
-    public int execute(Movie paramMovie) {
+    public int execute(Movie m) {
         try {
             if (this.isPres)
                 doDraw();
@@ -231,16 +231,16 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @throws quicktime.QTException
      */
     @Override
-    public void redraw(Region paramRegion) throws QTException {
-        if (paramRegion != null) {
-            this.m.invalidateRegion(paramRegion);
+    public void redraw(Region invalidRgn) throws QTException {
+        if (invalidRgn != null) {
+            this.m.invalidateRegion(invalidRgn);
         } else
             this.m.invalidateRegion(new Region(this.m.getBounds()));
         this.m.task(0);
         if ((this.spritePresenter != null) && (this.spritePresenter.isValid())) {
             this.spritePresenter.invalidate();
         }
-        super.redraw(paramRegion);
+        super.redraw(invalidRgn);
     }
 
     /**
@@ -266,14 +266,14 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @throws quicktime.QTException
      */
     @Override
-    public void setRate(float paramFloat) throws QTException {
+    public void setRate(float rate) throws QTException {
         synchronized (this) {
-            this.lastRate = paramFloat;
+            this.lastRate = rate;
         }
-        if (paramFloat == 0.0F) {
+        if (rate == 0.0F) {
             this.m.stop();
         } else
-            this.m.prePreroll(this.m.getTime(), paramFloat, new PrerollCallback(paramFloat));
+            this.m.prePreroll(this.m.getTime(), rate, new PrerollCallback(rate));
     }
 
     private float lastRate = 0.0F;
@@ -331,8 +331,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @throws quicktime.QTException
      */
     @Override
-    public void setTime(int paramInt) throws QTException {
-        this.m.setTimeValue(paramInt);
+    public void setTime(int time) throws QTException {
+        this.m.setTimeValue(time);
     }
 
     /**
@@ -394,8 +394,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @throws quicktime.QTException
      */
     @Override
-    public void setVolume(float paramFloat) throws QTException {
-        float f = Math.abs(paramFloat);
+    public void setVolume(float val) throws QTException {
+        float f = Math.abs(val);
         if (isMuted()) {
             this.m.setVolume(f * -1.0F);
         } else {
@@ -477,8 +477,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @see quicktime.app.display.SWCompositor
      */
     @Override
-    public Invalidator addedToCompositor(SWCompositor paramSWCompositor, TwoDSprite paramTwoDSprite) throws QTException {
-        this.spritePresenter = paramTwoDSprite;
+    public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) throws QTException {
+        this.spritePresenter = s;
         this.m.setActive(true);
         if (!this.drawCompleteListening) {
             this.m.setDrawingCompleteProc(0, this);
@@ -497,7 +497,7 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @throws quicktime.QTException
      */
     @Override
-    public void removedFromCompositor(SWCompositor paramSWCompositor) throws QTException {
+    public void removedFromCompositor(SWCompositor c) throws QTException {
         if (this.listenerList == null) {
             this.m.removeDrawingCompleteProc();
             this.drawCompleteListening = false;

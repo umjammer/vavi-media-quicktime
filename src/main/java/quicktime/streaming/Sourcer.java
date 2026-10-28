@@ -47,8 +47,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * Creates a new Sourcer component from a specific component identifier
      * @param compID component identifier
      */
-    public Sourcer(ComponentIdentifier paramComponentIdentifier) throws QTException {
-        super(paramComponentIdentifier);
+    public Sourcer(ComponentIdentifier compID) throws QTException {
+        super(compID);
         initialize(null);
     }
 
@@ -58,8 +58,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @param subType integer representing subtype (OSType) of sourcer
      * @param manufacturerType integer representing manufacturer type (OSType) of sourcer
      */
-    public Sourcer(int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        super(allocate(paramInt1, paramInt2, paramInt3));
+    public Sourcer(int sourcerType, int subType, int manufacturerType) throws QTException {
+        super(allocate(sourcerType, subType, manufacturerType));
         initialize(null);
     }
 
@@ -70,9 +70,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @param manufacturerType integer representing manufacturer type (OSType) of sourcer
      * @param initParams sourcer initialization parameters
      */
-    public Sourcer(int paramInt1, int paramInt2, int paramInt3, SourcerInitParams paramSourcerInitParams) throws QTException {
-        super(allocate(paramInt1, paramInt2, paramInt3));
-        initialize(paramSourcerInitParams);
+    public Sourcer(int sourcerType, int subType, int manufacturerType, SourcerInitParams initParams) throws QTException {
+        super(allocate(sourcerType, subType, manufacturerType));
+        initialize(initParams);
     }
 
     private static int allocate(int paramInt1, int paramInt2, int paramInt3) throws QTException {
@@ -101,8 +101,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * setLoopParams,
      * @see "QuickTime::QTSSourcerSetInfo"
      */
-    public void setInfo(int paramInt, QTPointer paramQTPointer) throws QTException {
-        QTException.checkError(QTSSourcerSetInfo(_ID(), paramInt, QTObject.ID(paramQTPointer)));
+    public void setInfo(int selector, QTPointer data) throws QTException {
+        QTException.checkError(QTSSourcerSetInfo(_ID(), selector, QTObject.ID(data)));
     }
 
     /**
@@ -115,9 +115,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * getLoopParams,
      * @see "QuickTime::QTSSourcerGetInfo"
      */
-    public QTPointer getInfo(int paramInt) throws QTException {
+    public QTPointer getInfo(int selector) throws QTException {
         byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetInfo(_ID(), paramInt, arrayOfByte));
+        QTException.checkError(QTSSourcerGetInfo(_ID(), selector, arrayOfByte));
         return new QTPointer(arrayOfByte);
     }
 
@@ -127,8 +127,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerSetInfo"
      * @throws quicktime.QTException
      */
-    public void setCallbackParams(SourcerCallbackParams paramSourcerCallbackParams) throws QTException {
-        QTException.checkError(QTSSourcerSetInfo(_ID(), 1935893104, QTObject.ID(paramSourcerCallbackParams)));
+    public void setCallbackParams(SourcerCallbackParams callbackParams) throws QTException {
+        QTException.checkError(QTSSourcerSetInfo(_ID(), 1935893104, QTObject.ID(callbackParams)));
     }
 
     /**
@@ -149,8 +149,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerSetInfo"
      * @throws quicktime.QTException
      */
-    public void setLoopParams(SourcerLoopParams paramSourcerLoopParams) throws QTException {
-        QTException.checkError(QTSSourcerSetInfo(_ID(), 1819242352, QTObject.ID(paramSourcerLoopParams)));
+    public void setLoopParams(SourcerLoopParams loopParams) throws QTException {
+        QTException.checkError(QTSSourcerSetInfo(_ID(), 1819242352, QTObject.ID(loopParams)));
     }
 
     /**
@@ -171,8 +171,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerSetInfo"
      * @throws quicktime.QTException
      */
-    public void setSourcerTrackParams(SourcerTrackParams paramSourcerTrackParams) throws QTException {
-        QTException.checkError(QTSSourcerSetInfo(_ID(), 1953653099, QTObject.ID(paramSourcerTrackParams)));
+    public void setSourcerTrackParams(SourcerTrackParams SourcerTrackParams) throws QTException {
+        QTException.checkError(QTSSourcerSetInfo(_ID(), 1953653099, QTObject.ID(SourcerTrackParams)));
     }
 
     /**
@@ -194,9 +194,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerIdle"
      * @throws quicktime.QTException
      */
-    public int idle(long paramLong, int paramInt) throws QTException {
+    public int idle(long inTime, int flags) throws QTException {
         int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSSourcerIdle(_ID(), paramLong, paramInt, arrayOfInt));
+        QTException.checkError(QTSSourcerIdle(_ID(), inTime, flags, arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -206,8 +206,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerSetEnable"
      * @throws quicktime.QTException
      */
-    public void setEnable(boolean paramBoolean) throws QTException {
-        setEnable(paramBoolean, 0);
+    public void setEnable(boolean enabled) throws QTException {
+        setEnable(enabled, 0);
     }
 
     /**
@@ -217,8 +217,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerSetEnable"
      * @throws quicktime.QTException
      */
-    public void setEnable(boolean paramBoolean, int paramInt) throws QTException {
-        QTException.checkError(QTSSourcerSetEnable(_ID(), (byte) (paramBoolean == true ? 1 : 0), paramInt));
+    public void setEnable(boolean enabled, int flags) throws QTException {
+        QTException.checkError(QTSSourcerSetEnable(_ID(), (byte) (enabled == true ? 1 : 0), flags));
     }
 
     /**
@@ -238,9 +238,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerGetEnable"
      * @throws quicktime.QTException
      */
-    public boolean isEnable(int paramInt) throws QTException {
+    public boolean isEnable(int flags) throws QTException {
         byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetEnable(_ID(), arrayOfByte, paramInt));
+        QTException.checkError(QTSSourcerGetEnable(_ID(), arrayOfByte, flags));
         return arrayOfByte[0] != 0;
     }
 
@@ -250,8 +250,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see " QuickTime::QTSSourcerSetTimeScale"
      * @throws quicktime.QTException
      */
-    public void setTimeScale(int paramInt) throws QTException {
-        QTException.checkError(QTSSourcerSetTimeScale(_ID(), paramInt));
+    public void setTimeScale(int scale) throws QTException {
+        QTException.checkError(QTSSourcerSetTimeScale(_ID(), scale));
     }
 
     /**

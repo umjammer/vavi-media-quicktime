@@ -91,8 +91,8 @@ public class QTMouseController implements ListenerController {
      * @see setTargetSpace()
      */
     @Override
-    public void addedToSpace(Space paramSpace) {
-        this.space = paramSpace;
+    public void addedToSpace(Space s) {
+        this.space = s;
         if ((this.space instanceof SWCompositor)) {
             this.compSpace = ((SWCompositor) this.space);
         } else if ((this.space instanceof GroupDrawable))
@@ -136,8 +136,8 @@ public class QTMouseController implements ListenerController {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
-        this.listenerSource = paramObject;
+    public void addedTo(Object interest) {
+        this.listenerSource = interest;
         if (this.handler == null) {
             addHandler();
         }
@@ -153,7 +153,7 @@ public class QTMouseController implements ListenerController {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
         this.listenerSource = null;
         if (this.handler != null) {
             removeActiveHandler();
@@ -206,7 +206,7 @@ public class QTMouseController implements ListenerController {
      * @param e the mouse event
      * @return a boolean
      */
-    protected boolean translateAndIsWithin(QTMouseEvent paramQTMouseEvent) {
+    protected boolean translateAndIsWithin(QTMouseEvent e) {
         if (this.displaySpace != null) {
             try {
                 QDRect localQDRect1 = this.displaySpace.getDisplayBounds();
@@ -223,11 +223,11 @@ public class QTMouseController implements ListenerController {
                         m += localQDRect2.getY();
                         localSWCompositor1 = localSWCompositor2.getParent();
                     }
-                    paramQTMouseEvent.translate(-k, -m);
+                    e.translate(-k, -m);
                 } else {
-                    paramQTMouseEvent.translate(-i, -j);
+                    e.translate(-i, -j);
                 }
-                if (localQDRect1.inside(paramQTMouseEvent.getX() + i, paramQTMouseEvent.getY() + j)) {
+                if (localQDRect1.inside(e.getX() + i, e.getY() + j)) {
                     return true;
                 }
                 return false;
@@ -246,13 +246,13 @@ public class QTMouseController implements ListenerController {
      * in the quicktime.app.event package.
      * @param l a new QTMouseListener
      */
-    public void addQTMouseListener(QTMouseListener paramQTMouseListener) {
-        if ((paramQTMouseListener instanceof MouseButtonListener))
-            addMouseButtonListener((MouseButtonListener) paramQTMouseListener);
-        if ((paramQTMouseListener instanceof MouseMoveListener))
-            addMouseMoveListener((MouseMoveListener) paramQTMouseListener);
-        if ((paramQTMouseListener instanceof MouseEnterExitListener)) {
-            addMouseEnterExitListener((MouseEnterExitListener) paramQTMouseListener);
+    public void addQTMouseListener(QTMouseListener l) {
+        if ((l instanceof MouseButtonListener))
+            addMouseButtonListener((MouseButtonListener) l);
+        if ((l instanceof MouseMoveListener))
+            addMouseMoveListener((MouseMoveListener) l);
+        if ((l instanceof MouseEnterExitListener)) {
+            addMouseEnterExitListener((MouseEnterExitListener) l);
         }
     }
 
@@ -262,13 +262,13 @@ public class QTMouseController implements ListenerController {
      * Remove a QTMouseListener for this controller.
      * @param l a new QTMouseListener
      */
-    public void removeQTMouseListener(QTMouseListener paramQTMouseListener) {
-        if ((paramQTMouseListener instanceof MouseButtonListener))
-            removeMouseButtonListener((MouseButtonListener) paramQTMouseListener);
-        if ((paramQTMouseListener instanceof MouseMoveListener))
-            removeMouseMoveListener((MouseMoveListener) paramQTMouseListener);
-        if ((paramQTMouseListener instanceof MouseEnterExitListener))
-            removeMouseEnterExitListener((MouseEnterExitListener) paramQTMouseListener);
+    public void removeQTMouseListener(QTMouseListener l) {
+        if ((l instanceof MouseButtonListener))
+            removeMouseButtonListener((MouseButtonListener) l);
+        if ((l instanceof MouseMoveListener))
+            removeMouseMoveListener((MouseMoveListener) l);
+        if ((l instanceof MouseEnterExitListener))
+            removeMouseEnterExitListener((MouseEnterExitListener) l);
     }
 
     void addMouseButtonListener(MouseButtonListener paramMouseButtonListener) {
@@ -303,9 +303,9 @@ public class QTMouseController implements ListenerController {
      * dispatch click events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
      */
-    public void mouseClicked(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) && (translateAndIsWithin(paramQTMouseEvent))) {
-            doMouseClicked(paramQTMouseEvent);
+    public void mouseClicked(QTMouseEvent e) {
+        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(e.getModifiers())) && (translateAndIsWithin(e))) {
+            doMouseClicked(e);
         }
     }
 
@@ -316,8 +316,8 @@ public class QTMouseController implements ListenerController {
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the mouse event
      */
-    protected void doMouseClicked(QTMouseEvent paramQTMouseEvent) {
-        this.mouseButtonListener.mouseClicked(paramQTMouseEvent);
+    protected void doMouseClicked(QTMouseEvent e) {
+        this.mouseButtonListener.mouseClicked(e);
     }
 
     /**
@@ -327,9 +327,9 @@ public class QTMouseController implements ListenerController {
      * dispatch press events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
      */
-    public void mousePressed(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) && (translateAndIsWithin(paramQTMouseEvent))) {
-            doMousePressed(paramQTMouseEvent);
+    public void mousePressed(QTMouseEvent e) {
+        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(e.getModifiers())) && (translateAndIsWithin(e))) {
+            doMousePressed(e);
         }
     }
 
@@ -340,8 +340,8 @@ public class QTMouseController implements ListenerController {
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMousePressed(QTMouseEvent paramQTMouseEvent) {
-        this.mouseButtonListener.mousePressed(paramQTMouseEvent);
+    protected void doMousePressed(QTMouseEvent e) {
+        this.mouseButtonListener.mousePressed(e);
     }
 
     /**
@@ -351,9 +351,9 @@ public class QTMouseController implements ListenerController {
      * dispatch release events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
      */
-    public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) && (translateAndIsWithin(paramQTMouseEvent))) {
-            doMouseReleased(paramQTMouseEvent);
+    public void mouseReleased(QTMouseEvent e) {
+        if ((this.mouseButtonListener != null) && (this.mouseButtonListener.matchModifierFilter(e.getModifiers())) && (translateAndIsWithin(e))) {
+            doMouseReleased(e);
         }
     }
 
@@ -364,8 +364,8 @@ public class QTMouseController implements ListenerController {
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMouseReleased(QTMouseEvent paramQTMouseEvent) {
-        this.mouseButtonListener.mouseReleased(paramQTMouseEvent);
+    protected void doMouseReleased(QTMouseEvent e) {
+        this.mouseButtonListener.mouseReleased(e);
     }
 
     void addMouseMoveListener(MouseMoveListener paramMouseMoveListener) {
@@ -407,26 +407,26 @@ public class QTMouseController implements ListenerController {
      * released (regardless of whether the mouse is within the space or not).
      * @param e the QTMouseEvent of this type.
      */
-    public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
+    public void mouseDragged(QTMouseEvent e) {
         int i = 0;
-        if ((this.isInEnclosingSpace) && (this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
+        if ((this.isInEnclosingSpace) && (this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(e.getModifiers()))) {
             boolean bool = this.isWithinItsSpace;
-            this.isWithinItsSpace = translateAndIsWithin(paramQTMouseEvent);
+            this.isWithinItsSpace = translateAndIsWithin(e);
             i = 1;
             if ((bool) && (!this.isWithinItsSpace)) {
-                paramQTMouseEvent.setEventType(505);
-                doMouseExited(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(506);
+                e.setEventType(505);
+                doMouseExited(e);
+                e.setEventType(506);
             } else if ((this.isWithinItsSpace) && (!bool)) {
-                paramQTMouseEvent.setEventType(504);
-                doMouseEntered(paramQTMouseEvent);
-                paramQTMouseEvent.setEventType(506);
+                e.setEventType(504);
+                doMouseEntered(e);
+                e.setEventType(506);
             }
         }
-        if (isInterestedInMouseMoveEvents(paramQTMouseEvent)) {
+        if (isInterestedInMouseMoveEvents(e)) {
             if (i == 0)
-                translateAndIsWithin(paramQTMouseEvent);
-            doMouseDragged(paramQTMouseEvent);
+                translateAndIsWithin(e);
+            doMouseDragged(e);
         }
     }
 
@@ -437,8 +437,8 @@ public class QTMouseController implements ListenerController {
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMouseDragged(QTMouseEvent paramQTMouseEvent) {
-        this.mouseMoveListener.mouseDragged(paramQTMouseEvent);
+    protected void doMouseDragged(QTMouseEvent e) {
+        this.mouseMoveListener.mouseDragged(e);
     }
 
     /**
@@ -448,21 +448,21 @@ public class QTMouseController implements ListenerController {
      * dispatch move events that occur within its Space's area to those listeners.
      * @param e the QTMouseEvent of this type.
      */
-    public void mouseMoved(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
+    public void mouseMoved(QTMouseEvent e) {
+        if ((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(e.getModifiers()))) {
             boolean bool = this.isWithinItsSpace;
-            this.isWithinItsSpace = translateAndIsWithin(paramQTMouseEvent);
+            this.isWithinItsSpace = translateAndIsWithin(e);
             if ((bool) && (!this.isWithinItsSpace)) {
-                paramQTMouseEvent.setEventType(505);
-                doMouseExited(paramQTMouseEvent);
+                e.setEventType(505);
+                doMouseExited(e);
             } else if ((this.isWithinItsSpace) && (!bool)) {
-                paramQTMouseEvent.setEventType(504);
-                doMouseEntered(paramQTMouseEvent);
-            } else if (isInterestedInMouseMoveEvents(paramQTMouseEvent)) {
-                doMouseMoved(paramQTMouseEvent, this.isWithinItsSpace);
+                e.setEventType(504);
+                doMouseEntered(e);
+            } else if (isInterestedInMouseMoveEvents(e)) {
+                doMouseMoved(e, this.isWithinItsSpace);
             }
-        } else if (isInterestedInMouseMoveEvents(paramQTMouseEvent)) {
-            doMouseMoved(paramQTMouseEvent, translateAndIsWithin(paramQTMouseEvent));
+        } else if (isInterestedInMouseMoveEvents(e)) {
+            doMouseMoved(e, translateAndIsWithin(e));
         }
     }
 
@@ -475,9 +475,9 @@ public class QTMouseController implements ListenerController {
      * @param isWithinItsSpace if true the mouse moved event is within the enclosing space. If false
      *  it isn't.
      */
-    protected void doMouseMoved(QTMouseEvent paramQTMouseEvent, boolean paramBoolean) {
-        if (paramBoolean)
-            this.mouseMoveListener.mouseMoved(paramQTMouseEvent);
+    protected void doMouseMoved(QTMouseEvent e, boolean isWithinItsSpace) {
+        if (isWithinItsSpace)
+            this.mouseMoveListener.mouseMoved(e);
     }
 
     void addMouseEnterExitListener(MouseEnterExitListener paramMouseEnterExitListener) {
@@ -512,11 +512,11 @@ public class QTMouseController implements ListenerController {
      * dispatch a mouseEntered event when the mouse moves or is dragged into the space.
      * @param e the QTMouseEvent of this type.
      */
-    public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
-            this.isWithinItsSpace = translateAndIsWithin(paramQTMouseEvent);
+    public void mouseEntered(QTMouseEvent e) {
+        if ((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(e.getModifiers()))) {
+            this.isWithinItsSpace = translateAndIsWithin(e);
             if (this.isWithinItsSpace) {
-                doMouseEntered(paramQTMouseEvent);
+                doMouseEntered(e);
             }
         }
         this.isInEnclosingSpace = true;
@@ -529,8 +529,8 @@ public class QTMouseController implements ListenerController {
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMouseEntered(QTMouseEvent paramQTMouseEvent) {
-        this.mouseEnterExitListener.mouseEntered(paramQTMouseEvent);
+    protected void doMouseEntered(QTMouseEvent e) {
+        this.mouseEnterExitListener.mouseEntered(e);
     }
 
     /**
@@ -540,14 +540,14 @@ public class QTMouseController implements ListenerController {
      * dispatch a mouseExited event when the mouse moves or is dragged out of the space.
      * @param e the QTMouseEvent of this type.
      */
-    public void mouseExited(QTMouseEvent paramQTMouseEvent) {
+    public void mouseExited(QTMouseEvent e) {
         this.isInEnclosingSpace = false;
-        if ((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
+        if ((this.mouseEnterExitListener != null) && (this.mouseEnterExitListener.matchModifierFilter(e.getModifiers()))) {
             boolean bool = this.isWithinItsSpace;
-            translateAndIsWithin(paramQTMouseEvent);
+            translateAndIsWithin(e);
             this.isWithinItsSpace = false;
             if (bool) {
-                doMouseExited(paramQTMouseEvent);
+                doMouseExited(e);
             }
         }
     }
@@ -559,7 +559,7 @@ public class QTMouseController implements ListenerController {
      * this method to do any particular processing that is required for this type of mouse event.
      * @param e the translated mouse event
      */
-    protected void doMouseExited(QTMouseEvent paramQTMouseEvent) {
-        this.mouseEnterExitListener.mouseExited(paramQTMouseEvent);
+    protected void doMouseExited(QTMouseEvent e) {
+        this.mouseEnterExitListener.mouseExited(e);
     }
 }

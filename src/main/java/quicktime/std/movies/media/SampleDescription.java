@@ -100,12 +100,12 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
      * @param size the new size of the SampleDescription.
      * @throws quicktime.std.StdQTException
      */
-    public void setSize(int paramInt) throws StdQTException {
+    public void setSize(int size) throws StdQTException {
         boolean bool = isLocked();
         unlock();
-        SetHandleSize(_ID(), paramInt);
+        SetHandleSize(_ID(), size);
         StdQTException.checkError(MemError());
-        setIntAt(0, paramInt);
+        setIntAt(0, size);
         if (bool) {
             lock();
         }
@@ -123,8 +123,8 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
      * Sets the data format of the sample description.
      * @param format the data format
      */
-    public void setDataFormat(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setDataFormat(int format) {
+        setIntAt(4, format);
     }
 
     /**
@@ -139,8 +139,8 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
      * Sets the data reference index for the description
      * @param index the new data reference index
      */
-    public void setDataRefIndex(int paramInt) {
-        setShortAt(14, (short) paramInt);
+    public void setDataRefIndex(int index) {
+        setShortAt(14, (short) index);
     }
 
     /**

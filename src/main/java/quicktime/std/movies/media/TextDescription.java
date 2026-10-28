@@ -72,8 +72,8 @@ public final class TextDescription extends SampleDescription {
      * Set the default style.
      * @param style the new default style.
      */
-    public void setDefaultStyle(ScrpSTElement paramScrpSTElement) {
-        copyFromArray(38, paramScrpSTElement.getBytes(), 0, paramScrpSTElement.getSize());
+    public void setDefaultStyle(ScrpSTElement style) {
+        copyFromArray(38, style.getBytes(), 0, style.getSize());
     }
 
     /**

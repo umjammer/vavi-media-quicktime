@@ -85,9 +85,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @return the AtomicInstrument
      * @throws quicktime.std.StdQTException
      */
-    public AtomicInstrument getPartAtomicInstrument(int paramInt1, int paramInt2) throws StdQTException {
+    public AtomicInstrument getPartAtomicInstrument(int part, int flags) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(MusicGetPartAtomicInstrument(_ID(), paramInt1, arrayOfInt, paramInt2));
+        StdQTException.checkError(MusicGetPartAtomicInstrument(_ID(), part, arrayOfInt, flags));
         if (arrayOfInt[0] == 0)
             return null;
         return new AtomicInstrument(arrayOfInt[0], this);
@@ -102,8 +102,8 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @return the knob value
      * @throws quicktime.std.StdQTException
      */
-    public int getKnob(int paramInt) throws StdQTException {
-        int i = MusicGetKnob(_ID(), paramInt);
+    public int getKnob(int knobID) throws StdQTException {
+        int i = MusicGetKnob(_ID(), knobID);
         if ((i >>> 16 == 32768) && ((i | 0xFFFF) != 0))
             throw new StdQTException(i | 0xFFFF);
         return i;
@@ -116,8 +116,8 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @param knobValue the knob value
      * @throws quicktime.std.StdQTException
      */
-    public void setKnob(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(MusicSetKnob(_ID(), paramInt1, paramInt2));
+    public void setKnob(int knobID, int knobValue) throws StdQTException {
+        StdQTException.checkError(MusicSetKnob(_ID(), knobID, knobValue));
     }
 
     /**
@@ -127,9 +127,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @return the name
      * @throws quicktime.std.StdQTException
      */
-    public String getPartName(int paramInt) throws StdQTException {
+    public String getPartName(int part) throws StdQTException {
         byte[] arrayOfByte = new byte[32];
-        StdQTException.checkError(MusicGetPartName(_ID(), paramInt, arrayOfByte));
+        StdQTException.checkError(MusicGetPartName(_ID(), part, arrayOfByte));
         return QTUtils.PString2String(arrayOfByte, 0);
     }
 
@@ -140,8 +140,8 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @param name the name
      * @throws quicktime.std.StdQTException
      */
-    public void setPartName(int paramInt, String paramString) throws StdQTException {
-        StdQTException.checkError(MusicSetPartName(_ID(), paramInt, QTUtils.String2PString(paramString, 31)));
+    public void setPartName(int part, String name) throws StdQTException {
+        StdQTException.checkError(MusicSetPartName(_ID(), part, QTUtils.String2PString(name, 31)));
     }
 
     /**
@@ -151,8 +151,8 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @param masterTune the new tuning
      * @throws quicktime.std.StdQTException
      */
-    public void setMasterTune(float paramFloat) throws StdQTException {
-        StdQTException.checkError(MusicSetMasterTune(_ID(), QTUtils.X2Fix(paramFloat)));
+    public void setMasterTune(float masterTune) throws StdQTException {
+        StdQTException.checkError(MusicSetMasterTune(_ID(), QTUtils.X2Fix(masterTune)));
     }
 
     /**
@@ -176,9 +176,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @return a KnobDescription
      * @throws quicktime.std.StdQTException
      */
-    public KnobDescription getInstrumentKnobDescrption(int paramInt) throws StdQTException {
+    public KnobDescription getInstrumentKnobDescrption(int knobIndex) throws StdQTException {
         KnobDescription localKnobDescription = new KnobDescription();
-        StdQTException.checkError(MusicGetInstrumentKnobDescription(_ID(), paramInt, localKnobDescription.getBytes()));
+        StdQTException.checkError(MusicGetInstrumentKnobDescription(_ID(), knobIndex, localKnobDescription.getBytes()));
         return localKnobDescription;
     }
 
@@ -189,9 +189,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @return a KnobDescription
      * @throws quicktime.std.StdQTException
      */
-    public KnobDescription getDrumKnobDescrption(int paramInt) throws StdQTException {
+    public KnobDescription getDrumKnobDescrption(int knobIndex) throws StdQTException {
         KnobDescription localKnobDescription = new KnobDescription();
-        StdQTException.checkError(MusicGetDrumKnobDescription(_ID(), paramInt, localKnobDescription.getBytes()));
+        StdQTException.checkError(MusicGetDrumKnobDescription(_ID(), knobIndex, localKnobDescription.getBytes()));
         return localKnobDescription;
     }
 
@@ -202,9 +202,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @return a KnobDescription
      * @throws quicktime.std.StdQTException
      */
-    public KnobDescription getKnobDescrption(int paramInt) throws StdQTException {
+    public KnobDescription getKnobDescrption(int knobIndex) throws StdQTException {
         KnobDescription localKnobDescription = new KnobDescription();
-        StdQTException.checkError(MusicGetKnobDescription(_ID(), paramInt, localKnobDescription.getBytes()));
+        StdQTException.checkError(MusicGetKnobDescription(_ID(), knobIndex, localKnobDescription.getBytes()));
         return localKnobDescription;
     }
 

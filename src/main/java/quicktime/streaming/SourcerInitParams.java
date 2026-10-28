@@ -30,8 +30,8 @@ public final class SourcerInitParams extends QTPointer {
      * @param dataType the data type of the sourcer object
      * @param data the data to use with the sourcer
      */
-    public SourcerInitParams(int paramInt1, int paramInt2, QTPointer paramQTPointer) throws QTException {
-        this(1, paramInt1, paramInt2, paramQTPointer);
+    public SourcerInitParams(int flags, int dataType, QTPointer data) throws QTException {
+        this(1, flags, dataType, data);
     }
 
     /**
@@ -41,20 +41,20 @@ public final class SourcerInitParams extends QTPointer {
      * @param dataType the data type of the sourcer object
      * @param data the data to use with the sourcer
      */
-    public SourcerInitParams(int paramInt1, int paramInt2, int paramInt3, QTPointer paramQTPointer) throws QTException {
+    public SourcerInitParams(int vers, int flags, int dataType, QTPointer data) throws QTException {
         super(20, true);
-        setVersion(paramInt1);
-        setFlags(paramInt2);
-        setDataType(paramInt3);
-        setData(paramQTPointer);
+        setVersion(vers);
+        setFlags(flags);
+        setDataType(dataType);
+        setData(data);
     }
 
     /**
      * Sets the version of the sourcer init params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -69,8 +69,8 @@ public final class SourcerInitParams extends QTPointer {
      * Sets the flags associated with the sourcer init params object
      * @param flags flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(4, flags);
     }
 
     /**
@@ -85,8 +85,8 @@ public final class SourcerInitParams extends QTPointer {
      * Sets the data type of the sourcer object
      * @param type sourcer data type
      */
-    public void setDataType(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setDataType(int type) {
+        setIntAt(8, type);
     }
 
     /**
@@ -100,15 +100,15 @@ public final class SourcerInitParams extends QTPointer {
      * Sets the target container data
      * @param data target container data
      */
-    public void setData(QTPointer paramQTPointer) {
-        if (paramQTPointer != null) {
-            setIntAt(12, QTObject.ID(paramQTPointer));
-            setIntAt(16, paramQTPointer.getSize());
+    public void setData(QTPointer data) {
+        if (data != null) {
+            setIntAt(12, QTObject.ID(data));
+            setIntAt(16, data.getSize());
         } else {
             setIntAt(12, 0);
             setIntAt(16, 0);
         }
-        this.sourcerData = paramQTPointer;
+        this.sourcerData = data;
     }
 
     /**

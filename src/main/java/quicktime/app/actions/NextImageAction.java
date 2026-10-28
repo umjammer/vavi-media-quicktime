@@ -34,9 +34,9 @@ public class NextImageAction extends SequencerAction implements Targetable {
      * @param images the images that will be cycled through
      * @param target this object is the target of the action.
      */
-    public NextImageAction(int paramInt1, int paramInt2, ImageSequencer paramImageSequencer, ImageSettable paramImageSettable) throws QTException {
-        super(paramInt1, paramInt2, paramImageSequencer);
-        this.target = paramImageSettable;
+    public NextImageAction(int scale, int period, ImageSequencer images, ImageSettable target) throws QTException {
+        super(scale, period, images);
+        this.target = target;
     }
 
     /**
@@ -46,8 +46,8 @@ public class NextImageAction extends SequencerAction implements Targetable {
      * @param target the new target for the Action
      */
     @Override
-    public void setTarget(Object paramObject) {
-        this.target = ((ImageSettable) paramObject);
+    public void setTarget(Object target) {
+        this.target = ((ImageSettable) target);
     }
 
     /**
@@ -71,10 +71,10 @@ public class NextImageAction extends SequencerAction implements Targetable {
      * @throws quicktime.QTException
      */
     @Override
-    protected void doAction(float paramFloat, int paramInt) throws QTException {
-        if (paramFloat > 0.0F) {
+    protected void doAction(float er, int t) throws QTException {
+        if (er > 0.0F) {
             this.seq.setFrameNext();
-        } else if (paramFloat < 0.0F) {
+        } else if (er < 0.0F) {
             this.seq.setFramePrevious();
         }
         this.target.setImageData(((ImageSequencer) this.seq).getImage(), ((ImageSequencer) this.seq).getDescription());

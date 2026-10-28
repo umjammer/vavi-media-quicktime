@@ -134,12 +134,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.GraphicsImporter#getGWorld()
      */
-    public static QDGraphics fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws StdQTException {
+    public static QDGraphics fromGraphicsImporter(GraphicsImporter gi) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
-        int i = GraphicsImportGetGWorld(QTObject.ID(paramGraphicsImporter), arrayOfInt1, arrayOfInt2);
+        int i = GraphicsImportGetGWorld(QTObject.ID(gi), arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(i);
-        return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], paramGraphicsImporter);
+        return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], gi);
     }
 
     /**
@@ -150,12 +150,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.Movie#getGWorld()
      */
-    public static QDGraphics fromMovie(Movie paramMovie) throws StdQTException {
+    public static QDGraphics fromMovie(Movie m) throws StdQTException {
         int[] arrayOfInt = new int[1];
         synchronized (QTNative.globalsLock) {
-            GetMovieGWorld(QTObject.ID(paramMovie), arrayOfInt, null);
+            GetMovieGWorld(QTObject.ID(m), arrayOfInt, null);
             StdQTException.checkError(GetMoviesError());
-            return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], paramMovie);
+            return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], m);
         }
     }
 
@@ -168,12 +168,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.streaming.Presentation#getGWorld()
      */
-    public static QDGraphics fromPresentation(Presentation paramPresentation, Stream paramStream) throws StdQTException {
+    public static QDGraphics fromPresentation(Presentation p, Stream s) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(QTSPresGetGWorld(QTObject.ID(paramPresentation), QTObject.ID(paramStream), arrayOfInt1, arrayOfInt2));
-            return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], paramPresentation);
+            StdQTException.checkError(QTSPresGetGWorld(QTObject.ID(p), QTObject.ID(s), arrayOfInt1, arrayOfInt2));
+            return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], p);
         }
     }
 
@@ -185,11 +185,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.MovieController#getPort()
      */
-    public static QDGraphics fromMovieController(MovieController paramMovieController) throws StdQTException {
+    public static QDGraphics fromMovieController(MovieController mc) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            int i = MCGetControllerPort(QTObject.ID(paramMovieController));
+            int i = MCGetControllerPort(QTObject.ID(mc));
             StdQTException.checkError(GetMoviesError());
-            return i == 0 ? scratch : new QDGraphics(i, paramMovieController);
+            return i == 0 ? scratch : new QDGraphics(i, mc);
         }
     }
 
@@ -201,12 +201,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.sg.SequenceGrabber#getGWorld()
      */
-    public static QDGraphics fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws StdQTException {
+    public static QDGraphics fromSequenceGrabber(SequenceGrabber sg) throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
-        int i = SGGetGWorld(QTObject.ID(paramSequenceGrabber), arrayOfInt1, arrayOfInt2);
+        int i = SGGetGWorld(QTObject.ID(sg), arrayOfInt1, arrayOfInt2);
         StdQTException.checkError(i);
-        return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], paramSequenceGrabber);
+        return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], sg);
     }
 
     /**
@@ -218,10 +218,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.CSequence#prevBuffer()
      */
-    public static QDGraphics fromCSequence(CSequence paramCSequence) throws StdQTException {
+    public static QDGraphics fromCSequence(CSequence c) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetCSequencePrevBuffer(QTObject.ID(paramCSequence), arrayOfInt));
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], paramCSequence);
+        StdQTException.checkError(GetCSequencePrevBuffer(QTObject.ID(c), arrayOfInt));
+        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], c);
     }
 
     /**
@@ -233,10 +233,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.DSequence#getImageBuffer()
      */
-    public static QDGraphics fromDSequenceImage(DSequence paramDSequence) throws StdQTException {
+    public static QDGraphics fromDSequenceImage(DSequence d) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetDSequenceImageBuffer(QTObject.ID(paramDSequence), arrayOfInt));
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], paramDSequence);
+        StdQTException.checkError(GetDSequenceImageBuffer(QTObject.ID(d), arrayOfInt));
+        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], d);
     }
 
     /**
@@ -248,10 +248,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.DSequence#getScreenBuffer()
      */
-    public static QDGraphics fromDSequenceScreen(DSequence paramDSequence) throws StdQTException {
+    public static QDGraphics fromDSequenceScreen(DSequence d) throws StdQTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetDSequenceScreenBuffer(QTObject.ID(paramDSequence), arrayOfInt));
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], paramDSequence);
+        StdQTException.checkError(GetDSequenceScreenBuffer(QTObject.ID(d), arrayOfInt));
+        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], d);
     }
 
     /**
@@ -311,8 +311,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param flags flags as specified to NewGWorld.
      * {@link quicktime.std.qtcomponents.ImageCompressionDialog#newGWorld(quicktime.qd.QDRect, int)}
      */
-    public QDGraphics(ImageCompressionDialog paramImageCompressionDialog, QDRect paramQDRect, int paramInt) throws QTException {
-        this(allocate(paramImageCompressionDialog, paramQDRect, paramInt));
+    public QDGraphics(ImageCompressionDialog paramImageCompressionDialog, QDRect area, int paramInt) throws QTException {
+        this(allocate(paramImageCompressionDialog, area, paramInt));
     }
 
     /**
@@ -335,8 +335,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param bounds the boundary rectangle and port rectangle for the offscreen
      *                    pixel map
      */
-    public QDGraphics(QDRect paramQDRect) throws QTException {
-        this(kDefaultPixelFormat, paramQDRect, null, null, 4096);
+    public QDGraphics(QDRect bounds) throws QTException {
+        this(kDefaultPixelFormat, bounds, null, null, 4096);
     }
 
     /**
@@ -348,8 +348,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param bounds the boundary rectangle and port rectangle for the offscreen
      *                    pixel map
      */
-    public QDGraphics(int paramInt, QDRect paramQDRect) throws QTException {
-        this(paramInt, paramQDRect, null, null, 4096);
+    public QDGraphics(int pixelFormat, QDRect bounds) throws QTException {
+        this(pixelFormat, bounds, null, null, 4096);
     }
 
     /**
@@ -362,8 +362,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *                    pixel map
      * @param flags options available to your application. See GWorld flags above
      */
-    public QDGraphics(int paramInt1, QDRect paramQDRect, int paramInt2) throws QTException {
-        this(paramInt1, paramQDRect, null, null, paramInt2);
+    public QDGraphics(int pixelFormat, QDRect bounds, int flags) throws QTException {
+        this(pixelFormat, bounds, null, null, flags);
     }
 
     /**
@@ -379,20 +379,20 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *  flag, otherwise it is just ignored and can be passed null.
      * @param flags options available to your application. See GWorld flags above
      */
-    public QDGraphics(int paramInt1, QDRect paramQDRect, ColorTable paramColorTable, GDevice paramGDevice, int paramInt2) throws QTException {
-        this(allocate(paramInt1, paramQDRect, paramColorTable, paramGDevice, paramInt2));
+    public QDGraphics(int pixelFormat, QDRect bounds, ColorTable cTable, GDevice aGDevice, int flags) throws QTException {
+        this(allocate(pixelFormat, bounds, cTable, aGDevice, flags));
     }
 
-    private static int allocate(int paramInt1, QDRect paramQDRect, ColorTable paramColorTable, GDevice paramGDevice, int paramInt2) throws QDException {
+    private static int allocate(int startAngle, QDRect area, ColorTable paramColorTable, GDevice paramGDevice, int arcAngle) throws QDException {
         int[] arrayOfInt = { 0 };
-        int i = QTNewGWorld(arrayOfInt, paramInt1, paramQDRect.getRect(), QTObject.ID(paramColorTable), QTObject.ID(paramGDevice), paramInt2);
+        int i = QTNewGWorld(arrayOfInt, startAngle, area.getRect(), QTObject.ID(paramColorTable), QTObject.ID(paramGDevice), arcAngle);
         QDException.checkError(i);
         return arrayOfInt[0];
     }
 
-    private static int allocate(ImageCompressionDialog paramImageCompressionDialog, QDRect paramQDRect, int paramInt) throws QTException {
+    private static int allocate(ImageCompressionDialog paramImageCompressionDialog, QDRect area, int paramInt) throws QTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(SCNewGWorld(QTObject.ID(paramImageCompressionDialog), arrayOfInt, paramQDRect != null ? paramQDRect.getRect() : null, paramInt));
+        StdQTException.checkError(SCNewGWorld(QTObject.ID(paramImageCompressionDialog), arrayOfInt, area != null ? area.getRect() : null, paramInt));
         if (arrayOfInt[0] == 0)
             throw new StdQTException(-50);
         return arrayOfInt[0];
@@ -411,12 +411,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param d the QDDrawer object that will do the drawing
      * @throws quicktime.QTException
      */
-    public void beginDraw(QDDrawer paramQDDrawer) throws QTException {
+    public void beginDraw(QDDrawer d) throws QTException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            paramQDDrawer.draw(this);
+            d.draw(this);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -469,8 +469,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @return a Pict object representing the thumbnail
      * @throws quicktime.QTException
      */
-    public Pict makeThumbnail(QDRect paramQDRect, int paramInt) throws QTException {
-        return Pict.thumbnailFromQDGraphics(this, paramQDRect, paramInt);
+    public Pict makeThumbnail(QDRect src, int colorDepth) throws QTException {
+        return Pict.thumbnailFromQDGraphics(this, src, colorDepth);
     }
 
     /**
@@ -535,13 +535,13 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::SetClip()"
      * @param rgn Region object which defines the new clip region
      */
-    public void setClip(Region paramRegion) {
+    public void setClip(Region rgn) {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            SetClip(QTObject.ID(paramRegion));
+            SetClip(QTObject.ID(rgn));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -569,12 +569,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * To change the clipping region of this QDGraphics, use the ClipRect procedure.
      * @param r the rect that will become the new clip rgn
      */
-    public void clipRect(QDRect paramQDRect) {
+    public void clipRect(QDRect r) {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            ClipRect(paramQDRect.getRect());
+            ClipRect(r.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -605,12 +605,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::RGBBackColor()"
      * @param bColor QDColor
      */
-    public void setBackColor(QDColor paramQDColor) {
+    public void setBackColor(QDColor bColor) {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            RGBBackColor(paramQDColor.getRGBColor());
+            RGBBackColor(bColor.getRGBColor());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -639,15 +639,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param arcAngle The angle indicating the arcÕs extent.
      * @throws quicktime.qd.QDException
      */
-    public void frameArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void frameArc(QDRect area, int startAngle, int arcAngle) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            FrameArc(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            FrameArc(area.getRect(), (short) startAngle, (short) arcAngle);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -666,15 +666,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param arcAngle The angle indicating the arcÕs extent.
      * @throws quicktime.qd.QDException
      */
-    public void paintArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void paintArc(QDRect area, int startAngle, int arcAngle) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            PaintArc(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            PaintArc(area.getRect(), (short) startAngle, (short) arcAngle);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -693,15 +693,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param arcAngle The angle indicating the arcÕs extent.
      * @throws quicktime.qd.QDException
      */
-    public void eraseArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void eraseArc(QDRect area, int startAngle, int arcAngle) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            EraseArc(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            EraseArc(area.getRect(), (short) startAngle, (short) arcAngle);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -720,15 +720,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param arcAngle The angle indicating the arcÕs extent.
      * @throws quicktime.qd.QDException
      */
-    public void invertArc(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void invertArc(QDRect area, int startAngle, int arcAngle) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            InvertArc(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            InvertArc(area.getRect(), (short) startAngle, (short) arcAngle);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -749,15 +749,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param ovalHeight The height of the oval defining the rounded corner.
      * @throws quicktime.qd.QDException
      */
-    public void frameRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void frameRoundRect(QDRect area, int ovalWidth, int ovalHeight) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            FrameRoundRect(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            FrameRoundRect(area.getRect(), (short) ovalWidth, (short) ovalHeight);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -775,15 +775,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param ovalHeight The height of the oval defining the rounded corner.
      * @throws quicktime.qd.QDException
      */
-    public void paintRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void paintRoundRect(QDRect area, int ovalWidth, int ovalHeight) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            PaintRoundRect(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            PaintRoundRect(area.getRect(), (short) ovalWidth, (short) ovalHeight);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -802,15 +802,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param ovalHeight The height of the oval defining the rounded corner.
      * @throws quicktime.qd.QDException
      */
-    public void eraseRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void eraseRoundRect(QDRect area, int ovalWidth, int ovalHeight) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            EraseRoundRect(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            EraseRoundRect(area.getRect(), (short) ovalWidth, (short) ovalHeight);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -828,15 +828,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param ovalHeight The height of the oval defining the rounded corner.
      * @throws quicktime.qd.QDException
      */
-    public void invertRoundRect(QDRect paramQDRect, int paramInt1, int paramInt2) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void invertRoundRect(QDRect area, int ovalWidth, int ovalHeight) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            InvertRoundRect(paramQDRect.getRect(), (short) paramInt1, (short) paramInt2);
+            InvertRoundRect(area.getRect(), (short) ovalWidth, (short) ovalHeight);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -854,15 +854,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area The rectangle that defines the ovalÕs boundary.
      * @throws quicktime.qd.QDException
      */
-    public void frameOval(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void frameOval(QDRect area) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            FrameOval(paramQDRect.getRect());
+            FrameOval(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -877,15 +877,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area The rectangle that defines the ovalÕs boundary.
      * @throws quicktime.qd.QDException
      */
-    public void paintOval(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void paintOval(QDRect area) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            PaintOval(paramQDRect.getRect());
+            PaintOval(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -901,15 +901,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area The rectangle that defines the ovalÕs boundary.
      * @throws quicktime.qd.QDException
      */
-    public void eraseOval(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void eraseOval(QDRect area) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            EraseOval(paramQDRect.getRect());
+            EraseOval(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -925,15 +925,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area The rectangle that defines the ovalÕs boundary.
      * @throws quicktime.qd.QDException
      */
-    public void invertOval(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void invertOval(QDRect area) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            InvertOval(paramQDRect.getRect());
+            InvertOval(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -953,12 +953,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param poly Polygon to frame.
      * @throws quicktime.qd.QDException
      */
-    public void framePoly(Polygon paramPolygon) throws QDException {
+    public void framePoly(Polygon poly) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            FramePoly(QTObject.ID(paramPolygon));
+            FramePoly(QTObject.ID(poly));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -973,12 +973,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param poly Polygon to paint.
      * @throws quicktime.qd.QDException
      */
-    public void paintPoly(Polygon paramPolygon) throws QDException {
+    public void paintPoly(Polygon poly) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            PaintPoly(QTObject.ID(paramPolygon));
+            PaintPoly(QTObject.ID(poly));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -993,12 +993,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param poly Polygon to erase.
      * @throws quicktime.qd.QDException
      */
-    public void erasePoly(Polygon paramPolygon) throws QDException {
+    public void erasePoly(Polygon poly) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            ErasePoly(QTObject.ID(paramPolygon));
+            ErasePoly(QTObject.ID(poly));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1013,12 +1013,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param poly Polygon to erase.
      * @throws quicktime.qd.QDException
      */
-    public void invertPoly(Polygon paramPolygon) throws QDException {
+    public void invertPoly(Polygon poly) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            InvertPoly(QTObject.ID(paramPolygon));
+            InvertPoly(QTObject.ID(poly));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1034,17 +1034,17 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *  or null for entire bounds
      * @throws quicktime.qd.QDException
      */
-    public void frameRect(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null)
-            paramQDRect = getPortRect();
+    public void frameRect(QDRect area) throws QDException {
+        if (area == null)
+            area = getPortRect();
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                FrameRect(paramQDRect.getRect());
+                FrameRect(area.getRect());
             } else
-                MacFrameRect(paramQDRect.getRect());
+                MacFrameRect(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1058,15 +1058,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *  or null for entire bounds
      * @throws quicktime.qd.QDException
      */
-    public void eraseRect(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void eraseRect(QDRect area) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            EraseRect(paramQDRect.getRect());
+            EraseRect(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1079,12 +1079,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area the portion of the QDGraphic to erase
      * @throws quicktime.qd.QDException
      */
-    public void eraseRgn(Region paramRegion) throws QDException {
+    public void eraseRgn(Region area) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            EraseRgn(QTObject.ID(paramRegion));
+            EraseRgn(QTObject.ID(area));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1100,13 +1100,13 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @return The QDColor for the pixel.
      * @throws quicktime.qd.QDException
      */
-    public QDColor getCPixel(int paramInt1, int paramInt2) throws QDException {
+    public QDColor getCPixel(int h, int v) throws QDException {
         byte[] arrayOfByte = new byte[6];
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            GetCPixel((short) paramInt1, (short) paramInt2, arrayOfByte);
+            GetCPixel((short) h, (short) v, arrayOfByte);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -1126,12 +1126,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param v The vertical coordinate of the point at the upper-left corner of the pixel.
      * @throws quicktime.qd.QDException
      */
-    public void setCPixel(int paramInt1, int paramInt2, QDColor paramQDColor) throws QDException {
+    public void setCPixel(int startAngle, int arcAngle, QDColor paramQDColor) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            SetCPixel((short) paramInt1, (short) paramInt2, paramQDColor.getRGBColor());
+            SetCPixel((short) startAngle, (short) arcAngle, paramQDColor.getRGBColor());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1150,12 +1150,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param height The pen height, as an integer from 0 to 32,767. If you set the value to 0, the pen does not draw. Values less than 0 are undefined.
      * @throws quicktime.qd.QDException
      */
-    public void penSize(int paramInt1, int paramInt2) throws QDException {
+    public void penSize(int width, int height) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            PenSize((short) paramInt1, (short) paramInt2);
+            PenSize((short) width, (short) height);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1204,12 +1204,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::RGBForeColor()"
      * @param fColor QDColor
      */
-    public void setForeColor(QDColor paramQDColor) {
+    public void setForeColor(QDColor fColor) {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            RGBForeColor(paramQDColor.getRGBColor());
+            RGBForeColor(fColor.getRGBColor());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1223,15 +1223,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *  or null for entire bounds
      * @throws quicktime.qd.QDException
      */
-    public void paintRect(QDRect paramQDRect) throws QDException {
-        if (paramQDRect == null) {
-            paramQDRect = getPortRect();
+    public void paintRect(QDRect area) throws QDException {
+        if (area == null) {
+            area = getPortRect();
         }
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            PaintRect(paramQDRect.getRect());
+            PaintRect(area.getRect());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1250,15 +1250,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param v The vertical coordinate of the graphics penÕs new location.
      * @throws quicktime.qd.QDException
      */
-    public void lineTo(int paramInt1, int paramInt2) throws QDException {
+    public void lineTo(int h, int v) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                LineTo((short) paramInt1, (short) paramInt2);
+                LineTo((short) h, (short) v);
             } else
-                MacLineTo((short) paramInt1, (short) paramInt2);
+                MacLineTo((short) h, (short) v);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1274,12 +1274,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param v The vertical distance of the graphics penÕs movement.
      * @throws quicktime.qd.QDException
      */
-    public void line(int paramInt1, int paramInt2) throws QDException {
+    public void line(int h, int v) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            Line((short) paramInt1, (short) paramInt2);
+            Line((short) h, (short) v);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1297,12 +1297,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param v The vertical distance of the graphics penÕs movement.
      * @throws quicktime.qd.QDException
      */
-    public void moveTo(int paramInt1, int paramInt2) throws QDException {
+    public void moveTo(int h, int v) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            MoveTo((short) paramInt1, (short) paramInt2);
+            MoveTo((short) h, (short) v);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1319,12 +1319,12 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param v The vertical distance of the graphics penÕs movement.
      * @throws quicktime.qd.QDException
      */
-    public void move(int paramInt1, int paramInt2) throws QDException {
+    public void move(int h, int v) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            Move((short) paramInt1, (short) paramInt2);
+            Move((short) h, (short) v);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1338,15 +1338,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area the portion of the QDGraphic port to paint
      * @throws quicktime.qd.QDException
      */
-    public void paintRgn(Region paramRegion) throws QDException {
+    public void paintRgn(Region area) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                PaintRgn(QTObject.ID(paramRegion));
+                PaintRgn(QTObject.ID(area));
             } else
-                MacPaintRgn(QTObject.ID(paramRegion));
+                MacPaintRgn(QTObject.ID(area));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1361,15 +1361,15 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param area the portion of the QDGraphic port to paint
      * @throws quicktime.qd.QDException
      */
-    public void frameRgn(Region paramRegion) throws QDException {
+    public void frameRgn(Region area) throws QDException {
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                FrameRgn(QTObject.ID(paramRegion));
+                FrameRgn(QTObject.ID(area));
             } else
-                MacFrameRgn(QTObject.ID(paramRegion));
+                MacFrameRgn(QTObject.ID(area));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1382,14 +1382,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param fontNumber The font family ID (obtained from an getFNum call).
      * @see getFNum
      */
-    public final void textFont(int paramInt) {
+    public final void textFont(int fontNumber) {
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            TextFont((short) paramInt);
+            TextFont((short) fontNumber);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1411,14 +1411,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::TextFace()"
      * @param face The style for text to be drawn
      */
-    public void textFace(int paramInt) {
+    public void textFace(int face) {
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            TextFace((short) paramInt);
+            TextFace((short) face);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1440,14 +1440,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param mode The transfer mode to be used in drawing text.  Possible values are: srcCopy, srcOr, srcXOr, srcBic, etc.
      * @see quicktime.QTConstants#srcCopy
      */
-    public void textMode(int paramInt) {
+    public void textMode(int mode) {
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            TextMode((short) paramInt);
+            TextMode((short) mode);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1468,14 +1468,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::TextSize()"
      * @param size The font size in points.  If you specify 0, the system font size is used.
      */
-    public void textSize(int paramInt) {
+    public void textSize(int size) {
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            TextSize((short) paramInt);
+            TextSize((short) size);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1496,14 +1496,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::DrawChar()"
      * @param character The character code whose glyph is to be drawn.
      */
-    public void drawChar(int paramInt) {
+    public void drawChar(int character) {
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            DrawChar((short) paramInt);
+            DrawChar((short) character);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1517,8 +1517,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param firstByte An offset from the start of the String (text) to the first byte of the text to be drawn.
      * @param byteCount The number of bytes of text to be drawn.
      */
-    public void drawText(String paramString, int paramInt1, int paramInt2) {
-        byte[] arrayOfByte = paramString.getBytes();
+    public void drawText(String text, int firstByte, int byteCount) {
+        byte[] arrayOfByte = text.getBytes();
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
@@ -1526,10 +1526,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
             }
             SetGWorld(_ID(), 0);
             if (i != 0) {
-                DrawText(arrayOfByte, (short) paramInt1, (short) paramInt2);
+                DrawText(arrayOfByte, (short) firstByte, (short) byteCount);
                 SetGWorld(savedPort[0], savedDevice[0]);
             } else {
-                MacDrawText(arrayOfByte, (short) paramInt1, (short) paramInt2);
+                MacDrawText(arrayOfByte, (short) firstByte, (short) byteCount);
             }
         }
     }
@@ -1540,7 +1540,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param character The character code whose width is to be measured.
      * @return The width of the specified character in pixels.
      */
-    public int charWidth(int paramInt) {
+    public int charWidth(int character) {
         int j = 0;
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
@@ -1548,7 +1548,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            j = CharWidth((short) paramInt);
+            j = CharWidth((short) character);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1564,16 +1564,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param byteCount The number of bytes of text to be measured.
      * @return The width of the specified text in pixels.
      */
-    public int textWidth(String paramString, int paramInt1, int paramInt2) {
+    public int textWidth(String text, int firstByte, int byteCount) {
         int j = 0;
-        byte[] arrayOfByte = paramString.getBytes();
+        byte[] arrayOfByte = text.getBytes();
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            j = TextWidth(arrayOfByte, (short) paramInt1, (short) paramInt2);
+            j = TextWidth(arrayOfByte, (short) firstByte, (short) byteCount);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1589,17 +1589,17 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param xScale Represents the scaling factor in the X dimension.
      * @param yScale Represents the scaling factor in the Y dimension.
      */
-    public void drawTextScaled(int paramInt, String paramString, float paramFloat1, float paramFloat2) {
-        QDPoint localQDPoint1 = new QDPoint((int) (paramFloat1 * 100.0F), (int) (paramFloat2 * 100.0F));
+    public void drawTextScaled(int count, String text, float xScale, float yScale) {
+        QDPoint localQDPoint1 = new QDPoint((int) (xScale * 100.0F), (int) (yScale * 100.0F));
         QDPoint localQDPoint2 = new QDPoint(100, 100);
-        byte[] arrayOfByte = paramString.getBytes();
+        byte[] arrayOfByte = text.getBytes();
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            StdText((short) paramInt, arrayOfByte, localQDPoint1.getPoint(), localQDPoint2.getPoint());
+            StdText((short) count, arrayOfByte, localQDPoint1.getPoint(), localQDPoint2.getPoint());
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1615,14 +1615,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @param yScale Represents the scaling factor in the Y dimension.
      * @return The width of the specified text in pixels.
      */
-    public int measureScaledText(int paramInt, String paramString, float paramFloat1, float paramFloat2) {
+    public int measureScaledText(int byteCount, String text, float xScale, float yScale) {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        QDPoint localQDPoint1 = new QDPoint((int) (paramFloat1 * 100.0F), (int) (paramFloat2 * 100.0F));
+        QDPoint localQDPoint1 = new QDPoint((int) (xScale * 100.0F), (int) (yScale * 100.0F));
         arrayOfInt1[0] = localQDPoint1.getPoint();
         QDPoint localQDPoint2 = new QDPoint(100, 100);
         arrayOfInt2[0] = localQDPoint2.getPoint();
-        byte[] arrayOfByte = paramString.getBytes();
+        byte[] arrayOfByte = text.getBytes();
         short[] arrayOfShort = new short[4];
         int j = 0;
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
@@ -1632,7 +1632,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
             }
             SetGWorld(_ID(), 0);
             GetFontInfo(arrayOfShort);
-            j = StdTxMeas((short) paramInt, arrayOfByte, arrayOfInt1, arrayOfInt2, arrayOfShort);
+            j = StdTxMeas((short) byteCount, arrayOfByte, arrayOfInt1, arrayOfInt2, arrayOfShort);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1700,16 +1700,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return QuickDrawManager.LockPixels(paramInt);
     }
 
-    private static short QTNewGWorld(int[] paramArrayOfInt, int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
-        return QuickDrawManager.QTNewGWorld(paramArrayOfInt, paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4);
+    private static short QTNewGWorld(int[] paramArrayOfInt, int startAngle, byte[] paramArrayOfByte, int arcAngle, int paramInt3, int paramInt4) {
+        return QuickDrawManager.QTNewGWorld(paramArrayOfInt, startAngle, paramArrayOfByte, arcAngle, paramInt3, paramInt4);
     }
 
-    private static int SCNewGWorld(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, int paramInt2) {
-        return ImageCompressionManager.SCNewGWorld(paramInt1, paramArrayOfInt, paramArrayOfByte, paramInt2);
+    private static int SCNewGWorld(int startAngle, int[] paramArrayOfInt, byte[] paramArrayOfByte, int arcAngle) {
+        return ImageCompressionManager.SCNewGWorld(startAngle, paramArrayOfInt, paramArrayOfByte, arcAngle);
     }
 
-    private static short NewImageGWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2) {
-        return QuickDrawManager.NewImageGWorld(paramArrayOfInt, paramInt1, paramInt2);
+    private static short NewImageGWorld(int[] paramArrayOfInt, int startAngle, int arcAngle) {
+        return QuickDrawManager.NewImageGWorld(paramArrayOfInt, startAngle, arcAngle);
     }
 
     private static void GetBackColor(byte[] paramArrayOfByte) {
@@ -1760,8 +1760,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         QuickDrawManager.GetPort(paramArrayOfInt);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int startAngle, int arcAngle) {
+        QuickDrawManager.SetGWorld(startAngle, arcAngle);
     }
 
     private static void PaintRgn(int paramInt) {
@@ -1772,8 +1772,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         QuickDrawManager.FrameRgn(paramInt);
     }
 
-    private static void CopyRgn(int paramInt1, int paramInt2) {
-        QuickDrawManager.CopyRgn(paramInt1, paramInt2);
+    private static void CopyRgn(int startAngle, int arcAngle) {
+        QuickDrawManager.CopyRgn(startAngle, arcAngle);
     }
 
     private static void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
@@ -1784,20 +1784,20 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         QuickDrawManager.OffsetRgn(paramInt, paramShort1, paramShort2);
     }
 
-    private static void UnionRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.UnionRgn(paramInt1, paramInt2, paramInt3);
+    private static void UnionRgn(int startAngle, int arcAngle, int paramInt3) {
+        QuickDrawManager.UnionRgn(startAngle, arcAngle, paramInt3);
     }
 
-    private static void XorRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.XorRgn(paramInt1, paramInt2, paramInt3);
+    private static void XorRgn(int startAngle, int arcAngle, int paramInt3) {
+        QuickDrawManager.XorRgn(startAngle, arcAngle, paramInt3);
     }
 
-    private static byte EqualRgn(int paramInt1, int paramInt2) {
-        return QuickDrawManager.EqualRgn(paramInt1, paramInt2);
+    private static byte EqualRgn(int startAngle, int arcAngle) {
+        return QuickDrawManager.EqualRgn(startAngle, arcAngle);
     }
 
-    private static void SectRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.SectRgn(paramInt1, paramInt2, paramInt3);
+    private static void SectRgn(int startAngle, int arcAngle, int paramInt3) {
+        QuickDrawManager.SectRgn(startAngle, arcAngle, paramInt3);
     }
 
     private static void GetClip(int paramInt) {
@@ -1920,16 +1920,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         QuickDrawManager.InvertPoly(paramInt);
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int startAngle, int arcAngle) {
+        return MemoryManager.getShortFromPointer(startAngle, arcAngle);
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int startAngle, int arcAngle, int paramInt3) {
+        MemoryManager.setIntInPointer(startAngle, arcAngle, paramInt3);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int startAngle, int arcAngle) {
+        return MemoryManager.getIntFromPointer(startAngle, arcAngle);
     }
 
     private static void TextFont(short paramShort) {
@@ -1972,8 +1972,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         QuickDrawManager.MeasureText(paramShort, paramArrayOfByte, paramArrayOfInt);
     }
 
-    private static void StdText(short paramShort, byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        QuickDrawManager.StdText(paramShort, paramArrayOfByte, paramInt1, paramInt2);
+    private static void StdText(short paramShort, byte[] paramArrayOfByte, int startAngle, int arcAngle) {
+        QuickDrawManager.StdText(paramShort, paramArrayOfByte, startAngle, arcAngle);
     }
 
     private static short StdTxMeas(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort) {
@@ -1992,16 +1992,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return QuickDrawManager.GetPortBounds(paramInt, paramArrayOfByte);
     }
 
-    private static int GetPortClipRegion(int paramInt1, int paramInt2) {
-        return QuickDrawManager.GetPortClipRegion(paramInt1, paramInt2);
+    private static int GetPortClipRegion(int startAngle, int arcAngle) {
+        return QuickDrawManager.GetPortClipRegion(startAngle, arcAngle);
     }
 
-    private static int GetPortVisibleRegion(int paramInt1, int paramInt2) {
-        return QuickDrawManager.GetPortVisibleRegion(paramInt1, paramInt2);
+    private static int GetPortVisibleRegion(int startAngle, int arcAngle) {
+        return QuickDrawManager.GetPortVisibleRegion(startAngle, arcAngle);
     }
 
-    private static short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return StreamingManager.QTSPresGetGWorld(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static short QTSPresGetGWorld(int startAngle, int arcAngle, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
+        return StreamingManager.QTSPresGetGWorld(startAngle, arcAngle, paramArrayOfInt1, paramArrayOfInt2);
     }
 }
 

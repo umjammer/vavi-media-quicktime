@@ -32,8 +32,8 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * This constructor creates an PresentationDrawer object from a Presentation component.
      * @param pres the Presentation object to present
      */
-    public PresentationDrawer(Presentation paramPresentation) throws QTException {
-        this.pres = paramPresentation;
+    public PresentationDrawer(Presentation pres) throws QTException {
+        this.pres = pres;
         setDefaultTasker(idleTasker);
     }
 
@@ -71,8 +71,8 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        this.pres.setGWorld(paramQDGraphics);
+    public synchronized void setGWorld(QDGraphics gWorld) throws QTException {
+        this.pres.setGWorld(gWorld);
     }
 
     /**
@@ -125,8 +125,8 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.pres.setMatrix(null, paramMatrix);
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.pres.setMatrix(null, matrix);
     }
 
     /**
@@ -137,15 +137,15 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void setDisplayBounds(QDRect paramQDRect) throws QTException {
+    public synchronized void setDisplayBounds(QDRect bounds) throws QTException {
         QDRect localQDRect = getDisplayBounds();
         Matrix localMatrix = new Matrix();
-        localMatrix.setTx(paramQDRect.getX());
-        localMatrix.setTy(paramQDRect.getY());
-        localMatrix.setSx(paramQDRect.getWidth() / localQDRect.getWidth());
-        localMatrix.setSy(paramQDRect.getHeight() / localQDRect.getHeight());
+        localMatrix.setTx(bounds.getX());
+        localMatrix.setTy(bounds.getY());
+        localMatrix.setSx(bounds.getWidth() / localQDRect.getWidth());
+        localMatrix.setSy(bounds.getHeight() / localQDRect.getHeight());
         setMatrix(localMatrix);
-        this.pres.setDimensions(null, paramQDRect.getWidth(), paramQDRect.getHeight());
+        this.pres.setDimensions(null, bounds.getWidth(), bounds.getHeight());
     }
 
     /**
@@ -157,10 +157,10 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setLocation(int paramInt1, int paramInt2) throws QTException {
+    public void setLocation(int x, int y) throws QTException {
         QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(paramInt1);
-        localQDRect.setY(paramInt2);
+        localQDRect.setX(x);
+        localQDRect.setY(y);
         setDisplayBounds(localQDRect);
     }
 
@@ -189,8 +189,8 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public final synchronized void redraw(Region paramRegion) throws QTException {
-        this.pres.invalidateRegion(paramRegion);
+    public final synchronized void redraw(Region invalidRgn) throws QTException {
+        this.pres.invalidateRegion(invalidRgn);
     }
 
     /**
@@ -213,8 +213,8 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setClip(Region paramRegion) throws QTException {
-        this.pres.setClip(null, paramRegion);
+    public void setClip(Region reg) throws QTException {
+        this.pres.setClip(null, reg);
     }
 
     /**
@@ -246,7 +246,7 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
+    public void addedTo(Object interest) {
     }
 
     /**
@@ -259,7 +259,7 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
+    public void removedFrom(Object interest) {
     }
 }
 

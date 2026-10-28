@@ -40,9 +40,9 @@ public class QTByteObject implements PrimitivesLib, Serializable {
      * @param ar the byte array to represent
      * @return a QTByteObject with the specified array as its target bytes
      */
-    public static QTByteObject fromArray(byte[] paramArrayOfByte) {
+    public static QTByteObject fromArray(byte[] ar) {
         QTByteObject localQTByteObject = new QTByteObject();
-        localQTByteObject.bytes = paramArrayOfByte;
+        localQTByteObject.bytes = ar;
         return localQTByteObject;
     }
 

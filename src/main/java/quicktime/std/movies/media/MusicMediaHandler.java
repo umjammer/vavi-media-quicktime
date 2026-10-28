@@ -17,8 +17,8 @@ public final class MusicMediaHandler extends SoundMediaHandler {
      * @param index the index within the media.
      * @throws quicktime.std.StdQTException
      */
-    public TunePlayer getIndexedTunePlayer(int paramInt) throws StdQTException {
-        return TunePlayer.fromMusicMediaHandler(this, paramInt);
+    public TunePlayer getIndexedTunePlayer(int index) throws StdQTException {
+        return TunePlayer.fromMusicMediaHandler(this, index);
     }
 }
 

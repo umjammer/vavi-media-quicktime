@@ -32,11 +32,11 @@ public abstract class TimeCallBack extends QTCallBack {
      * @param value the value in units as specified by the scale
      * @param flags the conditions under which the Callback will be executed
      */
-    public TimeCallBack(TimeBase paramTimeBase, int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        super(paramTimeBase, 1);
-        this.scale = paramInt1;
-        this.value = paramInt2;
-        this.flags = paramInt3;
+    public TimeCallBack(TimeBase tb, int scale, int value, int flags) throws QTException {
+        super(tb, 1);
+        this.scale = scale;
+        this.value = value;
+        this.flags = flags;
     }
 
     /**

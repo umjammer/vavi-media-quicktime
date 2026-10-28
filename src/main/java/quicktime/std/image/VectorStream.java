@@ -38,9 +38,9 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
      * @see "QuickTime::CurveCreateVectorStream"
      * @param c the curve component
      */
-    public VectorStream(Curve paramCurve) throws QTException {
-        super(allocate(paramCurve), null, false);
-        this.c = paramCurve;
+    public VectorStream(Curve c) throws QTException {
+        super(allocate(c), null, false);
+        this.c = c;
     }
 
     /**

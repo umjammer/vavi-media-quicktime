@@ -16,8 +16,8 @@ public final class FlashMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public FlashMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1718383464, paramInt, paramDataRef);
+    public FlashMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1718383464, timeScale, dataRef);
     }
 
     /**
@@ -26,8 +26,8 @@ public final class FlashMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public FlashMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public FlashMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     FlashMedia(int paramInt, Track paramTrack) throws QTException {
@@ -63,9 +63,9 @@ public final class FlashMedia extends Media {
      * @return a FlashDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public FlashDescription getFlashDescription(int paramInt) throws QTException {
+    public FlashDescription getFlashDescription(int index) throws QTException {
         FlashDescription localFlashDescription = new FlashDescription();
-        getNativeSampleDescription(paramInt, localFlashDescription);
+        getNativeSampleDescription(index, localFlashDescription);
         return localFlashDescription;
     }
 }

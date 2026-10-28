@@ -42,8 +42,8 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
      * @see "QuickTime::SGNewChannel"
      * @param owner specifies the sequence grabber component the channel is attached to.
      */
-    public SGSoundChannel(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramSequenceGrabber, 1936684398);
+    public SGSoundChannel(SequenceGrabber owner) throws StdQTException {
+        super(owner, 1936684398);
     }
 
     @Override
@@ -72,8 +72,8 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
      *   Set this field to 8 for 8-bit sound; set it to 16 for 16-bit sound..
      * @throws quicktime.std.StdQTException
      */
-    public void setSoundInputParameters(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int i = SGSetSoundInputParameters(_ID(), (short) paramInt1, (short) paramInt2, paramInt3);
+    public void setSoundInputParameters(int sampleSize, int numChannels, int compressionType) throws StdQTException {
+        int i = SGSetSoundInputParameters(_ID(), (short) sampleSize, (short) numChannels, compressionType);
         StdQTException.checkError(i);
     }
 
@@ -96,8 +96,8 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
      * @param rate Specifies the rate at which the sound channel is to acquire data.
      * @throws quicktime.std.StdQTException
      */
-    public void setSoundInputRate(float paramFloat) throws StdQTException {
-        int i = SGSetSoundInputRate(_ID(), QTUtils.X2UFix(paramFloat));
+    public void setSoundInputRate(float rate) throws StdQTException {
+        int i = SGSetSoundInputRate(_ID(), QTUtils.X2UFix(rate));
         StdQTException.checkError(i);
     }
 
@@ -126,8 +126,8 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
      * @param seconds the buffer size for the channel to use.
      * @throws quicktime.std.StdQTException
      */
-    public void setRecordChunkSize(int paramInt) throws StdQTException {
-        int i = SGSetSoundRecordChunkSize(_ID(), paramInt);
+    public void setRecordChunkSize(int seconds) throws StdQTException {
+        int i = SGSetSoundRecordChunkSize(_ID(), seconds);
         StdQTException.checkError(i);
     }
 

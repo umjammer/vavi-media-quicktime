@@ -28,8 +28,8 @@ public final class SourcerLoopParams extends QTPointer {
      * @param flagsMask the mask of the flags to use for the sourcer
      * @param numLoops the number of loops for the sourcer
      */
-    public SourcerLoopParams(int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        this(1, 0, paramInt1, paramInt2, paramInt3);
+    public SourcerLoopParams(int loopFlags, int flagsMask, int numLoops) throws QTException {
+        this(1, 0, loopFlags, flagsMask, numLoops);
     }
 
     /**
@@ -40,21 +40,21 @@ public final class SourcerLoopParams extends QTPointer {
      * @param flagsMask the mask of the flags to use for the sourcer
      * @param numLoops the number of loops for the sourcer
      */
-    public SourcerLoopParams(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) throws QTException {
+    public SourcerLoopParams(int vers, int flags, int loopFlags, int flagsMask, int numLoops) throws QTException {
         super(20, true);
-        setVersion(paramInt1);
-        setFlags(paramInt2);
-        setLoopFlags(paramInt3);
-        setFlagsMask(paramInt4);
-        setNumLoops(paramInt5);
+        setVersion(vers);
+        setFlags(flags);
+        setLoopFlags(loopFlags);
+        setFlagsMask(flagsMask);
+        setNumLoops(numLoops);
     }
 
     /**
      * Sets the version of the sourcer loop params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -69,8 +69,8 @@ public final class SourcerLoopParams extends QTPointer {
      * Sets the flags associated with the sourcer loop params object
      * @param flags flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(4, flags);
     }
 
     /**
@@ -85,8 +85,8 @@ public final class SourcerLoopParams extends QTPointer {
      * Sets the loop flags of the sourcer loop params object
      * @param loopFlags loop flags
      */
-    public void setLoopFlags(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setLoopFlags(int loopFlags) {
+        setIntAt(8, loopFlags);
     }
 
     /**
@@ -101,8 +101,8 @@ public final class SourcerLoopParams extends QTPointer {
      * Sets the flags mask of the sourcer loop params object
      * @param flagsMask mask for the sourcer loop flags
      */
-    public void setFlagsMask(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setFlagsMask(int flagsMask) {
+        setIntAt(12, flagsMask);
     }
 
     /**
@@ -116,8 +116,8 @@ public final class SourcerLoopParams extends QTPointer {
      * Sets the number of loops of the sourcer loop params object
      * @param numLoops number of loops
      */
-    public void setNumLoops(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setNumLoops(int numLoops) {
+        setIntAt(16, numLoops);
     }
 
     /**

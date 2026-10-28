@@ -48,7 +48,7 @@ public interface Timeable {
      * @param rate the new playback rate.
      * @throws quicktime.QTException
      */
-    void setRate(float paramFloat) throws QTException;
+    void setRate(float rate) throws QTException;
 
     /**
      * Returns the current rate of the Timeable object.

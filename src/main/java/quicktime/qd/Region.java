@@ -60,9 +60,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsImporter#getClip()
      */
-    public static Region fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws QTException {
+    public static Region fromGraphicsImporter(GraphicsImporter gi) throws QTException {
         int[] arrayOfInt = new int[1];
-        int i = GraphicsImportGetClip(QTObject.ID(paramGraphicsImporter), arrayOfInt);
+        int i = GraphicsImportGetClip(QTObject.ID(gi), arrayOfInt);
         QTException.checkError(i);
         if (arrayOfInt[0] == 0)
             return null;
@@ -77,9 +77,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsImporter#getClip()
      */
-    public static Region fromGraphicsImporterDefault(GraphicsImporter paramGraphicsImporter) throws QTException {
+    public static Region fromGraphicsImporterDefault(GraphicsImporter gi) throws QTException {
         int[] arrayOfInt = { 0 };
-        int i = GraphicsImportGetDefaultClip(QTObject.ID(paramGraphicsImporter), arrayOfInt);
+        int i = GraphicsImportGetDefaultClip(QTObject.ID(gi), arrayOfInt);
         QTException.checkError(i);
         return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
     }
@@ -92,8 +92,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getDisplayClipRgn()
      */
-    public static Region fromMovieDisplayClip(Movie paramMovie) throws QTException {
-        int i = GetMovieDisplayClipRgn(QTObject.ID(paramMovie));
+    public static Region fromMovieDisplayClip(Movie m) throws QTException {
+        int i = GetMovieDisplayClipRgn(QTObject.ID(m));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -110,8 +110,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getDisplayBoundsRgn()
      */
-    public static Region fromMovieDisplayBounds(Movie paramMovie) throws QTException {
-        int i = GetMovieDisplayBoundsRgn(QTObject.ID(paramMovie));
+    public static Region fromMovieDisplayBounds(Movie m) throws QTException {
+        int i = GetMovieDisplayBoundsRgn(QTObject.ID(m));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -124,8 +124,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getMovieClipRgn
      */
-    public static Region fromMovieClip(Movie paramMovie) throws QTException {
-        int i = GetMovieClipRgn(QTObject.ID(paramMovie));
+    public static Region fromMovieClip(Movie m) throws QTException {
+        int i = GetMovieClipRgn(QTObject.ID(m));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -139,9 +139,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.streaming.Presentation#getClip(quicktime.streaming.Stream)
      */
-    public static Region fromPresentationClip(Presentation paramPresentation, Stream paramStream) throws QTException {
+    public static Region fromPresentationClip(Presentation p, Stream s) throws QTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(QTSPresGetClip(QTObject.ID(paramPresentation), QTObject.ID(paramStream), arrayOfInt));
+        StdQTException.checkError(QTSPresGetClip(QTObject.ID(p), QTObject.ID(s), arrayOfInt));
         return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
     }
 
@@ -157,8 +157,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getBoundsRgn()
      */
-    public static Region fromMovieBounds(Movie paramMovie) throws QTException {
-        int i = GetMovieBoundsRgn(QTObject.ID(paramMovie));
+    public static Region fromMovieBounds(Movie m) throws QTException {
+        int i = GetMovieBoundsRgn(QTObject.ID(m));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -173,8 +173,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getSegmentDisplayBoundsRgn(int, int)
      */
-    public static Region fromMovieSegment(Movie paramMovie, int paramInt1, int paramInt2) throws QTException {
-        int i = GetMovieSegmentDisplayBoundsRgn(QTObject.ID(paramMovie), paramInt1, paramInt2);
+    public static Region fromMovieSegment(Movie m, int time, int duration) throws QTException {
+        int i = GetMovieSegmentDisplayBoundsRgn(QTObject.ID(m), time, duration);
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -188,8 +188,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.MovieController#getBoundsRgn()
      */
-    public static Region fromMovieControllerBounds(MovieController paramMovieController) throws QTException {
-        int i = MCGetControllerBoundsRgn(QTObject.ID(paramMovieController));
+    public static Region fromMovieControllerBounds(MovieController mc) throws QTException {
+        int i = MCGetControllerBoundsRgn(QTObject.ID(mc));
         StdQTException.checkError(GetMoviesError());
         return new Region(i);
     }
@@ -204,16 +204,16 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.MovieController#getWindowRgn(quicktime.qd.QDGraphics)
      */
-    public static Region fromMovieControllerWindow(MovieController paramMovieController, QDGraphics paramQDGraphics) throws QTException {
-        if (paramQDGraphics == null) {
+    public static Region fromMovieControllerWindow(MovieController mc, QDGraphics window) throws QTException {
+        if (window == null) {
             throw new StdQTException(-50);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = MCGetWindowRgn(QTObject.ID(paramMovieController), QTObject.ID(paramQDGraphics));
+            SetGWorld(QTObject.ID(window), 0);
+            i = MCGetWindowRgn(QTObject.ID(mc), QTObject.ID(window));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -229,10 +229,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.MovieController#getClip()
      */
-    public static Region fromMovieControllerClip(MovieController paramMovieController) throws QTException {
+    public static Region fromMovieControllerClip(MovieController mc) throws QTException {
         synchronized (QTNative.globalsLock) {
             int[] arrayOfInt = new int[1];
-            StdQTException.checkError(MCGetClip(QTObject.ID(paramMovieController), arrayOfInt, null));
+            StdQTException.checkError(MCGetClip(QTObject.ID(mc), arrayOfInt, null));
             return new Region(arrayOfInt[0]);
         }
     }
@@ -263,8 +263,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Track#getClipRgn()
      */
-    public static Region fromTrackClip(Track paramTrack) throws QTException {
-        int i = GetTrackClipRgn(QTObject.ID(paramTrack));
+    public static Region fromTrackClip(Track t) throws QTException {
+        int i = GetTrackClipRgn(QTObject.ID(t));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -277,8 +277,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Track#getDisplayBoundsRgn()
      */
-    public static Region fromTrackDisplay(Track paramTrack) throws QTException {
-        int i = GetTrackDisplayBoundsRgn(QTObject.ID(paramTrack));
+    public static Region fromTrackDisplay(Track t) throws QTException {
+        int i = GetTrackDisplayBoundsRgn(QTObject.ID(t));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -291,8 +291,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Track#getMovieBoundsRgn()
      */
-    public static Region fromTrackMovieBounds(Track paramTrack) throws QTException {
-        int i = GetTrackMovieBoundsRgn(QTObject.ID(paramTrack));
+    public static Region fromTrackMovieBounds(Track t) throws QTException {
+        int i = GetTrackMovieBoundsRgn(QTObject.ID(t));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -306,8 +306,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Track#getBoundsRgn()
      */
-    public static Region fromTrackBounds(Track paramTrack) throws QTException {
-        int i = GetTrackBoundsRgn(QTObject.ID(paramTrack));
+    public static Region fromTrackBounds(Track t) throws QTException {
+        int i = GetTrackBoundsRgn(QTObject.ID(t));
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -323,8 +323,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Track#getSegmentDisplayBoundsRgn(int, int)
      */
-    public static Region fromTrackSegment(Track paramTrack, int paramInt1, int paramInt2) throws QTException {
-        int i = GetTrackSegmentDisplayBoundsRgn(QTObject.ID(paramTrack), paramInt1, paramInt2);
+    public static Region fromTrackSegment(Track t, int time, int duration) throws QTException {
+        int i = GetTrackSegmentDisplayBoundsRgn(QTObject.ID(t), time, duration);
         StdQTException.checkError(GetMoviesError());
         return i == 0 ? null : new Region(i);
     }
@@ -337,9 +337,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @throws quicktime.QTException
      * @see quicktime.std.sg.VisualChannel#getClip()
      */
-    public static Region fromVideoChannel(VisualChannel paramVisualChannel) throws QTException {
+    public static Region fromVideoChannel(VisualChannel vc) throws QTException {
         int[] arrayOfInt = { 0 };
-        int i = SGGetChannelClip(QTObject.ID(paramVisualChannel), arrayOfInt);
+        int i = SGGetChannelClip(QTObject.ID(vc), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
     }
@@ -363,9 +363,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see "QuickDraw::RectRgn"
      * @param r the specified rectangle
      */
-    public Region(QDRect paramQDRect) throws QTException {
+    public Region(QDRect r) throws QTException {
         this();
-        rect(paramQDRect);
+        rect(r);
     }
 
     /**
@@ -373,17 +373,17 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see "QuickDraw::BitMapToRegion"
      * @param pMap the specified pixmap
      */
-    public Region(PixMap paramPixMap) throws QTException {
+    public Region(PixMap pMap) throws QTException {
         this();
         int i = 0;
-        if (!paramPixMap.isLocked()) {
-            paramPixMap.lock();
+        if (!pMap.isLocked()) {
+            pMap.lock();
             i = 1;
         }
-        int j = getIntFromPointer(QTObject.ID(paramPixMap), 0);
+        int j = getIntFromPointer(QTObject.ID(pMap), 0);
         int k = BitMapToRegion(_ID(), j);
         if (i != 0)
-            paramPixMap.unlock();
+            pMap.unlock();
         QDException.checkError(k);
     }
 
@@ -430,12 +430,12 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param graphics the QDGraphics object to record.
      * @throws quicktime.qd.QDException
      */
-    public void open(QDGraphics paramQDGraphics) throws QDException {
-        if (paramQDGraphics == null)
+    public void open(QDGraphics graphics) throws QDException {
+        if (graphics == null)
             throw new QDException("Graphics must be specified for Open Region");
         if (this.recordingGraphics != null)
             close();
-        this.recordingGraphics = paramQDGraphics;
+        this.recordingGraphics = graphics;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
@@ -471,8 +471,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see "QuickDraw::RectRgn"
      * @param r the specified rectangle
      */
-    public void rect(QDRect paramQDRect) {
-        RectRgn(_ID(), paramQDRect.getRect());
+    public void rect(QDRect r) {
+        RectRgn(_ID(), r.getRect());
     }
 
     /**
@@ -527,13 +527,13 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param width the specified width.
      * @param height the specified height.
      */
-    public void setRect(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        int i = paramInt2 + paramInt4;
-        int j = paramInt1 + paramInt3;
+    public void setRect(int x, int y, int width, int height) {
+        int i = height + width;
+        int j = x + y;
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
-            SetRectRgn(_ID(), (short) paramInt1, (short) paramInt2, (short) j, (short) i);
+            SetRectRgn(_ID(), (short) x, (short) y, (short) j, (short) i);
         } else {
-            MacSetRectRgn(_ID(), (short) paramInt1, (short) paramInt2, (short) j, (short) i);
+            MacSetRectRgn(_ID(), (short) x, (short) y, (short) j, (short) i);
         }
     }
 
@@ -544,11 +544,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param dh the specified horizontal offset.
      * @param dv the specified vertical offset.
      */
-    public void offset(int paramInt1, int paramInt2) {
+    public void offset(int dh, int dv) {
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
-            OffsetRgn(_ID(), (short) paramInt1, (short) paramInt2);
+            OffsetRgn(_ID(), (short) dh, (short) dv);
         } else {
-            MacOffsetRgn(_ID(), (short) paramInt1, (short) paramInt2);
+            MacOffsetRgn(_ID(), (short) dh, (short) dv);
         }
     }
 
@@ -558,8 +558,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param dh the specified horizontal inset.
      * @param dv the specified vertical inset.
      */
-    public void inset(int paramInt1, int paramInt2) {
-        InsetRgn(_ID(), (short) paramInt1, (short) paramInt2);
+    public void inset(int dh, int dv) {
+        InsetRgn(_ID(), (short) dh, (short) dv);
     }
 
     /**
@@ -570,11 +570,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @return The region of intersection.
      * @throws quicktime.QTException
      */
-    public Region sect(Region paramRegion) throws QTException {
+    public Region sect(Region regionB) throws QTException {
         int i = NewRgn();
         if (i == 0)
             QDException.checkError(-108);
-        SectRgn(_ID(), QTObject.ID(paramRegion), i);
+        SectRgn(_ID(), QTObject.ID(regionB), i);
         return new Region(i);
     }
 
@@ -587,11 +587,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @return The region of intersection.
      * @throws quicktime.QTException
      */
-    public Region sect(QDRect paramQDRect) throws QTException {
+    public Region sect(QDRect r) throws QTException {
         int i = NewRgn();
         if (i == 0)
             QDException.checkError(-108);
-        RectRgn(i, paramQDRect.getRect());
+        RectRgn(i, r.getRect());
         int j = NewRgn();
         if (j == 0) {
             DisposeRgn(i);
@@ -611,14 +611,14 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @return The region of union.
      * @throws quicktime.QTException
      */
-    public Region union(Region paramRegion) throws QTException {
+    public Region union(Region regionB) throws QTException {
         int i = NewRgn();
         if (i == 0)
             QDException.checkError(-108);
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
-            UnionRgn(_ID(), QTObject.ID(paramRegion), i);
+            UnionRgn(_ID(), QTObject.ID(regionB), i);
         } else
-            MacUnionRgn(_ID(), QTObject.ID(paramRegion), i);
+            MacUnionRgn(_ID(), QTObject.ID(regionB), i);
         return new Region(i);
     }
 
@@ -631,11 +631,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @return The region of union.
      * @throws quicktime.QTException
      */
-    public Region union(QDRect paramQDRect) throws QTException {
+    public Region union(QDRect rect) throws QTException {
         int i = NewRgn();
         if (i == 0)
             QDException.checkError(-108);
-        RectRgn(i, paramQDRect.getRect());
+        RectRgn(i, rect.getRect());
         int j = NewRgn();
         if (j == 0)
             QDException.checkError(-108);
@@ -654,11 +654,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @return The region of difference.
      * @throws quicktime.QTException
      */
-    public Region diff(Region paramRegion) throws QTException {
+    public Region diff(Region regionB) throws QTException {
         int i = NewRgn();
         if (i == 0)
             QDException.checkError(-108);
-        DiffRgn(_ID(), QTObject.ID(paramRegion), i);
+        DiffRgn(_ID(), QTObject.ID(regionB), i);
         return new Region(i);
     }
 
@@ -671,14 +671,14 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @return The region of exclusively or.
      * @throws quicktime.QTException
      */
-    public Region xor(Region paramRegion) throws QTException {
+    public Region xor(Region regionB) throws QTException {
         int i = NewRgn();
         if (i == 0)
             QDException.checkError(-108);
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
-            XorRgn(_ID(), QTObject.ID(paramRegion), i);
+            XorRgn(_ID(), QTObject.ID(regionB), i);
         } else
-            MacXorRgn(_ID(), QTObject.ID(paramRegion), i);
+            MacXorRgn(_ID(), QTObject.ID(regionB), i);
         return new Region(i);
     }
 
@@ -688,8 +688,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param srcRect the specified source rectangle
      * @return True if at least one bit of the rectangle is contained by the region, false otherwise.
      */
-    public boolean rectIn(QDRect paramQDRect) {
-        return RectInRgn(paramQDRect.getRect(), _ID()) != 0;
+    public boolean rectIn(QDRect srcRect) {
+        return RectInRgn(srcRect.getRect(), _ID()) != 0;
     }
 
     /**
@@ -720,8 +720,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param srcRect the specified source rectangle
      * @param dstRect the specified destination rectangle
      */
-    public void map(QDRect paramQDRect1, QDRect paramQDRect2) {
-        MapRgn(_ID(), paramQDRect1.getRect(), paramQDRect2.getRect());
+    public void map(QDRect srcRect, QDRect dstRect) {
+        MapRgn(_ID(), srcRect.getRect(), dstRect.getRect());
     }
 
     /**
@@ -730,8 +730,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @param pt the specified point.
      * @return True if pt is contained by the region, false otherwise.
      */
-    public boolean pointIn(QDPoint paramQDPoint) {
-        return PtInRgn(paramQDPoint.getPoint(), _ID()) != 0;
+    public boolean pointIn(QDPoint pt) {
+        return PtInRgn(pt.getPoint(), _ID()) != 0;
     }
 
     /**

@@ -59,8 +59,8 @@ public abstract class Sequencer {
      * kLoopForwards,
      * kLoopPalindrome
      */
-    public void setLooping(int paramInt) {
-        this.looping = paramInt;
+    public void setLooping(int flag) {
+        this.looping = flag;
         if (this.looping == 1)
             this.forwards = true;
     }
@@ -94,12 +94,12 @@ public abstract class Sequencer {
      * of the image object it refers to - it will loop, etc.
      * @param frameNumber the new current frame number to set to.
      */
-    public void setCurrentFrame(int paramInt) {
+    public void setCurrentFrame(int frameNumber) {
         int i = size();
-        if (paramInt == -1) {
+        if (frameNumber == -1) {
             this.mCurrentFrame = i;
         }
-        if (paramInt > i) {
+        if (frameNumber > i) {
             if (this.mCurrentFrame == i) {
                 switch(this.looping) {
                     case 1:
@@ -113,7 +113,7 @@ public abstract class Sequencer {
             } else {
                 this.mCurrentFrame = i;
             }
-        } else if (paramInt == 0) {
+        } else if (frameNumber == 0) {
             if (this.mCurrentFrame == 1) {
                 switch(this.looping) {
                     case 2:
@@ -128,7 +128,7 @@ public abstract class Sequencer {
                 this.mCurrentFrame = 1;
             }
         } else {
-            this.mCurrentFrame = paramInt;
+            this.mCurrentFrame = frameNumber;
         }
     }
 

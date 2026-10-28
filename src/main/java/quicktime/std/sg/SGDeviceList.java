@@ -36,11 +36,11 @@ public class SGDeviceList extends QTHandleRef {
      * @return the specified Device's name
      * @throws quicktime.std.StdQTException
      */
-    public SGDeviceName getDeviceName(int paramInt) throws StdQTException {
-        if ((paramInt < 0) || (paramInt >= getShortAt(0)))
+    public SGDeviceName getDeviceName(int whichOne) throws StdQTException {
+        if ((whichOne < 0) || (whichOne >= getShortAt(0)))
             throw new StdQTException(-50);
         SGDeviceName localSGDeviceName = new SGDeviceName();
-        copyToArray(8 + 80 * paramInt, localSGDeviceName.getBytes(), 0, 80);
+        copyToArray(8 + 80 * whichOne, localSGDeviceName.getBytes(), 0, 80);
         return localSGDeviceName;
     }
 

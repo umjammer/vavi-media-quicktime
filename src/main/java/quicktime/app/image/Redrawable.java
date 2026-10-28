@@ -62,7 +62,7 @@ public interface Redrawable {
      * @param redrawFlag boolean determining whether the current image is redrawn (false)
      *  of fresh or updated image data is first retrieved (true).
      */
-    void setRedrawing(boolean paramBoolean);
+    void setRedrawing(boolean redrawFlag);
 
     /**
      * @deprecated

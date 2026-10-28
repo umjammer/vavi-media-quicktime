@@ -48,21 +48,21 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * @param milliseconds On input, the number of milliseconds to record. If this field indicates a longer recording time than the count field, then the count field is ignored.
      * @param buffer A QTPointer to the buffer for the sampled-sound data. If this buffer length is too small to contain the amount of sampled-sound data specified in the count and milliseconds fields, then recording time is truncated so that the sampled-sound data fits in the buffer.
      */
-    public SPB(SPBDevice paramSPBDevice, int paramInt1, int paramInt2, QTPointerRef paramQTPointerRef) {
+    public SPB(SPBDevice device, int count, int milliseconds, QTPointerRef buffer) {
         super(38);
         try {
             this.realObject = new quicktime.util.QTPointer(38, true);
         } catch (quicktime.QTException localQTException) {
             throw new quicktime.QTRuntimeException(localQTException);
         }
-        setIntAt(0, QTObject.ID(paramSPBDevice));
-        setIntInPointer(QTObject.ID(this.realObject), 0, QTObject.ID(paramSPBDevice));
-        setIntAt(12, paramQTPointerRef.getSize());
-        setIntInPointer(QTObject.ID(this.realObject), 12, paramQTPointerRef.getSize());
-        this.device = paramSPBDevice;
-        setCount(paramInt1);
-        setMilliseconds(paramInt2);
-        setBuffer(paramQTPointerRef);
+        setIntAt(0, QTObject.ID(device));
+        setIntInPointer(QTObject.ID(this.realObject), 0, QTObject.ID(device));
+        setIntAt(12, buffer.getSize());
+        setIntInPointer(QTObject.ID(this.realObject), 12, buffer.getSize());
+        this.device = device;
+        setCount(count);
+        setMilliseconds(milliseconds);
+        setBuffer(buffer);
     }
 
     public void setCompletionProc(SICompletion paramSICompletion) {
@@ -96,9 +96,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * Sets the number of bytes that are to be recorded.
      * @param count number of bytes
      */
-    public void setCount(int paramInt) {
-        setIntAt(4, paramInt);
-        setIntInPointer(QTObject.ID(this.realObject), 4, paramInt);
+    public void setCount(int count) {
+        setIntAt(4, count);
+        setIntInPointer(QTObject.ID(this.realObject), 4, count);
     }
 
     /**
@@ -121,9 +121,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * Sets the the number of milliseconds that are to be recorded.
      * @param msecs milliseconds
      */
-    public void setMilliseconds(int paramInt) {
-        setIntAt(8, paramInt);
-        setIntInPointer(QTObject.ID(this.realObject), 8, paramInt);
+    public void setMilliseconds(int msecs) {
+        setIntAt(8, msecs);
+        setIntInPointer(QTObject.ID(this.realObject), 8, msecs);
     }
 
     /**
@@ -138,12 +138,12 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * Sets the buffer that the device will record into.
      * @param buffer the record buffer
      */
-    public void setBuffer(QTPointerRef paramQTPointerRef) {
-        setIntAt(16, QTObject.ID(paramQTPointerRef));
-        setIntInPointer(QTObject.ID(this.realObject), 16, QTObject.ID(paramQTPointerRef));
-        setIntAt(12, paramQTPointerRef.getSize());
-        setIntInPointer(QTObject.ID(this.realObject), 12, paramQTPointerRef.getSize());
-        this.buffer = paramQTPointerRef;
+    public void setBuffer(QTPointerRef buffer) {
+        setIntAt(16, QTObject.ID(buffer));
+        setIntInPointer(QTObject.ID(this.realObject), 16, QTObject.ID(buffer));
+        setIntAt(12, buffer.getSize());
+        setIntInPointer(QTObject.ID(this.realObject), 12, buffer.getSize());
+        this.buffer = buffer;
     }
 
     /**
@@ -176,9 +176,9 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * @param flag if true record asynchronously, if false records synchronously.
      * @throws quicktime.sound.SoundException
      */
-    public void record(boolean paramBoolean) throws SoundException {
+    public void record(boolean flag) throws SoundException {
         int i = 0;
-        byte b = (byte) (paramBoolean ? 1 : 0);
+        byte b = (byte) (flag ? 1 : 0);
         setShortAt(32, (short) 0);
         setShortInPointer(QTObject.ID(this.realObject), 32, (short) 0);
         synchronized (quicktime.jdirect.QTNative.globalsLock) {

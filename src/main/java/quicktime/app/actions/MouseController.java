@@ -83,11 +83,11 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param mr the responder that will become active to respond to mouse events
      * @param wholespace sets the value of the wholespace flag
      */
-    protected MouseController(MouseResponder paramMouseResponder, boolean paramBoolean) {
-        this.responder = paramMouseResponder;
-        if (paramMouseResponder == null)
+    protected MouseController(MouseResponder mr, boolean wholespace) {
+        this.responder = mr;
+        if (mr == null)
             throw new NullPointerException("Responder must NOT be null");
-        this.wholespace = paramBoolean;
+        this.wholespace = wholespace;
         this.table = new Vector();
         this.responder.controller = this;
     }
@@ -102,9 +102,9 @@ public abstract class MouseController implements ListenerController, Collection,
      * @see setTargetSpace()
      */
     @Override
-    public final void addedToSpace(Space paramSpace) {
-        setTargetSpace(paramSpace);
-        this.responder.setTargetSpace(paramSpace);
+    public final void addedToSpace(Space s) {
+        setTargetSpace(s);
+        this.responder.setTargetSpace(s);
     }
 
     /**
@@ -144,12 +144,12 @@ public abstract class MouseController implements ListenerController, Collection,
      *  the object that implements this interface.
      */
     @Override
-    public void addedTo(Object paramObject) {
-        if ((paramObject instanceof Component)) {
+    public void addedTo(Object interest) {
+        if ((interest instanceof Component)) {
             if (this.responder.isInterested(51))
-                ((Component) paramObject).addMouseListener(this);
+                ((Component) interest).addMouseListener(this);
             if (this.responder.isInterested(12)) {
-                ((Component) paramObject).addMouseMotionListener(this);
+                ((Component) interest).addMouseMotionListener(this);
             }
         }
     }
@@ -167,10 +167,10 @@ public abstract class MouseController implements ListenerController, Collection,
      *  the object that implements this interface.
      */
     @Override
-    public void removedFrom(Object paramObject) {
-        if ((paramObject instanceof Component)) {
-            ((Component) paramObject).removeMouseListener(this);
-            ((Component) paramObject).removeMouseMotionListener(this);
+    public void removedFrom(Object interest) {
+        if ((interest instanceof Component)) {
+            ((Component) interest).removeMouseListener(this);
+            ((Component) interest).removeMouseMotionListener(this);
         }
     }
 
@@ -190,8 +190,8 @@ public abstract class MouseController implements ListenerController, Collection,
      * Sets the new value of the wholespace flag.
      * @param flag if true all objects in the controller's space are potentially controllable.
      */
-    public void setWholespace(boolean paramBoolean) {
-        this.wholespace = paramBoolean;
+    public void setWholespace(boolean flag) {
+        this.wholespace = flag;
     }
 
     /**
@@ -300,8 +300,8 @@ public abstract class MouseController implements ListenerController, Collection,
      * @return a boolean
      */
     @Override
-    public boolean hasMember(Object member) {
-        return member == null ? false : this.table.contains(member);
+    public boolean hasMember(Object object) {
+        return object == null ? false : this.table.contains(object);
     }
 
     /**
@@ -312,14 +312,14 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mouseEntered(MouseEvent paramMouseEvent) {
-        if (this.responder.isInterested(16, paramMouseEvent.getModifiers())) {
+    public void mouseEntered(MouseEvent e) {
+        if (this.responder.isInterested(16, e.getModifiers())) {
             boolean bool = this.responder.isActive();
             if (!bool) {
                 this.responder.activate(16);
                 responderActivated();
             }
-            this.responder.mouseEntered(paramMouseEvent);
+            this.responder.mouseEntered(e);
             if (!bool) {
                 deactivateResponder();
             }
@@ -334,16 +334,16 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mouseExited(MouseEvent paramMouseEvent) {
-        if (this.responder.isInterested(32, paramMouseEvent.getModifiers())) {
+    public void mouseExited(MouseEvent e) {
+        if (this.responder.isInterested(32, e.getModifiers())) {
             boolean bool = this.responder.isActive();
             if (!bool) {
                 this.responder.activate(32);
                 responderActivated();
             }
-            this.responder.mouseExited(paramMouseEvent);
+            this.responder.mouseExited(e);
             if (this.mouseMoveCurrentTarget != null) {
-                this.responder.mouseExitedTarget(paramMouseEvent);
+                this.responder.mouseExitedTarget(e);
                 this.mouseMoveCurrentTarget = null;
             }
             if (bool) {
@@ -376,14 +376,14 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mousePressed(MouseEvent paramMouseEvent) {
-        if (this.responder.isInterested(2, paramMouseEvent.getModifiers())) {
+    public void mousePressed(MouseEvent e) {
+        if (this.responder.isInterested(2, e.getModifiers())) {
             setTranslation();
-            paramMouseEvent.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
-            if (_activateResponder(paramMouseEvent, 2)) {
-                this.responder.mousePressed(paramMouseEvent);
+            e.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
+            if (_activateResponder(e, 2)) {
+                this.responder.mousePressed(e);
             }
-            paramMouseEvent.translatePoint(this.xLocationOffset, this.yLocationOffset);
+            e.translatePoint(this.xLocationOffset, this.yLocationOffset);
         }
     }
 
@@ -395,11 +395,11 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mouseReleased(MouseEvent paramMouseEvent) {
-        if ((this.responder.isInterested(2, paramMouseEvent.getModifiers())) && (this.responder.isActive())) {
+    public void mouseReleased(MouseEvent e) {
+        if ((this.responder.isInterested(2, e.getModifiers())) && (this.responder.isActive())) {
             setTranslation();
-            paramMouseEvent.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
-            this.responder.mouseReleased(paramMouseEvent);
+            e.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
+            this.responder.mouseReleased(e);
             if (this.mouseMoveCurrentTarget == null) {
                 deactivateResponder();
             } else if (this.currentTargetInDrag == null) {
@@ -407,7 +407,7 @@ public abstract class MouseController implements ListenerController, Collection,
                 this.mouseMoveCurrentTarget = null;
             }
             this.originalDragTarget = null;
-            paramMouseEvent.translatePoint(this.xLocationOffset, this.yLocationOffset);
+            e.translatePoint(this.xLocationOffset, this.yLocationOffset);
         }
     }
 
@@ -419,15 +419,15 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mouseClicked(MouseEvent paramMouseEvent) {
-        if (this.responder.isInterested(1, paramMouseEvent.getModifiers())) {
+    public void mouseClicked(MouseEvent e) {
+        if (this.responder.isInterested(1, e.getModifiers())) {
             setTranslation();
-            paramMouseEvent.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
-            if (_activateResponder(paramMouseEvent, 1)) {
-                this.responder.mouseClicked(paramMouseEvent);
+            e.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
+            if (_activateResponder(e, 1)) {
+                this.responder.mouseClicked(e);
                 deactivateResponder();
             }
-            paramMouseEvent.translatePoint(this.xLocationOffset, this.yLocationOffset);
+            e.translatePoint(this.xLocationOffset, this.yLocationOffset);
         }
     }
 
@@ -439,18 +439,18 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mouseMoved(MouseEvent paramMouseEvent) {
-        if (!this.responder.isInterested(72, paramMouseEvent.getModifiers())) {
+    public void mouseMoved(MouseEvent e) {
+        if (!this.responder.isInterested(72, e.getModifiers())) {
             return;
         }
         setTranslation();
-        paramMouseEvent.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
-        if (this.responder.isInterested(64, paramMouseEvent.getModifiers())) {
+        e.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
+        if (this.responder.isInterested(64, e.getModifiers())) {
             try {
-                Object localObject = getSelected(paramMouseEvent);
+                Object localObject = getSelected(e);
                 if (localObject == null) {
                     if (this.mouseMoveCurrentTarget != null) {
-                        this.responder.mouseExitedTarget(paramMouseEvent);
+                        this.responder.mouseExitedTarget(e);
                         deactivateResponder();
                         this.mouseMoveCurrentTarget = null;
                     }
@@ -459,22 +459,22 @@ public abstract class MouseController implements ListenerController, Collection,
                         this.responder.setTarget(localObject);
                         this.responder.activate(64);
                         responderActivated();
-                        this.responder.mouseEnteredTarget(paramMouseEvent);
+                        this.responder.mouseEnteredTarget(e);
                         this.mouseMoveCurrentTarget = localObject;
                     } else if (this.mouseMoveCurrentTarget != localObject) {
-                        this.responder.mouseExitedTarget(paramMouseEvent);
+                        this.responder.mouseExitedTarget(e);
                         deactivateResponder();
                         this.responder.setTarget(localObject);
                         this.responder.activate(64);
                         responderActivated();
-                        this.responder.mouseEnteredTarget(paramMouseEvent);
+                        this.responder.mouseEnteredTarget(e);
                         this.mouseMoveCurrentTarget = localObject;
                     } else {
-                        this.responder.mouseMoved(paramMouseEvent);
-                        paramMouseEvent.translatePoint(this.xLocationOffset, this.yLocationOffset);
+                        this.responder.mouseMoved(e);
+                        e.translatePoint(this.xLocationOffset, this.yLocationOffset);
                     }
                 } else if (this.mouseMoveCurrentTarget != null) {
-                    this.responder.mouseExitedTarget(paramMouseEvent);
+                    this.responder.mouseExitedTarget(e);
                     deactivateResponder();
                     this.mouseMoveCurrentTarget = null;
                 }
@@ -482,17 +482,17 @@ public abstract class MouseController implements ListenerController, Collection,
                 QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "getSelected");
             }
         }
-        if (this.responder.isInterested(8, paramMouseEvent.getModifiers())) {
+        if (this.responder.isInterested(8, e.getModifiers())) {
             boolean bool = this.responder.isActive();
             if (!bool) {
                 this.responder.activate(8);
                 responderActivated();
             }
-            this.responder.mouseMoved(paramMouseEvent);
+            this.responder.mouseMoved(e);
             if (!bool)
                 deactivateResponder();
         }
-        paramMouseEvent.translatePoint(this.xLocationOffset, this.yLocationOffset);
+        e.translatePoint(this.xLocationOffset, this.yLocationOffset);
     }
 
     /**
@@ -503,13 +503,13 @@ public abstract class MouseController implements ListenerController, Collection,
      * @param e the mouse event
      */
     @Override
-    public void mouseDragged(MouseEvent paramMouseEvent) {
+    public void mouseDragged(MouseEvent e) {
         if ((this.responder.isInterested(4)) && (this.responder.isActive())) {
             setTranslation();
-            paramMouseEvent.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
-            doDragTarget(paramMouseEvent);
-            this.responder.mouseDragged(paramMouseEvent);
-            paramMouseEvent.translatePoint(this.xLocationOffset, this.yLocationOffset);
+            e.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
+            doDragTarget(e);
+            this.responder.mouseDragged(e);
+            e.translatePoint(this.xLocationOffset, this.yLocationOffset);
         }
     }
 
@@ -581,7 +581,7 @@ public abstract class MouseController implements ListenerController, Collection,
      * be attached to the Space.
      * @param s -
      */
-    protected abstract void setTargetSpace(Space paramSpace);
+    protected abstract void setTargetSpace(Space s);
 
     /**
      * @deprecated
@@ -593,7 +593,7 @@ public abstract class MouseController implements ListenerController, Collection,
      * @return a transformable object that is located at the event coordinates or null
      * @throws quicktime.QTException
      */
-    protected abstract Object getSelected(MouseEvent paramMouseEvent) throws QTException;
+    protected abstract Object getSelected(MouseEvent event) throws QTException;
 
     /**
      * @deprecated

@@ -42,8 +42,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @see "QuickTime::SGNewChannel"
      * @param owner specifies the sequence grabber component the channel is attached to.
      */
-    public SGTextChannel(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramSequenceGrabber, 1952807028);
+    public SGTextChannel(SequenceGrabber owner) throws StdQTException {
+        super(owner, 1952807028);
     }
 
     @Override
@@ -67,8 +67,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @param fontName a pointer to a string containing the name of the font.
      * @throws quicktime.std.StdQTException
      */
-    public void setFontName(String paramString) throws StdQTException {
-        int i = SGSetFontName(_ID(), QTUtils.String2PString(paramString, 255));
+    public void setFontName(String fontName) throws StdQTException {
+        int i = SGSetFontName(_ID(), QTUtils.String2PString(fontName, 255));
         StdQTException.checkError(i);
     }
 
@@ -87,8 +87,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @param theColor the new foreground text color.
      * @throws quicktime.std.StdQTException
      */
-    public void setForeColor(QDColor paramQDColor) throws StdQTException {
-        int i = SGSetTextForeColor(_ID(), paramQDColor.getRGBColor());
+    public void setForeColor(QDColor theColor) throws StdQTException {
+        int i = SGSetTextForeColor(_ID(), theColor.getRGBColor());
         StdQTException.checkError(i);
     }
 
@@ -98,8 +98,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @param theColor the new background text color.
      * @throws quicktime.std.StdQTException
      */
-    public void setBackColor(QDColor paramQDColor) throws StdQTException {
-        int i = SGSetTextBackColor(_ID(), paramQDColor.getRGBColor());
+    public void setBackColor(QDColor theColor) throws StdQTException {
+        int i = SGSetTextBackColor(_ID(), theColor.getRGBColor());
         StdQTException.checkError(i);
     }
 
@@ -109,8 +109,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @param just the text justification.
      * @throws quicktime.std.StdQTException
      */
-    public void setJustification(int paramInt) throws StdQTException {
-        int i = SGSetJustification(_ID(), (short) paramInt);
+    public void setJustification(int just) throws StdQTException {
+        int i = SGSetJustification(_ID(), (short) just);
         StdQTException.checkError(i);
     }
 
@@ -131,8 +131,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @param rettospace the value for the new text to space setting.
      * @throws quicktime.std.StdQTException
      */
-    public void setReturnToSpaceValue(int paramInt) throws StdQTException {
-        int i = SGSetTextReturnToSpaceValue(_ID(), (short) paramInt);
+    public void setReturnToSpaceValue(int rettospace) throws StdQTException {
+        int i = SGSetTextReturnToSpaceValue(_ID(), (short) rettospace);
         StdQTException.checkError(i);
     }
 

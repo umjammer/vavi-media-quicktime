@@ -48,8 +48,8 @@ public final class SourcerCallbackParams extends QTPointer {
      * Sets the version of the sourcer callback params object
      * @param vers version
      */
-    public void setVersion(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setVersion(int vers) {
+        setIntAt(0, vers);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class SourcerCallbackParams extends QTPointer {
      * Sets the flags of the sourcer callback object
      * @param flags sourcer callback flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(4, flags);
     }
 
     /**
@@ -80,15 +80,15 @@ public final class SourcerCallbackParams extends QTPointer {
      * proc is null, the current callback proc will be removed
      * @param proc StreamNotify Proc
      */
-    public void setProc(StreamNotifyProc paramStreamNotifyProc) {
-        if (paramStreamNotifyProc == null) {
+    public void setProc(StreamNotifyProc proc) {
+        if (proc == null) {
             setIntAt(8, 0);
             if (this.notifyUPP != null) {
                 this.notifyUPP.cleanup();
                 this.notifyUPP = null;
             }
         } else {
-            this.notifyUPP = new StreamDispatcher(paramStreamNotifyProc);
+            this.notifyUPP = new StreamDispatcher(proc);
             setIntAt(8, this.notifyUPP.ID());
         }
     }

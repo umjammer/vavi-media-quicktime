@@ -44,10 +44,10 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @return the RestrictionSet object for given movie
      * @throws quicktime.std.StdQTException
      */
-    public static RestrictionSet fromMovie(Movie paramMovie) throws StdQTException {
+    public static RestrictionSet fromMovie(Movie theMovie) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        int i = QTGetMovieRestrictions(QTObject.ID(paramMovie), arrayOfInt1, arrayOfInt2);
+        int i = QTGetMovieRestrictions(QTObject.ID(theMovie), arrayOfInt1, arrayOfInt2);
         return new RestrictionSet(arrayOfInt1[0]);
     }
 
@@ -94,9 +94,9 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @param restrictionClass class of restrictions to be reported: kQTRestrictionClassSave or kQTRestrictionClassEdit
      * @return integer holding constants that indicate individual restrictions
      */
-    public int getItem(int paramInt) {
+    public int getItem(int restrictionClass) {
         int[] arrayOfInt = { 0 };
-        QTRestrictionsGetItem(_ID(), paramInt, arrayOfInt);
+        QTRestrictionsGetItem(_ID(), restrictionClass, arrayOfInt);
         return arrayOfInt[0];
     }
 

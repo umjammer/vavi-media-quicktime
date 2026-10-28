@@ -227,17 +227,17 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @return the encoded image data as a Handle
      * @throws quicktime.QTException
      */
-    public static QTHandle fromEncodedImage(EncodedImage paramEncodedImage) throws QTException {
-        if ((paramEncodedImage instanceof ByteEncodedImage))
-            return new QTHandle(((ByteEncodedImage) paramEncodedImage).getBytes());
-        if ((paramEncodedImage instanceof IntEncodedImage)) {
-            QTHandle localQTHandle = new QTHandle(paramEncodedImage.getSize(), false);
-            int[] arrayOfInt = ((IntEncodedImage) paramEncodedImage).getInts();
+    public static QTHandle fromEncodedImage(EncodedImage image) throws QTException {
+        if ((image instanceof ByteEncodedImage))
+            return new QTHandle(((ByteEncodedImage) image).getBytes());
+        if ((image instanceof IntEncodedImage)) {
+            QTHandle localQTHandle = new QTHandle(image.getSize(), false);
+            int[] arrayOfInt = ((IntEncodedImage) image).getInts();
             localQTHandle.copyFromArray(0, arrayOfInt, 0, arrayOfInt.length);
             return localQTHandle;
         }
-        if ((paramEncodedImage instanceof RawEncodedImage)) {
-            return new QTHandle((RawEncodedImage) paramEncodedImage, 0, paramEncodedImage.getSize());
+        if ((image instanceof RawEncodedImage)) {
+            return new QTHandle((RawEncodedImage) image, 0, image.getSize());
         }
         return null;
     }
@@ -249,8 +249,8 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @param size the size of the handle you will allocate in the new Handle(size...) call
      * @throws quicktime.util.UtilException
      */
-    public static void reserveMemory(int paramInt) throws UtilException {
-        ReserveMem(paramInt);
+    public static void reserveMemory(int size) throws UtilException {
+        ReserveMem(size);
         UtilException.checkError(MemError());
     }
 
@@ -268,17 +268,17 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @param size the size of the handle to create.
      * @param clear clear the handle upon creation.
      */
-    public QTHandle(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, paramBoolean);
+    public QTHandle(int size, boolean clear) throws QTException {
+        super(size, clear);
     }
 
     /**
      * Construct a handle from input data.
      * @param byteArray the input data.
      */
-    public QTHandle(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte.length, false);
-        setBytesAt(0, paramArrayOfByte.length, paramArrayOfByte, 0);
+    public QTHandle(byte[] byteArray) throws QTException {
+        super(byteArray.length, false);
+        setBytesAt(0, byteArray.length, byteArray, 0);
     }
 
     /**
@@ -291,8 +291,8 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @param offset you can specify an offset within the pointer from which to copy the data
      * @param size the amount of bytes to copy
      */
-    public QTHandle(QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2) throws QTException {
-        this(copyPtr(paramQTPointerRef, paramInt1, paramInt2), null, false);
+    public QTHandle(QTPointerRef ptr, int offset, int size) throws QTException {
+        this(copyPtr(ptr, offset, size), null, false);
     }
 
     /**
@@ -301,9 +301,9 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @param firstHandle the first Handle
      * @param secondHandle the second Handle
      */
-    public QTHandle(QTHandleRef paramQTHandleRef1, QTHandleRef paramQTHandleRef2) throws QTException {
-        this(paramQTHandleRef1.makeAndCopyHandle(), null, false);
-        concatenate(paramQTHandleRef2);
+    public QTHandle(QTHandleRef firstHandle, QTHandleRef secondHandle) throws QTException {
+        this(firstHandle.makeAndCopyHandle(), null, false);
+        concatenate(secondHandle);
     }
 
     protected QTHandle(int paramInt, Object paramObject, boolean paramBoolean) {
@@ -324,8 +324,8 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @param size the new size of the handle.
      * @throws quicktime.util.UtilException
      */
-    public void setSize(int paramInt) throws UtilException {
-        SetHandleSize(_ID(), paramInt);
+    public void setSize(int size) throws UtilException {
+        SetHandleSize(_ID(), size);
         UtilException.checkError(MemError());
     }
 

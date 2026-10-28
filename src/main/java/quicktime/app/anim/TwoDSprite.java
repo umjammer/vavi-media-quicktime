@@ -87,8 +87,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * when it is attached to a SpriteWorld.
      * @param spriteInfo the image and layout information for the sprite when it is created.
      */
-    public TwoDSprite(TwoDSpriteInfo paramTwoDSpriteInfo) throws QTException {
-        this.info = paramTwoDSpriteInfo;
+    public TwoDSprite(TwoDSpriteInfo spriteInfo) throws QTException {
+        this.info = spriteInfo;
     }
 
     /**
@@ -112,8 +112,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param graphicsMode the GraphicsMode that is applied to the rendering of the
      *  image data, this can be null
      */
-    public TwoDSprite(Matrix paramMatrix, int paramInt, GraphicsMode paramGraphicsMode) throws QTException {
-        this.info = new TwoDSpriteInfo(getDummyEI(), getDummyID(), paramMatrix, false, paramInt, paramGraphicsMode);
+    public TwoDSprite(Matrix matrix, int layer, GraphicsMode graphicsMode) throws QTException {
+        this.info = new TwoDSpriteInfo(getDummyEI(), getDummyID(), matrix, false, layer, graphicsMode);
     }
 
     /**
@@ -127,8 +127,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param visibility whether the sprite will be visible (true) or not (false) when created
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
      */
-    public TwoDSprite(ImageSpec paramImageSpec, Matrix paramMatrix, boolean paramBoolean, int paramInt) throws QTException {
-        this.info = new TwoDSpriteInfo(paramImageSpec.getImage(), paramImageSpec.getDescription(), paramMatrix, paramBoolean, paramInt);
+    public TwoDSprite(ImageSpec image, Matrix matrix, boolean visibility, int layer) throws QTException {
+        this.info = new TwoDSpriteInfo(image.getImage(), image.getDescription(), matrix, visibility, layer);
     }
 
     private transient Sprite sprite;
@@ -146,8 +146,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param graphicsMode the GraphicsMode that is applied to the rendering of the
      *  image data, this can be null
      */
-    public TwoDSprite(ImageSpec paramImageSpec, Matrix paramMatrix, boolean paramBoolean, int paramInt, GraphicsMode paramGraphicsMode) throws QTException {
-        this.info = new TwoDSpriteInfo(paramImageSpec.getImage(), paramImageSpec.getDescription(), paramMatrix, paramBoolean, paramInt, paramGraphicsMode);
+    public TwoDSprite(ImageSpec image, Matrix matrix, boolean visibility, int layer, GraphicsMode graphicsMode) throws QTException {
+        this.info = new TwoDSpriteInfo(image.getImage(), image.getDescription(), matrix, visibility, layer, graphicsMode);
     }
 
     /**
@@ -163,8 +163,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param visibility whether the sprite will be visible (true) or not (false) when created
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
      */
-    public TwoDSprite(ImageDataSequence paramImageDataSequence, int paramInt1, Matrix paramMatrix, boolean paramBoolean, int paramInt2) throws QTException {
-        this.info = new TwoDSpriteInfo(paramImageDataSequence.getImage(paramInt1), paramImageDataSequence.getDescription(), paramMatrix, paramBoolean, paramInt2);
+    public TwoDSprite(ImageDataSequence images, int frame, Matrix matrix, boolean visibility, int layer) throws QTException {
+        this.info = new TwoDSpriteInfo(images.getImage(frame), images.getDescription(), matrix, visibility, layer);
     }
 
     private final TwoDSpriteInfo info;
@@ -186,8 +186,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param graphicsMode the GraphicsMode that is applied to the rendering of the
      *  image data, this can be null
      */
-    public TwoDSprite(ImageDataSequence paramImageDataSequence, int paramInt1, Matrix paramMatrix, boolean paramBoolean, int paramInt2, GraphicsMode paramGraphicsMode) throws QTException {
-        this.info = new TwoDSpriteInfo(paramImageDataSequence.getImage(paramInt1), paramImageDataSequence.getDescription(), paramMatrix, paramBoolean, paramInt2, paramGraphicsMode);
+    public TwoDSprite(ImageDataSequence images, int frame, Matrix matrix, boolean visibility, int layer, GraphicsMode graphicsMode) throws QTException {
+        this.info = new TwoDSpriteInfo(images.getImage(frame), images.getDescription(), matrix, visibility, layer, graphicsMode);
     }
 
     /**
@@ -216,8 +216,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * You can set the label string for this TwoDSprite.
      * @param label a string that is associated with this sprite.
      */
-    public void setLabel(String paramString) {
-        this.label = paramString;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     /**
@@ -239,9 +239,9 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      *  for the TwoDSprite. Returns false if the Notifier is not an instanceof ImageSpec.
      */
     @Override
-    public boolean setNotifier(Notifier paramNotifier) {
-        if ((paramNotifier instanceof ImageSpec)) {
-            this.is = ((ImageSpec) paramNotifier);
+    public boolean setNotifier(Notifier notifier) {
+        if ((notifier instanceof ImageSpec)) {
+            this.is = ((ImageSpec) notifier);
             return true;
         }
         this.is = null;
@@ -281,19 +281,19 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @throws quicktime.QTException
      */
     @Override
-    public void setImageData(EncodedImage paramEncodedImage, ImageDescription paramImageDescription) throws QTException {
-        paramEncodedImage = paramEncodedImage == null ? getDummyEI() : paramEncodedImage;
-        paramImageDescription = paramImageDescription == null ? getDummyID() : paramImageDescription;
-        this.info.desc = paramImageDescription;
+    public void setImageData(EncodedImage im, ImageDescription id) throws QTException {
+        im = im == null ? getDummyEI() : im;
+        id = id == null ? getDummyID() : id;
+        this.info.desc = id;
         if (this.sprite != null) {
-            this.sprite.setImageDescription(paramImageDescription);
-            if ((paramEncodedImage != getDummyEI()) && (this.info.image == getDummyEI())) {
+            this.sprite.setImageDescription(id);
+            if ((im != getDummyEI()) && (this.info.image == getDummyEI())) {
                 this.sprite.setGraphicsMode(this.info.graphicsMode);
                 this.sprite.setVisible(true);
             }
-            setImage(paramEncodedImage);
+            setImage(im);
         } else {
-            setImage(paramEncodedImage);
+            setImage(im);
         }
     }
 
@@ -302,16 +302,16 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @since QTJava 6.1
      * This method should make the object's current image the specified image.
      */
-    public void setImage(EncodedImage paramEncodedImage) throws QTException {
-        paramEncodedImage = paramEncodedImage != null ? paramEncodedImage : getDummyEI();
+    public void setImage(EncodedImage im) throws QTException {
+        im = im != null ? im : getDummyEI();
         if (this.sprite != null) {
-            boolean bool = this.sprite.setImageDataIfDifferent(paramEncodedImage);
-            if (paramEncodedImage == getDummyEI())
+            boolean bool = this.sprite.setImageDataIfDifferent(im);
+            if (im == getDummyEI())
                 this.sprite.setVisible(false);
             if (bool)
                 doParentRedraw(true);
         }
-        this.info.image = paramEncodedImage;
+        this.info.image = im;
     }
 
     private void doParentRedraw(boolean paramBoolean) throws QTException {
@@ -410,7 +410,7 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param sw the Sprite world that the Sprite will appear in
      * @throws quicktime.QTException
      */
-    public void createSprite(SpriteWorld paramSpriteWorld) throws QTException {
+    public void createSprite(SpriteWorld sw) throws QTException {
         if (this.sprite != null)
             this.sprite.remove();
         if (this.info == null)
@@ -421,7 +421,7 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
         }
         if ((this.info.image == getDummyEI()) || (this.info.desc == getDummyID()))
             this.info.visible = false;
-        this.sprite = new Sprite(paramSpriteWorld, this.info.desc, this.info.image, this.info.matrix, this.info.visible, this.info.layer);
+        this.sprite = new Sprite(sw, this.info.desc, this.info.image, this.info.matrix, this.info.visible, this.info.layer);
         this.sprite.setGraphicsMode(this.info.graphicsMode);
         if (this.spriteIsCompositor != null) {
             this.spriteIsCompositor.setGWorld(QDGraphics.validScratch);
@@ -512,12 +512,12 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @return true if the point is inside the sprite, false if not.
      * @throws quicktime.QTException
      */
-    public boolean hitTest(int paramInt, QDPoint paramQDPoint) throws QTException {
+    public boolean hitTest(int flags, QDPoint loc) throws QTException {
         if (this.sprite == null) {
             QTRuntimeException.handleOrThrow(new SpriteInvalidException(toString()), this, "hitTest");
             return false;
         }
-        return this.sprite.hitTest(paramInt, paramQDPoint);
+        return this.sprite.hitTest(flags, loc);
     }
 
     /**
@@ -541,10 +541,10 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param idh Specifies the image description.
      * @throws quicktime.QTException
      */
-    public void setDescription(ImageDescription paramImageDescription) throws QTException {
+    public void setDescription(ImageDescription idh) throws QTException {
         if (this.sprite != null)
-            this.sprite.setImageDescription(paramImageDescription);
-        this.info.desc = paramImageDescription;
+            this.sprite.setImageDescription(idh);
+        this.info.desc = idh;
     }
 
     /**
@@ -581,12 +581,12 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param visible Specifies the visibility.
      * @throws quicktime.QTException
      */
-    public void setVisible(boolean paramBoolean) throws QTException {
+    public void setVisible(boolean visible) throws QTException {
         if (this.sprite != null) {
-            this.sprite.setVisible(paramBoolean);
-            doParentRedraw(paramBoolean);
+            this.sprite.setVisible(visible);
+            doParentRedraw(visible);
         }
-        this.info.visible = paramBoolean;
+        this.info.visible = visible;
     }
 
     /**
@@ -611,12 +611,12 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @throws quicktime.QTException
      */
     @Override
-    public void setLayer(int paramInt) throws QTException {
+    public void setLayer(int layer) throws QTException {
         if (this.sprite != null) {
-            this.sprite.setLayer(paramInt);
+            this.sprite.setLayer(layer);
             doParentRedraw(getVisible());
         }
-        this.info.layer = paramInt;
+        this.info.layer = layer;
     }
 
     /**

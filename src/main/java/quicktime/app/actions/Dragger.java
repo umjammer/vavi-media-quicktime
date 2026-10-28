@@ -105,8 +105,8 @@ public class Dragger extends MouseResponder {
      *  be depressed for the action to be invoked. The modifierTestConditions is set
      *  in this case to MouseResonder.kModifiersExactMatch
      */
-    public Dragger(int paramInt) {
-        this(paramInt, -5, 0);
+    public Dragger(int modifierKeyMask) {
+        this(modifierKeyMask, -5, 0);
     }
 
     /**
@@ -118,8 +118,8 @@ public class Dragger extends MouseResponder {
      *  be depressed for the action to be invoked.
      * @param modifierTestConditions the test conditions under which the modifier mask is tested
      */
-    public Dragger(int paramInt1, int paramInt2) {
-        this(paramInt1, paramInt2, 0);
+    public Dragger(int modifierKeyMask, int modifierTestConditions) {
+        this(modifierKeyMask, modifierTestConditions, 0);
     }
 
     /**
@@ -131,8 +131,8 @@ public class Dragger extends MouseResponder {
      * @param modifierTestConditions the test conditions under which the modifier mask is tested
      * @param additionalEvents additional mouse events the responder will respond to
      */
-    public Dragger(int paramInt1, int paramInt2, int paramInt3) {
-        super(paramInt1, paramInt2, 0x6 | paramInt3);
+    public Dragger(int modifierKeyMask, int modifierTestConditions, int additionalEvents) {
+        super(modifierKeyMask, modifierTestConditions, 0x6 | additionalEvents);
     }
 
     private int constrained = 4369;
@@ -189,8 +189,8 @@ public class Dragger extends MouseResponder {
      * @param o the containing space of the potential targets of the Dragger.
      */
     @Override
-    protected void setTargetSpace(Object paramObject) {
-        this.space = ((QTDrawable) paramObject);
+    protected void setTargetSpace(Object o) {
+        this.space = ((QTDrawable) o);
     }
 
     /**
@@ -220,8 +220,8 @@ public class Dragger extends MouseResponder {
      * @return a boolean
      */
     @Override
-    public boolean isAppropriate(Object paramObject) {
-        return paramObject instanceof Transformable;
+    public boolean isAppropriate(Object object) {
+        return object instanceof Transformable;
     }
 
     /**
@@ -233,8 +233,8 @@ public class Dragger extends MouseResponder {
      * @param t the Transformable target
      */
     @Override
-    protected void setTarget(Object paramObject) {
-        this.target = ((Transformable) paramObject);
+    protected void setTarget(Object t) {
+        this.target = ((Transformable) t);
     }
 
     /**
@@ -254,8 +254,8 @@ public class Dragger extends MouseResponder {
      * Using the constrain constants dragging can be constrained in any direction.
      * @param flag constraint flag
      */
-    public void setConstrained(int paramInt) {
-        this.constrained = paramInt;
+    public void setConstrained(int flag) {
+        this.constrained = flag;
     }
 
     /**
@@ -278,7 +278,7 @@ public class Dragger extends MouseResponder {
      * @param event the mouse down event that may begin the drag action
      */
     @Override
-    public void mousePressed(MouseEvent paramMouseEvent) {
+    public void mousePressed(MouseEvent event) {
         try {
             QDRect localQDRect = this.space.getDisplayBounds();
             this.invSpaceMatrix = new Matrix();
@@ -287,7 +287,7 @@ public class Dragger extends MouseResponder {
             localMatrix.setTy(0.0F);
             localMatrix.inverse(this.invSpaceMatrix);
             this.origPt = new QDPoint[1];
-            this.origPt[0] = new QDPoint(paramMouseEvent.getX(), paramMouseEvent.getY());
+            this.origPt[0] = new QDPoint(event.getX(), event.getY());
             this.invSpaceMatrix.transformPoints(this.origPt);
             this.origTargetMatrix = this.target.getMatrix();
             this.spaceRect = localQDRect.copy();
@@ -308,11 +308,11 @@ public class Dragger extends MouseResponder {
      * @param event the mouse drag event that triggered the drag action.
      */
     @Override
-    public void mouseDragged(MouseEvent paramMouseEvent) {
+    public void mouseDragged(MouseEvent event) {
         try {
             int i = 0;
             QDPoint[] arrayOfQDPoint = new QDPoint[1];
-            arrayOfQDPoint[0] = new QDPoint(paramMouseEvent.getX(), paramMouseEvent.getY());
+            arrayOfQDPoint[0] = new QDPoint(event.getX(), event.getY());
             this.invSpaceMatrix.transformPoints(arrayOfQDPoint);
             int j = arrayOfQDPoint[0].getX() - this.origPt[0].getX();
             int k = arrayOfQDPoint[0].getY() - this.origPt[0].getY();

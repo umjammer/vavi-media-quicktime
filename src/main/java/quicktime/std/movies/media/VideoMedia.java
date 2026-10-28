@@ -17,8 +17,8 @@ public final class VideoMedia extends Media {
      * @param timeScale Specifies the time scale of the new media.
      * @param dataRef a DataRef object specifying the default data reference for this media.
      */
-    public VideoMedia(Track paramTrack, int paramInt, DataRef paramDataRef) throws QTException {
-        super(paramTrack, 1986618469, paramInt, paramDataRef);
+    public VideoMedia(Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        super(itsTrack, 1986618469, timeScale, dataRef);
     }
 
     /**
@@ -27,8 +27,8 @@ public final class VideoMedia extends Media {
      * @param itsTrack Specifies the Track object this media belongs to.
      * @param timeScale Specifies the time scale of the new media.
      */
-    public VideoMedia(Track paramTrack, int paramInt) throws QTException {
-        this(paramTrack, paramInt, null);
+    public VideoMedia(Track itsTrack, int timeScale) throws QTException {
+        this(itsTrack, timeScale, null);
     }
 
     VideoMedia(int paramInt, Track paramTrack) throws QTException {
@@ -64,9 +64,9 @@ public final class VideoMedia extends Media {
      * @return an ImageDescription object for the specified index.
      * @throws quicktime.QTException
      */
-    public ImageDescription getImageDescription(int paramInt) throws QTException {
+    public ImageDescription getImageDescription(int index) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
-        getNativeSampleDescription(paramInt, localImageDescription);
+        getNativeSampleDescription(index, localImageDescription);
         return localImageDescription;
     }
 }

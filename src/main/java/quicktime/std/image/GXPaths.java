@@ -43,15 +43,15 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @param curveComponent the curve Component
      * @param ar array of GXPath objects containing the geometries for the paths
      */
-    public GXPaths(Curve paramCurve, GXPath[] paramArrayOfGXPath) {
-        super(howManyBytes(paramArrayOfGXPath) + 4);
-        setIntAt(0, paramArrayOfGXPath.length);
+    public GXPaths(Curve curveComponent, GXPath[] ar) {
+        super(howManyBytes(ar) + 4);
+        setIntAt(0, ar.length);
         int i = 4;
-        for (GXPath gxPath : paramArrayOfGXPath) {
+        for (GXPath gxPath : ar) {
             setBytesAt(i, gxPath.getSize(), gxPath.getBytes(), 0);
             i += gxPath.getSize();
         }
-        this.comp = paramCurve;
+        this.comp = curveComponent;
     }
 
     /**
@@ -70,9 +70,9 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @return the number of points in the contour or path.
      * @throws quicktime.std.StdQTException
      */
-    public int countPointsInPath(int paramInt) throws StdQTException {
+    public int countPointsInPath(int contourIndex) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = CurveCountPointsInPath(QTObject.ID(this.comp), getBytes(), paramInt, arrayOfInt);
+        int i = CurveCountPointsInPath(QTObject.ID(this.comp), getBytes(), contourIndex, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
     }
@@ -98,10 +98,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @return thePoint field that is to receive the point.
      * @throws quicktime.std.StdQTException
      */
-    public PathPointInfo getPathPoint(int paramInt1, int paramInt2) throws StdQTException {
+    public PathPointInfo getPathPoint(int contourIndex, int pointIndex) throws StdQTException {
         QDPoint localQDPoint = new QDPoint(0.0F, 0.0F);
         byte[] arrayOfByte = new byte[1];
-        int i = CurveGetPathPoint(QTObject.ID(this.comp), getBytes(), paramInt1, paramInt2, localQDPoint.getGXPoint(), arrayOfByte);
+        int i = CurveGetPathPoint(QTObject.ID(this.comp), getBytes(), contourIndex, pointIndex, localQDPoint.getGXPoint(), arrayOfByte);
         StdQTException.checkError(i);
         return new PathPointInfo(localQDPoint, arrayOfByte[0] != 0);
     }
@@ -114,10 +114,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @return QDPoint[] array of two points containing the location (first element) and the tangent point (second element)
      * @throws quicktime.std.StdQTException
      */
-    public QDPoint[] lengthToPoint(int paramInt1, int paramInt2) throws StdQTException {
+    public QDPoint[] lengthToPoint(int index, int length) throws StdQTException {
         QDPoint localQDPoint1 = new QDPoint(0.0F, 0.0F);
         QDPoint localQDPoint2 = new QDPoint(0.0F, 0.0F);
-        int i = CurveLengthToPoint(QTObject.ID(this.comp), getBytes(), paramInt1, paramInt2, localQDPoint1.getGXPoint(), localQDPoint2.getGXPoint());
+        int i = CurveLengthToPoint(QTObject.ID(this.comp), getBytes(), index, length, localQDPoint1.getGXPoint(), localQDPoint2.getGXPoint());
         StdQTException.checkError(i);
         QDPoint[] arrayOfQDPoint = new QDPoint[2];
         arrayOfQDPoint[0] = localQDPoint1;
@@ -134,9 +134,9 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @return wideLength Contains the length.
      * @throws quicktime.std.StdQTException
      */
-    public long getLength(int paramInt) throws StdQTException {
+    public long getLength(int index) throws StdQTException {
         long[] arrayOfLong = { 0L };
-        int i = CurveGetLength(QTObject.ID(this.comp), getBytes(), paramInt, arrayOfLong);
+        int i = CurveGetLength(QTObject.ID(this.comp), getBytes(), index, arrayOfLong);
         StdQTException.checkError(i);
         return arrayOfLong[0];
     }
@@ -151,9 +151,9 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @return the length of the specified part of the path.
      * @throws quicktime.std.StdQTException
      */
-    public float getPathPointToLength(int paramInt1, int paramInt2, QDPoint paramQDPoint) throws StdQTException {
+    public float getPathPointToLength(int startDist, int endDist, QDPoint thePoint) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        int i = CurvePathPointToLength(QTObject.ID(this.comp), getBytes(), paramInt1, paramInt2, paramQDPoint.getGXPoint(), arrayOfInt);
+        int i = CurvePathPointToLength(QTObject.ID(this.comp), getBytes(), startDist, endDist, thePoint.getGXPoint(), arrayOfInt);
         StdQTException.checkError(i);
         return QTUtils.Fix2X(arrayOfInt[0]);
     }
@@ -167,11 +167,11 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @return information about the specified point
      * @throws quicktime.std.StdQTException
      */
-    public NearestPointInfo getNearestPathPoint(QDPoint paramQDPoint) throws StdQTException {
+    public NearestPointInfo getNearestPathPoint(QDPoint thePoint) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         int[] arrayOfInt3 = { 0 };
-        int i = CurveGetNearestPathPoint(QTObject.ID(this.comp), getBytes(), paramQDPoint.getGXPoint(), arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int i = CurveGetNearestPathPoint(QTObject.ID(this.comp), getBytes(), thePoint.getGXPoint(), arrayOfInt1, arrayOfInt2, arrayOfInt3);
         StdQTException.checkError(i);
         return new NearestPointInfo(arrayOfInt1[0], arrayOfInt2[0], QTUtils.Fix2X(arrayOfInt3[0]));
     }

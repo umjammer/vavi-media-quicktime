@@ -81,8 +81,8 @@ public class DirectGroup extends GroupDrawable {
      * @param bc the background color of the group
      * {@link quicktime.app.display.DirectGroup#DirectGroup(quicktime.qd.QDDimension, quicktime.qd.QDColor)}
      */
-    public DirectGroup(Dimension paramDimension, QDColor paramQDColor) throws QTException {
-        this(new QDDimension(paramDimension.width, paramDimension.height), paramQDColor, 10, 1, p);
+    public DirectGroup(Dimension initialSize, QDColor bc) throws QTException {
+        this(new QDDimension(initialSize.width, initialSize.height), bc, 10, 1, p);
     }
 
     /**
@@ -92,8 +92,8 @@ public class DirectGroup extends GroupDrawable {
      * @param initialSize the size of the display group
      * @param bc the background color of the group
      */
-    public DirectGroup(QDDimension paramQDDimension, QDColor paramQDColor) throws QTException {
-        this(paramQDDimension, paramQDColor, 10, 1, p);
+    public DirectGroup(QDDimension initialSize, QDColor bc) throws QTException {
+        this(initialSize, bc, 10, 1, p);
     }
 
     /**
@@ -106,8 +106,8 @@ public class DirectGroup extends GroupDrawable {
      * @param period the period of the space's Timer
      * @param p the default Protocol of members
      */
-    protected DirectGroup(QDDimension paramQDDimension, QDColor paramQDColor, int paramInt1, int paramInt2, Protocol paramProtocol) throws QTException {
-        super(paramQDDimension, paramQDColor, paramInt1, paramInt2, paramProtocol);
+    protected DirectGroup(QDDimension initialSize, QDColor bc, int scale, int period, Protocol p) throws QTException {
+        super(initialSize, bc, scale, period, p);
     }
 
     /**
@@ -161,11 +161,11 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public boolean addMember(Object paramObject, int paramInt) throws QTException {
-        if (!isAppropriate(paramObject))
+    public boolean addMember(Object layer, int member) throws QTException {
+        if (!isAppropriate(layer))
             return false;
-        QTDrawable localQTDrawable = (QTDrawable) paramObject;
-        _addQTDrawable(new GroupMember(this, localQTDrawable, paramInt));
+        QTDrawable localQTDrawable = (QTDrawable) layer;
+        _addQTDrawable(new GroupMember(this, localQTDrawable, member));
         return true;
     }
 
@@ -199,8 +199,8 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        super.setGWorld(paramQDGraphics);
+    public void setGWorld(QDGraphics cgp) throws QTException {
+        super.setGWorld(cgp);
         Enumeration<?> localEnumeration = this.vec.elements();
         while (localEnumeration.hasMoreElements()) {
             GroupMember localGroupMember = (GroupMember) localEnumeration.nextElement();
@@ -221,8 +221,8 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setDisplayBounds(QDRect paramQDRect) throws QTException {
-        super.setDisplayBounds(paramQDRect);
+    public void setDisplayBounds(QDRect bounds) throws QTException {
+        super.setDisplayBounds(bounds);
         setClip(null);
     }
 
@@ -241,11 +241,11 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public synchronized void redrawMember(QTDrawable paramQTDrawable, Region paramRegion) throws QTException {
-        if (paramQTDrawable != null) {
+    public synchronized void redrawMember(QTDrawable d, Region invalidRgn) throws QTException {
+        if (d != null) {
             GroupMember localGroupMember1 = null;
             try {
-                localGroupMember1 = memberChanged(paramQTDrawable);
+                localGroupMember1 = memberChanged(d);
             } catch (QTException localQTException) {
                 if ((localQTException.errorCode() == 65036) || (localQTException.errorCode() == -108)) {
                     QTUtils.reclaimMemory();
@@ -262,21 +262,21 @@ public class DirectGroup extends GroupDrawable {
                 for (int k = 0; k < this.vec.size(); k++) {
                     GroupMember localGroupMember2 = (GroupMember) this.vec.elementAt(k);
                     if (i != 0) {
-                        Region localRegion2 = localGroupMember2.drawer.getClip().sect(paramRegion);
+                        Region localRegion2 = localGroupMember2.drawer.getClip().sect(invalidRgn);
                         if (!localRegion2.empty()) {
                             localGroupMember2.drawer.redraw(localRegion2);
                         }
                     }
-                    if ((i == 0) && (localGroupMember2.drawer.equals(paramQTDrawable))) {
+                    if ((i == 0) && (localGroupMember2.drawer.equals(d))) {
                         localGroupMember2.drawer.redraw(null);
                         i = 1;
-                        if (paramRegion != null) {
-                            paramRegion = paramRegion.union(localGroupMember1.clipRegion);
+                        if (invalidRgn != null) {
+                            invalidRgn = invalidRgn.union(localGroupMember1.clipRegion);
                         } else
-                            paramRegion = localGroupMember1.clipRegion;
+                            invalidRgn = localGroupMember1.clipRegion;
                     }
                 }
-                Region localRegion1 = paramRegion.sect(this.eraseRegion);
+                Region localRegion1 = invalidRgn.sect(this.eraseRegion);
                 if (!localRegion1.empty()) {
                     this.port.setBackColor(this.bgColor);
                     this.port.eraseRgn(localRegion1);
@@ -294,8 +294,8 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public void setClip(Region paramRegion) throws QTException {
-        this.clip = (paramRegion == null ? new Region(getDisplayBounds()) : paramRegion.sect(getDisplayBounds()));
+    public void setClip(Region theClip) throws QTException {
+        this.clip = (theClip == null ? new Region(getDisplayBounds()) : theClip.sect(getDisplayBounds()));
         Region localRegion = this.clip;
         GroupMember localObject = null;
         this.doMemCleanup = true;
@@ -385,10 +385,10 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public GroupMember memberChanged(QTDrawable paramQTDrawable) throws QTException {
-        GroupMember localGroupMember = getGroupMember(paramQTDrawable);
+    public GroupMember memberChanged(QTDrawable d) throws QTException {
+        GroupMember localGroupMember = getGroupMember(d);
         if (localGroupMember != null) {
-            setClips(paramQTDrawable);
+            setClips(d);
         }
         return localGroupMember;
     }
@@ -404,10 +404,10 @@ public class DirectGroup extends GroupDrawable {
      * @throws quicktime.QTException
      */
     @Override
-    public boolean setMemberAlignment(QTDrawable paramQTDrawable, float paramFloat1, float paramFloat2) throws QTException {
-        boolean bool = super.setMemberAlignment(paramQTDrawable, paramFloat1, paramFloat2);
+    public boolean setMemberAlignment(QTDrawable d, float xAlign, float yAlign) throws QTException {
+        boolean bool = super.setMemberAlignment(d, xAlign, yAlign);
         if (bool) {
-            setClips(paramQTDrawable);
+            setClips(d);
             redraw(null);
         }
         return bool;

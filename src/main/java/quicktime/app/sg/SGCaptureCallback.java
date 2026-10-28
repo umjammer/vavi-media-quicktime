@@ -14,6 +14,6 @@ public interface SGCaptureCallback {
      * Called when the SequenceGrabber has completed capturing.
      * @param sg the SGDrawer
      */
-    void finish(SGDrawer paramSGDrawer);
+    void finish(SGDrawer sg);
 }
 

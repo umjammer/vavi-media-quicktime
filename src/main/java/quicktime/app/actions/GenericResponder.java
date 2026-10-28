@@ -51,8 +51,8 @@ public class GenericResponder extends MouseResponder {
      * @return a GenericResponder
      * @see MouseResponder.kMouseEvents
      */
-    public static GenericResponder asMouseListener(int paramInt1, int paramInt2) {
-        return new GenericResponder(paramInt1, paramInt2, 51);
+    public static GenericResponder asMouseListener(int modifierKeyMask, int modifierTestConditions) {
+        return new GenericResponder(modifierKeyMask, modifierTestConditions, 51);
     }
 
     /**
@@ -65,8 +65,8 @@ public class GenericResponder extends MouseResponder {
      * @return a GenericResponder
      * @see MouseResponder.kMouseMotionEvents
      */
-    public static GenericResponder asMouseMotionListener(int paramInt1, int paramInt2) {
-        return new GenericResponder(paramInt1, paramInt2, 12);
+    public static GenericResponder asMouseMotionListener(int modifierKeyMask, int modifierTestConditions) {
+        return new GenericResponder(modifierKeyMask, modifierTestConditions, 12);
     }
 
     /**
@@ -79,8 +79,8 @@ public class GenericResponder extends MouseResponder {
      * @return a GenericResponder
      * @see MouseResponder.kMouseOrMouseMotionEvents
      */
-    public static GenericResponder asMouseOrMouseMotionListener(int paramInt1, int paramInt2) {
-        return new GenericResponder(paramInt1, paramInt2, 63);
+    public static GenericResponder asMouseOrMouseMotionListener(int modifierKeyMask, int modifierTestConditions) {
+        return new GenericResponder(modifierKeyMask, modifierTestConditions, 63);
     }
 
     /**
@@ -95,8 +95,8 @@ public class GenericResponder extends MouseResponder {
      * @return a GenericResponder
      * @see MouseResponder.kQTMouseMotionEvents
      */
-    public static GenericResponder asQTMouseMotionListener(int paramInt1, int paramInt2) {
-        return new GenericResponder(paramInt1, paramInt2, 76);
+    public static GenericResponder asQTMouseMotionListener(int modifierKeyMask, int modifierTestConditions) {
+        return new GenericResponder(modifierKeyMask, modifierTestConditions, 76);
     }
 
     /**
@@ -112,8 +112,8 @@ public class GenericResponder extends MouseResponder {
      * @return a GenericResponder
      * @see MouseResponder.kRolloverEvents
      */
-    public static GenericResponder asRolloverListener(int paramInt1, int paramInt2) {
-        return new GenericResponder(paramInt1, paramInt2, 100);
+    public static GenericResponder asRolloverListener(int modifierKeyMask, int modifierTestConditions) {
+        return new GenericResponder(modifierKeyMask, modifierTestConditions, 100);
     }
 
     /**
@@ -126,8 +126,8 @@ public class GenericResponder extends MouseResponder {
      * @return a GenericResponder
      * @see MouseResponder.kAnyMouseEvent
      */
-    public static GenericResponder asAnyMouseListener(int paramInt1, int paramInt2) {
-        return new GenericResponder(paramInt1, paramInt2, 127);
+    public static GenericResponder asAnyMouseListener(int modifierKeyMask, int modifierTestConditions) {
+        return new GenericResponder(modifierKeyMask, modifierTestConditions, 127);
     }
 
     /**
@@ -141,8 +141,8 @@ public class GenericResponder extends MouseResponder {
      *  activated when the specified modifierKeyMask conditions are met.
      * @param eventTypes specifies the mouse event types that the responder is interested in.
      */
-    public GenericResponder(int paramInt1, int paramInt2, int paramInt3) {
-        super(paramInt1, paramInt2, paramInt3);
+    public GenericResponder(int modifierKeyMask, int modifierTestConditions, int eventTypes) {
+        super(modifierKeyMask, modifierTestConditions, eventTypes);
     }
 
     /**
@@ -155,8 +155,8 @@ public class GenericResponder extends MouseResponder {
      * @param s the Space to which the responder's controller has been added.
      */
     @Override
-    protected void setTargetSpace(Object paramObject) {
-        this.space = paramObject;
+    protected void setTargetSpace(Object s) {
+        this.space = s;
     }
 
     /**
@@ -168,8 +168,8 @@ public class GenericResponder extends MouseResponder {
      * @param target the object that is the selected target of the MouseEvent
      */
     @Override
-    protected void setTarget(Object paramObject) {
-        this.target = paramObject;
+    protected void setTarget(Object target) {
+        this.target = target;
     }
 
     /**
@@ -216,7 +216,7 @@ public class GenericResponder extends MouseResponder {
      * @return true if the object is the type of object that the Responder can control
      */
     @Override
-    public boolean isAppropriate(Object paramObject) {
+    public boolean isAppropriate(Object object) {
         return true;
     }
 
@@ -227,9 +227,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseClicked(MouseEvent paramMouseEvent) {
+    public void mouseClicked(MouseEvent e) {
         if (this.mouseListener != null) {
-            this.mouseListener.mouseClicked(paramMouseEvent);
+            this.mouseListener.mouseClicked(e);
         }
     }
 
@@ -240,9 +240,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseEntered(MouseEvent paramMouseEvent) {
+    public void mouseEntered(MouseEvent e) {
         if (this.mouseListener != null) {
-            this.mouseListener.mouseEntered(paramMouseEvent);
+            this.mouseListener.mouseEntered(e);
         }
     }
 
@@ -253,9 +253,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseExited(MouseEvent paramMouseEvent) {
+    public void mouseExited(MouseEvent e) {
         if (this.mouseListener != null) {
-            this.mouseListener.mouseExited(paramMouseEvent);
+            this.mouseListener.mouseExited(e);
         }
     }
 
@@ -266,9 +266,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
+    public void mouseEnteredTarget(MouseEvent e) {
         if (this.qtMouseListener != null) {
-            this.qtMouseListener.mouseEnteredTarget(paramMouseEvent);
+            this.qtMouseListener.mouseEnteredTarget(e);
         }
     }
 
@@ -279,9 +279,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseExitedTarget(MouseEvent paramMouseEvent) {
+    public void mouseExitedTarget(MouseEvent e) {
         if (this.qtMouseListener != null) {
-            this.qtMouseListener.mouseExitedTarget(paramMouseEvent);
+            this.qtMouseListener.mouseExitedTarget(e);
         }
     }
 
@@ -293,11 +293,11 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseMoved(MouseEvent paramMouseEvent) {
+    public void mouseMoved(MouseEvent e) {
         if (this.qtMouseListener != null)
-            this.qtMouseListener.mouseMoved(paramMouseEvent);
+            this.qtMouseListener.mouseMoved(e);
         if (this.mouseMotionListener != null) {
-            this.mouseMotionListener.mouseMoved(paramMouseEvent);
+            this.mouseMotionListener.mouseMoved(e);
         }
     }
 
@@ -308,9 +308,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mousePressed(MouseEvent paramMouseEvent) {
+    public void mousePressed(MouseEvent e) {
         if (this.mouseListener != null) {
-            this.mouseListener.mousePressed(paramMouseEvent);
+            this.mouseListener.mousePressed(e);
         }
     }
 
@@ -322,11 +322,11 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseDragged(MouseEvent paramMouseEvent) {
+    public void mouseDragged(MouseEvent e) {
         if (this.qtMouseListener != null)
-            this.qtMouseListener.mouseDragged(paramMouseEvent);
+            this.qtMouseListener.mouseDragged(e);
         if (this.mouseMotionListener != null) {
-            this.mouseMotionListener.mouseDragged(paramMouseEvent);
+            this.mouseMotionListener.mouseDragged(e);
         }
     }
 
@@ -337,9 +337,9 @@ public class GenericResponder extends MouseResponder {
      * @param e the MouseEvent that triggered this event
      */
     @Override
-    public void mouseReleased(MouseEvent paramMouseEvent) {
+    public void mouseReleased(MouseEvent e) {
         if (this.mouseListener != null) {
-            this.mouseListener.mouseReleased(paramMouseEvent);
+            this.mouseListener.mouseReleased(e);
         }
     }
 
@@ -357,9 +357,9 @@ public class GenericResponder extends MouseResponder {
      * the minimal requirement to register this kind of listener.
      * @param ql the new QTMouseMotionListener
      */
-    public void addQTMouseMotionListener(QTMouseMotionListener paramQTMouseMotionListener) {
+    public void addQTMouseMotionListener(QTMouseMotionListener ql) {
         if (isInterested(76)) {
-            this.qtMouseListener = GREventMulticaster.add(this.qtMouseListener, paramQTMouseMotionListener);
+            this.qtMouseListener = GREventMulticaster.add(this.qtMouseListener, ql);
         }
     }
 
@@ -369,8 +369,8 @@ public class GenericResponder extends MouseResponder {
      * Removes the specified QTMouseMotionListener from the GenericResponder.
      * @param ql the QTMouseMotionListener to remove
      */
-    public void removeQTMouseMotionListener(QTMouseMotionListener paramQTMouseMotionListener) {
-        this.qtMouseListener = GREventMulticaster.remove(this.qtMouseListener, paramQTMouseMotionListener);
+    public void removeQTMouseMotionListener(QTMouseMotionListener ql) {
+        this.qtMouseListener = GREventMulticaster.remove(this.qtMouseListener, ql);
     }
 
     /**
@@ -385,9 +385,9 @@ public class GenericResponder extends MouseResponder {
      *
      * @param ml the new MouseListener
      */
-    public void addMouseListener(MouseListener paramMouseListener) {
+    public void addMouseListener(MouseListener ml) {
         if (isInterested(51)) {
-            this.mouseListener = GREventMulticaster.add(this.mouseListener, paramMouseListener);
+            this.mouseListener = GREventMulticaster.add(this.mouseListener, ml);
         }
     }
 
@@ -397,8 +397,8 @@ public class GenericResponder extends MouseResponder {
      * Removes the specified MouseListener from the GenericResponder.
      * @param ml the MouseListener to remove
      */
-    public void removeMouseListener(MouseListener paramMouseListener) {
-        this.mouseListener = GREventMulticaster.remove(this.mouseListener, paramMouseListener);
+    public void removeMouseListener(MouseListener ml) {
+        this.mouseListener = GREventMulticaster.remove(this.mouseListener, ml);
     }
 
     /**
@@ -413,9 +413,9 @@ public class GenericResponder extends MouseResponder {
      *
      * @param ml the new MouseListener
      */
-    public void addMouseMotionListener(MouseMotionListener paramMouseMotionListener) {
+    public void addMouseMotionListener(MouseMotionListener ml) {
         if (isInterested(12)) {
-            this.mouseMotionListener = GREventMulticaster.add(this.mouseMotionListener, paramMouseMotionListener);
+            this.mouseMotionListener = GREventMulticaster.add(this.mouseMotionListener, ml);
         }
     }
 
@@ -425,8 +425,8 @@ public class GenericResponder extends MouseResponder {
      * Removes the specified MouseListener from the GenericResponder.
      * @param ml the MouseListener to remove
      */
-    public void removeMouseMotionListener(MouseMotionListener paramMouseMotionListener) {
-        this.mouseMotionListener = GREventMulticaster.remove(this.mouseMotionListener, paramMouseMotionListener);
+    public void removeMouseMotionListener(MouseMotionListener ml) {
+        this.mouseMotionListener = GREventMulticaster.remove(this.mouseMotionListener, ml);
     }
 
     static class GREventMulticaster extends AWTEventMulticaster implements QTMouseMotionListener {

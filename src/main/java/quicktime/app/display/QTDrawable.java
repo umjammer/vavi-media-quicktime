@@ -30,7 +30,7 @@ public interface QTDrawable extends Drawable, Transformable {
      * @param y the new y location
      * @throws quicktime.QTException
      */
-    void setLocation(int paramInt1, int paramInt2) throws QTException;
+    void setLocation(int x, int y) throws QTException;
 
     /**
      * @deprecated
@@ -43,7 +43,7 @@ public interface QTDrawable extends Drawable, Transformable {
      * @param cgp a QDGraphics object
      * @throws quicktime.QTException
      */
-    void setGWorld(QDGraphics paramQDGraphics) throws QTException;
+    void setGWorld(QDGraphics cgp) throws QTException;
 
     /**
      * @deprecated
@@ -61,7 +61,7 @@ public interface QTDrawable extends Drawable, Transformable {
      * @param theClip a Region that defines the new clipping region.
      * @throws quicktime.QTException
      */
-    void setClip(Region paramRegion) throws QTException;
+    void setClip(Region theClip) throws QTException;
 
     /**
      * @deprecated

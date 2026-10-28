@@ -48,8 +48,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param motion set to true if the image is part of a sequence, false if a single image
      * @throws quicktime.std.StdQTException
      */
-    public void defaultPixMapSettings(PixMap paramPixMap, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(SCDefaultPixMapSettings(_ID(), QTObject.ID(paramPixMap), (short) (paramBoolean ? 1 : 0)));
+    public void defaultPixMapSettings(PixMap src, boolean motion) throws StdQTException {
+        StdQTException.checkError(SCDefaultPixMapSettings(_ID(), QTObject.ID(src), (short) (motion ? 1 : 0)));
     }
 
     /**
@@ -59,8 +59,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param motion set to true if the image is part of a sequence, false if a single image
      * @throws quicktime.std.StdQTException
      */
-    public void defaultPictSettings(Pict paramPict, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(SCDefaultPictHandleSettings(_ID(), QTObject.ID(paramPict), (short) (paramBoolean ? 1 : 0)));
+    public void defaultPictSettings(Pict src, boolean motion) throws StdQTException {
+        StdQTException.checkError(SCDefaultPictHandleSettings(_ID(), QTObject.ID(src), (short) (motion ? 1 : 0)));
     }
 
     /**
@@ -70,8 +70,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param motion set to true if the image is part of a sequence, false if a single image
      * @throws quicktime.std.StdQTException
      */
-    public void defaultPictFileSettings(OpenFile paramOpenFile, boolean paramBoolean) throws StdQTException {
-        StdQTException.checkError(SCDefaultPictFileSettings(_ID(), (short) QTObject.ID(paramOpenFile), (short) (paramBoolean ? 1 : 0)));
+    public void defaultPictFileSettings(OpenFile src, boolean motion) throws StdQTException {
+        StdQTException.checkError(SCDefaultPictFileSettings(_ID(), (short) QTObject.ID(src), (short) (motion ? 1 : 0)));
     }
 
     /**
@@ -105,8 +105,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @return an image data object.
      * @throws quicktime.QTException
      */
-    public QTImage compressImage(QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
-        return ImageDescription.fromImageCompressionDialog(this, paramQDGraphics, paramQDRect);
+    public QTImage compressImage(QDGraphics src, QDRect srcRect) throws QTException {
+        return ImageDescription.fromImageCompressionDialog(this, src, srcRect);
     }
 
     /**
@@ -116,8 +116,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @return a Pict
      * @throws quicktime.QTException
      */
-    public Pict compressPicture(Pict paramPict) throws QTException {
-        return Pict.fromImageCompressionDialog(this, paramPict);
+    public Pict compressPicture(Pict src) throws QTException {
+        return Pict.fromImageCompressionDialog(this, src);
     }
 
     /**
@@ -127,8 +127,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param dest the destination Pict File.
      * @throws quicktime.QTException
      */
-    public void compressPictureFile(OpenFile paramOpenFile1, OpenFile paramOpenFile2) throws QTException {
-        int i = SCCompressPictureFile(_ID(), (short) QTObject.ID(paramOpenFile1), (short) QTObject.ID(paramOpenFile2));
+    public void compressPictureFile(OpenFile src, OpenFile dest) throws QTException {
+        int i = SCCompressPictureFile(_ID(), (short) QTObject.ID(src), (short) QTObject.ID(dest));
         StdQTException.checkError(i);
     }
 
@@ -140,8 +140,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @return a SCSequence object
      * @throws quicktime.QTException
      */
-    public SCSequence compressSequenceBegin(QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
-        return new SCSequence(this, paramQDGraphics, paramQDRect);
+    public SCSequence compressSequenceBegin(QDGraphics src, QDRect srcRect) throws QTException {
+        return new SCSequence(this, src, srcRect);
     }
 
     /**
@@ -150,8 +150,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param settings the new spatial settings
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoSpatialSettings(SpatialSettings paramSpatialSettings) throws StdQTException {
-        StdQTException.checkError(SCSetInfo(_ID(), 1936749676, paramSpatialSettings.getBytes()));
+    public void setInfoSpatialSettings(SpatialSettings settings) throws StdQTException {
+        StdQTException.checkError(SCSetInfo(_ID(), 1936749676, settings.getBytes()));
     }
 
     /**
@@ -172,8 +172,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param settings the new temporal settings
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoTemporalSettings(TemporalSettings paramTemporalSettings) throws StdQTException {
-        StdQTException.checkError(SCSetInfo(_ID(), 1953526380, paramTemporalSettings.getBytes()));
+    public void setInfoTemporalSettings(TemporalSettings settings) throws StdQTException {
+        StdQTException.checkError(SCSetInfo(_ID(), 1953526380, settings.getBytes()));
     }
 
     /**
@@ -194,8 +194,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param settings the new data rate settings
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoDataRateSettings(DataRateSettings paramDataRateSettings) throws StdQTException {
-        StdQTException.checkError(SCSetInfo(_ID(), 1685217652, paramDataRateSettings.getBytes()));
+    public void setInfoDataRateSettings(DataRateSettings settings) throws StdQTException {
+        StdQTException.checkError(SCSetInfo(_ID(), 1685217652, settings.getBytes()));
     }
 
     /**
@@ -216,8 +216,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param ctab the new color table
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoColorTable(ColorTable paramColorTable) throws StdQTException {
-        int[] arrayOfInt = { QTObject.ID(paramColorTable) };
+    public void setInfoColorTable(ColorTable ctab) throws StdQTException {
+        int[] arrayOfInt = { QTObject.ID(ctab) };
         StdQTException.checkError(SCSetInfo(_ID(), 1668052340, arrayOfInt));
     }
 
@@ -239,8 +239,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param testFlags controls how the dialog display's the image
      * @throws quicktime.std.StdQTException
      */
-    public void setTestImagePict(Pict paramPict, QDRect paramQDRect, int paramInt) throws StdQTException {
-        StdQTException.checkError(SCSetTestImagePictHandle(_ID(), QTObject.ID(paramPict), paramQDRect != null ? paramQDRect.getRect() : null, (short) paramInt));
+    public void setTestImagePict(Pict testPict, QDRect testRect, int testFlags) throws StdQTException {
+        StdQTException.checkError(SCSetTestImagePictHandle(_ID(), QTObject.ID(testPict), testRect != null ? testRect.getRect() : null, (short) testFlags));
     }
 
     /**
@@ -251,8 +251,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param testFlags controls how the dialog display's the image
      * @throws quicktime.std.StdQTException
      */
-    public void setTestImagePictFile(OpenFile paramOpenFile, QDRect paramQDRect, int paramInt) throws StdQTException {
-        StdQTException.checkError(SCSetTestImagePictFile(_ID(), (short) QTObject.ID(paramOpenFile), paramQDRect != null ? paramQDRect.getRect() : null, (short) paramInt));
+    public void setTestImagePictFile(OpenFile testPict, QDRect testRect, int testFlags) throws StdQTException {
+        StdQTException.checkError(SCSetTestImagePictFile(_ID(), (short) QTObject.ID(testPict), testRect != null ? testRect.getRect() : null, (short) testFlags));
     }
 
     /**
@@ -263,8 +263,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param testFlags controls how the dialog display's the image
      * @throws quicktime.std.StdQTException
      */
-    public void setTestImagePixMap(PixMap paramPixMap, QDRect paramQDRect, int paramInt) throws StdQTException {
-        StdQTException.checkError(SCSetTestImagePixMap(_ID(), QTObject.ID(paramPixMap), paramQDRect != null ? paramQDRect.getRect() : null, (short) paramInt));
+    public void setTestImagePixMap(PixMap testPixMap, QDRect testRect, int testFlags) throws StdQTException {
+        StdQTException.checkError(SCSetTestImagePixMap(_ID(), QTObject.ID(testPixMap), testRect != null ? testRect.getRect() : null, (short) testFlags));
     }
 
     /**
@@ -275,8 +275,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @return a QDGraphics object
      * @throws quicktime.QTException
      */
-    public QDGraphics newGWorld(QDRect paramQDRect, int paramInt) throws QTException {
-        return new QDGraphics(this, paramQDRect, paramInt);
+    public QDGraphics newGWorld(QDRect rp, int flags) throws QTException {
+        return new QDGraphics(this, rp, flags);
     }
 
     /**
@@ -285,8 +285,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @param flags the new flags
      * @throws quicktime.std.StdQTException
      */
-    public void setCompressFlags(int paramInt) throws StdQTException {
-        StdQTException.checkError(SCSetCompressFlags(_ID(), paramInt));
+    public void setCompressFlags(int flags) throws StdQTException {
+        StdQTException.checkError(SCSetCompressFlags(_ID(), flags));
     }
 
     /**

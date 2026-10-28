@@ -29,6 +29,6 @@ public interface SGDataProc {
      * @return where you wrote the data or zero if you didn't write data.
      * @throws quicktime.QTException
      */
-    int execute(SGChannel paramSGChannel, QTPointerRef paramQTPointerRef, int paramInt1, int paramInt2, int paramInt3, int paramInt4) throws QTException;
+    int execute(SGChannel chan, QTPointerRef dataToWrite, int offset, int chRefCon, int time, int writeType) throws QTException;
 }
 

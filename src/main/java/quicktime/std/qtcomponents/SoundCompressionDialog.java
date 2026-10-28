@@ -51,8 +51,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @param rate the new sample rate
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoSampleRate(float paramFloat) throws StdQTException {
-        int[] arrayOfInt = { QTUtils.X2Fix(paramFloat) };
+    public void setInfoSampleRate(float rate) throws StdQTException {
+        int[] arrayOfInt = { QTUtils.X2Fix(rate) };
         StdQTException.checkError(SCSetInfo(_ID(), 1936945780, arrayOfInt));
     }
 
@@ -74,8 +74,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @param size the new sample size
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoSampleSize(int paramInt) throws StdQTException {
-        short[] arrayOfShort = { (short) paramInt };
+    public void setInfoSampleSize(int size) throws StdQTException {
+        short[] arrayOfShort = { (short) size };
         StdQTException.checkError(SCSetInfo(_ID(), 1936946035, arrayOfShort));
     }
 
@@ -97,8 +97,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @param n the new channel count
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoChannelCount(int paramInt) throws StdQTException {
-        short[] arrayOfShort = { (short) paramInt };
+    public void setInfoChannelCount(int n) throws StdQTException {
+        short[] arrayOfShort = { (short) n };
         StdQTException.checkError(SCSetInfo(_ID(), 1936941923, arrayOfShort));
     }
 
@@ -108,8 +108,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @param compType the new compression type
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoCompression(int paramInt) throws StdQTException {
-        int[] arrayOfInt = { paramInt };
+    public void setInfoCompression(int compType) throws StdQTException {
+        int[] arrayOfInt = { compType };
         StdQTException.checkError(SCSetInfo(_ID(), 1936941940, arrayOfInt));
     }
 
@@ -131,12 +131,12 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @param compTypes the new compression types, if null then show all available compression options.
      * @throws quicktime.std.StdQTException
      */
-    public void setInfoCompressionList(int[] paramArrayOfInt) throws StdQTException {
-        if (paramArrayOfInt == null) {
+    public void setInfoCompressionList(int[] compTypes) throws StdQTException {
+        if (compTypes == null) {
             StdQTException.checkError(SCSetInfo(_ID(), 1668577644, (int[]) null));
         } else {
-            int i = NewHandle(paramArrayOfInt.length * 4);
-            copyArrayToPointer(paramArrayOfInt, 0, getIntFromPointer(i, 0), 0, paramArrayOfInt.length * 4);
+            int i = NewHandle(compTypes.length * 4);
+            copyArrayToPointer(compTypes, 0, getIntFromPointer(i, 0), 0, compTypes.length * 4);
             int j = SCSetInfo(_ID(), 1668577644, i);
             DisposeHandle(i);
             StdQTException.checkError(j);

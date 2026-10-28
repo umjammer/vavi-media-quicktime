@@ -63,8 +63,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @see "QuickTime::SGInitialize"
      * @param subType The movie export component sub type
      */
-    public SequenceGrabber(int paramInt) throws QTException {
-        super(1650553447, paramInt);
+    public SequenceGrabber(int subType) throws QTException {
+        super(1650553447, subType);
         initialize();
     }
 
@@ -119,12 +119,12 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      *     to null to use that graphics world's graphics device.
      * @throws quicktime.std.StdQTException
      */
-    public void setGWorld(QDGraphics paramQDGraphics, GDevice paramGDevice) throws StdQTException {
-        if (paramQDGraphics == null)
+    public void setGWorld(QDGraphics port, GDevice gdh) throws StdQTException {
+        if (port == null)
             throw new StdQTException(-50);
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = SGSetGWorld(_ID(), QTObject.ID(paramQDGraphics), QTObject.ID(paramGDevice));
+            i = SGSetGWorld(_ID(), QTObject.ID(port), QTObject.ID(gdh));
         }
         StdQTException.checkError(i);
     }
@@ -155,8 +155,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param c the channel you want to dispose
      * @throws quicktime.std.StdQTException
      */
-    public void disposeChannel(SGChannel paramSGChannel) throws StdQTException {
-        paramSGChannel.disposeChannel(this);
+    public void disposeChannel(SGChannel c) throws StdQTException {
+        c.disposeChannel(this);
     }
 
     /**
@@ -170,8 +170,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param whereFlags Specifies the type of channel.
      * @throws quicktime.std.StdQTException
      */
-    public SGOutput newOutput(DataRef paramDataRef, int paramInt) throws StdQTException {
-        return new SGOutput(this, QTObject.ID(paramDataRef), paramDataRef.getType(), paramInt);
+    public SGOutput newOutput(DataRef dataRef, int whereFlags) throws StdQTException {
+        return new SGOutput(this, QTObject.ID(dataRef), dataRef.getType(), whereFlags);
     }
 
     /**
@@ -291,14 +291,14 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      *  If you set this parameter to null, the sequence grabber uses the windowÕs current visible region
      * @throws quicktime.std.StdQTException
      */
-    public void update(Region paramRegion) throws StdQTException {
+    public void update(Region updateRgn) throws StdQTException {
         int i = 0;
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(arrayOfInt1, arrayOfInt2);
-            i = SGUpdate(_ID(), QTObject.ID(paramRegion));
+            i = SGUpdate(_ID(), QTObject.ID(updateRgn));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
             }
@@ -330,10 +330,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param pause Instructs whether to suspend or restart the current operation.
      * @throws quicktime.std.StdQTException
      */
-    public void pause(int paramInt) throws StdQTException {
+    public void pause(int pause) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = SGPause(_ID(), (byte) paramInt);
+            i = SGPause(_ID(), (byte) pause);
         }
         StdQTException.checkError(i);
     }
@@ -357,10 +357,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param prepareForRecord The record operation.
      * @throws quicktime.std.StdQTException
      */
-    public void prepare(boolean paramBoolean1, boolean paramBoolean2) throws StdQTException {
+    public void prepare(boolean prepareForPreview, boolean prepareForRecord) throws StdQTException {
         int i = 0;
-        byte b1 = (byte) (paramBoolean1 ? 1 : 0);
-        byte b2 = (byte) (paramBoolean2 ? 1 : 0);
+        byte b1 = (byte) (prepareForPreview ? 1 : 0);
+        byte b2 = (byte) (prepareForRecord ? 1 : 0);
         synchronized (QTNative.globalsLock) {
             i = SGPrepare(_ID(), b1, b2);
         }
@@ -403,8 +403,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param ud Specifies a user data list with configuration information for the sequence grabber.
      * @throws quicktime.std.StdQTException
      */
-    public void setSettings(UserData paramUserData) throws StdQTException {
-        int i = SGSetSettings(_ID(), QTObject.ID(paramUserData), 0);
+    public void setSettings(UserData ud) throws StdQTException {
+        int i = SGSetSettings(_ID(), QTObject.ID(ud), 0);
         StdQTException.checkError(i);
     }
 
@@ -435,8 +435,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @return The Pict.
      * @throws quicktime.QTException
      */
-    public Pict grabPict(QDRect paramQDRect, int paramInt1, int paramInt2) throws QTException {
-        return Pict.fromSequenceGrabber(this, paramQDRect, paramInt1, paramInt2);
+    public Pict grabPict(QDRect bounds, int offscreenDepth, int grabPictFlags) throws QTException {
+        return Pict.fromSequenceGrabber(this, bounds, offscreenDepth, grabPictFlags);
     }
 
     /**
@@ -449,15 +449,15 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param whereFlags -
      * @throws quicktime.QTException
      */
-    public void setDataOutput(QTFile paramQTFile, int paramInt) throws QTException {
+    public void setDataOutput(QTFile movieFile, int whereFlags) throws QTException {
         int i = 0;
-        if ((paramInt == 32) && (paramQTFile == null)) {
+        if ((whereFlags == 32) && (movieFile == null)) {
             synchronized (QTNative.globalsLock) {
-                i = SGSetDataOutput(_ID(), null, paramInt);
+                i = SGSetDataOutput(_ID(), null, whereFlags);
             }
         } else {
             synchronized (QTNative.globalsLock) {
-                i = SGSetDataOutput(_ID(), paramQTFile.getFSSpec(false, 256), paramInt);
+                i = SGSetDataOutput(_ID(), movieFile.getFSSpec(false, 256), whereFlags);
             }
         }
         StdQTException.checkError(i);
@@ -622,9 +622,9 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @return the channel type (e.g VideoMediaType, SoundMediaType etc..)
      * @throws quicktime.std.StdQTException
      */
-    public int getIndChannelType(int paramInt) throws StdQTException {
+    public int getIndChannelType(int index) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SGGetIndChannel(_ID(), (short) paramInt, 0, arrayOfInt));
+        StdQTException.checkError(SGGetIndChannel(_ID(), (short) index, 0, arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -636,10 +636,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @return the connection to the channel.
      * @throws quicktime.QTException
      */
-    public SGChannel getIndChannel(int paramInt) throws QTException {
+    public SGChannel getIndChannel(int index) throws QTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        StdQTException.checkError(SGGetIndChannel(_ID(), (short) paramInt, arrayOfInt1, arrayOfInt2));
+        StdQTException.checkError(SGGetIndChannel(_ID(), (short) index, arrayOfInt1, arrayOfInt2));
         return switch (arrayOfInt2[0]) {
             case 1936684398 -> new SGSoundChannel(arrayOfInt1[0], this);
             case 1952807028 -> new SGTextChannel(arrayOfInt1[0], this);
@@ -658,16 +658,16 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param proc the callback that will be called by the SequenceGrabber
      * @throws quicktime.std.StdQTException
      */
-    public void setDataProc(SGDataProc paramSGDataProc) throws StdQTException {
+    public void setDataProc(SGDataProc proc) throws StdQTException {
         int i = 0;
-        if (paramSGDataProc == null) {
+        if (proc == null) {
             removeDataProc();
             return;
         }
         if (this.upp != null) {
             removeDataProc();
         }
-        this.upp = new SGDispatcher(this, paramSGDataProc);
+        this.upp = new SGDispatcher(this, proc);
         synchronized (QTNative.globalsLock) {
             i = SGSetDataProc(_ID(), this.upp.ID(), 0);
         }
