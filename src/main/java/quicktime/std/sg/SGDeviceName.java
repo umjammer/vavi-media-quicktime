@@ -41,4 +41,3 @@ public class SGDeviceName extends QTByteObject {
         return getClass().getName() + "[flags=" + getFlags() + ",name=" + getName() + "]";
     }
 }
-

@@ -1208,4 +1208,3 @@ public interface StdQTConstants5 {
 
     int kMediaQTIdleFrequencySelector = 1768187505;
 }
-

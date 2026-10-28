@@ -9,12 +9,12 @@ public class TimeInfo {
     /**
      * Corresponds to some time value - generally a start time.
      */
-    public int time;
+    public final int time;
 
     /**
      * Corresponds to a duration value.
      */
-    public int duration;
+    public final int duration;
 
     /**
      * This constructor creates a TimeInfo object.
@@ -34,4 +34,3 @@ public class TimeInfo {
         return getClass().getName() + "[time=" + this.time + ",duration=" + this.duration + "]";
     }
 }
-

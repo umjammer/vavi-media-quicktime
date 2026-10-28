@@ -43,4 +43,3 @@ public interface QTJComponent {
      */
     JComponent asJComponent();
 }
-

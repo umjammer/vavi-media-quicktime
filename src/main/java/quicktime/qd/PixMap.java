@@ -1,7 +1,5 @@
 package quicktime.qd;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.GraphicsExportManager;
@@ -16,6 +14,7 @@ import quicktime.std.movies.Track;
 import quicktime.util.QTHandleRef;
 import quicktime.util.RawEncodedImage;
 
+
 /**
  * A pixel map contains information about the dimensions and contents of a pixel
  * image, as well as information on the image's storage format, depth, resolution
@@ -24,8 +23,6 @@ import quicktime.util.RawEncodedImage;
  */
 public final class PixMap extends QTHandleRef implements QuickTimeLib {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -33,20 +30,11 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
 
     private final boolean isOff;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(PixMap.class));
-            }
-        }.establish();
-    }
-
     /**
      * A PixMap object which describes the pixels in the QDGraphics.
      * @see "QuickTime::GetGWorldPixMap()"
      * @return a PixMap object
-     * @see quicktime.std.qd.QDGraphics#getPixMap
+     * @see "quicktime.std.qd.QDGraphics#getPixMap"
      */
     public static PixMap fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) {
         int[] arrayOfInt = { 0 };
@@ -59,7 +47,7 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      * @see "QuickTime::GetGWorldPixMap()"
      * @param g the QDGraphics object
      * @return a PixMap object
-     * @see quicktime.std.qd.QDGraphics#getPixMap
+     * @see "quicktime.std.qd.QDGraphics#getPixMap"
      */
     public static PixMap fromQDGraphics(QDGraphics g) {
         return new PixMap(GetGWorldPixMap(QTObject.ID(g)), g, g.isOffscreen());
@@ -164,7 +152,7 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      * PixMap object will be maintained by the ColorTable object to prevent the
      * PixMap from being garbage collected before the ColorTable.
      * @return a ColorTable object
-     * @see quicktime.std.qd.ColorTable
+     * @see "quicktime.std.qd.ColorTable"
      */
     public ColorTable getColorTable() {
         return ColorTable.fromPixMap(this);

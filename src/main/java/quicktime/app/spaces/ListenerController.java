@@ -19,4 +19,3 @@ package quicktime.app.spaces;
  */
 public interface ListenerController extends Controller, Listener {
 }
-

@@ -58,4 +58,3 @@ public interface Playable extends Timeable {
      */
     int getDuration() throws QTException;
 }
-

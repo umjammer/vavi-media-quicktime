@@ -55,4 +55,3 @@ public abstract class TimeCallBack extends QTCallBack {
         return super.toString() + "[scale=" + this.scale + ",value=" + this.value + ",flags=" + this.flags + "]";
     }
 }
-

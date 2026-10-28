@@ -10,4 +10,3 @@ public class NativeGraphicsException extends QDException {
         super(paramString);
     }
 }
-

@@ -107,4 +107,3 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
         return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
     }
 }
-

@@ -33,4 +33,3 @@ public interface NotifyListener {
      */
     void notifyComplete();
 }
-

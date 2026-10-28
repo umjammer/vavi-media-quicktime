@@ -687,4 +687,3 @@ public interface SoundConstants {
 
     int kMicrophoneArray = 1835623265;
 }
-

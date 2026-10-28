@@ -1,8 +1,8 @@
 
 package quicktime;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -20,7 +20,6 @@ import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.internal.toolbox.SoundManager;
 import quicktime.internal.toolbox.SpriteManager;
 import quicktime.internal.toolbox.StreamingManager;
-import quicktime.jdirect.QTNative;
 import quicktime.qd.ColorTable;
 import quicktime.qd.Polygon;
 import quicktime.sound.SPBDevice;
@@ -34,23 +33,8 @@ final class QTObjectManagement implements
                                quicktime.jdirect.QuickTimeVRLib,
                                quicktime.jdirect.QuickDraw3DLib,
                                quicktime.jdirect.QTStreamingLib {
-    private static Object linkage;
 
-    static final boolean debug = false;
-
-    static final boolean addDebug = false;
-
-    static final boolean removeDebug = false;
-
-    static {
-        class PrivelegedAction {
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTObjectManagement.class));
-            }
-        }
-
-        new PrivelegedAction().establish();
-    }
+    private static final Logger logger = System.getLogger(QTObjectManagement.class.getName());
 
     static int addCount = 0;
 
@@ -180,8 +164,8 @@ final class QTObjectManagement implements
         if (qtObjs.containsKey(localInteger)) {
             try {
                 disposeSessionObject(paramInt, (String) qtObjs.get(localInteger), paramQTObject);
-            } catch (QTException localQTException) {
-                throw localQTException;
+            } catch (QTException e) {
+                throw e;
             } finally {
                 qtObjs.remove(localInteger);
             }
@@ -202,81 +186,78 @@ final class QTObjectManagement implements
 
         Enumeration<Integer> localEnumeration = qtObjs.keys();
         while (localEnumeration.hasMoreElements()) {
-            Integer localObject1 = (Integer) localEnumeration.nextElement();
+            Integer localObject1 = localEnumeration.nextElement();
             String localObject2 = (String) qtObjs.get(localObject1);
 
             if (localObject2.startsWith("SGDeviceList")) {
                 try {
                     disposeSessionObject(localObject1, "SGDeviceList");
-                } catch (QTException localQTException1) {
-                    localQTException1.printStackTrace();
+                } catch (QTException e) {
+                    logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
             if (localObject2.startsWith("NoteChannel")) {
                 try {
                     disposeSessionObject(localObject1, "NoteChannel");
-                } catch (QTException localQTException2) {
-                    localQTException2.printStackTrace();
+                } catch (QTException e) {
+                    logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
             if (localObject2.startsWith("SpriteWorld")) {
                 try {
                     disposeSessionObject(localObject1, "SpriteWorld");
-                } catch (QTException localQTException3) {
-                    localQTException3.printStackTrace();
+                } catch (QTException e) {
+                    logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
             if (localObject2.startsWith("CDSequence")) {
                 try {
                     disposeSessionObject(localObject1, "CDSequence");
-                } catch (QTException localQTException4) {
-                    localQTException4.printStackTrace();
+                } catch (QTException e) {
+                    logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
         }
         localEnumeration = qtObjs.keys();
-        Object localObject1 = new Vector<>();
-        Object localObject2 = new Vector<>();
+        Vector<Integer> localObject1 = new Vector<>();
+        Vector<Integer> localObject2 = new Vector<>();
         Integer localInteger;
         while (localEnumeration.hasMoreElements()) {
-            localInteger = (Integer) localEnumeration.nextElement();
+            localInteger = localEnumeration.nextElement();
             String str = (String) qtObjs.get(localInteger);
             if ((str.startsWith("Movie")) && (!str.startsWith("MovieController")) && (!str.startsWith("MovieEditState"))) {
-                ((Vector) localObject1).addElement(localInteger);
+                localObject1.add(localInteger);
             } else if (str.startsWith("QDGraphics")) {
-                ((Vector) localObject2).addElement(localInteger);
+                localObject2.add(localInteger);
             } else if ((!str.startsWith("SGDeviceList")) &&
-
                        (!str.startsWith("NoteChannel")) &&
-
                        (!str.startsWith("SpriteWorld")) &&
-
                        (!str.startsWith("CDSequence"))) {
                 try {
                     disposeSessionObject(localInteger, str);
-                } catch (QTException localQTException7) {
-                    localQTException7.printStackTrace();
+                } catch (QTException e) {
+                    logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
         }
 
-        localEnumeration = ((Vector) localObject1).elements();
+        localEnumeration = localObject1.elements();
         while (localEnumeration.hasMoreElements()) {
-            localInteger = (Integer) localEnumeration.nextElement();
+            localInteger = localEnumeration.nextElement();
             try {
                 disposeSessionObject(localInteger, "Movie");
-            } catch (QTException localQTException5) {
-                localQTException5.printStackTrace();
+            } catch (QTException e) {
+                logger.log(Level.ERROR, e.getMessage(), e);
             }
         }
 
-        localEnumeration = ((Vector) localObject2).elements();
+        localEnumeration = localObject2.elements();
         while (localEnumeration.hasMoreElements()) {
-            localInteger = (Integer) localEnumeration.nextElement();
+            localInteger = localEnumeration.nextElement();
             try {
                 disposeSessionObject(localInteger, "QDGraphics");
-            } catch (QTException localQTException6) {
-                localQTException6.printStackTrace();
+            } catch (QTException e) {
+                logger.log(Level.ERROR, e.getMessage(), e);
             }
         }
 
@@ -284,9 +265,9 @@ final class QTObjectManagement implements
         lock = false;
 
         qtObjs = null;
-        ((Vector<?>) localObject1).removeAllElements();
+        localObject1.removeAllElements();
         localObject1 = null;
-        ((Vector<?>) localObject2).removeAllElements();
+        localObject2.removeAllElements();
         localObject2 = null;
     }
 
@@ -294,7 +275,7 @@ final class QTObjectManagement implements
         int i = paramString.lastIndexOf("_");
         if (i != -1) {
             String str = paramString.substring(i + 1);
-            return Integer.valueOf(str);
+            return Integer.parseInt(str);
         }
 
         return 0;
@@ -489,5 +470,3 @@ final class QTObjectManagement implements
         return StreamingManager.QTSDisposeStream(paramInt1, paramInt2);
     }
 }
-
-

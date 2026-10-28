@@ -60,11 +60,11 @@ public class Open_URL extends Dialog implements ActionListener {
     }
 
     //{{DECLARE_CONTROLS
-    Label label2;
+    final Label label2;
     Label label1;
-    Button okButton;
-    Button cancelButton;
-    TextField urlTextField;
+    final Button okButton;
+    final Button cancelButton;
+    final TextField urlTextField;
     //}}
 
     private final PlayMovie myPlayMovie;

@@ -36,4 +36,3 @@ public class QD3DException extends QTException {
         }
     }
 }
-

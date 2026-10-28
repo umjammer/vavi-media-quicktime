@@ -552,5 +552,3 @@ class AWTCanvasHelper extends Tasking implements java.awt.event.MouseListener, K
         }
     }
 }
-
-

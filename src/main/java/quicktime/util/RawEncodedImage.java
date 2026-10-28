@@ -1,17 +1,15 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.internal.toolbox.SpriteManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.PixMap;
 import quicktime.std.StdQTException;
 import quicktime.std.anim.Sprite;
+
 
 /**
  * RawEncodedImages keep the encoded image data as a pointer to some block of memory.
@@ -20,19 +18,7 @@ import quicktime.std.anim.Sprite;
  */
 public final class RawEncodedImage extends QTPointer implements QuickTimeLib, EncodedImage {
 
-    private static Object linkage;
-
     private int rowBytes;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(RawEncodedImage.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     /**
      * This will return a RawEncodedImage object from a pointer. It will not copy
@@ -54,9 +40,10 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
     /**
      * Returns the actual Pixel data itself. This can then be passed around in ICM calls
      * that deal with pixel data.
-     * @see "QuickTime::GetPixBaseAddr()"
+     *
      * @param pm the PixMap
      * @return the pixels
+     * @see "QuickTime::GetPixBaseAddr()"
      * @see quicktime.qd.PixMap#getPixelData()
      */
     public static RawEncodedImage fromPixMap(PixMap pm) {
@@ -69,13 +56,14 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * This method gets the image data property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the image data.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      * @see quicktime.std.anim.Sprite#getImageData()
      */
     public static RawEncodedImage fromSprite(Sprite paramSprite) throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = GetSpriteProperty(QTObject.ID(paramSprite), 3, arrayOfInt);
         StdQTException.checkError(i);
         return new RawEncodedImage(arrayOfInt[0], paramSprite.getImageDataSize(), paramSprite, -1);
@@ -93,6 +81,7 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
     /**
      * This will return a RawEncodedImage object from an int array. It will copy
      * the ints.
+     *
      * @param ints the int array containing the image data
      */
     public RawEncodedImage(int[] ints) throws QTException {
@@ -103,7 +92,8 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
     /**
      * This will return a RawEncodedImage object from an int array. It will copy
      * the ints.
-     * @param ints the int array containing the image data
+     *
+     * @param ints     the int array containing the image data
      * @param rowBytes the row bytes of the image data
      */
     public RawEncodedImage(int[] ints, int rowBytes) throws QTException {
@@ -113,7 +103,8 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Allocate the specified amount of bytes for containing encoded image data.
-     * @param size the size of the pointer to create.
+     *
+     * @param size  the size of the pointer to create.
      * @param clear clear the pointer upon creation.
      */
     public RawEncodedImage(int size, boolean clear) throws QTException {
@@ -123,8 +114,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Allocate the specified amount of bytes for containing encoded image data.
-     * @param size the size of the pointer to create.
-     * @param clear clear the pointer upon creation.
+     *
+     * @param size     the size of the pointer to create.
+     * @param clear    clear the pointer upon creation.
      * @param rowBytes the rowbytes of the encoded image.
      */
     public RawEncodedImage(int size, boolean clear, int rowBytes) throws QTException {
@@ -147,6 +139,7 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Returns the byte at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
      * @return a byte
      */
@@ -159,8 +152,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Sets the byte at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
-     * @param value the new value.
+     * @param value  the new value.
      */
     public void setByte(int offset, byte value) {
         if ((offset > getSize()) || (offset < 0))
@@ -170,6 +164,7 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Returns the short at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
      * @return a short
      */
@@ -182,8 +177,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Sets the short at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
-     * @param value the new value.
+     * @param value  the new value.
      */
     public void setShort(int offset, short value) {
         if ((offset > getSize()) || (offset < 0))
@@ -193,6 +189,7 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Returns the int at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
      * @return an int
      */
@@ -205,8 +202,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Sets the int at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
-     * @param value the new value.
+     * @param value  the new value.
      */
     public void setInt(int offset, int value) {
         if ((offset > getSize()) || (offset < 0))
@@ -216,8 +214,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Sets an array of ints at the specified offset
+     *
      * @param offset The offset is specified in bytes into the encoded image object.
-     * @param value an array of ints
+     * @param value  an array of ints
      */
     public void setInts(int offset, int[] value) {
         if ((offset + value.length * 4 > getSize()) || (offset < 0))
@@ -229,6 +228,7 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * Returns either kRowBytesUnknown or the number of bytes per row
      * that the encoded image data is comprised of. This number will
      * at least be as big as width*pixelSize, and maybe larger.
+     *
      * @return an int
      */
     @Override
@@ -238,6 +238,7 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
 
     /**
      * Sets the row bytes of the encoded image data
+     *
      * @param rowBytes the rowBytes of the encoded image data
      */
     public void setRowBytes(int rowBytes) {
@@ -264,4 +265,3 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
         MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
     }
 }
-

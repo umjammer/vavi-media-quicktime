@@ -11,12 +11,12 @@ public class PathPointInfo {
     /**
      * The QDPoint is on the queried path.
      */
-    public boolean isOnPath;
+    public final boolean isOnPath;
 
     /**
      * The QDPoint that was found at the specified index of the queried path.
      */
-    public QDPoint point;
+    public final QDPoint point;
 
     PathPointInfo(QDPoint paramQDPoint, boolean paramBoolean) {
         this.point = paramQDPoint;

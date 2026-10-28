@@ -1,17 +1,14 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
-import quicktime.internal.toolbox.TimeCodeManager;
-import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.SoundManager;
-import quicktime.jdirect.QTNative;
+import quicktime.internal.toolbox.TimeCodeManager;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.image.GraphicsExporter;
@@ -25,21 +22,11 @@ import quicktime.std.qtcomponents.TimeCodeInfo;
 import quicktime.std.qtcomponents.TimeCodeTime;
 import quicktime.std.qtcomponents.TimeCoder;
 
+
 /**
  * The QTHandle class implements a handle that can be used in calls to QuickTime.
  */
 public class QTHandle extends QTHandleRef implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTHandle.class));
-            }
-        }.establish();
-    }
 
     /**
      * Determines the data handle that is the source for input images to graphics export component
@@ -48,11 +35,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsExporter#getInputHandle()
      */
-    public static QTHandle fromGraphicsExporterText(GraphicsExporter paramGraphicsExporter) throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetSettingsAsText(QTObject.ID(paramGraphicsExporter), arrayOfInt);
-        StdQTException.checkError(i);
-        return new QTHandle(arrayOfInt[0], null, false);
+    public static QTHandle fromGraphicsExporterText(GraphicsExporter ge) throws QTException {
+        int[] h = { 0 };
+        int r = GraphicsExportGetSettingsAsText(QTObject.ID(ge), h);
+        StdQTException.checkError(r);
+        return new QTHandle(h[0], null, false);
     }
 
     /**
@@ -62,11 +49,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsExporter#getInputHandle()
      */
-    public static QTHandle fromGraphicsExporterInput(GraphicsExporter paramGraphicsExporter) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = GraphicsExportGetInputHandle(QTObject.ID(paramGraphicsExporter), arrayOfInt);
-        StdQTException.checkError(i);
-        return new QTHandle(arrayOfInt[0], null, false);
+    public static QTHandle fromGraphicsExporterInput(GraphicsExporter ge) throws QTException {
+        int[] h = new int[1];
+        int r = GraphicsExportGetInputHandle(QTObject.ID(ge), h);
+        StdQTException.checkError(r);
+        return new QTHandle(h[0], null, false);
     }
 
     /**
@@ -76,11 +63,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsExporter#getOutputHandle()
      */
-    public static QTHandle fromGraphicsExporterOutput(GraphicsExporter paramGraphicsExporter) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = GraphicsExportGetOutputHandle(QTObject.ID(paramGraphicsExporter), arrayOfInt);
-        StdQTException.checkError(i);
-        return new QTHandle(arrayOfInt[0], null, false);
+    public static QTHandle fromGraphicsExporterOutput(GraphicsExporter ge) throws QTException {
+        int[] h = new int[1];
+        int r = GraphicsExportGetOutputHandle(QTObject.ID(ge), h);
+        StdQTException.checkError(r);
+        return new QTHandle(h[0], null, false);
     }
 
     /**
@@ -91,11 +78,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.movies.media.SoundDescription#getExtension(int)
      */
-    public static QTHandle fromSoundDescription(SoundDescription paramSoundDescription, int paramInt) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = GetSoundDescriptionExtension(QTObject.ID(paramSoundDescription), arrayOfInt, paramInt);
-        StdQTException.checkError(i);
-        return new QTHandle(arrayOfInt[0], null, false);
+    public static QTHandle fromSoundDescription(SoundDescription paramSoundDescription, int idType) throws QTException {
+        int[] h = new int[1];
+        int r = GetSoundDescriptionExtension(QTObject.ID(paramSoundDescription), h, idType);
+        StdQTException.checkError(r);
+        return new QTHandle(h[0], null, false);
     }
 
     /**
@@ -106,10 +93,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.ImageDescription#getExtension(int, int)
      */
-    public static QTHandle fromImageDescription(ImageDescription paramImageDescription, int paramInt1, int paramInt2) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetImageDescriptionExtension(QTObject.ID(paramImageDescription), arrayOfInt, paramInt1, paramInt2));
-        return new QTHandle(arrayOfInt[0], null, false);
+    public static QTHandle fromImageDescription(ImageDescription paramImageDescription, int idType, int paramInt2) throws StdQTException {
+        int[] h = new int[1];
+        StdQTException.checkError(GetImageDescriptionExtension(QTObject.ID(paramImageDescription), h, idType, paramInt2));
+        return new QTHandle(h[0], null, false);
     }
 
     /**
@@ -120,10 +107,10 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @see quicktime.std.image.GraphicsImporter#getDataHandle()
      */
     public static QTHandle fromGraphicsImporterData(GraphicsImporter paramGraphicsImporter) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = GraphicsImportGetDataHandle(QTObject.ID(paramGraphicsImporter), arrayOfInt);
-        StdQTException.checkError(i);
-        return new QTHandle(arrayOfInt[0], null, false);
+        int[] h = new int[1];
+        int r = GraphicsImportGetDataHandle(QTObject.ID(paramGraphicsImporter), h);
+        StdQTException.checkError(r);
+        return new QTHandle(h[0], null, false);
     }
 
     /**
@@ -134,11 +121,11 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @see quicktime.std.image.GraphicsImporter#getAliasedDataReference()
      */
     public static QTHandle fromGraphicsImporterAlias(GraphicsImporter paramGraphicsImporter) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = GraphicsImportGetAliasedDataReference(QTObject.ID(paramGraphicsImporter), arrayOfInt1, arrayOfInt2);
-        StdQTException.checkError(i);
-        return new QTHandle(arrayOfInt1[0], null, false);
+        int[] h1 = new int[1];
+        int[] h2 = new int[1];
+        int r = GraphicsImportGetAliasedDataReference(QTObject.ID(paramGraphicsImporter), h1, h2);
+        StdQTException.checkError(r);
+        return new QTHandle(h1[0], null, false);
     }
 
     /**
@@ -149,22 +136,22 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.TimeCoder#getAtTime(int)
      */
-    public static TimeCodeInfo fromTimeCoderTime(TimeCoder paramTimeCoder, int paramInt) throws QTException {
+    public static TimeCodeInfo fromTimeCoderTime(TimeCoder paramTimeCoder, int mediaTime) throws QTException {
         int[] arrayOfInt1 = new int[1];
-        TimeCodeTime localTimeCodeTime = new TimeCodeTime();
+        TimeCodeTime tct = new TimeCodeTime();
         int[] arrayOfInt2 = new int[1];
-        TimeCodeInfo localTimeCodeInfo = new TimeCodeInfo();
-        int i = TCGetTimeCodeAtTime(QTObject.ID(paramTimeCoder), paramInt, arrayOfInt1, localTimeCodeInfo.definition.getBytes(), localTimeCodeTime.getBytes(), arrayOfInt2);
+        TimeCodeInfo tci = new TimeCodeInfo();
+        int i = TCGetTimeCodeAtTime(QTObject.ID(paramTimeCoder), mediaTime, arrayOfInt1, tci.definition.getBytes(), tct.getBytes(), arrayOfInt2);
         StdQTException.checkError(i);
         if (arrayOfInt2[0] != 0) {
-            localTimeCodeInfo.userData = new QTHandle(arrayOfInt2[0], null, false);
+            tci.userData = new QTHandle(arrayOfInt2[0], null, false);
         } else {
-            localTimeCodeInfo.userData = null;
+            tci.userData = null;
         }
-        localTimeCodeInfo.counter = localTimeCodeTime.toCounter();
-        localTimeCodeInfo.time = localTimeCodeTime;
-        localTimeCodeInfo.frameNumber = arrayOfInt1[0];
-        return localTimeCodeInfo;
+        tci.counter = tct.toCounter();
+        tci.time = tct;
+        tci.frameNumber = arrayOfInt1[0];
+        return tci;
     }
 
     /**
@@ -201,9 +188,9 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.TimeCoder#getSourceRef(quicktime.std.qtcomponents.TimeCodeDescription)
      */
-    public static QTHandle fromTimeCoderSource(TimeCoder paramTimeCoder, TimeCodeDescription paramTimeCodeDescription) throws QTException {
+    public static QTHandle fromTimeCoderSource(TimeCoder paramTimeCoder, TimeCodeDescription tcd) throws QTException {
         int[] arrayOfInt = new int[1];
-        StdQTException.checkError(TCGetSourceRef(QTObject.ID(paramTimeCoder), QTObject.ID(paramTimeCodeDescription), arrayOfInt));
+        StdQTException.checkError(TCGetSourceRef(QTObject.ID(paramTimeCoder), QTObject.ID(tcd), arrayOfInt));
         return new QTHandle(arrayOfInt[0], null, false);
     }
 
@@ -413,8 +400,8 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
         return MemoryManager.HandAndHand(paramInt1, paramInt2);
     }
 
-    private static int GraphicsExportGetInputHandle(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputHandle(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputHandle(int ge, int[] h) {
+        return GraphicsExportManager.GraphicsExportGetInputHandle(ge, h);
     }
 
     private static int GraphicsExportGetOutputHandle(int paramInt, int[] paramArrayOfInt) {
@@ -429,4 +416,3 @@ public class QTHandle extends QTHandleRef implements QuickTimeLib {
         return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
     }
 }
-

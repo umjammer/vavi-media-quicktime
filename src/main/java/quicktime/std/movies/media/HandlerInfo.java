@@ -11,17 +11,17 @@ public class HandlerInfo {
     /**
      * Specifies the type of media (subType of Media), or type of data handled (subType of DataHandler).
      */
-    public int subType;
+    public final int subType;
 
     /**
      * The name of the handler's manufacturer.
      */
-    public String name;
+    public final String name;
 
     /**
      * ManufacturerID the ID of the handler's manufacturer.
      */
-    public int manufacturerID;
+    public final int manufacturerID;
 
     /**
      * This constructor creates a HandlerInfo object.
@@ -42,4 +42,3 @@ public class HandlerInfo {
         return getClass().getName() + "[mediaType=" + QTUtils.fromOSType(this.subType) + ",manufacturerName=" + this.name + "]";
     }
 }
-

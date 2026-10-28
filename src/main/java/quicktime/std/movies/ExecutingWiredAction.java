@@ -15,4 +15,3 @@ public interface ExecutingWiredAction {
      */
     short execute(Movie mov, int flags, AtomContainer actionContainer);
 }
-

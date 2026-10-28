@@ -162,4 +162,3 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

@@ -5,19 +5,21 @@ import quicktime.QTSession;
 
 
 public class CarbonAccess {
+
     public static Object invokeCarbonEventClient(CarbonEventClient call) {
         class Runner implements Runnable {
+
             public Object fResult;
 
             @Override
             public void run() {
                 try {
-                    if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() == 65539) {
+                    if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() == 0x10003) {
                         CarbonLock.acquire();
                     }
                     this.fResult = call.invoke();
                 } finally {
-                    if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() == 65539) {
+                    if (QTSession.isCurrentOS(4) && QTSession.getJavaVersion() == 0x10003) {
                         CarbonLock.release();
                     }
                 }

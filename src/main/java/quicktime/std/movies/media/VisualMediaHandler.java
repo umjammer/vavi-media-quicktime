@@ -124,4 +124,3 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
         return MediaHandlerManager.MediaGetPublicInfo(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
     }
 }
-

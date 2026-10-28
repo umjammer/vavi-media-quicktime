@@ -1,7 +1,5 @@
 package quicktime.qd;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -13,6 +11,7 @@ import quicktime.std.StdQTException;
 import quicktime.util.QTHandleRef;
 import quicktime.util.UtilException;
 
+
 /**
  * The Polygon represents an arbitary area or set of areas on the drawing coordinate plane.
  * Methods are implemented for a corresponding QuickDraw structure used by QuickTime.
@@ -20,20 +19,9 @@ import quicktime.util.UtilException;
  */
 public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneable {
 
-    private static Object linkage;
+    private static final int[] savedPort = {0};
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Polygon.class));
-            }
-        }.establish();
-    }
-
-    private static final int[] savedPort = { 0 };
-
-    private static final int[] savedDevice = { 0 };
+    private static final int[] savedDevice = {0};
 
     private static int allocate(QDGraphics paramQDGraphics) throws QTException {
         if (paramQDGraphics == null) {
@@ -55,6 +43,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Allocates a new empty Polygon.
+     *
      * @see "QuickDraw::OpenPoly"
      */
     public Polygon(QDGraphics paramQDGraphics) throws QTException {
@@ -75,6 +64,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Completes the collection of lines that define the polygon.
+     *
      * @see "QuickDraw::ClosePoly"
      */
     public void close() throws QDException {
@@ -93,6 +83,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Returns size of the Polygon.
+     *
      * @return the size of the handle
      */
     @Override
@@ -102,6 +93,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Returns a copy of the bounding rectangle of the Polygon.
+     *
      * @return a rect
      */
     public QDRect getPolyBBox() {
@@ -112,6 +104,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Returns a copy of the bounding rectangle of the Polygon.
+     *
      * @return a rect
      */
     public QDRect getBounds() {
@@ -120,6 +113,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Copies the mathematical structure of the implicit Polygon into a newly created Polygon.
+     *
      * @return A new Polygon copy.
      * @throws quicktime.QTException
      */
@@ -129,8 +123,9 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Copies the mathematical structure of the implicit Polygon into a newly created Polygon.
-     * @see "QuickDraw::Copy"
+     *
      * @return A new Polygon copy.
+     * @see "QuickDraw::Copy"
      */
     @Override
     public Object clone() {
@@ -143,6 +138,7 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     /**
      * Print information about this object.
+     *
      * @return a string representing this Polygon object
      */
     public String toString() {
@@ -157,10 +153,11 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
      * is to the right and down; if either is negative, the corresponding movement is in the opposite
      * direction. The Polygon retains its size and shape. This doesnÕt affect the screen unless
      * you subsequently redraw the polygon.
-     * @see "QuickDraw::OffsetPoly()"
+     *
      * @param dh The horizontal distance to move the polygon.
      * @param dv The vertical distance to move the polygon.
      * @throws quicktime.qd.QDException
+     * @see "QuickDraw::OffsetPoly()"
      */
     public void offset(int dh, int dv) throws QDException {
         OffsetPoly(_ID(), (short) dh, (short) dv);

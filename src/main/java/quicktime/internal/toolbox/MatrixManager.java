@@ -47,7 +47,7 @@ public final class MatrixManager {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 double v = c == 2 ? d[r][c] * (1 << 30) : d[r][c] * 65536.0;
-                m[r * 3 + c] = (int) Math.clamp(Math.round(v), Integer.MIN_VALUE, Integer.MAX_VALUE);
+                m[r * 3 + c] = Math.clamp(Math.round(v), Integer.MIN_VALUE, Integer.MAX_VALUE);
             }
         }
         return m;

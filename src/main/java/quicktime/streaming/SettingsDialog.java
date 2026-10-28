@@ -2,8 +2,6 @@ package quicktime.streaming;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
 import com.apple.mrj.macos.carbon.CarbonEventClient;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -12,39 +10,25 @@ import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.std.StdQTException;
 
+
 /**
  * This class represents a settings dialog used to configure a streaming session. The dialog allows the user to specify audio and video
  * source in addition to settings for compression and packetizer
  */
 public class SettingsDialog implements QTStreamingLib {
 
-    private static Object linkage;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SettingsDialog.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     /**
      * This method creates and displays a new settings dialog for all active streams
+     *
      * @param p the presentation to configure
      * @see " QuickTime::QTSPresSettingsDialog"
      */
     public SettingsDialog(Presentation p) throws QTException {
         Presentation localPresentation = p;
         if (QTSession.isCurrentOS(4)) {
-            StdQTException.checkError((Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    int i = SettingsDialog.QTSPresSettingsDialog(QTObject.ID(localPresentation), 0, 0, 0, 0);
-                    return i;
-                }
+            StdQTException.checkError((Integer) CarbonAccess.invokeCarbonEventClient((CarbonEventClient) () -> {
+                int i = SettingsDialog.QTSPresSettingsDialog(QTObject.ID(localPresentation), 0, 0, 0, 0);
+                return i;
             }));
         } else {
             synchronized (QTNative.globalsLock) {
@@ -55,6 +39,7 @@ public class SettingsDialog implements QTStreamingLib {
 
     /**
      * This method creates and displays a new settings dialog for a specific stream
+     *
      * @param p the presentation to configure
      * @param s the stream to configure
      * @see " QuickTime::QTSPresSettingsDialog"

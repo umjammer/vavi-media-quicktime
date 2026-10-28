@@ -149,4 +149,3 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

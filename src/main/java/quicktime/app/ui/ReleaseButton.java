@@ -56,4 +56,3 @@ public class ReleaseButton extends QTButton {
         }
     }
 }
-

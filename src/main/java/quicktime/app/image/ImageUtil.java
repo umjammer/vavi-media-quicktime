@@ -38,31 +38,29 @@ public final class ImageUtil {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
-     * the keyColor set as a transparent colour that will not draw. It uses the
+     * the keyColor set as a transparent color that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will also
-     * have a default behaviour of setting the hit test region of the image data to
+     * have a default behavior of setting the hit test region of the image data to
      * the pixels that are drawn when the hitTestImageData flags are specified.
      * The images will be compressed at a default setting of 16bit resolution.
      * @param keyColor the color that will be removed from the images appearance
      * @return an ImageDataSequence object that contains the new images
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor) throws QTException {
-        return makeTransparent(paramImageSpec, paramQDColor, new QDGraphics(16, paramImageSpec.getDescription().getBounds()), null, null);
+    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor keyColor) throws QTException {
+        return makeTransparent(paramImageSpec, keyColor, new QDGraphics(16, paramImageSpec.getDescription().getBounds()), null, null);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
-     * the keyColor set as a transparent colour that will not draw. It uses the
+     * the keyColor set as a transparent color that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will use the depth
      * of the supplied QDGraphics to compress into - pixel sizes other than 8, 16, or 32 will throw
      * an exception. This will also
-     * have a default behaviour of setting the hit test region of the image data to
+     * have a default behavior of setting the hit test region of the image data to
      * the pixels that are drawn when the hitTestImageData flags are specified.
      * @param keyColor the color that will be removed from the images appearance
      * @param gw the QDGraphics that is used to contain the depth and pixel data of the recompressed image(s).
@@ -70,16 +68,16 @@ public final class ImageUtil {
      *  parts of the image are compressed.
      * @return an ImageDataSequence object that contains the new images
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor, QDGraphics paramQDGraphics) throws QTException {
-        return makeTransparent(paramImageSpec, paramQDColor, paramQDGraphics, null, null);
+    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor keyColor, QDGraphics gw) throws QTException {
+        return makeTransparent(paramImageSpec, keyColor, gw, null, null);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
-     * the keyColor set as a transparent colour that will not draw. It uses the
+     * the keyColor set as a transparent color that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will use the depth
      * of the supplied QDGraphics to compress into - pixel sizes other than 8, 16, or 32 will throw
      * an exception. The r parameter allows the application to specify a Region that is used as a hit-test
@@ -92,14 +90,14 @@ public final class ImageUtil {
      * @param r a hit test Region
      * @return an ImageDataSequence object that contains the new images
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor, QDGraphics paramQDGraphics, Region paramRegion) throws QTException {
-        return makeTransparent(paramImageSpec, paramQDColor, paramQDGraphics, paramRegion, null);
+    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor keyColor, QDGraphics gw, Region r) throws QTException {
+        return makeTransparent(paramImageSpec, keyColor, gw, r, null);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Takes an ImageSpec object and recompresses the images so that the images have
      * the keyColor set as a transparent colour that will not draw. It uses the
      * animation codec to do this, and there is no loss in quality. This will use the depth
@@ -116,9 +114,11 @@ public final class ImageUtil {
      * @param r an array of Regions that supply hit test data for each image in the sequence.
      * @return an ImageDataSequence object that contains the new images
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageDataSequence paramImageDataSequence, QDColor paramQDColor, QDGraphics paramQDGraphics, Region[] paramArrayOfRegion) throws QTException {
-        return makeTransparent(paramImageDataSequence, paramQDColor, paramQDGraphics, null, paramArrayOfRegion);
+    public static ImageDataSequence makeTransparent(ImageDataSequence paramImageDataSequence, QDColor keyColor, QDGraphics gw, Region[] r) throws QTException {
+        return makeTransparent(paramImageDataSequence, keyColor, gw, null, r);
     }
 
     private static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor, QDGraphics paramQDGraphics, Region paramRegion, Region[] paramArrayOfRegion) throws QTException {
@@ -170,7 +170,7 @@ public final class ImageUtil {
                     localImageDataSequence1.setDescription(localCSequenceToMemory.getDescription());
                     localImageDataSequence1.getDescription().setFrameCount(localImageDataSequence2.size());
                 }
-                localImageDataSequence1.append((quicktime.util.EncodedImage) localCSequenceToMemory.getFrames().elementAt(1));
+                localImageDataSequence1.append(localCSequenceToMemory.getFrames().elementAt(1));
                 localDSequenceFromMemory.setFrameNext();
                 if (k % 3 == 0)
                     QTUtils.reclaimMemory();
@@ -200,7 +200,7 @@ public final class ImageUtil {
         localCSequenceToMemory.compressFrame(paramQDGraphics, localQDRect, j != 0 ? 0 : 4);
         localImageDataSequence1.setDescription(localCSequenceToMemory.getDescription());
         localImageDataSequence1.getDescription().setFrameCount(1);
-        localImageDataSequence1.append((quicktime.util.EncodedImage) localCSequenceToMemory.getFrames().elementAt(1));
+        localImageDataSequence1.append(localCSequenceToMemory.getFrames().elementAt(1));
         localPixMap1 = null;
         paramQDGraphics = null;
         return localImageDataSequence1;

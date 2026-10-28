@@ -65,7 +65,7 @@ public final class QTVRWorldHeader extends QTVRAtom {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);

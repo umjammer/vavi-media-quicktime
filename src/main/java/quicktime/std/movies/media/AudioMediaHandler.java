@@ -95,4 +95,3 @@ public interface AudioMediaHandler {
      */
     int[] getSoundEqualizerBandLevels(int paramInt) throws QTException;
 }
-

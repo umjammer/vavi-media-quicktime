@@ -1,9 +1,6 @@
 package quicktime.std.qtcomponents;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
@@ -27,6 +24,7 @@ import quicktime.util.QTHandleRef;
 import quicktime.util.QTUtils;
 import quicktime.util.StringHandle;
 
+
 /**
  * Assists in importing movie data.
  * The MovieImporter implements methods for a corresponding QuickTime
@@ -35,18 +33,7 @@ import quicktime.util.StringHandle;
  */
 public final class MovieImporter extends Component implements QuickTimeLib {
 
-    private static Object linkage;
-
     private QTCompDispatcher progUPP;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MovieExporter.class));
-            }
-        }.establish();
-    }
 
     /**
      * Looks on the System scrap to find out if it can translate any of the track data into a movie.
@@ -95,8 +82,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::GetMovieImporterForDataRef()"
      * @param flags flags that control the kinds of importer components that are searched by this call
      */
-    public MovieImporter(DataRef paramDataRef, int paramInt) throws QTException {
-        this(allocate(paramDataRef, paramInt), dontOpenComponent);
+    public MovieImporter(DataRef dataRef, int flags) throws QTException {
+        this(allocate(dataRef, flags), dontOpenComponent);
     }
 
     /**
@@ -106,21 +93,21 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @param fileExt file extension for the source of the data. This is useful to provide the
      *  importer as a guide for it to know about the data format.
      */
-    public MovieImporter(DataRef paramDataRef, int paramInt, String paramString) throws QTException {
-        this(allocate(paramDataRef, paramInt, paramString), dontOpenComponent);
+    public MovieImporter(DataRef dataRef, int flags, String fileExt) throws QTException {
+        this(allocate(dataRef, flags, fileExt), dontOpenComponent);
     }
 
-    private static int allocate(DataRef paramDataRef, int paramInt) throws StdQTException {
+    private static int allocate(DataRef dataRef, int paramInt) throws StdQTException {
         int[] arrayOfInt = { 0 };
-        StdQTException.checkError(GetMovieImporterForDataRef(paramDataRef.getType(), QTObject.ID(paramDataRef), paramInt, arrayOfInt));
+        StdQTException.checkError(GetMovieImporterForDataRef(dataRef.getType(), QTObject.ID(dataRef), paramInt, arrayOfInt));
         return arrayOfInt[0];
     }
 
-    private static int allocate(DataRef paramDataRef, int paramInt, String paramString) throws QTException {
+    private static int allocate(DataRef dataRef, int paramInt, String paramString) throws QTException {
         int[] arrayOfInt = { 0 };
         StringHandle localStringHandle = new StringHandle("X." + paramString, 2);
-        paramDataRef.concatenate(localStringHandle);
-        StdQTException.checkError(GetMovieImporterForDataRef(paramDataRef.getType(), QTObject.ID(paramDataRef), paramInt, arrayOfInt));
+        dataRef.concatenate(localStringHandle);
+        StdQTException.checkError(GetMovieImporterForDataRef(dataRef.getType(), QTObject.ID(dataRef), paramInt, arrayOfInt));
         return arrayOfInt[0];
     }
 
@@ -309,16 +296,12 @@ public final class MovieImporter extends Component implements QuickTimeLib {
         int i = _ID();
         int j = 0;
         if (QTSession.isCurrentOS(4)) {
-            j = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    int i = 0;
-                    synchronized (QTNative.globalsLock) {
-                        i = MovieImporter.MovieImportDoUserDialog(i, arrayOfByte2, 0, arrayOfByte1);
-                    }
-                    return i;
+            j = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int i1 = 0;
+                synchronized (QTNative.globalsLock) {
+                    i1 = MovieImporter.MovieImportDoUserDialog(i1, arrayOfByte2, 0, arrayOfByte1);
                 }
+                return i1;
             });
             StdQTException.checkError(j);
             return arrayOfByte1[0] != 0;
@@ -577,4 +560,3 @@ public final class MovieImporter extends Component implements QuickTimeLib {
         return ComponentManager.MovieImportSetNewMovieFlags(paramInt1, paramInt2);
     }
 }
-

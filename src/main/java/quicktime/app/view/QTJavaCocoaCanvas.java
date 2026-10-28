@@ -745,5 +745,3 @@ label0:
     public void mouseReleased(MouseEvent paramMouseEvent) {
     }
 }
-
-

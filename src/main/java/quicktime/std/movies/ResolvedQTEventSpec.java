@@ -3,9 +3,11 @@ package quicktime.std.movies;
 import quicktime.QTException;
 import quicktime.util.QTPointerRef;
 
+
 /**
  * This class is returned from ActionFilters that deal with WiredSprite actions.
- * @see quicktime.std.movies.actions.ExecuteQTEventAction
+ *
+ * @see "quicktime.std.movies.actions.ExecuteQTEventAction"
  */
 public final class ResolvedQTEventSpec extends QTPointerRef {
 
@@ -15,7 +17,7 @@ public final class ResolvedQTEventSpec extends QTPointerRef {
     public static final int kNativeSize = 16;
 
     ResolvedQTEventSpec(int paramInt, Object paramObject) {
-        super(paramInt, 16, paramObject);
+        super(paramInt, kNativeSize, paramObject);
     }
 
     /**
@@ -40,4 +42,3 @@ public final class ResolvedQTEventSpec extends QTPointerRef {
         return new Track(getIntAt(8), this);
     }
 }
-

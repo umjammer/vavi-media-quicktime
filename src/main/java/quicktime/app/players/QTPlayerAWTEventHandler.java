@@ -16,7 +16,6 @@ import quicktime.qd.QDPoint;
 
 
 /**
- * @deprecated
  * When a QTPlayer is addedTo some kind of java.awt.Component the default
  * construction methods of the QTPlayerEventHandler will create an instance
  * of this object.
@@ -27,6 +26,7 @@ import quicktime.qd.QDPoint;
  *
  * The QTPlayerAWTEventHandler will handle mousePressed methods and keyPressed
  * methods.
+ * @deprecated
  */
 public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements MouseListener, KeyListener {
 
@@ -35,15 +35,15 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     private Window parentWindow;
 
     /**
-     * @deprecated
      * The QTPlayer this object handles events for * @deprecated since QTJava 6.1
+     * @deprecated
      */
     protected QTPlayer player;
 
     /**
+     * The java.awt.Component to which the QTPlayer has been added.
      * @deprecated
      * @since QTJava 6.1
-     * The java.awt.Component to which the QTPlayer has been added.
      */
     protected Component component;
 
@@ -54,21 +54,21 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Construct a QTPlayerAWTEventHandler where the object of interest for
      * events is some kind of java.awt.Component.
      * @param interest the source of events.
+     * @deprecated
+     * @since QTJava 6.1
      */
-    protected QTPlayerAWTEventHandler(QTPlayer paramQTPlayer, Object paramObject) {
+    protected QTPlayerAWTEventHandler(QTPlayer paramQTPlayer, Object interest) {
         this.player = paramQTPlayer;
-        this.component = ((Component) paramObject);
+        this.component = ((Component) interest);
     }
 
     /**
+     * Registers interests in mouse and key events with the java.awt.Component
      * @deprecated
      * @since QTJava 6.1
-     * Registers interests in mouse and key events with the java.awt.Component
      */
     @Override
     protected void addedTo() {
@@ -117,9 +117,9 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     }
 
     /**
+     * Removes any interests in mouse and key events with the java.awt.Component
      * @deprecated
      * @since QTJava 6.1
-     * Removes any interests in mouse and key events with the java.awt.Component
      */
     @Override
     protected void removedFrom() {
@@ -133,8 +133,8 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     }
 
     /**
-     * @deprecated
      * Key pressed events are passed on to the movie controller * @deprecated since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void keyPressed(KeyEvent paramKeyEvent) {
@@ -146,8 +146,8 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     }
 
     /**
-     * @deprecated
      * Mouse pressed events are passed on to the movie controller * @deprecated since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void mousePressed(MouseEvent paramMouseEvent) {
@@ -200,4 +200,3 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     public void mouseReleased(MouseEvent paramMouseEvent) {
     }
 }
-

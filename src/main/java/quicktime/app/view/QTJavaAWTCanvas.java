@@ -143,7 +143,7 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
 
     private transient boolean appHasSetPreferredSize = false;
 
-    boolean isWin = QTSession.isCurrentOS(2);
+    final boolean isWin = QTSession.isCurrentOS(2);
 
     private boolean addDone = false;
 
@@ -571,8 +571,7 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
         return getClass().getName() + "_" + this.numCanvas + "_" + "[Location=" + getLocation() + ",Size=" + getSize() + "]";
     }
 
-    @Override
-    protected void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         try {
             removeNotify();
         } finally {
@@ -583,7 +582,5 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
             this.channel = null;
             this.qtcHelper = null;
         }
-
-        super.finalize();
     }
 }

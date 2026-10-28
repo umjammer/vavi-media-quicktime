@@ -4,35 +4,23 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
+
 
 /**
  * This class represents a width and height dimension.
  */
 public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 8;
 
     @Serial
     private static final long serialVersionUID = -3790051028201084503L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDDimension.class));
-            }
-        }.establish();
-    }
 
     /**
      * Returns the EndianDescriptor for QDRect Rect.
@@ -57,7 +45,7 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * @param height the specified height dimension
      */
     public QDDimension(int width, int height) {
-        super(8);
+        super(kNativeSize);
         setWidth(width);
         setHeight(height);
     }
@@ -69,14 +57,14 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
      * @param height the specified height dimension
      */
     public QDDimension(float width, float height) {
-        super(8);
+        super(kNativeSize);
         setWidth(width);
         setHeight(height);
     }
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[8];
+        this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[12];
         paramObjectInputStream.read(arrayOfByte);
         int i = EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 0));
@@ -204,4 +192,3 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

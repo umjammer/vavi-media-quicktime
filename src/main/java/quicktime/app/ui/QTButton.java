@@ -328,4 +328,3 @@ public abstract class QTButton extends UIElement {
         }
     }
 }
-

@@ -57,4 +57,3 @@ public interface Timeable {
      */
     float getRate() throws QTException;
 }
-

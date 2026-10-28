@@ -130,4 +130,3 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
         return getClass().getName();
     }
 }
-

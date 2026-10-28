@@ -39,4 +39,3 @@ public interface Layerable {
      */
     void setLayer(int layer) throws QTException;
 }
-

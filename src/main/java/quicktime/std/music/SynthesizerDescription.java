@@ -4,33 +4,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 import quicktime.util.UtilException;
 
-public final class SynthesizerDescription extends QTByteObject implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
+public final class SynthesizerDescription extends QTByteObject implements PrimitivesLib, Cloneable {
 
     private static final int kNativeSize = 132;
 
     @Serial
     private static final long serialVersionUID = -3131954178923067174L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SynthesizerDescription.class));
-            }
-        }.establish();
-    }
 
     SynthesizerDescription() {
         super(132);
@@ -42,8 +30,8 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[132];
-        byte[] arrayOfByte = new byte[132];
+        this.bytes = new byte[kNativeSize];
+        byte[] arrayOfByte = new byte[kNativeSize];
         paramObjectInputStream.read(arrayOfByte);
         int i = getIntFromArray(arrayOfByte, 0);
         int j = EndianOrder.flipBigEndianToNative32(i);
@@ -58,7 +46,7 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
 
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[132];
+        byte[] arrayOfByte = new byte[kNativeSize];
         int i = getIntFromArray(getBytes(), 0);
         int j = EndianOrder.flipNativeToBigEndian32(i);
         setIntInArray(arrayOfByte, 0, j);

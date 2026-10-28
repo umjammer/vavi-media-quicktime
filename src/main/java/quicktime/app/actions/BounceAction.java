@@ -16,6 +16,7 @@ import quicktime.app.image.Transformable;
  *
  * @deprecated
  */
+@Deprecated
 public class BounceAction extends MatrixAction {
 
     static {

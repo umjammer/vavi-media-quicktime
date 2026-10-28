@@ -36,15 +36,16 @@ import quicktime.app.time.Ticklish;
  * It will still ask the QTImageDrawer if it requires redrawing upon each composit loop
  * when the Invalidator itself is activated.
  *
- * @see quicktime.app.display.SWCompositor,
- * {@link quicktime.app.image.QTImageDrawer},
- * {@link quicktime.app.players.MoviePresenter}
+ * @see "quicktime.app.display.SWCompositor"
+ * @see quicktime.app.image.QTImageDrawer
+ * @see quicktime.app.players.MoviePresenter
  * @deprecated
  */
 public class Invalidator implements Ticklish {
 
     /**
-     * @deprecated This is the sprite that requires invalidation in the tickle call * @deprecated since QTJava 6.1
+     * @since QTJava 6.1
+     * @deprecated This is the sprite that requires invalidation in the tickle call
      */
     protected TwoDSprite s;
 
@@ -57,6 +58,7 @@ public class Invalidator implements Ticklish {
     /**
      * Constructs an Invalidator with the TwoDSprite that is presenting the Image
      * and would require invalidation.
+     *
      * @param s the TwoDSprite presenter
      * @since QTJava 6.1
      * @deprecated
@@ -67,6 +69,7 @@ public class Invalidator implements Ticklish {
 
     /**
      * This returns the target TwoDSprite of the Invalidator.
+     *
      * @return a TwoDSprite object
      * @since QTJava 6.1
      * @deprecated
@@ -100,7 +103,7 @@ public class Invalidator implements Ticklish {
      * This call is ignored by the default Invalidator.
      *
      * @param newTime the new time when the Ticklish's time line has changed
-     * @throws  quicktime.QTException
+     * @throws quicktime.QTException
      * @since QTJava 6.1
      * @deprecated
      */
@@ -108,4 +111,3 @@ public class Invalidator implements Ticklish {
     public void timeChanged(int newTime) throws QTException {
     }
 }
-

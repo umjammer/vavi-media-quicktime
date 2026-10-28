@@ -14,4 +14,3 @@ public interface XMLEndDocProc {
      */
     void execute() throws QTException;
 }
-

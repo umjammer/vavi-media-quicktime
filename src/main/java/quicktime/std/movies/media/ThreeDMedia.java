@@ -35,12 +35,12 @@ public final class ThreeDMedia extends Media {
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new ThreeDDescription(1902392164);
     }
 
     @Override
-    final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new ThreeDMediaHandler(paramInt, paramObject);
     }
 
@@ -69,4 +69,3 @@ public final class ThreeDMedia extends Media {
         return localThreeDDescription;
     }
 }
-

@@ -1,32 +1,21 @@
 package quicktime.qd;
 
 import java.awt.Point;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.QTUtils;
 
-public final class QDPoint implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
+public final class QDPoint implements PrimitivesLib, Cloneable {
 
     private static final int kNativeSize = 8;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDPoint.class));
-            }
-        }.establish();
-    }
-
     /**
      * Returns the EndianDescriptor for FixedPoint point.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptorFixedPoint() {
@@ -35,6 +24,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Returns the EndianDescriptor for TQ3Point2D point.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptorTQ3Point2D() {
@@ -43,6 +33,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Returns the EndianDescriptor for TQ3Point2D point.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptorQTVRFloatPoint() {
@@ -82,8 +73,9 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
     /**
      * Creates a QDPoint from an array of bytes that represent a FixedPoint, so the
      * byte array must be 8bytes long at least.
+     *
      * @param ptBytes the byte array containing the packed point values
-     * @param ptType the type of point to be found in the array
+     * @param ptType  the type of point to be found in the array
      * @return a QDPoint
      * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
      */
@@ -94,14 +86,15 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
     /**
      * Creates a QDPoint from an array of bytes that represent a FixedPoint, so the
      * byte array must be 8bytes long at least.
+     *
      * @param ptBytes the byte array containing the packed point values
-     * @param ptType the type of point to be found in the array
-     * @param offset the offset in the array where the point is to be found
+     * @param ptType  the type of point to be found in the array
+     * @param offset  the offset in the array where the point is to be found
      * @return a QDPoint
      * @throws java.lang.IllegalArgumentException if mismatch between minimum length of byte array and format flag
      */
     public static QDPoint fromArray(byte[] ptBytes, int ptType, int offset) {
-        if (ptBytes.length - offset < 8) {
+        if (ptBytes.length - offset < kNativeSize) {
             throw new IllegalArgumentException("Mismatch between flag and supplied ptBytes");
         }
         if (ptType == 8) {
@@ -109,7 +102,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
             int j = getIntFromArray(ptBytes, offset + 4);
             return new QDPoint(QTUtils.Fix2X(i), QTUtils.Fix2X(j));
         }
-        if ((ptType == -8) || (ptType == -16)) {
+        if (ptType == kIsQ3Point2D || ptType == kIsQTVRFloatPoint) {
             float f1 = getFloatFromArray(ptBytes, offset);
             float f2 = getFloatFromArray(ptBytes, offset + 4);
             return new QDPoint(f1, f2);
@@ -119,6 +112,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Create a QDPoint at specified location
+     *
      * @param x x location
      * @param y y location
      */
@@ -129,6 +123,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Create a QDPoint at specified location
+     *
      * @param x x location
      * @param y y location
      */
@@ -138,8 +133,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
     }
 
     /**
-     * @deprecated
-     * <I>As of QTJava v 4.0</I>
+     * @deprecated <I>As of QTJava v 4.0</I>
      * Create a QDPoint at specified location
      */
     public QDPoint(Point paramPoint) {
@@ -150,8 +144,8 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         this.x = paramShort1;
         this.y = paramShort2;
         if (paramArrayOfByte != null) {
-            this.floatPt = new byte[8];
-            System.arraycopy(paramArrayOfByte, 0, this.floatPt, 0, 8);
+            this.floatPt = new byte[kNativeSize];
+            System.arraycopy(paramArrayOfByte, 0, this.floatPt, 0, kNativeSize);
         }
     }
 
@@ -175,7 +169,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Returns a byte array that contains the packed value of a FixedPoint
      */
     public byte[] getFixedPoint() {
-        byte[] arrayOfByte = new byte[8];
+        byte[] arrayOfByte = new byte[kNativeSize];
         setIntInArray(arrayOfByte, 0, QTUtils.X2Fix(getXF()));
         setIntInArray(arrayOfByte, 4, QTUtils.X2Fix(getYF()));
         return arrayOfByte;
@@ -186,7 +180,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      */
     public byte[] getQ3Point2D() {
         if (this.floatPt == null) {
-            this.floatPt = new byte[8];
+            this.floatPt = new byte[kNativeSize];
             setX(getX());
             setY(getY());
         }
@@ -202,6 +196,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Get the x location of the point.
+     *
      * @return the current x location
      */
     public int getX() {
@@ -210,6 +205,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Get the x location of the point.
+     *
      * @return the current x location
      */
     public float getXF() {
@@ -218,6 +214,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Set the x location of the point.
+     *
      * @param x the new x location
      */
     public void setX(int x) {
@@ -230,17 +227,19 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Set the x location of the point.
+     *
      * @param x the new x location
      */
     public void setX(float x) {
         if (this.floatPt == null)
-            this.floatPt = new byte[8];
+            this.floatPt = new byte[kNativeSize];
         setFloatInArray(this.floatPt, 0, x);
         this.x = ((short) (int) x);
     }
 
     /**
      * Get the y location of the point.
+     *
      * @return the current y location
      */
     public int getY() {
@@ -249,6 +248,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Get the y location of the point.
+     *
      * @return the current y location
      */
     public float getYF() {
@@ -257,6 +257,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Set the y location of the point.
+     *
      * @param y the new y location
      */
     public void setY(int y) {
@@ -269,11 +270,12 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Set the y location of the point.
+     *
      * @param y the new y location
      */
     public void setY(float y) {
         if (this.floatPt == null)
-            this.floatPt = new byte[8];
+            this.floatPt = new byte[kNativeSize];
         setFloatInArray(this.floatPt, 4, y);
         this.y = ((short) (int) y);
     }
@@ -329,6 +331,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Return a copy of the QDPoint
+     *
      * @return a QDPoint
      */
     @Override
@@ -338,6 +341,7 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
 
     /**
      * Returns a copy of the QDPoint with the correct return type.
+     *
      * @return a QDPoint
      */
     public QDPoint copy() {
@@ -360,4 +364,3 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         MemoryManager.setFloatInArray(paramArrayOfByte, paramInt, paramFloat);
     }
 }
-

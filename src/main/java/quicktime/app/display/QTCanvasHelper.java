@@ -142,5 +142,3 @@ class QTCanvasHelper {
                 .setDisplayBounds(new QDRect(localPoint.x, localPoint.y, this.canvas.currentWidth, this.canvas.currentHeight));
     }
 }
-
-

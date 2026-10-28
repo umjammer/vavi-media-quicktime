@@ -7,7 +7,7 @@ public final class Atom {
 
     public static final Atom kParentIsContainer = new Atom(0);
 
-    int atom;
+    final int atom;
 
     /**
      * Construct an Atom out of the constant value that defines this data type.
@@ -43,4 +43,3 @@ public final class Atom {
         return Integer.hashCode(atom);
     }
 }
-

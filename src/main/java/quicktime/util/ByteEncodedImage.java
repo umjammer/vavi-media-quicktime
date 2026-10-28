@@ -133,4 +133,3 @@ public class ByteEncodedImage extends QTByteObject implements EncodedImage, Clon
         return this.rowBytes;
     }
 }
-

@@ -146,7 +146,7 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
         return arrayOfByte;
     }
 
-    private final void checkOffset(int paramInt) throws IndexOutOfBoundsException {
+    private void checkOffset(int paramInt) throws IndexOutOfBoundsException {
         if (paramInt > getSize())
             throw new IndexOutOfBoundsException();
     }
@@ -155,4 +155,3 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
         return ImageCompressionManager.CurveGetAtomDataFromVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
     }
 }
-

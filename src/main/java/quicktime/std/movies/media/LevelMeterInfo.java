@@ -49,4 +49,3 @@ public final class LevelMeterInfo extends QTByteObject {
         return getClass().getName() + "[channels=" + getNumChannels() + ",leftLevel=" + getLeftMeterLevel() + ",rightLevel=" + getRightMeterLevel() + "]";
     }
 }
-

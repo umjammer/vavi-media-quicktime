@@ -215,4 +215,3 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

@@ -8,22 +8,22 @@ public class MixStateInfo {
     /**
      * The part number the information pertains too.
      */
-    public int partNumber;
+    public final int partNumber;
 
     /**
      * The volume of that part.
      */
-    public float volume;
+    public final float volume;
 
     /**
      * The balance of that part.
      */
-    public float balance;
+    public final float balance;
 
     /**
      * The mix flags of that part.
      */
-    public int flags;
+    public final int flags;
 
     MixStateInfo(int paramInt1, float paramFloat1, float paramFloat2, int paramInt2) {
         this.partNumber = paramInt1;

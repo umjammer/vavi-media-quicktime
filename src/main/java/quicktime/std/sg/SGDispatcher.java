@@ -1,15 +1,11 @@
 
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import quicktime.QTException;
 import quicktime.internal.toolbox.ComponentManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.comp.ComponentDescription;
 import quicktime.util.QTHandleRef;
@@ -17,7 +13,6 @@ import quicktime.util.QTPointerRef;
 
 
 final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
-    private static Object linkage;
 
     private final String methodName;
 
@@ -30,14 +25,6 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
     private SGMethodClosure mMethodClosure;
 
     private final SequenceGrabber sg;
-
-    static {
-        new Object() {
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGDispatcher.class));
-            }
-        }.establish();
-    }
 
     SGDispatcher(SequenceGrabber paramSequenceGrabber, SGDataProc paramSGDataProc) {
         this.methodName = "callbackProc";
@@ -77,11 +64,11 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
             SGPtr localSGPtr = new SGPtr(paramInt2, paramInt3, this);
 
             int k = this.cb.execute(localObject,
-                                    localSGPtr,
-                                    paramInt4 == 0 ? 0 : getIntFromPointer(paramInt4, 0),
-                                    paramInt5,
-                                    paramInt6,
-                                    paramShort);
+                    localSGPtr,
+                    paramInt4 == 0 ? 0 : getIntFromPointer(paramInt4, 0),
+                    paramInt5,
+                    paramInt6,
+                    paramShort);
             if (paramInt4 != 0) {
                 setIntInPointer(paramInt4, 0, k);
             }
@@ -114,6 +101,7 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
     }
 
     static class SGMethodClosure extends MethodClosure {
+
         SGMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
             super(paramObject, paramString1, paramString2, paramInt);
         }
@@ -124,12 +112,14 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
     }
 
     static class SGPtr extends QTPointerRef {
+
         SGPtr(int paramInt1, int paramInt2, Object paramObject) {
             super(paramInt1, paramInt2, paramObject);
         }
     }
 
     static class SGHdl extends QTHandleRef {
+
         SGHdl(int paramInt) {
             super(paramInt, null, false);
         }

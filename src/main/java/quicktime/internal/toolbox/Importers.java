@@ -145,7 +145,7 @@ final class Importers {
     /** @return a movie of one sound track whose frames are at the offset of the file */
     static MovieRec soundMovie(String path, byte[] desc, double sampleRate, long frames, long offset, long bytes) {
         MovieRec m = new MovieRec();
-        int scale = (int) Math.clamp(Math.round(sampleRate), 1, Integer.MAX_VALUE);
+        int scale = Math.clamp(Math.round(sampleRate), 1, Integer.MAX_VALUE);
         m.setTimeScale(scale);
         TrackRec t = m.newTrack();
         t.volume = 0x100;

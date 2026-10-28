@@ -226,7 +226,7 @@ public final class FullScreen implements QuickTimeLib {
         this.restoreState = 0;
     }
 
-    protected void dispose() throws Throwable {
+    private void dispose() throws Throwable {
         end();
     }
 
@@ -238,4 +238,3 @@ public final class FullScreen implements QuickTimeLib {
         return PlatformManager.EndFullScreen(paramInt1, paramInt2);
     }
 }
-

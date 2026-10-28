@@ -6,5 +6,3 @@ public interface DrawingNotifier {
 
     void removeDrawingListener(DrawingListener paramDrawingListener);
 }
-
-

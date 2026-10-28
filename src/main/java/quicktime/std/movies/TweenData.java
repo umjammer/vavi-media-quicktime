@@ -192,4 +192,3 @@ public final class TweenData extends QTByteObject {
         return i + i;
     }
 }
-

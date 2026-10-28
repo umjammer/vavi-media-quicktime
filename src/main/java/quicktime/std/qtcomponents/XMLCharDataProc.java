@@ -14,4 +14,3 @@ public interface XMLCharDataProc {
      */
     void execute(String paramString) throws QTException;
 }
-

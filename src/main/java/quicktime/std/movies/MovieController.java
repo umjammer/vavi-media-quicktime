@@ -164,7 +164,7 @@ public class MovieController extends Component implements QuickTimeLib {
         return new Movie(paramInt, paramObject);
     }
 
-    static Hashtable<Integer, Vector<Movie>> mcHashtable = new Hashtable<>();
+    static final Hashtable<Integer, Vector<Movie>> mcHashtable = new Hashtable<>();
 
     private static int currentSessionID;
 
@@ -1644,4 +1644,3 @@ public class MovieController extends Component implements QuickTimeLib {
         QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
     }
 }
-

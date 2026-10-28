@@ -219,4 +219,3 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
         MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
     }
 }
-

@@ -14,4 +14,3 @@ public class MediaHandler extends Component {
         super(paramInt, paramObject);
     }
 }
-

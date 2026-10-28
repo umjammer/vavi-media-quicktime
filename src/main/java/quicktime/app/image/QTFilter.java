@@ -71,13 +71,13 @@ public class QTFilter extends QTEffect {
     }
 
     /**
-     * @deprecated
-     * <I>since QTJava 4.0</I>
      * Creates a QTFilter of specified frame setting and initSize.
      * @param d the initSize of the effect.
+     * @deprecated
+     * @since QTJava 4.0
      */
-    public QTFilter(int paramInt, Dimension paramDimension) throws QTException {
-        this(paramInt, new QDDimension(paramDimension.width, paramDimension.height));
+    public QTFilter(int paramInt, Dimension d) throws QTException {
+        this(paramInt, new QDDimension(d.width, d.height));
     }
 
     /**
@@ -86,13 +86,13 @@ public class QTFilter extends QTEffect {
      * Creates a QTFilter of specified frame setting and initSize.
      * @param d the initSize of the effect.
      */
-    public QTFilter(int paramInt, QDDimension paramQDDimension) throws QTException {
-        super(paramInt, paramQDDimension);
+    public QTFilter(int paramInt, QDDimension d) throws QTException {
+        super(paramInt, d);
         if (paramInt == 2) {
         }
     }
 
-    int srcA = QTUtils.toOSType("srcA");
+    final int srcA = QTUtils.toOSType("srcA");
 
     boolean inEffect = false;
 
@@ -101,13 +101,13 @@ public class QTFilter extends QTEffect {
     private static int nThreads;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method will take the incoming parameters and use this as the control parameters for the
      * effect. The container will be locked for the duration of the effect object's life or until
      * another effect is set.
      * @param effectParams the parameters that determine the effect that is run
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setEffect(AtomContainer effectParams) throws QTException {
@@ -206,7 +206,7 @@ public class QTFilter extends QTEffect {
      */
     class ImageContainer extends Thread implements DrawingListener {
 
-        ImageSpec image;
+        final ImageSpec image;
 
         EncodedImage encImage;
 

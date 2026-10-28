@@ -1,7 +1,5 @@
 package quicktime.qd;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -26,6 +24,7 @@ import quicktime.streaming.Presentation;
 import quicktime.streaming.Stream;
 import quicktime.util.QTHandleRef;
 
+
 /**
  * The Region represents an arbitary area or set of areas on the drawing coordinate plane.
  * Methods are implemented for a corresponding QuickDraw structure used by QuickTime.
@@ -33,31 +32,21 @@ import quicktime.util.QTHandleRef;
  */
 public final class Region extends QTHandleRef implements QuickTimeLib, QTStreamingLib, Cloneable {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Region.class));
-            }
-        }.establish();
-    }
-
     private static final boolean isMacOS = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4));
 
-    private static final int[] savedPort = { 0 };
+    private static final int[] savedPort = {0};
 
-    private static final int[] savedDevice = { 0 };
+    private static final int[] savedDevice = {0};
 
     private QDGraphics recordingGraphics;
 
     /**
      * Determines the current clipping region.
-     * @see "QuickTime::GraphicsImportGetClip"
+     *
      * @param gi the GraphicsImporter
      * @return The current clip region or null, if not possible
      * @throws quicktime.QTException
+     * @see "QuickTime::GraphicsImportGetClip"
      * @see quicktime.std.image.GraphicsImporter#getClip()
      */
     public static Region fromGraphicsImporter(GraphicsImporter gi) throws QTException {
@@ -71,14 +60,15 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Determines the default clipping region.
-     * @see "QuickTime::GraphicsImportGetDefaultClip"
+     *
      * @param gi the GraphicsImporter
      * @return The default clip region or null, if not possible
      * @throws quicktime.QTException
+     * @see "QuickTime::GraphicsImportGetDefaultClip"
      * @see quicktime.std.image.GraphicsImporter#getClip()
      */
     public static Region fromGraphicsImporterDefault(GraphicsImporter gi) throws QTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = GraphicsImportGetDefaultClip(QTObject.ID(gi), arrayOfInt);
         QTException.checkError(i);
         return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
@@ -86,10 +76,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows your application to determine a movie's current display clipping region.
-     * @see "QuickTime::GetMovieDisplayClipRgn()"
+     *
      * @param m the Movie
      * @return a Region object.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetMovieDisplayClipRgn()"
      * @see quicktime.std.movies.Movie#getDisplayClipRgn()
      */
     public static Region fromMovieDisplayClip(Movie m) throws QTException {
@@ -104,10 +95,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * after the track matrix, track clip, movie matrix, and movie clip have
      * been applied to all of the movie's tracks. This region is in the display
      * coordinate system of the movie's graphics world.
-     * @see "QuickTime::GetMovieDisplayBoundsRgn()"
+     *
      * @param m the Movie
      * @return a Region object.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetMovieDisplayBoundsRgn()"
      * @see quicktime.std.movies.Movie#getDisplayBoundsRgn()
      */
     public static Region fromMovieDisplayBounds(Movie m) throws QTException {
@@ -118,11 +110,12 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows your application to determine a movie's clipping region.
-     * @see "QuickTime::GetMovieClipRgn()"
+     *
      * @param m the Movie
      * @return a Region object.
      * @throws quicktime.QTException
-     * @see quicktime.std.movies.Movie#getMovieClipRgn
+     * @see "QuickTime::GetMovieClipRgn()"
+     * @see "quicktime.std.movies.Movie#getMovieClipRgn"
      */
     public static Region fromMovieClip(Movie m) throws QTException {
         int i = GetMovieClipRgn(QTObject.ID(m));
@@ -132,15 +125,16 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows your application to determine a Presentation's clipping region.
-     * @see "QuickTime::QTSPresGetClip()"
+     *
      * @param p the Presentation
      * @param s the Stream
      * @return a Region object.
      * @throws quicktime.QTException
+     * @see "QuickTime::QTSPresGetClip()"
      * @see quicktime.streaming.Presentation#getClip(quicktime.streaming.Stream)
      */
     public static Region fromPresentationClip(Presentation p, Stream s) throws QTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         StdQTException.checkError(QTSPresGetClip(QTObject.ID(p), QTObject.ID(s), arrayOfInt));
         return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
     }
@@ -151,10 +145,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * The movie boundary region encloses all of a movie's tracks after the union of
      * the track clip and the track matrix has been applied to all the movie's
      * tracks (but not to the movie itself).
-     * @see "QuickTime::GetMovieBoundsRgn()"
+     *
      * @param m the Movie
      * @return a Region object specifying the movie boundary region.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetMovieBoundsRgn()"
      * @see quicktime.std.movies.Movie#getBoundsRgn()
      */
     public static Region fromMovieBounds(Movie m) throws QTException {
@@ -165,12 +160,13 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows your application to determine a movie's display boundary region during a specified segment.
-     * @see "QuickTime::GetMovieSegmentDisplayBoundsRgn()"
-     * @param m the Movie
-     * @param time Specifies the starting time of the movie segment to consider.
+     *
+     * @param m        the Movie
+     * @param time     Specifies the starting time of the movie segment to consider.
      * @param duration Specifies the length of the segment to consider.
      * @return a Region object.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetMovieSegmentDisplayBoundsRgn()"
      * @see quicktime.std.movies.Movie#getSegmentDisplayBoundsRgn(int, int)
      */
     public static Region fromMovieSegment(Movie m, int time, int duration) throws QTException {
@@ -182,10 +178,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * This method returns the actual region occupied by the controller and its movie,
      * if the movie is attached to the controller.
-     * @see "QuickTime::MCGetControllerBoundsRgn()"
+     *
      * @param mc the MovieController
      * @return a Region object specifying the boundary region for this controller.
      * @throws quicktime.QTException
+     * @see "QuickTime::MCGetControllerBoundsRgn()"
      * @see quicktime.std.movies.MovieController#getBoundsRgn()
      */
     public static Region fromMovieControllerBounds(MovieController mc) throws QTException {
@@ -197,11 +194,12 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * This method  allows your application to determine the window region that is
      * actually in use by a controller and its movie.
-     * @see "QuickTime::MCGetWindowRgn()"
-     * @param mc the MovieController
+     *
+     * @param mc     the MovieController
      * @param window Specifies the window. This may NOT be null.
      * @return a Region object specifying the window region.
      * @throws quicktime.QTException
+     * @see "QuickTime::MCGetWindowRgn()"
      * @see quicktime.std.movies.MovieController#getWindowRgn(quicktime.qd.QDGraphics)
      */
     public static Region fromMovieControllerWindow(MovieController mc, QDGraphics window) throws QTException {
@@ -223,10 +221,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows you to obtain information describing a movie controller's clipping regions.
-     * @see "QuickTime::MCGetClip()"
+     *
      * @param mc the MovieController
      * @return the clipping region of the entire movie controller
      * @throws quicktime.QTException
+     * @see "QuickTime::MCGetClip()"
      * @see quicktime.std.movies.MovieController#getClip()
      */
     public static Region fromMovieControllerClip(MovieController mc) throws QTException {
@@ -239,28 +238,30 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows you to display a controller's badge.
-     * @see "QuickTime::MCDrawBadge()"
-     * @param mc the MovieController
+     *
+     * @param mc       the MovieController
      * @param movieRgn Specifies the boundary region of the controller's movie.
      * @return A Region that gives information about the location of the badge.
      * @throws quicktime.QTException
+     * @see "QuickTime::MCDrawBadge()"
      * @see quicktime.std.movies.MovieController#drawBadge(quicktime.qd.Region, boolean)
      */
-    public static Region fromMovieControllerBadge(MovieController paramMovieController, Region paramRegion, boolean paramBoolean) throws QTException {
+    public static Region fromMovieControllerBadge(MovieController mc, Region movieRgn, boolean paramBoolean) throws QTException {
         int[] arrayOfInt = null;
         if (paramBoolean) {
             arrayOfInt = new int[1];
         }
-        StdQTException.checkError(MCDrawBadge(QTObject.ID(paramMovieController), QTObject.ID(paramRegion), arrayOfInt));
+        StdQTException.checkError(MCDrawBadge(QTObject.ID(mc), QTObject.ID(movieRgn), arrayOfInt));
         return paramBoolean ? new Region(arrayOfInt[0]) : null;
     }
 
     /**
      * This method allows your application to determine the clipping region of a track.
-     * @see "QuickTime::GetTrackClipRgn()"
+     *
      * @param t the Track
      * @return a Region object specifying the clip region for this track.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetTrackClipRgn()"
      * @see quicktime.std.movies.Track#getClipRgn()
      */
     public static Region fromTrackClip(Track t) throws QTException {
@@ -271,10 +272,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows your application to determine the region a track occupies in a movie's graphics world.
-     * @see "QuickTime::GetTrackDisplayBoundsRgn()"
+     *
      * @param t the Track
      * @return a Region object specifying the track's bounds region.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetTrackDisplayBoundsRgn()"
      * @see quicktime.std.movies.Track#getDisplayBoundsRgn()
      */
     public static Region fromTrackDisplay(Track t) throws QTException {
@@ -285,10 +287,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * This method allows your application to determine the region the track occupies in a movie's boundary region.
-     * @see "QuickTime::GetTrackMovieBoundsRgn()"
+     *
      * @param t the Track
      * @return a Region object specifying the region the track occupies in a movie's boundary region.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetTrackMovieBoundsRgn()"
      * @see quicktime.std.movies.Track#getMovieBoundsRgn()
      */
     public static Region fromTrackMovieBounds(Track t) throws QTException {
@@ -300,10 +303,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * This method allows the media to limit the size of the track boundary rectangle.  Therefore, the region
      * returned by GetTrackBoundsRgn may not be rectangular and may be smaller than the track boundary region.
-     * @see "QuickTime::GetTrackBoundsRgn()"
+     *
      * @param t the Track
      * @return a Region object specifying the region track's media uses to do drawing.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetTrackBoundsRgn()"
      * @see quicktime.std.movies.Track#getBoundsRgn()
      */
     public static Region fromTrackBounds(Track t) throws QTException {
@@ -315,12 +319,13 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * This method allows your application to determine the region a track occupies in a movie's graphics
      * world during a specified segment.
-     * @see "QuickTime::GetTrackSegmentDisplayBoundsRgn()"
-     * @param t the Track
-     * @param time Specifies the starting time of the track segment to consider.
+     *
+     * @param t        the Track
+     * @param time     Specifies the starting time of the track segment to consider.
      * @param duration Specifies the length of the segment to consider. Set this parameter to 0 to
-     *  consider an instant in time.
+     *                 consider an instant in time.
      * @throws quicktime.QTException
+     * @see "QuickTime::GetTrackSegmentDisplayBoundsRgn()"
      * @see quicktime.std.movies.Track#getSegmentDisplayBoundsRgn(int, int)
      */
     public static Region fromTrackSegment(Track t, int time, int duration) throws QTException {
@@ -331,14 +336,15 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Allows you to retrieve a channels clipping region.
-     * @see "QuickTime::SGGetChannelClip"
+     *
      * @param vc the VisualChannel
      * @return the clipping region or null if no clip.
      * @throws quicktime.QTException
+     * @see "QuickTime::SGGetChannelClip"
      * @see quicktime.std.sg.VisualChannel#getClip()
      */
     public static Region fromVideoChannel(VisualChannel vc) throws QTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = SGGetChannelClip(QTObject.ID(vc), arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
@@ -346,6 +352,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Allocates a new empty region.
+     *
      * @see "QuickDraw::NewRgn"
      */
     public Region() throws QTException {
@@ -360,8 +367,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Allocates a new region specified by a rectangle.
-     * @see "QuickDraw::RectRgn"
+     *
      * @param r the specified rectangle
+     * @see "QuickDraw::RectRgn"
      */
     public Region(QDRect r) throws QTException {
         this();
@@ -370,8 +378,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Converts a specified BitMap or PixMap to a region.
-     * @see "QuickDraw::BitMapToRegion"
+     *
      * @param pMap the specified pixmap
+     * @see "QuickDraw::BitMapToRegion"
      */
     public Region(PixMap pMap) throws QTException {
         this();
@@ -393,6 +402,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Returns size of the Region.
+     *
      * @return the size of the handle
      */
     @Override
@@ -402,6 +412,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Returns a copy of the bounding rectangle of the Region.
+     *
      * @return a rect
      */
     public QDRect getRgnBBox() {
@@ -417,6 +428,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Returns a copy of the bounding rectangle of the Region.
+     *
      * @return a rect
      */
     public QDRect getBounds() {
@@ -426,9 +438,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Begins the recording of lines or frames in the specified QDGraphics that when closed
      * will define a Region.
-     * @see "QuickDraw::OpenRgn"
+     *
      * @param graphics the QDGraphics object to record.
      * @throws quicktime.qd.QDException
+     * @see "QuickDraw::OpenRgn"
      */
     public void open(QDGraphics graphics) throws QDException {
         if (graphics == null)
@@ -449,6 +462,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Completes the collection of lines or frames that define the Region.
+     *
      * @see "QuickDraw::CloseRgn"
      */
     public void close() throws QDException {
@@ -468,8 +482,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Resets the mathematical structure to the specified rectangle.
      * Destroys the previous mathematical structure of the implicit region.
-     * @see "QuickDraw::RectRgn"
+     *
      * @param r the specified rectangle
+     * @see "QuickDraw::RectRgn"
      */
     public void rect(QDRect r) {
         RectRgn(_ID(), r.getRect());
@@ -477,10 +492,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Copies the mathematical structure of the implicit region into a newly created region.
-     * @see "QuickDraw::CopyRgn"
-     * @see "QuickDraw::MacCopyRgn"
+     *
      * @return A new region copy.
      * @throws quicktime.QTException
+     * @see "QuickDraw::CopyRgn"
+     * @see "QuickDraw::MacCopyRgn"
      */
     public Region copy() throws QTException {
         int i = NewRgn();
@@ -495,8 +511,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Copies the mathematical structure of the implicit region into a newly created region.
-     * @see "QuickDraw::CopyRgn"
+     *
      * @return A new region copy.
+     * @see "QuickDraw::CopyRgn"
      */
     @Override
     public Object clone() {
@@ -510,6 +527,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Resets the mathematical structure to the rectangle (0,0,0,0).
      * Destroys the previous mathematical structure of the implicit region.
+     *
      * @see "QuickDraw::SetEmptyRgn"
      */
     public void setEmpty() {
@@ -520,12 +538,13 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * Resets the mathematical structure to the specified coordinates and sizes.
      * Destroys the previous mathematical structure of the implicit region.
      * May reset the structure to the rectangle(0,0,0,0), if bad parameters.
+     *
+     * @param x      the specified leftmost position.
+     * @param y      the specified topmost position.
+     * @param width  the specified width.
+     * @param height the specified height.
      * @see "QuickDraw::SetRectRgn"
      * @see "QuickDraw::MacSetRectRgn"
-     * @param x the specified leftmost position.
-     * @param y the specified topmost position.
-     * @param width the specified width.
-     * @param height the specified height.
      */
     public void setRect(int x, int y, int width, int height) {
         int i = height + width;
@@ -539,10 +558,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Moves the region horizontally and vertically by adding the respective parameters to all of the region.
-     * @see "QuickDraw::OffsetRgn"
-     * @see "QuickDraw::MacOffsetRgn"
+     *
      * @param dh the specified horizontal offset.
      * @param dv the specified vertical offset.
+     * @see "QuickDraw::OffsetRgn"
+     * @see "QuickDraw::MacOffsetRgn"
      */
     public void offset(int dh, int dv) {
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
@@ -554,9 +574,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Moves all points on the region boundary horizontally and vertically by adding the respective parameters to those points.
-     * @see "QuickDraw::InsetRgn"
+     *
      * @param dh the specified horizontal inset.
      * @param dv the specified vertical inset.
+     * @see "QuickDraw::InsetRgn"
      */
     public void inset(int dh, int dv) {
         InsetRgn(_ID(), (short) dh, (short) dv);
@@ -565,10 +586,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Calculates the intersection of two regions and creates a new region representing that structure.
      * May return an empty region if no intersection or one of the regions is empty.
-     * @see "QuickDraw::SectRgn"
+     *
      * @param regionB the specified intersecting region.
      * @return The region of intersection.
      * @throws quicktime.QTException
+     * @see "QuickDraw::SectRgn"
      */
     public Region sect(Region regionB) throws QTException {
         int i = NewRgn();
@@ -582,10 +604,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * Calculates the intersection of this region and the incoming QDRect
      * and creates a new region representing that structure.
      * May return an empty region if no intersection or one of the regions is empty.
-     * @see "QuickDraw::SectRgn"
+     *
      * @param r the specified intersecting rect.
      * @return The region of intersection.
      * @throws quicktime.QTException
+     * @see "QuickDraw::SectRgn"
      */
     public Region sect(QDRect r) throws QTException {
         int i = NewRgn();
@@ -605,11 +628,12 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Calculates the union of two regions and creates a new region representing that structure.
      * May return an empty region if both regions are empty.
-     * @see "QuickDraw::UnionRgn"
-     * @see "QuickDraw::MacUnionRgn"
+     *
      * @param regionB the specified region to union with.
      * @return The region of union.
      * @throws quicktime.QTException
+     * @see "QuickDraw::UnionRgn"
+     * @see "QuickDraw::MacUnionRgn"
      */
     public Region union(Region regionB) throws QTException {
         int i = NewRgn();
@@ -626,10 +650,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * Calculates the union of this region and the incoming rect,
      * and creates a new region representing that structure.
      * May return an empty region if both regions are empty.
-     * @see "QuickDraw::UnionRgn"
+     *
      * @param rect the specified rect to union with.
      * @return The region of union.
      * @throws quicktime.QTException
+     * @see "QuickDraw::UnionRgn"
      */
     public Region union(QDRect rect) throws QTException {
         int i = NewRgn();
@@ -649,10 +674,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Calculates the subtracts the specified explicit region from the implicit region and creates a new region representing that structure.
      * May return an empty region if the implicit region is empty.
-     * @see "QuickDraw::DiffRgn"
+     *
      * @param regionB the specified region to find difference with.
      * @return The region of difference.
      * @throws quicktime.QTException
+     * @see "QuickDraw::DiffRgn"
      */
     public Region diff(Region regionB) throws QTException {
         int i = NewRgn();
@@ -665,11 +691,12 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     /**
      * Calculates the difference between the union and intersection of two regions and creates a new region representing that structure.
      * May return an empty region if both regions are coincident.
-     * @see "QuickDraw::XorRgn"
-     * @see "QuickDraw::MacXorRgn"
+     *
      * @param regionB the specified region to xor with.
      * @return The region of exclusively or.
      * @throws quicktime.QTException
+     * @see "QuickDraw::XorRgn"
+     * @see "QuickDraw::MacXorRgn"
      */
     public Region xor(Region regionB) throws QTException {
         int i = NewRgn();
@@ -684,9 +711,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Checks whether the specified rectangle intersects the region.
-     * @see "QuickDraw::RectInRgn"
+     *
      * @param srcRect the specified source rectangle
      * @return True if at least one bit of the rectangle is contained by the region, false otherwise.
+     * @see "QuickDraw::RectInRgn"
      */
     public boolean rectIn(QDRect srcRect) {
         return RectInRgn(srcRect.getRect(), _ID()) != 0;
@@ -694,9 +722,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Compares two regions for sizes, shapes, and locations.
+     *
+     * @return true if both regions' sizes, shapes, and locations are identical, false otherwise.
      * @see "QuickDraw::EqualRgn"
      * @see "QuickDraw::MacEqualRgn"
-     * @return true if both regions' sizes, shapes, and locations are identical, false otherwise.
      */
     public boolean equalRgn(Region paramRegion) {
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
@@ -707,8 +736,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Determines whether a region is empty or not.
-     * @see "QuickDraw::EmptyRgn"
+     *
      * @return True if region is empty, false otherwise.
+     * @see "QuickDraw::EmptyRgn"
      */
     public boolean empty() {
         return EmptyRgn(_ID()) != 0;
@@ -716,9 +746,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Takes the implicit region with one rectangle, maps and scales it to another rectangle.
-     * @see "QuickDraw::MapRgn"
+     *
      * @param srcRect the specified source rectangle
      * @param dstRect the specified destination rectangle
+     * @see "QuickDraw::MapRgn"
      */
     public void map(QDRect srcRect, QDRect dstRect) {
         MapRgn(_ID(), srcRect.getRect(), dstRect.getRect());
@@ -726,9 +757,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Checks whether the pixel below and to the right of the point is within the region.
-     * @see "QuickDraw::PtInRgn"
+     *
      * @param pt the specified point.
      * @return True if pt is contained by the region, false otherwise.
+     * @see "QuickDraw::PtInRgn"
      */
     public boolean pointIn(QDPoint pt) {
         return PtInRgn(pt.getPoint(), _ID()) != 0;
@@ -736,6 +768,7 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
 
     /**
      * Print information about this object.
+     *
      * @return a string representing this Region object
      */
     public String toString() {

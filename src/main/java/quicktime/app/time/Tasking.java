@@ -1,5 +1,8 @@
 package quicktime.app.time;
 
+import java.util.Objects;
+
+
 /**
  * This class implements most of the methods of the Taskable interface,
  * providing an application a default implementation of this.
@@ -72,11 +75,7 @@ public abstract class Tasking implements Taskable {
      * @param tasker the TaskThread to use for tasking
      */
     public void setDefaultTasker(TaskThread tasker) {
-        if (tasker == null) {
-            this.defTasker = Taskable.tasker;
-        } else {
-            this.defTasker = tasker;
-        }
+        this.defTasker = Objects.requireNonNullElse(tasker, Taskable.tasker);
         if ((this.tt != null) && (this.tt != this.defTasker)) {
             this.tt.removeMember(this);
             this.defTasker.addAndStart(this);
@@ -91,4 +90,3 @@ public abstract class Tasking implements Taskable {
         return this.defTasker;
     }
 }
-

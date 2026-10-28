@@ -5,13 +5,12 @@ package quicktime.std.sg;
  */
 public class SGDataSourceInfo {
 
-    public String mName;
+    public final String mName;
 
-    public int mScriptTag;
+    public final int mScriptTag;
 
     SGDataSourceInfo(String paramString, int paramInt) {
         this.mName = paramString;
         this.mScriptTag = paramInt;
     }
 }
-

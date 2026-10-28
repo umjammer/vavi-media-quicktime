@@ -521,4 +521,3 @@ public final class UserData extends QTObject implements QuickTimeLib {
         return MovieToolbox.CopyUserData(paramInt1, paramInt2, paramInt3);
     }
 }
-

@@ -19,11 +19,11 @@ public class QTRuntimeException extends RuntimeException {
      * a potentially serious exception - eg. memFullErr
      * @param e the exception to either handle or throw
      */
-    public static void handleOrThrow(QTRuntimeException paramQTRuntimeException, Object paramObject, String paramString) {
+    public static void handleOrThrow(QTRuntimeException e, Object paramObject, String paramString) {
         if (handler == null)
-            throw paramQTRuntimeException;
-        boolean bool = paramQTRuntimeException.errorCode() == -108;
-        handler.exceptionOccurred(paramQTRuntimeException, paramObject, paramString, bool);
+            throw e;
+        boolean bool = e.errorCode() == -108;
+        handler.exceptionOccurred(e, paramObject, paramString, bool);
     }
 
     /**
@@ -110,4 +110,3 @@ public class QTRuntimeException extends RuntimeException {
         return getClass().getName() + QTBuild.info() + str + ",QT.vers:" + Integer.toHexString(QTSession.getQTVersion());
     }
 }
-

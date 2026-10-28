@@ -1,8 +1,7 @@
 package quicktime.std.anim;
 
 import java.awt.Dimension;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
@@ -20,24 +19,13 @@ import quicktime.util.EncodedImage;
 import quicktime.util.IntEncodedImage;
 import quicktime.util.RawEncodedImage;
 
+
 /**
  * The Sprite class implements the corresponding data structure of the Movie Toolbox.
  */
 public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jdirect.PrimitivesLib {
 
-    private static Object linkage;
-
     private SpriteWorld sw;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Sprite.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     Sprite(int paramInt, SpriteWorld paramSpriteWorld) throws QTException {
         super(paramInt);
@@ -46,13 +34,14 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This constructor creates a new Sprite object for a specified sprite world.
-     * @see "QuickTime::NewSprite()"
+     *
      * @param itsSpriteWorld Specifies the sprite world.
-     * @param idh an ImageDescription object that describes the image.
-     * @param imageData Contains the sprite's image data.
-     * @param matrix A Matrix object describing the sprite's matrix.
-     * @param visible True if the sprite is visible.
-     * @param layer The sprite's layer.
+     * @param idh            an ImageDescription object that describes the image.
+     * @param imageData      Contains the sprite's image data.
+     * @param matrix         A Matrix object describing the sprite's matrix.
+     * @param visible        True if the sprite is visible.
+     * @param layer          The sprite's layer.
+     * @see "QuickTime::NewSprite()"
      */
     public Sprite(SpriteWorld itsSpriteWorld, ImageDescription idh, EncodedImage imageData, Matrix matrix, boolean visible, int layer) throws QTException {
         super(allocate(itsSpriteWorld, idh, imageData, matrix, visible, layer));
@@ -86,6 +75,7 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
     /**
      * This method invalidates the portion of the sprite's sprite world which is occupied
      * by the sprite.
+     *
      * @see "QuickTime::InvalidateSprite ()"
      */
     public void invalidate() {
@@ -96,14 +86,15 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method tests if a point is inside a sprite.
-     * @see "QuickTime::SpriteHitTest ()"
+     *
      * @param flags Specifies the control flags.
-     * @param loc Specifies the test point.
+     * @param loc   Specifies the test point.
      * @return true if the point is inside the sprite, false if not.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SpriteHitTest ()"
      */
     public boolean hitTest(int flags, QDPoint loc) throws StdQTException {
-        byte[] arrayOfByte = { 0 };
+        byte[] arrayOfByte = {0};
         synchronized (QTNative.globalsLock) {
             StdQTException.checkError(SpriteHitTest(_ID(), flags, loc.getPoint(), arrayOfByte));
         }
@@ -112,9 +103,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the matrix property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the matrix.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public Matrix getMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
@@ -127,9 +119,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method sets the matrix property of this sprite.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param matrix Specifies the matrix.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setMatrix(Matrix matrix) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -140,25 +133,25 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the image description property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the image description.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public ImageDescription getImageDescription() throws StdQTException {
         return ImageDescription.fromSprite(this);
     }
 
     /**
-     * @deprecated
-     * <I>since QTJava 4.0</I>
-     * This method returns the original width and height of the image currently being
-     * presented by the sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
      * @return a Dimension
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
+     * @deprecated <I>since QTJava 4.0</I>
+     * This method returns the original width and height of the image currently being
+     * presented by the sprite.
      */
     public Dimension getInitialSize() throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
             StdQTException.checkError(i);
@@ -169,12 +162,13 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
     /**
      * This method returns the original width and height of the image currently being
      * presented by the sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return a QDDimension
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public QDDimension getOriginalSize() throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
             StdQTException.checkError(i);
@@ -184,12 +178,13 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method sets the image description property of this sprite.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param idh Specifies the image description.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setImageDescription(ImageDescription idh) throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
             StdQTException.checkError(i);
@@ -202,9 +197,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the image data property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the image data.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public RawEncodedImage getImageData() throws StdQTException {
         return RawEncodedImage.fromSprite(this);
@@ -215,9 +211,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * It will also set the size of the image data to the size of the pointer. If the
      * actual size of the image data is smaller than the handle you should set the
      * imageDataSize after this call to the desired size.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param data Specifies the image data.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setImageData(EncodedImage data) throws StdQTException {
         int i = -50;
@@ -239,17 +236,18 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * It will also set the size of the image data to the size of the pointer. If the
      * actual size of the image data is smaller than the handle you should set the
      * imageDataSize after this call to the desired size.
-     *
+     * <p>
      * This method can be useful to use if the SpriteWorld the Sprite is a member of
      * should be redrawn after changing the image data of a Sprite.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param data Specifies the image data.
      * @return a boolean which indicates if the incoming image data is different (true)
-     *  than the previous data the sprite was presented.
+     * than the previous data the sprite was presented.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public boolean setImageDataIfDifferent(EncodedImage data) throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = 0;
         synchronized (QTNative.globalsLock) {
             i = GetSpriteProperty(_ID(), 3, arrayOfInt);
@@ -266,7 +264,7 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
             }
             StdQTException.checkError(i);
         }
-        int[] ai1 = new int[] { 0 };
+        int[] ai1 = new int[] {0};
         GetSpriteProperty(_ID(), 3, ai1);
         if (ai1[0] != arrayOfInt[0]) {
             setImageDataSize(data.getSize());
@@ -277,12 +275,13 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the visibility property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the visibility.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public boolean getVisible() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
+        byte[] arrayOfByte = {0};
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 4, arrayOfByte);
             StdQTException.checkError(i);
@@ -292,9 +291,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method sets the visibility property of this sprite.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param visible Specifies the visibility.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setVisible(boolean visible) throws StdQTException {
         int i = (byte) (visible ? 1 : 0);
@@ -306,12 +306,13 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the layer property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the layer.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public int getLayer() throws StdQTException {
-        short[] arrayOfShort = { 0 };
+        short[] arrayOfShort = {0};
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 5, arrayOfShort);
             StdQTException.checkError(i);
@@ -321,9 +322,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method sets the layer property of this sprite.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param layer Specifies the layer.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setLayer(int layer) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -334,9 +336,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the graphics mode property of this sprite.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the graphics mode.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public GraphicsMode getGraphicsMode() throws StdQTException {
         GraphicsMode localGraphicsMode = new GraphicsMode();
@@ -349,9 +352,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method sets the graphics mode property of this sprite.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param gMode Specifies the graphics mode.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setGraphicsMode(GraphicsMode gMode) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -364,12 +368,13 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     /**
      * This method gets the size of the image data that a sprite is currently displaying.
-     * @see "QuickTime::GetSpriteProperty ()"
+     *
      * @return the size of the image data
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetSpriteProperty ()"
      */
     public int getImageDataSize() throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         synchronized (QTNative.globalsLock) {
             int i = GetSpriteProperty(_ID(), 7, arrayOfInt);
             StdQTException.checkError(i);
@@ -380,9 +385,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
     /**
      * This method sets the size of the image data that the sprite is currently displaying.
      * If you know the size of the image data it is recommended that you set this.
-     * @see "QuickTime::SetSpriteProperty ()"
+     *
      * @param size the size of the image data
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setImageDataSize(int size) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -396,6 +402,7 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * internal structures. The Sprite is not usuable after this call.
      * If you have any other java objects that refer to this sprite, they will also be unusable
      * - so use this call with care.
+     *
      * @see "QuickTime::DisposeSprite ()"
      */
     public void remove() {
@@ -404,8 +411,8 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
         }
         this.sw = null;
         try {
-            finalize();
-        } catch (Throwable localThrowable) {
+            _dispose();
+        } catch (Throwable _) {
         }
     }
 

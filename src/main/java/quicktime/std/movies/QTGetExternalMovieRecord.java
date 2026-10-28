@@ -1,28 +1,15 @@
 package quicktime.std.movies;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.util.QTPointerRef;
 
-public final class QTGetExternalMovieRecord extends QTPointerRef implements quicktime.jdirect.PrimitivesLib {
 
-    private static Object linkage;
+public final class QTGetExternalMovieRecord extends QTPointerRef implements quicktime.jdirect.PrimitivesLib {
 
     /**
      * This is the size (the number of bytes) that are required for this class
      */
     public static final int kNativeSize = 20;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTGetExternalMovieRecord.class));
-            }
-        }.establish();
-    }
 
     QTGetExternalMovieRecord(int paramInt, Object paramObject) {
         super(paramInt, 20, paramObject);

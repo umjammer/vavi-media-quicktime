@@ -31,4 +31,3 @@ public interface SGDataProc {
      */
     int execute(SGChannel chan, QTPointerRef dataToWrite, int offset, int chRefCon, int time, int writeType) throws QTException;
 }
-

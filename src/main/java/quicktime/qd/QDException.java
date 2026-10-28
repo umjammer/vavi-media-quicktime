@@ -35,4 +35,3 @@ public class QDException extends QTException {
             throw new QDException(err);
     }
 }
-

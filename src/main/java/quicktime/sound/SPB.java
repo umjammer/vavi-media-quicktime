@@ -1,13 +1,11 @@
 package quicktime.sound;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.SoundManager;
-import quicktime.jdirect.QTNative;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTPointerRef;
+
 
 /**
  * The SPB class is used in conjunction with a SPBDevice to record sound.
@@ -15,8 +13,6 @@ import quicktime.util.QTPointerRef;
  * and a buffer of memory where the recorded sound is recorded.
  */
 public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTimeLib, quicktime.jdirect.PrimitivesLib {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -31,27 +27,18 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     private final quicktime.util.QTPointer realObject;
 
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SPB.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     /**
      * Create a SPB.
-     * @param device the SPBDevice that is to be used for recording the sound
-     * @param count how many bytes of data to record
+     *
+     * @param device       the SPBDevice that is to be used for recording the sound
+     * @param count        how many bytes of data to record
      * @param milliseconds On input, the number of milliseconds to record. If this field indicates a longer recording time than the count field, then the count field is ignored.
-     * @param buffer A QTPointer to the buffer for the sampled-sound data. If this buffer length is too small to contain the amount of sampled-sound data specified in the count and milliseconds fields, then recording time is truncated so that the sampled-sound data fits in the buffer.
+     * @param buffer       A QTPointer to the buffer for the sampled-sound data. If this buffer length is too small to contain the amount of sampled-sound data specified in the count and milliseconds fields, then recording time is truncated so that the sampled-sound data fits in the buffer.
      */
     public SPB(SPBDevice device, int count, int milliseconds, QTPointerRef buffer) {
-        super(38);
+        super(kNativeSize);
         try {
-            this.realObject = new quicktime.util.QTPointer(38, true);
+            this.realObject = new quicktime.util.QTPointer(kNativeSize, true);
         } catch (quicktime.QTException localQTException) {
             throw new quicktime.QTRuntimeException(localQTException);
         }
@@ -86,6 +73,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Get the number of bytes that are or were recorded.
+     *
      * @return number of bytes
      */
     public int getCount() {
@@ -94,6 +82,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Sets the number of bytes that are to be recorded.
+     *
      * @param count number of bytes
      */
     public void setCount(int count) {
@@ -103,6 +92,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Get the number of bytes that are or were recorded.
+     *
      * @return number of bytes
      */
     public int getBufferLength() {
@@ -111,6 +101,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Get the the number of milliseconds that are or were recorded.
+     *
      * @return number of milliseconds
      */
     public int getMilliseconds() {
@@ -119,6 +110,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Sets the the number of milliseconds that are to be recorded.
+     *
      * @param msecs milliseconds
      */
     public void setMilliseconds(int msecs) {
@@ -128,6 +120,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Gets the device that is attached to this object.
+     *
      * @return the SPBDevice
      */
     public SPBDevice getDevice() {
@@ -136,6 +129,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Sets the buffer that the device will record into.
+     *
      * @param buffer the record buffer
      */
     public void setBuffer(QTPointerRef buffer) {
@@ -172,9 +166,10 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * After recording the buffer contains the recorded bytes, the count how many
      * bytes were recorded, the milliseconds how many milliseconds of sound were
      * recorded based on the current settings of the device.
-     * @see "QuickTime::SPBRecord"
+     *
      * @param flag if true record asynchronously, if false records synchronously.
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SPBRecord"
      */
     public void record(boolean flag) throws SoundException {
         int i = 0;
@@ -189,6 +184,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Pause recording from a sound input device.
+     *
      * @see "QuickTime::SPBPauseRecording"
      */
     public void pauseRecording() throws SoundException {
@@ -197,6 +193,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * Pause recording from a sound input device.
+     *
      * @see "QuickTime::SPBResumeRecording"
      */
     public void resumeRecording() throws SoundException {
@@ -207,6 +204,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * End a recording from a sound input device. If you call the checkError
      * instance method you will get an abortErr exception which indicates
      * that the recording was stopped by calling this method.
+     *
      * @see "QuickTime::SPBStopRecording"
      */
     public void stopRecording() throws SoundException {
@@ -219,6 +217,7 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
      * When a recording terminates without an error, this call false.
      * When an error occurs during recording or the recording has been terminated
      * by a call to the SPBStopRecording function (abortErr), this call throws an exception.
+     *
      * @see "QuickTime::SPBGetRecordingStatus"
      */
     public boolean isRecording() throws SoundException {
@@ -233,9 +232,10 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
     /**
      * The level of the meter.
      * While the input device is recording, this call returns the level.
-     * @see "QuickTime::SPBGetRecordingStatus"
+     *
      * @return the current meter level
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SPBGetRecordingStatus"
      */
     public short meterLevel() throws SoundException {
         getRecordingStatus();
@@ -244,9 +244,10 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of samples to record.
-     * @see "QuickTime::SPBGetRecordingStatus"
+     *
      * @return the total number of samples to record
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SPBGetRecordingStatus"
      */
     public int totalSamplesToRecord() throws SoundException {
         getRecordingStatus();
@@ -255,9 +256,10 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of samples recorded.
-     * @see "QuickTime::SPBGetRecordingStatus"
+     *
      * @return the total number of samples recorded
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SPBGetRecordingStatus"
      */
     public int numberOfSamplesRecorded() throws SoundException {
         getRecordingStatus();
@@ -266,9 +268,10 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of msecs to record.
-     * @see "QuickTime::SPBGetRecordingStatus"
+     *
      * @return the total number of msecs to record
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SPBGetRecordingStatus"
      */
     public int totalMsecsToRecord() throws SoundException {
         getRecordingStatus();
@@ -277,26 +280,27 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
 
     /**
      * The total number of msecs recorded.
-     * @see "QuickTime::SPBGetRecordingStatus"
+     *
      * @return the total number of msecs recorded
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SPBGetRecordingStatus"
      */
     public int numberOfMsecsRecorded() throws SoundException {
         getRecordingStatus();
         return this.numberOfMsecsRecordedVal[0];
     }
 
-    private final short[] recordingStatus = { 0 };
+    private final short[] recordingStatus = {0};
 
-    private final short[] meterLevelValue = { 0 };
+    private final short[] meterLevelValue = {0};
 
-    private final int[] totalSamplesToRecordVal = { 0 };
+    private final int[] totalSamplesToRecordVal = {0};
 
-    private final int[] numberOfSamplesRecordedVal = { 0 };
+    private final int[] numberOfSamplesRecordedVal = {0};
 
-    private final int[] totalMsecsToRecordVal = { 0 };
+    private final int[] totalMsecsToRecordVal = {0};
 
-    private final int[] numberOfMsecsRecordedVal = { 0 };
+    private final int[] numberOfMsecsRecordedVal = {0};
 
     private void getRecordingStatus() throws SoundException {
         int i = SPBGetRecordingStatus(getIntFromPointer(QTObject.ID(this.realObject), 0), this.recordingStatus, this.meterLevelValue, this.totalSamplesToRecordVal, this.numberOfSamplesRecordedVal, this.totalMsecsToRecordVal, this.numberOfMsecsRecordedVal);

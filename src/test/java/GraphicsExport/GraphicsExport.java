@@ -14,8 +14,6 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -37,7 +35,7 @@ import quicktime.std.image.GraphicsImporter;
 
 public class GraphicsExport extends Frame implements StdQTConstants, IOConstants, Errors {
 
-    Frame frame;
+    final Frame frame;
 
     static void main(String[] args) {
         try {
@@ -53,7 +51,6 @@ public class GraphicsExport extends Frame implements StdQTConstants, IOConstants
             QTSession.close();
         }
     }
-
 
     GraphicsExport(String title) throws QTException {
         super(title);
@@ -126,8 +123,8 @@ public class GraphicsExport extends Frame implements StdQTConstants, IOConstants
 
     static class WriteToFile implements Runnable {
 
-        Frame parent;
-        GraphicsImporter gi;
+        final Frame parent;
+        final GraphicsImporter gi;
 
         WriteToFile(Frame parent, GraphicsImporter gi) {
             super();

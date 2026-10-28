@@ -1,17 +1,12 @@
 
 package quicktime.std.movies;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 
 
 final class IdleDispatcher implements PrimitivesLib, InterfaceLib {
-    private static Object linkage;
 
     private final String methodName;
 
@@ -22,14 +17,6 @@ final class IdleDispatcher implements PrimitivesLib, InterfaceLib {
     private IdleMethodClosure mMethodClosure;
 
     private final NextTaskNeededSooner tns;
-
-    static {
-        new Object() {
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(IdleDispatcher.class));
-            }
-        }.establish();
-    }
 
     IdleDispatcher(NextTaskNeededSooner paramNextTaskNeededSooner) {
         this.methodName = "NewQTNextTaskNeededSoonerCallbackProc";

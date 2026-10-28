@@ -66,7 +66,7 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
@@ -300,4 +300,3 @@ public final class QTVRLinkHotSpot extends QTVRAtom {
         return getClass().getName() + "[toNodeID=" + getToNodeID() + ",fromValidFlags=" + getFromValidFlags() + ",fromPan=" + getFromPan() + ",fromTilt" + getFromTilt() + ",fromFOV" + getFromFOV() + ",fromViewCenter" + getFromViewCenter() + ",toValidFlags" + getToValidFlags() + ",toPan" + getToPan() + ",toTilt" + getToTilt() + ",toFOV" + getToFOV() + ",toViewCenter" + getToViewCenter() + ",distance" + getDistance() + ",flags" + getFlags() + "]";
     }
 }
-

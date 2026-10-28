@@ -75,7 +75,7 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
     int hWnd = 0;
 
     @Override
-    public final QDGraphics getGWorld() throws NativeGraphicsException {
+    public QDGraphics getGWorld() throws NativeGraphicsException {
         return QDGraphics.fromNativeGraphics(this);
     }
 
@@ -103,9 +103,8 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
     }
 
     @Override
-    protected void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         removeContext();
-        super.finalize();
     }
 
     public String toString() {

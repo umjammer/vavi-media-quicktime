@@ -33,4 +33,3 @@ public interface MovieProgress {
      */
     int execute(Movie theMovie, int message, int whatOperation, float percentDone);
 }
-

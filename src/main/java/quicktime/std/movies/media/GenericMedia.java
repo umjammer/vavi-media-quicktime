@@ -65,4 +65,3 @@ public class GenericMedia extends Media {
         return new MediaHandler(paramInt, paramObject);
     }
 }
-

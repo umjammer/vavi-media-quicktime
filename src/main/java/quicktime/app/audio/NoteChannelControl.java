@@ -69,7 +69,7 @@ public class NoteChannelControl implements MusicPart {
         this.vol = getVolume();
     }
 
-    private final Vector activeNotes = new Vector();
+    private final Vector<EndNote> activeNotes = new Vector<>();
 
     /**
      * @deprecated
@@ -238,8 +238,8 @@ public class NoteChannelControl implements MusicPart {
         public void execute() {
             try {
                 this.nc.playNote(this.note, 0);
-            } catch (QTException localQTException1) {
-                localQTException1.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             } finally {
                 NoteChannelControl.this.activeNotes.removeElement(this);
                 if (NoteChannelControl.this.activeNotes.isEmpty()) {
@@ -256,8 +256,8 @@ public class NoteChannelControl implements MusicPart {
         public boolean equals(Object paramObject) {
             if (paramObject == this)
                 return true;
-            if ((paramObject instanceof EndNote localEndNote)) {
-                return (this.value == localEndNote.value) && (this.note == localEndNote.note) && (this.nc.equals(localEndNote.nc));
+            if ((paramObject instanceof EndNote endNote)) {
+                return (this.value == endNote.value) && (this.note == endNote.note) && (this.nc.equals(endNote.nc));
             }
             return false;
         }
@@ -270,8 +270,8 @@ public class NoteChannelControl implements MusicPart {
 
         @Override
         public void timeChanged(int paramInt) throws QTException {
-            Enumeration localEnumeration = NoteChannelControl.this.activeNotes.elements();
-            while (localEnumeration.hasMoreElements()) ((NoteChannelControl.EndNote) localEnumeration.nextElement()).execute();
+            Enumeration<EndNote> localEnumeration = NoteChannelControl.this.activeNotes.elements();
+            while (localEnumeration.hasMoreElements()) localEnumeration.nextElement().execute();
         }
 
         @Override
@@ -280,15 +280,9 @@ public class NoteChannelControl implements MusicPart {
         }
     }
 
-    /**
-     * @deprecated
-     * java.lang.Throwable
-     */
-    @Override
-    protected final void finalize() throws Throwable {
-        Enumeration localEnumeration = this.activeNotes.elements();
-        while (localEnumeration.hasMoreElements()) ((EndNote) localEnumeration.nextElement()).cancelAndCleanup();
+    protected final void dispose() throws Throwable {
+        Enumeration<EndNote> localEnumeration = this.activeNotes.elements();
+        while (localEnumeration.hasMoreElements()) localEnumeration.nextElement().cancelAndCleanup();
         this.activeNotes.removeAllElements();
-        super.finalize();
     }
 }

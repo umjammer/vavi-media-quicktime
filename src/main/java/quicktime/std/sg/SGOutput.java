@@ -1,17 +1,15 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.SequenceGrabberManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.media.DataRef;
 import quicktime.util.QTUtils;
+
 
 /**
  * Assists in capturing to Multiple files.
@@ -22,18 +20,7 @@ import quicktime.util.QTUtils;
  */
 public final class SGOutput extends QTObject implements QuickTimeLib, PrimitivesLib {
 
-    private static Object linkage;
-
     private SequenceGrabber owner;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGOutput.class));
-            }
-        }.establish();
-    }
 
     /**
      * The SGNewOutput function creates a new sequence grabber output. You specify
@@ -41,11 +28,11 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * created the sequence grabber output, you can use the SGSetChannelOutput
      * function to assign the output to a sequence grabber channel.
      *
-     * @see "QuickTime::SGNewOutput"
-     * @param owner your connection to the sequence grabber.
-     * @param dataRef A handle to the destination container.
+     * @param owner      your connection to the sequence grabber.
+     * @param dataRef    A handle to the destination container.
      * @param whereFlags that control the record operation. You must set either
-     *  seqGrabToDisk or seqGrabToMemory to 1. Set unused flags to 0.
+     *                   seqGrabToDisk or seqGrabToMemory to 1. Set unused flags to 0.
+     * @see "QuickTime::SGNewOutput"
      */
     public SGOutput(SequenceGrabber owner, DataRef dataRef, int whereFlags) throws StdQTException {
         super(allocate(owner, QTObject.ID(dataRef), dataRef.getType(), whereFlags), owner);
@@ -63,7 +50,7 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
     }
 
     private static int allocate(SequenceGrabber paramSequenceGrabber, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = SGNewOutput(QTObject.ID(paramSequenceGrabber), paramInt1, paramInt2, paramInt3, arrayOfInt);
         StdQTException.checkError(i);
         return arrayOfInt[0];
@@ -77,6 +64,7 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
 
     /**
      * Disposes of an output associated with a sequence grabber.
+     *
      * @see "QuickTime::SGDisposeOutput"
      */
     @Override
@@ -89,9 +77,9 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
     }
 
     /**
-     * @see "QuickTime::SGSetOutputMaximumOffset"
      * @param maxOffset the maximum offset for data written to this output.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetOutputMaximumOffset"
      */
     public void setMaximumOffset(long maxOffset) throws StdQTException {
         byte[] arrayOfByte = new byte[8];
@@ -111,9 +99,9 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
     }
 
     /**
-     * @see "QuickTime::SGSetOutputFlags"
      * @param whereFlags determines where the output is sent, eg seqGrabToDisk
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetOutputFlags"
      */
     public void setOutputFlags(int whereFlags) throws StdQTException {
         int i = SGSetOutputFlags(QTObject.ID(this.owner), _ID(), whereFlags);
@@ -121,9 +109,9 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
     }
 
     /**
-     * @see "QuickTime::SGSetChannelOutput"
      * @param c the channel you want to assign the output to
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetChannelOutput"
      */
     public void setChannel(SGChannel c) throws StdQTException {
         int i = SGSetChannelOutput(QTObject.ID(this.owner), QTObject.ID(c), _ID());
@@ -134,7 +122,7 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @see "QuickTime::SGGetDataOutputStorageSpaceRemaining"
      */
     public long getDataStorageSpaceRemaining() throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = SGGetDataOutputStorageSpaceRemaining(QTObject.ID(this.owner), _ID(), arrayOfInt);
         StdQTException.checkError(i);
         return QTUtils.UInt2Long(arrayOfInt[0]);
@@ -144,16 +132,16 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @see "QuickTime::SGGetOutputNextOutput("
      */
     public SGOutput getNextOutput() throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         int i = SGGetOutputNextOutput(QTObject.ID(this.owner), _ID(), arrayOfInt);
         StdQTException.checkError(i);
         return new SGOutput(arrayOfInt[0], this.owner);
     }
 
     /**
-     * @see "QuickTime::SGSetOutputNextOutput("
      * @param nextOutput specifies the next output to be used after the output represented by this object.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetOutputNextOutput("
      */
     public void setNextOutput(SGOutput nextOutput) throws StdQTException {
         int i = SGSetOutputNextOutput(QTObject.ID(this.owner), _ID(), QTObject.ID(nextOutput));
@@ -211,4 +199,3 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
         return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
     }
 }
-

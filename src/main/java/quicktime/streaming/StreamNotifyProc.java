@@ -114,12 +114,12 @@ public abstract class StreamNotifyProc {
      * This method should be overridden to handle the following notification types:
      * kQTSDurationNotification
      *
-     * @param type the type of notification
-     * @param flags the notification flags
+     * @param type     the type of notification
+     * @param flags    the notification flags
      * @param duration the duration
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int paramInt1, int paramInt2, int paramInt3, long paramLong) {
+    public int execute(int type, int flags, int paramInt3, long duration) {
         return 0;
     }
 

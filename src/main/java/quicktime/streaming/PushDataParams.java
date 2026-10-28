@@ -5,10 +5,11 @@ import quicktime.QTObject;
 import quicktime.std.movies.media.SampleDescription;
 import quicktime.util.QTPointer;
 
+
 /**
  * This class provides a representation the native QTSPushDataParams structure
  * that provides settings for pushing data from the Sourcer
- *
+ * <p>
  * When configuring the Sourcer for use with Push Data, you may send arbitrary
  * data. You need to provide a sample descripion and a data pointer. The time
  * stamp is optional. If you do not provide this time stamp, the current time
@@ -35,11 +36,12 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Constructs an PushDataParams object based on the native QTSPushDataParams structure
+     *
      * @param vers version of the params structure
      */
-    public PushDataParams(int paramInt1, SampleDescription paramSampleDescription, int paramInt2, long paramLong1, long paramLong2, QTPointer paramQTPointer) throws QTException {
+    public PushDataParams(int vers, SampleDescription paramSampleDescription, int paramInt2, long paramLong1, long paramLong2, QTPointer paramQTPointer) throws QTException {
         super(40, true);
-        setVersion(paramInt1);
+        setVersion(vers);
         setSampleDescription(paramSampleDescription);
         setSampleDescSeed(paramInt2);
         setSampleTime(paramLong1);
@@ -49,15 +51,17 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Constructs an PushDataParams object based on the native QTSPushDataParams structure
+     *
      * @param vers version of the params structure
      */
-    public PushDataParams(int paramInt1, SampleDescription paramSampleDescription, int paramInt2, QTPointer paramQTPointer) throws QTException {
-        this(paramInt1, paramSampleDescription, paramInt2, 0L, 0L, paramQTPointer);
+    public PushDataParams(int vers, SampleDescription paramSampleDescription, int paramInt2, QTPointer paramQTPointer) throws QTException {
+        this(vers, paramSampleDescription, paramInt2, 0L, 0L, paramQTPointer);
         setFlags(0);
     }
 
     /**
      * Sets the version of the push data params object
+     *
      * @param vers version
      */
     public void setVersion(int vers) {
@@ -66,6 +70,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Gets the version of the push data params object
+     *
      * @return version
      */
     public int getVersion() {
@@ -74,6 +79,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Sets the flags of the push data object
+     *
      * @param flags sourcer callback flags
      */
     public void setFlags(int flags) {
@@ -89,6 +95,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Set the sample description of the push data
+     *
      * @param sampleDesc sample description
      */
     public void setSampleDescription(SampleDescription sampleDesc) {
@@ -98,6 +105,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Get the sample description of the push data
+     *
      * @return sample description
      */
     public SampleDescription getSampleDescription() {
@@ -106,6 +114,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Set sample description seed of the push data
+     *
      * @param seed sample description seed
      */
     public void setSampleDescSeed(int seed) {
@@ -114,6 +123,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Get sample description seed of the push data
+     *
      * @return sample description seed
      */
     public int getSampleDescSeed() {
@@ -122,8 +132,9 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Set sample time of the push data
+     *
      * @param time sample time
-     *  NOTE: This function automatically adds kQTSPushDataFlag_SampleTimeIsValid to the flags
+     *             NOTE: This function automatically adds kQTSPushDataFlag_SampleTimeIsValid to the flags
      */
     public void setSampleTime(long time) {
         setLongAt(16, time);
@@ -132,6 +143,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Get sample time of the push data
+     *
      * @return sample time
      */
     public long getSampleTime() {
@@ -140,8 +152,9 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Set duration of the push data
+     *
      * @param duration duration
-     *  NOTE: This function automatically adds kQTSPushDataFlag_DurationIsValid to the flags
+     *                 NOTE: This function automatically adds kQTSPushDataFlag_DurationIsValid to the flags
      */
     public void setDuration(long duration) {
         setLongAt(24, duration);
@@ -150,6 +163,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Get duration of the push data
+     *
      * @return duration
      */
     public long getDuration() {
@@ -158,6 +172,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Sets the push data
+     *
      * @param data push data
      */
     public void setDataPtr(QTPointer data) {
@@ -168,6 +183,7 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Gets the push data
+     *
      * @return data
      */
     public QTPointer getDataPtr() {
@@ -176,9 +192,18 @@ public final class PushDataParams extends QTPointer {
 
     /**
      * Returns a string representation of this object.
+     *
      * @return a String
      */
     public String toString() {
-        return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",sampleDescription=" + getSampleDescription() + ",sampleDescriptionSeed=" + getSampleDescSeed() + ",sampleTime=" + getSampleTime() + ",duration=" + getDuration() + ",dataPtr=" + getDataPtr() + "]";
+        return getClass().getName() +
+                "[version=" + getVersion() +
+                ",flags=" + getFlags() +
+                ",sampleDescription=" + getSampleDescription() +
+                ",sampleDescriptionSeed=" + getSampleDescSeed() +
+                ",sampleTime=" + getSampleTime() +
+                ",duration=" + getDuration() +
+                ",dataPtr=" + getDataPtr() +
+                "]";
     }
 }

@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.internal.toolbox.MovieToolbox;
 import quicktime.internal.toolbox.QuickDrawManager;
@@ -34,23 +33,13 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTHandleRef;
 import quicktime.util.RawEncodedImage;
 
+
 /**
  * The Pict class represents sequences of drawing commands, while providing a common medium for sharing image data.
  * Methods are implemented for a corresponding QuickDraw structure used by QuickTime.
  * refer to Pictures in QuickDraw
  */
 public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, QTStreamingLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Pict.class));
-            }
-        }.establish();
-    }
 
     private static final int kNativeSize = 10;
 
@@ -168,9 +157,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.sg.SequenceGrabber#grabPict(quicktime.qd.QDRect, int, int)
      */
-    public static Pict fromSequenceGrabber(SequenceGrabber paramSequenceGrabber, QDRect paramQDRect, int paramInt1, int paramInt2) throws QTException {
+    public static Pict fromSequenceGrabber(SequenceGrabber paramSequenceGrabber, QDRect bounds, int offscreenDepth, int grabPictFlags) throws QTException {
         int[] arrayOfInt = new int[1];
-        int i = SGGrabPict(QTObject.ID(paramSequenceGrabber), arrayOfInt, paramQDRect.getRect(), (short) paramInt1, paramInt2);
+        int i = SGGrabPict(QTObject.ID(paramSequenceGrabber), arrayOfInt, bounds.getRect(), (short) offscreenDepth, grabPictFlags);
         StdQTException.checkError(i);
         return arrayOfInt[0] == 0 ? null : new Pict(arrayOfInt[0]);
     }
@@ -211,9 +200,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.ImageCompressionDialog#compressPicture(quicktime.qd.Pict)
      */
-    public static Pict fromImageCompressionDialog(ImageCompressionDialog paramImageCompressionDialog, Pict paramPict) throws QTException {
+    public static Pict fromImageCompressionDialog(ImageCompressionDialog paramImageCompressionDialog, Pict src) throws QTException {
         Pict localPict = new Pict(4, true);
-        int i = SCCompressPicture(QTObject.ID(paramImageCompressionDialog), QTObject.ID(paramPict), QTObject.ID(localPict));
+        int i = SCCompressPicture(QTObject.ID(paramImageCompressionDialog), QTObject.ID(src), QTObject.ID(localPict));
         if (i == 1)
             throw new StdQTException(-128);
         StdQTException.checkError(i);
@@ -226,7 +215,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @param file the PICT file
      * @return a Pict
      * @throws quicktime.QTException
-     * @return java.io.IOException
+     * @throws java.io.IOException
      */
     public static Pict fromFile(File file) throws QTException, IOException {
         FileInputStream localFileInputStream = new FileInputStream(file);
@@ -352,7 +341,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * Returns the result in a new picture.
      * @see "QuickTime::FCompressPicture()"
      * @param colorDepth Specifies the depth at which the image is to be compressed
-     *          // * @param clut Specifies the custom color lookup table. Uses source color table only.
+     * param clut Specifies the custom color lookup table. Uses source color table only.
      * @param quality Specifies the desired compressed image quality
      * @param doDither Specifies whether to dither or not
      * @param compressAgain Indicates whether to recompress compressed image data in the picture
@@ -361,11 +350,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @return dstPicture The destination compressed image
      * @throws quicktime.QTException
      */
-    public Pict fCompress(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) throws QTException {
+    public Pict fCompress(int colorDepth, int quality, int doDither, int compressAgain, int cType, int codec) throws QTException {
         if (isOpen())
             throw new QDException(-9);
         Pict localPict = new Pict(4, true);
-        QDException.checkError(FCompressPicture(_ID(), QTObject.ID(localPict), (short) paramInt1, 0, paramInt2, (short) paramInt3, (short) paramInt4, 0, paramInt5, paramInt6));
+        QDException.checkError(FCompressPicture(_ID(), QTObject.ID(localPict), (short) colorDepth, 0, quality, (short) doDither, (short) compressAgain, 0, cType, codec));
         return localPict;
     }
 
@@ -451,12 +440,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * Write out the Pict to the specified file.
      * @param file the destination file that the Pict will be written to.
      * @throws quicktime.qd.QDException
-     * @param java.io.IOException
+     * @throws java.io.IOException
      */
-    public void writeToFile(File paramFile) throws QDException, IOException {
+    public void writeToFile(File file) throws QDException, IOException {
         if (isOpen())
             throw new QDException(-9);
-        FileOutputStream localFileOutputStream = new FileOutputStream(paramFile);
+        FileOutputStream localFileOutputStream = new FileOutputStream(file);
         localFileOutputStream.write(new byte[512]);
         byte[] arrayOfByte = getBytes();
         localFileOutputStream.write(arrayOfByte, 0, arrayOfByte.length);
@@ -468,7 +457,10 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @return a string representation of this object
      */
     public String toString() {
-        return super.toString() + "[pictFrame=" + getPictFrame() + ",isOpen=" + isOpen() + "]";
+        return super.toString() +
+                "[pictFrame=" + getPictFrame() +
+                ",isOpen=" + isOpen() +
+                "]";
     }
 
     @Override
@@ -540,8 +532,8 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         return ImageCompressionManager.CompressPicture(paramInt1, paramInt2, paramInt3, paramInt4);
     }
 
-    private static short FCompressPicture(int paramInt1, int paramInt2, short paramShort1, int paramInt3, int paramInt4, short paramShort2, short paramShort3, int paramInt5, int paramInt6, int paramInt7) {
-        return ImageCompressionManager.FCompressPicture(paramInt1, paramInt2, paramShort1, paramInt3, paramInt4, paramShort2, paramShort3, paramInt5, paramInt6, paramInt7);
+    private static short FCompressPicture(int srcPicture, int dstPicture, short colorDepth, int ctable, int quality, short doDither, short compressAgain, int progressProc, int cType, int codec) {
+        return ImageCompressionManager.FCompressPicture(srcPicture, dstPicture, colorDepth, ctable, quality, doDither, compressAgain, progressProc, cType, codec);
     }
 
     private static void DrawPicture(int paramInt, byte[] paramArrayOfByte) {

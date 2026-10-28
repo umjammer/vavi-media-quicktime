@@ -7,9 +7,9 @@ import quicktime.util.QTUtils;
  */
 public final class CompressedFrameInfo {
 
-    int mDataSize;
+    final int mDataSize;
 
-    int mSimilarity;
+    final int mSimilarity;
 
     CompressedFrameInfo(int paramInt, byte paramByte) {
         this.mDataSize = paramInt;

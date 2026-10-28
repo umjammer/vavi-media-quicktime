@@ -5,16 +5,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianFlipSpec;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
+
 
 /**
  * Represents color as 16bit values for each component and alpha channel.
@@ -24,45 +23,21 @@ import quicktime.util.QTUtils;
  */
 public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneable {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 6;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QDColor.class));
-            }
-        }.establish();
-    }
-
     public static final QDColor black = new QDColor(0, 0, 0);
-
     public static final QDColor white = new QDColor(65535, 65535, 65535);
-
     public static final QDColor red = new QDColor(65535, 0, 0);
-
     public static final QDColor green = new QDColor(0, 65535, 0);
-
     public static final QDColor blue = new QDColor(0, 0, 65535);
-
     public static final QDColor yellow = new QDColor(65535, 65535, 0);
-
     public static final QDColor magenta = new QDColor(65535, 0, 65535);
-
     public static final QDColor cyan = new QDColor(0, 65535, 65535);
-
     public static final QDColor darkGray = new QDColor(16383, 16383, 16383);
-
     public static final QDColor gray = new QDColor(32767, 32767, 32767);
-
     public static final QDColor lightGray = new QDColor(49151, 49151, 49151);
-
     public static final QDColor pink = new QDColor(65535, 44976, 44976);
-
     public static final QDColor orange = new QDColor(65535, 51400, 0);
-
     public static final QDColor brown = new QDColor(32767, 16383, 0);
 
     /**
@@ -240,7 +215,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Create an instance of an QDColor class - Black
      */
     public QDColor() {
-        super(6);
+        super(kNativeSize);
     }
 
     /**
@@ -335,7 +310,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[6];
+        this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[10];
         paramObjectInputStream.read(arrayOfByte);
         for (int i = 0; i < 6; i += 2) {
@@ -355,7 +330,7 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
         byte[] arrayOfByte = new byte[18];
-        for (int i = 0; i < 6; i += 2) {
+        for (int i = 0; i < kNativeSize; i += 2) {
             setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
         setIntInArray(arrayOfByte, 6, -1);
@@ -550,4 +525,3 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

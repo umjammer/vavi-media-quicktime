@@ -1,37 +1,32 @@
 
 package quicktime.app.view;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 import quicktime.QTSession;
 import quicktime.internal.toolbox.PlatformManager;
 
 
 final class QTJavaJNIAWTCanvas {
+
+    private static final Logger logger = System.getLogger(QTJavaJNIAWTCanvas.class.getName());
+
     static void RemoveNewContext(Object paramObject) {
         PlatformManager.RemoveNewContext(paramObject);
     }
 
     static {
-        class PrivelegedAction {
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
-                    try {
-                        System.loadLibrary("QTJava");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                });
-            }
-        }
 
         if (QTSession.isCurrentOS(2)) {
             if (QTSession.getJavaVersion() == 65537) {
                 System.loadLibrary("QTJava");
             } else {
-                new PrivelegedAction().establish();
+                try {
+                    System.loadLibrary("QTJava");
+                } catch (Exception e) {
+                    logger.log(Level.ERROR, e.getMessage(), e);
+                }
             }
         }
     }

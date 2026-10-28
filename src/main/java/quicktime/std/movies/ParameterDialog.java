@@ -6,7 +6,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -46,16 +45,12 @@ public final class ParameterDialog implements QuickTimeLib {
         int i = paramInt;
         if (QTSession.isCurrentOS(4)) {
             GetGWorld(savedPort, savedDevice);
-            res = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    synchronized (QTNative.globalsLock) {
-                        res = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(localEffectsList), QTObject.ID(localAtomContainer), i, arrayOfInt);
-                        ParameterDialog.SetGWorld(ParameterDialog.savedPort[0], ParameterDialog.savedDevice[0]);
-                    }
-                    return ParameterDialog.res;
+            res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                synchronized (QTNative.globalsLock) {
+                    res = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(localEffectsList), QTObject.ID(localAtomContainer), i, arrayOfInt);
+                    ParameterDialog.SetGWorld(ParameterDialog.savedPort[0], ParameterDialog.savedDevice[0]);
                 }
+                return ParameterDialog.res;
             });
             StdQTException.checkError(res);
         } else {
@@ -95,21 +90,17 @@ public final class ParameterDialog implements QuickTimeLib {
         if (QTSession.isCurrentOS(4)) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            i = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    int i = 0;
-                    synchronized (QTNative.globalsLock) {
-                        logger.log(Level.DEBUG, "QTCreateStandardParameterDialog " + ParameterDialog.res);
-                        i = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(effectsList), QTObject.ID(parameters), dialogOptions, ar);
-                        if (i == 0) {
-                            ParameterDialog.res = ParameterDialog.QTIsStandardParameterDialogEvent(null, ar[0]);
-                            ParameterDialog.QTDismissStandardParameterDialog(ar[0]);
-                        }
+            i = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int i1 = 0;
+                synchronized (QTNative.globalsLock) {
+                    logger.log(Level.DEBUG, "QTCreateStandardParameterDialog " + ParameterDialog.res);
+                    i1 = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(effectsList), QTObject.ID(parameters), dialogOptions, ar);
+                    if (i1 == 0) {
+                        ParameterDialog.res = ParameterDialog.QTIsStandardParameterDialogEvent(null, ar[0]);
+                        ParameterDialog.QTDismissStandardParameterDialog(ar[0]);
                     }
-                    return i;
                 }
+                return i1;
             });
             StdQTException.checkError(i);
             res = i;

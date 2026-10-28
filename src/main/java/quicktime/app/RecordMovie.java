@@ -73,7 +73,7 @@ import quicktime.util.RawEncodedImage;
  *     }
  *   }
  * </pre>
- * @see quicktime.app.display.Compositor
+ * @see "quicktime.app.display.Compositor"
  * @deprecated
  */
 public class RecordMovie {
@@ -381,4 +381,3 @@ public class RecordMovie {
         this.vidMedia = new VideoMedia(this.vidTrack, 600);
     }
 }
-

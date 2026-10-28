@@ -28,12 +28,12 @@ class JavaPainter implements Paintable {
         this.iName = iName;
     }
 
-    Frame f;
-    String iName;
+    final Frame f;
+    final String iName;
     Image im;
-    Font font = new Font("Helvetica", Font.PLAIN, 18);
+    final Font font = new Font("Helvetica", Font.PLAIN, 18);
     int width, height;
-    Rectangle[] r = new Rectangle[1];
+    final Rectangle[] r = new Rectangle[1];
 
     void prepareImage() throws Exception {
         MediaTracker tracker = new MediaTracker(f);
@@ -43,7 +43,7 @@ class JavaPainter implements Paintable {
         // wait for them all to finish importing
         try {
             tracker.waitForAll();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException _) {
         }
 
         if (tracker.isErrorAny()) throw new Exception("Error in Media Tracker");
@@ -68,7 +68,7 @@ class JavaPainter implements Paintable {
      * You should not cache this graphics object as it can be different
      * between different calls.
      *
-     * @param comp the component from which the Graphics object was derived or
+     * param comp the component from which the Graphics object was derived or
      *             related too.
      * @param g    the graphics to paint on.
      */

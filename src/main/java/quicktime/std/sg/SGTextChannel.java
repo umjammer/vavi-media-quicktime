@@ -1,16 +1,14 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.internal.toolbox.SequenceGrabberManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.media.SampleDescription;
 import quicktime.std.movies.media.TextDescription;
 import quicktime.util.QTUtils;
+
 
 /**
  * Assists in importing video into a movie.
@@ -20,17 +18,6 @@ import quicktime.util.QTUtils;
  */
 public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGTextChannel.class));
-            }
-        }.establish();
-    }
-
     SGTextChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
         super(paramInt, paramSequenceGrabber);
     }
@@ -39,33 +26,36 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * Creates a sequence grabber channel text and assigns a channel component to the channel.
      * The channel component is responsible for providing digitized data to the
      * sequence grabber component.
-     * @see "QuickTime::SGNewChannel"
+     *
      * @param owner specifies the sequence grabber component the channel is attached to.
+     * @see "QuickTime::SGNewChannel"
      */
     public SGTextChannel(SequenceGrabber owner) throws StdQTException {
         super(owner, 1952807028);
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new TextDescription();
     }
 
     /**
      * This method allows you to retrieve a music sample description from the SGChannel.
-     * @see "QuickTime::SGGetChannelSampleDescription()"
+     *
      * @return a TextDescription object.
      * @throws quicktime.QTException
+     * @see "QuickTime::SGGetChannelSampleDescription()"
      */
-    public final TextDescription getTextDescription() throws QTException {
+    public TextDescription getTextDescription() throws QTException {
         return (TextDescription) getSampleDescription();
     }
 
     /**
      * sets the name of the font to be used to display text.
-     * @see "QuickTime::SGSetFontName"
+     *
      * @param fontName a pointer to a string containing the name of the font.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetFontName"
      */
     public void setFontName(String fontName) throws StdQTException {
         int i = SGSetFontName(_ID(), QTUtils.String2PString(fontName, 255));
@@ -74,6 +64,7 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
     /**
      * sets the size of the font to be used to display text.
+     *
      * @see "QuickTime::SGSetFontSize"
      */
     public void setFontSize(int paramInt) throws StdQTException {
@@ -83,9 +74,10 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
     /**
      * sets foreground text color.
-     * @see "QuickTime::SGSetTextForeColor"
+     *
      * @param theColor the new foreground text color.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetTextForeColor"
      */
     public void setForeColor(QDColor theColor) throws StdQTException {
         int i = SGSetTextForeColor(_ID(), theColor.getRGBColor());
@@ -94,9 +86,10 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
     /**
      * sets background text color.
-     * @see "QuickTime::SGSetTextBackColor"
+     *
      * @param theColor the new background text color.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetTextBackColor"
      */
     public void setBackColor(QDColor theColor) throws StdQTException {
         int i = SGSetTextBackColor(_ID(), theColor.getRGBColor());
@@ -105,9 +98,10 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
     /**
      * sets text justification.
-     * @see "QuickTime::SGSetJustification"
+     *
      * @param just the text justification.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetJustification"
      */
     public void setJustification(int just) throws StdQTException {
         int i = SGSetJustification(_ID(), (short) just);
@@ -116,6 +110,7 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
     /**
      * Gets the text return to space value.
+     *
      * @see "QuickTime::SGGetTextReturnToSpaceValue"
      */
     public int getReturnToSpaceValue() throws StdQTException {
@@ -127,9 +122,10 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
     /**
      * Sets the text return to space value.
-     * @see "QuickTime::SGSetTextReturnToSpaceValue"
+     *
      * @param rettospace the value for the new text to space setting.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetTextReturnToSpaceValue"
      */
     public void setReturnToSpaceValue(int rettospace) throws StdQTException {
         int i = SGSetTextReturnToSpaceValue(_ID(), (short) rettospace);
@@ -164,4 +160,3 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
         return SequenceGrabberManager.SGSetTextReturnToSpaceValue(paramInt, paramShort);
     }
 }
-

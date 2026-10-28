@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDColor;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
+
 
 /**
  * The GraphicsMode class implements details that describe transfer operations and
@@ -20,8 +19,6 @@ import quicktime.util.QTByteObject;
  */
 public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cloneable {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -29,15 +26,6 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
 
     @Serial
     private static final long serialVersionUID = -7245842945216323992L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(GraphicsMode.class));
-            }
-        }.establish();
-    }
 
     /**
      * This constructor creates an empty GraphicsMode object.

@@ -37,7 +37,7 @@ final class DataRefRec {
     /** dref flag, data is in the same file as the movie */
     static final int selfReference = 1;
 
-    int type;
+    final int type;
     int flags;
     byte[] data;
     /** dataRefAttributes */

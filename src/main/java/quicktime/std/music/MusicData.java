@@ -53,8 +53,8 @@ public class MusicData extends QTHandle {
      *  of the size of the general event. This size is in bytes.
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffGeneralEvent_Footer(int paramInt1, int paramInt2) {
-        int i = 0xC0000000 | paramInt1 << 16 | paramInt2 << 0;
+    public static int stuffGeneralEvent_Footer(int paramInt1, int length) {
+        int i = 0xC0000000 | paramInt1 << 16 | length << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -112,13 +112,13 @@ public class MusicData extends QTHandle {
      * @param duration the duration in the time scale of the TunePlayer or the MusicMedia
      * @return the stuffed representation of this type of extended music event.
      */
-    public static long stuffXNoteEvent(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        long l1 = 0x90000000 | (long) paramInt1 << 16 | paramInt2 << 0;
+    public static long stuffXNoteEvent(int part, int pitch, int paramInt3, int duration) {
+        long l1 = 0x90000000L | (long) part << 16 | pitch << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000 | paramInt4 << 0 | (long) paramInt3 << 22;
+        long l2 = 0x80000000L | duration << 0 | (long) paramInt3 << 22;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
-        l1 &= 0xFFFFFFFF;
-        l2 &= 0xFFFFFFFF;
+        l1 &= 0xFFFFFFFFL;
+        l2 &= 0xFFFFFFFFL;
         return l1 << 32 | l2;
     }
 
@@ -131,12 +131,12 @@ public class MusicData extends QTHandle {
      * @return the stuffed representation of this type of extended music event.
      */
     public static long stuffXControlEvent(int part, int control, int value) {
-        long l1 = 0xA0000000 | (long) part << 16 | (value & qtma_MASK(16)) << 0;
+        long l1 = 0xA0000000L | (long) part << 16 | (value & qtma_MASK(16)) << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
         long l2 = 0x80000000 | control << 0;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
-        l1 &= 0xFFFFFFFF;
-        l2 &= 0xFFFFFFFF;
+        l1 &= 0xFFFFFFFFL;
+        l2 &= 0xFFFFFFFFL;
         return l1 << 32 | l2;
     }
 
@@ -149,12 +149,12 @@ public class MusicData extends QTHandle {
      * @return the stuffed representation of this type of extended music event.
      */
     public static long stuffXKnobEvent(int part, int knob, int value) {
-        long l1 = 0xB0000000 | (long) part << 16 | value >> 16 << 0;
+        long l1 = 0xB0000000L | (long) part << 16 | value >> 16 << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000 | (long) knob << 16 | (value & 0xFFFF) << 0;
+        long l2 = 0x80000000L | (long) knob << 16 | (value & 0xFFFF) << 0;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
-        l1 &= 0xFFFFFFFF;
-        l2 &= 0xFFFFFFFF;
+        l1 &= 0xFFFFFFFFL;
+        l2 &= 0xFFFFFFFFL;
         return l1 << 32 | l2;
     }
 

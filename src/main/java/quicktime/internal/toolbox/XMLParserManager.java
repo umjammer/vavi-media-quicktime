@@ -74,7 +74,7 @@ public final class XMLParserManager {
         final int id;
         final String name;
         int kinds;
-        List<String> enumValues = new ArrayList<>();
+        final List<String> enumValues = new ArrayList<>();
         boolean caseSensitiveEnum;
 
         Attr(int id, String name) {

@@ -351,4 +351,3 @@ public interface IOConstants {
 
     int langAfricaans = 141;
 }
-

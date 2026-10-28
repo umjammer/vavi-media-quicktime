@@ -20,4 +20,3 @@ public interface QDDrawer {
      */
     void draw(QDGraphics g) throws QTException;
 }
-

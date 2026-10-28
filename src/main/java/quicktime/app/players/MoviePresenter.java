@@ -1,6 +1,7 @@
 package quicktime.app.players;
 
 import java.util.Vector;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
@@ -24,13 +25,13 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieDrawingComplete;
 import quicktime.std.movies.MoviePrePreroll;
 
+
 /**
- * @deprecated
  * The MoviePresenter is used to present typically a movie
- * as a member of a SWCompositor. It will create an Invalidator to innvalidate its
+ * as a member of a SWCompositor. It will create an Invalidator to invalidate its
  * TwoDSprite that is presenting the movie in the SWCompositor
  * when the movie redraws.
- *
+ * <p>
  * Outside of the use in the SWCompositor this Presenter also gives the ability
  * to apply a GraphicsMode to the overall output of a movie and can be used
  * also for easy manipulation and control of a movie's display characteristics,
@@ -38,10 +39,12 @@ import quicktime.std.movies.MoviePrePreroll;
  * screen (for example bouncing it around) you will get better performance of the
  * visual output using a MoviePresenter than doing these kinds of activities
  * with a standard MoviePlayer presentation.
- *
+ * <p>
  * It uses the MovieDrawingComplete callback to either invalidate its presenting
  * TwoDSprite or to redraw itself to the destination QDGraphics.
- * @see quicktime.app.display.SWCompositor
+ *
+ * @see "quicktime.app.display.SWCompositor"
+ * @deprecated
  */
 public class MoviePresenter extends ImagePresenter implements AudioSpec, Playable, DynamicImage, MovieDrawingComplete, DrawingNotifier {
 
@@ -85,27 +88,29 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Create a MoviePresenter with the supplied movie. The movie
      * will be rendered into a default offscreen QDGraphics and the
      * pixel data of the QDGraphics buffer becomes the image data
      * that this presenter presents.
+     *
      * @param m the movie that is rendered
+     * @since QTJava 6.1
+     * @deprecated
      */
     public MoviePresenter(Movie m) throws QTException {
         this(m, new QDGraphics(32, m.getBounds(), 4096));
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Create a MoviePresenter with the supplied movie. The movie
      * will be rendered into the supplied offscreen QDGraphics and the
      * pixel data of the QDGraphics buffer becomes the image data
      * that this presenter presents.
+     *
      * @param m the movie that is rendered
      * @param g the offscreen QDGraphics that the effect is rendered into.
+     * @since QTJava 6.1
+     * @deprecated
      */
     public MoviePresenter(Movie m, QDGraphics g) throws QTException {
         super(moveToZero(m.getBounds()));
@@ -123,8 +128,6 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     private boolean isPres = false;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
@@ -132,6 +135,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      *
      * @param cgp a QDGraphics object
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setGWorld(QDGraphics cgp) throws QTException {
@@ -144,7 +149,7 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
             this.m.removeDrawingCompleteProc();
             this.m.setActive(false);
         } else {
-        if (QDGraphics.validScratch.equals(cgp)) {
+            if (QDGraphics.validScratch.equals(cgp)) {
                 this.isPres = false;
             } else
                 this.isPres = true;
@@ -155,32 +160,34 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns true if the MoviePresenter is presenting its movie to a destination
      * QDGraphics.
+     *
      * @return a boolean
+     * @since QTJava 6.1
+     * @deprecated
      */
     public boolean isPresenting() {
         return this.isPres;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Implements the execute method on the MovieDrawingComplete interface.
      * This method will set the movie changed state to true, so that a consequent
      * call to the TwoDSprite Invalidator will invalidate its presenting sprite.
      * If the MoviePresenter is presenting a movie to a destination QDGraphics
      * it will redraw the movie to that destination.
-     *
+     * <p>
      * The callback will be triggered as a result of a call to Movie.task and
      * is fired whenever the Movie draws to its internal QDGraphics - the offscreen buffer
      * that the presenter presents.
+     *
      * @param m the Movie that is presented by this presenter
      * @return an error code or 0 if no error
      * @see quicktime.std.clocks.QTCallBack,
      * {@link quicktime.std.movies.Movie#setDrawingCompleteProc(int, quicktime.std.movies.MovieDrawingComplete)}
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int execute(Movie m) {
@@ -190,7 +197,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
             this.mChanged = true;
             if (this.listenerList != null) {
                 synchronized (this) {
-                    for (int i = 0; i < this.listenerList.size(); i++) ((DrawingListener) this.listenerList.elementAt(i)).drawingComplete(this);
+                    for (int i = 0; i < this.listenerList.size(); i++)
+                        this.listenerList.elementAt(i).drawingComplete(this);
                 }
             }
         } catch (QTException localQTException) {
@@ -200,35 +208,38 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Return the movie that is being presented.
+     *
      * @return a movie
+     * @since QTJava 6.1
+     * @deprecated
      */
     public Movie getMovie() {
         return this.m;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the offscreen buffer that the movie of the MoviePresenter is drawing into.
+     *
      * @return a QDGraphics.
+     * @since QTJava 6.1
+     * @deprecated
      */
     public QDGraphics getOffscreenBuffer() {
         return this.g;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
+     *
      * @param invalidRgn the invalidRgn that the client should redraw
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void redraw(Region invalidRgn) throws QTException {
@@ -244,12 +255,13 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current time base that provides the time foundation
      * of this object.
+     *
      * @return a TimeBase
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public TimeBase getTimeBase() throws QTException {
@@ -257,13 +269,14 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the Timeable's playback rate. Typically a rate of zero will
      * mean that the player is stopped, a positive value that the player
      * is playing forwards, a negative value that the time values are decreasing.
+     *
      * @param rate the new playback rate.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setRate(float rate) throws QTException {
@@ -278,7 +291,7 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
 
     private float lastRate = 0.0F;
 
-    private Vector listenerList;
+    private Vector<DrawingListener> listenerList;
 
     class PrerollCallback implements MoviePrePreroll {
 
@@ -309,11 +322,12 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current rate of the Timeable object.
+     *
      * @return the playback rate
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public float getRate() throws QTException {
@@ -321,14 +335,15 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the player to the time specified. This time value at this level
      * is a totally arbitrary value - what time that means in "real time" is
      * determined by the implementor of the interface, typically the scale value
      * will determine what a "real" time of 1 second is.
+     *
      * @param time the new time value
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setTime(int time) throws QTException {
@@ -336,11 +351,12 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current time value of the object.
+     *
      * @return the current time.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int getTime() throws QTException {
@@ -348,13 +364,14 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the duration of the media attached to the player. If
      * the player has no media, or does not know the duration of its media
      * it can return the constant kDurationUnknown.
+     *
      * @return the media duration.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int getDuration() throws QTException {
@@ -362,11 +379,12 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the time scale of the player - how many ticks per second.
+     *
      * @return the current scale.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int getScale() throws QTException {
@@ -374,11 +392,12 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the volume setting (0 is silent, 1 is unity gain).
+     *
      * @return a float
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public float getVolume() throws QTException {
@@ -387,11 +406,12 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the volume.
+     *
      * @param val the new volume
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setVolume(float val) throws QTException {
@@ -404,11 +424,12 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current mute status.
+     *
      * @return a boolean
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public boolean isMuted() throws QTException {
@@ -416,12 +437,13 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Allows the muting of the specific channel. When unmuted the AudioSpec object will return
      * to its current volume setting.
+     *
      * @param flag turn muting on - true or off - false.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setMuted(boolean flag) throws QTException {
@@ -434,28 +456,27 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * If an application requires the MoviePresenter to explicitly
      * invalidate its TwoDSprite Presenter, or redraw its offscreen image
      * due to some change in the Movie (other than normal playback of the Movie)
      * then it should signify this by calling this method. Then in the normal
      * course of Invalidation or Redrawing the MoviePresenter will do the correct
      * thing. If the movie has a timeline and is playing this will be done automatically.
-     *
+     * <p>
      * Thus a potential usage of this method is if the MoviePresenter is presenting a
-     * QuickTime VR movie that has no real time line, and has programatically changed
+     * QuickTime VR movie that has no real time line, and has programmatically changed
      * some characteristic of the display of the Movie. In which case it needs to inform
      * the MoviePresenter that the Movie has changed and it should do the appropriate
      * invalidation or redraw.
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     public void movieChanged() {
         this.mChanged = true;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns an object that invalidates a sprite. When a DynamicImage
      * is a member of a SWompositor and the DynamicImage presents a
      * changing image (for example a movie), the TwoDSprite that presents
@@ -465,16 +486,19 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * itself cannot perform the invalidation.
      * Can return null if the DynamicImage does not require the SWCompositor
      * to invalidate it (or the object is in a state where its image won't change).
-     *
+     * <p>
      * The Invalidators provided with objects that implement the DynamicImage
      * interface will execute at the scale and period of the Compositor
      * when they are created.
+     *
      * @param c the Compositor in which the DynamicImage is a member
      * @param s the TwoDSprite that is presenting the DynamicImage's image in
-     *  the Compositor. This is the sprite that must be invalidated.
+     *          the Compositor. This is the sprite that must be invalidated.
      * @return an Invalidator or null if invalidation is not required
      * @throws quicktime.QTException
-     * @see quicktime.app.display.SWCompositor
+     * @see "quicktime.app.display.SWCompositor"
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public Invalidator addedToCompositor(SWCompositor c, TwoDSprite s) throws QTException {
@@ -488,13 +512,14 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * When a dynamic image class is removed from a SWCompositor this
      * method is called to allow the class to cleanup any of the invalidation
      * processes it had established in the addedToCompositor call.
+     *
      * @param c the SWCompositor it is being removed from
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void removedFromCompositor(SWCompositor c) throws QTException {
@@ -511,14 +536,15 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
     private boolean drawCompleteListening = false;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Registers an object as a listener of the MoviePlayer. The object will receive notification when the MoviePlayer draws a frame
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList == null) {
-            this.listenerList = new Vector();
+            this.listenerList = new Vector<>();
         }
         if (this.listenerList.contains(paramDrawingListener)) {
             return;
@@ -528,15 +554,16 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
             try {
                 this.m.setDrawingCompleteProc(0, this);
                 this.drawCompleteListening = true;
-            } catch (StdQTException localStdQTException) {
+            } catch (StdQTException _) {
             }
         }
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Removes an object that is a listener of the MoviePlayer. The object will no longer receive notification when the MoviePlayer draws a frame
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
@@ -546,11 +573,10 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
                 try {
                     this.m.removeDrawingCompleteProc();
                     this.drawCompleteListening = false;
-                } catch (StdQTException localStdQTException) {
+                } catch (StdQTException _) {
                 }
             }
             this.listenerList = null;
         }
     }
 }
-

@@ -72,4 +72,3 @@ public interface QTDrawable extends Drawable, Transformable {
      */
     Region getClip() throws QTException;
 }
-

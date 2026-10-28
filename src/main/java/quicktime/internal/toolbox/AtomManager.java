@@ -44,7 +44,7 @@ public final class AtomManager {
 
     /** an atom of a parsed container */
     static final class Node {
-        int type;
+        final int type;
         int id;
         byte[] data = new byte[0];
         List<Node> children = new ArrayList<>();
@@ -686,7 +686,6 @@ public final class AtomManager {
         }
         return n.data;
     }
-
 
     /** @return the data of the first child of each type of the parent */
     static java.util.Map<Integer, byte[]> children(int container, int parent) {

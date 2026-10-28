@@ -58,4 +58,3 @@ public class VideoMediaHandler extends VisualMediaHandler implements QuickTimeLi
         return MediaHandlerManager.VideoMediaGetStallCount(paramInt, paramArrayOfInt);
     }
 }
-

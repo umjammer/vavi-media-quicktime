@@ -1,12 +1,10 @@
 package quicktime.std;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.PlatformManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.movies.Movie;
+
 
 /**
  * The RestrictionSet class implements the corresponding data structure of the Movie Toolbox.
@@ -21,32 +19,21 @@ import quicktime.std.movies.Movie;
  */
 public final class RestrictionSet extends QTObject implements QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(RestrictionSet.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     private RestrictionSet(int paramInt) {
         super(paramInt, null);
     }
 
     /**
      * Returns the restrictions, if any, specified on a given movie.
-     * @see "QuickTime::QTGetMovieRestrictions"
+     *
      * @param theMovie the movie whose restrictions are returned
      * @return the RestrictionSet object for given movie
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::QTGetMovieRestrictions"
      */
     public static RestrictionSet fromMovie(Movie theMovie) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] arrayOfInt1 = {0};
+        int[] arrayOfInt2 = {0};
         int i = QTGetMovieRestrictions(QTObject.ID(theMovie), arrayOfInt1, arrayOfInt2);
         return new RestrictionSet(arrayOfInt1[0]);
     }
@@ -54,11 +41,12 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
     /**
      * Use this routine to determine what restrictions are enforced by the currently
      * running version of QuickTime.
-     * @see "QuickTime::QTGetSupportedRestrictions"
+     *
      * @return restrictions in force for the class passed.
+     * @see "QuickTime::QTGetSupportedRestrictions"
      */
     public static int getSupportedRestrictions(int paramInt) {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         QTGetSupportedRestrictions(paramInt, arrayOfInt);
         return arrayOfInt[0];
     }
@@ -66,11 +54,12 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
     /**
      * Returns the information about the restrictions designated by the specified
      * restriction set. If you want to determine all of the restrictions, use this routine to determine the count.
+     *
      * @see "QuickTime::QTRestrictionsGetInfo"
      */
     public int getClassCount() {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] arrayOfInt1 = {0};
+        int[] arrayOfInt2 = {0};
         QTRestrictionsGetInfo(_ID(), arrayOfInt1, arrayOfInt2);
         return arrayOfInt1[0];
     }
@@ -78,24 +67,26 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
     /**
      * Returns the information about the restrictions designated by the specified
      * restriction set.
-     * @see "QuickTime::QTRestrictionsGetInfo"
+     *
      * @return an updated integer value that changes with change to the restrition set
+     * @see "QuickTime::QTRestrictionsGetInfo"
      */
     public int getSeed() {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] arrayOfInt1 = {0};
+        int[] arrayOfInt2 = {0};
         QTRestrictionsGetInfo(_ID(), arrayOfInt1, arrayOfInt2);
         return arrayOfInt2[0];
     }
 
     /**
      * Returns the restricted items.
-     * @see "QuickTime::QTRestrictionsGetItem"
+     *
      * @param restrictionClass class of restrictions to be reported: kQTRestrictionClassSave or kQTRestrictionClassEdit
      * @return integer holding constants that indicate individual restrictions
+     * @see "QuickTime::QTRestrictionsGetItem"
      */
     public int getItem(int restrictionClass) {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         QTRestrictionsGetItem(_ID(), restrictionClass, arrayOfInt);
         return arrayOfInt[0];
     }

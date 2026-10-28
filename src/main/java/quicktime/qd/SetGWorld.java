@@ -57,7 +57,7 @@ public final class SetGWorld implements QuickTimeLib {
      * @see "set"
      * @deprecated
      */
-    public final void reset() {
+    public void reset() {
         if (this.savedPort[0] != -1) {
             setGWorld(this.savedPort[0], this.savedDevice[0]);
             this.savedPort[0] = -1;

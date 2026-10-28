@@ -39,7 +39,6 @@ public class TestVRMedia extends JFrame implements StdQTConstants {
                 System.exit(1);
             }
 
-
             OpenMovieFile movieFile = OpenMovieFile.asRead(qtf);
             Movie mov = Movie.fromFile(movieFile);
 

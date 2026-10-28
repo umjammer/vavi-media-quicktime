@@ -393,4 +393,3 @@ public abstract class MouseResponder {
     public void mouseReleased(MouseEvent e) {
     }
 }
-

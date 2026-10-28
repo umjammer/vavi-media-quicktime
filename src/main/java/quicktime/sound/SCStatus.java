@@ -4,37 +4,25 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
+
 
 /**
  * Sound Channel Status object
  */
 public final class SCStatus extends QTByteObject implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
-
     /**
      * This is the size of this class
      */
     public static final int kNativeSize = 24;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SCStatus.class));
-            }
-        }.establish();
-    }
-
     SCStatus() {
-        super(24);
+        super(kNativeSize);
     }
 
     private SCStatus(byte[] paramArrayOfByte) {
@@ -43,7 +31,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[24];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         for (int i = 0; i < 12; i += 4) {
             int j = getIntFromArray(this.bytes, i);
@@ -58,7 +46,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[24];
+        byte[] arrayOfByte = new byte[kNativeSize];
         for (int i = 0; i < 12; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipNativeToBigEndian32(j);
@@ -76,6 +64,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Retrieves the start time.
+     *
      * @return start time of sound in sound channel
      */
     public int getStartTime() {
@@ -84,6 +73,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Retrieves the end time.
+     *
      * @return end time of sound in sound channel
      */
     public int getEndTime() {
@@ -92,6 +82,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Retrieves the current time.
+     *
      * @return current time of sound in sound channel
      */
     public int getCurrentTime() {
@@ -100,6 +91,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Returns the busy status of the sound channel
+     *
      * @return true if the sound channel is busy
      */
     public boolean getChannelBusy() {
@@ -109,6 +101,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Retrieves pause status of the sound channel
+     *
      * @return true if the channel is busy
      */
     public boolean getChannelPaused() {
@@ -118,6 +111,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Retrieves the attributes of the sound channel
+     *
      * @return attributes of the channel
      */
     public int getChannelAttributes() {
@@ -126,6 +120,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Retrieves the cpu load of the sound channel
+     *
      * @return cpu load of the channel
      */
     public int getCPULoad() {
@@ -134,6 +129,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * clones the current SCStatus object
+     *
      * @return the cloned object
      */
     @Override
@@ -143,6 +139,7 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
 
     /**
      * Returns a string representation of this object.
+     *
      * @return a String
      */
     public String toString() {
@@ -161,4 +158,3 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
     }
 }
-

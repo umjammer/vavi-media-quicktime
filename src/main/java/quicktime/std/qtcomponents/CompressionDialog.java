@@ -1,7 +1,6 @@
 package quicktime.std.qtcomponents;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -158,4 +157,3 @@ public class CompressionDialog extends Component implements QuickTimeLib {
         return ImageCompressionManager.SCSetSettingsFromAtomContainer(paramInt1, paramInt2);
     }
 }
-

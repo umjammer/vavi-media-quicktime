@@ -30,8 +30,7 @@ public class MethodClosure {
         }
     }
 
-    @Override
-    protected final void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         if (this.closure != 0) {
             if (QTSession.isCurrentOS(1)) {
                 ((MethodClosureUPP) this.macProc).dispose();

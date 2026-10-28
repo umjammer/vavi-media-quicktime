@@ -17,7 +17,7 @@ public final class SourcerCallbackParams extends QTPointer {
     private StreamDispatcher notifyUPP;
 
     SourcerCallbackParams() throws QTException {
-        super(16, true);
+        super(kNativeSize, true);
     }
 
     SourcerCallbackParams(byte[] paramArrayOfByte) throws QTException {
@@ -28,8 +28,8 @@ public final class SourcerCallbackParams extends QTPointer {
      * Constructs an SourcerCallbackParams object based on the native SourcerCallbackParams structure
      * @param proc the notify proc to be registered with the sourcer
      */
-    public SourcerCallbackParams(int paramInt, StreamNotifyProc paramStreamNotifyProc) throws QTException {
-        this(1, paramInt, paramStreamNotifyProc);
+    public SourcerCallbackParams(int paramInt, StreamNotifyProc proc) throws QTException {
+        this(1, paramInt, proc);
     }
 
     /**
@@ -37,11 +37,11 @@ public final class SourcerCallbackParams extends QTPointer {
      * @param vers version of the callback params structure
      * @param proc the notify proc to be registered with the sourcer
      */
-    public SourcerCallbackParams(int paramInt1, int paramInt2, StreamNotifyProc paramStreamNotifyProc) throws QTException {
-        super(16, true);
-        setVersion(paramInt1);
-        setFlags(paramInt2);
-        setProc(paramStreamNotifyProc);
+    public SourcerCallbackParams(int vers, int flags, StreamNotifyProc proc) throws QTException {
+        super(kNativeSize, true);
+        setVersion(vers);
+        setFlags(flags);
+        setProc(proc);
     }
 
     /**
@@ -93,11 +93,12 @@ public final class SourcerCallbackParams extends QTPointer {
         }
     }
 
-    /**
-     * Returns a string representation of this object.
-     * @return a String
-     */
+    @Override
     public String toString() {
-        return getClass().getName() + "[version=" + getVersion() + ",flags=" + getFlags() + ",proc" + this.notifyUPP + "]";
+        return getClass().getName() +
+                "[version=" + getVersion() +
+                ",flags=" + getFlags() +
+                ",proc" + this.notifyUPP +
+                "]";
     }
 }

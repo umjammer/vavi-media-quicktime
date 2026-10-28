@@ -471,4 +471,3 @@ public interface QDConstants {
 
     int pmAllUpdates = 57344;
 }
-

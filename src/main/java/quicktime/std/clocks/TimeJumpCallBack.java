@@ -28,4 +28,3 @@ public abstract class TimeJumpCallBack extends QTCallBack {
         super.callMeWhen(0, 0, 0);
     }
 }
-

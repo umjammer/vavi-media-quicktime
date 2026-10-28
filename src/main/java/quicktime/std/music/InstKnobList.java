@@ -65,9 +65,9 @@ public final class InstKnobList extends QTByteObject {
      * The list is a zero based list.
      * @param knob the knob to set
      */
-    public void setKnob(int paramInt, InstKnob paramInstKnob) {
-        setIntAt(paramInt * 8 + 8, paramInstKnob.getNumber());
-        setIntAt(paramInt * 8 + 12, paramInstKnob.getValue());
+    public void setKnob(int paramInt, InstKnob knob) {
+        setIntAt(paramInt * 8 + 8, knob.getNumber());
+        setIntAt(paramInt * 8 + 12, knob.getValue());
     }
 
     /**

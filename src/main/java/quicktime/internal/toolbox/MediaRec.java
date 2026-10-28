@@ -25,17 +25,17 @@ final class MediaRec {
         int dataRefIndex;
         long offset;
         /** nominal size of each sample as in 'stsz', 1 for frames of QuickTime sound */
-        int size;
+        final int size;
         /** size of the run in bytes */
         long bytes;
         /** duration of each sample */
         int duration;
         int count;
         /** 1 based */
-        int descIndex;
-        boolean sync;
+        final int descIndex;
+        final boolean sync;
         /** composition time offset of each sample */
-        int ctsOffset;
+        final int ctsOffset;
 
         SampleRun(int dataRefIndex, long offset, int size, long bytes, int duration, int count, int descIndex, boolean sync, int ctsOffset) {
             this.dataRefIndex = dataRefIndex;
@@ -78,7 +78,7 @@ final class MediaRec {
     final int ref;
     TrackRec track;
     /** media type, the handler subtype ('vide', 'soun', ...) */
-    int type;
+    final int type;
     int timeScale;
     short language;
     short quality;

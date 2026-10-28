@@ -14,4 +14,3 @@ public interface XMLEndElementProc {
      */
     void execute(String paramString) throws QTException;
 }
-

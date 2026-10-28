@@ -1,11 +1,10 @@
 package quicktime.util;
 
 import java.io.Serializable;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
+
 
 /**
  * Provides a representation of the native data structure as a byte array.
@@ -21,22 +20,12 @@ import quicktime.jdirect.QTNative;
  */
 public class QTByteObject implements PrimitivesLib, Serializable {
 
-    private static Object linkage;
-
     protected transient byte[] bytes;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTByteObject.class));
-            }
-        }.establish();
-    }
 
     /**
      * This call will return a QTByteObject which becomes a proxy for the
      * specified byte array. It does not copy the byte array - but references it.
+     *
      * @param ar the byte array to represent
      * @return a QTByteObject with the specified array as its target bytes
      */
@@ -67,6 +56,7 @@ public class QTByteObject implements PrimitivesLib, Serializable {
 
     /**
      * Returns the byte array containing the packed native object.
+     *
      * @return the actual byte array NOT a copy
      */
     public final byte[] getBytes() {
@@ -75,6 +65,7 @@ public class QTByteObject implements PrimitivesLib, Serializable {
 
     /**
      * Returns the size of the represented native object.
+     *
      * @return size
      */
     public int getSize() {
@@ -91,8 +82,9 @@ public class QTByteObject implements PrimitivesLib, Serializable {
             byte[] arrayOfByte = ((QTByteObject) paramObject).bytes;
             if (arrayOfByte.length != this.bytes.length)
                 return false;
-            for (int i = 0; i < this.bytes.length; i++) if (this.bytes[i] != arrayOfByte[i])
-                return false;
+            for (int i = 0; i < this.bytes.length; i++)
+                if (this.bytes[i] != arrayOfByte[i])
+                    return false;
             return true;
         }
         return false;

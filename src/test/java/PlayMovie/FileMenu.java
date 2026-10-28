@@ -10,8 +10,6 @@ package PlayMovie;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import quicktime.Errors;
 import quicktime.QTException;
@@ -20,7 +18,7 @@ import quicktime.io.QTFile;
 
 public class FileMenu {
 
-    PlayMovie myPlayMovie;
+    final PlayMovie myPlayMovie;
 
     public FileMenu(PlayMovie src) {
         this.myPlayMovie = src;

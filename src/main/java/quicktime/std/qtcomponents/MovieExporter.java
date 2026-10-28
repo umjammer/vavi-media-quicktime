@@ -1,9 +1,6 @@
 package quicktime.std.qtcomponents;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
@@ -24,6 +21,7 @@ import quicktime.std.movies.media.SampleDescription;
 import quicktime.util.QTHandle;
 import quicktime.util.QTUtils;
 
+
 /**
  * Assists in exporting movie data and data conversion operations.
  * The MovieDataImportComponent implements methods for a corresponding QuickTime
@@ -32,18 +30,7 @@ import quicktime.util.QTUtils;
  */
 public final class MovieExporter extends Component implements QuickTimeLib {
 
-    private static Object linkage;
-
     private QTCompDispatcher progUPP;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MovieExporter.class));
-            }
-        }.establish();
-    }
 
     /**
      * Opens the specified movie export component,'spit', with the given subType.
@@ -141,10 +128,10 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return The handle containing the converted movie data.
      * @throws quicktime.std.StdQTException
      */
-    public void toDataRef(DataRef paramDataRef, Movie paramMovie, Track paramTrack, int paramInt1, int paramInt2) throws StdQTException {
+    public void toDataRef(DataRef dataRef, Movie theMovie, Track paramTrack, int startTime, int duration) throws StdQTException {
         if (this.progUPP != null)
-            this.progUPP.theCurrentMov = paramMovie;
-        StdQTException.checkError(MovieExportToDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), QTObject.ID(paramMovie), QTObject.ID(paramTrack), paramInt1, paramInt2));
+            this.progUPP.theCurrentMov = theMovie;
+        StdQTException.checkError(MovieExportToDataRef(_ID(), QTObject.ID(dataRef), dataRef.getType(), QTObject.ID(theMovie), QTObject.ID(paramTrack), startTime, duration));
     }
 
     /**
@@ -192,16 +179,12 @@ public final class MovieExporter extends Component implements QuickTimeLib {
         int k = _ID();
         int m = 0;
         if (QTSession.isCurrentOS(4)) {
-            m = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    int l = 0;
-                    synchronized (QTNative.globalsLock) {
-                        l = MovieExporter.MovieExportDoUserDialog(k, QTObject.ID(localMovie), QTObject.ID(localTrack), i, j, arrayOfByte);
-                    }
-                    return l;
+            m = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int l = 0;
+                synchronized (QTNative.globalsLock) {
+                    l = MovieExporter.MovieExportDoUserDialog(k, QTObject.ID(localMovie), QTObject.ID(localTrack), i, j, arrayOfByte);
                 }
+                return l;
             });
             StdQTException.checkError(m);
         } else {
@@ -268,7 +251,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return and ostype of the current filename extension.
      * @throws quicktime.std.StdQTException
      */
-    public final int getExportFileNameExtension() throws StdQTException {
+    public int getExportFileNameExtension() throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = MovieExportGetFileNameExtension(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -281,7 +264,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return a java string.
      * @throws quicktime.std.StdQTException
      */
-    public final String getExportShortFileTypeString() throws StdQTException {
+    public String getExportShortFileTypeString() throws StdQTException {
         byte[] arrayOfByte = new byte[256];
         int i = MovieExportGetShortFileTypeString(_ID(), arrayOfByte);
         StdQTException.checkError(i);
@@ -298,7 +281,7 @@ public final class MovieExporter extends Component implements QuickTimeLib {
      * @return and ostype.
      * @throws quicktime.std.StdQTException
      */
-    public final int getExportSourceMediaType() throws StdQTException {
+    public int getExportSourceMediaType() throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = MovieExportGetSourceMediaType(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -322,8 +305,8 @@ public final class MovieExporter extends Component implements QuickTimeLib {
         return ComponentManager.MovieExportToHandle(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
     }
 
-    private static int MovieExportToDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7) {
-        return ComponentManager.MovieExportToDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7);
+    private static int MovieExportToDataRef(int ci, int dataRef, int dataRefType, int theMovie, int onlyThisTrack, int startTime, int duration) {
+        return ComponentManager.MovieExportToDataRef(ci, dataRef, dataRefType, theMovie, onlyThisTrack, startTime, duration);
     }
 
     private static int MovieExportGetAuxiliaryData(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
@@ -370,4 +353,3 @@ public final class MovieExporter extends Component implements QuickTimeLib {
         return ComponentManager.MovieExportToFile(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramInt5);
     }
 }
-

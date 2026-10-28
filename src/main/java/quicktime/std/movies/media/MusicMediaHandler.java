@@ -21,4 +21,3 @@ public final class MusicMediaHandler extends SoundMediaHandler {
         return TunePlayer.fromMusicMediaHandler(this, index);
     }
 }
-

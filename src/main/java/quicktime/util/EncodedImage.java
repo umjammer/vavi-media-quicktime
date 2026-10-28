@@ -71,4 +71,3 @@ public interface EncodedImage {
      */
     int getRowBytes();
 }
-

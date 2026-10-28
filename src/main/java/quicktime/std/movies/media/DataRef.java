@@ -341,4 +341,3 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
         return MovieToolbox.GetMovieAnchorDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
     }
 }
-

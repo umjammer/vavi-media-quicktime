@@ -8,8 +8,6 @@ public class JDirectLinker {
      * @return
      */
     public static Object loadLibrary(String string) {
-        // TODO Auto-generated method stub
         return null;
     }
-
 }

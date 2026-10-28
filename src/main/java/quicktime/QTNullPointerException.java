@@ -15,4 +15,3 @@ public class QTNullPointerException extends NullPointerException {
         super(str);
     }
 }
-

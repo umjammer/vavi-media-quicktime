@@ -255,4 +255,3 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
         return MediaHandlerManager.FlashMediaGetSupportedSwfVersion(paramInt, paramArrayOfByte);
     }
 }
-

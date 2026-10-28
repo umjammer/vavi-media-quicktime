@@ -61,4 +61,3 @@ public interface QTComponent {
      */
     Component asComponent();
 }
-

@@ -17,4 +17,3 @@ public interface XMLStartElementProc {
      */
     void execute(String name, String[] attributes) throws QTException;
 }
-

@@ -1,7 +1,5 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -22,29 +20,19 @@ import quicktime.util.IntEncodedImage;
 import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 
+
 /**
  * The QTImage class provides static methods and constants for compressing and
  * decompressing QuickTime images.
- *
+ * <p>
  * Instance of this class can be used to associate an ImageDescription
  * with the encoded Image data that the description describes.
  */
 public class QTImage implements QuickTimeLib {
 
-    private static Object linkage;
+    private static final int[] savedPort = {0};
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTImage.class));
-            }
-        }.establish();
-    }
-
-    private static final int[] savedPort = { 0 };
-
-    private static final int[] savedDevice = { 0 };
+    private static final int[] savedDevice = {0};
 
     private final ImageDescription desc;
 
@@ -53,6 +41,7 @@ public class QTImage implements QuickTimeLib {
     /**
      * Associate an image description with the image data that is described
      * by the description.
+     *
      * @param id the image description
      * @param im the image data
      */
@@ -79,18 +68,19 @@ public class QTImage implements QuickTimeLib {
      * Compresses a single frame image that is currently stored as a pixel map.
      * The size of the compressed image can be obtained from the ImageDescription
      * object which is returned.
-     * @see "QuickTime::CompressImage"
-     * @param src the QDGraphics that contains the PixMap for compressing. This may NOT be null.
+     *
+     * @param src     the QDGraphics that contains the PixMap for compressing. This may NOT be null.
      * @param srcRect a Rect defining the portion of the image to compress
      * @param quality the desired compressed image quality
-     * @param cType a compressor type
-     * @param data a encoded image object to receive the compressed image data.
-     *                 It is your program's responsibility to make sure that this
-     *                 object can receive at least as much data as indicated by
-     *                 the getMaxCompressionSize method.
+     * @param cType   a compressor type
+     * @param data    a encoded image object to receive the compressed image data.
+     *                It is your program's responsibility to make sure that this
+     *                object can receive at least as much data as indicated by
+     *                the getMaxCompressionSize method.
      * @return an ImageDescription object. Your application should store this
-     *          image description with the compressed image data.
+     * image description with the compressed image data.
      * @throws quicktime.QTException
+     * @see "QuickTime::CompressImage"
      */
     public static ImageDescription compress(QDGraphics src, QDRect srcRect, int quality, int cType, EncodedImage data) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
@@ -120,22 +110,23 @@ public class QTImage implements QuickTimeLib {
      * Compresses a single frame image that is currently stored as a pixel map.
      * The size of the compressed image can be obtained from the ImageDescription
      * object which is returned.
-     * @see "QuickTime::FCompressImage"
-     * @param src a QDGraphics that contains the PixMap for compressing. This may NOT be null.
-     * @param srcRect a QDRect defining the portion of the image to compress
+     *
+     * @param src        a QDGraphics that contains the PixMap for compressing. This may NOT be null.
+     * @param srcRect    a QDRect defining the portion of the image to compress
      * @param colorDepth the depth at which the image is likely to be viewed
-     * @param quality the desired compressed image quality
-     * @param cType a compressor type
-     * @param c a compressor or codec identifier
-     * @param clut a custom color lookup table
-     * @param flags flags providing further control information
-     * @param data a EncodedImage object to receive the compressed image data.
-     *                    It is your program's responsibility to make sure that this
-     *                    object can receive at least as much data as indicated by
-     *                    the getMaxCompressionSize method.
+     * @param quality    the desired compressed image quality
+     * @param cType      a compressor type
+     * @param c          a compressor or codec identifier
+     * @param clut       a custom color lookup table
+     * @param flags      flags providing further control information
+     * @param data       a EncodedImage object to receive the compressed image data.
+     *                   It is your program's responsibility to make sure that this
+     *                   object can receive at least as much data as indicated by
+     *                   the getMaxCompressionSize method.
      * @return an ImageDescription object. Your application should store this
-     *          image description with the compressed image data.
+     * image description with the compressed image data.
      * @throws quicktime.QTException
+     * @see "QuickTime::FCompressImage"
      */
     public static ImageDescription fCompress(QDGraphics src, QDRect srcRect, int colorDepth, int quality, int cType, CodecComponent c, ColorTable clut, int flags, EncodedImage data) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
@@ -163,19 +154,20 @@ public class QTImage implements QuickTimeLib {
 
     /**
      * Converts the format of a compressed image.
-     * @see "QuickTime::ConvertImage"
-     * @param srcDD the image description structure that describes the compressed image
-     * @param srcData the encoded image data to convert
+     *
+     * @param srcDD      the image description structure that describes the compressed image
+     * @param srcData    the encoded image data to convert
      * @param colorDepth the depth at which the recompressed image is likely to be viewed
-     * @param clut a custom color look up table
-     * @param accuracy the accuracy for the decompressed image
-     * @param quality the desired compressed image quality
-     * @param cType the compressor type
-     * @param codec a CodecComponent
+     * @param clut       a custom color look up table
+     * @param accuracy   the accuracy for the decompressed image
+     * @param quality    the desired compressed image quality
+     * @param cType      the compressor type
+     * @param codec      a CodecComponent
      * @return an ImageDescription object defining the converted image data. Your
-     *          application should store this image description with the converted
-     *          image data.
+     * application should store this image description with the converted
+     * image data.
      * @throws quicktime.QTException
+     * @see "QuickTime::ConvertImage"
      */
     public static ImageDescription convert(ImageDescription srcDD, EncodedImage srcData, int colorDepth, ColorTable clut, int accuracy, int quality, int cType, CodecComponent codec, EncodedImage outData) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(0);
@@ -212,15 +204,16 @@ public class QTImage implements QuickTimeLib {
     /**
      * Ajusts a compressed image to the boundaries defined by a QDRect specified
      * by your application.
-     * @see "QuickTime::TrimImage"
-     * @param desc an ImageDescription object that describes the compressed image.
-     *                  On return from this method, the compressor updates this image
-     *                  description to refer to the resized image.
-     * @param inData the encoded image data
-     * @param outData a encoded image object to receive the trimmed image. Your application
-     *                  should create this object at least as large as the source image.
+     *
+     * @param desc     an ImageDescription object that describes the compressed image.
+     *                 On return from this method, the compressor updates this image
+     *                 description to refer to the resized image.
+     * @param inData   the encoded image data
+     * @param outData  a encoded image object to receive the trimmed image. Your application
+     *                 should create this object at least as large as the source image.
      * @param trimRect defines the desired dimensions of the trimmed image
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::TrimImage"
      */
     public static void trim(ImageDescription desc, EncodedImage inData, EncodedImage outData, QDRect trimRect) throws StdQTException {
         int i = -50;
@@ -254,14 +247,15 @@ public class QTImage implements QuickTimeLib {
 
     /**
      * Decompresses a single frame image into a pixel map structure.
-     * @see "QuickTime::DecompressImage"
-     * @param data a EncodedImage object that contains the compressed image data
-     * @param desc an ImageDescription object that defines the compressed image
-     * @param dst a QDGraphics that contains the PixMap where the decompressed image is to be displayed. This may NOT be null.
+     *
+     * @param data    a EncodedImage object that contains the compressed image data
+     * @param desc    an ImageDescription object that defines the compressed image
+     * @param dst     a QDGraphics that contains the PixMap where the decompressed image is to be displayed. This may NOT be null.
      * @param dstRect a QDRect into which the decompressed image is to be loaded
-     * @param mode the transfer mode for the operation
+     * @param mode    the transfer mode for the operation
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
+     * @see "QuickTime::DecompressImage"
      */
     public static void decompress(EncodedImage data, ImageDescription desc, QDGraphics dst, QDRect dstRect, int mode) throws StdQTException, QDException {
         decompress(data, desc, dst, null, dstRect, mode, null);
@@ -269,16 +263,17 @@ public class QTImage implements QuickTimeLib {
 
     /**
      * Decompresses a single frame image into a pixel map structure.
-     * @see "QuickTime::DecompressImage"
-     * @param data a EncodedImage object that contains the compressed image data
-     * @param desc an ImageDescription object that defines the compressed image
-     * @param dst a QDGraphics that contains the PixMap where the decompressed image is to be displayed. This may NOT be null.
+     *
+     * @param data    a EncodedImage object that contains the compressed image data
+     * @param desc    an ImageDescription object that defines the compressed image
+     * @param dst     a QDGraphics that contains the PixMap where the decompressed image is to be displayed. This may NOT be null.
      * @param srcRect a QDRect defining the portion of the image to decompress
      * @param dstRect a QDRect into which the decompressed image is to be loaded
-     * @param mode the transfer mode for the operation
-     * @param mask a clipping region in the destination coordinate system
+     * @param mode    the transfer mode for the operation
+     * @param mask    a clipping region in the destination coordinate system
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
+     * @see "QuickTime::DecompressImage"
      */
     public static void decompress(EncodedImage data, ImageDescription desc, QDGraphics dst, QDRect srcRect, QDRect dstRect, int mode, Region mask) throws StdQTException, QDException {
         if (dst == null) {
@@ -304,20 +299,21 @@ public class QTImage implements QuickTimeLib {
 
     /**
      * Decompresses a single frame image into a pixel map structure.
-     * @see "QuickTime::FDecompressImage"
-     * @param data a EncodedImage object that contains the compressed image data
-     * @param desc an ImageDescription object that defines the compressed image
-     * @param dst a QDGraphics that contains the PixMap where the decompressed image is to be displayed. This may NOT be null.
-     * @param srcRect a QDRect defining the portion of the image to decompress
-     * @param matrix a Matrix specifies how to transform the image during decompression
-     * @param mode the transfer mode for the operation
-     * @param mask a Region in the destination coordinate system
-     * @param matte a PixMap that contains a blend matte
+     *
+     * @param data      a EncodedImage object that contains the compressed image data
+     * @param desc      an ImageDescription object that defines the compressed image
+     * @param dst       a QDGraphics that contains the PixMap where the decompressed image is to be displayed. This may NOT be null.
+     * @param srcRect   a QDRect defining the portion of the image to decompress
+     * @param matrix    a Matrix specifies how to transform the image during decompression
+     * @param mode      the transfer mode for the operation
+     * @param mask      a Region in the destination coordinate system
+     * @param matte     a PixMap that contains a blend matte
      * @param matteRect a QDRect defining a portion of the blend matte to apply
-     * @param accuracy the accuracy desired in the decompressed image
-     * @param codec a codec component
+     * @param accuracy  the accuracy desired in the decompressed image
+     * @param codec     a codec component
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
+     * @see "QuickTime::FDecompressImage"
      */
     public static void fDecompress(EncodedImage data, ImageDescription desc, QDGraphics dst, QDRect srcRect, Matrix matrix, int mode, Region mask, PixMap matte, QDRect matteRect, int accuracy, CodecComponent codec) throws StdQTException, QDException {
         if (dst == null) {
@@ -338,17 +334,18 @@ public class QTImage implements QuickTimeLib {
     /**
      * Determines the maximum size an image will be after compression.  The size returned is in the
      * number of bytes that the encoded image will require.
-     * @see "see QuickTime::GetMaxCompressionSize"
-     * @param src is a QDGraphics that contains the PixMap to be compressed. This may NOT be null.
-     * @param srcRect points to the QDRect defining the portion of the
-     *  source image that is to be compressed
+     *
+     * @param src        is a QDGraphics that contains the PixMap to be compressed. This may NOT be null.
+     * @param srcRect    points to the QDRect defining the portion of the
+     *                   source image that is to be compressed
      * @param colorDepth the depth at which the image is to be compressed
-     * @param quality the desired compressed image quality
-     * @param cType a compressor type
-     * @param c a compressor component
+     * @param quality    the desired compressed image quality
+     * @param cType      a compressor type
+     * @param c          a compressor component
      * @return size of the compressed pixmap
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
+     * @see "see QuickTime::GetMaxCompressionSize"
      */
     public static int getMaxCompressionSize(QDGraphics src, QDRect srcRect, int colorDepth, int quality, int cType, CodecComponent c) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];
@@ -370,11 +367,12 @@ public class QTImage implements QuickTimeLib {
 
     /**
      * Determines the size in bytes of a compressed image.
-     * @see "QuickTime::GetCompressedImageSize"
+     *
      * @param desc an ImageDescription object that defines the compressed image
      * @param data a EncodedImage object that contains the compressed image data
      * @return the size of the compressed image in bytes
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::GetCompressedImageSize"
      */
     public static int getCompressedSize(ImageDescription desc, EncodedImage data) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -392,18 +390,19 @@ public class QTImage implements QuickTimeLib {
 
     /**
      * Determines the estimated amount of time required to compress a given image.
-     * @see "see QuickTime::GetCompressionTime"
-     * @param src a QDGraphics that contains a PixMap object that will be compressed. This may be null.
-     * @param srcRect a QDRect defining the portion of the source image that is
+     *
+     * @param src             a QDGraphics that contains a PixMap object that will be compressed. This may be null.
+     * @param srcRect         a QDRect defining the portion of the source image that is
      *                        to be compressed
-     * @param colorDepth the depth at which the image is to be compressed
-     * @param cType a compressor type
-     * @param c the compressor component
-     * @param spatialQuality the desired compressed image spatial quality
+     * @param colorDepth      the depth at which the image is to be compressed
+     * @param cType           a compressor type
+     * @param c               the compressor component
+     * @param spatialQuality  the desired compressed image spatial quality
      * @param temporalQuality the desired compressed image temporal quality
      * @return the compression time in milliseconds
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
+     * @see "see QuickTime::GetCompressionTime"
      */
     public static int getCompressionTime(QDGraphics src, QDRect srcRect, int colorDepth, int cType, CodecComponent c, int spatialQuality, int temporalQuality) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];
@@ -428,15 +427,16 @@ public class QTImage implements QuickTimeLib {
     /**
      * Compares a compressed image to a picture stored in a pixel map and
      * returns a value indicating the relative similarity of the two images.
-     * @see "QuickTime::GetSimilarity"
-     * @param src a QDGraphics that contains a PixMap object containing a noncompressed image.
+     *
+     * @param src     a QDGraphics that contains a PixMap object containing a noncompressed image.
      * @param srcRect a QDRect defining the portion of the source image to compare
-     *                 to the compressed image
-     * @param desc an ImageDescription object that defines the compressed image
-     * @param data an EncodedImage object that contains the compressed image data
+     *                to the compressed image
+     * @param desc    an ImageDescription object that defines the compressed image
+     * @param data    an EncodedImage object that contains the compressed image data
      * @return the relative similarity value
      * @throws quicktime.std.StdQTException
      * @throws quicktime.qd.QDException
+     * @see "QuickTime::GetSimilarity"
      */
     public static float getSimilarity(QDGraphics src, QDRect srcRect, ImageDescription desc, EncodedImage data) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];

@@ -40,4 +40,3 @@ public interface Listener {
      */
     void removedFrom(Object source);
 }
-

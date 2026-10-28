@@ -17,4 +17,3 @@ public interface XMLPreprocessorProc {
      */
     void execute(String name, String[] attributes) throws QTException;
 }
-

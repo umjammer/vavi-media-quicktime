@@ -63,4 +63,3 @@ public class QTDrawableMaker {
         return new QTPlayer(localMovieController);
     }
 }
-

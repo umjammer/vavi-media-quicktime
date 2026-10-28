@@ -85,4 +85,3 @@ public class TickleNode {
         return getClass().getName() + "[action=" + this.action + ",active=" + this.active + ",next=" + this.next + "]";
     }
 }
-

@@ -160,4 +160,3 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
         return new TimeCodeTime(getBytes());
     }
 }
-

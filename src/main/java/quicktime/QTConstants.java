@@ -177,4 +177,3 @@ public interface QTConstants {
      */
     int kJavaVKeySlash = 47;
 }
-

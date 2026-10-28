@@ -98,4 +98,3 @@ public class GroupMember implements Layerable {
         return getClass().getName() + "[" + this.drawer + ",layer=" + this.layer + "]";
     }
 }
-

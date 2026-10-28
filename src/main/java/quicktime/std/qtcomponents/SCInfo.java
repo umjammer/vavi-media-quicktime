@@ -7,19 +7,19 @@ public final class SCInfo {
     /**
      * The compressed image data of a frame
      */
-    public QTHandleRef imageData;
+    public final QTHandleRef imageData;
 
     /**
      * The actual number of bytes in the handle that is the compressed data.
      * This may be less than the handle's actual size, in which case only
      * the bytes up to this size are valid compressed data.
      */
-    public int dataSize;
+    public final int dataSize;
 
     /**
      * Indicates whether the frame is a key frame.
      */
-    public short notSyncFlag;
+    public final short notSyncFlag;
 
     public SCInfo(QTHandleRef paramQTHandleRef, int paramInt, short paramShort) {
         this.imageData = paramQTHandleRef;
@@ -27,4 +27,3 @@ public final class SCInfo {
         this.notSyncFlag = paramShort;
     }
 }
-

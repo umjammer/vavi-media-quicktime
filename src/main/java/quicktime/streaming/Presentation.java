@@ -1,14 +1,11 @@
 package quicktime.streaming;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MatrixManager;
 import quicktime.internal.toolbox.StreamingManager;
 import quicktime.io.QTFile;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.qd.GDevice;
 import quicktime.qd.Pict;
@@ -24,13 +21,12 @@ import quicktime.std.movies.media.DataRef;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
 
+
 /**
  * The presentation class is the basis of a broadcast. It can manage one or more streams of content.
  * Most presentation calls can refer to a specific stream or all streams if a stream is not specified.
  */
 public final class Presentation extends QTObject implements QTStreamingLib {
-
-    private static Object linkage;
 
     private static final Object owner = new Object();
 
@@ -41,13 +37,6 @@ public final class Presentation extends QTObject implements QTStreamingLib {
         if (QTSession.isCurrentOS(2)) {
             throw new RuntimeException("The broadcaster API is not supported on windows");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Presentation.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     Presentation(int paramInt, Object paramObject) {
@@ -202,9 +191,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetInfo"
      * @throws quicktime.QTException
      */
-    public boolean hasCharacteristic(Stream paramStream, int paramInt) throws QTException {
+    public boolean hasCharacteristic(Stream paramStream, int characteristic) throws QTException {
         byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresHasCharacteristic(_ID(), QTObject.ID(paramStream), paramInt, arrayOfByte));
+        QTException.checkError(QTSPresHasCharacteristic(_ID(), QTObject.ID(paramStream), characteristic, arrayOfByte));
         return arrayOfByte[0] != 0;
     }
 

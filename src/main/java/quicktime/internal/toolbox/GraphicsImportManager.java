@@ -109,7 +109,7 @@ public final class GraphicsImportManager {
             } else {
                 throw new IOException("no data source");
             }
-            int from = (int) Math.clamp(offset, 0, all.length);
+            int from = Math.clamp(offset, 0, all.length);
             int to = limit < 0 ? all.length : (int) Math.min(all.length, limit);
             cached = from == 0 && to == all.length ? all : Arrays.copyOfRange(all, from, Math.max(from, to));
             return cached;

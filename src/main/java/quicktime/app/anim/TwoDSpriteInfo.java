@@ -133,4 +133,3 @@ public final class TwoDSpriteInfo implements quicktime.app.image.ImageSpec, java
         return getClass().getName() + "[image=" + this.image + ",desc=" + this.desc + ",matrix=" + this.matrix + ",layer=" + this.layer + ",visible=" + this.visible + ",graphicsMode=" + this.graphicsMode + "]";
     }
 }
-

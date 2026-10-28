@@ -23,4 +23,3 @@ public interface QTVRLeavingNode {
      */
     int execute(QTVRInstance vr, int fromNodeID, int toNodeID, boolean[] cancel);
 }
-

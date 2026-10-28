@@ -8,12 +8,12 @@ public final class LoadSettings extends TimeInfo {
     /**
      * The flags for preloading.
      */
-    public int preloadFlags;
+    public final int preloadFlags;
 
     /**
      * The default hints for preloading.
      */
-    public int defaultHints;
+    public final int defaultHints;
 
     /**
      * This constructor allows you to make a LoadSettings object.
@@ -28,4 +28,3 @@ public final class LoadSettings extends TimeInfo {
         this.defaultHints = defaultHints;
     }
 }
-

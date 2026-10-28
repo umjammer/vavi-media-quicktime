@@ -132,4 +132,3 @@ public final class TextDescription extends SampleDescription {
         return getPStringAt(58);
     }
 }
-

@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
+
 
 /**
  * Provides the basic information that is used to create a NoteChannel.
@@ -21,8 +20,6 @@ import quicktime.util.QTUtils;
  */
 public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -30,15 +27,6 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     @Serial
     private static final long serialVersionUID = -8181311485902882832L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(NoteRequestInfo.class));
-            }
-        }.establish();
-    }
 
     /**
      * Creates a NoteRequestInfo instance with the default values.
@@ -50,9 +38,10 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Create a NoteRequestInfo from the given polyphony value.
+     *
      * @param poly the most number of simulateous notes maybe played at the same time. This
-     *  value is a suggestion to the music toolbox that is used to estimate the resources
-     *  a NoteChannel will be required to utilise.
+     *             value is a suggestion to the music toolbox that is used to estimate the resources
+     *             a NoteChannel will be required to utilise.
      */
     public NoteRequestInfo(int poly) throws QTException {
         this(8, null);
@@ -86,6 +75,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Gets the flags of the NoteRequestInfo
+     *
      * @return flags
      */
     public final int getFlags() {
@@ -94,6 +84,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Sets the flags of the NoteRequestInfo
+     *
      * @param flags flags to set
      */
     public final void setFlags(int flags) {
@@ -103,6 +94,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
     /**
      * Gets the MIDIChannel - a value of zero indicates an unassigned channel
      * and QTMA will then use the first free channel if required.
+     *
      * @return MIDIChannel
      */
     public final int getMIDIChannel() {
@@ -118,6 +110,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
     /**
      * Sets the MIDIChannel - a value of zero indicates an unassigned channel
      * and QTMA will then use the first free channel if required.
+     *
      * @param chan MIDIChannel
      */
     public final void setMIDIChannel(int chan) {
@@ -127,6 +120,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Gets the polyphony of the NoteRequestInfo
+     *
      * @return polyphony
      */
     public final int getPolyphony() {
@@ -135,6 +129,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Sets the polyphony of the NoteRequestInfo
+     *
      * @param poly polyphony to set
      */
     public final void setPolyphony(int poly) {
@@ -143,6 +138,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Gets the typicalPolyphony of the NoteRequestInfo
+     *
      * @return typicalPolyphony
      */
     public final float getTypicalPolyphony() {
@@ -151,6 +147,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Sets the typicalPolyphony of the NoteRequestInfo
+     *
      * @param poly typicalPolyphony to set
      */
     public final void setTypicalPolyphony(float poly) {
@@ -166,6 +163,7 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
 
     /**
      * Makes a copy of a NoteRequestInfo object.
+     *
      * @return a NoteRequestInfo
      */
     @Override

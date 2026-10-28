@@ -9,17 +9,17 @@ public class NearestPointInfo {
     /**
      * The contour index value of the point
      */
-    public int contourIndex;
+    public final int contourIndex;
 
     /**
      * The point index value of the point
      */
-    public int pointIndex;
+    public final int pointIndex;
 
     /**
      * The distance between the specified point and the closest point in the contour to it.
      */
-    public float deltaDistance;
+    public final float deltaDistance;
 
     NearestPointInfo(int paramInt1, int paramInt2, float paramFloat) {
         this.contourIndex = paramInt1;

@@ -4,32 +4,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
+
 public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 36;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ICMPixelFormatInfo.class));
-            }
-        }.establish();
-    }
 
     private static final byte[] ar = new byte[36];
 
@@ -79,7 +67,7 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
     }
 
     private ICMPixelFormatInfo() {
-        super(36);
+        super(kNativeSize);
     }
 
     @Serial

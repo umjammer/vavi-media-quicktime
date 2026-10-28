@@ -5,13 +5,12 @@ package quicktime.std.movies;
  */
 public final class IStringInfo {
 
-    public String string;
+    public final String string;
 
-    public int region;
+    public final int region;
 
     IStringInfo(String paramString, int paramInt) {
         this.string = paramString;
         this.region = paramInt;
     }
 }
-

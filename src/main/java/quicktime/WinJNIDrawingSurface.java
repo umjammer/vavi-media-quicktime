@@ -72,4 +72,3 @@ public class WinJNIDrawingSurface {
         return WinNativeHelper.getDrawingSurfaceHWnd(this.comp, this.drawingSurface);
     }
 }
-

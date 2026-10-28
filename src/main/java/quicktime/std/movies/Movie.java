@@ -1,11 +1,10 @@
 package quicktime.std.movies;
 
+import java.io.IOException;
+import java.util.Hashtable;
+
 import com.apple.mrj.macos.carbon.CarbonAccess;
 import com.apple.mrj.macos.carbon.CarbonEventClient;
-import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Hashtable;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -43,6 +42,7 @@ import quicktime.util.QTHandle;
 import quicktime.util.QTPointer;
 import quicktime.util.QTUtils;
 
+
 /**
  * The Movie class implements methods for the corresponding QuickTime structure.
  * A QuickTime movie can consist of data in sequences from different forms, such as analog video and CD-ROM.
@@ -59,17 +59,6 @@ import quicktime.util.QTUtils;
  * when it has finished with them to allow the native structures used in these callbacks to be properly disposed.
  */
 public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Movie.class));
-            }
-        }.establish();
-    }
 
     private static final int[] savedPort = { 0 };
 
@@ -1479,8 +1468,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      *  Contains a time value specifying where the segment is to be inserted.
      * @throws quicktime.std.StdQTException
      */
-    public void insertSegment(Movie paramMovie, int fCreator, int flags, int duration) throws StdQTException {
-        int i = InsertMovieSegment(_ID(), QTObject.ID(paramMovie), fCreator, flags, duration);
+    public void insertSegment(Movie dstMovie, int fCreator, int flags, int duration) throws StdQTException {
+        int i = InsertMovieSegment(_ID(), QTObject.ID(dstMovie), fCreator, flags, duration);
         StdQTException.checkError(i);
     }
 
@@ -1775,7 +1764,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
     /**
      * This method allows your application to get the color table of the movie.
      * @see "QuickTime::GetMovieColorTable()"
-     * @return a ColorTable object specifiying the current color table.
+     * @return a ColorTable object specifying the current color table.
      * @throws quicktime.QTException
      */
     public ColorTable getColorTable() throws QTException {
@@ -1795,16 +1784,16 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return the resource ID number of the new resource
      * @throws quicktime.QTException
      */
-    public int flatten(int fCreator, QTFile pathName, int flags, int duration, int time4, int time5, String paramString) throws QTException {
-        short[] arrayOfShort = new short[1];
-        arrayOfShort[0] = ((short) fCreator);
-        byte[] arrayOfByte = null;
-        if (paramString != null) {
-            arrayOfByte = QTUtils.String2PString(paramString, 255);
+    public int flatten(int movieFlattenFlags, QTFile fileOut, int creator, int duration, int createQTFileFlags, int scriptTag, String resName) throws QTException {
+        short[] resId = new short[1];
+        resId[0] = ((short) movieFlattenFlags);
+        byte[] name = null;
+        if (resName != null) {
+            name = QTUtils.String2PString(resName, 255);
         }
-        FlattenMovie(_ID(), fCreator, pathName.getFSSpec(false, 512), flags, (short) time5, time4, arrayOfShort, arrayOfByte);
+        FlattenMovie(_ID(), movieFlattenFlags, fileOut.getFSSpec(false, 512), creator, (short) scriptTag, createQTFileFlags, resId, name);
         StdQTException.checkError(GetMoviesError());
-        return arrayOfShort[0];
+        return resId[0];
     }
 
     /**
@@ -1962,8 +1951,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param flags execution flags
      * @throws quicktime.std.StdQTException
      */
-    public void executeWiredActions(int time, AtomContainer paramAtomContainer) throws StdQTException {
-        StdQTException.checkError(MovieExecuteWiredActions(_ID(), time, QTObject.ID(paramAtomContainer)));
+    public void executeWiredActions(int flags, AtomContainer paramAtomContainer) throws StdQTException {
+        StdQTException.checkError(MovieExecuteWiredActions(_ID(), flags, QTObject.ID(paramAtomContainer)));
     }
 
     /**
@@ -2135,8 +2124,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @param slaveZero Contains the time, in the clock's time scale, that corresponds to a 0 time value for the movie.
      * @throws quicktime.std.StdQTException
      */
-    public void setMasterClock(Clock paramClock, TimeRecord paramTimeRecord) throws StdQTException {
-        SetMovieMasterClock(_ID(), QTObject.ID(paramClock), QTObject.ID(paramTimeRecord));
+    public void setMasterClock(Clock slaveZero, TimeRecord paramTimeRecord) throws StdQTException {
+        SetMovieMasterClock(_ID(), QTObject.ID(slaveZero), QTObject.ID(paramTimeRecord));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -2198,9 +2187,9 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @throws quicktime.QTException
      * @throws quicktime.std.StdQTException
      */
-    public int convertToFile(Track onlyTrack, QTFile pathName, int fileType, int creator, int scriptTag, int flags, MovieExporter userComp) throws QTException, StdQTException {
+    public int convertToFile(Track onlyTrack, QTFile outputFile, int fileType, int creator, int scriptTag, int flags, MovieExporter userComp) throws QTException, StdQTException {
         short[] resID_native = new short[1];
-        byte[] fsspec = pathName.getFSSpec(false, 512);
+        byte[] fsspec = outputFile.getFSSpec(false, 512);
         int i1;
         if (QTSession.isCurrentOS(4)) {
             i1 = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
@@ -2219,7 +2208,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
             return resID_native[0];
         }
         synchronized (QTNative.globalsLock) {
-            i1 = ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), pathName.getFSSpec(false, 512), fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
+            i1 = ConvertMovieToFile(_ID(), QTObject.ID(onlyTrack), outputFile.getFSSpec(false, 512), fileType, creator, (short) scriptTag, resID_native, flags, QTObject.ID(userComp));
         }
         StdQTException.checkError(i1);
         return resID_native[0];
@@ -2258,7 +2247,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * @return a boolean if movie is being progressively downloaded
      * @throws quicktime.std.StdQTException
      */
-    public final boolean needsTimeTable() throws StdQTException {
+    public boolean needsTimeTable() throws StdQTException {
         byte[] arrayOfByte = new byte[1];
         int i = QTMovieNeedsTimeTable(_ID(), arrayOfByte);
         StdQTException.checkError(i);
@@ -2269,7 +2258,7 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
      * Returns the duration of the part of a movie that has already been downloaded.
      * @see "QuickTime::GetMaxLoadedTimeInMovie()"
      */
-    public final int maxLoadedTimeInMovie() throws StdQTException {
+    public int maxLoadedTimeInMovie() throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = GetMaxLoadedTimeInMovie(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -2868,8 +2857,8 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         return MovieToolbox.SetMovieColorTable(fCreator, flags);
     }
 
-    private static void FlattenMovie(int fCreator, int flags, byte[] paramArrayOfByte1, int duration, short paramShort, int time4, short[] paramArrayOfShort, byte[] paramArrayOfByte2) {
-        MovieToolbox.FlattenMovie(fCreator, flags, paramArrayOfByte1, duration, paramShort, time4, paramArrayOfShort, paramArrayOfByte2);
+    private static void FlattenMovie(int fCreator, int flags, byte[] fsspec, int creator, short scriptTag, int createMovieFileFlags, short[] resId, byte[] resName) {
+        MovieToolbox.FlattenMovie(fCreator, flags, fsspec, creator, scriptTag, createMovieFileFlags, resId, resName);
     }
 
     private static int FlattenMovieData(int fCreator, int flags, byte[] paramArrayOfByte, int duration, short paramShort, int time4) {
@@ -3016,4 +3005,3 @@ public final class Movie extends QTObject implements QuickTimeLib, QuickTimeVRLi
         return MovieToolbox.GetMovieAnchorDataRef(time, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
     }
 }
-

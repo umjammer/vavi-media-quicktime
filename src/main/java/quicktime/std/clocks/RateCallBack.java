@@ -52,4 +52,3 @@ public abstract class RateCallBack extends QTCallBack {
         return getClass().getName() + "[rate=" + this.rate + ",flags=" + this.flags + "]";
     }
 }
-

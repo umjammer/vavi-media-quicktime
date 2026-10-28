@@ -213,5 +213,3 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
         MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
     }
 }
-
-

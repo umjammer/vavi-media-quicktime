@@ -45,4 +45,3 @@ public final class QTVRMedia extends GenericMedia {
         return new QTVRMediaHandler(paramInt, paramObject);
     }
 }
-

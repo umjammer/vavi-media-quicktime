@@ -74,4 +74,3 @@ public final class SpriteDescription extends SampleDescription {
         return getIntAt(24);
     }
 }
-

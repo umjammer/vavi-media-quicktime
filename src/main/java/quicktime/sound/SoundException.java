@@ -36,4 +36,3 @@ public final class SoundException extends QTException {
         }
     }
 }
-

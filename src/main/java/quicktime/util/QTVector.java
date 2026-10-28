@@ -1,31 +1,19 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Enumeration;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
+
 
 /**
  * This class represents a Vector of uniform sized objects into a handle.
  */
 public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
 
-    private static Object linkage;
-
     private final int mElSize;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTVector.class));
-            }
-        }.establish();
-    }
 
     protected QTVector(int paramInt1, int paramInt2) throws QTException {
         super(paramInt1 * paramInt2, true);

@@ -135,4 +135,3 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

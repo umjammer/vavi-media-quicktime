@@ -24,4 +24,3 @@ public class QTAppException extends QTException {
         super("");
     }
 }
-

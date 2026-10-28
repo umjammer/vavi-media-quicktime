@@ -105,4 +105,3 @@ public class QTException extends Exception {
         return getClass().getName() + QTBuild.info() + "," + str + ",QT.vers:" + Integer.toHexString(QTSession.getQTVersion());
     }
 }
-

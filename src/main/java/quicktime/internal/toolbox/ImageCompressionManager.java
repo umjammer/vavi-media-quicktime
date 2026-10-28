@@ -923,7 +923,7 @@ public final class ImageCompressionManager {
         int frameNumber;
         BufferedImage prev;
         int prevGWorld;
-        byte[] dataRateParams = new byte[24];
+        final byte[] dataRateParams = new byte[24];
         int preferredPacketSize;
 
         CSeq() {

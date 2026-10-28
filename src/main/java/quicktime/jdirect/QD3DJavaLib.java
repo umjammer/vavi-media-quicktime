@@ -7,4 +7,3 @@ public interface QD3DJavaLib {
 
     String name = "qd3d";
 }
-

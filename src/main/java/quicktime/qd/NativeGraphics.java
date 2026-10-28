@@ -146,11 +146,8 @@ public abstract class NativeGraphics {
             this.dsi.lock();
     }
 
-    @Override
-    protected void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         this.dsi = null;
         this.jnidrawingsurfaceinfo = null;
-        super.finalize();
     }
 }
-

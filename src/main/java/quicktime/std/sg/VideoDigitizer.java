@@ -210,4 +210,3 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
         return SequenceGrabberManager.VDSetInputStandard(paramInt, paramShort);
     }
 }
-

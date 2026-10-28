@@ -10,17 +10,17 @@ public class GraphicsImporterInfo {
     /**
      * file type that was chosen for export.
      */
-    public int mOutExportedType;
+    public final int mOutExportedType;
 
     /**
      * the file that was written..
      */
-    public QTFile mOutExportedSpec;
+    public final QTFile mOutExportedSpec;
 
     /**
      * the script system in which the exported file name is to be displayed.
      */
-    public short mOutScriptTag;
+    public final short mOutScriptTag;
 
     public GraphicsImporterInfo(int paramInt, QTFile paramQTFile, short paramShort) {
         this.mOutExportedType = paramInt;

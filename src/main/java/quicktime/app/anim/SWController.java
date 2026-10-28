@@ -197,4 +197,3 @@ public class SWController extends MouseController {
         return localObject;
     }
 }
-

@@ -1,13 +1,12 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Enumeration;
+
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
+
 
 /**
  * This provides a set of routines to convert between types that the
@@ -23,33 +22,16 @@ import quicktime.jdirect.QuickTimeLib;
  */
 public final class QTUtils implements QuickTimeLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTUtils.class));
-            }
-        }.establish();
-    }
-
     private static final boolean isWin = (!QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4));
 
     private static final int kIsPointer = 1;
-
     private static final int kIsByteArray = 16;
-
     private static final int kIsIntArray = 256;
-
     private static final int kIsFloatArray = 4096;
 
     private static final int kShiftModShiftMask = 9;
-
     private static final int kControlModShiftMask = 12;
-
     private static final int kCommandModShiftMask = 8;
-
     private static final int kOptionModShiftMask = 11;
 
     /**
@@ -265,7 +247,6 @@ public final class QTUtils implements QuickTimeLib {
         localRuntime.gc();
         localRuntime.gc();
         localRuntime.gc();
-        localRuntime.runFinalization();
     }
 
     /**
@@ -686,4 +667,3 @@ public final class QTUtils implements QuickTimeLib {
         MemoryManager.setLongInPointer(paramInt1, paramInt2, paramLong);
     }
 }
-

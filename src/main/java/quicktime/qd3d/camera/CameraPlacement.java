@@ -161,4 +161,3 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

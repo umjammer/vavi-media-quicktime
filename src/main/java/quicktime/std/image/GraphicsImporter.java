@@ -1,7 +1,5 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -29,6 +27,7 @@ import quicktime.util.QTHandle;
 import quicktime.util.QTHandleRef;
 import quicktime.util.RawEncodedImage;
 
+
 /**
  * Assists in managing still images. Allows display and manipulation of various
  * types of image data. This is regardless of file format or compression used
@@ -38,17 +37,6 @@ import quicktime.util.RawEncodedImage;
  * refer to GraphicsImportComponent in QuickTime
  */
 public final class GraphicsImporter extends Component implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(GraphicsImporter.class));
-            }
-        }.establish();
-    }
 
     private static final int[] savedPort = { 0 };
 
@@ -196,7 +184,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param dataRef Specifies the handle to a QuickTime data reference.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataReference(DataRef dataRef) throws StdQTException {
+    public void setDataReference(DataRef dataRef) throws StdQTException {
         int i = GraphicsImportSetDataReference(_ID(), QTObject.ID(dataRef), dataRef.getType());
         StdQTException.checkError(i);
         this.ref = dataRef;
@@ -208,7 +196,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The data reference type.
      * @throws quicktime.std.StdQTException
      */
-    public final int getDataReferenceType() throws StdQTException {
+    public int getDataReferenceType() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int i = GraphicsImportGetDataReference(_ID(), arrayOfInt1, arrayOfInt2);
@@ -222,7 +210,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param fileIn Specifies the source file containing the graphics data.
      * @throws quicktime.QTException
      */
-    public final void setDataFile(QTFile fileIn) throws QTException {
+    public void setDataFile(QTFile fileIn) throws QTException {
         int i = GraphicsImportSetDataFile(_ID(), fileIn.getFSSpec(true, 256));
         StdQTException.checkError(i);
         this.ref = null;
@@ -234,7 +222,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The file that contains the graphics data.
      * @throws quicktime.QTException
      */
-    public final QTFile getDataFile() throws QTException {
+    public QTFile getDataFile() throws QTException {
         return QTFile.fromGraphicsImporter(this);
     }
 
@@ -244,7 +232,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param dataRef Specifies the handle to a QuickTime data reference.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataHandle(QTHandleRef dataRef) throws StdQTException {
+    public void setDataHandle(QTHandleRef dataRef) throws StdQTException {
         int i = GraphicsImportSetDataHandle(_ID(), QTObject.ID(dataRef));
         StdQTException.checkError(i);
         this.ref = dataRef;
@@ -256,7 +244,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The handle to a QuickTime data reference.
      * @throws quicktime.QTException
      */
-    public final QTHandle getDataHandle() throws QTException {
+    public QTHandle getDataHandle() throws QTException {
         return QTHandle.fromGraphicsImporterData(this);
     }
 
@@ -264,7 +252,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * Determines the image description information.
      * @see "QuickTime::GraphicsImportGetImageDescription"
      */
-    public final ImageDescription getImageDescription() throws StdQTException {
+    public ImageDescription getImageDescription() throws StdQTException {
         return ImageDescription.fromGraphicsImporter(this);
     }
 
@@ -274,7 +262,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The offset for the data.
      * @throws quicktime.std.StdQTException
      */
-    public final int getDataOffset() throws StdQTException {
+    public int getDataOffset() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int i = GraphicsImportGetDataOffsetAndSize(_ID(), arrayOfInt1, arrayOfInt2);
@@ -288,7 +276,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The size of the data.
      * @throws quicktime.std.StdQTException
      */
-    public final int getDataSize() throws StdQTException {
+    public int getDataSize() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int i = GraphicsImportGetDataOffsetAndSize(_ID(), arrayOfInt1, arrayOfInt2);
@@ -304,7 +292,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param dataSize Specifies the size of the data to be read.
      * @throws quicktime.std.StdQTException
      */
-    public final void readData(EncodedImage data, int dataOffset, int dataSize) throws StdQTException {
+    public void readData(EncodedImage data, int dataOffset, int dataSize) throws StdQTException {
         int i = -50;
         if ((data instanceof ByteEncodedImage)) {
             i = GraphicsImportReadData(_ID(), ((ByteEncodedImage) data).getBytes(), dataOffset, dataSize);
@@ -321,7 +309,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param clipRgn Specifies clipping region.
      * @throws quicktime.std.StdQTException
      */
-    public final void setClip(Region clipRgn) throws StdQTException {
+    public void setClip(Region clipRgn) throws StdQTException {
         int i = GraphicsImportSetClip(_ID(), QTObject.ID(clipRgn));
         StdQTException.checkError(i);
     }
@@ -332,7 +320,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The current clip region or null, if not possible
      * @throws quicktime.QTException
      */
-    public final Region getClip() throws QTException {
+    public Region getClip() throws QTException {
         return Region.fromGraphicsImporter(this);
     }
 
@@ -340,7 +328,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * Sets the source rectangle to use for an image.
      * @see "QuickTime::GraphicsImportSetSourceRect"
      */
-    public final void setSourceRect(QDRect paramQDRect) throws StdQTException {
+    public void setSourceRect(QDRect paramQDRect) throws StdQTException {
         int i = GraphicsImportSetSourceRect(_ID(), paramQDRect.getRect());
         StdQTException.checkError(i);
     }
@@ -351,7 +339,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The current source rectangle for an image.
      * @throws quicktime.std.StdQTException
      */
-    public final QDRect getSourceRect() throws StdQTException {
+    public QDRect getSourceRect() throws StdQTException {
         QDRect localQDRect = new QDRect();
         int i = GraphicsImportGetSourceRect(_ID(), localQDRect.getRect());
         StdQTException.checkError(i);
@@ -364,7 +352,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The size of the bounding rectangle for an image.
      * @throws quicktime.std.StdQTException
      */
-    public final QDRect getNaturalBounds() throws StdQTException {
+    public QDRect getNaturalBounds() throws StdQTException {
         QDRect localQDRect = new QDRect();
         int i = GraphicsImportGetNaturalBounds(_ID(), localQDRect.getRect());
         StdQTException.checkError(i);
@@ -375,7 +363,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * Draws an image.
      * @see "QuickTime::GraphicsImportDraw"
      */
-    public final void draw() throws StdQTException {
+    public void draw() throws StdQTException {
         int i = GraphicsImportDraw(_ID());
         StdQTException.checkError(i);
     }
@@ -386,7 +374,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param matrix Specifies the drawing matrix.
      * @throws quicktime.std.StdQTException
      */
-    public final void setMatrix(Matrix matrix) throws StdQTException {
+    public void setMatrix(Matrix matrix) throws StdQTException {
         int i = GraphicsImportSetMatrix(_ID(), matrix.getBytes());
         StdQTException.checkError(i);
     }
@@ -397,7 +385,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The matrix specification to use for drawing.
      * @throws quicktime.std.StdQTException
      */
-    public final Matrix getMatrix() throws StdQTException {
+    public Matrix getMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
         int i = GraphicsImportGetMatrix(_ID(), localMatrix.getBytes());
         StdQTException.checkError(i);
@@ -410,7 +398,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param bounds Specifies the bounding rectangle.
      * @throws quicktime.std.StdQTException
      */
-    public final void setBoundsRect(QDRect bounds) throws StdQTException {
+    public void setBoundsRect(QDRect bounds) throws StdQTException {
         int i = GraphicsImportSetBoundsRect(_ID(), bounds.getRect());
         StdQTException.checkError(i);
     }
@@ -421,7 +409,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The bounding rectangle.
      * @throws quicktime.std.StdQTException
      */
-    public final QDRect getBoundsRect() throws StdQTException {
+    public QDRect getBoundsRect() throws StdQTException {
         QDRect localQDRect = new QDRect();
         int i = GraphicsImportGetBoundsRect(_ID(), localQDRect.getRect());
         StdQTException.checkError(i);
@@ -435,7 +423,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param scriptTag Specifies the depth at which the image is to be compressed.
      * @throws quicktime.QTException
      */
-    public final void saveAsPicture(QTFile file, int scriptTag) throws QTException {
+    public void saveAsPicture(QTFile file, int scriptTag) throws QTException {
         int i = GraphicsImportSaveAsPicture(_ID(), file.getFSSpec(false, 512), scriptTag);
         StdQTException.checkError(i);
     }
@@ -446,7 +434,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param scriptTag Specifies
      * @throws quicktime.QTException
      */
-    public final void saveAsQuickTimeImageFile(QTFile paramQTFile, int scriptTag) throws QTException {
+    public void saveAsQuickTimeImageFile(QTFile paramQTFile, int scriptTag) throws QTException {
         int i = GraphicsImportSaveAsQuickTimeImageFile(_ID(), paramQTFile.getFSSpec(false, 512), scriptTag);
         StdQTException.checkError(i);
     }
@@ -457,7 +445,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param graphicsMode Specifies the graphics transfer mode.
      * @throws quicktime.std.StdQTException
      */
-    public final void setGraphicsMode(GraphicsMode graphicsMode) throws StdQTException {
+    public void setGraphicsMode(GraphicsMode graphicsMode) throws StdQTException {
         int i = GraphicsImportSetGraphicsMode(_ID(), graphicsMode.getGraphicsMode(), graphicsMode.getColor().getRGBColor());
         StdQTException.checkError(i);
     }
@@ -468,7 +456,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The graphics transfer mode.
      * @throws quicktime.std.StdQTException
      */
-    public final GraphicsMode getGraphicsMode() throws StdQTException {
+    public GraphicsMode getGraphicsMode() throws StdQTException {
         int[] arrayOfInt = new int[1];
         byte[] arrayOfByte = new byte[6];
         int i = GraphicsImportGetGraphicsMode(_ID(), arrayOfInt, arrayOfByte);
@@ -482,7 +470,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param quality Specifies a quality CodecQ value
      * @throws quicktime.std.StdQTException
      */
-    public final void setQuality(int quality) throws StdQTException {
+    public void setQuality(int quality) throws StdQTException {
         int i = GraphicsImportSetQuality(_ID(), quality);
         StdQTException.checkError(i);
     }
@@ -493,7 +481,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The image quality value.
      * @throws quicktime.std.StdQTException
      */
-    public final int getQuality() throws StdQTException {
+    public int getQuality() throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = GraphicsImportGetQuality(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -506,7 +494,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The handle to the aliased data reference
      * @throws quicktime.QTException
      */
-    public final QTHandle getAliasedDataReference() throws QTException {
+    public QTHandle getAliasedDataReference() throws QTException {
         return QTHandle.fromGraphicsImporterAlias(this);
     }
 
@@ -516,7 +504,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The aliased data type
      * @throws quicktime.std.StdQTException
      */
-    public final int getAliasedDataType() throws StdQTException {
+    public int getAliasedDataType() throws StdQTException {
         int[] arrayOfInt1 = new int[1];
         int[] arrayOfInt2 = new int[1];
         int i = GraphicsImportGetAliasedDataReference(_ID(), arrayOfInt1, arrayOfInt2);
@@ -532,7 +520,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param gdh a GDevice object or null to use current device
      * @throws quicktime.std.StdQTException
      */
-    public final void setGWorld(QDGraphics port, GDevice gdh) throws StdQTException {
+    public void setGWorld(QDGraphics port, GDevice gdh) throws StdQTException {
         int i = GraphicsImportSetGWorld(_ID(), QTObject.ID(port), QTObject.ID(gdh));
         StdQTException.checkError(i);
     }
@@ -543,7 +531,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return The current destination graphics port
      * @throws quicktime.std.StdQTException
      */
-    public final QDGraphics getGWorld() throws StdQTException {
+    public QDGraphics getGWorld() throws StdQTException {
         return QDGraphics.fromGraphicsImporter(this);
     }
 
@@ -554,7 +542,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return True if a valid operation, false otherwise.
      * @throws quicktime.std.StdQTException
      */
-    public final boolean validate() throws StdQTException {
+    public boolean validate() throws StdQTException {
         int[] arrayOfInt = new int[1];
         int i = GraphicsImportValidate(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -569,7 +557,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return a value that indicates if this instance of the importer will draw all pixels
      * @throws quicktime.std.StdQTException
      */
-    public final int doesDrawAllPixels() throws StdQTException {
+    public int doesDrawAllPixels() throws StdQTException {
         short[] arrayOfShort = { 0 };
         int i = GraphicsImportDoesDrawAllPixels(_ID(), arrayOfShort);
         if (i == -2147450878)
@@ -619,8 +607,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param theFile the output file to write to.
      * @throws quicktime.QTException
      */
-    public void exportImageFile(int scriptTag1, int limit, QTFile paramQTFile, int paramInt3) throws QTException {
-        int i = GraphicsImportExportImageFile(_ID(), scriptTag1, limit, paramQTFile.getFSSpec(false, 512), (short) paramInt3);
+    public void exportImageFile(int fileType, int fileCreator, QTFile theFile, int scriptTag) throws QTException {
+        int i = GraphicsImportExportImageFile(_ID(), fileType, fileCreator, theFile.getFSSpec(false, 512), (short) scriptTag);
         StdQTException.checkError(i);
     }
 
@@ -630,7 +618,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return a QT atom container that contains a list of available export formats. supported by the graphics import component.
      * @throws quicktime.std.StdQTException
      */
-    public final AtomContainer getExportImageTypeList() throws StdQTException {
+    public AtomContainer getExportImageTypeList() throws StdQTException {
         return AtomContainer.fromGraphicsImporterExportImage(this);
     }
 
@@ -640,18 +628,18 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return a QT atom container that contains Export settings.
      * @throws quicktime.std.StdQTException
      */
-    public final AtomContainer getExportSettingsAsAtomContainer() throws StdQTException {
+    public AtomContainer getExportSettingsAsAtomContainer() throws StdQTException {
         return AtomContainer.fromGraphicsImporterExportSettings(this);
     }
 
     /**
      * Export settings from a QuickTime atom container. These settings configure how images will be saved by the
-     * GraphicsImportExportImageFile function..
+     * GraphicsImportExportImageFile function.
      * @see "QuickTime::GraphicsImportSetExportSettingsFromAtomContainer"
      * @param qtAtomContainer the atomcontainer with the export settings.
      * @throws quicktime.std.StdQTException
      */
-    public final void setExportSettingsFromAtomContainer(AtomContainer qtAtomContainer) throws StdQTException {
+    public void setExportSettingsFromAtomContainer(AtomContainer qtAtomContainer) throws StdQTException {
         int[] arrayOfInt = { 0 };
         arrayOfInt[0] = QTObject.ID(qtAtomContainer);
         int i = GraphicsImportSetExportSettingsFromAtomContainer(_ID(), arrayOfInt);
@@ -665,7 +653,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param prompt A prompt that appears in the standard put dialog box; it may be nil, in which case a default string is used.
      * @throws quicktime.QTException
      */
-    public final GraphicsImporterInfo doExportImageFileDialog(QTFile inDefaultSpec, String prompt) throws QTException {
+    public GraphicsImporterInfo doExportImageFileDialog(QTFile inDefaultSpec, String prompt) throws QTException {
         return QTFile.fromGraphicsImporter(this, inDefaultSpec, prompt);
     }
 
@@ -676,7 +664,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param limit the offset of the byte following the last byte of the image data.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataReferenceOffsetAndLimit(int offset, int limit) throws StdQTException {
+    public void setDataReferenceOffsetAndLimit(int offset, int limit) throws StdQTException {
         int i = GraphicsImportSetDataReferenceOffsetAndLimit(_ID(), offset, limit);
         StdQTException.checkError(i);
     }
@@ -687,7 +675,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return an array of length 2 with 1st element as the offset and 2nd element as the limit.
      * @throws quicktime.std.StdQTException
      */
-    public final int[] getDataReferenceOffsetAndLimit() throws StdQTException {
+    public int[] getDataReferenceOffsetAndLimit() throws StdQTException {
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
         int[] arrayOfInt3 = new int[2];
@@ -706,7 +694,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the number of images.
      * @throws quicktime.std.StdQTException
      */
-    public final int getImageCount() throws StdQTException {
+    public int getImageCount() throws StdQTException {
         int[] arrayOfInt = { 0 };
         int i = GraphicsImportGetImageCount(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -720,7 +708,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param imageIndex Specifies the image index.
      * @throws quicktime.std.StdQTException
      */
-    public final void setImageIndex(int imageIndex) throws StdQTException {
+    public void setImageIndex(int imageIndex) throws StdQTException {
         int i = GraphicsImportSetImageIndex(_ID(), imageIndex);
         StdQTException.checkError(i);
     }
@@ -731,7 +719,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the image index.
      * @throws quicktime.std.StdQTException
      */
-    public final int getImageIndex() throws StdQTException {
+    public int getImageIndex() throws StdQTException {
         int[] arrayOfInt = { 0 };
         int i = GraphicsImportGetImageIndex(_ID(), arrayOfInt);
         StdQTException.checkError(i);
@@ -744,7 +732,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the default matrix
      * @throws quicktime.std.StdQTException
      */
-    public final Matrix getDefaultMatrix() throws StdQTException {
+    public Matrix getDefaultMatrix() throws StdQTException {
         Matrix localMatrix = new Matrix();
         int i = GraphicsImportGetDefaultMatrix(_ID(), localMatrix.getBytes());
         StdQTException.checkError(i);
@@ -757,7 +745,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the default matrix
      * @throws quicktime.QTException
      */
-    public final Region getDefaultClip() throws QTException {
+    public Region getDefaultClip() throws QTException {
         return Region.fromGraphicsImporterDefault(this);
     }
 
@@ -768,7 +756,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the default mode
      * @throws quicktime.QTException
      */
-    public final GraphicsMode getDefaultGraphicsMode() throws QTException {
+    public GraphicsMode getDefaultGraphicsMode() throws QTException {
         int[] arrayOfInt = { 0 };
         QDColor localQDColor = new QDColor();
         int i = GraphicsImportGetDefaultGraphicsMode(_ID(), arrayOfInt, localQDColor.getRGBColor());
@@ -783,7 +771,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the default Rect
      * @throws quicktime.QTException
      */
-    public final QDRect getDefaultSourceRect() throws QTException {
+    public QDRect getDefaultSourceRect() throws QTException {
         QDRect localQDRect = new QDRect();
         int i = GraphicsImportGetDefaultSourceRect(_ID(), localQDRect.getBytes());
         return localQDRect;
@@ -794,7 +782,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * rectangle should be drawn.
      * @see "QuickTime::GraphicsImportSetDestRect"
      */
-    public final void setDestRect(QDRect paramQDRect) throws QTException {
+    public void setDestRect(QDRect paramQDRect) throws QTException {
         int i = GraphicsImportSetDestRect(_ID(), paramQDRect.getBytes());
     }
 
@@ -804,7 +792,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return the destination rectangle.
      * @throws quicktime.QTException
      */
-    public final QDRect getDestRect() throws QTException {
+    public QDRect getDestRect() throws QTException {
         QDRect localQDRect = new QDRect();
         int i = GraphicsImportGetDestRect(_ID(), localQDRect.getBytes());
         return localQDRect;
@@ -816,7 +804,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @param scriptTag the flag
      * @throws quicktime.QTException
      */
-    public final void setFlags(int scriptTag) throws QTException {
+    public void setFlags(int scriptTag) throws QTException {
         int i = GraphicsImportSetFlags(_ID(), scriptTag);
     }
 
@@ -826,7 +814,7 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
      * @return Returns the current scriptTag.
      * @throws quicktime.QTException
      */
-    public final int getFlags() throws QTException {
+    public int getFlags() throws QTException {
         int[] arrayOfInt = { 0 };
         int i = GraphicsImportGetFlags(_ID(), arrayOfInt);
         return arrayOfInt[0];
@@ -964,8 +952,8 @@ public final class GraphicsImporter extends Component implements QuickTimeLib {
         return GraphicsImportManager.GraphicsImportGetMetaData(scriptTag1, limit);
     }
 
-    private static short GraphicsImportExportImageFile(int scriptTag1, int limit, int paramInt3, byte[] paramArrayOfByte, short paramShort) {
-        return GraphicsImportManager.GraphicsImportExportImageFile(scriptTag1, limit, paramInt3, paramArrayOfByte, paramShort);
+    private static short GraphicsImportExportImageFile(int scriptTag1, int fileType, int fileCreator, byte[] fsspec, short scriptTag) {
+        return GraphicsImportManager.GraphicsImportExportImageFile(scriptTag1, fileType, fileCreator, fsspec, scriptTag);
     }
 
     private static int GraphicsImportSetExportSettingsFromAtomContainer(int scriptTag, int[] paramArrayOfInt) {

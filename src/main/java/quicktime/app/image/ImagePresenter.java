@@ -29,12 +29,12 @@ import quicktime.util.IntEncodedImage;
 import quicktime.util.RawEncodedImage;
 
 /**
- * @deprecated
  * This class represents an image that is loaded into memory. Its focus is on performance
  * so if the image data that is presented to the ImagePresenter is in a format that is non-optimal
  * for drawing the data will generally be converted to a format that is optimal, at the expense of a greater usage
- * of memory (see setImageData methods). This process is controlled by the optimised redrawing flag, which if true
+ * of memory (see setImageData methods). This process is controlled by the optimized redrawing flag, which if true
  * (the default), may convert the image to a better format for drawing performance.
+ * @deprecated
  */
 public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
 
@@ -47,27 +47,27 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from a file.
      * @param qtFile the QTFile.
-     * @param java.io.IOException
+     * @throws java.io.IOException
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public static ImagePresenter fromFile(QTFile paramQTFile) throws IOException, QTException {
-        return fromGraphicsImporterDrawer(new GraphicsImporterDrawer(paramQTFile));
+    public static ImagePresenter fromFile(QTFile qtFile) throws IOException, QTException {
+        return fromGraphicsImporterDrawer(new GraphicsImporterDrawer(qtFile));
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from a GraphicsImporter.
      * @param importer the GraphicsImporter object.
-     * @param java.io.IOException
+     * @throws java.io.IOException
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
-    public static ImagePresenter fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws IOException, QTException {
-        return fromGraphicsImporterDrawer(new GraphicsImporterDrawer(paramGraphicsImporter));
+    public static ImagePresenter fromGraphicsImporter(GraphicsImporter importer) throws IOException, QTException {
+        return fromGraphicsImporterDrawer(new GraphicsImporterDrawer(importer));
     }
 
     /**
@@ -83,35 +83,35 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from an ImageSpec object.
      * @param image the image
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public static ImagePresenter fromImageSpec(ImageSpec image) throws QTException {
         return fromQTImage(image.getImage(), image.getDescription());
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from nth first image of any ImageDataSequence object
      * @param image the image
      * @param nth the index into the ImageDataSequence object of the image data that should be used
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public static ImagePresenter fromImageSequence(ImageDataSequence image, int nth) throws QTException {
         return fromQTImage(image.getImage(nth), image.getDescription());
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from the PixMap of the QDGraphics object.
      * It will not be compressed.
      * @param grafPort the grafPort that will be used to create the ImagePresenter object from.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public static ImagePresenter fromGWorld(QDGraphics grafPort) throws QTException {
         PixMap localPixMap = grafPort.getPixMap();
@@ -119,8 +119,6 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from PixMap source, bounds QDRect, color depth, compression quality, codec type,
      * and codec component. This will circumvent the normal restrictions placed on an ImagePresenter in that the data
      * will be kept in the format you specify, even if that is not an optimal format for rendering.
@@ -132,6 +130,8 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      * @param codecType the int value.
      * @param codec the CodecComponent object.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public static ImagePresenter fromGWorld(QDGraphics port, QDRect rect, int colorDepth, int quality, int codecType, CodecComponent codec) throws QTException {
         int i = QTImage.getMaxCompressionSize(port, rect, colorDepth, quality, codecType, codec);
@@ -145,11 +145,11 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from a Pict object that is stored in memory.
      * @param p the pict handle
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public static ImagePresenter fromPict(Pict p) throws QTException {
         ImageDescription localImageDescription = new ImageDescription(1902408311);
@@ -169,22 +169,22 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This creates an ImagePresenter object from raw image data and ImageDescription.
      * @param data the image data.
      * @param desc the ImageDescription object.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public static ImagePresenter fromQTImage(EncodedImage data, ImageDescription desc) throws QTException {
         return new ImagePresenter(data, desc);
     }
 
     /**
+     * Creates an empty ImagePresenter object - you will need to set the image data and description
+     * before this object is usable.
      * @deprecated
      * @since QTJava 6.1
-     * Creates an emtpy ImagePresenter object - you will need to set the image data and description
-     * before this object is usable.
      */
     public ImagePresenter(QDRect paramQDRect) {
         this.mDisplayBounds = paramQDRect;
@@ -228,8 +228,6 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     private boolean optimiseRedraw = true;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the current image data and description.
      * If the data is specified then it may be recompressed if the format of the data is
      * not optimal for redrawing and the redraw optimised flag is set to true. If you pass in null
@@ -240,6 +238,8 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      * @param data the new image data for display or null to allow the application to keep the data in its preferred format.
      * @param desc describes the format of the image data - this may NOT be null.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setImageData(EncodedImage data, ImageDescription desc) throws QTException {
@@ -273,14 +273,14 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * If you have already set the image data and you have image data in the same
      * general parameters as previously set (ie. the same ImageDescription will
      * describe the data) then this call can be used to just replace the changed
      * image data.
      * @param ei the new encoded image data
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void setImageData(EncodedImage ei) throws QTException {
         this.mData = ei;
@@ -315,35 +315,35 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
-     * Returns the state of the optimisation for redraw flag. If true, then when image data is set
-     * the ImagePresenter may decompress the image data to a format that is optimised for performance
+     * Returns the state of the optimization for redraw flag. If true, then when image data is set
+     * the ImagePresenter may decompress the image data to a format that is optimized for performance
      * at the expense of possibly greater memory usage. If false, then setting the image data will
      * not decompress the image data. The default is true. Changing this flag will not alter the current
      * image data format, it only effects consequent calls to the setImageData (EncodedImage, ImageDescription) calls.
      * @param flag the new setting.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void setRedrawOptimised(boolean flag) {
         this.optimiseRedraw = flag;
     }
 
     /**
+     * Returns the current state of the optimization for drawing flag.
+     * @return a boolean
      * @deprecated
      * @since QTJava 6.1
-     * Returns the current state of the optimisation for drawing flag.
-     * @return a boolean
      */
     public boolean isRedrawOptimised() {
         return this.optimiseRedraw;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method removes the previously set encoded image data and description
      * from the ImagePresenter and will remove it from any destination QDGraphics
      * it is currently drawing into.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void removeImageData() throws QTException {
         setGWorld(QDGraphics.scratch);
@@ -355,11 +355,11 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method should return an ImageDescription that describes
      * the image data that the class contains.
      * @return the ImageDescription of an Image
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public ImageDescription getDescription() {
@@ -367,24 +367,24 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the DSequence that is used by the ImagePresenter. This
      * object may be null if the ImagePresenter is not currently attached to
      * a valid destination QDGraphics. The application should not cache this
      * sequence object for any length of time - as if the destination QDGraphics
      * is changed the DSequence is thrown away and a new one is created.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public DSequence getDSequence() {
         return this.mImageSeq;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns a region that defines the current clipping region for the object.
      * @return the clipping region
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public Region getClip() throws QTException {
@@ -392,11 +392,11 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets a region that will define the clipping region for the object
      * @param reg the new clipping region
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public synchronized void setClip(Region reg) throws StdQTException {
@@ -406,12 +406,12 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public Matrix getMatrix() throws StdQTException {
@@ -419,13 +419,13 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method assigns a mapping matrix to the sequence.
      * @see "QuickTime::SetDSequenceMatrix"
      * @param matrix a Matrix object that specifies how to transform the image during
      *                 decompression
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setMatrix(Matrix matrix) throws QTException {
@@ -440,23 +440,23 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @see ()
+     * @deprecated
+     * @since QTJava 4.0
      */
     public Dimension getInitialSize() throws QTException {
         return new Dimension(this.origWidth, this.origHeight);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the original size of the image data presented.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
@@ -464,10 +464,10 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method returns the actual image data.
      * @return the image data
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public EncodedImage getImage() {
@@ -475,10 +475,10 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDGraphics getGWorld() {
@@ -486,8 +486,6 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
@@ -495,6 +493,8 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      *
      * @param cgp a QDGraphics object
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setGWorld(QDGraphics cgp) throws QTException {
@@ -510,13 +510,13 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to tell the client to adjust its
      * location, width and/or height. All values are in pixels.
      *
      * @param bounds the new size and location.
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setDisplayBounds(QDRect bounds) throws StdQTException {
@@ -532,12 +532,12 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
@@ -548,12 +548,12 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method when it needs to ask the client for its boundary.
      * All values are in pixels.
      *
      * @return the boundary of the client
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDRect getDisplayBounds() {
@@ -561,8 +561,6 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
@@ -570,6 +568,8 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public synchronized void redraw(Region invalidRgn) throws QTException {
@@ -591,9 +591,9 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
+     * This is the method that blits the data directly to the destination QDGraphics.
      * @deprecated
      * @since QTJava 6.1
-     * This is the method that blits the data directly to the destination QDGraphics.
      */
     protected final void doDraw() throws QTException {
         if (this.mDataR != null) {
@@ -606,12 +606,12 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This sets the GraphicsMode for the Compositor when it draws its composited
      * contents to its destination QDGraphics (typically the QTCanvas).
      * @param mode the new GraphicsMode for this presenter
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setGraphicsMode(GraphicsMode mode) throws QTException {
@@ -621,10 +621,10 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This gets the current GraphicsMode for the compositor.
      * @return a GraphicsMode
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public GraphicsMode getGraphicsMode() {
@@ -632,36 +632,36 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns a String representation of this object.
      * @return a String
+     * @deprecated
+     * @since QTJava 6.1
      */
     public String toString() {
         return getClass().getName() + "[" + this.mData + "," + this.mImageDescription + "]";
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest.
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void addedTo(Object interest) {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest.
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void removedFrom(Object interest) {

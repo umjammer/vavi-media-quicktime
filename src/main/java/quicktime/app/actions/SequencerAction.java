@@ -109,4 +109,3 @@ public abstract class SequencerAction extends PeriodicAction {
         return false;
     }
 }
-

@@ -1,11 +1,8 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.SoundManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.util.EndianDescriptor;
@@ -14,13 +11,12 @@ import quicktime.util.QTHandle;
 import quicktime.util.QTHandleRef;
 import quicktime.util.QTUtils;
 
+
 /**
  * This class maps the SoundDescription record of the MovieToolbox.
  * SoundDescriptions are used when adding and getting media samples to/from Sound tracks.
  */
 public final class SoundDescription extends SampleDescription implements QuickTimeLib {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -28,15 +24,6 @@ public final class SoundDescription extends SampleDescription implements QuickTi
     public static final int kNativeSize = 36;
 
     private static EndianDescriptor ed;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SoundDescription.class));
-            }
-        }.establish();
-    }
 
     protected static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
@@ -207,4 +194,3 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         return SoundManager.RemoveSoundDescriptionExtension(paramInt1, paramInt2);
     }
 }
-

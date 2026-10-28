@@ -19,4 +19,3 @@ public interface QTVRMouseOverHotSpot {
      */
     int execute(QTVRInstance vr, int hotSpotID, int flags);
 }
-

@@ -44,4 +44,3 @@ public interface Notifier {
      */
     boolean addNotifyListener(NotifyListener nl);
 }
-

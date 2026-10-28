@@ -4688,4 +4688,3 @@ public interface StdQTConstants {
 
     int scNewGWorld = 23;
 }
-

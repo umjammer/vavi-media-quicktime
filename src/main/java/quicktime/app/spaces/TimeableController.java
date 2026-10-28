@@ -16,4 +16,3 @@ import quicktime.app.time.Timeable;
  */
 public interface TimeableController extends Timeable, Controller {
 }
-

@@ -81,7 +81,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Returns the current OSType of the described instrument's synthesizer.
      * @return the OSType
      */
-    public final int getSynthesizerType() {
+    public int getSynthesizerType() {
         return EndianOrder.flipBigEndianToNative32(getIntAt(0));
     }
 
@@ -89,7 +89,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Sets the current OSType of the described instrument's synthesizer.
      * @param type the OSType
      */
-    public final void setSynthesizerType(int type) {
+    public void setSynthesizerType(int type) {
         setIntAt(0, EndianOrder.flipNativeToBigEndian32(type));
     }
 
@@ -98,7 +98,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * @return the Synthesizer name
      * @throws quicktime.util.UtilException
      */
-    public final String getSynthesizerName() throws UtilException {
+    public String getSynthesizerName() throws UtilException {
         return getPStringAt(4);
     }
 
@@ -107,7 +107,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * @param name the Synthesizer name
      * @throws quicktime.util.UtilException
      */
-    public final void setSynthesizerName(String name) throws UtilException {
+    public void setSynthesizerName(String name) throws UtilException {
         setPStringAt(4, 31, name);
     }
 
@@ -116,7 +116,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * @return the instrumentName
      * @throws quicktime.util.UtilException
      */
-    public final String getInstrumentName() throws UtilException {
+    public String getInstrumentName() throws UtilException {
         return getPStringAt(36);
     }
 
@@ -125,7 +125,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * @param name the instrumentName
      * @throws quicktime.util.UtilException
      */
-    public final void setInstrumentName(String name) throws UtilException {
+    public void setInstrumentName(String name) throws UtilException {
         setPStringAt(36, 31, name);
     }
 
@@ -133,7 +133,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Returns the current number of the described instrument.
      * @return the instrumentNumber
      */
-    public final int getInstrumentNumber() {
+    public int getInstrumentNumber() {
         return EndianOrder.flipBigEndianToNative32(getIntAt(68));
     }
 
@@ -141,7 +141,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Sets the current number of the described instrument.
      * @param num the instrumentNumber
      */
-    public final void setInstrumentNumber(int num) {
+    public void setInstrumentNumber(int num) {
         setIntAt(68, EndianOrder.flipNativeToBigEndian32(num));
     }
 
@@ -149,7 +149,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Returns the current gm Number of the described instrument's synthesizer.
      * @return the gm Number
      */
-    public final int getGMNumber() {
+    public int getGMNumber() {
         return EndianOrder.flipBigEndianToNative32(getIntAt(72));
     }
 
@@ -157,7 +157,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Sets the current gm Number of the described instrument's synthesizer.
      * @param gmNumber the gm Number
      */
-    public final void setGMNumber(int gmNumber) {
+    public void setGMNumber(int gmNumber) {
         setIntAt(72, EndianOrder.flipNativeToBigEndian32(gmNumber));
     }
 
@@ -169,7 +169,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * @param gmNumber instrument number
      * @throws quicktime.std.StdQTException
      */
-    public final void stuff(NoteAllocator na, int gmNumber) throws StdQTException {
+    public void stuff(NoteAllocator na, int gmNumber) throws StdQTException {
         StdQTException.checkError(NAStuffToneDescription(QTObject.ID(na), gmNumber, getBytes()));
     }
 
@@ -182,7 +182,7 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * @param flags flags to limit user options
      * @throws quicktime.std.StdQTException
      */
-    public final void pickInstrument(NoteAllocator na, String prompt, int flags) throws StdQTException {
+    public void pickInstrument(NoteAllocator na, String prompt, int flags) throws StdQTException {
         int i = 0;
         if (QTSession.isCurrentOS(4)) {
             i = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {

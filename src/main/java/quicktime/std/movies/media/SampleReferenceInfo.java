@@ -8,22 +8,22 @@ public final class SampleReferenceInfo {
     /**
      * The sample time.
      */
-    public int sampleTime;
+    public final int sampleTime;
 
     /**
      * The sample description index.
      */
-    public int descriptionIndex;
+    public final int descriptionIndex;
 
     /**
      * The sample description object for the media samples of this sample reference.
      */
-    public SampleDescription sampleDescription;
+    public final SampleDescription sampleDescription;
 
     /**
      * A vector of sample reference objects.
      */
-    public SampleReferenceVector sampleRefs;
+    public final SampleReferenceVector sampleRefs;
 
     SampleReferenceInfo(int paramInt1, SampleDescription paramSampleDescription, int paramInt2, SampleReferenceVector paramSampleReferenceVector) {
         this.sampleRefs = paramSampleReferenceVector;
@@ -32,4 +32,3 @@ public final class SampleReferenceInfo {
         this.sampleDescription = paramSampleDescription;
     }
 }
-

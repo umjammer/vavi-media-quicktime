@@ -10,34 +10,34 @@ public class SampleInfo extends TimeInfo {
     /**
      * The media sample's offset.
      */
-    public int offset;
+    public final int offset;
 
     /**
      * The media sample's data size.
      */
-    public int size;
+    public final int size;
 
     /**
      * The number of samples.
      */
-    public int numberOfSamples;
+    public final int numberOfSamples;
 
     /**
      * The media sample's sample description. This will generally be a subclass of SampleDescription
      * according to the type of media the sample deals with. This may also be null if the media sample
      * does not require sample description information.
      */
-    public SampleDescription description;
+    public final SampleDescription description;
 
     /**
      * The flags for the media samples.
      */
-    public int flags;
+    public final int flags;
 
     /**
      * The media sample's sample description index.
      */
-    public int descriptionIndex;
+    public final int descriptionIndex;
 
     SampleInfo(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, SampleDescription paramSampleDescription, int paramInt6, int paramInt7) {
         super(paramInt1, paramInt2);
@@ -57,4 +57,3 @@ public class SampleInfo extends TimeInfo {
         return getClass().getName() + "[time=" + this.time + ",duration=" + this.duration + ",offset=" + this.offset + ",size=" + this.size + ",numSamples=" + this.numberOfSamples + ",flags=" + this.flags + ",description=" + this.description + ",descriptionIndex=" + this.descriptionIndex + "]";
     }
 }
-

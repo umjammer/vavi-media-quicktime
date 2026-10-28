@@ -3,11 +3,12 @@ package quicktime.app.actions;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.Vector;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
+
 /**
- * @deprecated
  * The SimpleActionList class extends the TickleList to
  * provide a list of Targetable objects. The Targetable interface
  * extends the Ticklish interface providing a Ticklish object
@@ -18,6 +19,7 @@ import quicktime.QTSession;
  * that is capable of enumerating over the list's targets.
  *
  * @see quicktime.app.actions.Targetable
+ * @deprecated
  */
 public class SimpleActionList extends TickleList {
 
@@ -28,26 +30,28 @@ public class SimpleActionList extends TickleList {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Return an Enumeration that is capable of enumerating through
      * the targets that are targetted by the actions. As any of the
      * actions that are added can target the same object, this Enumerator
      * should iterate through each of the targets, with each target
      * being unique.
+     *
      * @return an Enumerator
+     * @since QTJava 6.1
+     * @deprecated
      */
     public Enumeration targets() {
         return new TargetEnumerator(this.list, null);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns true if the object implements the Targetable interface. Only
      * Targetable objects can be members of the SimpleActionList
+     *
      * @param object an object to test for appropriateness of this list
      * @return true if the object implements the Targetable interface
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public boolean isAppropriate(Object object) {
@@ -55,10 +59,11 @@ public class SimpleActionList extends TickleList {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Removes any and all actions that target the supplied target.
+     *
      * @param target the target which determines which actions to remove
+     * @since QTJava 6.1
+     * @deprecated
      */
     public synchronized void removeTarget(Object target) {
         if (this.list != null) {
@@ -84,7 +89,7 @@ public class SimpleActionList extends TickleList {
         }
     }
 
-    static class TargetEnumerator implements Enumeration {
+    static class TargetEnumerator implements Enumeration<Object> {
 
         TickleNode current;
 
@@ -117,7 +122,6 @@ public class SimpleActionList extends TickleList {
             return localObject;
         }
 
-        private final Vector rt = new Vector();
+        private final Vector<Object> rt = new Vector<>();
     }
 }
-

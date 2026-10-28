@@ -26,19 +26,19 @@ import quicktime.util.EncodedImage;
 import quicktime.util.RawEncodedImage;
 
 /**
- * @deprecated
- * A TwoDSprite is a specialised presenter for image data within the context of a SpriteWorld.
+ * A TwoDSprite is a specialized presenter for image data within the context of a SpriteWorld.
  * It contains information also about the layer within the SpriteWorld that the image presented by the Sprite
  * is drawn. It also contains information about visibility and Matrix transformations and GraphicsMode
  * drawing transformations that are applied to the image data when the Sprite is drawn in the SpriteWorld.
  *
- * Typically an application will provide the image data and presentation characteristics and the SWCompositor
+ * Typically, an application will provide the image data and presentation characteristics and the SWCompositor
  * assumes the responsibility of creating the actual TwoDSprite's Sprite that is used to present this data in the internal
  * SpriteWorld that the SWCompositor uses to render and construct its image.
  * The TwoDSprite uses the quicktime.std.anim.Sprite class to draw the image in a quicktime.std.anim.SpriteWorld.
  *
- * @see quicktime.app.display.Compositor,
- * {@link quicktime.app.anim.TwoDSpriteInfo}
+ * @see "quicktime.app.display.Compositor"
+ * @see quicktime.app.anim.TwoDSpriteInfo
+ * @deprecated
  */
 public class TwoDSprite implements NotifyListener, Transformable, Layerable, ImageSettable, Compositable {
 
@@ -80,29 +80,27 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Create a sprite when the final destination of the sprite is not known. This constructor
      * provides all of the state which will be used by the TwoDSprite object to create itself
      * when it is attached to a SpriteWorld.
      * @param spriteInfo the image and layout information for the sprite when it is created.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSprite(TwoDSpriteInfo spriteInfo) throws QTException {
         this.info = spriteInfo;
     }
 
     /**
+     * Create a sprite that will use a hidden image, visibility set to false and an Identity matrix.
      * @deprecated
      * @since QTJava 6.1
-     * Create a sprite that will use a hidden image, visibility set to false and an Identity matrix.
      */
     public TwoDSprite() throws QTException {
         this(new Matrix(), 1, null);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Create a sprite that will use a hidden image and visibility set to false. This constructor
      * is used when the TwoDSprite is being used as a NotifyListener, expecting the image
      * data from a Notifier to arrive at some indeterminate time in the future. The arguments
@@ -111,14 +109,14 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
      * @param graphicsMode the GraphicsMode that is applied to the rendering of the
      *  image data, this can be null
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSprite(Matrix matrix, int layer, GraphicsMode graphicsMode) throws QTException {
         this.info = new TwoDSpriteInfo(getDummyEI(), getDummyID(), matrix, false, layer, graphicsMode);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This constructor
      * provides all of the state which will be used by the TwoDSprite object to create itself
      * when it is attached to a SpriteWorld.
@@ -126,6 +124,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param matrix the display matrix of the sprite
      * @param visibility whether the sprite will be visible (true) or not (false) when created
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSprite(ImageSpec image, Matrix matrix, boolean visibility, int layer) throws QTException {
         this.info = new TwoDSpriteInfo(image.getImage(), image.getDescription(), matrix, visibility, layer);
@@ -134,8 +134,6 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     private transient Sprite sprite;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This constructor
      * provides all of the state which will be used by the TwoDSprite object to create itself
      * when it is attached to a SpriteWorld.
@@ -145,14 +143,14 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
      * @param graphicsMode the GraphicsMode that is applied to the rendering of the
      *  image data, this can be null
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSprite(ImageSpec image, Matrix matrix, boolean visibility, int layer, GraphicsMode graphicsMode) throws QTException {
         this.info = new TwoDSpriteInfo(image.getImage(), image.getDescription(), matrix, visibility, layer, graphicsMode);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This constructor
      * provides all of the state which will be used by the TwoDSprite object to create itself
      * when it is attached to a SpriteWorld.
@@ -162,6 +160,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param matrix the display matrix of the sprite
      * @param visibility whether the sprite will be visible (true) or not (false) when created
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSprite(ImageDataSequence images, int frame, Matrix matrix, boolean visibility, int layer) throws QTException {
         this.info = new TwoDSpriteInfo(images.getImage(frame), images.getDescription(), matrix, visibility, layer);
@@ -172,8 +172,6 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     private transient ImageSpec is;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This constructor
      * provides all of the state which will be used by the TwoDSprite object to create itself
      * when it is attached to a SpriteWorld.
@@ -185,6 +183,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param layer the layer of the SpriteWorld where the Sprite will be drawn
      * @param graphicsMode the GraphicsMode that is applied to the rendering of the
      *  image data, this can be null
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSprite(ImageDataSequence images, int frame, Matrix matrix, boolean visibility, int layer, GraphicsMode graphicsMode) throws QTException {
         this.info = new TwoDSpriteInfo(images.getImage(frame), images.getDescription(), matrix, visibility, layer, graphicsMode);
@@ -205,38 +205,38 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     private transient Timer parentsTimer;
 
     /**
-     * @deprecated
      * The actionCommand string that is presented to the QTActionListeners of the QTButton.* @deprecated since QTJava 6.1
+     * @deprecated
      */
     protected String label;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * You can set the label string for this TwoDSprite.
      * @param label a string that is associated with this sprite.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void setLabel(String label) {
         this.label = label;
     }
 
     /**
+     * @return the label that is associated with this TwoDSprite.
      * @deprecated
      * @since QTJava 6.1
-     * @return the label that is associated with this TwoDSprite.
      */
     public String getLabel() {
         return this.label;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This registers the deferred listener.
      * @param notifier the Notifier that will notify the listener when it
      *  has reached the state that the listener expects.
      * @return true if the Notifier is an instanceof ImageSpec and thus is a valid Notifier
      *  for the TwoDSprite. Returns false if the Notifier is not an instanceof ImageSpec.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public boolean setNotifier(Notifier notifier) {
@@ -249,10 +249,10 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the Notifier object when the image data that it is
      * supplying to the TwoDSprite is valid.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void notifyComplete() {
@@ -268,8 +268,6 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method can be used to change the image that is being presented by the Sprite
      * and to ensure that the sprite is visible, if the specified image data is not null.
      * This method is also called internally when the
@@ -279,6 +277,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @param im the EncodedImage image data
      * @param id the ImageDescription that describes the format of the EncodedImage data.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setImageData(EncodedImage im, ImageDescription id) throws QTException {
@@ -298,9 +298,9 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
+     * This method should make the object's current image the specified image.
      * @deprecated
      * @since QTJava 6.1
-     * This method should make the object's current image the specified image.
      */
     public void setImage(EncodedImage im) throws QTException {
         im = im != null ? im : getDummyEI();
@@ -321,12 +321,12 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Return the sprite world that this sprite belongs too. If the TwoDSprite
      * is not currently attached to a SpriteWorld a SpriteInvalidException will
      * be thrown.
      * @return the current SpriteWorld of a valid TwoDSprite
+     * @deprecated
+     * @since QTJava 6.1
      */
     public SWCompositor getParent() {
         return this.parentCompositor;
@@ -349,23 +349,23 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns true if the Sprite being used by the TwoDSprite is valid and thus is constructed
      * and present in a SpriteWorld. Returns false if not.
      * @return a boolean
+     * @deprecated
+     * @since QTJava 6.1
      */
     public boolean isValid() {
         return this.sprite != null;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This will remove the sprite from the SpriteWorld it is contained in and destroy its
      * internal structures. The TwoDSprite must be reset after this call to recreate a
      * Sprite object to attach it to a sprite world.
-     * @see createSprite
+     * @see #createSprite
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void remove() throws QTException {
         if (this.sprite != null) {
@@ -377,24 +377,24 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns all of the pertinent information about the current sprite's state to
      * recreate a sprite.
      * @return the TwoDSprite info object that contains all of the information that the Sprite
      *  is presenting.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public TwoDSpriteInfo getSpriteInfo() throws QTException {
         return this.info;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This call should not be called by an application. It is used by the Compositor
      * to notify the Sprite that it is no longer valid - generally done when the Compositor
      * is recreating its internal SpriteWorld.
+     * @deprecated
+     * @since QTJava 6.1
      */
     protected void removeNotify() throws QTException {
         if (this.spriteIsCompositor != null)
@@ -403,12 +403,12 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This will create a sprite object that presents the specified image and display options
      * as specified in the contained info object.
      * @param sw the Sprite world that the Sprite will appear in
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void createSprite(SpriteWorld sw) throws QTException {
         if (this.sprite != null)
@@ -430,9 +430,9 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
+     * This method returns the current matrix of the Transformable object.
      * @deprecated
      * @since QTJava 6.1
-     * This method returns the current matrix of the Transformable object.
      */
     @Override
     public Matrix getMatrix() throws QTException {
@@ -442,10 +442,10 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
@@ -460,26 +460,26 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the runtime type is a java.awt.Dimension - the return value can be
      *  cast to this Class - however getOriginalSize should be used.
      * @throws quicktime.QTException
      * @see ()
+     * @deprecated
+     * @since QTJava 4.0
      */
     public Dimension getInitialSize() throws QTException {
         return new Dimension(this.info.desc.getWidth(), this.info.desc.getHeight());
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the original size
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
@@ -487,10 +487,10 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method invalidates the portion of the sprite's sprite world which is occupied
      * by the sprite.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public final void invalidate() throws QTException {
         if (this.sprite == null) {
@@ -504,13 +504,13 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method tests if a point is inside a sprite.
      * @param flags Specifies the control flags.
      * @param loc Specifies the test point.
      * @return true if the point is inside the sprite, false if not.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public boolean hitTest(int flags, QDPoint loc) throws QTException {
         if (this.sprite == null) {
@@ -521,11 +521,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method gets the image description property of this sprite.
      * @return the image description.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public ImageDescription getDescription() throws QTException {
@@ -535,11 +535,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the image description property of this sprite.
      * @param idh Specifies the image description.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void setDescription(ImageDescription idh) throws QTException {
         if (this.sprite != null)
@@ -548,11 +548,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method returns the actual image data.
      * @return the image data
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public EncodedImage getImage() throws QTException {
@@ -562,11 +562,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method gets the visibility property of this sprite.
      * @return the visibility.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public boolean getVisible() throws QTException {
         if (this.sprite != null)
@@ -575,11 +575,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the visibility property of this sprite.
      * @param visible Specifies the visibility.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void setVisible(boolean visible) throws QTException {
         if (this.sprite != null) {
@@ -590,11 +590,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method gets the layer property of this sprite.
      * @return the layer.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public int getLayer() throws QTException {
@@ -604,11 +604,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the layer property of this sprite.
      * @param layer Specifies the layer.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setLayer(int layer) throws QTException {
@@ -620,11 +620,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method gets the graphics mode property of this sprite.
      * @return the graphics mode.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public GraphicsMode getGraphicsMode() throws QTException {
@@ -634,11 +634,11 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the graphics mode property of this sprite.
      * @param gMode Specifies the graphics mode.
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setGraphicsMode(GraphicsMode gMode) throws QTException {
@@ -650,8 +650,9 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
+     * Returns true if the TwoDSprite represents the same Sprite object
+     * @since QTJava 6.1
      * @deprecated
-     * Returns true if the TwoDSprite represents the same Sprite object * @deprecated since QTJava 6.1
      */
     public boolean equals(Object paramObject) {
         if (this == paramObject)
@@ -666,10 +667,10 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns a String representation of this class.
      * @return a String
+     * @deprecated
+     * @since QTJava 6.1
      */
     public String toString() {
         try {
@@ -677,9 +678,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
             if (this.label != null)
                 str = "label=" + this.label;
             return getClass().getName() + "[" + str + "sprite= " + this.sprite + ",matrix=" + getMatrix() + "]";
-        } catch (QTException localQTException) {
+        } catch (QTException _) {
         }
         return getClass().getName();
     }
 }
-

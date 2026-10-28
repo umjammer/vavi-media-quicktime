@@ -1,7 +1,6 @@
 package quicktime.std.image;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.Errors;
 import quicktime.QTException;
 import quicktime.QTObject;
@@ -591,16 +590,12 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
     public void requestSettings() throws QTException {
         int j;
         if (QTSession.isCurrentOS(4)) {
-            j = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    int i = 0;
-                    synchronized (QTNative.globalsLock) {
-                        i = GraphicsExporter.GraphicsExportRequestSettings(_ID(), 0, 0);
-                    }
-                    return i;
+            j = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int i = 0;
+                synchronized (QTNative.globalsLock) {
+                    i = GraphicsExporter.GraphicsExportRequestSettings(_ID(), 0, 0);
                 }
+                return i;
             });
             StdQTException.checkError(j);
         } else {

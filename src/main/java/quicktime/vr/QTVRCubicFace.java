@@ -38,7 +38,7 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(16);
         return localEndianDescriptor;
     }
@@ -179,4 +179,3 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
         return getClass().getName() + "[orientation W=" + getOrientationW() + ",X=" + getOrientationX() + ",Y=" + getOrientationY() + ",Z=" + getOrientationZ() + ",center=" + getCenter() + ",aspect=" + getAspect() + ",skew=" + getSkew() + "]";
     }
 }
-

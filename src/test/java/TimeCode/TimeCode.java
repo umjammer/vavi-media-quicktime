@@ -151,11 +151,11 @@ public class TimeCode extends Frame {
             myTCDef.setTimeScale(3000);
             myTCDef.setFrameDuration(100);
             myTCDef.setFramesPerSecond(30);
-   /*
-    For drop frame 29.97 fps
-    tcdFlags |= StdQTConstants.tcDropFrame;
-    myTCDef.setTimeScale (2997);
-   */
+
+//            // For drop frame 29.97 fps
+//            tcdFlags |= StdQTConstants.tcDropFrame;
+//            myTCDef.setTimeScale(2997);
+
             // Start the timecode at 0:0:0:0
             TimeCodeTime myTCTime = new TimeCodeTime(0, 0, 0, 0);
 
@@ -212,11 +212,9 @@ public class TimeCode extends Frame {
             theTCTrack.insertMedia(0, 0, theMovie.getDuration(), 1.0F);
 
             // this code saves the TimeCode to the movie
-  /*
-   OpenMovieFile outStream = OpenMovieFile.asWrite (qtf); 
-   theMovie.addResource (outStream, movieInDataForkResID, qtf.getName());
-   outStream.close();
-  */
+//            OpenMovieFile outStream = OpenMovieFile.asWrite(qtf);
+//            theMovie.addResource(outStream, movieInDataForkResID, qtf.getName());
+//            outStream.close();
 
             // Make the timecode visible
             int tcFlags = theTimeCoder.getFlags();
@@ -240,13 +238,11 @@ public class TimeCode extends Frame {
 
             } while (myTrack != null);
 
-            // if you previous saved the time code to the movie
+            // if you previously saved the time code to the movie
             // removing the time code track you also need to update the movie file
-  /*
-   OpenMovieFile outStream = OpenMovieFile.asWrite (qtf); 
-   theMovie.addResource (outStream, movieInDataForkResID, qtf.getName());
-   outStream.close();
-  */
+//            OpenMovieFile outStream = OpenMovieFile.asWrite(qtf);
+//            theMovie.addResource(outStream, movieInDataForkResID, qtf.getName());
+//            outStream.close();
 
             changedMovie();
         } catch (QTException err) {
@@ -263,8 +259,3 @@ public class TimeCode extends Frame {
         pack();
     }
 }
-
-
-
-
-

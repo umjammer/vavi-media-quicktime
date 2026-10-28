@@ -1,12 +1,12 @@
 package quicktime.app.time;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Enumeration;
 import java.util.Vector;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
+
 
 /**
  * The TaskThread class maintains a table of Taskable objects that will periodically
@@ -14,17 +14,17 @@ import quicktime.QTSession;
  * a new thread is spawned when the start method of the TaskThread object is called.
  * The thread is stopped when the stop method is called. Taskable objects can be added
  * or removed from TaskThreads at the applications discretion.
- *
+ * <p>
  * When the thread is running it calls its Taskable member's task method. When it has
  * completed a single iteration of its members it will sleep for the specified
  * sleepTime and then go through the process again until the thread is stopped.
- *
+ * <p>
  * A TaskThread object must be explicitly started - just adding a Taskable object
  * to the collection is not sufficient to start the thread. However, once all
  * of the Taskable objects are removed from the collection the thread will stop.
  * To ensure that adding a Taskable object to a TaskThread will also have the
  * thread started the addAndStart method can be used.
- *
+ * <p>
  * If a member's task() method throws an Exception it is uncerimoniously removed from
  * the TaskThread collection - no notification is given of such an occurance.
  */
@@ -33,7 +33,7 @@ public class TaskThread implements Runnable {
     private static final int PRIORITY_NOT_SET = -1;
 
     public static void killAllThreads() {
-        Enumeration e = threads.elements();
+        Enumeration<?> e = threads.elements();
         while (e.hasMoreElements()) {
             TaskThread localTaskThread = (TaskThread) e.nextElement();
             localTaskThread.stop();
@@ -49,6 +49,7 @@ public class TaskThread implements Runnable {
      * the supplied name will be the name of the thread that is created by
      * the task thread object. The default sleep time for a TaskThread's thread
      * is 100 msecs.
+     *
      * @param tName the name of the thread
      */
     public TaskThread(String tName) {
@@ -59,14 +60,15 @@ public class TaskThread implements Runnable {
      * Creates a TaskThread object. When the object's start method is called
      * the supplied name will be the name of the thread that is created by
      * the task thread object.
+     *
      * @param sleepTime sets the sleep time that will be used when the thread starts
      */
-    public TaskThread(String paramString, int paramInt) {
-        this.sleepTime = paramInt;
+    public TaskThread(String paramString, int sleepTime) {
+        this.sleepTime = sleepTime;
         this.tName = paramString;
     }
 
-    private final Vector tasks = new Vector(12, 0);
+    private final Vector<Taskable> tasks = new Vector<>(12, 0);
 
     private Thread theThread = null;
 
@@ -104,13 +106,14 @@ public class TaskThread implements Runnable {
         if (localTaskable.getTasker() != null) {
             localTaskable.getTasker().removeMember(paramObject);
         }
-        this.tasks.addElement(paramObject);
+        this.tasks.addElement(localTaskable);
         localTaskable.addedToTasker(this);
         return true;
     }
 
     /**
      * Returns true if the object is an instance of the Taskable interface.
+     *
      * @return a boolean
      */
     public boolean isAppropriate(Object paramObject) {
@@ -119,15 +122,17 @@ public class TaskThread implements Runnable {
 
     /**
      * Returns an Enumeration for the current Taskable members of the collection.
+     *
      * @return an Enumeration
      */
-    public Enumeration members() {
+    public Enumeration<?> members() {
         return this.tasks.elements();
     }
 
     /**
      * This method will add a taskable client to the list.
      * If the thread was stopped (because there were no objects to task) this will start the thread up.
+     *
      * @param t the Taskable object to add to the collection.
      */
     public void addAndStart(Taskable t) {
@@ -152,8 +157,8 @@ public class TaskThread implements Runnable {
     public void removeAll() {
         stop();
         synchronized (this) {
-            for (Enumeration e = this.tasks.elements(); e.hasMoreElements(); ) {
-                Taskable localTaskable = (Taskable) e.nextElement();
+            for (Enumeration<Taskable> e = this.tasks.elements(); e.hasMoreElements(); ) {
+                Taskable localTaskable = e.nextElement();
                 localTaskable.removedFromTasker();
             }
             this.tasks.removeAllElements();
@@ -162,6 +167,7 @@ public class TaskThread implements Runnable {
 
     /**
      * Return the number of task current objects.
+     *
      * @return an int
      */
     public int size() {
@@ -170,6 +176,7 @@ public class TaskThread implements Runnable {
 
     /**
      * Return true if the Taskable object is currently a member of the task list.
+     *
      * @param object the object to test if a member
      * @return true if the object is a member
      */
@@ -179,6 +186,7 @@ public class TaskThread implements Runnable {
 
     /**
      * Returns true if there are no Taskable objects in the collection
+     *
      * @return a boolean
      */
     public boolean isEmpty() {
@@ -194,13 +202,7 @@ public class TaskThread implements Runnable {
             if (QTSession.getJavaVersion() == 65537) {
                 this.theThread = new Thread(this, this.tName);
             } else {
-                class QTJPrivelegedAction {
-
-                    Object doPrivelegedAction() {
-                        return AccessController.doPrivileged((PrivilegedAction<Object>) () -> new Thread(TaskThread.this, tName));
-                    }
-                }
-                this.theThread = (Thread) new QTJPrivelegedAction().doPrivelegedAction();
+                this.theThread = new Thread(TaskThread.this, tName);
             }
             if (this.threadPriority != -1)
                 setPriority(this.threadPriority);
@@ -231,7 +233,7 @@ public class TaskThread implements Runnable {
 
     private volatile boolean suspended = false;
 
-    private static final Vector threads = new Vector();
+    private static final Vector<TaskThread> threads = new Vector<>();
 
     /**
      * Suspends the execution of the task thread.
@@ -259,8 +261,9 @@ public class TaskThread implements Runnable {
 
     /**
      * Returns the current priority of the task thread.
+     *
      * @return the task thread priority or PRIORITY_NOT_SET if the TaskThread object has
-     *  not had a priority explicitly set.
+     * not had a priority explicitly set.
      */
     public int getPriority() {
         return this.theThread != null ? this.theThread.getPriority() : this.threadPriority;
@@ -268,6 +271,7 @@ public class TaskThread implements Runnable {
 
     /**
      * Sets the priority of the thread.
+     *
      * @param newPriority the new priority of the thread or any consequent threads created.
      */
     public void setPriority(int newPriority) {
@@ -282,7 +286,8 @@ public class TaskThread implements Runnable {
      */
     @Override
     public void run() {
-        end: while (true) {
+end:
+        while (true) {
             synchronized (this) {
                 while (this.suspended && this.threadIsRunning) {
                     try {
@@ -294,14 +299,14 @@ public class TaskThread implements Runnable {
                 }
             }
             if (!this.threadIsRunning)
-                break end;
+                break;
             if (!this.tasks.isEmpty()) {
                 synchronized (this.theThread) {
                     if (!this.threadIsRunning)
-                        break end;
+                        break;
                     for (int i = 0; i < this.tasks.size(); i++) {
                         try {
-                            Taskable task = (Taskable) this.tasks.elementAt(i);
+                            Taskable task = this.tasks.elementAt(i);
                             boolean isRunning = true;
                             try {
                                 if (!this.threadIsRunning)
@@ -331,7 +336,7 @@ public class TaskThread implements Runnable {
                         }
                     } catch (InterruptedException e) {
                         if (!this.threadIsRunning)
-                            break end;
+                            break;
                     }
             }
         }
@@ -342,10 +347,8 @@ public class TaskThread implements Runnable {
     /**
      * java.lang.Throwable
      */
-    @Override
-    protected void finalize() throws Throwable {
+    protected void dispose() throws Throwable {
         removeAll();
-        super.finalize();
     }
 
     /**

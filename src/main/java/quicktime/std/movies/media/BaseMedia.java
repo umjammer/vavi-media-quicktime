@@ -44,4 +44,3 @@ public final class BaseMedia extends Media {
         return new MediaHandler(paramInt, paramObject);
     }
 }
-

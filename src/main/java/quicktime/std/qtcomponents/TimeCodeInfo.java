@@ -18,7 +18,7 @@ public final class TimeCodeInfo {
     /**
      * Used to indicate the timecode formatting information.
      */
-    public TimeCodeDef definition;
+    public final TimeCodeDef definition;
 
     /**
      * Represents time of the timecode as HH:MM:SS:FF.
@@ -85,4 +85,3 @@ public final class TimeCodeInfo {
         return getClass().getName() + "[" + "frameNumber=" + this.frameNumber + "definition=" + this.definition.toString() + "time=" + this.time.toString() + "counter=" + this.counter + "]";
     }
 }
-

@@ -2,6 +2,7 @@ package quicktime.app.players;
 
 import java.awt.Dimension;
 import java.util.Vector;
+
 import quicktime.QTException;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
@@ -21,20 +22,21 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieDrawingComplete;
 import quicktime.std.movies.MoviePrePreroll;
 
+
 /**
- * @deprecated
  * The MoviePlayer class allows your application to display, play and control any
  * QuickTime movie. The MoviePlayer
  * object works with the QTCanvas to be displayed in a Java AWT Container.
  *
  * @see quicktime.app.display.QTCanvas,
  * {@link quicktime.std.movies.Movie}
+ * @deprecated
  */
 public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNotifier {
 
     private final Movie mMovie;
 
-    private Vector listenerList;
+    private Vector<DrawingListener> listenerList;
 
     private MovieComplete mComplete;
 
@@ -45,10 +47,11 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This constructor creates a MoviePlayer object given a QuickTime Movie object.
+     *
      * @param mov a Movie object
+     * @since QTJava 6.1
+     * @deprecated
      */
     public MoviePlayer(Movie mov) throws StdQTException {
         this.mMovie = mov;
@@ -56,19 +59,19 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * This allows you to access the contained movie controller. * @deprecated since QTJava 6.1
+     * @deprecated This allows you to access the contained movie controller. * @deprecated since QTJava 6.1
      */
     public Movie getMovie() {
         return this.mMovie;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
+     *
      * @return a QDGraphics object or null
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public QDGraphics getGWorld() throws StdQTException {
@@ -76,8 +79,6 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
@@ -85,6 +86,8 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
      *
      * @param cgp a QDGraphics object
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public synchronized void setGWorld(QDGraphics cgp) throws StdQTException {
@@ -102,11 +105,11 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
+     *
      * @see ()
+     * @since QTJava 4.0
      */
     public Dimension getInitialSize() throws QTException {
         QDRect localQDRect = this.mMovie.getNaturalBoundsRect();
@@ -114,12 +117,13 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
+     *
      * @return the original size.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
@@ -128,12 +132,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public Matrix getMatrix() throws StdQTException {
@@ -141,10 +145,11 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setMatrix(Matrix paramMatrix) throws QTException {
@@ -153,15 +158,16 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
      * using the invalidRgn. Otherwise this will be null in which case the
      * client should redraw itself entirely.
+     *
      * @param invalidRgn the invalidRgn that the client should redraw
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public final void redraw(Region invalidRgn) throws QTException {
@@ -174,13 +180,13 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called automatically via the QTCanvas object associated with
      * this client to set the boundary of the movie.
      *
      * @param bounds a QDRect object describing the boundary
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public synchronized void setDisplayBounds(QDRect bounds) throws StdQTException {
@@ -188,12 +194,13 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
+     *
      * @param x the new x location
      * @param y the new y location
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
@@ -204,13 +211,13 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called automatically via the QTCanvas object associated with
      * this client to set the boundary of the movie.
      *
      * @return the display boundary of the client
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public QDRect getDisplayBounds() throws StdQTException {
@@ -218,11 +225,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method allows you to set a MoviePlayer's clipping region.
+     *
      * @param theClip a Region that defines the player's clipping region.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setClip(Region theClip) throws QTException {
@@ -230,11 +238,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method allows you to obtain information describing a MoviePlayer's clipping regions.
+     *
      * @return the clipping region of the entire MoviePlayer object
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public Region getClip() throws QTException {
@@ -242,14 +251,15 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the player to the time specified. This time value at this level
      * is a totally arbitrary value - what time that means in "real time" is
      * determined by the implementor of the interface, typically the scale value
      * will determine what a "real" time of 1 second is.
+     *
      * @param time the new time value
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setTime(int time) throws StdQTException {
@@ -257,11 +267,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current time value of the object.
+     *
      * @return the current time.
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int getTime() throws StdQTException {
@@ -269,13 +280,14 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the duration of the media attached to the player. If
      * the player has no media, or does not know the duration of its media
      * it can return the constant kDurationUnknown.
+     *
      * @return the media duration.
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int getDuration() throws StdQTException {
@@ -283,11 +295,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the TimeBase of the media attached to the player.
+     *
      * @return the players TimeBase.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public TimeBase getTimeBase() throws QTException {
@@ -295,13 +308,14 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the player to the playback rate. Typically a rate of zero will
      * mean that the player is stopped, a positive value that the player
      * is playing forwards, a negative value that the player is playing backwards.
+     *
      * @param rate the new playback rate.
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setRate(float rate) throws StdQTException {
@@ -348,21 +362,24 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
         @Override
         public int execute(Movie paramMovie) {
             synchronized (MoviePlayer.this) {
-                for (int i = 0; i < MoviePlayer.this.listenerList.size(); i++) ((DrawingListener) MoviePlayer.this.listenerList.elementAt(i)).drawingComplete(MoviePlayer.this);
+                for (int i = 0; i < MoviePlayer.this.listenerList.size(); i++)
+                    MoviePlayer.this.listenerList.elementAt(i).drawingComplete(MoviePlayer.this);
             }
             return 0;
         }
     }
 
     /**
-     * @deprecated
+     * Registers an object as a listener of the MoviePlayer.
+     * The object will receive notification when the MoviePlayer draws a frame
+     *
      * @since QTJava 6.1
-     * Registers an object as a listener of the MoviePlayer. The object will receive notification when the MoviePlayer draws a frame
+     * @deprecated
      */
     @Override
     public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
         if (this.listenerList == null) {
-            this.listenerList = new Vector();
+            this.listenerList = new Vector<>();
         }
         if (this.listenerList.contains(paramDrawingListener)) {
             return;
@@ -379,9 +396,11 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
+     * Removes an object that is a listener of the MoviePlayer.
+     * The object will no longer receive notification when the MoviePlayer draws a frame
+     *
      * @since QTJava 6.1
-     * Removes an object that is a listener of the MoviePlayer. The object will no longer receive notification when the MoviePlayer draws a frame
+     * @deprecated
      */
     @Override
     public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
@@ -397,11 +416,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current rate of the player.
+     *
      * @return the playback rate
      * @throws quicktime.std.StdQTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public float getRate() throws StdQTException {
@@ -409,11 +429,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the time scale of the player - how many ticks per second.
+     *
      * @return the current scale.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public int getScale() throws QTException {
@@ -421,11 +442,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the volume setting (0 is silent, 1 is unity gain).
+     *
      * @return a float
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public float getVolume() throws QTException {
@@ -434,11 +456,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the volume.
+     *
      * @param val the new volume
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setVolume(float val) throws QTException {
@@ -451,11 +474,12 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current mute status.
+     *
      * @return a boolean
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public boolean isMuted() throws QTException {
@@ -463,12 +487,13 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Allows the muting of the specific channel. When unmuted the AudioSpec object will return
      * to its current volume setting.
+     *
      * @param flag turn muting on - true or off - false.
      * @throws quicktime.QTException
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void setMuted(boolean flag) throws QTException {
@@ -481,29 +506,30 @@ public class MoviePlayer implements QTDrawable, Playable, AudioSpec, DrawingNoti
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest.
+     *
      * @param interest the object that is to be the source of interest for the
-     *  the object that implements this interface.
+     *                 the object that implements this interface.
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void addedTo(Object interest) {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest.
+     *
      * @param interest the object that was the source of interest for the
-     *  the object that implements this interface.
+     *                 the object that implements this interface.
+     * @since QTJava 6.1
+     * @deprecated
      */
     @Override
     public void removedFrom(Object interest) {
     }
 }
-

@@ -4,24 +4,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.std.clocks.TimeBase;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
+
 
 /**
  * No QT documentation available for the ICMTimeFrameRecord struct
  * QuickTime:ICMTimeFrameRecord
  */
 public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -30,15 +27,6 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
 
     @Serial
     private static final long serialVersionUID = 8668877262716984973L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ICMFrameTime.class));
-            }
-        }.establish();
-    }
 
     /**
      * Creates an ICMFrameTime object. It will set the size of the record to the extended TimeFrameRecord

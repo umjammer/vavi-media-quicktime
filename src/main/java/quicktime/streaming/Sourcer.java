@@ -1,24 +1,20 @@
 package quicktime.streaming;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.StreamingManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QTStreamingLib;
 import quicktime.std.comp.Component;
 import quicktime.std.comp.ComponentDescription;
 import quicktime.std.comp.ComponentIdentifier;
 import quicktime.util.QTPointer;
 
+
 /**
  * The Sourcer class implements the corresponding data structure of the QTSSourcer component
  */
 public class Sourcer extends Component implements QTStreamingLib {
-
-    private static Object linkage;
 
     private static final Object owner = new Object();
 
@@ -29,13 +25,6 @@ public class Sourcer extends Component implements QTStreamingLib {
         if (QTSession.isCurrentOS(2)) {
             throw new RuntimeException("The broadcaster API is not supported on windows");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Sourcer.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     Sourcer(int paramInt) throws QTException {
@@ -97,8 +86,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @param data data to be set
      *  For specific information setting routine, see the more specific function calls
      * @throws quicktime.QTException
-     * @see setCallbackParams,
-     * setLoopParams,
+     * @see #setCallbackParams
+     * @see #setLoopParams
      * @see "QuickTime::QTSSourcerSetInfo"
      */
     public void setInfo(int selector, QTPointer data) throws QTException {
@@ -111,8 +100,8 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @return retrieved data
      *  For specific information accessor routine, see the more specific function calls
      * @throws quicktime.QTException
-     * @see getCallbackParams,
-     * getLoopParams,
+     * @see #getCallbackParams
+     * @see #getLoopParams
      * @see "QuickTime::QTSSourcerGetInfo"
      */
     public QTPointer getInfo(int selector) throws QTException {

@@ -1,13 +1,10 @@
 package quicktime.std.movies.media;
 
 import java.lang.reflect.Constructor;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Hashtable;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MovieToolbox;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.AtomContainer;
@@ -25,17 +22,6 @@ import quicktime.util.QTUtils;
  * Inside Macintosh: QuickTime and page 2-206 of Inside Macintosh: QuickTime, respectively).
  */
 public abstract class Media extends QTObject implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Media.class));
-            }
-        }.establish();
-    }
 
     private static final Hashtable<Integer, String> mediaObjects = new Hashtable<>();
 
@@ -110,25 +96,25 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      *  is no known dataRef then null can be passed in.
      * @throws quicktime.QTException
      */
-    public static Media newFromType(int paramInt1, Track paramTrack, int paramInt2, DataRef paramDataRef) throws QTException {
-        if ((paramInt1 == 0) || (paramTrack == null)) {
+    public static Media newFromType(int mediaType, Track paramTrack, int timeScale, DataRef dataRef) throws QTException {
+        if ((mediaType == 0) || (paramTrack == null)) {
             throw new QTException(-50);
         }
-        return switch (paramInt1) {
-            case 1735291491 -> new BaseMedia(paramTrack, paramInt2, paramDataRef);
-            case 1297106247 -> new MPEGMedia(paramTrack, paramInt2, paramDataRef);
-            case 1836413801 -> new MusicMedia(paramTrack, paramInt2, paramDataRef);
-            case 1936684398 -> new SoundMedia(paramTrack, paramInt2, paramDataRef);
-            case 1936749172 -> new SpriteMedia(paramTrack, paramInt2, paramDataRef);
-            case 1952807028 -> new TextMedia(paramTrack, paramInt2, paramDataRef);
-            case 1902392164 -> new ThreeDMedia(paramTrack, paramInt2, paramDataRef);
-            case 1953325924 -> new TimeCodeMedia(paramTrack, paramInt2, paramDataRef);
-            case 1953981806 -> new TweenMedia(paramTrack, paramInt2, paramDataRef);
-            case 1986618469 -> new VideoMedia(paramTrack, paramInt2, paramDataRef);
-            case 1718383464 -> new FlashMedia(paramTrack, paramInt2, paramDataRef);
-            case 1937011309 -> new StreamMedia(paramTrack, paramInt2, paramDataRef);
-            case 1836019574 -> new MovieMedia(paramTrack, paramInt2, paramDataRef);
-            default -> fromGenericType(paramInt1, paramTrack, paramInt2, paramDataRef);
+        return switch (mediaType) {
+            case 1735291491 -> new BaseMedia(paramTrack, timeScale, dataRef);
+            case 1297106247 -> new MPEGMedia(paramTrack, timeScale, dataRef);
+            case 1836413801 -> new MusicMedia(paramTrack, timeScale, dataRef);
+            case 1936684398 -> new SoundMedia(paramTrack, timeScale, dataRef);
+            case 1936749172 -> new SpriteMedia(paramTrack, timeScale, dataRef);
+            case 1952807028 -> new TextMedia(paramTrack, timeScale, dataRef);
+            case 1902392164 -> new ThreeDMedia(paramTrack, timeScale, dataRef);
+            case 1953325924 -> new TimeCodeMedia(paramTrack, timeScale, dataRef);
+            case 1953981806 -> new TweenMedia(paramTrack, timeScale, dataRef);
+            case 1986618469 -> new VideoMedia(paramTrack, timeScale, dataRef);
+            case 1718383464 -> new FlashMedia(paramTrack, timeScale, dataRef);
+            case 1937011309 -> new StreamMedia(paramTrack, timeScale, dataRef);
+            case 1836019574 -> new MovieMedia(paramTrack, timeScale, dataRef);
+            default -> fromGenericType(mediaType, paramTrack, timeScale, dataRef);
         };
     }
 
@@ -226,8 +212,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param index Identifies the data reference for this data handler.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataHandler(int paramInt, DataHandler paramDataHandler) throws StdQTException {
-        StdQTException.checkError(SetMediaDataHandler(_ID(), (short) paramInt, QTObject.ID(paramDataHandler)));
+    public final void setDataHandler(int index, DataHandler paramDataHandler) throws StdQTException {
+        StdQTException.checkError(SetMediaDataHandler(_ID(), (short) index, QTObject.ID(paramDataHandler)));
     }
 
     /**
@@ -731,8 +717,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param index the index value at which to add the data.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataRef(int paramInt, DataRef paramDataRef) throws StdQTException {
-        StdQTException.checkError(SetMediaDataRef(_ID(), (short) paramInt, QTObject.ID(paramDataRef), paramDataRef.getType()));
+    public final void setDataRef(int index, DataRef paramDataRef) throws StdQTException {
+        StdQTException.checkError(SetMediaDataRef(_ID(), (short) index, QTObject.ID(paramDataRef), paramDataRef.getType()));
     }
 
     /**
@@ -1079,4 +1065,3 @@ public abstract class Media extends QTObject implements QuickTimeLib {
         return MovieToolbox.CopyMediaUserData(paramInt1, paramInt2, paramInt3);
     }
 }
-

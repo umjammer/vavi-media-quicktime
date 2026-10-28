@@ -18,9 +18,9 @@ import quicktime.std.sg.SGVideoChannel;
 import quicktime.std.sg.SequenceGrabber;
 
 /**
- * @deprecated
  * This class presents the SequenceGrabber/SGChannel component as a Drawable object
  * so that it can be displayed within the confines of the QTCanvas.
+ * @deprecated
  */
 public class SGDrawer extends Tasking implements QTDrawable {
 
@@ -35,11 +35,11 @@ public class SGDrawer extends Tasking implements QTDrawable {
     private final SGVideoChannel chan;
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This constructor creates an SGDrawer object from a SGChannel component.
      * If the channel is set to useVideo then it will throw a paramErr QTException.
      * @param sg the SequenceGrabber component channel to present.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public SGDrawer(SGVideoChannel sg) throws QTException {
         this.chan = sg;
@@ -47,31 +47,31 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This returns the SequenceGrabber's VideoChannel that is presented by this drawable.
      * @return an SGVideoChannel
+     * @deprecated
+     * @since QTJava 6.1
      */
     public SGVideoChannel getSGChannel() {
         return this.chan;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This returns the SequenceGrabber that is presented by this drawable.
      * @return an SequenceGrabber
+     * @deprecated
+     * @since QTJava 6.1
      */
     public SequenceGrabber getSequenceGrabber() {
         return this.chan.getSequenceGrabber();
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to get the destination QDGraphics of its client.
      * @return a QDGraphics object or null
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDGraphics getGWorld() throws StdQTException {
@@ -79,8 +79,6 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method to give the client the QDGraphics object it should
      * use to do its drawing. If the incoming QDGraphics is the QDGraphics.scratch then
      * the drawable will not be visible and can disable itself.
@@ -88,6 +86,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      *
      * @param cgp a QDGraphics object
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public synchronized void setGWorld(QDGraphics cgp) throws QTException {
@@ -105,11 +105,11 @@ public class SGDrawer extends Tasking implements QTDrawable {
     private SGCaptureCallback stopTimeCallback;
 
     /**
-     * @deprecated
-     * <I>since QTJava 4.0</I>
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @see ()
+     * @deprecated
+     * @since QTJava 4.0
      */
     public Dimension getInitialSize() throws QTException {
         QDRect localQDRect = this.chan.getBounds();
@@ -118,12 +118,12 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method returns the original size before the transformations
      * specified in the returned matrix are applied.
      * @return the intial size of the SGDrawer
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
@@ -133,12 +133,12 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This will return the client's current display transformations
      *
      * @return the display transformations of the client
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public Matrix getMatrix() throws StdQTException {
@@ -146,12 +146,12 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      * @param matrix the new display Matrix
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setMatrix(Matrix matrix) throws QTException {
@@ -159,11 +159,11 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets the display bounds for the SGDrawer
      * @param bounds the new size and location.
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public synchronized void setDisplayBounds(QDRect bounds) throws StdQTException {
@@ -175,12 +175,12 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * A convenience method to set the position of a QTDrawable object.
      * @param x the new x location
      * @param y the new y location
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
@@ -191,12 +191,12 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the current display location and size of the SGDrawer.
      *
      * @return the boundary of the client
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public QDRect getDisplayBounds() throws StdQTException {
@@ -204,8 +204,6 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * QTCanvas calls this method when the client should redraw itself.
      * If the canvas is able to discern that only a part of the client's
      * drawing area needs to be redrawn - then this area shall be passed in
@@ -213,6 +211,8 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * client should redraw itself entirely.
      * @param invalidRgn the invalidRgn that the client should redraw
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public final synchronized void redraw(Region invalidRgn) throws StdQTException {
@@ -220,11 +220,11 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns a region that defines the current clipping region for the object.
      * @return the clipping region
      * @throws quicktime.QTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public Region getClip() throws QTException {
@@ -232,11 +232,11 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets a region that will define the clipping region for the object
      * @param reg the new clipping region
      * @throws quicktime.std.StdQTException
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void setClip(Region reg) throws StdQTException {
@@ -244,15 +244,15 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method performs idle processing for the SGDrawer and will be automatically
      * called if this object is added to the TaskThread object.
      * It the sequence grabber has completed its capture task this method
      * will stop tasking the SGDrawer, stop the sequence grabber and call
      * the SGCaptureCallback if registered to notify the application that Sequence grabbing
      * is complete.
-     * @see quicktime.util.TaskThread
+     * @see "quicktime.util.TaskThread"
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public final void task() throws StdQTException {
@@ -268,61 +268,61 @@ public class SGDrawer extends Tasking implements QTDrawable {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Sets a SGCaptureCallback that will be used by the SGDrawer to
      * notify an application when a sequence grabbing operation
      * has completed.
      * @param callback can be null to de-register notification
+     * @deprecated
+     * @since QTJava 6.1
      */
     public void setSGCaptureCallback(SGCaptureCallback callback) {
         this.stopTimeCallback = callback;
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Gets a SGCaptureCallback that is used by the SGDrawer to
      * notify an application when a sequence grabbing operation
      * has completed.
      * @return the SGCaptureCallback object or null if none registered.
+     * @deprecated
+     * @since QTJava 6.1
      */
     public SGCaptureCallback getSGCaptureCallback() {
         return this.stopTimeCallback;
     }
 
     /**
+     * Returns a String representation of this object.
+     * @since QTJava 6.1
      * @deprecated
-     * Returns a String representation of this object.* @deprecated since QTJava 6.1
      */
     public String toString() {
         return getClass().getName() + "[" + this.chan + "]";
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is added to the object
      * that is the source of the interest.
      * @param interest the object that is to be the source of interest for the
      *  the object that implements this interface.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void addedTo(Object interest) {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * This method is called by the specified object when the instance of
      * the class that implements this interface is removed from the object
      * that is the source of the interest.
      * @param interest the object that was the source of interest for the
      *  the object that implements this interface.
+     * @deprecated
+     * @since QTJava 6.1
      */
     @Override
     public void removedFrom(Object interest) {
     }
 }
-

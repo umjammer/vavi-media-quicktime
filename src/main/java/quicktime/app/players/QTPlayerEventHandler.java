@@ -1,27 +1,30 @@
 package quicktime.app.players;
 
 import java.util.Vector;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 
+
 /**
- * @deprecated
  * When a QTPlayer is addedTo some kind of display space it receives
  * an addedTo (or removedFrom) notification. At this point the QTPlayer
  * will dispatch to the QTPlayerEventHandler to return a QTPlayerEventHandler
  * which will handle all of the events that are generated from the source of interest
  * that the player has been added to.
- *
+ * <p>
  * Applications can install custom event handler for the QTPlayer and in this construction
  * process custom event handlers will be made first. If not custom event handlers are appropriate
  * and a default handler exists it will be made and returned. The first event handler that is
  * found will be returned as the event handler for any given QTPlayer.
- *
+ * <p>
  * The QTPlayerEventHandler is expected to handle all events for the QTPlayer.
+ *
+ * @deprecated
  */
 public abstract class QTPlayerEventHandler {
 
-    private static Vector vec;
+    private static Vector<QTPlayerEventHandlerMaker> vec;
 
     static {
         if ((QTSession.isCurrentOS(4)) && (QTSession.getJavaVersion() >= 65540)) {
@@ -30,21 +33,23 @@ public abstract class QTPlayerEventHandler {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Register a custom event handler maker that will make an EventDispatcher
      * based on the type of event interest for the QTPlayer
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     public static void registerEventHandlerMaker(QTPlayerEventHandlerMaker paramQTPlayerEventHandlerMaker) {
         if (vec == null)
-            vec = new Vector();
+            vec = new Vector<>();
         vec.addElement(paramQTPlayerEventHandlerMaker);
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Remove a custom event handler maker.
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     public static void removeEventHandlerMaker(QTPlayerEventHandlerMaker paramQTPlayerEventHandlerMaker) {
         if (vec != null)
@@ -57,7 +62,7 @@ public abstract class QTPlayerEventHandler {
     static QTPlayerEventHandler make(QTPlayer paramQTPlayer, Object paramObject) {
         if (vec != null) {
             for (int i = 0; i < vec.size(); i++) {
-                QTPlayerEventHandlerMaker localObject = (QTPlayerEventHandlerMaker) vec.elementAt(i);
+                QTPlayerEventHandlerMaker localObject = vec.elementAt(i);
                 QTPlayerEventHandler localQTPlayerEventHandler = localObject.make(paramQTPlayer, paramObject);
                 if (localQTPlayerEventHandler != null) {
                     return localQTPlayerEventHandler;
@@ -77,19 +82,21 @@ public abstract class QTPlayerEventHandler {
     }
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * When the QTPlayer is removed from its addedTo interest its event Handler
      * is notified and should remove any interests it has declared for events
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     protected abstract void removedFrom();
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * When the QTPlayer is added to its addedTo interest its event Handler
      * is notified and should add any interests it requires to receive
      * events.
+     *
+     * @since QTJava 6.1
+     * @deprecated
      */
     protected abstract void addedTo();
 }

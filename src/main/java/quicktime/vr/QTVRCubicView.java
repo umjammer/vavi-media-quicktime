@@ -199,4 +199,3 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
         return getClass().getName() + "[minPan=" + getMinPan() + ",maxPan=" + getMaxPan() + ",minTilt=" + getMinTilt() + ",maxTilt" + getMaxTilt() + ",minFieldOfView" + getMinFieldOfView() + ",maxFieldOfView" + getMaxFieldOfView() + ",defaultPan" + getDefaultPan() + ",defaultTilt" + getDefaultTilt() + ",defaultFieldOfView" + getDefaultFieldOfView() + "]";
     }
 }
-

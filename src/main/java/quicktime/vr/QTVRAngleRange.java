@@ -102,4 +102,3 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
         return getClass().getName() + "[minimumAngle=" + getMinimumAngle() + ",maximumAngle=" + getMaximumAngle() + "]";
     }
 }
-

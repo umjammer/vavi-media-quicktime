@@ -1,12 +1,9 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ComponentManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.std.StdQTException;
 import quicktime.std.qtcomponents.MovieImporter;
@@ -15,12 +12,11 @@ import quicktime.util.EndianFlipSpec;
 import quicktime.util.QTHandleRef;
 import quicktime.util.QTUtils;
 
+
 /**
  * The SampleDescription class implements the SampleDescription data structure of the Movie Toolbox.
  */
 public class SampleDescription extends QTHandleRef implements QuickTimeLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -28,15 +24,6 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
     public static final int kNativeSize = 16;
 
     private static EndianDescriptor ed;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SampleDescription.class));
-            }
-        }.establish();
-    }
 
     protected static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
@@ -55,9 +42,10 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Determines the sample description of the component.
-     * @see "QuickTime::MovieImportGetSampleDescription"
+     *
      * @return The sample description.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::MovieImportGetSampleDescription"
      * @see quicktime.std.qtcomponents.MovieImporter#getSampleDescription()
      */
     public static SampleDescription fromMovieImporter(MovieImporter paramMovieImporter) throws StdQTException {
@@ -72,7 +60,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
      * This constructor creates an empty SampleDescription object.
      */
     public SampleDescription(int paramInt) throws QTException {
-        this(16, true, paramInt);
+        this(kNativeSize, true, paramInt);
     }
 
     protected SampleDescription(int paramInt, Object paramObject, boolean paramBoolean) {
@@ -87,6 +75,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * This method returns the size of the media sample description.
+     *
      * @return the size of the sample description.
      */
     @Override
@@ -96,9 +85,10 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Resizes the SampleDescription to the specified size.
-     * @see "QuickTime::SetHandleSize"
+     *
      * @param size the new size of the SampleDescription.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetHandleSize"
      */
     public void setSize(int size) throws StdQTException {
         boolean bool = isLocked();
@@ -113,6 +103,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Return the data format of the sample description.
+     *
      * @return the data format
      */
     public int getDataFormat() {
@@ -121,6 +112,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Sets the data format of the sample description.
+     *
      * @param format the data format
      */
     public void setDataFormat(int format) {
@@ -129,6 +121,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Gets the index of the data reference
+     *
      * @return the index of the data reference
      */
     public int getDataRefIndex() {
@@ -137,6 +130,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Sets the data reference index for the description
+     *
      * @param index the new data reference index
      */
     public void setDataRefIndex(int index) {
@@ -153,6 +147,7 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
 
     /**
      * Print information about this object.
+     *
      * @return a string representation of this object.
      */
     public String toString() {
@@ -171,4 +166,3 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
         return MemoryManager.MemError();
     }
 }
-

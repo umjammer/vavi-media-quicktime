@@ -137,4 +137,3 @@ public class TranslateMatrix extends TransformMatrix {
         this.deltaY = (-this.deltaY);
     }
 }
-

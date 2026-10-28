@@ -28,4 +28,3 @@ public interface Targetable extends Ticklish {
      */
     void setTarget(Object target);
 }
-

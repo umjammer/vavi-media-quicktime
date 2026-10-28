@@ -794,4 +794,3 @@ public final class XMLParser extends Component implements QuickTimeLib {
         return XMLParserManager.XMLParseSetCommentHandler(paramInt1, paramInt2);
     }
 }
-

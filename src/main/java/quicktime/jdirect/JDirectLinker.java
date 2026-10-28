@@ -5,8 +5,6 @@ import java.lang.System.Logger.Level;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Vector;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.PlatformManager;
@@ -41,9 +39,9 @@ public class JDirectLinker {
 
     static class Library {
 
-        String libraryName;
+        final String libraryName;
 
-        int libraryHandle;
+        final int libraryHandle;
 
         Library(String paramString) {
             this.libraryName = (paramString + ".dll");

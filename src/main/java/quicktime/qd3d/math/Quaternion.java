@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MatrixManager;
 import quicktime.internal.toolbox.QD3DManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianDescriptor;
@@ -18,15 +16,14 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.UtilException;
 
+
 /**
  * Quaternion A quadruple of floating-point numbers that obeys the laws of quaternion arithmetic.
  * A Quaternion transform will rotate and twist an object according to the mathematical properties of quaternions.
- *
+ * <p>
  * Refer to TQ3Quaternion in QuickDraw3d
  */
 public final class Quaternion extends QTByteObject implements QuickTimeLib, QuickDraw3DLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -40,17 +37,11 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Quaternion.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
      * Returns the EndianDescriptor for this class.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptor() {
@@ -59,15 +50,17 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Creates a Quaternion object set to the identity.
+     *
      * @see "QuickDraw3D::Q3Quaternion_SetIdentity"
      */
     public Quaternion() {
-        super(16);
+        super(kNativeSize);
         setIdentity();
     }
 
     /**
      * Creates a Quaternion object containing given data.
+     *
      * @param w The final w value.
      * @param x The final x position.
      * @param y The final y position.
@@ -82,17 +75,17 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
     }
 
     private Quaternion(Object paramObject) {
-        super(16);
+        super(kNativeSize);
     }
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[16];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
     }
 
@@ -101,8 +94,8 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
         Quaternion localQuaternion = (Quaternion) clone();
         try {
             EndianOrder.flipNativeToBigEndian(localQuaternion, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
         paramObjectOutputStream.write(localQuaternion.getBytes());
     }
@@ -165,8 +158,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Returns a copy of the quaternion.
-     * @see "QuickDraw3D::Q3Quaternion_Copy"
+     *
      * @return a copy of quaternion.
+     * @see "QuickDraw3D::Q3Quaternion_Copy"
      */
     public Quaternion copy() {
         Quaternion localQuaternion = new Quaternion(null);
@@ -176,6 +170,7 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Sets the Quaternion to the identity quaternion.
+     *
      * @see "QuickDraw3D::Q3Quaternion_SetIdentity"
      */
     public void setIdentity() {
@@ -184,8 +179,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Returns rue if the quaternion is an identity quaternion.
-     * @see "QuickDraw3D::Q3Quaternion_IsIdentity"
+     *
      * @return true if the quaternion is an identity quaternion
+     * @see "QuickDraw3D::Q3Quaternion_IsIdentity"
      */
     public boolean isIdentity() {
         return Q3Quaternion_IsIdentity(getBytes()) != 0;
@@ -193,8 +189,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Returns the inverse of the quaternion.
-     * @see "QuickDraw3D::Q3Quaternion_Invert"
+     *
      * @return the invert quaternion
+     * @see "QuickDraw3D::Q3Quaternion_Invert"
      */
     public Quaternion invert() {
         Quaternion localQuaternion = new Quaternion(null);
@@ -204,9 +201,10 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Returns the product of the two quaternions, this and q2.
-     * @see "QuickDraw3D::Q3Quaternion_Multiply"
+     *
      * @param q2 a quaternion
      * @return the product
+     * @see "QuickDraw3D::Q3Quaternion_Multiply"
      */
     public Quaternion multiply(Quaternion q2) {
         Quaternion localQuaternion = new Quaternion(null);
@@ -216,8 +214,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Returns a normalized the quaternion.
-     * @see "QuickDraw3D::Q3Quaternion_Normalize"
+     *
      * @return the normalized quaternion
+     * @see "QuickDraw3D::Q3Quaternion_Normalize"
      */
     public Quaternion normalize() {
         Quaternion localQuaternion = new Quaternion(null);
@@ -227,9 +226,10 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Returns the dot product of two quaternions, this and q2.
-     * @see "QuickDraw3D::Q3Quaternion_Dot"
+     *
      * @param q2 A quaternion.
      * @return the dot product
+     * @see "QuickDraw3D::Q3Quaternion_Dot"
      */
     public float dot(Quaternion q2) {
         return Q3Quaternion_Dot(getBytes(), q2.getBytes());
@@ -238,9 +238,10 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
     /**
      * Sets a a rotate-about-axis quaternion that rotates an
      * object by the angle angle around the axis specified by the axis parameter.
-     * @see "QuickDraw3D::Q3Quaternion_SetRotateAboutAxis"
-     * @param axis The desired axis of rotation.
+     *
+     * @param axis  The desired axis of rotation.
      * @param angle The desired angle of rotation, in radians.
+     * @see "QuickDraw3D::Q3Quaternion_SetRotateAboutAxis"
      */
     public void setRotateAboutAxis(Vector3D axis, float angle) {
         int i = Q3Quaternion_SetRotateAboutAxis(getBytes(), axis.getBytes(), angle);
@@ -248,8 +249,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Sets a rotational quaternion that rotates an object by the specified angle around the x axis.
-     * @see "QuickDraw3D::Q3Quaternion_SetRotate_X"
+     *
      * @param angle The desired angle of rotation around the x coordinate axis, in radians.
+     * @see "QuickDraw3D::Q3Quaternion_SetRotate_X"
      */
     public void setRotateX(float angle) {
         int i = Q3Quaternion_SetRotate_X(getBytes(), angle);
@@ -257,8 +259,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Sets a rotational quaternion that rotates an object by the specified angle around the y axis.
-     * @see "QuickDraw3D::Q3Quaternion_SetRotate_Y"
+     *
      * @param angle The desired angle of rotation around the y coordinate axis, in radians.
+     * @see "QuickDraw3D::Q3Quaternion_SetRotate_Y"
      */
     public void setRotateY(float angle) {
         int i = Q3Quaternion_SetRotate_Y(getBytes(), angle);
@@ -266,8 +269,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
 
     /**
      * Sets a rotational quaternion that rotates an object by the specified angle around the x axis.
-     * @see "QuickDraw3D::Q3Quaternion_SetRotate_Z"
+     *
      * @param angle The desired angle of rotation around the z coordinate axis, in radians.
+     * @see "QuickDraw3D::Q3Quaternion_SetRotate_Z"
      */
     public void setRotateZ(float angle) {
         int i = Q3Quaternion_SetRotate_Z(getBytes(), angle);
@@ -276,10 +280,11 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
     /**
      * Sets a rotational quaternion that rotates an object by the specified angles around their
      * specified axis.
-     * @see "QuickDraw3D::Q3Quaternion_SetRotate_XYZ"
+     *
      * @param xAngle The desired angle of rotation around the x coordinate axis, in radians.
      * @param yAngle The desired angle of rotation around the y coordinate axis, in radians.
      * @param zAngle The desired angle of rotation around the z coordinate axis, in radians.
+     * @see "QuickDraw3D::Q3Quaternion_SetRotate_XYZ"
      */
     public void setRotateXYZ(float xAngle, float yAngle, float zAngle) {
         int i = Q3Quaternion_SetRotate_XYZ(getBytes(), xAngle, yAngle, zAngle);
@@ -288,8 +293,9 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
     /**
      * Sets a quaternion that has the same transformational properties as the matrix
      * specified by the matrix parameter.
-     * @see "QuickDraw3D::Q3Quaternion_SetMatrix"
+     *
      * @param matrix A 4-by-by matrix.
+     * @see "QuickDraw3D::Q3Quaternion_SetMatrix"
      */
     public void setMatrix(Matrix4x4 matrix) {
         int i = Q3Quaternion_SetMatrix(getBytes(), matrix.getBytes());
@@ -299,9 +305,10 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
      * Sets a rotational quaternion that rotates objects
      * around the origin in such a way that the transformed vector v1 matches the
      * vector v2. Both v1 and v2 should be normalized.
-     * @see "QuickDraw3D::Q3Quaternion_SetRotateVectorToVector"
+     *
      * @param v1 A three-dimensional vector.
      * @param v2 A three-dimensional vector.
+     * @see "QuickDraw3D::Q3Quaternion_SetRotateVectorToVector"
      */
     public void setRotateVectorToVector(Vector3D v1, Vector3D v2) {
         int i = Q3Quaternion_SetRotateVectorToVector(getBytes(), v1.getBytes(), v2.getBytes());
@@ -312,9 +319,10 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
      * specified by the q1 parameter or is the negative of q1, depending on whether q1
      * or its negative matches the orientation of the quaternion specified by the q2
      * parameter.
-     * @see "QuickDraw3D::Q3Quaternion_MatchReflection"
+     *
      * @param q2 A quaternion.
      * @return a quaternion that is either q1 or the negative of q1, and that matches the orientation of q2.
+     * @see "QuickDraw3D::Q3Quaternion_MatchReflection"
      */
     public Quaternion matchReflection(Quaternion q2) {
         Quaternion localQuaternion = new Quaternion(null);
@@ -325,10 +333,11 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
     /**
      * Return a a quaternion that is a fast interpolation between the this and the
      * specified quaternion.
-     * @see "QuickDraw3D::Q3Quaternion_InterpolateFast"
+     *
      * @param q2 A quaternion.
-     * @param t An interpolation factor. This parameter should contain a value between 0.0 and 1.0.
+     * @param t  An interpolation factor. This parameter should contain a value between 0.0 and 1.0.
      * @return a quaternion
+     * @see "QuickDraw3D::Q3Quaternion_InterpolateFast"
      */
     public Quaternion interpolateFast(Quaternion q2, float t) {
         Quaternion localQuaternion = new Quaternion(null);
@@ -339,10 +348,11 @@ public final class Quaternion extends QTByteObject implements QuickTimeLib, Quic
     /**
      * Return a a quaternion that is a linear interpolation between the this and the
      * specified quaternion.
-     * @see "QuickDraw3D::Q3Quaternion_InterpolateLinear"
+     *
      * @param q2 A quaternion.
-     * @param t An interpolation factor. This parameter should contain a value between 0.0 and 1.0.
+     * @param t  An interpolation factor. This parameter should contain a value between 0.0 and 1.0.
      * @return a quaternion
+     * @see "QuickDraw3D::Q3Quaternion_InterpolateLinear"
      */
     public Quaternion interpolateLinear(Quaternion q2, float t) {
         Quaternion localQuaternion = new Quaternion(null);

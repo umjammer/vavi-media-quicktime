@@ -16,35 +16,21 @@ public final class QTVRObjectSample extends QTVRAtom {
     private static final int kNativeSize = 88;
 
     public static final int kQTVRObjectAnimateViewFramesOn = 1;
-
     public static final int kQTVRObjectPalindromeViewFramesOn = 2;
-
     public static final int kQTVRObjectStartFirstViewFrameOn = 4;
-
     public static final int kQTVRObjectAnimateViewsOn = 8;
-
     public static final int kQTVRObjectPalindromeViewsOn = 16;
-
     public static final int kQTVRObjectSyncViewToFrameRate = 32;
-
     public static final int kQTVRObjectDontLoopViewFramesOn = 64;
-
     public static final int kQTVRObjectPlayEveryViewFrameOn = 128;
-
     public static final int kQTVRObjectStreamingViewsOn = 256;
 
     public static final int kQTVRObjectWrapPanOn = 1;
-
     public static final int kQTVRObjectWrapTiltOn = 2;
-
     public static final int kQTVRObjectCanZoomOn = 4;
-
     public static final int kQTVRObjectReverseHControlOn = 8;
-
     public static final int kQTVRObjectReverseVControlOn = 16;
-
     public static final int kQTVRObjectSwapHVControlOn = 32;
-
     public static final int kQTVRObjectTranslationOn = 64;
 
     /**
@@ -123,7 +109,7 @@ public final class QTVRObjectSample extends QTVRAtom {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 6);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
@@ -347,8 +333,7 @@ public final class QTVRObjectSample extends QTVRAtom {
 
     /**
      * @param minFieldOfView field of view setting (appears as the maximum zoom effect)
-     * @throws minFieldOfView must be &gt;= 1
-     * @throws quicktime.QTException
+     * @throws quicktime.QTException throws minFieldOfView must be &gt;= 1
      */
     public void setMinFieldOfView(float minFieldOfView) throws QTException {
         if (minFieldOfView < 1.0D)
@@ -365,8 +350,7 @@ public final class QTVRObjectSample extends QTVRAtom {
 
     /**
      * @param fieldOfView the field of view range
-     * @throws fieldOfView must be &gt;= 1
-     * @throws quicktime.QTException
+     * @throws quicktime.QTException throws fieldOfView must be &gt;= 1
      */
     public void setFieldOfView(float fieldOfView) throws QTException {
         if (fieldOfView < 1.0D)
@@ -466,4 +450,3 @@ public final class QTVRObjectSample extends QTVRAtom {
         return getClass().getName() + "[movieType=" + getMovieType() + ",viewStateCount=" + getViewStateCount() + ",defaultViewState=" + getDefaultViewState() + ",mouseDownViewState=" + getMouseDownViewState() + ",viewDuration=" + getViewDuration() + ",columns=" + getColumns() + ",rows=" + getRows() + ",mouseMotionScale=" + getMouseMotionScale() + ",minPan=" + getMinPan() + ",maxPan=" + getMaxPan() + ",defaultPan=" + getDefaultPan() + ",minTilt=" + getMinTilt() + ",maxTilt=" + getMaxTilt() + ",defaultTilt=" + getDefaultTilt() + ",minFieldOfView=" + getMinFieldOfView() + ",fieldOfView=" + getFieldOfView() + ",defaultFieldOfView=" + getDefaultFieldOfView() + ",defaultViewCenter=" + getDefaultViewCenter() + ",viewRate=" + getViewRate() + ",frameRate=" + getFrameRate() + ",animationSettings=" + getAnimationSettings() + ",controlSettings" + getControlSettings() + "]";
     }
 }
-

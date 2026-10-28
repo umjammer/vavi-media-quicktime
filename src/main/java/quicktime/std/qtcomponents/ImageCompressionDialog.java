@@ -1,7 +1,5 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.ImageCompressionManager;
@@ -18,21 +16,11 @@ import quicktime.std.image.ImageDescription;
 import quicktime.std.image.QTImage;
 import quicktime.util.QTHandle;
 
+
 /**
  * This class represents the standard compression dialog for images.
  */
 public final class ImageCompressionDialog extends CompressionDialog implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ImageCompressionDialog.class));
-            }
-        }.establish();
-    }
 
     /**
      * Opens the CompressionDialog component for an Image compression dialog.
@@ -414,4 +402,3 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
         return ImageCompressionManager.SCGetCompressFlags(paramInt, paramArrayOfInt);
     }
 }
-

@@ -95,4 +95,3 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
         return FileManager.NewAlias(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
     }
 }
-

@@ -7,22 +7,22 @@ import quicktime.std.image.Compressor;
  */
 public class SGVideoCompressorInfo {
 
-    public int mDepth;
+    public final int mDepth;
 
     /**
      * @deprecated
      * <I>use theCompressor field</I>
      * This field is no longer used and is ALWAYS set to zero
      */
-    public int mCompressor;
+    public final int mCompressor;
 
-    public Compressor theCompressor;
+    public final Compressor theCompressor;
 
-    public int mSpatialQuality;
+    public final int mSpatialQuality;
 
-    public int mTemporalQuality;
+    public final int mTemporalQuality;
 
-    public int mKeyFrameRate;
+    public final int mKeyFrameRate;
 
     /**
      * This constructor creates a SGVideoCompressorInfo object.
@@ -41,4 +41,3 @@ public class SGVideoCompressorInfo {
         this.theCompressor = compressor;
     }
 }
-

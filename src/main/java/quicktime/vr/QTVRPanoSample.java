@@ -71,7 +71,7 @@ public final class QTVRPanoSample extends QTVRAtom {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
@@ -363,4 +363,3 @@ public final class QTVRPanoSample extends QTVRAtom {
         return getClass().getName() + "[imageRefTrackIndex=" + getImageRefTrackIndex() + ",hotSpotRefTrackIndex=" + getHotSpotRefTrackIndex() + ",minPan=" + getMinPan() + ",maxPan=" + getMaxPan() + ",minTilt=" + getMinTilt() + ",maxTilt=" + getMaxTilt() + ",minFieldOfView=" + getMinFieldOfView() + ",maxFieldOfView=" + getMaxFieldOfView() + ",defaultPan=" + getDefaultPan() + ",defaultTilt=" + getDefaultTilt() + ",defaultFieldOfView=" + getDefaultFieldOfView() + ",imageSize=" + getImageSize() + ",imageNumFrames=" + getNumFrames() + ",hotSpotSize=" + getHotSpotSize() + ",hotSpotNumFrames=" + getHotSpotNumFrames() + ",flags=" + getFlags() + ",panoType=" + getPanoType() + ",reserved2=" + getReserved2() + "]";
     }
 }
-

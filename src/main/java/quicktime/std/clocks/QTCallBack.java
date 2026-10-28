@@ -1,7 +1,5 @@
 package quicktime.std.clocks;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
@@ -62,30 +60,15 @@ import quicktime.std.StdQTException;
  */
 public abstract class QTCallBack extends QTObject implements QuickTimeLib {
 
-    private static Object linkage;
-
     static final int callBackAtTime = 1;
-
     static final int callBackAtRate = 2;
-
     static final int callBackAtTimeJump = 3;
-
     static final int callBackAtExtremes = 4;
 
     static final int callBackAtInterrupt = 32768;
-
     static final int callBackAtDeferredTask = 16384;
 
     private final TimeBase tb;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTCallBack.class));
-            }
-        }.establish();
-    }
 
     QTCallBack(TimeBase paramTimeBase, int paramInt) throws QTException {
         super(allocate(paramTimeBase, paramInt));
@@ -190,8 +173,8 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
     /**
      * Registers the callback. It will use the state of the subclass to set the parameters
      *  that control the callbacks activation. As a method on QTCallBack it does nothing.
-     * @see " QuickTime::CallMeWhen"
-     *  @param cb CallBack interface who's execute method will be called when the callback becomes active.
+     * @see "QuickTime::CallMeWhen"
+     *  param cb CallBack interface who's execute method will be called when the callback becomes active.
      */
     public abstract void callMeWhen() throws StdQTException;
 
@@ -217,4 +200,3 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
         return ClockManager.NewCallBack(paramInt, paramShort);
     }
 }
-

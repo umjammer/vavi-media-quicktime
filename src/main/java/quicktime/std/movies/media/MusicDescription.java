@@ -1,17 +1,15 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.std.StdQTException;
 import quicktime.std.music.MusicData;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianFlipSpec;
+
 
 /**
  * This class maps the MusicDescription record of the MovieToolbox.
@@ -19,20 +17,9 @@ import quicktime.util.EndianFlipSpec;
  */
 public final class MusicDescription extends SampleDescription implements InterfaceLib, PrimitivesLib {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 20;
 
     private static EndianDescriptor ed;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MusicDescription.class));
-            }
-        }.establish();
-    }
 
     protected static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
@@ -43,6 +30,7 @@ public final class MusicDescription extends SampleDescription implements Interfa
 
     /**
      * Returns the EndianDescriptor for this class.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptor() {
@@ -119,4 +107,3 @@ public final class MusicDescription extends SampleDescription implements Interfa
         return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
     }
 }
-

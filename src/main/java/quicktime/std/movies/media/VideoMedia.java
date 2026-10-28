@@ -36,12 +36,12 @@ public final class VideoMedia extends Media {
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new ImageDescription(0);
     }
 
     @Override
-    final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new VideoMediaHandler(paramInt, paramObject);
     }
 
@@ -70,4 +70,3 @@ public final class VideoMedia extends Media {
         return localImageDescription;
     }
 }
-

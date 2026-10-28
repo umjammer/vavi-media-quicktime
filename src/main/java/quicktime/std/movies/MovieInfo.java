@@ -26,4 +26,3 @@ public final class MovieInfo {
         this.resourceName = paramString;
     }
 }
-

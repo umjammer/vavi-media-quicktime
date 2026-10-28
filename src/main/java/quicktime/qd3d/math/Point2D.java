@@ -1,14 +1,12 @@
 package quicktime.qd3d.math;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.QD3DManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDPoint;
+
 
 /**
  * Point2D contains static calls - the implementation is found in the QDPoint class
@@ -16,19 +14,10 @@ import quicktime.qd.QDPoint;
  */
 public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
 
-    private static Object linkage;
-
     static {
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Point2D.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
@@ -76,9 +65,9 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param r2 A floating-point number.
      * @return a QDPoint
      */
-    public static QDPoint rRatio(QDPoint paramQDPoint1, QDPoint paramQDPoint2, float paramFloat1, float paramFloat2) {
+    public static QDPoint rRatio(QDPoint paramQDPoint1, QDPoint p2, float r1, float r2) {
         byte[] arrayOfByte = new byte[8];
-        int i = Q3Point2D_RRatio(paramQDPoint1.getQ3Point2D(), paramQDPoint2.getQ3Point2D(), paramFloat1, paramFloat2, arrayOfByte);
+        int i = Q3Point2D_RRatio(paramQDPoint1.getQ3Point2D(), p2.getQ3Point2D(), r1, r2, arrayOfByte);
         return QDPoint.fromArray(arrayOfByte, -8);
     }
 

@@ -27,4 +27,3 @@ public interface QTMouseMotionListener extends MouseMotionListener {
      */
     void mouseExitedTarget(MouseEvent e);
 }
-

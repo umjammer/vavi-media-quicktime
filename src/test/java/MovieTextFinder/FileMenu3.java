@@ -9,8 +9,6 @@ package MovieTextFinder;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import quicktime.Errors;
 import quicktime.QTException;
@@ -23,7 +21,7 @@ import quicktime.io.QTFile;
  */
 public class FileMenu3 {
 
-    MovieTextFinder myPlayMovie;
+    final MovieTextFinder myPlayMovie;
 
     public FileMenu3(MovieTextFinder src) {
         this.myPlayMovie = src;

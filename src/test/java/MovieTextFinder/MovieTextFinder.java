@@ -23,8 +23,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -76,11 +74,11 @@ import quicktime.util.QTPointer;
  */
 public class MovieTextFinder extends JFrame implements Errors {
 
-    JTextField searchTextField;
-    JCheckBox wrapSearch;
-    JCheckBox caseSensitiveSearch;
-    JRadioButton searchForwardButton;
-    JRadioButton searchBackwardButton;
+    final JTextField searchTextField;
+    final JCheckBox wrapSearch;
+    final JCheckBox caseSensitiveSearch;
+    final JRadioButton searchForwardButton;
+    final JRadioButton searchBackwardButton;
 
     Movie theMovie;
     MovieController theMovieController;

@@ -17,7 +17,7 @@ public final class ExportParams extends QTByteObject {
     public static final int kNativeSize = 40;
 
     ExportParams() {
-        super(40);
+        super(kNativeSize);
     }
 
     /**
@@ -30,15 +30,15 @@ public final class ExportParams extends QTByteObject {
      * @param flagsIn input flags
      * @param flagsOut output flags
      */
-    public ExportParams(int paramInt1, int paramInt2, QTPointer paramQTPointer1, int paramInt3, QTPointer paramQTPointer2, QTPointer paramQTPointer3, int paramInt4, int paramInt5) {
-        super(40);
-        setVersion(paramInt1);
-        setExportType(paramInt2);
-        setDestinationContainerType(paramInt3);
-        setDestinationContainerData(paramQTPointer2);
-        setDestinationContainerExtras(paramQTPointer3);
-        setFlagsIn(paramInt4);
-        setFlagsOut(paramInt5);
+    public ExportParams(int vers, int expType, QTPointer paramQTPointer1, int targetType, QTPointer targData, QTPointer extraData, int flagsIn, int flagsOut) {
+        super(kNativeSize);
+        setVersion(vers);
+        setExportType(expType);
+        setDestinationContainerType(targetType);
+        setDestinationContainerData(targData);
+        setDestinationContainerExtras(extraData);
+        setFlagsIn(flagsIn);
+        setFlagsOut(flagsOut);
     }
 
     /**
@@ -164,6 +164,14 @@ public final class ExportParams extends QTByteObject {
      * @return a String
      */
     public String toString() {
-        return getClass().getName() + "[version=" + getVersion() + ",exportType=" + QTUtils.fromOSType(getExportType()) + ",destinationContainerType" + QTUtils.fromOSType(getDestinationContainerType()) + ",destinationContainerData" + getDestinationContainerData() + ",desintationContainerExtras" + getDestinationContainerExtras() + ",flagsIn" + getFlagsIn() + ",flagsOut" + getFlagsOut() + "]";
+        return getClass().getName() +
+                "[version=" + getVersion() +
+                ",exportType=" + QTUtils.fromOSType(getExportType()) +
+                ",destinationContainerType" + QTUtils.fromOSType(getDestinationContainerType()) +
+                ",destinationContainerData" + getDestinationContainerData() +
+                ",desintationContainerExtras" + getDestinationContainerExtras() +
+                ",flagsIn" + getFlagsIn() +
+                ",flagsOut" + getFlagsOut() +
+                "]";
     }
 }

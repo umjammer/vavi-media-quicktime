@@ -1,12 +1,10 @@
 package quicktime.streaming;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
+
 
 /**
  * This class represents a QTSStatusParam structure that is returned when a notification proc
@@ -14,22 +12,10 @@ import quicktime.util.QTUtils;
  */
 public class StatusParams extends QTPointerRef implements PrimitivesLib {
 
-    private static Object linkage;
-
     /**
      * This is the size of this class
      */
     public static final int kNativeSize = 20;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(StatusParams.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     StatusParams(int paramInt, Object paramObject) {
         super(paramInt, kNativeSize, paramObject);

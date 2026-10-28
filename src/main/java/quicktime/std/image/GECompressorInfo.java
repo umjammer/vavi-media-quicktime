@@ -7,12 +7,12 @@ public class GECompressorInfo {
     /**
      * canUseCompressor true if Graphics Exporter uses compressor
      */
-    public boolean canUseCompressor;
+    public final boolean canUseCompressor;
 
     /**
      * atomContainer contains information related to the compression operation
      */
-    public AtomContainer atomContainer;
+    public final AtomContainer atomContainer;
 
     /**
      * This constructor creates a GECompressorInfo object.

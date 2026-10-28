@@ -30,4 +30,3 @@ public final class StatusInfo {
 
     private int err = 0;
 }
-

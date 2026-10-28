@@ -4,20 +4,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTPointer;
 import quicktime.util.QTUtils;
 
-public final class SoundComponentData extends QTByteObject implements PrimitivesLib {
 
-    private static Object linkage;
+public final class SoundComponentData extends QTByteObject implements PrimitivesLib {
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -29,22 +26,13 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     @Serial
     private static final long serialVersionUID = -7514870412490785051L;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SoundComponentData.class));
-            }
-        }.establish();
-    }
-
     public SoundComponentData() {
-        super(28);
+        super(kNativeSize);
     }
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[28];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         for (int i = 0; i < 8; i += 4) {
             setIntInArray(this.bytes, i, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, i)));
@@ -59,7 +47,7 @@ public final class SoundComponentData extends QTByteObject implements Primitives
 
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[28];
+        byte[] arrayOfByte = new byte[kNativeSize];
         for (int i = 0; i < 8; i += 4) {
             setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
@@ -76,91 +64,91 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * A set of bit flags whose meanings are specific to a particular sound component.
      */
-    public final int getFlags() {
+    public int getFlags() {
         return getIntAt(0);
     }
 
     /**
      * A set of bit flags whose meanings are specific to a particular sound component.
      */
-    public final void setFlags(int paramInt) {
+    public void setFlags(int paramInt) {
         setIntAt(0, paramInt);
     }
 
     /**
      * The format of the data a sound component is producing.
      */
-    public final int getFormat() {
+    public int getFormat() {
         return getIntAt(4);
     }
 
     /**
      * The format of the data a sound component is producing.
      */
-    public final void setFormat(int paramInt) {
+    public void setFormat(int paramInt) {
         setIntAt(4, paramInt);
     }
 
     /**
      * The number of channels of sound in the output data stream.
      */
-    public final int getNumChannels() {
+    public int getNumChannels() {
         return getShortAt(8);
     }
 
     /**
      * The number of channels of sound in the output data stream.
      */
-    public final void setNumChannels(int paramInt) {
+    public void setNumChannels(int paramInt) {
         setShortAt(8, (short) paramInt);
     }
 
     /**
      * The size, in bits, of each sample in the output data stream.
      */
-    public final int getSampleSize() {
+    public int getSampleSize() {
         return getShortAt(10);
     }
 
     /**
      * The size, in bits, of each sample in the output data stream.
      */
-    public final void setSampleSize(int paramInt) {
+    public void setSampleSize(int paramInt) {
         setShortAt(10, (short) paramInt);
     }
 
     /**
      * The sample rate for the audio data.
      */
-    public final float getSampleRate() {
+    public float getSampleRate() {
         return QTUtils.UFix2X(getIntAt(12));
     }
 
     /**
      * The sample rate for the audio data.
      */
-    public final void setSampleRate(float paramFloat) {
+    public void setSampleRate(float paramFloat) {
         setIntAt(12, QTUtils.X2UFix(paramFloat));
     }
 
     /**
      * The number of samples in the buffer pointed to by the buffer field. For compressed sounds, this field indicates the number of compressed samples in the sound, not the size of the buffer.
      */
-    public final int getSampleCount() {
+    public int getSampleCount() {
         return getIntAt(16);
     }
 
     /**
      * The number of samples in the buffer pointed to by the buffer field. For compressed sounds, this field indicates the number of compressed samples in the sound, not the size of the buffer.
      */
-    public final void setSampleCount(int paramInt) {
+    public void setSampleCount(int paramInt) {
         setIntAt(16, paramInt);
     }
 
     /**
      * The buffer that contains the sound data.
      */
-    public final QTPointer getBuffer() {
+    public QTPointer getBuffer() {
         return QTPointer.fromSCData(this);
     }
 
@@ -170,7 +158,7 @@ public final class SoundComponentData extends QTByteObject implements Primitives
      * a paramErr exception is thrown as the buffer is not large enough to hold the specified samples.
      * This also means that the sample size and sample count fields must be set before the buffer is set.
      */
-    public final void setBuffer(QTPointer paramQTPointer) throws SoundException {
+    public void setBuffer(QTPointer paramQTPointer) throws SoundException {
         if (paramQTPointer.getSize() < getSampleSize() / 8 * getSampleCount())
             throw new SoundException(-50);
         setIntAt(20, QTObject.ID(paramQTPointer));
@@ -179,6 +167,7 @@ public final class SoundComponentData extends QTByteObject implements Primitives
 
     /**
      * Returns a String representation of this object.
+     *
      * @return a String
      */
     public String toString() {

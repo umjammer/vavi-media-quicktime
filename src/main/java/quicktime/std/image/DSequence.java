@@ -26,8 +26,8 @@ import quicktime.util.RawEncodedImage;
  * The Movie Toolbox handles the details of decompressing image sequences in
  * QuickTime movies. If you need to decompress other sequences, your application
  * can use this class.
- * @see quicktime.std.image.CDSequence,
- * {@link quicktime.std.image.CSequence}
+ * @see quicktime.std.image.CDSequence
+ * @see quicktime.std.image.CSequence
  */
 public final class DSequence extends CDSequence {
 

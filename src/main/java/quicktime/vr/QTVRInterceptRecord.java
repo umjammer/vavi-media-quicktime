@@ -1,14 +1,12 @@
 package quicktime.vr;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.qd.QDPoint;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
+
 
 /**
  * The QTVRInterceptRecord is passed to the QTVRInterceptor's exeucte method by QuickTime.
@@ -19,22 +17,10 @@ import quicktime.util.QTUtils;
  */
 public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
 
-    private static Object linkage;
-
     private static final int kNativeSize = 44;
 
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTVRInterceptRecord.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
     protected QTVRInterceptRecord(int paramInt, Object paramObject) {
-        super(paramInt, 44, paramObject);
+        super(paramInt, kNativeSize, paramObject);
         if (paramObject == null) {
             throw new RuntimeException("Must have an owner");
         }
@@ -43,6 +29,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
     /**
      * This returns the selector which will in turn describe the parameters
      * that this record will contain. This is a read only field.
+     *
      * @return an int
      */
     public final int getSelector() {
@@ -53,6 +40,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * This returns the number of parameters in a particular instance.
      * The number of parameters are dependent on the given selector.
      * This is a read only field.
+     *
      * @return an int
      */
     public final int getParamCount() {
@@ -63,6 +51,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Returns the pan or tilt angle, depending on the selector.
      * If the selector is not kQTVRSetPanAngleSelector or kQTVRSetTiltAngleSelector
      * a paramError QTException is thrown.
+     *
      * @return the angle in Radians.
      * @throws quicktime.QTException
      */
@@ -79,6 +68,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Sets the pan or tilt angle, depending on the selector.
      * If the selector is not kQTVRSetPanAngleSelector or kQTVRSetTiltAngleSelector
      * a paramError QTException is thrown.
+     *
      * @param angle the angle in Radians.
      * @throws quicktime.QTException
      */
@@ -95,6 +85,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Returns the field of view for the kQTVRSetFieldOfViewSelector.
      * If the selector is not kQTVRSetFieldOfViewSelector
      * a paramError QTException is thrown.
+     *
      * @return the field of view
      * @throws quicktime.QTException
      */
@@ -110,6 +101,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Sets the field of view for the kQTVRSetFieldOfViewSelector.
      * If the selector is not kQTVRSetFieldOfViewSelector
      * a paramError QTException is thrown.
+     *
      * @param fieldOfView the field of view
      * @throws quicktime.QTException
      */
@@ -125,6 +117,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Returns the field of view for the kQTVRSetViewCenterSelector.
      * If the selector is not kQTVRSetViewCenterSelector
      * a paramError QTException is thrown.
+     *
      * @return the current view center
      * @throws quicktime.QTException
      */
@@ -142,6 +135,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Sets the field of view for the kQTVRSetViewCenterSelector.
      * If the selector is not kQTVRSetViewCenterSelector
      * a paramError QTException is thrown.
+     *
      * @param viewCenter the new view center
      * @throws quicktime.QTException
      */
@@ -158,6 +152,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Gets the hot spot ID.
      * If the selector is not kQTVRTriggerHotSpotSelector or kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
+     *
      * @return the hot spot ID
      * @throws quicktime.QTException
      */
@@ -173,6 +168,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Sets the hot spot ID.
      * If the selector is not kQTVRTriggerHotSpotSelector or kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
+     *
      * @param hotSpotID the new hot spot ID
      * @throws quicktime.QTException
      */
@@ -188,6 +184,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Gets the hot spot type.
      * If the selector is not kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
+     *
      * @return the hot spot type
      * @throws quicktime.QTException
      */
@@ -202,6 +199,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * Sets the hot spot type.
      * If the selector is not kQTVRGetHotSpotTypeSelector
      * a paramError QTException is thrown.
+     *
      * @param hotSpotType the new hot spot type
      * @throws quicktime.QTException
      */
@@ -214,6 +212,7 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
 
     /**
      * Returns a String representation of this object.
+     *
      * @return a String
      */
     public String toString() {

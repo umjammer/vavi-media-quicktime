@@ -19,5 +19,3 @@ interface Taskable {
 
     void stopTasking();
 }
-
-

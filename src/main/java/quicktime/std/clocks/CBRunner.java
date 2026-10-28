@@ -80,7 +80,7 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
 
     private boolean executing;
 
-    final void cleanup() {
+    void cleanup() {
         this.callbackDone = true;
         if (QTSession.isCurrentOS(1)) {
             activeCallbacks -= 1;
@@ -92,7 +92,7 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
         doNotify();
     }
 
-    final int getClosure() {
+    int getClosure() {
         if (this.mInterruptClosure != null)
             return this.mInterruptClosure.fetchPointer();
         if (this.mMethodClosure != null) {

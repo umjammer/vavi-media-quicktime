@@ -687,4 +687,3 @@ public interface QTVRConstants {
 
     int kQTVRValueIsUserPrefRelative = 4;
 }
-

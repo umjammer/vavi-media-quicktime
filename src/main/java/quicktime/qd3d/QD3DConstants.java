@@ -171,4 +171,3 @@ public interface QD3DConstants {
      */
     int gestaltQD3DViewerAvailable = 1;
 }
-

@@ -117,9 +117,9 @@ public class QTImageProducer implements ImageProducer {
 
     private final ColorModel cm = new DirectColorModel(32, 16711680, 65280, 255, 0);
 
-    private final Hashtable props = new Hashtable();
+    private final Hashtable<String, String> props = new Hashtable<>();
 
-    private final Vector consumers = new Vector();
+    private final Vector<ImageConsumer> consumers = new Vector<>();
 
     private boolean doesRedraw;
 
@@ -250,12 +250,12 @@ public class QTImageProducer implements ImageProducer {
      * order.  If the data can be resent, then the ImageProducer
      * should respond by executing the following minimum set of
      * ImageConsumer method calls:
-     *
+     * <pre>
      * ic.setHints(TOPDOWNLEFTRIGHT | < otherhints >);
      * ic.setPixels(...); // As many times as needed
      * ic.imageComplete();
-     *
-     * @see ImageConsumer.setHints(int)
+     * </pre>
+     * @see ImageConsumer#setHints(int)
      */
     @Override
     public void requestTopDownLeftRightResend(ImageConsumer paramImageConsumer) {
@@ -292,7 +292,7 @@ public class QTImageProducer implements ImageProducer {
      * or can receive notification by the Presentable source when it has drawn, and use this method to
      * update the registered ImageConsumers.
      * @param invalidRgn enter null to copy all pixels, or specify a region that specifies the changed pixel data,
-     *  which can econimize the copying of the pixel data to only those areas that have changed.
+     *  which can economize the copying of the pixel data to only those areas that have changed.
      * @throws quicktime.QTException
      */
     public synchronized void updateConsumers(Region invalidRgn) throws QTException {
@@ -314,9 +314,9 @@ public class QTImageProducer implements ImageProducer {
             k = this.size.width;
             m = this.size.height;
         }
-        Object localObject = this.consumers.elements();
-        while (((Enumeration<?>) localObject).hasMoreElements()) {
-            ImageConsumer localImageConsumer = (ImageConsumer) ((Enumeration<?>) localObject).nextElement();
+        Enumeration<ImageConsumer> localObject = this.consumers.elements();
+        while (localObject.hasMoreElements()) {
+            ImageConsumer localImageConsumer = localObject.nextElement();
             localImageConsumer.setPixels(i, j, k, m, this.cm, this.pixels, 0, this.rowInts);
             if (isConsumer(localImageConsumer)) {
                 localImageConsumer.imageComplete(2);
@@ -350,4 +350,3 @@ public class QTImageProducer implements ImageProducer {
         return new Dimension(this.size);
     }
 }
-

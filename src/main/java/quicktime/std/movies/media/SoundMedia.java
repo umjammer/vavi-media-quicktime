@@ -35,12 +35,12 @@ public final class SoundMedia extends Media {
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new SoundDescription(0);
     }
 
     @Override
-    final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new SoundMediaHandler(paramInt, paramObject);
     }
 
@@ -69,4 +69,3 @@ public final class SoundMedia extends Media {
         return localSoundDescription;
     }
 }
-

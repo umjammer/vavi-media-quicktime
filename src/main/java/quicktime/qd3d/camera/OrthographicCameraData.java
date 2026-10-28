@@ -1,24 +1,20 @@
 package quicktime.qd3d.camera;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
+
 
 /**
  * OrthographicCameraData contains information for the camera angle and position.
- *
+ * <p>
  * The lens characteristics are set with the dimensions of a
  * rectangular viewPort in the frame of the camera.
- *
+ * <p>
  * Refer to TQ3OrthographicCameraData in QuickDraw3d
  */
 public final class OrthographicCameraData extends CameraData implements PrimitivesLib {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -29,29 +25,23 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(OrthographicCameraData.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
      * Creates a OrthographicCameraData object containing no data.
      */
     public OrthographicCameraData() {
-        super(76);
+        super(kNativeSize);
     }
 
     /**
      * Creates a OrthographicCameraData object containing given data.
+     *
      * @param cameraData The camera data.
-     * @param left The left position.
-     * @param top The top position.
-     * @param right The right position.
-     * @param bottom The bottom position.
+     * @param left       The left position.
+     * @param top        The top position.
+     * @param right      The right position.
+     * @param bottom     The bottom position.
      */
     public OrthographicCameraData(CameraData cameraData, float left, float top, float right, float bottom) {
         this();
@@ -138,4 +128,3 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

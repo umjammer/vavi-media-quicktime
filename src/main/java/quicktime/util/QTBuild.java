@@ -96,4 +96,3 @@ public final class QTBuild {
         return "[QTJava:6.1.3g" + str + "]";
     }
 }
-

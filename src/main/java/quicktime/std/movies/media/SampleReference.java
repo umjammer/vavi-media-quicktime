@@ -93,4 +93,3 @@ public final class SampleReference extends QTPointerRef {
         setShortAt(16, (short) paramInt);
     }
 }
-

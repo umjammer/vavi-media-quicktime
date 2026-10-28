@@ -6,7 +6,7 @@ import quicktime.internal.awt.MacDrawingSurface;
 
 
 final class MacNativeGraphics extends NativeGraphics {
-    MacDrawingSurface nd;
+    final MacDrawingSurface nd;
 
     MacNativeGraphics(DrawingSurfaceInfo paramDrawingSurfaceInfo) {
         super(paramDrawingSurfaceInfo);
@@ -14,7 +14,7 @@ final class MacNativeGraphics extends NativeGraphics {
     }
 
     @Override
-    public final QDGraphics getGWorld() throws NativeGraphicsException {
+    public QDGraphics getGWorld() throws NativeGraphicsException {
         return QDGraphics.fromNativeGraphics(this);
     }
 
@@ -27,5 +27,3 @@ final class MacNativeGraphics extends NativeGraphics {
         return getClass().getName();
     }
 }
-
-

@@ -1,7 +1,5 @@
 package quicktime.std.qtcomponents;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -15,23 +13,12 @@ import quicktime.std.StdQTException;
 import quicktime.std.image.ImageDescription;
 import quicktime.util.QTHandleRef;
 
-public final class SCSequence implements QuickTimeLib {
 
-    private static Object linkage;
+public final class SCSequence implements QuickTimeLib {
 
     private final ImageDescription desc;
 
     private final ImageCompressionDialog dialog;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SCSequence.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     SCSequence(ImageCompressionDialog paramImageCompressionDialog, QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
         if (paramQDGraphics == null) {
@@ -85,10 +72,8 @@ public final class SCSequence implements QuickTimeLib {
         return QTHandleRef.fromSCSequence(this, src, srcRect);
     }
 
-    @Override
-    protected final void finalize() throws Throwable {
+    private void dispose() throws Throwable {
         SCCompressSequenceEnd(QTObject.ID(this.dialog));
-        super.finalize();
     }
 
     private static int SCCompressSequenceBegin(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
@@ -107,4 +92,3 @@ public final class SCSequence implements QuickTimeLib {
         QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
     }
 }
-

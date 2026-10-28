@@ -102,4 +102,3 @@ public interface QTDisplaySpace extends QTDrawable, Space {
      */
     Object hitTest(int x, int y) throws QTException;
 }
-

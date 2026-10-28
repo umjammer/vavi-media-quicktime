@@ -8,4 +8,3 @@ package quicktime.jdirect;
  */
 public interface SharedLibrary {
 }
-

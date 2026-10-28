@@ -9,4 +9,3 @@ public interface NextTaskNeededSooner {
      */
     int execute(int paramInt1, int paramInt2);
 }
-

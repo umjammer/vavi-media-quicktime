@@ -136,4 +136,3 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
     }
 }
-

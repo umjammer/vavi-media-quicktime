@@ -1,22 +1,20 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
+
 
 /**
  * A QTPointerRef is a "smart" pointer in that it can be either a Reference to a pointer
  * which is not disposable, or it can be a real "independent" pointer which is
  * automatically disposed on finalization.This class is used as a generic base class for pointer based objects. See QTHandle
  * for a user-level pointer object.
- *
+ * <p>
  * The default setting is for the Ptr to be disposable - you must use the
  * QTPointerRef(int, int, Object) constructor to create a non-disposable reference
  * For non-disposable Pointers there are two situations to look out for:
@@ -27,18 +25,7 @@ import quicktime.jdirect.QuickTimeLib;
  */
 public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLib, InterfaceLib {
 
-    private static Object linkage;
-
     private transient int size;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTPointerRef.class));
-            }
-        }.establish();
-    }
 
     protected QTPointerRef(int paramInt, boolean paramBoolean) throws QTException {
         this(allocate(paramInt, paramBoolean), paramInt, null);
@@ -71,6 +58,7 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
 
     /**
      * Returns a copy of the data of the pointer as a byte array
+     *
      * @return a byte array - copy of pointer data
      */
     public byte[] getBytes() {
@@ -90,10 +78,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient byte[] copy that copies length bytes from the pointer to the
      * byte array.
-     * @param ptrOffset the byte offset from the pointer to copy the bytes from
-     * @param destArray the destination byte array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the bytes from
+     * @param destArray  the destination byte array
      * @param destOffset the offset within the byte array to start copying to
-     * @param length the number of bytes to copy
+     * @param length     the number of bytes to copy
      */
     public final void copyToArray(int ptrOffset, byte[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 1, destOffset, destArray.length);
@@ -103,10 +92,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient short[] copy that copies length shorts from the pointer to the
      * short array.
-     * @param ptrOffset the byte offset from the pointer to copy the shorts from
-     * @param destArray the destination short array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the shorts from
+     * @param destArray  the destination short array
      * @param destOffset the offset within the short array to start copying to
-     * @param length the number of shorts to copy
+     * @param length     the number of shorts to copy
      */
     public final void copyToArray(int ptrOffset, short[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, destOffset, destArray.length);
@@ -116,10 +106,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient char[] copy that copies length chars from the pointer to the
      * char array.
-     * @param ptrOffset the byte offset from the pointer to copy the chars from
-     * @param destArray the destination char array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the chars from
+     * @param destArray  the destination char array
      * @param destOffset the offset within the char array to start copying to
-     * @param length the number of chars to copy
+     * @param length     the number of chars to copy
      */
     public final void copyToArray(int ptrOffset, char[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, destOffset, destArray.length);
@@ -129,10 +120,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient int[] copy that copies length ints from the pointer to the
      * int array.
-     * @param ptrOffset the byte offset from the pointer to copy the ints from
-     * @param destArray the destination int array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the ints from
+     * @param destArray  the destination int array
      * @param destOffset the offset within the int array to start copying to
-     * @param length the number of ints to copy
+     * @param length     the number of ints to copy
      */
     public final void copyToArray(int ptrOffset, int[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, destOffset, destArray.length);
@@ -142,10 +134,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient float[] copy that copies length floats from the pointer to the
      * float array.
-     * @param ptrOffset the byte offset from the pointer to copy the floats from
-     * @param destArray the destination float array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the floats from
+     * @param destArray  the destination float array
      * @param destOffset the offset within the float array to start copying to
-     * @param length the number of floats to copy
+     * @param length     the number of floats to copy
      */
     public final void copyToArray(int ptrOffset, float[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, destOffset, destArray.length);
@@ -155,10 +148,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient long[] copy that copies length longs from the pointer to the
      * long array.
-     * @param ptrOffset the byte offset from the pointer to copy the longs from
-     * @param destArray the destination long array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the longs from
+     * @param destArray  the destination long array
      * @param destOffset the offset within the long array to start copying to
-     * @param length the number of longs to copy
+     * @param length     the number of longs to copy
      */
     public final void copyToArray(int ptrOffset, long[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, destOffset, destArray.length);
@@ -168,10 +162,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient double[] copy that copies length doubles from the pointer to the
      * double array.
-     * @param ptrOffset the byte offset from the pointer to copy the doubles from
-     * @param destArray the destination double array
+     *
+     * @param ptrOffset  the byte offset from the pointer to copy the doubles from
+     * @param destArray  the destination double array
      * @param destOffset the offset within the double array to start copying to
-     * @param length the number of doubles to copy
+     * @param length     the number of doubles to copy
      */
     public final void copyToArray(int ptrOffset, double[] destArray, int destOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, destOffset, destArray.length);
@@ -181,10 +176,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient byte[] copy that copies length bytes from the byte array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the byte[] to copy
+     * @param srcArray  the byte[] to copy
      * @param srcOffset the nth index within the byte [] to start copying from
-     * @param length how many elements of the byte array to copy
+     * @param length    how many elements of the byte array to copy
      */
     public final void copyFromArray(int ptrOffset, byte[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 1, srcOffset, srcArray.length);
@@ -194,10 +190,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient short[] copy that copies length shorts from the short array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the short[] to copy
+     * @param srcArray  the short[] to copy
      * @param srcOffset the nth index within the short [] to start copying from
-     * @param length how many elements of the short array to copy
+     * @param length    how many elements of the short array to copy
      */
     public final void copyFromArray(int ptrOffset, short[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, srcOffset, srcArray.length);
@@ -207,10 +204,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient char[] copy that copies length chars from the char array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the char[] to copy
+     * @param srcArray  the char[] to copy
      * @param srcOffset the nth index within the char [] to start copying from
-     * @param length how many elements of the char array to copy
+     * @param length    how many elements of the char array to copy
      */
     public final void copyFromArray(int ptrOffset, char[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 2, srcOffset, srcArray.length);
@@ -220,10 +218,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient int[] copy that copies length ints from the int array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the int[] to copy
+     * @param srcArray  the int[] to copy
      * @param srcOffset the nth index within the int [] to start copying from
-     * @param length how many elements of the int array to copy
+     * @param length    how many elements of the int array to copy
      */
     public final void copyFromArray(int ptrOffset, int[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, srcOffset, srcArray.length);
@@ -233,10 +232,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient float[] copy that copies length floats from the float array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the float[] to copy
+     * @param srcArray  the float[] to copy
      * @param srcOffset the nth index within the float [] to start copying from
-     * @param length how many elements of the float array to copy
+     * @param length    how many elements of the float array to copy
      */
     public final void copyFromArray(int ptrOffset, float[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 4, srcOffset, srcArray.length);
@@ -246,10 +246,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient long[] copy that copies length longs from the long array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the long[] to copy
+     * @param srcArray  the long[] to copy
      * @param srcOffset the nth index within the long [] to start copying from
-     * @param length how many elements of the long array to copy
+     * @param length    how many elements of the long array to copy
      */
     public final void copyFromArray(int ptrOffset, long[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, srcOffset, srcArray.length);
@@ -259,10 +260,11 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
     /**
      * An efficient double[] copy that copies length doubles from the double array to
      * the pointer.
+     *
      * @param ptrOffset how many bytes offset from the base pointer to copy to.
-     * @param srcArray the double[] to copy
+     * @param srcArray  the double[] to copy
      * @param srcOffset the nth index within the double [] to start copying from
-     * @param length how many elements of the double array to copy
+     * @param length    how many elements of the double array to copy
      */
     public final void copyFromArray(int ptrOffset, double[] srcArray, int srcOffset, int length) {
         QTUtils.doBoundsChecks(ptrOffset, this.size, length, 8, srcOffset, srcArray.length);
@@ -501,4 +503,3 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         MemoryManager.setDoubleInPointer(paramInt1, paramInt2, paramDouble);
     }
 }
-

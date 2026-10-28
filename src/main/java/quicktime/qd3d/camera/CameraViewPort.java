@@ -72,7 +72,7 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
         setHeight(height);
     }
 
-    protected CameraViewPort(byte[] paramArrayOfByte) {
+    private CameraViewPort(byte[] paramArrayOfByte) {
         super(paramArrayOfByte);
     }
 
@@ -83,8 +83,8 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
         paramObjectInputStream.read(localCameraViewPort.getBytes());
         try {
             EndianOrder.flipBigEndianToNative(localCameraViewPort, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
         System.arraycopy(localCameraViewPort.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
@@ -94,8 +94,8 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
         CameraViewPort localCameraViewPort = (CameraViewPort) clone();
         try {
             EndianOrder.flipNativeToBigEndian(localCameraViewPort, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
         paramObjectOutputStream.write(localCameraViewPort.getBytes());
     }
@@ -158,4 +158,3 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
         return getClass().getName();
     }
 }
-

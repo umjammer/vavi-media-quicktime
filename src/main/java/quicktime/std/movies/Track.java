@@ -1250,4 +1250,3 @@ public final class Track extends QTObject implements QuickTimeLib {
         return MovieToolbox.CopyTrackUserData(paramInt1, paramInt2, paramInt3);
     }
 }
-

@@ -1,13 +1,11 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
+
 
 /**
  * This represents the Equalizer Spectrum of Bands. It contains the
@@ -17,17 +15,6 @@ import quicktime.util.QTUtils;
  * frequencies array which you passed in.
  */
 public final class MediaEQSpectrumBands extends QTByteObject implements PrimitivesLib, InterfaceLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MediaEQSpectrumBands.class));
-            }
-        }.establish();
-    }
 
     /**
      * @param count the count of bands
@@ -80,10 +67,8 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
         return str.toString();
     }
 
-    @Override
-    protected void finalize() throws Throwable {
+    private void dispose() throws Throwable {
         DisposePtr(getIntAt(2));
-        super.finalize();
     }
 
     private static int getIntFromPointer(int paramInt1, int paramInt2) {

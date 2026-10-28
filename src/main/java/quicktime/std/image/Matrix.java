@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.MatrixManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDPoint;
 import quicktime.qd.QDRect;
@@ -21,12 +19,11 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 
+
 /**
  * A Matrix defines how to map points from one coordinate space into another coordinate space.
  */
 public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -35,15 +32,6 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
 
     @Serial
     private static final long serialVersionUID = -3479751345142891528L;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Matrix.class));
-            }
-        }.establish();
-    }
 
     /**
      * Construct an instance of a Matrix, with default settings of the identity Matrix
@@ -324,8 +312,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @see "QuickTime::TranslateMatrix"
      * @param deltaH specifies the value to be added to the x coordinate translation value.
      */
-    public void translate(float paramFloat1, float paramFloat2) {
-        TranslateMatrix(getBytes(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2));
+    public void translate(float paramFloat1, float deltaH) {
+        TranslateMatrix(getBytes(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(deltaH));
     }
 
     /**
@@ -450,11 +438,11 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @return false if the transformation is other than scaling and translation.
      * @throws quicktime.QTException
      */
-    public boolean transformDRect(QDRect paramQDRect, QDPoint[] paramArrayOfQDPoint) throws QTException {
+    public boolean transformDRect(QDRect r, QDPoint[] paramArrayOfQDPoint) throws QTException {
         int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
-        if (paramQDRect.getFixedRect() == null)
+        if (r.getFixedRect() == null)
             throw new QTException(-50);
-        int i = TransformFixedRect(getBytes(), paramQDRect.getFixedRect(), arrayOfInt);
+        int i = TransformFixedRect(getBytes(), r.getFixedRect(), arrayOfInt);
         if (i == 0) {
             FixedPts2DoublePts(arrayOfInt, paramArrayOfQDPoint);
         }
@@ -479,9 +467,9 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @return false if the transformation is other than scaling and translation.
      * @throws quicktime.QTException
      */
-    public boolean transformRect(QDRect paramQDRect, QDPoint[] paramArrayOfQDPoint) throws QTException {
+    public boolean transformRect(QDRect r, QDPoint[] paramArrayOfQDPoint) throws QTException {
         int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
-        int i = TransformRect(getBytes(), paramQDRect.getRect(), arrayOfInt);
+        int i = TransformRect(getBytes(), r.getRect(), arrayOfInt);
         if (i == 0) {
             FixedPts2DoublePts(arrayOfInt, paramArrayOfQDPoint);
         }
@@ -568,8 +556,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         MatrixManager.SetIdentityMatrix(paramArrayOfByte);
     }
 
-    private static void TranslateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MatrixManager.TranslateMatrix(paramArrayOfByte, paramInt1, paramInt2);
+    private static void TranslateMatrix(byte[] m, int dx, int dy) {
+        MatrixManager.TranslateMatrix(m, dx, dy);
     }
 
     private static void RotateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3) {

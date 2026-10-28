@@ -69,4 +69,3 @@ public final class ThreeDDescription extends SampleDescription {
         return getIntAt(18);
     }
 }
-

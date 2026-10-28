@@ -19,4 +19,3 @@ public interface RecordMovieCallback {
      */
     void finish(Movie m);
 }
-

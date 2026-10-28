@@ -1,17 +1,13 @@
 
 package com.apple.mrj.macos.carbon;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import javax.swing.SwingUtilities;
+
 import quicktime.internal.toolbox.PlatformManager;
 import quicktime.jdirect.InterfaceLib;
-import quicktime.jdirect.QTNative;
 
 
 class HIToolBoxFunctions implements InterfaceLib {
-    private static Object linkage;
 
     static int SetEventLoopTimerNextFireTime(int paramInt, double paramDouble) {
         return PlatformManager.SetEventLoopTimerNextFireTime(paramInt, paramDouble);
@@ -34,13 +30,6 @@ class HIToolBoxFunctions implements InterfaceLib {
     }
 
     static {
-        class PrivelegedAction {
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(HIToolBoxFunctions.class));
-            }
-        }
-
-        new PrivelegedAction().establish();
         SwingUtilities.invokeLater(() -> System.load("/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon"));
     }
 }

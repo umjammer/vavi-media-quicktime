@@ -1,31 +1,17 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
+
 
 /**
  * IntEncodedImage keep the encoded image data as an array of ints.
  */
 public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
 
-    static Object linkage;
-
     private final int[] ints;
 
     private int rowBytes;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(IntEncodedImage.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     /**
      * This will make a ByteEncodedImage from an array of ints. It will not copy
@@ -185,4 +171,3 @@ public class IntEncodedImage implements PrimitivesLib, EncodedImage, Cloneable {
         return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
     }
 }
-

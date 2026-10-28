@@ -24,4 +24,3 @@ public interface QTPlayerEventHandlerMaker {
      */
     QTPlayerEventHandler make(QTPlayer p, Object addedToInterest);
 }
-

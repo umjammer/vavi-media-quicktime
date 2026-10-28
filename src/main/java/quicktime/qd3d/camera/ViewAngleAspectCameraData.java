@@ -36,11 +36,11 @@ public final class ViewAngleAspectCameraData extends CameraData implements Primi
      * @param fov The field of view
      * @param aspectRatio The aspect ratio of x to y
      */
-    public ViewAngleAspectCameraData(CameraData paramCameraData, float paramFloat1, float paramFloat2) {
+    public ViewAngleAspectCameraData(CameraData paramCameraData, float fov, float aspectRatio) {
         this();
         setCameraBytes(paramCameraData);
-        setFov(paramFloat1);
-        setAspectRatio(paramFloat2);
+        setFov(fov);
+        setAspectRatio(aspectRatio);
     }
 
     private ViewAngleAspectCameraData(byte[] paramArrayOfByte) {
@@ -91,4 +91,3 @@ public final class ViewAngleAspectCameraData extends CameraData implements Primi
         MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
     }
 }
-

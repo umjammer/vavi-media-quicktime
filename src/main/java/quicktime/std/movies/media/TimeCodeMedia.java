@@ -37,12 +37,12 @@ public final class TimeCodeMedia extends Media {
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new TimeCodeDescription();
     }
 
     @Override
-    final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return TimeCoder.fromMedia(this);
     }
 
@@ -71,4 +71,3 @@ public final class TimeCodeMedia extends Media {
         return localTimeCodeDescription;
     }
 }
-

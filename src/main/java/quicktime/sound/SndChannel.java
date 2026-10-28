@@ -1,39 +1,27 @@
 package quicktime.sound;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.SoundManager;
 import quicktime.jdirect.InterfaceLib;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.SoundLib;
 import quicktime.std.clocks.Clock;
 import quicktime.std.movies.media.LevelMeterInfo;
 import quicktime.std.movies.media.MediaEQSpectrumBands;
 import quicktime.util.QTUtils;
 
+
 /**
  * Sound Channels are used to playback sound.
  */
 public final class SndChannel extends QTObject implements InterfaceLib, SoundLib {
 
-    private static Object linkage;
-
     private static SoundRunner tempUPP;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SndChannel.class));
-            }
-        }.establish();
-    }
 
     /**
      * Opens a new SndChannel and allocates memory to store the commands that will control
      * the operation of the sound channel.
+     *
      * @see "QuickTime::SndNewChannel"
      */
     public SndChannel() throws QTException {
@@ -43,9 +31,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * Opens a new SndChannel and allocates memory to store the commands that will control
      * the operation of the sound channel.
-     * @see "QuickTime::SndNewChannel"
+     *
      * @param synth the sound data type you intend to play on this channel
-     * @param init the desired initialization parameters for the channel.
+     * @param init  the desired initialization parameters for the channel.
+     * @see "QuickTime::SndNewChannel"
      */
     public SndChannel(int synth, int init) throws QTException {
         super(allocate((short) synth, init));
@@ -54,8 +43,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * Opens a new SndChannel and allocates memory to store the commands that will control
      * the operation of the sound channel.
-     * @see "QuickTime::SndNewChannel"
+     *
      * @param callback the (optional) callback that can be called when a sound has completed.
+     * @see "QuickTime::SndNewChannel"
      */
     public SndChannel(SoundCallBack callback) throws QTException {
         this(5, 192, callback);
@@ -64,10 +54,11 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * Opens a new SndChannel and allocates memory to store the commands that will control
      * the operation of the sound channel.
-     * @see "QuickTime::SndNewChannel"
-     * @param synth the sound data type you intend to play on this channel
-     * @param init the desired initialization parameters for the channel.
+     *
+     * @param synth    the sound data type you intend to play on this channel
+     * @param init     the desired initialization parameters for the channel.
      * @param callback the (optional) callback that can be called when a sound has completed.
+     * @see "QuickTime::SndNewChannel"
      */
     public SndChannel(int synth, int init, SoundCallBack callback) throws QTException {
         super(allocate((short) synth, init, callback));
@@ -79,7 +70,7 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     }
 
     private static int allocate(short paramShort, int paramInt, SoundCallBack paramSoundCallBack) throws QTException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         if (paramSoundCallBack != null) {
             tempUPP = new SoundRunner(paramSoundCallBack);
             SoundException.checkError(SndNewChannel(arrayOfInt, paramShort, paramInt, tempUPP.getClosure()));
@@ -90,7 +81,7 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     }
 
     private static int allocate(short paramShort, int paramInt) throws SoundException {
-        int[] arrayOfInt = { 0 };
+        int[] arrayOfInt = {0};
         SoundException.checkError(SndNewChannel(arrayOfInt, paramShort, paramInt, 0));
         return arrayOfInt[0];
     }
@@ -130,9 +121,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Plays a sound asynchronously from memory.
-     * @see "QuickTime::SndPlay"
+     *
      * @param sndHdl the handle that has the sound data in it
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndPlay"
      */
     public void play(SndHandle sndHdl) throws SoundException {
         SoundException.checkError(SndPlay(_ID(), QTObject.ID(sndHdl), (byte) 1));
@@ -141,9 +133,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * Returns true if the channel is both NOT busy and NOT paused - ie. there are
      * no commands to waiting to be processed for the channel and it is not paused.
-     * @see "QuickTime::SndChannelStatus"
+     *
      * @return a boolean
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndChannelStatus"
      */
     public boolean isFinished() throws SoundException {
         if (this.scratchArray == null)
@@ -155,9 +148,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Returns true if the channel is currently paused.
-     * @see "QuickTime::SndChannelStatus"
+     *
      * @return a boolean
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndChannelStatus"
      */
     public boolean isPaused() throws SoundException {
         if (this.scratchArray == null)
@@ -170,9 +164,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * The fields of the record returned by this call accurately
      * describe the sound channel specified.
-     * @see "QuickTime::SndChannelStatus"
+     *
      * @return SCStatus
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndChannelStatus"
      */
     public SCStatus status() throws SoundException {
         SCStatus localSCStatus = new SCStatus();
@@ -183,9 +178,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * The SndDoCommand function sends the sound command specified in the cmd parameter to the end of the command queue of the channel specified in the chan parameter. The noWait is set to true
-     * @see "QuickTime::SndDoCommand"
+     *
      * @param cmd A sound command to be sent to the channel
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndDoCommand"
      */
     public void doCommand(SndCommand cmd) throws SoundException {
         doCommand(cmd, true);
@@ -193,10 +189,11 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * The SndDoCommand function sends the sound command specified in the cmd parameter to the end of the command queue of the channel specified in the chan parameter.
-     * @see "QuickTime::SndDoCommand"
-     * @param cmd A sound command to be sent to the channel
+     *
+     * @param cmd    A sound command to be sent to the channel
      * @param noWait noWait A flag indicating whether the Sound Manager should wait for a free space in a full queue (FALSE) or whether it should return immediately with a queueFull result code if the queue is full (TRUE).
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndDoCommand"
      */
     public void doCommand(SndCommand cmd, boolean noWait) throws SoundException {
         SoundException.checkError(SndDoCommand(_ID(), QTObject.ID(cmd), (byte) (noWait ? 1 : 0)));
@@ -204,9 +201,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * The SndDoImmediate function operates much like SndDoCommand, except that it bypasses the existing command queue of the sound channel and sends the specified command directly to the Sound Manager for immediate processing.
-     * @see "QuickTime::SndDoImmediate"
+     *
      * @param cmd A sound command to be sent to the channel
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndDoImmediate"
      */
     public void doImmediate(SndCommand cmd) throws SoundException {
         SoundException.checkError(SndDoImmediate(_ID(), QTObject.ID(cmd)));
@@ -214,21 +212,23 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Gets Level Meter state.
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return the balance value
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public boolean getLevelMeterOnOff() throws SoundException {
-        byte[] arrayOfByte = { 0 };
+        byte[] arrayOfByte = {0};
         SoundException.checkError(SndGetInfo(_ID(), 1819108724, arrayOfByte));
         return arrayOfByte[0] != 0;
     }
 
     /**
      * Sets Level Meter state.
-     * @see "QuickTime::SndSetInfo"
+     *
      * @param enabled true if enabled
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndSetInfo"
      */
     public void setLevelMeterOnOff(boolean enabled) throws SoundException {
         SoundException.checkError(SndSetInfo(_ID(), 1819108724, (byte) (enabled ? 1 : 0)));
@@ -236,9 +236,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Returns the current clock of the SoundClock.
-     * @see "QuickTime::SndSetInfo"
+     *
      * @return the clock
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndSetInfo"
      */
     public void enableClock(boolean paramBoolean) throws SoundException {
         SoundException.checkError(SndSetInfo(_ID(), 1935895659, (byte) (paramBoolean ? 1 : 0)));
@@ -246,9 +247,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Returns the current clock of the SoundClock.
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return the clock
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public Clock getClock() throws SoundException {
         return Clock.fromSndChannel(this);
@@ -256,9 +258,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Gets the level values.
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return LevelMeterInfo object
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public LevelMeterInfo getActiveLevels() throws SoundException {
         LevelMeterInfo localLevelMeterInfo = new LevelMeterInfo();
@@ -269,9 +272,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * Pass in the count of bands you expect to get back, it would return the the actual value of bands available
      * with their frequncy limits.
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return MediaEQSpectrumBandsRecord object
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public MediaEQSpectrumBands getEQSpectrumBands(int paramInt) throws SoundException {
         MediaEQSpectrumBands localMediaEQSpectrumBands = new MediaEQSpectrumBands(paramInt);
@@ -283,9 +287,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * Set the array of fequencies that are used to calculate spectral information.
      * The frequencies are the upper limits for each band, thus the first frequency specified (say 100) will
      * set that first band from 0 to 100Hz, the second value (say 200) sets the second band from 100 to 200Hz.
-     * @see "QuickTime::SndSetInfo"
+     *
      * @param spectrumInfo MediaEQSpectrumBandsRecord object
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndSetInfo"
      */
     public void setEQSpectrumBands(MediaEQSpectrumBands spectrumInfo) throws SoundException {
         SoundException.checkError(SndSetInfo(_ID(), 1701933922, spectrumInfo.getBytes()));
@@ -293,9 +298,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Gets the Equalizer Band Levels. The levels are equal to supplied the bands count.
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return bandLevels
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public int[] getEQSpectrumLevels(int paramInt) throws SoundException {
         byte[] arrayOfByte = new byte[paramInt];
@@ -309,34 +315,37 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
 
     /**
      * Returns true if the tone control (bass and treble) are enabled.
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return a boolean.
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public boolean getEQToneControlOnOff() throws SoundException {
-        byte[] arrayOfByte = { 0 };
+        byte[] arrayOfByte = {0};
         SoundException.checkError(SndGetInfo(_ID(), 1701934179, arrayOfByte));
         return arrayOfByte[0] != 0;
     }
 
     /**
      * If true enables the tone control (bass and treble).
-     * @see "QuickTime::SndSetInfo"
+     *
      * @param flag a boolean.
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndSetInfo"
      */
     public void setEQToneControlOnOff(boolean flag) throws SoundException {
-        byte[] arrayOfByte = { 0 };
+        byte[] arrayOfByte = {0};
         SoundException.checkError(SndSetInfo(_ID(), 1701934179, (byte) (flag ? 1 : 0)));
     }
 
     /**
      * Sets the values of the bass and treble tone control gain values.
      * Range is 0 to 255 unity gain. You can overdrive these values...
-     * @see "QuickTime::SndSetInfo"
-     * @param bass the sound bass
+     *
+     * @param bass   the sound bass
      * @param treble the sound treble
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndSetInfo"
      */
     public void setEQToneControlGain(int bass, int treble) throws SoundException {
         int i = QTUtils.X2ShortFix(bass);
@@ -348,9 +357,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
     /**
      * Gets the values of the bass and treble tone control gain values.
      * Range is 0 to 255 unity gain. You can overdrive these values...
-     * @see "QuickTime::SndGetInfo"
+     *
      * @return an array on length 2, containing 1st element as bass and 2nd element as treble.
      * @throws quicktime.sound.SoundException
+     * @see "QuickTime::SndGetInfo"
      */
     public int[] getEQToneControlGain() throws SoundException {
         int[] arrayOfInt = new int[2];
@@ -401,4 +411,3 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
         return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfInt);
     }
 }
-

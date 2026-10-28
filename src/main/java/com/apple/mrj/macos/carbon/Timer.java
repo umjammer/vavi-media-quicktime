@@ -24,7 +24,6 @@ public class Timer implements Runnable, EventLoopTimerInterface {
             fProc = new EventLoopTimerClosureUPP(this);
             fInterval = d;
             setTarget(runnable);
-            return;
         }
     }
 

@@ -15,4 +15,3 @@ public interface MovieDrawingComplete {
      */
     int execute(Movie m);
 }
-

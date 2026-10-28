@@ -45,7 +45,7 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
 
     private DSequence seq;
 
-    private final Vector frames;
+    private final Vector<EncodedImage> frames;
 
     private int initialNumElements;
 
@@ -86,7 +86,7 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
     @Deprecated
     public DSequenceFromMemory(EncodedImage data, ImageDescription description) throws QTException {
         this.initialNumElements = 1;
-        this.frames = new Vector(this.initialNumElements, this.initialNumElements);
+        this.frames = new Vector<>(this.initialNumElements, this.initialNumElements);
         this.frames.addElement(data);
         this.mDesc = description;
         this.bnds = new QDRect(this.mDesc.getWidth(), this.mDesc.getHeight());
@@ -122,7 +122,7 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
     public DSequenceFromMemory(ImageSpec spec) throws QTException {
         if ((spec instanceof ImageDataSequence localImageDataSequence)) {
             this.initialNumElements = localImageDataSequence.size();
-            this.frames = new Vector(this.initialNumElements, this.initialNumElements);
+            this.frames = new Vector<>(this.initialNumElements, this.initialNumElements);
             for (int i = 1; i <= localImageDataSequence.size(); i++) {
                 this.frames.addElement(localImageDataSequence.getImage(i));
             }
@@ -130,7 +130,7 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
             this.bnds = new QDRect(this.mDesc.getWidth(), this.mDesc.getHeight());
         } else {
             this.initialNumElements = 1;
-            this.frames = new Vector();
+            this.frames = new Vector<>();
             this.frames.addElement(spec.getImage());
             this.mDesc = spec.getDescription();
             this.bnds = new QDRect(this.mDesc.getWidth(), this.mDesc.getHeight());
@@ -161,7 +161,7 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
      * @deprecated
      */
     @Deprecated
-    public int flags = 0;
+    public final int flags = 0;
 
     /**
      * QTCanvas calls this method to get the destination QDGraphics of its client.
@@ -402,7 +402,7 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
     @Deprecated
     public EncodedImage getImage() throws StdQTException {
         if (this.frames != null) {
-            return (EncodedImage) this.frames.elementAt(getCurrentFrame() - 1);
+            return this.frames.elementAt(getCurrentFrame() - 1);
         }
         return null;
     }

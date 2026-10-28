@@ -1,7 +1,5 @@
 package quicktime.std.anim;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MatrixManager;
@@ -19,6 +17,7 @@ import quicktime.std.StdQTException;
 import quicktime.std.image.GraphicsMode;
 import quicktime.std.image.Matrix;
 
+
 /**
  * The SpriteWorld class implements the corresponding data structure of the Movie Toolbox.
  * Your application can use SpriteWorld's to make animations. A Sprite World handles the common tasks of
@@ -26,18 +25,6 @@ import quicktime.std.image.Matrix;
  * on an offscreen buffer, and the blitting of the result to the screen or alternate destination.
  */
 public class SpriteWorld extends QTObject implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SpriteWorld.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     private static int allocate(QDGraphics paramQDGraphics1, QDGraphics paramQDGraphics2, QDColor paramQDColor, QDGraphics paramQDGraphics3) throws StdQTException, QDException {
         int[] arrayOfInt = new int[1];
@@ -50,12 +37,13 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * This constructor creates a new sprite world.
-     * @see "QuickTime::NewSpriteWorld()"
-     * @param port the target destination of the SpriteWorld. This may NOT be null.
-     * @param spriteLayer Specifies the mSpriteGWorld QDGraphics.
+     *
+     * @param port            the target destination of the SpriteWorld. This may NOT be null.
+     * @param spriteLayer     Specifies the mSpriteGWorld QDGraphics.
      * @param backgroundColor Specifies the background color.
-     * @param background Specifies the background QDGraphics that can be used for better performance when
-     *  you have background sprites
+     * @param background      Specifies the background QDGraphics that can be used for better performance when
+     *                        you have background sprites
+     * @see "QuickTime::NewSpriteWorld()"
      */
     public SpriteWorld(QDGraphics port, QDGraphics spriteLayer, QDColor backgroundColor, QDGraphics background) throws QTException {
         super(allocate(port, spriteLayer, backgroundColor, background));
@@ -72,9 +60,9 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     private final int destPort;
 
-    private final int[] savedPort = { 0 };
+    private final int[] savedPort = {0};
 
-    private final int[] savedDevice = { 0 };
+    private final int[] savedDevice = {0};
 
     private void setWidthHeight(QDGraphics paramQDGraphics) {
         synchronized (QTNative.globalsLock) {
@@ -86,6 +74,7 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * Sets the bounds of the SpriteWorld by scaling its matrix.
+     *
      * @param bounds the new size of the SpriteWorld
      * @throws quicktime.std.StdQTException
      */
@@ -100,6 +89,7 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the current bounds of the SpriteWorld.
+     *
      * @return the bounds of the SpriteWorld
      * @throws quicktime.std.StdQTException
      */
@@ -115,9 +105,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * This method sets the sprite world's clip.
-     * @see "QuickTime::SetSpriteWorldClip()"
+     *
      * @param clipRgn Specifies the clipping region.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteWorldClip()"
      */
     public final void setClip(Region clipRgn) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -127,9 +118,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * This method sets the Graphic's mode of the SpriteWorld.
-     * @see "QuickTime::SetSpriteWorldGraphicsMode()"
+     *
      * @param gMode the new graphic's mode for the SpriteWorld
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteWorldGraphicsMode()"
      */
     public final void setGraphicsMode(GraphicsMode gMode) throws StdQTException {
         gMode = gMode == null ? new GraphicsMode() : gMode;
@@ -140,6 +132,7 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * Returns the current transformational matrix used by the sprite world
+     *
      * @return the current matrix.
      */
     public final Matrix getMatrix() {
@@ -148,9 +141,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * This method sets the sprite world's matrix.
-     * @see "QuickTime::SetSpriteWorldMatrix()"
+     *
      * @param matrix Specifies the Matrix.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SetSpriteWorldMatrix()"
      */
     public final void setMatrix(Matrix matrix) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -161,11 +155,12 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * This method allows the sprite world to update and redraw the invalid portions of the sprite world.
-     * @see "QuickTime::SpriteWorldIdle()"
+     *
      * @param flagsIn Contains flags describing what type of actions may take place during the idle,
-     *  such as if drawing to the final destination should be pressed.
+     *                such as if drawing to the final destination should be pressed.
      * @return Flags describing what type of actions took place during the idle, such as if any drawing took place.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SpriteWorldIdle()"
      */
     public final int idle(int flagsIn) throws StdQTException {
         int[] arrayOfInt = new int[1];
@@ -179,9 +174,10 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
     /**
      * This method allows a rectangular area of the sprite world to be invalidated,
      * which will force it to redraw the next time SpriteWorldIdle is called.
-     * @see "QuickTime::InvalidateSpriteWorld()"
+     *
      * @param invalidArea A Rectangle which describes the invalid rectangle in sprite world source space.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::InvalidateSpriteWorld()"
      */
     public final void invalidate(QDRect invalidArea) throws StdQTException {
         synchronized (QTNative.globalsLock) {
@@ -191,11 +187,12 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * This method is used to determine if a sprite exists at a certain location.
-     * @see "QuickTime::SpriteWorldHitTest()"
+     *
      * @param flags This allows the hit testing operation to be controlled more precisely.
-     * @param loc The point that you wish to test.
+     * @param loc   The point that you wish to test.
      * @return the Sprite object which received the hit, or null if no sprite at that location.
      * @throws quicktime.QTException
+     * @see "QuickTime::SpriteWorldHitTest()"
      */
     public final Sprite hitTest(int flags, QDPoint loc) throws QTException {
         int[] arrayOfInt = new int[1];
@@ -207,6 +204,7 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     /**
      * Set the flags for the sprite world.
+     *
      * @see "QuickTime::SetSpriteWorldFlags()"
      */
     public final void setFlags(int paramInt1, int paramInt2) throws StdQTException {

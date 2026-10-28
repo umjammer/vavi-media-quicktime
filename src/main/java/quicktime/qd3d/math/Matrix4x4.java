@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.QD3DManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianDescriptor;
@@ -17,14 +15,13 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.UtilException;
 
+
 /**
  * Matrix4x4 contains information for a 4 x 4 float matrix.
  *
  * refer to Q3Matrix4x4 in QuickDraw3D
  */
 public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, QuickDraw3DLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -38,13 +35,6 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Matrix4x4.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
@@ -59,12 +49,12 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
      * Creates a Matrix4x4 object and sets it to the identity matrix.
      */
     public Matrix4x4() {
-        super(64);
+        super(kNativeSize);
         setIdentity();
     }
 
     public Matrix4x4(float[][] paramArrayOfFloat) {
-        super(64);
+        super(kNativeSize);
         setAt00(paramArrayOfFloat[0][0]);
         setAt01(paramArrayOfFloat[0][1]);
         setAt02(paramArrayOfFloat[0][2]);
@@ -84,12 +74,12 @@ public final class Matrix4x4 extends QTByteObject implements QuickTimeLib, Quick
     }
 
     private Matrix4x4(Object paramObject) {
-        super(64);
+        super(kNativeSize);
     }
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[64];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());

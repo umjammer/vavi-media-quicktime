@@ -1,7 +1,5 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTRuntimeException;
@@ -19,6 +17,7 @@ import quicktime.std.StdQTException;
 import quicktime.std.qtcomponents.CompressionDialog;
 import quicktime.std.qtcomponents.SCInfo;
 import quicktime.std.qtcomponents.SCSequence;
+
 
 /**
  * A QTHandleRef is a "smart" handle in that it can be either a Reference to a handle
@@ -38,17 +37,6 @@ import quicktime.std.qtcomponents.SCSequence;
  */
 public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib, InterfaceLib {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTHandleRef.class));
-            }
-        }.establish();
-    }
-
     /**
      * Compresses a frame that is sourced by a PixMap from the supplied QDGraphics, returning
      * the compressed data.
@@ -59,8 +47,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @return an image data object.
      * @throws quicktime.QTException
      */
-    public static SCInfo fromSCSequence(SCSequence paramSCSequence, QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
-        if (paramQDGraphics == null) {
+    public static SCInfo fromSCSequence(SCSequence paramSCSequence, QDGraphics src, QDRect srcRect) throws QTException {
+        if (src == null) {
             throw new StdQTException(-50);
         }
         int[] arrayOfInt1 = { 0 };
@@ -72,8 +60,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(arrayOfInt3, arrayOfInt4);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = SCCompressSequenceFrame(QTObject.ID(paramSCSequence.getDialog()), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect != null ? paramQDRect.getRect() : null, arrayOfInt1, arrayOfInt2, arrayOfShort);
+            SetGWorld(QTObject.ID(src), 0);
+            i = SCCompressSequenceFrame(QTObject.ID(paramSCSequence.getDialog()), QTObject.ID(src.getPixMap()), srcRect != null ? srcRect.getRect() : null, arrayOfInt1, arrayOfInt2, arrayOfShort);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(arrayOfInt3[0], arrayOfInt4[0]);
             }
@@ -748,4 +736,3 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         MemoryManager.setDoubleInHandle(handleOffset, destOffset, paramDouble);
     }
 }
-

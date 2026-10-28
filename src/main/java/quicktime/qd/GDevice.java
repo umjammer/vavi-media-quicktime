@@ -91,8 +91,8 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @see "QuickDraw::InitGDevice"
      * @param mode the device configuration mode
      */
-    public void init(int paramInt1, int paramInt2) {
-        InitGDevice((short) paramInt1, paramInt2, _ID());
+    public void init(int paramInt1, int mode) {
+        InitGDevice((short) paramInt1, mode, _ID());
     }
 
     /**
@@ -200,8 +200,8 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @param scale the desired scale value
      * @throws quicktime.std.StdQTException
      */
-    public void setScale(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(GDSetScale(_ID(), QTUtils.X2Fix(paramInt1), (short) paramInt2));
+    public void setScale(int scale, int flags) throws StdQTException {
+        StdQTException.checkError(GDSetScale(_ID(), QTUtils.X2Fix(scale), (short) flags));
     }
 
     private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
@@ -224,8 +224,8 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
         return QuickDrawManager.GetMaxDevice(paramArrayOfByte);
     }
 
-    private static void InitGDevice(short paramShort, int paramInt1, int paramInt2) {
-        QuickDrawManager.InitGDevice(paramShort, paramInt1, paramInt2);
+    private static void InitGDevice(short paramShort, int mode, int paramInt2) {
+        QuickDrawManager.InitGDevice(paramShort, mode, paramInt2);
     }
 
     private static void SetDeviceAttribute(int paramInt, short paramShort, byte paramByte) {
@@ -252,7 +252,7 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
         return QuickDrawManager.GDGetScale(paramInt, paramArrayOfInt, paramArrayOfShort);
     }
 
-    private static short GDSetScale(int paramInt1, int paramInt2, short paramShort) {
-        return QuickDrawManager.GDSetScale(paramInt1, paramInt2, paramShort);
+    private static short GDSetScale(int gd, int scale, short flags) {
+        return QuickDrawManager.GDSetScale(gd, scale, flags);
     }
 }

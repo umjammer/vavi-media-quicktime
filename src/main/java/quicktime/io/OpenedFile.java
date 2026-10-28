@@ -1,14 +1,13 @@
 package quicktime.io;
 
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.FileManager;
 import quicktime.internal.toolbox.MovieToolbox;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
+
 
 /**
  * This class represents an OpenedFile. Subclasses define the type
@@ -16,25 +15,11 @@ import quicktime.jdirect.QuickTimeLib;
  */
 public abstract class OpenedFile extends QTObject implements QuickTimeLib {
 
-    private static Object linkage;
-
     private static final byte rPerm = 1;
-
     private static final byte wPerm = 2;
 
     static final int kMovie = 1;
-
     static final int kStd = 2;
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(OpenedFile.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     OpenedFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
         super(allocate(paramQTFile, paramInt1, paramInt2));
@@ -122,4 +107,3 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         return FileManager.FSClose(paramShort);
     }
 }
-

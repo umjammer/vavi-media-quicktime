@@ -5,6 +5,7 @@ import com.apple.mrj.MRJApplicationUtils;
 
 
 final class MacDoQuit implements com.apple.mrj.MRJQuitHandler {
+
     MacDoQuit() {
         MRJApplicationUtils.registerQuitHandler(this);
     }

@@ -48,8 +48,7 @@ public final class XMLContent extends QTObject implements PrimitivesLib, QuickTi
     /**
      * get element kind content
      * @return XMLElement if element kind is StdQTConstants5.xmlContentTypeElement
-     * @throws on element kind not StdQTConstants5.xmlContentTypeElement
-     * @throws quicktime.QTException
+     * @throws quicktime.QTException throws on element kind not StdQTConstants5.xmlContentTypeElement
      */
     public XMLElement getElement() throws QTException {
         if (getKind() == 1) {
@@ -62,8 +61,7 @@ public final class XMLContent extends QTObject implements PrimitivesLib, QuickTi
     /**
      * get string kind content
      * @return String if element kind is StdQTConstants5.xmlContentTypeCharData
-     * @throws on element kind not StdQTConstants5.xmlContentTypeCharData
-     * @throws quicktime.std.StdQTException
+     * @throws quicktime.std.StdQTException throws on element kind not StdQTConstants5.xmlContentTypeCharData
      * @throws quicktime.util.UtilException
      */
     public String getString() throws StdQTException, UtilException {
@@ -100,4 +98,3 @@ public final class XMLContent extends QTObject implements PrimitivesLib, QuickTi
         MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
     }
 }
-

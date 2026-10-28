@@ -25,4 +25,3 @@ public class ThreeDMediaHandler extends VisualMediaHandler {
         return AtomContainer.fromThreeDMediaHandlerRenderer(this);
     }
 }
-

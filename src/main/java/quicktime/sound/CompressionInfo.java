@@ -174,4 +174,3 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
         return ImageCompressionManager.GetCompressionInfo(compressionID, paramInt, paramShort2, paramShort3, paramArrayOfByte);
     }
 }
-

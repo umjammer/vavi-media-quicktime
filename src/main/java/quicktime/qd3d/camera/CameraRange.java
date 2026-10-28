@@ -70,8 +70,8 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         paramObjectInputStream.read(localCameraRange.getBytes());
         try {
             EndianOrder.flipBigEndianToNative(localCameraRange, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
         System.arraycopy(localCameraRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
@@ -81,8 +81,8 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         CameraRange localCameraRange = (CameraRange) clone();
         try {
             EndianOrder.flipNativeToBigEndian(localCameraRange, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
         paramObjectOutputStream.write(localCameraRange.getBytes());
     }
@@ -123,4 +123,3 @@ public final class CameraRange extends QTByteObject implements Cloneable {
         return new CameraRange(getBytes());
     }
 }
-

@@ -44,4 +44,3 @@ public final class SearchResult {
 
     private int offset = 0;
 }
-

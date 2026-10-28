@@ -251,4 +251,3 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
         MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
     }
 }
-

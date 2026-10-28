@@ -1,14 +1,12 @@
 package quicktime.sound;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.QTPointerRef;
 import quicktime.util.QTUtils;
+
 
 /**
  * This class represents a SndCommand as used by SndChannel's doCommand() and doImmediate methods.
@@ -17,8 +15,6 @@ import quicktime.util.QTUtils;
  */
 public final class SndCommand extends QTPointerRef implements PrimitivesLib {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -26,21 +22,12 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
 
     private ExtScheduledSoundHeader keepBuffer;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SndCommand.class));
-            }
-        }.establish();
-    }
-
     /**
      * Creates a SndCommand object and performs initialization
      * @param cmd the sound command (from StdQTConstants)
      */
     public SndCommand(int cmd) throws QTException {
-        super(8, true);
+        super(kNativeSize, true);
         setCmd(cmd);
     }
 
@@ -51,7 +38,7 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
      * @param param2 optional command parameter
      */
     public SndCommand(int cmd, int param1, int param2) throws QTException {
-        super(8, true);
+        super(kNativeSize, true);
         setCmd(cmd);
         setParam1(param1);
         setParam2(param2);
@@ -187,4 +174,3 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
         return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
     }
 }
-

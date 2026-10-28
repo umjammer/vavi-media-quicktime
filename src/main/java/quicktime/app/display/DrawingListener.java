@@ -18,4 +18,3 @@ public interface DrawingListener {
      */
     void drawingComplete(QTDrawable drawable);
 }
-

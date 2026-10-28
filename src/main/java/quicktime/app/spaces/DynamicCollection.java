@@ -1,13 +1,12 @@
 package quicktime.app.spaces;
 
 /**
- * @deprecated
  * The DynamicCollection uses the Protocol class to enable
  * the application to dynamically type members on a collection
  * by collection basis. Dynamic collections use the protocol to
  * test to see if an object is appropriate before it is accepted
  * as a candidate for membership of the collection.
- *
+ * <p>
  * This enables an application to tighten the restrictions on membership
  * on a case by case basis. For example, the DirectGroup is a DynamicCollection,
  * of which the fundamental requirement is that the member implement the
@@ -19,21 +18,23 @@ package quicktime.app.spaces;
  * QTDrawable and MoviePlayer before the object was added. The application (having
  * specified this protocol) can then make certain assumptions about the type of object
  * that is a member of the collection.
- *
+ * <p>
  * Changing a protocol after a member has been added to the collection will not mean that
  * existing members are removed if they do not match the new protocol, thus protocols should
  * only be specified when the collection is empty.
+ *
  * @see quicktime.app.spaces.Protocol
+ * @deprecated
  */
 public interface DynamicCollection extends Collection {
 
     /**
-     * @deprecated
-     * @since QTJava 6.1
      * Returns the Protocol class that is used to when testing
      * an object's appropriateness for membership of a collection.
+     *
      * @return a Protocol object.
+     * @since QTJava 6.1
+     * @deprecated
      */
     Protocol getProtocol();
 }
-

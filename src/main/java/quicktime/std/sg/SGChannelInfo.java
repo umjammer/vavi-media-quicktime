@@ -8,17 +8,17 @@ public class SGChannelInfo {
     /**
      * The  sample's size, eg returns 8 for 8 bit, 16 for 16 bit.
      */
-    public int mSampleSize;
+    public final int mSampleSize;
 
     /**
      * Number of Channels 1-for Mono, 2 for Stereo.
      */
-    public int mNumChannels;
+    public final int mNumChannels;
 
     /**
      * Format of Channel data, e.g  'raw', 'MAC3', 'MAC6'.
      */
-    public int mCompressionType;
+    public final int mCompressionType;
 
     SGChannelInfo(int paramInt1, int paramInt2, int paramInt3) {
         this.mSampleSize = paramInt1;
@@ -26,4 +26,3 @@ public class SGChannelInfo {
         this.mCompressionType = paramInt3;
     }
 }
-

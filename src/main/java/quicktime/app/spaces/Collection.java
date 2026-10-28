@@ -27,7 +27,7 @@ import quicktime.QTException;
  * @see quicktime.app.spaces.DynamicCollection
  * @deprecated
  */
-public interface Collection {
+public interface Collection<T> {
 
     /**
      * Adds an object to the collection. Returns true if the object is
@@ -39,7 +39,7 @@ public interface Collection {
      * @since QTJava 6.1
      * @deprecated
      */
-    boolean addMember(Object member) throws QTException;
+    boolean addMember(T member) throws QTException;
 
     /**
      * Returns true if the provided object is a member of the collection.
@@ -49,7 +49,7 @@ public interface Collection {
      * @since QTJava 6.1
      * @deprecated
      */
-    boolean hasMember(Object member);
+    boolean hasMember(T member);
 
     /**
      * Returns true if the provided object is an appropriate candidate for
@@ -85,7 +85,7 @@ public interface Collection {
      * @since QTJava 6.1
      * @deprecated
      */
-    Enumeration members();
+    Enumeration<T> members();
 
     /**
      * If the object is a member of the collection it is removed.
@@ -95,7 +95,7 @@ public interface Collection {
      * @since QTJava 6.1
      * @deprecated
      */
-    void removeMember(Object member) throws QTException;
+    void removeMember(T member) throws QTException;
 
     /**
      * Returns the number of members in the collection, ie. the collection's size.
@@ -106,4 +106,3 @@ public interface Collection {
      */
     int size();
 }
-

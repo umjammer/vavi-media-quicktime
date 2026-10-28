@@ -4,7 +4,6 @@ import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 
 import com.apple.mrj.macos.carbon.CarbonAccess;
-import com.apple.mrj.macos.carbon.CarbonEventClient;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -65,14 +64,10 @@ public final class AtomicInstrument extends AtomContainer implements QuickTimeLi
         int k = 0;
         if (QTSession.isCurrentOS(4)) {
             logger.log(Level.DEBUG, "New NAPickEditInstrument");
-            k = (Integer) CarbonAccess.invokeCarbonEventClient(new CarbonEventClient() {
-
-                @Override
-                public Object invoke() {
-                    int l = 0;
-                    l = AtomicInstrument.NAPickEditInstrument(QTObject.ID(localNoteAllocator), 0, QTUtils.String2PString(str, 255), 0, 0, j, i);
-                    return l;
-                }
+            k = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
+                int l = 0;
+                l = AtomicInstrument.NAPickEditInstrument(QTObject.ID(localNoteAllocator), 0, QTUtils.String2PString(str, 255), 0, 0, j, i);
+                return l;
             });
             StdQTException.checkError(k);
         } else {

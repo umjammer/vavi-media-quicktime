@@ -10,7 +10,7 @@ public final class FoundTextInfo extends TimeInfo {
     /**
      * The offset of the found text in track.
      */
-    public int offset;
+    public final int offset;
 
     /**
      * This constructor creates a FoundTextInfo object from the information returned after a search.
@@ -23,4 +23,3 @@ public final class FoundTextInfo extends TimeInfo {
         this.offset = offset;
     }
 }
-

@@ -9,10 +9,5 @@ public class CocoaComponent extends Component {
      * @param integer
      */
     protected void sendMessage(int i, Integer integer) {
-        // TODO Auto-generated method stub
-        
     }
-
 }
-
-/* */

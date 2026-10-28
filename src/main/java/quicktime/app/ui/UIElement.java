@@ -223,4 +223,3 @@ public class UIElement extends TwoDSprite implements DynamicImage {
         }
     }
 }
-

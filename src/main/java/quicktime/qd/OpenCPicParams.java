@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
+
 
 /**
  * Provides information about a picture image relating to the source rectangle,
@@ -21,8 +20,6 @@ import quicktime.util.QTUtils;
  */
 public final class OpenCPicParams extends QTByteObject implements PrimitivesLib, Cloneable {
 
-    private static Object linkage;
-
     /**
      * This is the size (the number of bytes) that are required for this class
      */
@@ -31,25 +28,16 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
     @Serial
     private static final long serialVersionUID = -5429124066722306588L;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(OpenCPicParams.class));
-            }
-        }.establish();
-    }
-
     /**
      * The OpenCPicParams as a new object.
      * @param hRes the horizotal resolution e.g 72 dpi.
      * @param vRes the vertical resolution e.g 72 dpi
      */
-    public OpenCPicParams(QDRect paramQDRect, float paramFloat1, float paramFloat2) {
-        super(24);
+    public OpenCPicParams(QDRect paramQDRect, float hRes, float vRes) {
+        super(kNativeSize);
         _setSrcRect(paramQDRect);
-        _setHRes(paramFloat1);
-        _setVRes(paramFloat2);
+        _setHRes(hRes);
+        _setVRes(vRes);
         setShortAt(16, (short) -2);
     }
 
@@ -66,7 +54,7 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[24];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         for (int i = 0; i < 8; i += 2) {
             setShortInArray(getBytes(), i, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, i)));
@@ -79,7 +67,7 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
 
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[24];
+        byte[] arrayOfByte = new byte[kNativeSize];
         for (int i = 0; i < 8; i += 2) {
             setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
@@ -160,4 +148,3 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
         MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
     }
 }
-

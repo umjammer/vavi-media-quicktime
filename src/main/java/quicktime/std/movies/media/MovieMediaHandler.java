@@ -1,12 +1,9 @@
 package quicktime.std.movies.media;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MediaHandlerManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTException;
@@ -14,18 +11,8 @@ import quicktime.std.clocks.TimeRecord;
 import quicktime.std.image.Matrix;
 import quicktime.util.QTHandle;
 
+
 public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MovieMediaHandler.class));
-            }
-        }.establish();
-    }
 
     MovieMediaHandler(int paramInt, Object paramObject) {
         super(paramInt, paramObject);
@@ -201,4 +188,3 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
         return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
     }
 }
-

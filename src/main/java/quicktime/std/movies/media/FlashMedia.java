@@ -35,12 +35,12 @@ public final class FlashMedia extends Media {
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new FlashDescription();
     }
 
     @Override
-    final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new FlashMediaHandler(paramInt, paramObject);
     }
 
@@ -69,4 +69,3 @@ public final class FlashMedia extends Media {
         return localFlashDescription;
     }
 }
-

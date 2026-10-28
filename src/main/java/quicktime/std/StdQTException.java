@@ -35,4 +35,3 @@ public class StdQTException extends QTException {
             throw new StdQTException(err);
     }
 }
-

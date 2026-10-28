@@ -85,4 +85,3 @@ public interface Space extends Listener, DynamicCollection, Ticklish {
      */
     Object getSource();
 }
-

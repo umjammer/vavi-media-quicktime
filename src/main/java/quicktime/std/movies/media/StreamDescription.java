@@ -77,4 +77,3 @@ public final class StreamDescription extends SampleDescription {
         return getIntAt(16);
     }
 }
-

@@ -2,6 +2,7 @@ package quicktime.std.qtcomponents;
 
 import quicktime.std.movies.Track;
 
+
 /**
  * MovieImportInfo contains information for the movie import component.
  * The results returned from querying a movie import component using a movie, a data reference and time values.
@@ -13,10 +14,10 @@ public final class MovieImportInfo {
      * @param t The used track result from movie import withFile/withHandle method.
      * @param timeVal The time value duration result from movie import withFile/withHandle method.
      */
-    public MovieImportInfo(Track paramTrack, int paramInt1, int paramInt2) {
-        this.trackRef = paramTrack;
-        this.duration = paramInt1;
-        this.flags = paramInt2;
+    public MovieImportInfo(Track t, int timeVal, int flags) {
+        this.trackRef = t;
+        this.duration = timeVal;
+        this.flags = flags;
     }
 
     /**
@@ -46,4 +47,3 @@ public final class MovieImportInfo {
 
     private int flags = 0;
 }
-

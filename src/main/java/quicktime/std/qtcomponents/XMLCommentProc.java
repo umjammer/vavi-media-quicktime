@@ -14,4 +14,3 @@ public interface XMLCommentProc {
      */
     void execute(String paramString) throws QTException;
 }
-

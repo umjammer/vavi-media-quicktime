@@ -178,4 +178,3 @@ public interface StdQTConstants6 {
 
     int kQTRestrictionEditDontExtract = 32;
 }
-

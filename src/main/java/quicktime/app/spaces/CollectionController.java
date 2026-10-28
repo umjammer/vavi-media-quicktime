@@ -41,4 +41,3 @@ public interface CollectionController extends Controller, Collection {
      */
     boolean isWholespace();
 }
-

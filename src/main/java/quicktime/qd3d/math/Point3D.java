@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTRuntimeException;
 import quicktime.QTSession;
 import quicktime.internal.toolbox.QD3DManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickDraw3DLib;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.util.EndianDescriptor;
@@ -17,14 +15,13 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.UtilException;
 
+
 /**
  * Point3D contains information for the three dimensional point.
- *
+ * <p>
  * Refer to TQ3Point3D in QuickDraw3d
  */
 public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDraw3DLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -38,17 +35,11 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
         if (QTSession.isCurrentOS(4)) {
             throw new QTRuntimeException("Unsupported OS");
         }
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(Point3D.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 
     /**
      * Returns the EndianDescriptor for this class.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptor() {
@@ -59,11 +50,12 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * Creates a Point3D object containing no data.
      */
     public Point3D() {
-        super(12);
+        super(kNativeSize);
     }
 
     /**
      * Creates a Point3D object containing with given data.
+     *
      * @param x The final x coordinate.
      * @param y The final y coordinate.
      * @param z The final z coordinate.
@@ -81,7 +73,7 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[12];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());
@@ -145,9 +137,10 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
 
     /**
      * Returns a three-dimensional vector that is the result of subtracting the point p2 from p1.
-     * @see "QuickDraw3D::Q3Point3D_Subtract"
+     *
      * @param p2 A three-dimensional point
      * @return a three-dimensional vector that is the result of subtracting the point p2 from p1.
+     * @see "QuickDraw3D::Q3Point3D_Subtract"
      */
     public Vector3D subtract(Point3D p2) {
         Vector3D localVector3D = new Vector3D();
@@ -157,9 +150,10 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
 
     /**
      * Returns the absolute value of the distance between points this and p2.
-     * @see "QuickDraw3D::Q3Point3D_Distance"
+     *
      * @param p2 A three-dimensional point
      * @return the distance
+     * @see "QuickDraw3D::Q3Point3D_Distance"
      */
     public float distance(Point3D p2) {
         return Q3Point3D_Distance(getBytes(), p2.getBytes());
@@ -167,9 +161,10 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
 
     /**
      * Returns the squared value of the distance between points this and p2.
-     * @see "QuickDraw3D::Q3Point3D_DistanceSquared"
+     *
      * @param p2 A three-dimensional point
      * @return the distance
+     * @see "QuickDraw3D::Q3Point3D_DistanceSquared"
      */
     public float distanceSquared(Point3D p2) {
         return Q3Point3D_DistanceSquared(getBytes(), p2.getBytes());
@@ -179,11 +174,12 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * Returns the three-dimensional point that lies on the line segment between
      * the points p1 and p2 and that is at a distance from the first point determined by
      * the ratio r1/(r1 + r2).
-     * @see "QuickDraw3D::Q3Point3D_RRatio"
+     *
      * @param p2 A three-dimensional point.
      * @param r1 A floating-point number.
      * @param r2 A floating-point number.
      * @return a 3DPoint
+     * @see "QuickDraw3D::Q3Point3D_RRatio"
      */
     public Point3D rRatio(Point3D p2, float r1, float r2) {
         Point3D localPoint3D = new Point3D();
@@ -194,9 +190,10 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
     /**
      * Returns the three-dimensional point that is the result of adding the
      * vector vector3D to this.
-     * @see "QuickDraw3D::Q3Point3D_Vector3D_Add"
+     *
      * @param vector3D A three-dimensional vector.
      * @return a three-dimensional point
+     * @see "QuickDraw3D::Q3Point3D_Vector3D_Add"
      */
     public Point3D add(Vector3D vector3D) {
         Point3D localPoint3D = new Point3D();
@@ -207,9 +204,10 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
     /**
      * Returns the three-dimensional point that is the result of subtracting the
      * vector vector3D from this.
-     * @see "QuickDraw3D::Q3Point3D_Vector3D_Subtract"
+     *
      * @param vector3D A three-dimensional vector.
      * @return a three-dimensional point
+     * @see "QuickDraw3D::Q3Point3D_Vector3D_Subtract"
      */
     public Point3D subtract(Vector3D vector3D) {
         Point3D localPoint3D = new Point3D();
@@ -220,10 +218,11 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
     /**
      * Returns the cross product of the two vectors determined by
      * subtracting point2 from this and point3 from this
-     * @see "QuickDraw3D::Q3Point3D_CrossProductTri"
+     *
      * @param point2 A three-dimensional point.
      * @param point3 A three-dimensional point.
      * @return a vector
+     * @see "QuickDraw3D::Q3Point3D_CrossProductTri"
      */
     public Vector3D cross(Point3D point2, Point3D point3) {
         Vector3D localVector3D = new Vector3D();
@@ -235,9 +234,10 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * Return a three-dimensional point that is the result of
      * transforming the vector specified by the vector parameter using the quaternion
      * specified by the quaternion parameter.
-     * @see "QuickDraw3D::Q3Point3D_TransformQuaternion"
+     *
      * @param quaternion A quaternion.
      * @return a three-dimensional point
+     * @see "QuickDraw3D::Q3Point3D_TransformQuaternion"
      */
     public Point3D transformQuaternion(Quaternion quaternion) {
         Point3D localPoint3D = new Point3D();

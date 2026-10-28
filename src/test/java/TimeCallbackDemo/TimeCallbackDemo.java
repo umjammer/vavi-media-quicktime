@@ -126,7 +126,6 @@ public class TimeCallbackDemo extends Frame implements Errors {
         timer.setActive(true);
     }
 
-
     /**
      * This class extends the RateCallBack class and provides an execute routine that is invoked by the callback
      * when the rate of the movie changes
@@ -155,7 +154,7 @@ public class TimeCallbackDemo extends Frame implements Errors {
     static class TimeBaseExtremesCallBack extends quicktime.std.clocks.ExtremesCallBack {
 
         /**
-         * @param mov The movie to monitor.
+         * param mov The movie to monitor.
          */
         public TimeBaseExtremesCallBack(TimeBase tb, int flag) throws QTException {
             super(tb, flag);

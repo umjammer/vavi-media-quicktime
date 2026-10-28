@@ -20,7 +20,7 @@ public class CDSequence extends QTObject implements QuickTimeLib {
 
     ImageDescription mImageDescription;
 
-    protected QDGraphics cdPort;
+    protected final QDGraphics cdPort;
 
     CDSequence(int paramInt, QDGraphics paramQDGraphics) throws QTException {
         super(paramInt);

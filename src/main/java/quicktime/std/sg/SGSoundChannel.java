@@ -1,10 +1,7 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.internal.toolbox.SequenceGrabberManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.sound.SPBDevice;
 import quicktime.std.StdQTException;
@@ -12,24 +9,15 @@ import quicktime.std.movies.media.SampleDescription;
 import quicktime.std.movies.media.SoundDescription;
 import quicktime.util.QTUtils;
 
+
 /**
  * Assists in importing sound into a movie.
  * The SGChannel implements methods for a corresponding QuickTime
  * ComponentInstance structure.
+ *
  * @see "QuickTime Components::SGChannel"
  */
 public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
-
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SGSoundChannel.class));
-            }
-        }.establish();
-    }
 
     SGSoundChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
         super(paramInt, paramSequenceGrabber);
@@ -39,38 +27,41 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
      * Creates a sequence grabber channel and assigns a channel component to the channel.
      * The channel component is responsible for providing digitized data to the
      * sequence grabber component.
-     * @see "QuickTime::SGNewChannel"
+     *
      * @param owner specifies the sequence grabber component the channel is attached to.
+     * @see "QuickTime::SGNewChannel"
      */
     public SGSoundChannel(SequenceGrabber owner) throws StdQTException {
         super(owner, 1936684398);
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new SoundDescription(0);
     }
 
     /**
      * This method allows you to retrieve a music sample description from the SGChannel.
-     * @see "QuickTime::SGGetChannelSampleDescription()"
+     *
      * @return a SoundDescription object.
      * @throws quicktime.QTException
+     * @see "QuickTime::SGGetChannelSampleDescription()"
      */
-    public final SoundDescription getSoundDescription() throws QTException {
+    public SoundDescription getSoundDescription() throws QTException {
         return (SoundDescription) getSampleDescription();
     }
 
     /**
      * Set some parameters that relate to sound recording.
-     * @see "QuickTime::SGSetSoundInputParameters"
-     * @param sampleSize Specifies the number of bits in each sound sample.
-     *    Set this field to 8 for 8-bit sound; set it to 16 for 16-bit sound..
-     * @param numChannels Specifies the number of sound channels used by the sound sample.
-     *   Set this field to 1 for monaural sounds; set it to 2 for stereo sounds...
+     *
+     * @param sampleSize      Specifies the number of bits in each sound sample.
+     *                        Set this field to 8 for 8-bit sound; set it to 16 for 16-bit sound..
+     * @param numChannels     Specifies the number of sound channels used by the sound sample.
+     *                        Set this field to 1 for monaural sounds; set it to 2 for stereo sounds...
      * @param compressionType Specifies the number of bits in each sound sample.
-     *   Set this field to 8 for 8-bit sound; set it to 16 for 16-bit sound..
+     *                        Set this field to 8 for 8-bit sound; set it to 16 for 16-bit sound..
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetSoundInputParameters"
      */
     public void setSoundInputParameters(int sampleSize, int numChannels, int compressionType) throws StdQTException {
         int i = SGSetSoundInputParameters(_ID(), (short) sampleSize, (short) numChannels, compressionType);
@@ -79,6 +70,7 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Get some parameters that relate to the current sound recording.
+     *
      * @see "QuickTime::SGGetSoundInputParameters"
      */
     public SGChannelInfo getSoundInputParameters() throws StdQTException {
@@ -92,9 +84,10 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Set the Sound Input Rate
-     * @see "QuickTime::SGSetSoundInputRate"
+     *
      * @param rate Specifies the rate at which the sound channel is to acquire data.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetSoundInputRate"
      */
     public void setSoundInputRate(float rate) throws StdQTException {
         int i = SGSetSoundInputRate(_ID(), QTUtils.X2UFix(rate));
@@ -103,6 +96,7 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Get the Sound Input Rate
+     *
      * @see "QuickTime::SGGetSoundInputRate"
      */
     public float getSoundInputRate() throws StdQTException {
@@ -112,9 +106,10 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Get the Sound Input Driver.
-     * @see "QuickTime::SGGetSoundInputDriver"
+     *
      * @return the Sound Input driver in use by this channel.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGGetSoundInputDriver"
      */
     public SPBDevice getInputDriver() throws StdQTException {
         return SPBDevice.fromSoundChannel(this);
@@ -122,9 +117,10 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Set the buffer size for sound recording in seconds
-     * @see "QuickTime::SGSetSoundRecordChunkSize"
+     *
      * @param seconds the buffer size for the channel to use.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetSoundRecordChunkSize"
      */
     public void setRecordChunkSize(int seconds) throws StdQTException {
         int i = SGSetSoundRecordChunkSize(_ID(), seconds);
@@ -133,9 +129,10 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Get the buffer size (in seconds) of the record buffer
-     * @see "QuickTime::SGGetSoundRecordChunkSize"
+     *
      * @return the Sound Input driver in use by this channel.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGGetSoundRecordChunkSize"
      */
     public int getRecordChunkSize() throws StdQTException {
         int i = SGGetSoundRecordChunkSize(_ID());
@@ -144,10 +141,11 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
 
     /**
      * Set the Sound Input Driver, Automatically calls SGSoundInputDriverChanged
-     * @see "QuickTime::SGSetSoundInputDriver"
-     * @see "QuickTime::SGSoundInputDriverChanged"
+     *
      * @return the Sound Input driver in use by this channel.
      * @throws quicktime.std.StdQTException
+     * @see "QuickTime::SGSetSoundInputDriver"
+     * @see "QuickTime::SGSoundInputDriverChanged"
      */
     public void setInputDriver(String paramString) throws StdQTException {
         int i = SGSetSoundInputDriver(_ID(), QTUtils.String2PString(paramString, 255));
@@ -188,4 +186,3 @@ public final class SGSoundChannel extends AudioChannel implements QuickTimeLib {
         return SequenceGrabberManager.SGGetSoundRecordChunkSize(paramInt);
     }
 }
-

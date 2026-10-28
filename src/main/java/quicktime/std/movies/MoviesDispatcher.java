@@ -1,13 +1,10 @@
 
 package quicktime.std.movies;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.InterfaceLib;
 import quicktime.jdirect.MethodClosure;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.qd.QDRect;
 import quicktime.std.clocks.TimeRecord;
 import quicktime.util.QTUtils;
@@ -15,7 +12,6 @@ import quicktime.util.StringHandle;
 
 
 final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
-    private static Object linkage;
 
     private final String methodName;
 
@@ -40,15 +36,6 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
     private ActionFilter filter;
 
     private ExecutingWiredAction wa;
-
-    static {
-        class PrivelegedAction {
-            void establish() {
-                AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(MoviesDispatcher.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
 
     MoviesDispatcher(Movie paramMovie, MovieProgress paramMovieProgress) {
         this.methodName = "movieProgress";

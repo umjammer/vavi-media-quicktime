@@ -31,7 +31,8 @@ import quicktime.std.movies.Movie;
  */
 public class PlaySound extends Frame {
 
-    Button playMidi, playSnd;
+    final Button playMidi;
+    final Button playSnd;
     Movie movie;
 
     static String midiFile = "jazz.mid";

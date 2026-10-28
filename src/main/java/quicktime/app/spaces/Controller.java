@@ -45,4 +45,3 @@ public interface Controller {
      */
     void removedFromSpace();
 }
-

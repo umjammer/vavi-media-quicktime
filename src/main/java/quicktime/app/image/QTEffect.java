@@ -153,7 +153,7 @@ public class QTEffect implements QTDrawable, Redrawable {
 
     private quicktime.app.time.TaskThread tt;
 
-    ICMFrameTime ft = new ICMFrameTime();
+    final ICMFrameTime ft = new ICMFrameTime();
 
     int currentFrame = 1;
 

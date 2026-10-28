@@ -44,7 +44,7 @@ public final class TimeCodeManager {
     /** the state of a timecode media handler */
     static final class State {
         int flags;
-        byte[] displayOptions = new byte[20];
+        final byte[] displayOptions = new byte[20];
 
         State() {
             Bytes.putShort(displayOptions, 4, 12);

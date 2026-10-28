@@ -418,4 +418,3 @@ public class TickleList implements TicklishController, CollectionController {
     public void removedFromSpace() {
     }
 }
-

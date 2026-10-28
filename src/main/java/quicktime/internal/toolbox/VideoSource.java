@@ -65,7 +65,7 @@ public abstract class VideoSource {
     static final int avfc = Bytes.fourCC("avfc");
 
     /** the platform's cameras, for tests to replace */
-    static Supplier<List<VideoSource>> cameras = () -> {
+    static final Supplier<List<VideoSource>> cameras = () -> {
         if (!System.getProperty("os.name", "").startsWith("Mac")) {
             return List.of();
         }
@@ -102,8 +102,8 @@ public abstract class VideoSource {
 
     /** color bars with a moving box and the frame number */
     static final class TestPattern extends VideoSource {
-        int width = 320;
-        int height = 240;
+        final int width = 320;
+        final int height = 240;
         long frame;
         long started;
 

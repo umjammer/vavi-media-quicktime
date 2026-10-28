@@ -68,7 +68,7 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
@@ -303,4 +303,3 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
         return getClass().getName() + "[hotSpotType=" + QTUtils.fromOSType(getHotSpotType()) + ",nameAtomID=" + getNameAtomID() + ",commentAtomID=" + getCommentAtomID() + ",bestPan" + getBestPan() + ",bestTilt" + getBestTilt() + ",bestFOV" + getBestFOV() + ",bestViewCenter" + getBestViewCenter() + ",hotSpotRect" + getHotSpotRect() + ",flags" + getFlags() + "]";
     }
 }
-

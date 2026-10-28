@@ -51,4 +51,3 @@ public class SampleReferenceVector extends QTVector {
         return localSampleReference;
     }
 }
-

@@ -4,6 +4,7 @@ import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.util.QTPointerRef;
 
+
 /**
  * A class that represents an presentation idle parameters
  */
@@ -25,17 +26,19 @@ public final class PresIdleParams extends QTPointerRef {
 
     /**
      * This constructor creates an PresIdleParams Object
+     *
      * @param s the stream of the presentation
      */
-    public PresIdleParams(Stream paramStream, long paramLong, int paramInt) throws QTException {
+    public PresIdleParams(Stream s, long paramLong, int paramInt) throws QTException {
         this();
-        setStream(paramStream);
+        setStream(s);
         setMovieTimeToDisplay(paramLong);
         setFlagsIn(paramInt);
     }
 
     /**
      * This method sets the stream of the params object
+     *
      * @param s the stream of the params
      * @throws quicktime.QTException
      */
@@ -54,6 +57,7 @@ public final class PresIdleParams extends QTPointerRef {
 
     /**
      * This method sets the movie time to display of the params object
+     *
      * @param time the time of the params
      * @throws quicktime.QTException
      */
@@ -63,6 +67,7 @@ public final class PresIdleParams extends QTPointerRef {
 
     /**
      * This method sets the input flags of the prarms object
+     *
      * @param flags input flags
      * @throws quicktime.QTException
      */
@@ -72,6 +77,7 @@ public final class PresIdleParams extends QTPointerRef {
 
     /**
      * This method gets the output flags of the params object
+     *
      * @return flags
      * @throws quicktime.QTException
      */

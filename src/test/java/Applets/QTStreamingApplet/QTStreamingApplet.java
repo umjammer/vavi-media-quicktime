@@ -18,8 +18,6 @@ import java.awt.Panel;
 import java.awt.PopupMenu;
 import java.awt.TextField;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -92,7 +90,6 @@ public class QTStreamingApplet extends JFrame {
             QTSession.close();
         }
     }
-
 
     /**
      * creates drawable object from the URL the user has entered

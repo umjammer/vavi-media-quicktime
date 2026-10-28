@@ -4,25 +4,22 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.io.QTFile;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTPointer;
 import quicktime.util.QTUtils;
 
+
 /**
  * Describes how a MIDI device is connected to the computer.
  */
 public class SynthesizerConnections extends QTByteObject implements PrimitivesLib, Cloneable {
-
-    private static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -34,20 +31,11 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     @Serial
     private static final long serialVersionUID = -2499879404792104283L;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SynthesizerConnections.class));
-            }
-        }.establish();
-    }
-
     /**
      * Create a connections class with all slots set to zero.
      */
     public SynthesizerConnections() {
-        this(32);
+        this(kNativeSize);
     }
 
     /**

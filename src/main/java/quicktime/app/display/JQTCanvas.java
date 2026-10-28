@@ -106,7 +106,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     /**
      * @deprecated
      */
-    public static boolean useMacOSXAcceleration = true;
+    public static final boolean useMacOSXAcceleration = true;
 
     transient QTDrawable client;
 
@@ -150,7 +150,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
 
     private final boolean paintlock = false;
 
-    java.awt.image.DirectColorModel colorModel = new java.awt.image.DirectColorModel(32, 16711680, 65280, 255, 0);
+    final java.awt.image.DirectColorModel colorModel = new java.awt.image.DirectColorModel(32, 16711680, 65280, 255, 0);
 
     /**
      * @deprecated

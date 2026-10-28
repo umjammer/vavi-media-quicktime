@@ -1404,8 +1404,8 @@ final class Codecs {
 
         /** 2x2 vectors as 4 argb pixels */
         private static final class Book {
-            int[][] v1 = new int[256][4];
-            int[][] v4 = new int[256][4];
+            final int[][] v1 = new int[256][4];
+            final int[][] v4 = new int[256][4];
 
             Book copy() {
                 Book n = new Book();

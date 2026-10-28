@@ -17,4 +17,3 @@ public interface QTVREnteringNode {
      */
     int execute(QTVRInstance vr, int nodeID);
 }
-

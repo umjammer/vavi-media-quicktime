@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.qd.QDColor;
 import quicktime.util.EndianDescriptor;
 import quicktime.util.EndianFlipSpec;
@@ -16,13 +14,12 @@ import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 import quicktime.util.QTUtils;
 
+
 /**
  * This class maps the ScrpSTElement record of the TextToolbox.
  * ScrpSTElement are used as part of the TextDescription
  */
 public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
-
-    static Object linkage;
 
     /**
      * This is the size (the number of bytes) that are required for this class
@@ -34,17 +31,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
     @Serial
     private static final long serialVersionUID = 939259602280929910L;
 
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ScrpSTElement.class));
-            }
-        }
-        new PrivelegedAction().establish();
-    }
-
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 4, 1);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
@@ -59,6 +46,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     /**
      * Returns the EndianDescriptor for this class.
+     *
      * @return an EndianDescriptor
      */
     public static EndianDescriptor getEndianDescriptor() {
@@ -71,7 +59,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
      * This constructor makes a new ScrpSTElement object.
      */
     public ScrpSTElement() {
-        super(20);
+        super(kNativeSize);
     }
 
     private ScrpSTElement(byte[] paramArrayOfByte) {
@@ -80,8 +68,8 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[20];
-        byte[] arrayOfByte = new byte[20];
+        this.bytes = new byte[kNativeSize];
+        byte[] arrayOfByte = new byte[kNativeSize];
         paramObjectInputStream.read(arrayOfByte);
         setIntInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 0)));
         setShortInArray(this.bytes, 4, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, 4)));
@@ -95,7 +83,7 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
 
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[20];
+        byte[] arrayOfByte = new byte[kNativeSize];
         setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
         setShortInArray(arrayOfByte, 4, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 4)));
         setShortInArray(arrayOfByte, 6, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 6)));
@@ -203,4 +191,3 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
     }
 }
-

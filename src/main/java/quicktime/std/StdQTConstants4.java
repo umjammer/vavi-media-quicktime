@@ -1584,4 +1584,3 @@ public interface StdQTConstants4 {
      */
     int kICMGetChainUltimateChild = 3;
 }
-

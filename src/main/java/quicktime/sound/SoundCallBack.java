@@ -15,4 +15,3 @@ public interface SoundCallBack {
      */
     void execute(SndChannel sc);
 }
-

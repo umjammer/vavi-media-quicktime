@@ -1,40 +1,27 @@
 package quicktime.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTNullPointerException;
 import quicktime.QTObject;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.MemoryManager;
-import quicktime.jdirect.QTNative;
 import quicktime.jdirect.QuickTimeLib;
 import quicktime.sound.SoundComponentData;
 import quicktime.std.StdQTException;
 import quicktime.std.image.GraphicsExporter;
+
 
 /**
  * The QTPointer class implements a pointer that can be used in calls to QuickTime.
  */
 public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
 
-    private static Object linkage;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(QTPointer.class));
-            }
-        }.establish();
-    }
-
     /**
      * The buffer that contains the sound data.
      * @see "QuickTime::GraphicsExportGetInputPtr"
      * @return the QTPointer buffer
      * @throws quicktime.std.StdQTException
-     * @see quicktime.std.image.GraphicsExporter.getInputPtr
+     * @see quicktime.std.image.GraphicsExporter#getInputPtr
      */
     public static QTPointerRef fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
         int[] arrayOfInt1 = { 0 };
@@ -184,4 +171,3 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
         return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
     }
 }
-

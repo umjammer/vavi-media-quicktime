@@ -38,5 +38,3 @@ interface Presentable {
 
     boolean isSingleFrame();
 }
-
-

@@ -17,4 +17,3 @@ import quicktime.app.time.Ticklish;
  */
 public interface TicklishController extends Ticklish, Controller {
 }
-

@@ -4,45 +4,33 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+
 import quicktime.internal.toolbox.MemoryManager;
 import quicktime.jdirect.PrimitivesLib;
-import quicktime.jdirect.QTNative;
 import quicktime.qd.QDColor;
 import quicktime.util.EndianOrder;
 import quicktime.util.QTByteObject;
 
-public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
-    private static Object linkage;
+public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     private static final int kNativeSize = 20;
 
     @Serial
     private static final long serialVersionUID = -7109590438601877043L;
 
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(TCTextOptions.class));
-            }
-        }.establish();
-    }
-
     /**
      * Make a TextOptions class for the TimeCoder
      */
     public TCTextOptions() {
-        super(20);
+        super(kNativeSize);
     }
 
     @Serial
     private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        this.bytes = new byte[20];
+        this.bytes = new byte[kNativeSize];
         paramObjectInputStream.read(getBytes());
-        for (int i = 0; i < 20; i += 2) {
+        for (int i = 0; i < kNativeSize; i += 2) {
             short s1 = getShortFromArray(getBytes(), i);
             short s2 = EndianOrder.flipBigEndianToNative16(s1);
             setShortInArray(getBytes(), i, s2);
@@ -51,8 +39,8 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     @Serial
     private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[20];
-        for (int i = 0; i < 20; i += 2) {
+        byte[] arrayOfByte = new byte[kNativeSize];
+        for (int i = 0; i < kNativeSize; i += 2) {
             short s1 = getShortFromArray(arrayOfByte, i);
             short s2 = EndianOrder.flipNativeToBigEndian16(s1);
             setShortInArray(arrayOfByte, i, s2);
@@ -62,6 +50,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Returns the txFont field.
+     *
      * @return an int
      */
     public int getTXFont() {
@@ -70,6 +59,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Sets the txFont field.
+     *
      * @param txFont the new font ID
      */
     public void setTXFont(int txFont) {
@@ -78,6 +68,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Returns the txFace field.
+     *
      * @return an int
      */
     public int getTXFace() {
@@ -86,6 +77,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Sets the txFace field.
+     *
      * @param txFace the new font ID
      */
     public void setTXFace(int txFace) {
@@ -94,6 +86,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Returns the txSize field.
+     *
      * @return an int
      */
     public int getTXSize() {
@@ -102,6 +95,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Sets the txSize field.
+     *
      * @param txSize the new font ID
      */
     public void setTXSize(int txSize) {
@@ -110,6 +104,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Returns the foreground Color field.
+     *
      * @return a QDColor
      */
     public QDColor getForeColor() {
@@ -120,6 +115,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Sets the foreground Color field.
+     *
      * @param foreColor a QDColor
      */
     public void setForeColor(QDColor foreColor) {
@@ -128,6 +124,7 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
 
     /**
      * Returns the background Color field.
+     *
      * @return a QDColor
      */
     public QDColor getBackColor() {
@@ -151,4 +148,3 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
         MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
     }
 }
-

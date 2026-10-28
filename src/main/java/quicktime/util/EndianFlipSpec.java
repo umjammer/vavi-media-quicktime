@@ -36,11 +36,11 @@ public class EndianFlipSpec {
      */
     public static final int kFlip64BitValue = 8;
 
-    int offset;
+    final int offset;
 
-    int sizeFlag;
+    final int sizeFlag;
 
-    int num;
+    final int num;
 
     /**
      * Creates an EndianFlipSpec with the given offset from the start of the
@@ -103,4 +103,3 @@ public class EndianFlipSpec {
         return "flipSpec[offset=" + this.offset + ",sizeFlag=" + this.sizeFlag + ",num=" + this.num + "]";
     }
 }
-

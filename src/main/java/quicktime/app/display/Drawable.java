@@ -56,4 +56,3 @@ public interface Drawable extends Listener {
      */
     void redraw(Region invalidRgn) throws QTException;
 }
-

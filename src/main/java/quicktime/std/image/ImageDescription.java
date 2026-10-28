@@ -1,13 +1,11 @@
 package quicktime.std.image;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
-import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.GraphicsExportManager;
 import quicktime.internal.toolbox.GraphicsImportManager;
+import quicktime.internal.toolbox.ImageCompressionManager;
 import quicktime.internal.toolbox.QuickDrawManager;
 import quicktime.internal.toolbox.SpriteManager;
 import quicktime.jdirect.QTNative;
@@ -29,13 +27,12 @@ import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 import quicktime.util.UtilException;
 
+
 /**
  * This class corresponds to the image description handle.
  * refer to ImageDescription in QuickTime
  */
 public class ImageDescription extends SampleDescription implements QuickTimeLib {
-
-    private static Object linkage;
 
     private static EndianDescriptor ed;
 
@@ -138,18 +135,18 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.ImageCompressionDialog#compressImage(quicktime.qd.QDGraphics, quicktime.qd.QDRect)
      */
-    public static QTImage fromImageCompressionDialog(ImageCompressionDialog imagecompressiondialog, QDGraphics qdgraphics, QDRect qdrect) throws QTException {
-        byte[] abyte0 = qdrect == null ? null : qdrect.getRect();
-        int[] ai = { 0 };
-        int[] ai1 = { 0 };
-        if (qdgraphics == null)
+    public static QTImage fromImageCompressionDialog(ImageCompressionDialog dialog, QDGraphics src, QDRect srcRect) throws QTException {
+        byte[] rect = srcRect == null ? null : srcRect.getRect();
+        int[] desc = { 0 };
+        int[] data = { 0 };
+        if (src == null)
             throw new StdQTException(-50);
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if (QTSession.isCurrentOS(1) || QTSession.isCurrentOS(4))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(qdgraphics), 0);
-            i = SCCompressImage(QTObject.ID(imagecompressiondialog), QTObject.ID(qdgraphics.getPixMap()), abyte0, ai, ai1);
+            SetGWorld(QTObject.ID(src), 0);
+            i = SCCompressImage(QTObject.ID(dialog), QTObject.ID(src.getPixMap()), rect, desc, data);
             if (QTSession.isCurrentOS(1) || QTSession.isCurrentOS(4))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
@@ -163,9 +160,9 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
                     super(i, obj, false);
                 }
             }
-            _cls1ImageHdl _lcls1imagehdl = new _cls1ImageHdl(ai1[0], null);
+            _cls1ImageHdl _lcls1imagehdl = new _cls1ImageHdl(data[0], null);
             _lcls1imagehdl.lockHigh();
-            return new QTImage(new ImageDescription(ai[0], null), RawEncodedImage.fromQTHandle(_lcls1imagehdl));
+            return new QTImage(new ImageDescription(desc[0], null), RawEncodedImage.fromQTHandle(_lcls1imagehdl));
         }
     }
 
@@ -180,20 +177,20 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
      * @throws quicktime.QTException
      */
     public static ImageDescription getJavaDefaultPixelDescription(int width, int height) throws QTException {
-        ImageDescription imagedescription = null;
+        ImageDescription description = null;
         if (QTSession.isCurrentOS(2))
-            imagedescription = new ImageDescription(QDGraphics.kDefaultPixelFormat);
+            description = new ImageDescription(QDGraphics.kDefaultPixelFormat);
         else
-            imagedescription = new ImageDescription(0x72617720);
-        imagedescription.setDepth(32);
-        imagedescription.setSpatialQuality(512);
-        imagedescription.setWidth(width);
-        imagedescription.setHeight(height);
-        imagedescription.setHRes(72F);
-        imagedescription.setVRes(72F);
-        imagedescription.setFrameCount(1);
-        imagedescription.setClutID(-1);
-        return (ImageDescription) imagedescription.clone();
+            description = new ImageDescription(0x72617720);
+        description.setDepth(32);
+        description.setSpatialQuality(512);
+        description.setWidth(width);
+        description.setHeight(height);
+        description.setHRes(72F);
+        description.setVRes(72F);
+        description.setFrameCount(1);
+        description.setClutID(-1);
+        return (ImageDescription) description.clone();
     }
 
     /**
@@ -608,8 +605,8 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
         return SpriteManager.GetSpriteProperty(i, j, ai);
     }
 
-    private static int SCCompressImage(int i, int j, byte[] abyte0, int[] ai, int[] ai1) {
-        return ImageCompressionManager.SCCompressImage(i, j, abyte0, ai, ai1);
+    private static int SCCompressImage(int ci, int src, byte[] srcRect, int[] desc, int[] data) {
+        return ImageCompressionManager.SCCompressImage(ci, src, srcRect, desc, data);
     }
 
     private static short MakeImageDescriptionForPixMap(int i, int[] ai) {
@@ -650,15 +647,5 @@ public class ImageDescription extends SampleDescription implements QuickTimeLib 
 
     private static void GetGWorld(int[] ai, int[] ai1) {
         QuickDrawManager.GetGWorld(ai, ai1);
-    }
-
-    static {
-        class PrivelegedAction {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(ImageDescription.class));
-            }
-        }
-        new PrivelegedAction().establish();
     }
 }

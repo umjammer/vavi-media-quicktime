@@ -35,13 +35,12 @@ public final class MPEGMedia extends Media {
     }
 
     @Override
-    final SampleDescription makeDescription() throws QTException {
+    SampleDescription makeDescription() throws QTException {
         return new SampleDescription(1297106247);
     }
 
     @Override
-    final MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
         return new MPEGMediaHandler(paramInt, paramObject);
     }
 }
-

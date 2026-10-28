@@ -280,4 +280,3 @@ public class GraphicsImporterDrawer implements Presentable {
         return getClass().getName() + "[" + this.mGraphicsImporter + "]";
     }
 }
-

@@ -43,4 +43,3 @@ public abstract class ExtremesCallBack extends QTCallBack {
         return super.toString() + ",[flags=" + this.flags + "]";
     }
 }
-

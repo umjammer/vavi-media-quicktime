@@ -74,4 +74,3 @@ public final class QTVRSampleDescription extends SampleDescription {
         return AtomContainer.fromQTHandle(localQTHandle);
     }
 }
-

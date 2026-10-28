@@ -39,4 +39,3 @@ public interface Ticklish {
      */
     boolean tickle(float er, int time) throws QTException;
 }
-

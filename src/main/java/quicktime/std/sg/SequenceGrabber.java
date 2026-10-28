@@ -1,7 +1,5 @@
 package quicktime.std.sg;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import quicktime.QTException;
 import quicktime.QTObject;
 import quicktime.QTSession;
@@ -23,6 +21,7 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.media.DataRef;
 import quicktime.std.movies.media.UserData;
 
+
 /**
  * Assists in importing sound and video into a movie.
  * The SeqGrabComponent implements methods for a corresponding QuickTime
@@ -31,20 +30,9 @@ import quicktime.std.movies.media.UserData;
  */
 public final class SequenceGrabber extends Component implements QuickTimeLib {
 
-    private static Object linkage;
-
     private SGDispatcher upp;
 
     private boolean hasStarted;
-
-    static {
-        new Object() {
-
-            void establish() {
-                linkage = AccessController.doPrivileged((PrivilegedAction<Object>) () -> QTNative.linkNativeMethods(SequenceGrabber.class));
-            }
-        }.establish();
-    }
 
     /**
      * Opens the specified movie export component,'barg', with any subType.
@@ -75,8 +63,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @see "QuickTime::SGInitialize"
      * @param subType The movie export component sub type
      */
-    public SequenceGrabber(int paramInt1, int paramInt2) throws QTException {
-        super(paramInt1, paramInt2);
+    public SequenceGrabber(int paramInt1, int subType) throws QTException {
+        super(paramInt1, subType);
         initialize();
     }
 
@@ -99,8 +87,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
         }
         if (i < 0) {
             try {
-                finalize();
-            } catch (Throwable localThrowable) {
+                _dispose();
+            } catch (Throwable _) {
             }
             StdQTException.checkError(i);
         }
@@ -197,10 +185,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      *  associated with the sequence grabber output.
      * @throws quicktime.std.StdQTException
      */
-    public void writeExtendedMovieData(SGChannel paramSGChannel, int paramInt1, int paramInt2, long paramLong, SGOutput paramSGOutput) throws StdQTException {
+    public void writeExtendedMovieData(SGChannel paramSGChannel, int p, int len, long offset, SGOutput sgOut) throws StdQTException {
         byte[] arrayOfByte = new byte[8];
-        setLongInArray(arrayOfByte, 0, paramLong);
-        int i = SGWriteExtendedMovieData(_ID(), QTObject.ID(paramSGChannel), paramInt1, paramInt2, arrayOfByte, QTObject.ID(paramSGOutput));
+        setLongInArray(arrayOfByte, 0, offset);
+        int i = SGWriteExtendedMovieData(_ID(), QTObject.ID(paramSGChannel), p, len, arrayOfByte, QTObject.ID(sgOut));
         StdQTException.checkError(i);
     }
 
@@ -493,11 +481,11 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param dataRef information that identifies the destination container
      * @throws quicktime.std.StdQTException
      */
-    public void setDataRef(DataRef paramDataRef, int paramInt) throws StdQTException {
+    public void setDataRef(DataRef dataRef, int paramInt) throws StdQTException {
         int i = 0;
-        if (paramDataRef != null) {
+        if (dataRef != null) {
             synchronized (QTNative.globalsLock) {
-                i = SGSetDataRef(_ID(), QTObject.ID(paramDataRef), paramDataRef.getType(), paramInt);
+                i = SGSetDataRef(_ID(), QTObject.ID(dataRef), dataRef.getType(), paramInt);
             }
         }
         synchronized (QTNative.globalsLock) {
@@ -810,4 +798,3 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
         MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
     }
 }
-

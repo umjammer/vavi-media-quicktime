@@ -61,7 +61,7 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
         }
     }
 
-    protected static EndianDescriptor makeED() {
+    private static EndianDescriptor makeED() {
         EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
         EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 4, 1);
         localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);

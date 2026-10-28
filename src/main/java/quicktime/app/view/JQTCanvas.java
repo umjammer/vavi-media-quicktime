@@ -31,7 +31,7 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
 
     public static boolean flashScaling = false;
 
-    public static boolean useMacOSXAcceleration = false;
+    public static final boolean useMacOSXAcceleration = false;
 
     transient Presentable client;
 
@@ -67,7 +67,7 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
 
     private final boolean paintlock = false;
 
-    DirectColorModel colorModel = new DirectColorModel(32, 16711680, 65280, 255, 0);
+    final DirectColorModel colorModel = new DirectColorModel(32, 16711680, 65280, 255, 0);
 
     public QTImageProducer ip;
 

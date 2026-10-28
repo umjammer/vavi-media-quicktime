@@ -6,4 +6,3 @@ public class QTUnknownOSException extends QTException {
         super(System.getProperty("os.name"));
     }
 }
-

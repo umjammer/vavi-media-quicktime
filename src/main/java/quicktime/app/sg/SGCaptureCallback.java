@@ -16,4 +16,3 @@ public interface SGCaptureCallback {
      */
     void finish(SGDrawer sg);
 }
-
