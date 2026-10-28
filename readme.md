@@ -4,6 +4,8 @@
 
 # vavi-media-quicktime
 
+<img alt="logo" src="src/test/resources/duke_quicktime.png" width="160" />
+
 quicktime clone
 
 ## Install
@@ -15,3 +17,7 @@ quicktime clone
  - https://mobilehackerz.jp/contents/3GPConv
 
 ## TODO
+
+---
+
+<sub>image designed by @umjammer, drawn by nano banana</sub>
