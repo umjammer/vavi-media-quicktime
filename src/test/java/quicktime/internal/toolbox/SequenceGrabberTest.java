@@ -186,7 +186,11 @@ class SequenceGrabberTest implements StdQTConstants {
         });
         sg.setDataOutput(null, seqGrabDontMakeMovie);
         sg.startRecord();
-        idle(sg, 300);
+        // idle by count, not by time: the first frame warms up the codec, which may take the whole time on a busy machine
+        for (int i = 0; i < 5; i++) {
+            sg.idle();
+            Thread.sleep(15);
+        }
         sg.stop();
         assertTrue(calls.get() >= 3, "calls " + calls.get());
         assertTrue(bytes.get() > 0);
