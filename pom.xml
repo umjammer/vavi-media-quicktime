@@ -8,7 +8,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-media-quicktime</artifactId>
-  <version>6.1.1-SNAPSHOT</version>
+  <version>6.1.1</version>
 
   <name>Quick Time for Java</name>
   <organization>
