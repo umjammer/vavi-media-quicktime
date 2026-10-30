@@ -54,19 +54,19 @@ public final class TimeCodeTime extends QTByteObject implements Cloneable {
         setFrames(counter & 0xFF);
     }
 
-    private TimeCodeTime(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private TimeCodeTime(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(getBytes());
+        in.read(getBytes());
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        paramObjectOutputStream.write(getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.write(getBytes());
     }
 
     /**

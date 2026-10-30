@@ -65,10 +65,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public int doExport() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportDoExport(_ID(), arrayOfInt);
+        int[] actualSizeWritten = { 0 };
+        int i = GraphicsExportDoExport(_ID(), actualSizeWritten);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return actualSizeWritten[0];
     }
 
     /**
@@ -362,10 +362,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public int getOutputOffset() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetOutputOffsetAndMaxSize(_ID(), arrayOfInt, null, null);
+        int[] offset = { 0 };
+        int i = GraphicsExportGetOutputOffsetAndMaxSize(_ID(), offset, null, null);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return offset[0];
     }
 
     /**
@@ -375,10 +375,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public int getOutputMaxSize() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetOutputOffsetAndMaxSize(_ID(), null, arrayOfInt, null);
+        int[] maxSize = { 0 };
+        int i = GraphicsExportGetOutputOffsetAndMaxSize(_ID(), null, maxSize, null);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return maxSize[0];
     }
 
     /**
@@ -388,10 +388,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public boolean getOutputTruncateFile() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        int i = GraphicsExportGetOutputOffsetAndMaxSize(_ID(), null, null, arrayOfByte);
+        byte[] truncate = { 0 };
+        int i = GraphicsExportGetOutputOffsetAndMaxSize(_ID(), null, null, truncate);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return truncate[0] != 0;
     }
 
     /**
@@ -414,11 +414,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getOutputFileType() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetOutputFileTypeAndCreator(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] fileType = { 0 };
+        int[] creator = { 0 };
+        int i = GraphicsExportGetOutputFileTypeAndCreator(_ID(), fileType, creator);
         StdQTException.checkError(i);
-        return arrayOfInt1[0];
+        return fileType[0];
     }
 
     /**
@@ -428,11 +428,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getOutputFileCreator() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetOutputFileTypeAndCreator(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] fileType = { 0 };
+        int[] creator = { 0 };
+        int i = GraphicsExportGetOutputFileTypeAndCreator(_ID(), fileType, creator);
         StdQTException.checkError(i);
-        return arrayOfInt2[0];
+        return creator[0];
     }
 
     /**
@@ -442,10 +442,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * return true if the exporter is allowed to read the input data
      */
     public boolean mayExporterReadInputData() throws QTException {
-        byte[] arrayOfByte = { 0 };
-        int i = GraphicsExportMayExporterReadInputData(_ID(), arrayOfByte);
+        byte[] mayReadInputData = { 0 };
+        int i = GraphicsExportMayExporterReadInputData(_ID(), mayReadInputData);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return mayReadInputData[0] != 0;
     }
 
     /**
@@ -456,10 +456,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getInputDataSize() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetInputDataSize(_ID(), arrayOfInt);
+        int[] size = { 0 };
+        int i = GraphicsExportGetInputDataSize(_ID(), size);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return size[0];
     }
 
     /**
@@ -473,10 +473,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public byte[] readInputData(int dataOffset, int dataSize) throws StdQTException {
-        byte[] arrayOfByte = new byte[dataSize];
-        int i = GraphicsExportReadInputData(_ID(), arrayOfByte, dataOffset, dataSize);
+        byte[] dst = new byte[dataSize];
+        int i = GraphicsExportReadInputData(_ID(), dst, dataOffset, dataSize);
         StdQTException.checkError(i);
-        return arrayOfByte;
+        return dst;
     }
 
     /**
@@ -498,10 +498,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public QDRect getInputImageDimensions() throws QTException {
-        QDRect localQDRect = new QDRect();
-        int i = GraphicsExportGetInputImageDimensions(_ID(), localQDRect.getRect());
+        QDRect inputImageDimensions = new QDRect();
+        int i = GraphicsExportGetInputImageDimensions(_ID(), inputImageDimensions.getRect());
         StdQTException.checkError(i);
-        return localQDRect;
+        return inputImageDimensions;
     }
 
     /**
@@ -512,10 +512,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getInputImageDepth() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetInputImageDepth(_ID(), arrayOfInt);
+        int[] depth = { 0 };
+        int i = GraphicsExportGetInputImageDepth(_ID(), depth);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return depth[0];
     }
 
     /**
@@ -526,8 +526,8 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * multiple-resolution format.
      * @see "QuickTime::GraphicsExportDrawInputImage"
      */
-    public void drawInputImage(QDGraphics paramQDGraphics, QDRect paramQDRect1, QDRect paramQDRect2) throws QTException {
-        int i = GraphicsExportDrawInputImage(_ID(), QTObject.ID(paramQDGraphics), 0, paramQDRect1.getRect(), paramQDRect2.getRect());
+    public void drawInputImage(QDGraphics gworld, QDRect rect1, QDRect rect2) throws QTException {
+        int i = GraphicsExportDrawInputImage(_ID(), QTObject.ID(gworld), 0, rect1.getRect(), rect2.getRect());
         StdQTException.checkError(i);
     }
 
@@ -556,11 +556,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getInputOffset() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetInputOffsetAndLimit(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] offset = { 0 };
+        int[] limit = { 0 };
+        int i = GraphicsExportGetInputOffsetAndLimit(_ID(), offset, limit);
         StdQTException.checkError(i);
-        return arrayOfInt1[0];
+        return offset[0];
     }
 
     /**
@@ -573,11 +573,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getInputLimit() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetInputOffsetAndLimit(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] offset = { 0 };
+        int[] limit = { 0 };
+        int i = GraphicsExportGetInputOffsetAndLimit(_ID(), offset, limit);
         StdQTException.checkError(i);
-        return arrayOfInt2[0];
+        return limit[0];
     }
 
     /**
@@ -650,10 +650,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public String getDefaultFileNameExtension() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetDefaultFileNameExtension(_ID(), arrayOfInt);
+        int[] extension = { 0 };
+        int i = GraphicsExportGetDefaultFileNameExtension(_ID(), extension);
         StdQTException.checkError(i);
-        return QTUtils.fromOSType(arrayOfInt[0]);
+        return QTUtils.fromOSType(extension[0]);
     }
 
     /**
@@ -675,11 +675,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public String getDefaultFileType() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetDefaultFileTypeAndCreator(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] fileType = { 0 };
+        int[] creator = { 0 };
+        int i = GraphicsExportGetDefaultFileTypeAndCreator(_ID(), fileType, creator);
         StdQTException.checkError(i);
-        return QTUtils.fromOSType(arrayOfInt1[0]);
+        return QTUtils.fromOSType(fileType[0]);
     }
 
     /**
@@ -689,11 +689,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public String getDefaultFileCreator() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetDefaultFileTypeAndCreator(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] fileType = { 0 };
+        int[] creator = { 0 };
+        int i = GraphicsExportGetDefaultFileTypeAndCreator(_ID(), fileType, creator);
         StdQTException.checkError(i);
-        return QTUtils.fromOSType(arrayOfInt2[0]);
+        return QTUtils.fromOSType(creator[0]);
     }
 
     /**
@@ -704,10 +704,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public boolean canTranscode() throws QTException {
-        byte[] arrayOfByte = { 0 };
-        int i = GraphicsExportCanTranscode(_ID(), arrayOfByte);
+        byte[] canTranscode = { 0 };
+        int i = GraphicsExportCanTranscode(_ID(), canTranscode);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return canTranscode[0] != 0;
     }
 
     /**
@@ -739,8 +739,8 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @return ImageDescription object describing the compressed image.
      * @throws quicktime.QTException
      */
-    public ImageDescription doUseCompressor(AtomContainer paramAtomContainer) throws QTException {
-        return ImageDescription.fromGraphicsExporterCompressor(this, paramAtomContainer);
+    public ImageDescription doUseCompressor(AtomContainer atomcontainer) throws QTException {
+        return ImageDescription.fromGraphicsExporterCompressor(this, atomcontainer);
     }
 
     /**
@@ -763,10 +763,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public boolean getDontRecompress() throws QTException {
-        byte[] arrayOfByte = { 0 };
-        int i = GraphicsExportGetDontRecompress(_ID(), arrayOfByte);
+        byte[] dontRecompress = { 0 };
+        int i = GraphicsExportGetDontRecompress(_ID(), dontRecompress);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return dontRecompress[0] != 0;
     }
 
     /**
@@ -787,10 +787,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getInterlaceStyle() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetInterlaceStyle(_ID(), arrayOfInt);
+        int[] style = { 0 };
+        int i = GraphicsExportGetInterlaceStyle(_ID(), style);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return style[0];
     }
 
     /**
@@ -835,10 +835,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getTargetDataSize() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetTargetDataSize(_ID(), arrayOfInt);
+        int[] size = { 0 };
+        int i = GraphicsExportGetTargetDataSize(_ID(), size);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return size[0];
     }
 
     /**
@@ -859,10 +859,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getCompressionMethod() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetCompressionMethod(_ID(), arrayOfInt);
+        int[] method = { 0 };
+        int i = GraphicsExportGetCompressionMethod(_ID(), method);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return method[0];
     }
 
     /**
@@ -883,18 +883,18 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getCompressionQuality() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetCompressionQuality(_ID(), arrayOfInt);
+        int[] quality = { 0 };
+        int i = GraphicsExportGetCompressionQuality(_ID(), quality);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return quality[0];
     }
 
     /**
      * Defines the resolution to save and store.
      * @see "QuickTime::GraphicsExportSetResolution"
      */
-    public void setResolution(int paramInt1, int paramInt2) throws QTException {
-        int i = GraphicsExportSetResolution(_ID(), paramInt1, paramInt2);
+    public void setResolution(int hRes, int vRes) throws QTException {
+        int i = GraphicsExportSetResolution(_ID(), hRes, vRes);
         StdQTException.checkError(i);
     }
 
@@ -905,11 +905,11 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getHorizontalResolution() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetResolution(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] hRes = { 0 };
+        int[] vRes = { 0 };
+        int i = GraphicsExportGetResolution(_ID(), hRes, vRes);
         StdQTException.checkError(i);
-        return arrayOfInt1[0];
+        return hRes[0];
     }
 
     /**
@@ -919,19 +919,19 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getVerticalResolution() throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetResolution(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] hRes = { 0 };
+        int[] vRes = { 0 };
+        int i = GraphicsExportGetResolution(_ID(), hRes, vRes);
         StdQTException.checkError(i);
-        return arrayOfInt2[0];
+        return vRes[0];
     }
 
     /**
      * Defines the depth to use. Some image file formats support more than one pixel depth.
      * @see "QuickTime::GraphicsExportSetDepth"
      */
-    public void setDepth(int paramInt) throws QTException {
-        int i = GraphicsExportSetDepth(_ID(), paramInt);
+    public void setDepth(int depth) throws QTException {
+        int i = GraphicsExportSetDepth(_ID(), depth);
         StdQTException.checkError(i);
     }
 
@@ -942,10 +942,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.QTException
      */
     public int getDepth() throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetDepth(_ID(), arrayOfInt);
+        int[] depth = { 0 };
+        int i = GraphicsExportGetDepth(_ID(), depth);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return depth[0];
     }
 
     /**
@@ -969,10 +969,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public byte[] GraphicsExportReadOutputData(int dataOffset, int dataSize) throws StdQTException {
-        byte[] arrayOfByte = new byte[dataSize];
-        int i = GraphicsExportReadOutputData(_ID(), arrayOfByte, dataOffset, dataSize);
+        byte[] dst = new byte[dataSize];
+        int i = GraphicsExportReadOutputData(_ID(), dst, dataOffset, dataSize);
         StdQTException.checkError(i);
-        return arrayOfByte;
+        return dst;
     }
 
     /**
@@ -995,10 +995,10 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public boolean getExifEnabled() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        int i = GraphicsExportGetExifEnabled(_ID(), arrayOfByte);
+        byte[] enable = { 0 };
+        int i = GraphicsExportGetExifEnabled(_ID(), enable);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return enable[0] != 0;
     }
 
     /**
@@ -1026,12 +1026,12 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public boolean getThumbnailEnabled() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetThumbnailEnabled(_ID(), arrayOfByte, arrayOfInt1, arrayOfInt2);
+        byte[] enable = { 0 };
+        int[] maxThumbnailWidth = { 0 };
+        int[] maxThumbnailHeight = { 0 };
+        int i = GraphicsExportGetThumbnailEnabled(_ID(), enable, maxThumbnailWidth, maxThumbnailHeight);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return enable[0] != 0;
     }
 
     /**
@@ -1042,239 +1042,239 @@ public final class GraphicsExporter extends Component implements QuickTimeLib, E
      * @throws quicktime.std.StdQTException
      */
     public QDDimension getThumbnailDimension() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = GraphicsExportGetThumbnailEnabled(_ID(), arrayOfByte, arrayOfInt1, arrayOfInt2);
+        byte[] enable = { 0 };
+        int[] maxThumbnailWidth = { 0 };
+        int[] maxThumbnailHeight = { 0 };
+        int i = GraphicsExportGetThumbnailEnabled(_ID(), enable, maxThumbnailWidth, maxThumbnailHeight);
         StdQTException.checkError(i);
-        return new QDDimension(arrayOfInt1[0], arrayOfInt2[0]);
+        return new QDDimension(maxThumbnailWidth[0], maxThumbnailHeight[0]);
     }
 
-    private static int GraphicsExportSetExifEnabled(int paramInt, byte paramByte) {
-        return GraphicsExportManager.GraphicsExportSetExifEnabled(paramInt, paramByte);
+    private static int GraphicsExportSetExifEnabled(int ge, byte enable) {
+        return GraphicsExportManager.GraphicsExportSetExifEnabled(ge, enable);
     }
 
-    private static int GraphicsExportGetExifEnabled(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportGetExifEnabled(paramInt, paramArrayOfByte);
+    private static int GraphicsExportGetExifEnabled(int ge, byte[] enable) {
+        return GraphicsExportManager.GraphicsExportGetExifEnabled(ge, enable);
     }
 
-    private static int GraphicsExportSetThumbnailEnabled(int paramInt1, byte paramByte, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportSetThumbnailEnabled(paramInt1, paramByte, paramInt2, paramInt3);
+    private static int GraphicsExportSetThumbnailEnabled(int ge, byte enable, int maxThumbnailWidth, int maxThumbnailHeight) {
+        return GraphicsExportManager.GraphicsExportSetThumbnailEnabled(ge, enable, maxThumbnailWidth, maxThumbnailHeight);
     }
 
-    private static int GraphicsExportGetThumbnailEnabled(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetThumbnailEnabled(paramInt, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetThumbnailEnabled(int ge, byte[] enable, int[] maxThumbnailWidth, int[] maxThumbnailHeight) {
+        return GraphicsExportManager.GraphicsExportGetThumbnailEnabled(ge, enable, maxThumbnailWidth, maxThumbnailHeight);
     }
 
-    private static int GraphicsExportDoExport(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportDoExport(paramInt, paramArrayOfInt);
+    private static int GraphicsExportDoExport(int ge, int[] actualSizeWritten) {
+        return GraphicsExportManager.GraphicsExportDoExport(ge, actualSizeWritten);
     }
 
-    private static int GraphicsExportSetInputDataReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return GraphicsExportManager.GraphicsExportSetInputDataReference(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int GraphicsExportSetInputDataReference(int ge, int dataRef, int dataRefType, int desc) {
+        return GraphicsExportManager.GraphicsExportSetInputDataReference(ge, dataRef, dataRefType, desc);
     }
 
-    private static int GraphicsExportSetInputFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetInputFile(paramInt1, paramArrayOfByte, paramInt2);
+    private static int GraphicsExportSetInputFile(int ge, byte[] fsspec, int desc) {
+        return GraphicsExportManager.GraphicsExportSetInputFile(ge, fsspec, desc);
     }
 
-    private static int GraphicsExportSetInputHandle(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportSetInputHandle(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsExportSetInputHandle(int ge, int h, int desc) {
+        return GraphicsExportManager.GraphicsExportSetInputHandle(ge, h, desc);
     }
 
-    private static int GraphicsExportSetInputPtr(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return GraphicsExportManager.GraphicsExportSetInputPtr(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int GraphicsExportSetInputPtr(int ge, int p, int size, int desc) {
+        return GraphicsExportManager.GraphicsExportSetInputPtr(ge, p, size, desc);
     }
 
-    private static int GraphicsExportSetInputGraphicsImporter(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetInputGraphicsImporter(paramInt1, paramInt2);
+    private static int GraphicsExportSetInputGraphicsImporter(int ge, int gi) {
+        return GraphicsExportManager.GraphicsExportSetInputGraphicsImporter(ge, gi);
     }
 
-    private static int GraphicsExportSetInputPicture(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetInputPicture(paramInt1, paramInt2);
+    private static int GraphicsExportSetInputPicture(int ge, int picture) {
+        return GraphicsExportManager.GraphicsExportSetInputPicture(ge, picture);
     }
 
-    private static int GraphicsExportSetInputGWorld(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetInputGWorld(paramInt1, paramInt2);
+    private static int GraphicsExportSetInputGWorld(int ge, int gworld) {
+        return GraphicsExportManager.GraphicsExportSetInputGWorld(ge, gworld);
     }
 
-    private static int GraphicsExportSetInputPixmap(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetInputPixmap(paramInt1, paramInt2);
+    private static int GraphicsExportSetInputPixmap(int ge, int pixMap) {
+        return GraphicsExportManager.GraphicsExportSetInputPixmap(ge, pixMap);
     }
 
-    private static int GraphicsExportSetOutputDataReference(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportSetOutputDataReference(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsExportSetOutputDataReference(int ge, int dataRef, int dataRefType) {
+        return GraphicsExportManager.GraphicsExportSetOutputDataReference(ge, dataRef, dataRefType);
     }
 
-    private static int GraphicsExportSetOutputFile(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportSetOutputFile(paramInt, paramArrayOfByte);
+    private static int GraphicsExportSetOutputFile(int ge, byte[] fsspec) {
+        return GraphicsExportManager.GraphicsExportSetOutputFile(ge, fsspec);
     }
 
-    private static int GraphicsExportSetOutputHandle(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetOutputHandle(paramInt1, paramInt2);
+    private static int GraphicsExportSetOutputHandle(int ge, int h) {
+        return GraphicsExportManager.GraphicsExportSetOutputHandle(ge, h);
     }
 
-    private static int GraphicsExportSetOutputOffsetAndMaxSize(int paramInt1, int paramInt2, int paramInt3, byte paramByte) {
-        return GraphicsExportManager.GraphicsExportSetOutputOffsetAndMaxSize(paramInt1, paramInt2, paramInt3, paramByte);
+    private static int GraphicsExportSetOutputOffsetAndMaxSize(int ge, int offset, int maxSize, byte truncate) {
+        return GraphicsExportManager.GraphicsExportSetOutputOffsetAndMaxSize(ge, offset, maxSize, truncate);
     }
 
-    private static int GraphicsExportGetOutputOffsetAndMaxSize(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportGetOutputOffsetAndMaxSize(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfByte);
+    private static int GraphicsExportGetOutputOffsetAndMaxSize(int ge, int[] offset, int[] maxSize, byte[] truncate) {
+        return GraphicsExportManager.GraphicsExportGetOutputOffsetAndMaxSize(ge, offset, maxSize, truncate);
     }
 
-    private static int GraphicsExportSetOutputFileTypeAndCreator(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportSetOutputFileTypeAndCreator(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsExportSetOutputFileTypeAndCreator(int ge, int fileType, int creator) {
+        return GraphicsExportManager.GraphicsExportSetOutputFileTypeAndCreator(ge, fileType, creator);
     }
 
-    private static int GraphicsExportGetOutputFileTypeAndCreator(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetOutputFileTypeAndCreator(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetOutputFileTypeAndCreator(int ge, int[] fileType, int[] creator) {
+        return GraphicsExportManager.GraphicsExportGetOutputFileTypeAndCreator(ge, fileType, creator);
     }
 
-    private static int GraphicsExportMayExporterReadInputData(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportMayExporterReadInputData(paramInt, paramArrayOfByte);
+    private static int GraphicsExportMayExporterReadInputData(int ge, byte[] mayReadInputData) {
+        return GraphicsExportManager.GraphicsExportMayExporterReadInputData(ge, mayReadInputData);
     }
 
-    private static int GraphicsExportGetInputDataSize(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputDataSize(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputDataSize(int ge, int[] size) {
+        return GraphicsExportManager.GraphicsExportGetInputDataSize(ge, size);
     }
 
-    private static int GraphicsExportReadInputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportReadInputData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+    private static int GraphicsExportReadInputData(int ge, byte[] dst, int offset, int size) {
+        return GraphicsExportManager.GraphicsExportReadInputData(ge, dst, offset, size);
     }
 
-    private static int GraphicsExportGetInputImageDimensions(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportGetInputImageDimensions(paramInt, paramArrayOfByte);
+    private static int GraphicsExportGetInputImageDimensions(int ge, byte[] rect) {
+        return GraphicsExportManager.GraphicsExportGetInputImageDimensions(ge, rect);
     }
 
-    private static int GraphicsExportGetInputImageDepth(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputImageDepth(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputImageDepth(int ge, int[] depth) {
+        return GraphicsExportManager.GraphicsExportGetInputImageDepth(ge, depth);
     }
 
-    private static int GraphicsExportDrawInputImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return GraphicsExportManager.GraphicsExportDrawInputImage(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2);
+    private static int GraphicsExportDrawInputImage(int ge, int gworld, int gdh, byte[] srcRect, byte[] dstRect) {
+        return GraphicsExportManager.GraphicsExportDrawInputImage(ge, gworld, gdh, srcRect, dstRect);
     }
 
-    private static int GraphicsExportSetInputOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportSetInputOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsExportSetInputOffsetAndLimit(int ge, int offset, int limit) {
+        return GraphicsExportManager.GraphicsExportSetInputOffsetAndLimit(ge, offset, limit);
     }
 
-    private static int GraphicsExportGetInputOffsetAndLimit(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetInputOffsetAndLimit(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetInputOffsetAndLimit(int ge, int[] offset, int[] limit) {
+        return GraphicsExportManager.GraphicsExportGetInputOffsetAndLimit(ge, offset, limit);
     }
 
-    private static int GraphicsExportRequestSettings(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportRequestSettings(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsExportRequestSettings(int ge, int filterProc, int refCon) {
+        return GraphicsExportManager.GraphicsExportRequestSettings(ge, filterProc, refCon);
     }
 
-    private static int GraphicsExportSetSettingsFromAtomContainer(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportSetSettingsFromAtomContainer(paramInt, paramArrayOfByte);
+    private static int GraphicsExportSetSettingsFromAtomContainer(int ge, byte[] container) {
+        return GraphicsExportManager.GraphicsExportSetSettingsFromAtomContainer(ge, container);
     }
 
-    private static int GraphicsExportGetDefaultFileTypeAndCreator(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetDefaultFileTypeAndCreator(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetDefaultFileTypeAndCreator(int ge, int[] fileType, int[] creator) {
+        return GraphicsExportManager.GraphicsExportGetDefaultFileTypeAndCreator(ge, fileType, creator);
     }
 
-    private static int GraphicsExportGetDefaultFileNameExtension(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetDefaultFileNameExtension(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetDefaultFileNameExtension(int ge, int[] extension) {
+        return GraphicsExportManager.GraphicsExportGetDefaultFileNameExtension(ge, extension);
     }
 
-    private static int GraphicsExportGetMIMETypeList(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetMIMETypeList(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetMIMETypeList(int ge, int[] container) {
+        return GraphicsExportManager.GraphicsExportGetMIMETypeList(ge, container);
     }
 
-    private static int GraphicsExportCanTranscode(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportCanTranscode(paramInt, paramArrayOfByte);
+    private static int GraphicsExportCanTranscode(int ge, byte[] canTranscode) {
+        return GraphicsExportManager.GraphicsExportCanTranscode(ge, canTranscode);
     }
 
-    private static int GraphicsExportDoTranscode(int paramInt) {
-        return GraphicsExportManager.GraphicsExportDoTranscode(paramInt);
+    private static int GraphicsExportDoTranscode(int ge) {
+        return GraphicsExportManager.GraphicsExportDoTranscode(ge);
     }
 
-    private static int GraphicsExportCanUseCompressor(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportCanUseCompressor(paramInt, paramArrayOfByte, paramArrayOfInt);
+    private static int GraphicsExportCanUseCompressor(int ge, byte[] use, int[] codecSettings) {
+        return GraphicsExportManager.GraphicsExportCanUseCompressor(ge, use, codecSettings);
     }
 
-    private static int GraphicsExportDoStandaloneExport(int paramInt) {
-        return GraphicsExportManager.GraphicsExportDoStandaloneExport(paramInt);
+    private static int GraphicsExportDoStandaloneExport(int ge) {
+        return GraphicsExportManager.GraphicsExportDoStandaloneExport(ge);
     }
 
-    private static int GraphicsExportSetDontRecompress(int paramInt, byte paramByte) {
-        return GraphicsExportManager.GraphicsExportSetDontRecompress(paramInt, paramByte);
+    private static int GraphicsExportSetDontRecompress(int ge, byte dontRecompress) {
+        return GraphicsExportManager.GraphicsExportSetDontRecompress(ge, dontRecompress);
     }
 
-    private static int GraphicsExportGetDontRecompress(int paramInt, byte[] paramArrayOfByte) {
-        return GraphicsExportManager.GraphicsExportGetDontRecompress(paramInt, paramArrayOfByte);
+    private static int GraphicsExportGetDontRecompress(int ge, byte[] dontRecompress) {
+        return GraphicsExportManager.GraphicsExportGetDontRecompress(ge, dontRecompress);
     }
 
-    private static int GraphicsExportSetInterlaceStyle(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetInterlaceStyle(paramInt1, paramInt2);
+    private static int GraphicsExportSetInterlaceStyle(int ge, int style) {
+        return GraphicsExportManager.GraphicsExportSetInterlaceStyle(ge, style);
     }
 
-    private static int GraphicsExportGetInterlaceStyle(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInterlaceStyle(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInterlaceStyle(int ge, int[] style) {
+        return GraphicsExportManager.GraphicsExportGetInterlaceStyle(ge, style);
     }
 
-    private static int GraphicsExportSetMetaData(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetMetaData(paramInt1, paramInt2);
+    private static int GraphicsExportSetMetaData(int ge, int userData) {
+        return GraphicsExportManager.GraphicsExportSetMetaData(ge, userData);
     }
 
-    private static int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetMetaData(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetMetaData(int ge, int[] userData) {
+        return GraphicsExportManager.GraphicsExportGetMetaData(ge, userData);
     }
 
-    private static int GraphicsExportSetTargetDataSize(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetTargetDataSize(paramInt1, paramInt2);
+    private static int GraphicsExportSetTargetDataSize(int ge, int size) {
+        return GraphicsExportManager.GraphicsExportSetTargetDataSize(ge, size);
     }
 
-    private static int GraphicsExportGetTargetDataSize(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetTargetDataSize(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetTargetDataSize(int ge, int[] size) {
+        return GraphicsExportManager.GraphicsExportGetTargetDataSize(ge, size);
     }
 
-    private static int GraphicsExportSetCompressionMethod(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetCompressionMethod(paramInt1, paramInt2);
+    private static int GraphicsExportSetCompressionMethod(int ge, int method) {
+        return GraphicsExportManager.GraphicsExportSetCompressionMethod(ge, method);
     }
 
-    private static int GraphicsExportGetCompressionMethod(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetCompressionMethod(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetCompressionMethod(int ge, int[] method) {
+        return GraphicsExportManager.GraphicsExportGetCompressionMethod(ge, method);
     }
 
-    private static int GraphicsExportSetCompressionQuality(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetCompressionQuality(paramInt1, paramInt2);
+    private static int GraphicsExportSetCompressionQuality(int ge, int quality) {
+        return GraphicsExportManager.GraphicsExportSetCompressionQuality(ge, quality);
     }
 
-    private static int GraphicsExportGetCompressionQuality(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetCompressionQuality(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetCompressionQuality(int ge, int[] quality) {
+        return GraphicsExportManager.GraphicsExportGetCompressionQuality(ge, quality);
     }
 
-    private static int GraphicsExportSetResolution(int paramInt1, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportSetResolution(paramInt1, paramInt2, paramInt3);
+    private static int GraphicsExportSetResolution(int ge, int hRes, int vRes) {
+        return GraphicsExportManager.GraphicsExportSetResolution(ge, hRes, vRes);
     }
 
-    private static int GraphicsExportGetResolution(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetResolution(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetResolution(int ge, int[] hRes, int[] vRes) {
+        return GraphicsExportManager.GraphicsExportGetResolution(ge, hRes, vRes);
     }
 
-    private static int GraphicsExportSetDepth(int paramInt1, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportSetDepth(paramInt1, paramInt2);
+    private static int GraphicsExportSetDepth(int ge, int depth) {
+        return GraphicsExportManager.GraphicsExportSetDepth(ge, depth);
     }
 
-    private static int GraphicsExportGetDepth(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetDepth(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetDepth(int ge, int[] depth) {
+        return GraphicsExportManager.GraphicsExportGetDepth(ge, depth);
     }
 
-    private static int GraphicsExportWriteOutputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return GraphicsExportManager.GraphicsExportWriteOutputData(paramInt1, paramArrayOfByte, paramInt2);
+    private static int GraphicsExportWriteOutputData(int ge, byte[] data, int size) {
+        return GraphicsExportManager.GraphicsExportWriteOutputData(ge, data, size);
     }
 
-    private static int GraphicsExportReadOutputData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3) {
-        return GraphicsExportManager.GraphicsExportReadOutputData(paramInt1, paramArrayOfByte, paramInt2, paramInt3);
+    private static int GraphicsExportReadOutputData(int ge, byte[] dst, int offset, int size) {
+        return GraphicsExportManager.GraphicsExportReadOutputData(ge, dst, offset, size);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 }

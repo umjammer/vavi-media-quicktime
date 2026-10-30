@@ -28,9 +28,9 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
      * @throws quicktime.sound.SoundException
      */
     public static CompressionInfo get(int compressionID, int format, int numChannels, int sampleSize) throws SoundException {
-        CompressionInfo localCompressionInfo = new CompressionInfo();
-        SoundException.checkError(GetCompressionInfo((short) compressionID, format, (short) numChannels, (short) sampleSize, localCompressionInfo.getBytes()));
-        return localCompressionInfo;
+        CompressionInfo compressionInfo = new CompressionInfo();
+        SoundException.checkError(GetCompressionInfo((short) compressionID, format, (short) numChannels, (short) sampleSize, compressionInfo.getBytes()));
+        return compressionInfo;
     }
 
     /**
@@ -170,7 +170,7 @@ public final class CompressionInfo extends QTByteObject implements SoundLib, Int
                 "]";
     }
 
-    private static short GetCompressionInfo(short compressionID, int paramInt, short paramShort2, short paramShort3, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GetCompressionInfo(compressionID, paramInt, paramShort2, paramShort3, paramArrayOfByte);
+    private static short GetCompressionInfo(short compressionID, int format, short numChannels, short sampleSize, byte[] info) {
+        return ImageCompressionManager.GetCompressionInfo(compressionID, format, numChannels, sampleSize, info);
     }
 }

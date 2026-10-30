@@ -33,9 +33,9 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
      * @param hRes the horizotal resolution e.g 72 dpi.
      * @param vRes the vertical resolution e.g 72 dpi
      */
-    public OpenCPicParams(QDRect paramQDRect, float hRes, float vRes) {
+    public OpenCPicParams(QDRect rect, float hRes, float vRes) {
         super(kNativeSize);
-        _setSrcRect(paramQDRect);
+        _setSrcRect(rect);
         _setHRes(hRes);
         _setVRes(vRes);
         setShortAt(16, (short) -2);
@@ -44,18 +44,18 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
     /**
      * The OpenCPicParams as a new object.
      */
-    public OpenCPicParams(QDRect paramQDRect) {
-        this(paramQDRect, 72.0F, 72.0F);
+    public OpenCPicParams(QDRect rect) {
+        this(rect, 72.0F, 72.0F);
     }
 
-    private OpenCPicParams(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private OpenCPicParams(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int i = 0; i < 8; i += 2) {
             setShortInArray(getBytes(), i, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, i)));
         }
@@ -66,16 +66,16 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         for (int i = 0; i < 8; i += 2) {
-            setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
+            setShortInArray(movie, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
         for (int i = 8; i < 16; i += 4) {
-            setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
+            setIntInArray(movie, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
-        setShortInArray(arrayOfByte, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 16)));
-        paramObjectOutputStream.write(arrayOfByte);
+        setShortInArray(movie, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 16)));
+        out.write(movie);
     }
 
     /**
@@ -83,9 +83,9 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
      * @return The bounding rectangle.
      */
     public QDRect getSrcRect() {
-        byte[] arrayOfByte = new byte[8];
-        getBytesAt(0, 8, arrayOfByte, 0);
-        return QDRect.fromArray(arrayOfByte, 8);
+        byte[] destArray = new byte[8];
+        getBytesAt(0, 8, destArray, 0);
+        return QDRect.fromArray(destArray, 8);
     }
 
     /**
@@ -104,16 +104,16 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
         return QTUtils.Fix2X(getIntAt(12));
     }
 
-    private void _setSrcRect(QDRect paramQDRect) {
-        setBytesAt(0, 8, paramQDRect.getBytes(), 0);
+    private void _setSrcRect(QDRect rect) {
+        setBytesAt(0, 8, rect.getBytes(), 0);
     }
 
-    private void _setHRes(float paramFloat) {
-        setIntAt(8, QTUtils.X2Fix(paramFloat));
+    private void _setHRes(float hRes) {
+        setIntAt(8, QTUtils.X2Fix(hRes));
     }
 
-    private void _setVRes(float paramFloat) {
-        setIntAt(12, QTUtils.X2Fix(paramFloat));
+    private void _setVRes(float vRes) {
+        setIntAt(12, QTUtils.X2Fix(vRes));
     }
 
     /**
@@ -132,19 +132,19 @@ public final class OpenCPicParams extends QTByteObject implements PrimitivesLib,
         return getClass().getName() + "[Bounds=" + getSrcRect() + "]";
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 }

@@ -20,9 +20,9 @@ public final class MovieInfo {
      */
     public String resourceName;
 
-    void setMovieInfo(int paramInt, boolean paramBoolean, String paramString) {
-        this.resID = paramInt;
-        this.dataRefWasChanged = paramBoolean;
-        this.resourceName = paramString;
+    void setMovieInfo(int resID, boolean dataRefWasChanged, String resourceName) {
+        this.resID = resID;
+        this.dataRefWasChanged = dataRefWasChanged;
+        this.resourceName = resourceName;
     }
 }

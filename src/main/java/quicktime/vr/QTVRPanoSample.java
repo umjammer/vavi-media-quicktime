@@ -36,8 +36,8 @@ public final class QTVRPanoSample extends QTVRAtom {
      * Creates a QTVRPanoSample object from a byte array
      * Used in cloning
      */
-    public QTVRPanoSample(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRPanoSample(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -46,17 +46,17 @@ public final class QTVRPanoSample extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRPanoSample localQTVRPanoSample = new QTVRPanoSample();
-        paramObjectInputStream.read(localQTVRPanoSample.getBytes());
-        System.arraycopy(localQTVRPanoSample.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRPanoSample qtvrPanoSample = new QTVRPanoSample();
+        in.read(qtvrPanoSample.getBytes());
+        System.arraycopy(qtvrPanoSample.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRPanoSample localQTVRPanoSample = (QTVRPanoSample) clone();
-        paramObjectOutputStream.write(localQTVRPanoSample.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRPanoSample qtvrPanoSample = (QTVRPanoSample) clone();
+        out.write(qtvrPanoSample.getBytes());
     }
 
     /**
@@ -66,26 +66,26 @@ public final class QTVRPanoSample extends QTVRAtom {
     public Object clone() {
         try {
             return new QTVRPanoSample(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 13);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(56, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-        EndianFlipSpec localEndianFlipSpec4 = new EndianFlipSpec(60, 4, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec4);
-        EndianFlipSpec localEndianFlipSpec5 = new EndianFlipSpec(68, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec5);
-        EndianFlipSpec localEndianFlipSpec6 = new EndianFlipSpec(72, 4, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec6);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 4, 13);
+        ed.addFlipSpec(endianFlipSpec2);
+        EndianFlipSpec endianFlipSpec3 = new EndianFlipSpec(56, 2, 2);
+        ed.addFlipSpec(endianFlipSpec3);
+        EndianFlipSpec endianFlipSpec4 = new EndianFlipSpec(60, 4, 2);
+        ed.addFlipSpec(endianFlipSpec4);
+        EndianFlipSpec endianFlipSpec5 = new EndianFlipSpec(68, 2, 2);
+        ed.addFlipSpec(endianFlipSpec5);
+        EndianFlipSpec endianFlipSpec6 = new EndianFlipSpec(72, 4, 3);
+        ed.addFlipSpec(endianFlipSpec6);
+        return ed;
     }
 
     /**
@@ -119,8 +119,8 @@ public final class QTVRPanoSample extends QTVRAtom {
         return getIntAt(8);
     }
 
-    public void setHotSpotRefTrackIndex(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setHotSpotRefTrackIndex(int hotSpotRefTrackIndex) {
+        setIntAt(8, hotSpotRefTrackIndex);
     }
 
     /**

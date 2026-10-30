@@ -39,8 +39,8 @@ public class Compositor extends SWCompositor {
     private static Protocol makeP() {
         try {
             return new Protocol(Class.forName("quicktime.app.image.ImageSpec"));
-        } catch (ClassNotFoundException localClassNotFoundException) {
-            throw new QTRuntimeException(localClassNotFoundException.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new QTRuntimeException(e.getMessage());
         }
     }
 
@@ -238,12 +238,12 @@ public class Compositor extends SWCompositor {
         int i = 1;
         if ((member instanceof Layerable))
             i = ((Layerable) member).getLayer();
-        boolean bool = true;
+        boolean initiallyVisible = true;
         if ((member instanceof TwoDSprite)) {
-            bool = ((TwoDSprite) member).getVisible();
+            initiallyVisible = ((TwoDSprite) member).getVisible();
         } else if ((member instanceof TwoDSpriteInfo))
-            bool = ((TwoDSpriteInfo) member).getVisible();
-        return addMember(member, i, bool);
+            initiallyVisible = ((TwoDSpriteInfo) member).getVisible();
+        return addMember(member, i, initiallyVisible);
     }
 
     /**
@@ -260,12 +260,12 @@ public class Compositor extends SWCompositor {
      */
     @Override
     public boolean addMember(Object member, int layer) throws QTException {
-        boolean bool = true;
+        boolean initiallyVisible = true;
         if ((member instanceof TwoDSprite)) {
-            bool = ((TwoDSprite) member).getVisible();
+            initiallyVisible = ((TwoDSprite) member).getVisible();
         } else if ((member instanceof TwoDSpriteInfo))
-            bool = ((TwoDSpriteInfo) member).getVisible();
-        return addMember(member, layer, bool);
+            initiallyVisible = ((TwoDSpriteInfo) member).getVisible();
+        return addMember(member, layer, initiallyVisible);
     }
 
     /**
@@ -285,26 +285,26 @@ public class Compositor extends SWCompositor {
         if (hasMember(member)) {
             return true;
         }
-        TwoDSprite localTwoDSprite = null;
+        TwoDSprite twoDSprite = null;
         if ((member instanceof TwoDSprite)) {
-            localTwoDSprite = (TwoDSprite) member;
-            localTwoDSprite.setLayer(layer);
-            localTwoDSprite.setVisible(initiallyVisible);
+            twoDSprite = (TwoDSprite) member;
+            twoDSprite.setLayer(layer);
+            twoDSprite.setVisible(initiallyVisible);
         } else {
-            ImageSpec localImageSpec = (ImageSpec) member;
-            GraphicsMode localGraphicsMode = null;
+            ImageSpec image = (ImageSpec) member;
+            GraphicsMode graphicsMode = null;
             if ((member instanceof Compositable))
-                localGraphicsMode = ((Compositable) member).getGraphicsMode();
-            Matrix localMatrix;
+                graphicsMode = ((Compositable) member).getGraphicsMode();
+            Matrix matrix;
             if ((member instanceof Transformable)) {
-                localMatrix = ((Transformable) member).getMatrix();
+                matrix = ((Transformable) member).getMatrix();
             } else
-                localMatrix = new Matrix();
-            localTwoDSprite = new TwoDSprite(localImageSpec, localMatrix, initiallyVisible, layer, localGraphicsMode);
+                matrix = new Matrix();
+            twoDSprite = new TwoDSprite(image, matrix, initiallyVisible, layer, graphicsMode);
         }
-        this.membersTable.put(member, localTwoDSprite);
-        this.spritesTable.put(localTwoDSprite, member);
-        postProcessAdd(member, localTwoDSprite);
+        this.membersTable.put(member, twoDSprite);
+        this.spritesTable.put(twoDSprite, member);
+        postProcessAdd(member, twoDSprite);
         return true;
     }
 
@@ -330,11 +330,11 @@ public class Compositor extends SWCompositor {
      */
     @Override
     public int getFrontLayer() throws QTException {
-        Enumeration localEnumeration = sprites();
+        Enumeration enumeration = sprites();
         int i = Integer.MAX_VALUE;
-        while (localEnumeration.hasMoreElements()) {
-            TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-            int j = localTwoDSprite.getLayer();
+        while (enumeration.hasMoreElements()) {
+            TwoDSprite twoDSprite = (TwoDSprite) enumeration.nextElement();
+            int j = twoDSprite.getLayer();
             if (j < i)
                 i = j;
         }
@@ -351,11 +351,11 @@ public class Compositor extends SWCompositor {
      */
     @Override
     public int getBackLayer() throws QTException {
-        Enumeration localEnumeration = sprites();
+        Enumeration enumeration = sprites();
         int i = Integer.MIN_VALUE;
-        while (localEnumeration.hasMoreElements()) {
-            TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-            int j = localTwoDSprite.getLayer();
+        while (enumeration.hasMoreElements()) {
+            TwoDSprite twoDSprite = (TwoDSprite) enumeration.nextElement();
+            int j = twoDSprite.getLayer();
             if (j > i)
                 i = j;
         }
@@ -375,9 +375,9 @@ public class Compositor extends SWCompositor {
     @Override
     public void removeMember(Object member) throws QTException {
         if (this.membersTable.containsKey(member)) {
-            TwoDSprite localTwoDSprite = (TwoDSprite) this.membersTable.remove(member);
-            this.spritesTable.remove(localTwoDSprite);
-            postProcessRemove(member, localTwoDSprite);
+            TwoDSprite twoDSprite = (TwoDSprite) this.membersTable.remove(member);
+            this.spritesTable.remove(twoDSprite);
+            postProcessRemove(member, twoDSprite);
         }
     }
 }

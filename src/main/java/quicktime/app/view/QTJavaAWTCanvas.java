@@ -76,25 +76,25 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
 
     private AWTCanvasHelper qtcHelper;
 
-    public QTJavaAWTCanvas(SGVideoChannel paramSGVideoChannel) throws QTException {
+    public QTJavaAWTCanvas(SGVideoChannel channel) throws QTException {
         this();
-        this.channel = paramSGVideoChannel;
-        setSGChannel(paramSGVideoChannel);
+        this.channel = channel;
+        setSGChannel(channel);
     }
 
-    QTJavaAWTCanvas(Movie paramMovie) throws QTException {
+    QTJavaAWTCanvas(Movie mov) throws QTException {
         this();
-        setMovie(paramMovie);
+        setMovie(mov);
     }
 
-    QTJavaAWTCanvas(GraphicsImporter paramGraphicsImporter) throws QTException {
+    QTJavaAWTCanvas(GraphicsImporter img) throws QTException {
         this();
-        setImage(paramGraphicsImporter);
+        setImage(img);
     }
 
-    QTJavaAWTCanvas(MovieController paramMovieController) throws QTException {
+    QTJavaAWTCanvas(MovieController movieController) throws QTException {
         this();
-        setMovieController(paramMovieController);
+        setMovieController(movieController);
     }
 
     private QTJavaAWTCanvas() {
@@ -161,10 +161,10 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
 
     private boolean moved;
 
-    public void displayChanged(int paramInt1, int paramInt2) {
-        Rectangle localRectangle = new Rectangle(getLocation(), new Dimension(this.initialWidth, this.initialHeight));
-        this.initialWidth = Math.max(paramInt1, 0);
-        this.initialHeight = Math.max(paramInt2, 0);
+    public void displayChanged(int width, int height) {
+        Rectangle rectangle = new Rectangle(getLocation(), new Dimension(this.initialWidth, this.initialHeight));
+        this.initialWidth = Math.max(width, 0);
+        this.initialHeight = Math.max(height, 0);
         if (!this.appHasSetPreferredSize) {
             this.prefWidth = this.initialWidth;
             this.prefHeight = this.initialHeight;
@@ -172,11 +172,11 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     }
 
     public final QDGraphics getPort() throws QTUnknownOSException, NativeGraphicsException {
-        QDGraphics localQDGraphics = null;
+        QDGraphics qdGraphics = null;
         if (isVisible()) {
-            localQDGraphics = this.ng != null ? this.ng.getGWorld() : null;
+            qdGraphics = this.ng != null ? this.ng.getGWorld() : null;
         }
-        return localQDGraphics == null ? QDGraphics.scratch : localQDGraphics;
+        return qdGraphics == null ? QDGraphics.scratch : qdGraphics;
     }
 
     public final Point getNGLocation() throws QTUnknownOSException, NativeGraphicsException {
@@ -190,10 +190,10 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
         return this.ng;
     }
 
-    public final QDPoint translatePoint(int paramInt1, int paramInt2) throws QTUnknownOSException, NativeGraphicsException {
-        Point localPoint = getNGLocation();
+    public final QDPoint translatePoint(int x, int y) throws QTUnknownOSException, NativeGraphicsException {
+        Point ngLocation = getNGLocation();
 
-        return new QDPoint(paramInt1 + localPoint.x, paramInt2 + localPoint.y);
+        return new QDPoint(x + ngLocation.x, y + ngLocation.y);
     }
 
     @Override
@@ -212,50 +212,50 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     }
 
     @Override
-    public synchronized void setMovieController(MovieController paramMovieController) throws QTException {
-        paramMovieController.getMovie().setGWorld(QDGraphics.scratch, null);
-        this.qtcHelper.doSetMovieController(paramMovieController,
-                                            paramMovieController != null ? paramMovieController.getBounds() : null,
+    public synchronized void setMovieController(MovieController movieController) throws QTException {
+        movieController.getMovie().setGWorld(QDGraphics.scratch, null);
+        this.qtcHelper.doSetMovieController(movieController,
+                                            movieController != null ? movieController.getBounds() : null,
                                             getMinimumSize(),
                                             getMaximumSize(),
                                             false);
     }
 
     @Override
-    public synchronized void setMovie(Movie paramMovie) throws QTException {
-        this.qtcHelper.doSetMovie(paramMovie,
-                                  paramMovie != null ? paramMovie.getBounds() : null,
+    public synchronized void setMovie(Movie mov) throws QTException {
+        this.qtcHelper.doSetMovie(mov,
+                                  mov != null ? mov.getBounds() : null,
                                   getMinimumSize(),
                                   getMaximumSize(),
                                   false);
     }
 
     @Override
-    public synchronized void setImage(GraphicsImporter paramGraphicsImporter) throws QTException {
-        this.qtcHelper.doSetGraphicsImporter(paramGraphicsImporter,
-                                             paramGraphicsImporter != null ? paramGraphicsImporter.getBoundsRect() : null,
+    public synchronized void setImage(GraphicsImporter img) throws QTException {
+        this.qtcHelper.doSetGraphicsImporter(img,
+                                             img != null ? img.getBoundsRect() : null,
                                              getMinimumSize(),
                                              getMaximumSize(),
                                              false);
     }
 
-    public synchronized void setSGChannel(SGVideoChannel paramSGVideoChannel) throws QTException {
-        this.grabber = paramSGVideoChannel.getSequenceGrabber();
+    public synchronized void setSGChannel(SGVideoChannel sgChannel) throws QTException {
+        this.grabber = sgChannel.getSequenceGrabber();
         this.qtcHelper.doSetSequenceGrabber(this.grabber,
-                                            this.grabber != null ? paramSGVideoChannel.getBounds() : null,
+                                            this.grabber != null ? sgChannel.getBounds() : null,
                                             getMinimumSize(),
                                             getMaximumSize(),
                                             false);
     }
 
-    void setInitialWidthAndHeight(QDRect paramQDRect, Dimension paramDimension1, Dimension paramDimension2) {
-        this.initialWidth = paramQDRect.getWidth();
-        this.initialHeight = paramQDRect.getHeight();
+    void setInitialWidthAndHeight(QDRect rect, Dimension minSize, Dimension maxSize) {
+        this.initialWidth = rect.getWidth();
+        this.initialHeight = rect.getHeight();
 
-        this.minWidth = Math.max(paramDimension1.width, 0);
-        this.minHeight = Math.max(paramDimension1.height, 0);
-        this.maxWidth = Math.max(paramDimension2.width, this.minWidth);
-        this.maxHeight = Math.max(paramDimension2.height, this.minHeight);
+        this.minWidth = Math.max(minSize.width, 0);
+        this.minHeight = Math.max(minSize.height, 0);
+        this.maxWidth = Math.max(maxSize.width, this.minWidth);
+        this.maxHeight = Math.max(maxSize.height, this.minHeight);
         if (this.initialWidth < this.minWidth) {
             this.initialWidth = this.minWidth;
         } else if (this.initialWidth > this.maxWidth) {
@@ -273,27 +273,27 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     }
 
     final void doParentLayout() {
-        Container localContainer = getParent();
-        if (localContainer != null) {
+        Container parent = getParent();
+        if (parent != null) {
             invalidate();
-            localContainer.validate();
+            parent.validate();
             return;
         }
         super.reshape(this.currentX, this.currentY, this.currentWidth, this.currentHeight);
     }
 
     @Override
-    public void setMinimumSize(Dimension paramDimension) {
-        if (paramDimension == null) {
+    public void setMinimumSize(Dimension minimumSize) {
+        if (minimumSize == null) {
             setMinimumSize(0, 0);
         } else {
-            setMinimumSize(paramDimension.width, paramDimension.height);
+            setMinimumSize(minimumSize.width, minimumSize.height);
         }
     }
 
-    public void setMinimumSize(int paramInt1, int paramInt2) {
-        this.minWidth = Math.max(paramInt1, 0);
-        this.minHeight = Math.max(paramInt2, 0);
+    public void setMinimumSize(int width, int height) {
+        this.minWidth = Math.max(width, 0);
+        this.minHeight = Math.max(height, 0);
         if ((this.currentWidth < this.minWidth) || (this.currentHeight < this.minHeight)) {
             doParentLayout();
         }
@@ -314,28 +314,28 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     }
 
     @Override
-    public void setPreferredSize(Dimension paramDimension) {
-        if (paramDimension == null) {
+    public void setPreferredSize(Dimension preferredSize) {
+        if (preferredSize == null) {
             setPreferredSize(this.initialWidth, this.initialHeight);
         } else {
-            setPreferredSize(paramDimension.width, paramDimension.height);
+            setPreferredSize(preferredSize.width, preferredSize.height);
         }
     }
 
-    public void setPreferredSize(int paramInt1, int paramInt2) {
-        if (paramInt1 < 0) {
+    public void setPreferredSize(int width, int height) {
+        if (width < 0) {
             this.prefWidth = this.initialWidth;
             this.appHasSetPreferredSize = false;
         } else {
-            this.prefWidth = paramInt1;
+            this.prefWidth = width;
             this.appHasSetPreferredSize = true;
         }
 
-        if (paramInt2 < 0) {
+        if (height < 0) {
             this.prefHeight = this.initialHeight;
             this.appHasSetPreferredSize = false;
         } else {
-            this.prefHeight = paramInt2;
+            this.prefHeight = height;
             this.appHasSetPreferredSize = true;
         }
 
@@ -350,18 +350,18 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     }
 
     @Override
-    public void setMaximumSize(Dimension paramDimension) {
-        if (paramDimension == null) {
-            Dimension localDimension = Toolkit.getDefaultToolkit().getScreenSize();
-            setMaximumSize(localDimension.width, localDimension.height);
+    public void setMaximumSize(Dimension maximumSize) {
+        if (maximumSize == null) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            setMaximumSize(screenSize.width, screenSize.height);
         } else {
-            setMaximumSize(paramDimension.width, paramDimension.height);
+            setMaximumSize(maximumSize.width, maximumSize.height);
         }
     }
 
-    public void setMaximumSize(int paramInt1, int paramInt2) {
-        this.maxWidth = Math.max(paramInt1, 0);
-        this.maxHeight = Math.max(paramInt2, 0);
+    public void setMaximumSize(int width, int height) {
+        this.maxWidth = Math.max(width, 0);
+        this.maxHeight = Math.max(height, 0);
         if ((this.currentWidth > this.maxWidth) || (this.currentHeight > this.maxHeight)) {
             doParentLayout();
         }
@@ -372,55 +372,55 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
         return new Dimension(this.maxWidth, this.maxHeight);
     }
 
-    private void setCurrentWidthHeight(int paramInt1, int paramInt2) {
-        if (paramInt1 < this.minWidth) {
-            paramInt1 = this.minWidth;
-        } else if (paramInt1 > this.maxWidth)
-            paramInt1 = this.maxWidth;
-        if (paramInt2 < this.minHeight) {
-            paramInt2 = this.minHeight;
-        } else if (paramInt2 > this.maxHeight) {
-            paramInt2 = this.maxHeight;
+    private void setCurrentWidthHeight(int width, int height) {
+        if (width < this.minWidth) {
+            width = this.minWidth;
+        } else if (width > this.maxWidth)
+            width = this.maxWidth;
+        if (height < this.minHeight) {
+            height = this.minHeight;
+        } else if (height > this.maxHeight) {
+            height = this.maxHeight;
         }
-        this.currentWidth = paramInt1;
-        this.currentHeight = paramInt2;
+        this.currentWidth = width;
+        this.currentHeight = height;
     }
 
-    private void setCurrentXY(int paramInt1, int paramInt2) {
-        this.currentX = paramInt1;
-        this.currentY = paramInt2;
-    }
-
-    @Override
-    public void setSize(Dimension paramDimension) {
-        setSize(paramDimension.width, paramDimension.height);
+    private void setCurrentXY(int x, int y) {
+        this.currentX = x;
+        this.currentY = y;
     }
 
     @Override
-    public void setSize(int paramInt1, int paramInt2) {
-        setBounds(this.currentX, this.currentY, paramInt1, paramInt2);
+    public void setSize(Dimension size) {
+        setSize(size.width, size.height);
+    }
+
+    @Override
+    public void setSize(int width, int height) {
+        setBounds(this.currentX, this.currentY, width, height);
     }
 
     /**
      * @deprecated
      */
     @Override
-    public final void reshape(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        setBounds(paramInt1, paramInt2, paramInt3, paramInt4);
+    public final void reshape(int x, int y, int width, int height) {
+        setBounds(x, y, width, height);
     }
 
     @Override
-    public final synchronized void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public final synchronized void setBounds(int x, int y, int width, int height) {
         boolean bool = isValid();
 
         int i = this.currentWidth;
         int j = this.currentHeight;
-        setCurrentWidthHeight(paramInt3, paramInt4);
+        setCurrentWidthHeight(width, height);
         int k = (i != this.currentWidth) || (j != this.currentHeight) ? 1 : 0;
 
         int m = this.currentX;
         int n = this.currentY;
-        setCurrentXY(paramInt1, paramInt2);
+        setCurrentXY(x, y);
 
         super.reshape(this.currentX, this.currentY, this.currentWidth, this.currentHeight);
 
@@ -435,15 +435,15 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     }
 
     @Override
-    public void paint(Graphics paramGraphics) {
+    public void paint(Graphics graphics) {
         if ((isValid()) && (this.qtcHelper != null)) {
-            QDGraphics localQDGraphics = null;
-            Region localRegion = null;
+            QDGraphics port = null;
+            Region clip = null;
             try {
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                    localQDGraphics = getPort();
-                    localRegion = localQDGraphics.getClip();
-                    localQDGraphics.clipRect();
+                    port = getPort();
+                    clip = port.getClip();
+                    port.clipRect();
                 }
                 if ((this.movie != null) || (this.graphicsImporter != null) || (this.grabber != null)) {
                     this.qtcHelper.doSetBounds();
@@ -455,10 +455,10 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
                         this.qtcHelper.redraw(null);
                     }
                 }
-            } catch (QTException localQTException) {
+            } catch (QTException e) {
             } finally {
-                if ((localQDGraphics != null) && (localRegion != null))
-                    localQDGraphics.setClip(localRegion);
+                if ((port != null) && (clip != null))
+                    port.setClip(clip);
             }
         } else {
             doParentLayout();
@@ -471,40 +471,40 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
     ComponentListener clientListener;
 
     @Override
-    public void update(Graphics paramGraphics) {
-        super.update(paramGraphics);
+    public void update(Graphics graphics) {
+        super.update(graphics);
         if (QTSession.isCurrentOS(4)) {
-            paint(paramGraphics);
+            paint(graphics);
         } else if (this.deferRedraw) {
-            paint(paramGraphics);
+            paint(graphics);
         }
     }
 
     @Override
-    public synchronized void setVisible(boolean paramBoolean) {
-        super.setVisible(paramBoolean);
+    public synchronized void setVisible(boolean visible) {
+        super.setVisible(visible);
         try {
-            if (paramBoolean) {
+            if (visible) {
                 this.qtcHelper.doSetGWorld(true);
                 doParentLayout();
             } else {
                 this.qtcHelper.doSetGWorld(false);
-                Container localContainer = getParent();
-                if (localContainer != null) {
-                    localContainer.repaint();
+                Container parent = getParent();
+                if (parent != null) {
+                    parent.repaint();
                 }
             }
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this.qtcHelper, "setGWorld");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this.qtcHelper, "setGWorld");
         }
     }
 
-    public void addQTClientListener(ComponentListener paramComponentListener) {
-        this.clientListener = AWTEventMulticaster.add(this.clientListener, paramComponentListener);
+    public void addQTClientListener(ComponentListener componentListener) {
+        this.clientListener = AWTEventMulticaster.add(this.clientListener, componentListener);
     }
 
-    public void removeQTClientListener(ComponentListener paramComponentListener) {
-        this.clientListener = AWTEventMulticaster.remove(this.clientListener, paramComponentListener);
+    public void removeQTClientListener(ComponentListener componentListener) {
+        this.clientListener = AWTEventMulticaster.remove(this.clientListener, componentListener);
     }
 
     @Override
@@ -526,9 +526,9 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
                     }
                     QTSession.addActiveCanvas(this);
                 }
-            } catch (QTException localQTException) {
+            } catch (QTException e) {
                 this.qtcHelper.doRemoveClient();
-                throw new QTRuntimeException(localQTException);
+                throw new QTRuntimeException(e);
             }
             this.addDone = true;
         }
@@ -542,9 +542,9 @@ class QTJavaAWTCanvas extends Canvas implements QTComponent {
                     this.qtcHelper.doSetGWorld(false);
                     this.qtcHelper.removedFrom();
                     QTSession.removeActiveCanvas(this);
-                } catch (QTException localQTException) {
+                } catch (QTException e) {
                     this.qtcHelper.doRemoveClient();
-                    throw new QTRuntimeException(localQTException);
+                    throw new QTRuntimeException(e);
                 } finally {
                     if ((QTSession.isCurrentOS(2)) && (this.ng != null)) {
                         synchronized (QTNative.globalsLock) {

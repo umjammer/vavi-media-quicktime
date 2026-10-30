@@ -13,35 +13,35 @@ public abstract class QTObject {
 
     static boolean qtIsNOTInitialized = true;
 
-    public static int ID(QTObject paramQTObject) {
-        return paramQTObject == null ? 0 : paramQTObject.nativeRep;
+    public static int ID(QTObject qtObject) {
+        return qtObject == null ? 0 : qtObject.nativeRep;
     }
 
-    protected QTObject(int paramInt) {
-        this(paramInt, 0);
+    protected QTObject(int nativeRep) {
+        this(nativeRep, 0);
     }
 
-    protected QTObject(int paramInt, Object paramObject) {
-        this(paramInt, paramObject, 0);
+    protected QTObject(int nativeRep, Object ref) {
+        this(nativeRep, ref, 0);
     }
 
-    protected QTObject(int paramInt1, Object paramObject, int paramInt2) {
+    protected QTObject(int nativeRep, Object ref, int ownerID) {
         _doSC();
-        this.nativeRep = paramInt1;
-        this.ref = paramObject;
-        if (paramObject == null) {
-            if (paramInt1 == 0)
+        this.nativeRep = nativeRep;
+        this.ref = ref;
+        if (ref == null) {
+            if (nativeRep == 0)
                 throw new QTNullPointerException("The QT native object represented by this QTJava object is not valid:" + getClass().getName());
-            QTObjectManagement.add(this, this.nativeRep, paramInt2);
+            QTObjectManagement.add(this, this.nativeRep, ownerID);
         }
     }
 
-    protected QTObject(int paramInt1, int paramInt2) {
-        if (paramInt1 == 0)
+    protected QTObject(int nativeRep, int ownerID) {
+        if (nativeRep == 0)
             throw new QTNullPointerException("The QT native object represented by this QTJava object is not valid:" + getClass().getName());
         _doSC();
-        this.nativeRep = paramInt1;
-        QTObjectManagement.add(this, this.nativeRep, paramInt2);
+        this.nativeRep = nativeRep;
+        QTObjectManagement.add(this, this.nativeRep, ownerID);
     }
 
     private transient int nativeRep = 0;
@@ -52,12 +52,12 @@ public abstract class QTObject {
 
     protected final int _ID() {
         if (qtIsNOTInitialized || this.nativeRep == 0 || sessionAllocated != QTSession.sessionID) {
-            String str = getClass().getName();
+            String name = getClass().getName();
             if (qtIsNOTInitialized)
-                throw new QTNullPointerException("QuickTime MUST be initialized:" + str);
+                throw new QTNullPointerException("QuickTime MUST be initialized:" + name);
             if (this.nativeRep == 0)
-                throw new QTNullPointerException("The QT native object represented by this QTJava object is no longer valid:" + str);
-            throw new QTNullPointerException("This QTJava object was allocated in a previous QTSession and is no longer valid:" + str);
+                throw new QTNullPointerException("The QT native object represented by this QTJava object is no longer valid:" + name);
+            throw new QTNullPointerException("This QTJava object was allocated in a previous QTSession and is no longer valid:" + name);
         }
         return this.nativeRep;
     }
@@ -92,8 +92,8 @@ public abstract class QTObject {
     public void disposeQTObject() throws QTException {
         try {
             disposeNative();
-        } catch (Throwable localThrowable) {
-            throw new QTException(localThrowable.toString());
+        } catch (Throwable e) {
+            throw new QTException(e.toString());
         }
     }
 
@@ -104,11 +104,11 @@ public abstract class QTObject {
      * Indicates whether some other object is equal to this one.
      * If true, indicates that the two objects refer to the same memory.
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object qtObject) {
+        if (this == qtObject)
             return true;
-        if ((paramObject != null) && ((paramObject instanceof QTObject))) {
-            return this.nativeRep == ID((QTObject) paramObject);
+        if ((qtObject != null) && ((qtObject instanceof QTObject))) {
+            return this.nativeRep == ID((QTObject) qtObject);
         }
         return false;
     }
@@ -128,12 +128,12 @@ public abstract class QTObject {
         }
     }
 
-    protected final void setNR(int paramInt) {
+    protected final void setNR(int nr) {
         if (this.ref == null) {
             throw new QTRuntimeException("Cannot reset a disposable reference " + getClass().getName());
         }
-        if (this.nativeRep == paramInt)
+        if (this.nativeRep == nr)
             return;
-        this.nativeRep = paramInt;
+        this.nativeRep = nr;
     }
 }

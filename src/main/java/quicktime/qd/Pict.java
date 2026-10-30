@@ -59,7 +59,7 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      */
     public static Pict thumbnailFromQDGraphics(QDGraphics qd, QDRect src, int colorDepth) throws QTException {
-        Pict localPict = new Pict(4, false);
+        Pict thumbnail = new Pict(4, false);
         if (qd == null) {
             throw new StdQTException(-50);
         }
@@ -70,12 +70,12 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
             SetGWorld(QTObject.ID(qd), 0);
             int j = GetGWorldPixMap(QTObject.ID(qd));
             LockPixels(j);
-            i = MakeThumbnailFromPixMap(j, src.getRect(), (short) colorDepth, QTObject.ID(localPict), 0);
+            i = MakeThumbnailFromPixMap(j, src.getRect(), (short) colorDepth, QTObject.ID(thumbnail), 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         QDException.checkError(i);
-        return localPict;
+        return thumbnail;
     }
 
     /**
@@ -136,9 +136,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @see quicktime.streaming.Presentation#getPicture(quicktime.streaming.Stream)
      */
     public static Pict fromPresentation(Presentation p, Stream s) throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(QTSPresGetPicture(QTObject.ID(p), QTObject.ID(s), arrayOfInt));
-        return arrayOfInt[0] == 0 ? null : new Pict(arrayOfInt[0]);
+        int[] picture = new int[1];
+        StdQTException.checkError(QTSPresGetPicture(QTObject.ID(p), QTObject.ID(s), picture));
+        return picture[0] == 0 ? null : new Pict(picture[0]);
     }
 
     /**
@@ -157,11 +157,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.sg.SequenceGrabber#grabPict(quicktime.qd.QDRect, int, int)
      */
-    public static Pict fromSequenceGrabber(SequenceGrabber paramSequenceGrabber, QDRect bounds, int offscreenDepth, int grabPictFlags) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = SGGrabPict(QTObject.ID(paramSequenceGrabber), arrayOfInt, bounds.getRect(), (short) offscreenDepth, grabPictFlags);
+    public static Pict fromSequenceGrabber(SequenceGrabber sg, QDRect bounds, int offscreenDepth, int grabPictFlags) throws QTException {
+        int[] pict = new int[1];
+        int i = SGGrabPict(QTObject.ID(sg), pict, bounds.getRect(), (short) offscreenDepth, grabPictFlags);
         StdQTException.checkError(i);
-        return arrayOfInt[0] == 0 ? null : new Pict(arrayOfInt[0]);
+        return pict[0] == 0 ? null : new Pict(pict[0]);
     }
 
     /**
@@ -171,11 +171,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsImporter#getAsPicture()
      */
-    public static Pict fromGraphicsImporter(GraphicsImporter paramGraphicsImporter) throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsImportGetAsPicture(QTObject.ID(paramGraphicsImporter), arrayOfInt);
+    public static Pict fromGraphicsImporter(GraphicsImporter gi) throws QTException {
+        int[] pict = { 0 };
+        int i = GraphicsImportGetAsPicture(QTObject.ID(gi), pict);
         StdQTException.checkError(i);
-        return new Pict(arrayOfInt[0]);
+        return new Pict(pict[0]);
     }
 
     /**
@@ -185,11 +185,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsExporter#getInputPicture()
      */
-    public static Pict fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetInputPicture(QTObject.ID(paramGraphicsExporter), arrayOfInt);
+    public static Pict fromGraphicsExporter(GraphicsExporter ge) throws QTException {
+        int[] picture = { 0 };
+        int i = GraphicsExportGetInputPicture(QTObject.ID(ge), picture);
         StdQTException.checkError(i);
-        return new Pict(arrayOfInt[0]);
+        return new Pict(picture[0]);
     }
 
     /**
@@ -200,13 +200,13 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.ImageCompressionDialog#compressPicture(quicktime.qd.Pict)
      */
-    public static Pict fromImageCompressionDialog(ImageCompressionDialog paramImageCompressionDialog, Pict src) throws QTException {
-        Pict localPict = new Pict(4, true);
-        int i = SCCompressPicture(QTObject.ID(paramImageCompressionDialog), QTObject.ID(src), QTObject.ID(localPict));
+    public static Pict fromImageCompressionDialog(ImageCompressionDialog ci, Pict src) throws QTException {
+        Pict dstPicture = new Pict(4, true);
+        int i = SCCompressPicture(QTObject.ID(ci), QTObject.ID(src), QTObject.ID(dstPicture));
         if (i == 1)
             throw new StdQTException(-128);
         StdQTException.checkError(i);
-        return localPict;
+        return dstPicture;
     }
 
     /**
@@ -218,14 +218,14 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
      * @throws java.io.IOException
      */
     public static Pict fromFile(File file) throws QTException, IOException {
-        FileInputStream localFileInputStream = new FileInputStream(file);
-        byte[] arrayOfByte = new byte[localFileInputStream.available() - 512];
-        localFileInputStream.skip(512L);
-        localFileInputStream.read(arrayOfByte, 0, arrayOfByte.length);
-        localFileInputStream.close();
-        Pict localPict = new Pict(arrayOfByte.length, false);
-        localPict.copyFromArray(0, arrayOfByte, 0, arrayOfByte.length);
-        return localPict;
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] srcArray = new byte[fileInputStream.available() - 512];
+        fileInputStream.skip(512L);
+        fileInputStream.read(srcArray, 0, srcArray.length);
+        fileInputStream.close();
+        Pict pict = new Pict(srcArray.length, false);
+        pict.copyFromArray(0, srcArray, 0, srcArray.length);
+        return pict;
     }
 
     /**
@@ -252,9 +252,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
                 SetGWorld(savedPort[0], savedDevice[0]);
             try {
                 QDException.checkError(QDError());
-            } catch (QTException localQTException) {
+            } catch (QTException e) {
                 gw = null;
-                throw localQTException;
+                throw e;
             }
         }
         if (i == 0)
@@ -273,24 +273,24 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         copyFromArray(0, pictBytes, 0, pictBytes.length);
     }
 
-    private Pict(int paramInt) throws QTException {
-        super(paramInt, null, false);
+    private Pict(int nativeRep) throws QTException {
+        super(nativeRep, null, false);
     }
 
-    private Pict(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, paramBoolean);
+    private Pict(int size, boolean clear) throws QTException {
+        super(size, clear);
     }
 
     /**
      * Returns the picture frame rectangle referenced of the Pict.
      */
     public QDRect getPictFrame() {
-        byte[] arrayOfByte = new byte[8];
-        getBytesAt(2, 8, arrayOfByte, 0);
+        byte[] destArray = new byte[8];
+        getBytesAt(2, 8, destArray, 0);
         if (QTSession.isCurrentOS(2)) {
-            for (int i = 0; i < 8; i += 2) setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(arrayOfByte, i)));
+            for (int i = 0; i < 8; i += 2) setShortInArray(destArray, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(destArray, i)));
         }
-        return QDRect.fromArray(arrayOfByte, 8);
+        return QDRect.fromArray(destArray, 8);
     }
 
     /**
@@ -331,9 +331,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     public Pict compress(int quality, int cType) throws QTException {
         if (isOpen())
             throw new QDException(-9);
-        Pict localPict = new Pict(4, true);
-        QDException.checkError(CompressPicture(_ID(), QTObject.ID(localPict), quality, cType));
-        return localPict;
+        Pict dstPicture = new Pict(4, true);
+        QDException.checkError(CompressPicture(_ID(), QTObject.ID(dstPicture), quality, cType));
+        return dstPicture;
     }
 
     /**
@@ -353,9 +353,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     public Pict fCompress(int colorDepth, int quality, int doDither, int compressAgain, int cType, int codec) throws QTException {
         if (isOpen())
             throw new QDException(-9);
-        Pict localPict = new Pict(4, true);
-        QDException.checkError(FCompressPicture(_ID(), QTObject.ID(localPict), (short) colorDepth, 0, quality, (short) doDither, (short) compressAgain, 0, cType, codec));
-        return localPict;
+        Pict dstPicture = new Pict(4, true);
+        QDException.checkError(FCompressPicture(_ID(), QTObject.ID(dstPicture), (short) colorDepth, 0, quality, (short) doDither, (short) compressAgain, 0, cType, codec));
+        return dstPicture;
     }
 
     /**
@@ -420,9 +420,9 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     public Pict makeThumbnail(int colorDepth) throws QTException {
         if (isOpen())
             throw new QDException(-9);
-        Pict localPict = new Pict(4, false);
-        QDException.checkError(MakeThumbnailFromPicture(_ID(), (short) colorDepth, QTObject.ID(localPict), 0));
-        return localPict;
+        Pict thumbnail = new Pict(4, false);
+        QDException.checkError(MakeThumbnailFromPicture(_ID(), (short) colorDepth, QTObject.ID(thumbnail), 0));
+        return thumbnail;
     }
 
     /**
@@ -445,11 +445,11 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     public void writeToFile(File file) throws QDException, IOException {
         if (isOpen())
             throw new QDException(-9);
-        FileOutputStream localFileOutputStream = new FileOutputStream(file);
-        localFileOutputStream.write(new byte[512]);
-        byte[] arrayOfByte = getBytes();
-        localFileOutputStream.write(arrayOfByte, 0, arrayOfByte.length);
-        localFileOutputStream.close();
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileOutputStream.write(new byte[512]);
+        byte[] movie = getBytes();
+        fileOutputStream.write(movie, 0, movie.length);
+        fileOutputStream.close();
     }
 
     /**
@@ -467,57 +467,57 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
     protected void _dispose() {
         try {
             close();
-        } catch (QDException localQDException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQDException), this, "close");
+        } catch (QDException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "close");
         }
     }
 
-    private static int GetGWorldPixMap(int paramInt) {
-        return QuickDrawManager.GetGWorldPixMap(paramInt);
+    private static int GetGWorldPixMap(int gworld) {
+        return QuickDrawManager.GetGWorldPixMap(gworld);
     }
 
-    private static byte LockPixels(int paramInt) {
-        return QuickDrawManager.LockPixels(paramInt);
+    private static byte LockPixels(int pixMap) {
+        return QuickDrawManager.LockPixels(pixMap);
     }
 
-    private static short MakeThumbnailFromPixMap(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.MakeThumbnailFromPixMap(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3);
+    private static short MakeThumbnailFromPixMap(int src, byte[] srcRect, short colorDepth, int thumbnail, int progressProc) {
+        return ImageCompressionManager.MakeThumbnailFromPixMap(src, srcRect, colorDepth, thumbnail, progressProc);
     }
 
-    private static void UnlockPixels(int paramInt) {
-        QuickDrawManager.UnlockPixels(paramInt);
+    private static void UnlockPixels(int pixMap) {
+        QuickDrawManager.UnlockPixels(pixMap);
     }
 
-    private static int GetTrackPict(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetTrackPict(paramInt1, paramInt2);
+    private static int GetTrackPict(int track, int time) {
+        return MovieToolbox.GetTrackPict(track, time);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int GetMoviePict(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetMoviePict(paramInt1, paramInt2);
+    private static int GetMoviePict(int movie, int time) {
+        return MovieToolbox.GetMoviePict(movie, time);
     }
 
-    private static int GetMoviePosterPict(int paramInt) {
-        return MovieToolbox.GetMoviePosterPict(paramInt);
+    private static int GetMoviePosterPict(int movie) {
+        return MovieToolbox.GetMoviePosterPict(movie);
     }
 
-    private static int SGGrabPict(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, short paramShort, int paramInt2) {
-        return SequenceGrabberManager.SGGrabPict(paramInt1, paramArrayOfInt, paramArrayOfByte, paramShort, paramInt2);
+    private static int SGGrabPict(int sg, int[] pict, byte[] bounds, short offscreenDepth, int grabPictFlags) {
+        return SequenceGrabberManager.SGGrabPict(sg, pict, bounds, offscreenDepth, grabPictFlags);
     }
 
-    private static int GraphicsImportGetAsPicture(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetAsPicture(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetAsPicture(int gi, int[] pict) {
+        return GraphicsImportManager.GraphicsImportGetAsPicture(gi, pict);
     }
 
-    private static int SCCompressPicture(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.SCCompressPicture(paramInt1, paramInt2, paramInt3);
+    private static int SCCompressPicture(int ci, int srcPicture, int dstPicture) {
+        return ImageCompressionManager.SCCompressPicture(ci, srcPicture, dstPicture);
     }
 
-    private static int OpenCPicture(byte[] paramArrayOfByte) {
-        return QuickDrawManager.OpenCPicture(paramArrayOfByte);
+    private static int OpenCPicture(byte[] params) {
+        return QuickDrawManager.OpenCPicture(params);
     }
 
     private static short QDError() {
@@ -528,47 +528,47 @@ public final class Pict extends QTHandleRef implements QuickTimeLib, Cloneable, 
         QuickDrawManager.ClosePicture();
     }
 
-    private static short CompressPicture(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return ImageCompressionManager.CompressPicture(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short CompressPicture(int srcPicture, int dstPicture, int quality, int cType) {
+        return ImageCompressionManager.CompressPicture(srcPicture, dstPicture, quality, cType);
     }
 
     private static short FCompressPicture(int srcPicture, int dstPicture, short colorDepth, int ctable, int quality, short doDither, short compressAgain, int progressProc, int cType, int codec) {
         return ImageCompressionManager.FCompressPicture(srcPicture, dstPicture, colorDepth, ctable, quality, doDither, compressAgain, progressProc, cType, codec);
     }
 
-    private static void DrawPicture(int paramInt, byte[] paramArrayOfByte) {
-        QuickDrawManager.DrawPicture(paramInt, paramArrayOfByte);
+    private static void DrawPicture(int pict, byte[] dstRect) {
+        QuickDrawManager.DrawPicture(pict, dstRect);
     }
 
-    private static short DrawTrimmedPicture(int paramInt1, byte[] paramArrayOfByte, int paramInt2, short paramShort, int paramInt3) {
-        return QuickDrawManager.DrawTrimmedPicture(paramInt1, paramArrayOfByte, paramInt2, paramShort, paramInt3);
+    private static short DrawTrimmedPicture(int pict, byte[] frame, int trimMask, short doDither, int gEtc) {
+        return QuickDrawManager.DrawTrimmedPicture(pict, frame, trimMask, doDither, gEtc);
     }
 
-    private static short MakeThumbnailFromPicture(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return ImageCompressionManager.MakeThumbnailFromPicture(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short MakeThumbnailFromPicture(int picture, int colorDepth, int thumbnail, int progressProc) {
+        return ImageCompressionManager.MakeThumbnailFromPicture(picture, colorDepth, thumbnail, progressProc);
     }
 
-    private static int GraphicsExportGetInputPicture(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputPicture(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputPicture(int ge, int[] picture) {
+        return GraphicsExportManager.GraphicsExportGetInputPicture(ge, picture);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] destArray1, int[] destArray2) {
+        QuickDrawManager.GetGWorld(destArray1, destArray2);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static short QTSPresGetPicture(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetPicture(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTSPresGetPicture(int presentation, int stream, int[] picture) {
+        return StreamingManager.QTSPresGetPicture(presentation, stream, picture);
     }
 }

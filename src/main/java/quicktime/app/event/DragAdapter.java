@@ -37,7 +37,7 @@ public class DragAdapter implements MouseMoveListener, MouseButtonListener {
      * (with no buttons no down).
      */
     @Override
-    public void mouseMoved(QTMouseEvent paramQTMouseEvent) {
+    public void mouseMoved(QTMouseEvent qtMouseEvent) {
     }
 
     /**
@@ -50,7 +50,7 @@ public class DragAdapter implements MouseMoveListener, MouseButtonListener {
      * bounds of the space).
      */
     @Override
-    public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
+    public void mouseDragged(QTMouseEvent event) {
     }
 
     /**
@@ -59,7 +59,7 @@ public class DragAdapter implements MouseMoveListener, MouseButtonListener {
      * Invoked when a mouse button has been released where the press occured within the space.
      */
     @Override
-    public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
+    public void mouseReleased(QTMouseEvent qtMouseEvent) {
     }
 
     /**
@@ -68,7 +68,7 @@ public class DragAdapter implements MouseMoveListener, MouseButtonListener {
      * Invoked when the mouse has been pressed in a space.
      */
     @Override
-    public void mousePressed(QTMouseEvent paramQTMouseEvent) {
+    public void mousePressed(QTMouseEvent event) {
     }
 
     /**
@@ -77,6 +77,6 @@ public class DragAdapter implements MouseMoveListener, MouseButtonListener {
      * Invoked when the mouse has been clicked in a space.
      */
     @Override
-    public void mouseClicked(QTMouseEvent paramQTMouseEvent) {
+    public void mouseClicked(QTMouseEvent qtMouseEvent) {
     }
 }

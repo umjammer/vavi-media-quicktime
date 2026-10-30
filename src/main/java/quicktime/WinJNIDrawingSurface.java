@@ -18,9 +18,9 @@ public class WinJNIDrawingSurface {
     /**
      * Returns the native drawing surface for the component supplied
      */
-    public WinJNIDrawingSurface(Component paramComponent) {
-        this.comp = paramComponent;
-        this.drawingSurface = WinNativeHelper.getDrawingSurface(paramComponent);
+    public WinJNIDrawingSurface(Component comp) {
+        this.comp = comp;
+        this.drawingSurface = WinNativeHelper.getDrawingSurface(comp);
     }
 
     /**
@@ -55,10 +55,10 @@ public class WinJNIDrawingSurface {
      * @return Rectangle the bounding rectangle
      */
     public Rectangle getBounds() {
-        int[] arrayOfInt = new int[4];
-        WinNativeHelper.getBounds(this.comp, this.drawingSurface, arrayOfInt);
-        Rectangle localRectangle = new Rectangle(arrayOfInt[0], arrayOfInt[1], arrayOfInt[2], arrayOfInt[3]);
-        return localRectangle;
+        int[] bounds = new int[4];
+        WinNativeHelper.getBounds(this.comp, this.drawingSurface, bounds);
+        Rectangle rectangle = new Rectangle(bounds[0], bounds[1], bounds[2], bounds[3]);
+        return rectangle;
     }
 
     /**

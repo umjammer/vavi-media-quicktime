@@ -38,14 +38,14 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
         setFlags(1);
     }
 
-    private ICMFrameTime(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private ICMFrameTime(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[48];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         long l1 = getLongFromArray(this.bytes, 0);
         setLongInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative64(l1));
         int i = getIntFromArray(this.bytes, 8);
@@ -64,27 +64,27 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[48];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[48];
         long l1 = getValue();
-        setLongInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian64(l1));
+        setLongInArray(movie, 0, EndianOrder.flipNativeToBigEndian64(l1));
         int i = getScale();
-        setIntInArray(arrayOfByte, 8, EndianOrder.flipNativeToBigEndian32(i));
-        setIntInArray(arrayOfByte, 12, 0);
+        setIntInArray(movie, 8, EndianOrder.flipNativeToBigEndian32(i));
+        setIntInArray(movie, 12, 0);
         for (int j = 16; j < 36; j += 4) {
             int k = getIntFromArray(getBytes(), j);
             int m = EndianOrder.flipNativeToBigEndian32(k);
-            setIntInArray(arrayOfByte, j, m);
+            setIntInArray(movie, j, m);
         }
         long l2 = getVirtualStartTime();
-        setLongInArray(arrayOfByte, 36, EndianOrder.flipNativeToBigEndian64(l2));
+        setLongInArray(movie, 36, EndianOrder.flipNativeToBigEndian64(l2));
         int m = getVirtualDuration();
-        setIntInArray(arrayOfByte, 44, EndianOrder.flipNativeToBigEndian32(m));
-        paramObjectOutputStream.write(arrayOfByte);
+        setIntInArray(movie, 44, EndianOrder.flipNativeToBigEndian32(m));
+        out.write(movie);
     }
 
-    private void setRecordSize(int paramInt) {
-        setIntAt(24, paramInt);
+    private void setRecordSize(int recordSize) {
+        setIntAt(24, recordSize);
     }
 
     /**
@@ -248,19 +248,19 @@ public final class ICMFrameTime extends QTByteObject implements PrimitivesLib, C
         return getClass().getName();
     }
 
-    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    private static void setLongInArray(byte[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static long getLongFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
+    private static long getLongFromArray(byte[] array, int offset) {
+        return MemoryManager.getLongFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 }

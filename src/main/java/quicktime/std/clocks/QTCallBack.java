@@ -70,15 +70,15 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
 
     private final TimeBase tb;
 
-    QTCallBack(TimeBase paramTimeBase, int paramInt) throws QTException {
-        super(allocate(paramTimeBase, paramInt));
-        this.tb = paramTimeBase;
+    QTCallBack(TimeBase tb, int flags) throws QTException {
+        super(allocate(tb, flags));
+        this.tb = tb;
     }
 
-    private static int allocate(TimeBase paramTimeBase, int paramInt) throws QTException {
+    private static int allocate(TimeBase tb, int flags) throws QTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = NewCallBack(QTObject.ID(paramTimeBase), (short) (paramInt | 0x8000));
+            i = NewCallBack(QTObject.ID(tb), (short) (flags | 0x8000));
         }
         if (i == 0)
             throw new StdQTException("QTCallback.<init>");
@@ -101,13 +101,13 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
      */
     public float rateWhenCalled;
 
-    final void callMeWhen(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
+    final void callMeWhen(int param1, int param2, int param3) throws StdQTException {
         if (this.upp == null) {
             this.upp = new CBRunner(this);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = CallMeWhen(_ID(), this.upp.getClosure(), 0, paramInt1, paramInt2, paramInt3);
+            i = CallMeWhen(_ID(), this.upp.getClosure(), 0, param1, param2, param3);
         }
         StdQTException.checkError(i);
     }
@@ -137,7 +137,7 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
             synchronized (QTNative.globalsLock) {
                 CancelCallBack(_ID());
             }
-        } catch (QTNullPointerException localQTNullPointerException) {
+        } catch (QTNullPointerException e) {
         }
         if (this.upp != null) {
             this.upp.cleanup();
@@ -184,19 +184,19 @@ public abstract class QTCallBack extends QTObject implements QuickTimeLib {
      */
     public abstract void execute();
 
-    private static short CallMeWhen(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        return ClockManager.CallMeWhen(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
+    private static short CallMeWhen(int cb, int proc, int refCon, int param1, int param2, int param3) {
+        return ClockManager.CallMeWhen(cb, proc, refCon, param1, param2, param3);
     }
 
-    private static short GetCallBackType(int paramInt) {
-        return ClockManager.GetCallBackType(paramInt);
+    private static short GetCallBackType(int cb) {
+        return ClockManager.GetCallBackType(cb);
     }
 
-    private static void CancelCallBack(int paramInt) {
-        ClockManager.CancelCallBack(paramInt);
+    private static void CancelCallBack(int cb) {
+        ClockManager.CancelCallBack(cb);
     }
 
-    private static int NewCallBack(int paramInt, short paramShort) {
-        return ClockManager.NewCallBack(paramInt, paramShort);
+    private static int NewCallBack(int tb, short type) {
+        return ClockManager.NewCallBack(tb, type);
     }
 }

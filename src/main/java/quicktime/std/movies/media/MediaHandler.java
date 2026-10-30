@@ -10,7 +10,7 @@ import quicktime.std.comp.Component;
  */
 public class MediaHandler extends Component {
 
-    MediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    MediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 }

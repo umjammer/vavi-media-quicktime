@@ -123,23 +123,23 @@ public class CSequenceToMemory {
      * @deprecated
      */
     public int compressFrame(QDGraphics src, QDRect srcRect, int flags) throws QTException {
-        RawEncodedImage localRawEncodedImage = new RawEncodedImage(this.seq.getMaxCompressionSize(src), true);
-        CompressedFrameInfo localCompressedFrameInfo = this.seq.compressFrame(src, srcRect, flags, localRawEncodedImage);
-        localRawEncodedImage.setSize(localCompressedFrameInfo.getDataSize());
+        RawEncodedImage data = new RawEncodedImage(this.seq.getMaxCompressionSize(src), true);
+        CompressedFrameInfo compressedFrameInfo = this.seq.compressFrame(src, srcRect, flags, data);
+        data.setSize(compressedFrameInfo.getDataSize());
         try {
             int i = this.seq.getFrameNumber() - 1;
             if (i < this.frames.size()) {
-                this.frames.setElementAt(localRawEncodedImage, i);
+                this.frames.setElementAt(data, i);
             } else if (i > this.frames.size()) {
                 this.frames.setSize(i);
-                this.frames.setElementAt(localRawEncodedImage, i);
+                this.frames.setElementAt(data, i);
             } else {
-                this.frames.addElement(localRawEncodedImage);
+                this.frames.addElement(data);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new QTException(getClass().getName() + ": Unable to grow internal Vector object.");
         }
-        return localCompressedFrameInfo.getSimilarity();
+        return compressedFrameInfo.getSimilarity();
     }
 
     /**

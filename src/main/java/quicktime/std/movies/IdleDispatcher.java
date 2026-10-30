@@ -18,15 +18,15 @@ final class IdleDispatcher implements PrimitivesLib, InterfaceLib {
 
     private final NextTaskNeededSooner tns;
 
-    IdleDispatcher(NextTaskNeededSooner paramNextTaskNeededSooner) {
+    IdleDispatcher(NextTaskNeededSooner tns) {
         this.methodName = "NewQTNextTaskNeededSoonerCallbackProc";
         this.methodSig = "(III)S";
         this.procInfo = 240;
-        this.tns = paramNextTaskNeededSooner;
+        this.tns = tns;
     }
 
-    private short NewQTNextTaskNeededSoonerCallbackProc(int paramInt1, int paramInt2, int paramInt3) {
-        return (short) this.tns.execute(paramInt1, paramInt2);
+    private short NewQTNextTaskNeededSoonerCallbackProc(int duration, int flags, int refcon) {
+        return (short) this.tns.execute(duration, flags);
     }
 
     int ID() {
@@ -40,8 +40,8 @@ final class IdleDispatcher implements PrimitivesLib, InterfaceLib {
     }
 
     static class IdleMethodClosure extends MethodClosure {
-        IdleMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        IdleMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {

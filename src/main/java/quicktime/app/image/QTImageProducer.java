@@ -62,8 +62,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
 
     private static final boolean profile = false;
 
-    private static boolean requiresRedrawing(QTDrawable paramQTDrawable) {
-        return ((paramQTDrawable instanceof Space)) || ((paramQTDrawable instanceof Timeable)) || (((paramQTDrawable instanceof Redrawable)) && (!((Redrawable) paramQTDrawable).isSingleFrame()));
+    private static boolean requiresRedrawing(QTDrawable qtDrawable) {
+        return ((qtDrawable instanceof Space)) || ((qtDrawable instanceof Timeable)) || (((qtDrawable instanceof Redrawable)) && (!((Redrawable) qtDrawable).isSingleFrame()));
     }
 
     private final Dimension size;
@@ -156,32 +156,32 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * @deprecated
      */
     @Override
-    public synchronized void addConsumer(ImageConsumer paramImageConsumer) {
-        if (isConsumer(paramImageConsumer)) {
+    public synchronized void addConsumer(ImageConsumer imageConsumer) {
+        if (isConsumer(imageConsumer)) {
             return;
         }
         try {
-            this.consumers.add(paramImageConsumer);
-            paramImageConsumer.setDimensions(this.size.width, this.size.height);
-            if (isConsumer(paramImageConsumer)) {
-                paramImageConsumer.setProperties(this.props);
+            this.consumers.add(imageConsumer);
+            imageConsumer.setDimensions(this.size.width, this.size.height);
+            if (isConsumer(imageConsumer)) {
+                imageConsumer.setProperties(this.props);
             } else {
                 return;
             }
-            if (isConsumer(paramImageConsumer)) {
-                paramImageConsumer.setColorModel(this.cm);
+            if (isConsumer(imageConsumer)) {
+                imageConsumer.setColorModel(this.cm);
             } else {
                 return;
             }
-            if (isConsumer(paramImageConsumer)) {
+            if (isConsumer(imageConsumer)) {
                 int i = 14;
                 if (isSingleFrame())
                     i |= 0x10;
-                paramImageConsumer.setHints(i);
+                imageConsumer.setHints(i);
             }
-        } catch (Exception localException) {
-            if (isConsumer(paramImageConsumer)) {
-                paramImageConsumer.imageComplete(1);
+        } catch (Exception e) {
+            if (isConsumer(imageConsumer)) {
+                imageConsumer.imageComplete(1);
             }
         }
     }
@@ -195,8 +195,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * @deprecated
      */
     @Override
-    public synchronized boolean isConsumer(ImageConsumer paramImageConsumer) {
-        return this.consumers.contains(paramImageConsumer);
+    public synchronized boolean isConsumer(ImageConsumer imageConsumer) {
+        return this.consumers.contains(imageConsumer);
     }
 
     /**
@@ -211,8 +211,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * @deprecated
      */
     @Override
-    public synchronized void removeConsumer(ImageConsumer paramImageConsumer) {
-        this.consumers.removeElement(paramImageConsumer);
+    public synchronized void removeConsumer(ImageConsumer imageConsumer) {
+        this.consumers.removeElement(imageConsumer);
     }
 
     /**
@@ -229,30 +229,30 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * @deprecated
      */
     @Override
-    public void startProduction(ImageConsumer paramImageConsumer) {
+    public void startProduction(ImageConsumer imageConsumer) {
         synchronized (QTNative.globalsLock) {
             synchronized (this) {
                 try {
-                    addConsumer(paramImageConsumer);
-                    if (isConsumer(paramImageConsumer)) {
-                        paramImageConsumer.setPixels(0, 0, this.size.width, this.size.height, this.cm, this.pixels, 0, this.rowInts);
+                    addConsumer(imageConsumer);
+                    if (isConsumer(imageConsumer)) {
+                        imageConsumer.setPixels(0, 0, this.size.width, this.size.height, this.cm, this.pixels, 0, this.rowInts);
                     } else {
                         return;
                     }
-                    if (isConsumer(paramImageConsumer)) {
+                    if (isConsumer(imageConsumer)) {
                         if (isSingleFrame()) {
-                            paramImageConsumer.imageComplete(3);
-                            if (isConsumer(paramImageConsumer)) {
-                                paramImageConsumer.imageComplete(1);
-                                removeConsumer(paramImageConsumer);
+                            imageConsumer.imageComplete(3);
+                            if (isConsumer(imageConsumer)) {
+                                imageConsumer.imageComplete(1);
+                                removeConsumer(imageConsumer);
                             }
                         } else {
-                            paramImageConsumer.imageComplete(2);
+                            imageConsumer.imageComplete(2);
                         }
                     }
-                } catch (Exception localException) {
-                    if (isConsumer(paramImageConsumer)) {
-                        paramImageConsumer.imageComplete(1);
+                } catch (Exception e) {
+                    if (isConsumer(imageConsumer)) {
+                        imageConsumer.imageComplete(1);
                     }
                 }
             }
@@ -260,8 +260,8 @@ public class QTImageProducer implements ImageProducer, Redrawable {
     }
 
     private synchronized void copyPixels() throws QTException {
-        RawEncodedImage localRawEncodedImage = this.pm.getPixelData();
-        localRawEncodedImage.copyToArray(0, this.pixels, 0, this.pixels.length);
+        RawEncodedImage pixelData = this.pm.getPixelData();
+        pixelData.copyToArray(0, this.pixels, 0, this.pixels.length);
     }
 
     /**
@@ -307,23 +307,23 @@ public class QTImageProducer implements ImageProducer, Redrawable {
         int j;
         int k;
         if (invalidRgn != null) {
-            QDRect localObject = invalidRgn.getRgnBBox();
-            i = localObject.getX();
-            j = localObject.getY();
-            k = localObject.getWidth();
-            m = localObject.getHeight();
+            QDRect rgnBBox = invalidRgn.getRgnBBox();
+            i = rgnBBox.getX();
+            j = rgnBBox.getY();
+            k = rgnBBox.getWidth();
+            m = rgnBBox.getHeight();
         } else {
             i = 0;
             j = 0;
             k = this.size.width;
             m = this.size.height;
         }
-        Enumeration<?> localObject = this.consumers.elements();
-        while (localObject.hasMoreElements()) {
-            ImageConsumer localImageConsumer = (ImageConsumer) localObject.nextElement();
-            localImageConsumer.setPixels(i, j, k, m, this.cm, this.pixels, 0, this.rowInts);
-            if (isConsumer(localImageConsumer)) {
-                localImageConsumer.imageComplete(2);
+        Enumeration<?> enumeration = this.consumers.elements();
+        while (enumeration.hasMoreElements()) {
+            ImageConsumer imageConsumer = (ImageConsumer) enumeration.nextElement();
+            imageConsumer.setPixels(i, j, k, m, this.cm, this.pixels, 0, this.rowInts);
+            if (isConsumer(imageConsumer)) {
+                imageConsumer.imageComplete(2);
             }
         }
     }
@@ -385,6 +385,6 @@ public class QTImageProducer implements ImageProducer, Redrawable {
      * @deprecated
      */
     @Override
-    public void requestTopDownLeftRightResend(ImageConsumer paramImageConsumer) {
+    public void requestTopDownLeftRightResend(ImageConsumer imageConsumer) {
     }
 }

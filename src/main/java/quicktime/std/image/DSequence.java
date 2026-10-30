@@ -79,7 +79,7 @@ public final class DSequence extends CDSequence {
     private static final int codecDSeqFlushInstdOfDirtying = 256;
 
     private static int begin(ImageDescription desc, QDGraphics port, QDRect srcRect, Matrix matrix, Region flags, int mask, int accuracy, CodecComponent codec) throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] seqID = new int[1];
         int i = 0;
         if (port == null) {
             throw new StdQTException(-50);
@@ -89,19 +89,19 @@ public final class DSequence extends CDSequence {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(QTObject.ID(port), 0);
-            i = DecompressSequenceBegin(arrayOfInt, QTObject.ID(desc), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
+            i = DecompressSequenceBegin(seqID, QTObject.ID(desc), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
         if (QTSession.isCurrentOS(4)) {
-            StdQTException.checkError(SetDSequenceFlags(arrayOfInt[0], codecDSeqFlushInstdOfDirtying, codecDSeqFlushInstdOfDirtying));
+            StdQTException.checkError(SetDSequenceFlags(seqID[0], codecDSeqFlushInstdOfDirtying, codecDSeqFlushInstdOfDirtying));
         }
-        return arrayOfInt[0];
+        return seqID[0];
     }
 
-    private static int beginS(ImageDescription desc, EncodedImage paramEncodedImage, QDGraphics port, QDRect srcRect, Matrix matrix, Region flags, int mask, int accuracy, CodecComponent codec) throws StdQTException {
-        int[] arrayOfInt = { 0 };
+    private static int beginS(ImageDescription desc, EncodedImage data, QDGraphics port, QDRect srcRect, Matrix matrix, Region flags, int mask, int accuracy, CodecComponent codec) throws StdQTException {
+        int[] seqID = { 0 };
         int i = -50;
         if (port == null) {
             throw new StdQTException(-50);
@@ -110,20 +110,20 @@ public final class DSequence extends CDSequence {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(port), 0);
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(desc), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramEncodedImage.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(desc), ((IntEncodedImage) paramEncodedImage).getInts(), paramEncodedImage.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = DecompressSequenceBeginS(arrayOfInt, QTObject.ID(desc), QTObject.ID((RawEncodedImage) paramEncodedImage), paramEncodedImage.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
+            if ((data instanceof ByteEncodedImage)) {
+                i = DecompressSequenceBeginS(seqID, QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), data.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
+            } else if ((data instanceof IntEncodedImage)) {
+                i = DecompressSequenceBeginS(seqID, QTObject.ID(desc), ((IntEncodedImage) data).getInts(), data.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
+            } else if ((data instanceof RawEncodedImage)) {
+                i = DecompressSequenceBeginS(seqID, QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), data.getSize(), QTObject.ID(port), 0, srcRect == null ? null : srcRect.getRect(), matrix == null ? null : matrix.getBytes(), (short) 0, QTObject.ID(flags), (short) mask, accuracy, QTObject.ID(codec));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
         if (QTSession.isCurrentOS(4))
-            StdQTException.checkError(SetDSequenceFlags(arrayOfInt[0], codecDSeqFlushInstdOfDirtying, codecDSeqFlushInstdOfDirtying));
-        return arrayOfInt[0];
+            StdQTException.checkError(SetDSequenceFlags(seqID[0], codecDSeqFlushInstdOfDirtying, codecDSeqFlushInstdOfDirtying));
+        return seqID[0];
     }
 
     /**
@@ -154,10 +154,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrameS(ByteEncodedImage data, int inFlags) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameS(_ID(), data.getBytes(), data.getSize(), (short) inFlags, arrayOfShort, 0);
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrameS(_ID(), data.getBytes(), data.getSize(), (short) inFlags, outFlags, 0);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -169,10 +169,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrameS(IntEncodedImage data, int inFlags) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameS(_ID(), data.getInts(), data.getSize(), (short) inFlags, arrayOfShort, 0);
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrameS(_ID(), data.getInts(), data.getSize(), (short) inFlags, outFlags, 0);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -184,10 +184,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrameS(RawEncodedImage data, int inFlags) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameS(_ID(), QTObject.ID(data), data.getSize(), (short) inFlags, arrayOfShort, 0);
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrameS(_ID(), QTObject.ID(data), data.getSize(), (short) inFlags, outFlags, 0);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -218,10 +218,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrame(ByteEncodedImage data, int inFlags) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrame(_ID(), data.getBytes(), (short) inFlags, arrayOfShort, 0);
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrame(_ID(), data.getBytes(), (short) inFlags, outFlags, 0);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -233,10 +233,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrame(IntEncodedImage data, int inFlags) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrame(_ID(), data.getInts(), (short) inFlags, arrayOfShort, 0);
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrame(_ID(), data.getInts(), (short) inFlags, outFlags, 0);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -248,10 +248,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrame(RawEncodedImage data, int inFlags) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrame(_ID(), QTObject.ID(data), (short) inFlags, arrayOfShort, 0);
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrame(_ID(), QTObject.ID(data), (short) inFlags, outFlags, 0);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -267,10 +267,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrameWhen(ByteEncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameWhen(_ID(), data.getBytes(), data.getSize(), (short) inFlags, arrayOfShort, 0, frameTime.getBytes());
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrameWhen(_ID(), data.getBytes(), data.getSize(), (short) inFlags, outFlags, 0, frameTime.getBytes());
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -286,10 +286,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrameWhen(IntEncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameWhen(_ID(), data.getInts(), data.getSize(), (short) inFlags, arrayOfShort, 0, frameTime.getBytes());
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrameWhen(_ID(), data.getInts(), data.getSize(), (short) inFlags, outFlags, 0, frameTime.getBytes());
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -305,10 +305,10 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public int decompressFrameWhen(RawEncodedImage data, int inFlags, ICMFrameTime frameTime) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = DecompressSequenceFrameWhen(_ID(), QTObject.ID(data), data.getSize(), (short) inFlags, arrayOfShort, 0, frameTime.getBytes());
+        short[] outFlags = new short[1];
+        int i = DecompressSequenceFrameWhen(_ID(), QTObject.ID(data), data.getSize(), (short) inFlags, outFlags, 0, frameTime.getBytes());
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return outFlags[0];
     }
 
     /**
@@ -384,9 +384,9 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public Matrix getMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        StdQTException.checkError(GetDSequenceMatrix(_ID(), localMatrix.getBytes()));
-        return localMatrix;
+        Matrix matrix = new Matrix();
+        StdQTException.checkError(GetDSequenceMatrix(_ID(), matrix.getBytes()));
+        return matrix;
     }
 
     /**
@@ -465,17 +465,17 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public boolean ptInData(EncodedImage data, QDPoint where) throws StdQTException {
-        byte[] arrayOfByte = new byte[1];
+        byte[] hit = new byte[1];
         int i = -50;
         if ((data instanceof ByteEncodedImage)) {
-            i = PtInDSequenceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize(), where.getPoint(), arrayOfByte);
+            i = PtInDSequenceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize(), where.getPoint(), hit);
         } else if ((data instanceof IntEncodedImage)) {
-            i = PtInDSequenceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize(), where.getPoint(), arrayOfByte);
+            i = PtInDSequenceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize(), where.getPoint(), hit);
         } else if ((data instanceof RawEncodedImage)) {
-            i = PtInDSequenceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize(), where.getPoint(), arrayOfByte);
+            i = PtInDSequenceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize(), where.getPoint(), hit);
         }
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return hit[0] != 0;
     }
 
     /**
@@ -488,17 +488,17 @@ public final class DSequence extends CDSequence {
      * @throws quicktime.std.StdQTException
      */
     public boolean hitTestData(EncodedImage data, QDPoint where, int hitFlags) throws StdQTException {
-        int[] arrayOfInt = { 0 };
+        int[] hit = { 0 };
         int i = 0;
         if ((data instanceof ByteEncodedImage)) {
-            i = HitTestDSequenceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize(), where.getPoint(), arrayOfInt, hitFlags);
+            i = HitTestDSequenceData(_ID(), ((ByteEncodedImage) data).getBytes(), data.getSize(), where.getPoint(), hit, hitFlags);
         } else if ((data instanceof IntEncodedImage)) {
-            i = HitTestDSequenceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize(), where.getPoint(), arrayOfInt, hitFlags);
+            i = HitTestDSequenceData(_ID(), ((IntEncodedImage) data).getInts(), data.getSize(), where.getPoint(), hit, hitFlags);
         } else if ((data instanceof RawEncodedImage)) {
-            i = HitTestDSequenceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize(), where.getPoint(), arrayOfInt, hitFlags);
+            i = HitTestDSequenceData(_ID(), QTObject.ID((RawEncodedImage) data), data.getSize(), where.getPoint(), hit, hitFlags);
         }
         StdQTException.checkError(i);
-        return arrayOfInt[0] != 0;
+        return hit[0] != 0;
     }
 
     /**
@@ -532,142 +532,142 @@ public final class DSequence extends CDSequence {
      * Sets the timecode value for the frame that is about to be decompressed.
      * QuickTime__SetDSequenceTimeCode
      */
-    public void setTimeCode(TimeCodeDef paramTimeCodeDef, TimeCodeTime paramTimeCodeTime) throws StdQTException {
-        StdQTException.checkError(SetDSequenceTimeCode(_ID(), paramTimeCodeDef.getBytes(), paramTimeCodeTime.getBytes()));
+    public void setTimeCode(TimeCodeDef timeCodeDef, TimeCodeTime timeCodeTime) throws StdQTException {
+        StdQTException.checkError(SetDSequenceTimeCode(_ID(), timeCodeDef.getBytes(), timeCodeTime.getBytes()));
     }
 
-    private void setDataProc(Object paramObject, int paramInt) {
+    private void setDataProc(Object proc, int refCon) {
     }
 
-    private static short DecompressSequenceBegin(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt4, short paramShort2, int paramInt5, int paramInt6) {
-        return ImageCompressionManager.DecompressSequenceBegin(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt4, paramShort2, paramInt5, paramInt6);
+    private static short DecompressSequenceBegin(int[] seqID, int desc, int port, int gdh, byte[] srcRect, byte[] matrix, short mode, int mask, short flags, int accuracy, int codec) {
+        return ImageCompressionManager.DecompressSequenceBegin(seqID, desc, port, gdh, srcRect, matrix, mode, mask, flags, accuracy, codec);
     }
 
-    private static short DecompressSequenceBeginS(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt6, short paramShort2, int paramInt7, int paramInt8) {
-        return ImageCompressionManager.DecompressSequenceBeginS(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt6, paramShort2, paramInt7, paramInt8);
+    private static short DecompressSequenceBeginS(int[] seqID, int desc, int data, int dataSize, int port, int gdh, byte[] srcRect, byte[] matrix, short mode, int mask, short flags, int accuracy, int codec) {
+        return ImageCompressionManager.DecompressSequenceBeginS(seqID, desc, data, dataSize, port, gdh, srcRect, matrix, mode, mask, flags, accuracy, codec);
     }
 
-    private static short DecompressSequenceBeginS(int[] paramArrayOfInt, int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, short paramShort1, int paramInt5, short paramShort2, int paramInt6, int paramInt7) {
-        return ImageCompressionManager.DecompressSequenceBeginS(paramArrayOfInt, paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramInt4, paramArrayOfByte2, paramArrayOfByte3, paramShort1, paramInt5, paramShort2, paramInt6, paramInt7);
+    private static short DecompressSequenceBeginS(int[] seqID, int desc, byte[] data, int dataSize, int port, int gdh, byte[] srcRect, byte[] matrix, short mode, int mask, short flags, int accuracy, int codec) {
+        return ImageCompressionManager.DecompressSequenceBeginS(seqID, desc, data, dataSize, port, gdh, srcRect, matrix, mode, mask, flags, accuracy, codec);
     }
 
-    private static short DecompressSequenceBeginS(int[] paramArrayOfInt1, int paramInt1, int[] paramArrayOfInt2, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt5, short paramShort2, int paramInt6, int paramInt7) {
-        return ImageCompressionManager.DecompressSequenceBeginS(paramArrayOfInt1, paramInt1, paramArrayOfInt2, paramInt2, paramInt3, paramInt4, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt5, paramShort2, paramInt6, paramInt7);
+    private static short DecompressSequenceBeginS(int[] seqID, int desc, int[] data, int dataSize, int port, int gdh, byte[] srcRect, byte[] matrix, short mode, int mask, short flags, int accuracy, int codec) {
+        return ImageCompressionManager.DecompressSequenceBeginS(seqID, desc, data, dataSize, port, gdh, srcRect, matrix, mode, mask, flags, accuracy, codec);
     }
 
-    private static short DecompressSequenceFrameS(int paramInt1, int paramInt2, int paramInt3, short paramShort, short[] paramArrayOfShort, int paramInt4) {
-        return ImageCompressionManager.DecompressSequenceFrameS(paramInt1, paramInt2, paramInt3, paramShort, paramArrayOfShort, paramInt4);
+    private static short DecompressSequenceFrameS(int seqID, int data, int dataSize, short inFlags, short[] outFlags, int asyncCompletion) {
+        return ImageCompressionManager.DecompressSequenceFrameS(seqID, data, dataSize, inFlags, outFlags, asyncCompletion);
     }
 
-    private static short DecompressSequenceFrameS(int paramInt1, byte[] paramArrayOfByte, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3) {
-        return ImageCompressionManager.DecompressSequenceFrameS(paramInt1, paramArrayOfByte, paramInt2, paramShort, paramArrayOfShort, paramInt3);
+    private static short DecompressSequenceFrameS(int seqID, byte[] data, int dataSize, short inFlags, short[] outFlags, int asyncCompletion) {
+        return ImageCompressionManager.DecompressSequenceFrameS(seqID, data, dataSize, inFlags, outFlags, asyncCompletion);
     }
 
-    private static short DecompressSequenceFrameS(int paramInt1, int[] paramArrayOfInt, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3) {
-        return ImageCompressionManager.DecompressSequenceFrameS(paramInt1, paramArrayOfInt, paramInt2, paramShort, paramArrayOfShort, paramInt3);
+    private static short DecompressSequenceFrameS(int seqID, int[] data, int dataSize, short inFlags, short[] outFlags, int asyncCompletion) {
+        return ImageCompressionManager.DecompressSequenceFrameS(seqID, data, dataSize, inFlags, outFlags, asyncCompletion);
     }
 
-    private static short DecompressSequenceFrame(int paramInt1, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3) {
-        return ImageCompressionManager.DecompressSequenceFrame(paramInt1, paramInt2, paramShort, paramArrayOfShort, paramInt3);
+    private static short DecompressSequenceFrame(int seqID, int data, short inFlags, short[] outFlags, int asyncCompletion) {
+        return ImageCompressionManager.DecompressSequenceFrame(seqID, data, inFlags, outFlags, asyncCompletion);
     }
 
-    private static short DecompressSequenceFrame(int paramInt1, byte[] paramArrayOfByte, short paramShort, short[] paramArrayOfShort, int paramInt2) {
-        return ImageCompressionManager.DecompressSequenceFrame(paramInt1, paramArrayOfByte, paramShort, paramArrayOfShort, paramInt2);
+    private static short DecompressSequenceFrame(int seqID, byte[] data, short inFlags, short[] outFlags, int asyncCompletion) {
+        return ImageCompressionManager.DecompressSequenceFrame(seqID, data, inFlags, outFlags, asyncCompletion);
     }
 
-    private static short DecompressSequenceFrame(int paramInt1, int[] paramArrayOfInt, short paramShort, short[] paramArrayOfShort, int paramInt2) {
-        return ImageCompressionManager.DecompressSequenceFrame(paramInt1, paramArrayOfInt, paramShort, paramArrayOfShort, paramInt2);
+    private static short DecompressSequenceFrame(int seqID, int[] data, short inFlags, short[] outFlags, int asyncCompletion) {
+        return ImageCompressionManager.DecompressSequenceFrame(seqID, data, inFlags, outFlags, asyncCompletion);
     }
 
-    private static short DecompressSequenceFrameWhen(int paramInt1, int paramInt2, int paramInt3, short paramShort, short[] paramArrayOfShort, int paramInt4, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.DecompressSequenceFrameWhen(paramInt1, paramInt2, paramInt3, paramShort, paramArrayOfShort, paramInt4, paramArrayOfByte);
+    private static short DecompressSequenceFrameWhen(int seqID, int data, int dataSize, short inFlags, short[] outFlags, int asyncCompletion, byte[] frameTime) {
+        return ImageCompressionManager.DecompressSequenceFrameWhen(seqID, data, dataSize, inFlags, outFlags, asyncCompletion, frameTime);
     }
 
-    private static short DecompressSequenceFrameWhen(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3, byte[] paramArrayOfByte2) {
-        return ImageCompressionManager.DecompressSequenceFrameWhen(paramInt1, paramArrayOfByte1, paramInt2, paramShort, paramArrayOfShort, paramInt3, paramArrayOfByte2);
+    private static short DecompressSequenceFrameWhen(int seqID, byte[] data, int dataSize, short inFlags, short[] outFlags, int asyncCompletion, byte[] frameTime) {
+        return ImageCompressionManager.DecompressSequenceFrameWhen(seqID, data, dataSize, inFlags, outFlags, asyncCompletion, frameTime);
     }
 
-    private static short DecompressSequenceFrameWhen(int paramInt1, int[] paramArrayOfInt, int paramInt2, short paramShort, short[] paramArrayOfShort, int paramInt3, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.DecompressSequenceFrameWhen(paramInt1, paramArrayOfInt, paramInt2, paramShort, paramArrayOfShort, paramInt3, paramArrayOfByte);
+    private static short DecompressSequenceFrameWhen(int seqID, int[] data, int dataSize, short inFlags, short[] outFlags, int asyncCompletion, byte[] frameTime) {
+        return ImageCompressionManager.DecompressSequenceFrameWhen(seqID, data, dataSize, inFlags, outFlags, asyncCompletion, frameTime);
     }
 
-    private static short SetDSequenceTransferMode(int paramInt, short paramShort, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SetDSequenceTransferMode(paramInt, paramShort, paramArrayOfByte);
+    private static short SetDSequenceTransferMode(int seqID, short mode, byte[] opColor) {
+        return ImageCompressionManager.SetDSequenceTransferMode(seqID, mode, opColor);
     }
 
-    private static short SetDSequenceSrcRect(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SetDSequenceSrcRect(paramInt, paramArrayOfByte);
+    private static short SetDSequenceSrcRect(int seqID, byte[] srcRect) {
+        return ImageCompressionManager.SetDSequenceSrcRect(seqID, srcRect);
     }
 
-    private static short SetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SetDSequenceMatrix(paramInt, paramArrayOfByte);
+    private static short SetDSequenceMatrix(int seqID, byte[] matrix) {
+        return ImageCompressionManager.SetDSequenceMatrix(seqID, matrix);
     }
 
-    private static short SetDSequenceMask(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SetDSequenceMask(paramInt1, paramInt2);
+    private static short SetDSequenceMask(int seqID, int mask) {
+        return ImageCompressionManager.SetDSequenceMask(seqID, mask);
     }
 
-    private static short SetDSequenceMatte(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SetDSequenceMatte(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SetDSequenceMatte(int seqID, int matte, byte[] matteRect) {
+        return ImageCompressionManager.SetDSequenceMatte(seqID, matte, matteRect);
     }
 
-    private static short SetDSequenceAccuracy(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SetDSequenceAccuracy(paramInt1, paramInt2);
+    private static short SetDSequenceAccuracy(int seqID, int accuracy) {
+        return ImageCompressionManager.SetDSequenceAccuracy(seqID, accuracy);
     }
 
-    private static short GetDSequenceMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GetDSequenceMatrix(paramInt, paramArrayOfByte);
+    private static short GetDSequenceMatrix(int seqID, byte[] matrix) {
+        return ImageCompressionManager.GetDSequenceMatrix(seqID, matrix);
     }
 
-    private static short SetDSequenceFlags(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.SetDSequenceFlags(paramInt1, paramInt2, paramInt3);
+    private static short SetDSequenceFlags(int seqID, int flags, int flagsMask) {
+        return ImageCompressionManager.SetDSequenceFlags(seqID, flags, flagsMask);
     }
 
-    private static short PtInDSequenceData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.PtInDSequenceData(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    private static short PtInDSequenceData(int seqID, int data, int dataSize, int where, byte[] hit) {
+        return ImageCompressionManager.PtInDSequenceData(seqID, data, dataSize, where, hit);
     }
 
-    private static short PtInDSequenceData(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2) {
-        return ImageCompressionManager.PtInDSequenceData(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2);
+    private static short PtInDSequenceData(int seqID, byte[] data, int dataSize, int where, byte[] hit) {
+        return ImageCompressionManager.PtInDSequenceData(seqID, data, dataSize, where, hit);
     }
 
-    private static short PtInDSequenceData(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.PtInDSequenceData(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramArrayOfByte);
+    private static short PtInDSequenceData(int seqID, int[] data, int dataSize, int where, byte[] hit) {
+        return ImageCompressionManager.PtInDSequenceData(seqID, data, dataSize, where, hit);
     }
 
-    private static short CDSequenceFlush(int paramInt) {
-        return ImageCompressionManager.CDSequenceFlush(paramInt);
+    private static short CDSequenceFlush(int seqID) {
+        return ImageCompressionManager.CDSequenceFlush(seqID);
     }
 
-    private static short CDSequenceInvalidate(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.CDSequenceInvalidate(paramInt1, paramInt2);
+    private static short CDSequenceInvalidate(int seqID, int invalRgn) {
+        return ImageCompressionManager.CDSequenceInvalidate(seqID, invalRgn);
     }
 
-    private static short ICMShieldSequenceCursor(int paramInt) {
-        return ImageCompressionManager.ICMShieldSequenceCursor(paramInt);
+    private static short ICMShieldSequenceCursor(int seqID) {
+        return ImageCompressionManager.ICMShieldSequenceCursor(seqID);
     }
 
-    private static short HitTestDSequenceData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt, int paramInt5) {
-        return ImageCompressionManager.HitTestDSequenceData(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt, paramInt5);
+    private static short HitTestDSequenceData(int seqID, int data, int dataSize, int where, int[] hit, int hitFlags) {
+        return ImageCompressionManager.HitTestDSequenceData(seqID, data, dataSize, where, hit, hitFlags);
     }
 
-    private static short HitTestDSequenceData(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int paramInt4) {
-        return ImageCompressionManager.HitTestDSequenceData(paramInt1, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2, paramInt4);
+    private static short HitTestDSequenceData(int seqID, int[] data, int dataSize, int where, int[] hit, int hitFlags) {
+        return ImageCompressionManager.HitTestDSequenceData(seqID, data, dataSize, where, hit, hitFlags);
     }
 
-    private static short HitTestDSequenceData(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4) {
-        return ImageCompressionManager.HitTestDSequenceData(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt, paramInt4);
+    private static short HitTestDSequenceData(int seqID, byte[] data, int dataSize, int where, int[] hit, int hitFlags) {
+        return ImageCompressionManager.HitTestDSequenceData(seqID, data, dataSize, where, hit, hitFlags);
     }
 
-    private static short SetDSequenceTimeCode(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return ImageCompressionManager.SetDSequenceTimeCode(paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    private static short SetDSequenceTimeCode(int seqID, byte[] timeCodeFormat, byte[] timeCodeTime) {
+        return ImageCompressionManager.SetDSequenceTimeCode(seqID, timeCodeFormat, timeCodeTime);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 }

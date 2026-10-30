@@ -42,8 +42,8 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * @deprecated
      * Creates a viewer for a sequence of images.* @deprecated since QTJava 6.1
      */
-    public ImageViewer(ImageSequencer paramImageSequencer) throws QTException {
-        setImages(paramImageSequencer);
+    public ImageViewer(ImageSequencer images) throws QTException {
+        setImages(images);
     }
 
     /**
@@ -81,9 +81,9 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      * a subclass can overide this method, set the currentImage on the incoming images
      * and then call super.setImages(images).
      */
-    public void setImages(ImageSequencer paramImageSequencer) throws QTException {
-        this.images = paramImageSequencer;
-        setImageData(paramImageSequencer.getImage(), paramImageSequencer.getDescription());
+    public void setImages(ImageSequencer images) throws QTException {
+        this.images = images;
+        setImageData(images.getImage(), images.getDescription());
     }
 
     /**
@@ -137,10 +137,10 @@ public abstract class ImageViewer implements QTDrawable, ImageSettable {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**

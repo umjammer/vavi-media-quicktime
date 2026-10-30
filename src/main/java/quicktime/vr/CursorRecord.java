@@ -26,9 +26,9 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
      * Creates a QTVRTrackRefEntry object from a byte array
      * Used in cloning
      */
-    public CursorRecord(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
-        if (paramArrayOfByte.length != 8) {
+    public CursorRecord(byte[] bytes) throws QTException {
+        super(bytes);
+        if (bytes.length != 8) {
             throw new QTException(-50);
         }
     }
@@ -52,8 +52,8 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
      * kQTVRStdCursorType
      * kQTVRColorCursorType
      */
-    public void setType(short paramShort) {
-        setShortAt(0, paramShort);
+    public void setType(short type) {
+        setShortAt(0, type);
     }
 
     /**
@@ -80,9 +80,9 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
     public QTHandle getData() throws QTException {
         int i = getIntAt(4);
         int j = getIntFromHandle(i, 0);
-        QTHandle localQTHandle = new QTHandle();
-        setIntInHandle(QTObject.ID(localQTHandle), 0, j);
-        return localQTHandle;
+        QTHandle data = new QTHandle();
+        setIntInHandle(QTObject.ID(data), 0, j);
+        return data;
     }
 
     /**
@@ -99,11 +99,11 @@ public class CursorRecord extends QTByteObject implements PrimitivesLib {
         setIntAt(4, i);
     }
 
-    private static void setIntInHandle(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInHandle(paramInt1, paramInt2, paramInt3);
+    private static void setIntInHandle(int h, int offset, int value) {
+        MemoryManager.setIntInHandle(h, offset, value);
     }
 
-    private static int getIntFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    private static int getIntFromHandle(int h, int offset) {
+        return MemoryManager.getIntFromHandle(h, offset);
     }
 }

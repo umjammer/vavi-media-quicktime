@@ -644,7 +644,7 @@ public final class ClockManager {
     }
 
     /** used by CDSequence */
-    public static short CDSequenceSetTimeBase(int paramInt1, int paramInt2) {
+    public static short CDSequenceSetTimeBase(int sequenceID, int timeBase) {
         throw new UnsupportedToolboxException("CDSequenceSetTimeBase");
     }
 

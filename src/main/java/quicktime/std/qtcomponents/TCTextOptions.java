@@ -27,9 +27,9 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(getBytes());
+        in.read(getBytes());
         for (int i = 0; i < kNativeSize; i += 2) {
             short s1 = getShortFromArray(getBytes(), i);
             short s2 = EndianOrder.flipBigEndianToNative16(s1);
@@ -38,14 +38,14 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         for (int i = 0; i < kNativeSize; i += 2) {
-            short s1 = getShortFromArray(arrayOfByte, i);
+            short s1 = getShortFromArray(movie, i);
             short s2 = EndianOrder.flipNativeToBigEndian16(s1);
-            setShortInArray(arrayOfByte, i, s2);
+            setShortInArray(movie, i, s2);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -108,9 +108,9 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
      * @return a QDColor
      */
     public QDColor getForeColor() {
-        byte[] arrayOfByte = new byte[6];
-        System.arraycopy(getBytes(), 8, arrayOfByte, 0, 6);
-        return QDColor.fromArray(arrayOfByte, 6);
+        byte[] colorBytes = new byte[6];
+        System.arraycopy(getBytes(), 8, colorBytes, 0, 6);
+        return QDColor.fromArray(colorBytes, 6);
     }
 
     /**
@@ -128,23 +128,23 @@ public final class TCTextOptions extends QTByteObject implements PrimitivesLib {
      * @return a QDColor
      */
     public QDColor getBackColor() {
-        byte[] arrayOfByte = new byte[6];
-        System.arraycopy(getBytes(), 14, arrayOfByte, 0, 6);
-        return QDColor.fromArray(arrayOfByte, 6);
+        byte[] colorBytes = new byte[6];
+        System.arraycopy(getBytes(), 14, colorBytes, 0, 6);
+        return QDColor.fromArray(colorBytes, 6);
     }
 
     /**
      * Sets the background Color field.
      */
-    public void setBackColor(QDColor paramQDColor) {
-        System.arraycopy(paramQDColor.getRGBColor(), 0, getBytes(), 14, 6);
+    public void setBackColor(QDColor backColor) {
+        System.arraycopy(backColor.getRGBColor(), 0, getBytes(), 14, 6);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 }

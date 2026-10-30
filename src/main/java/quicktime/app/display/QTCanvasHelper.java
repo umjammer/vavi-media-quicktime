@@ -32,8 +32,8 @@ class QTCanvasHelper {
         }
     }
 
-    QTCanvasHelper(QTCanvas paramQTCanvas) {
-        this.canvas = paramQTCanvas;
+    QTCanvasHelper(QTCanvas canvas) {
+        this.canvas = canvas;
     }
 
     void doRemoveClient() {
@@ -43,41 +43,41 @@ class QTCanvasHelper {
                     doSetGWorld(false);
                 this.mClient.removedFrom(this.canvas);
             }
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         } finally {
             this.mClient = null;
         }
     }
 
-    void doSetClient(Drawable paramDrawable,
-                     QDRect paramQDRect,
-                     Dimension paramDimension1,
-                     Dimension paramDimension2,
-                     boolean paramBoolean) throws QTException {
-        if (paramDrawable == this.mClient) {
+    void doSetClient(Drawable client,
+                     QDRect rect,
+                     Dimension minSize,
+                     Dimension maxSize,
+                     boolean doLayout) throws QTException {
+        if (client == this.mClient) {
             return;
         }
         if (this.mClient != null) {
             doRemoveClient();
         }
-        if (paramDrawable != null) {
-            this.mClient = paramDrawable;
+        if (client != null) {
+            this.mClient = client;
             int i = this.canvas.currentWidth;
             int j = this.canvas.currentHeight;
-            if (paramBoolean) {
-                paramQDRect = paramQDRect != null ? paramQDRect
+            if (doLayout) {
+                rect = rect != null ? rect
                                                   : new QDRect(0, 0, this.canvas.getSize().width, this.canvas.getSize().height);
 
-                this.canvas.setInitialWidthAndHeight(paramQDRect, paramDimension1, paramDimension2);
-                this.canvas.currentX = paramQDRect.getX();
-                this.canvas.currentY = paramQDRect.getY();
+                this.canvas.setInitialWidthAndHeight(rect, minSize, maxSize);
+                this.canvas.currentX = rect.getX();
+                this.canvas.currentY = rect.getY();
                 this.canvas.currentWidth = this.canvas.initialWidth;
                 this.canvas.currentHeight = this.canvas.initialHeight;
 
                 this.canvas.doParentLayout();
                 this.canvas.deferResize = true;
             } else {
-                this.canvas.setInitialWidthAndHeight(paramQDRect, this.canvas.getMinimumSize(), this.canvas.getMaximumSize());
+                this.canvas.setInitialWidthAndHeight(rect, this.canvas.getMinimumSize(), this.canvas.getMaximumSize());
                 doClientSetBounds();
             }
             try {
@@ -87,32 +87,32 @@ class QTCanvasHelper {
                     this.canvas.repaint();
                 }
                 if (this.canvas.isVisible()) {
-                    if ((!this.canvas.isWin) || (!paramBoolean)
+                    if ((!this.canvas.isWin) || (!doLayout)
                         || ((i == this.canvas.currentWidth) && (j == this.canvas.currentHeight))) {
                         this.canvas.deferRedraw = true;
                     } else
                         this.canvas.repaint();
                 }
-            } catch (QTException localQTException) {
+            } catch (QTException e) {
                 this.mClient.removedFrom(this.canvas);
-                throw localQTException;
+                throw e;
             }
         }
     }
 
-    void doSetGWorld(boolean paramBoolean) throws QTException {
-        if ((this.mClient instanceof QTDrawable localQTDrawable)) {
-            QDGraphics localQDGraphics1;
-            if ((paramBoolean) && (this.canvas.isDisplayable())) {
-                localQDGraphics1 = this.canvas.getPort();
+    void doSetGWorld(boolean displayable) throws QTException {
+        if ((this.mClient instanceof QTDrawable qtDrawable)) {
+            QDGraphics port;
+            if ((displayable) && (this.canvas.isDisplayable())) {
+                port = this.canvas.getPort();
             } else {
-                localQDGraphics1 = QDGraphics.scratch;
+                port = QDGraphics.scratch;
             }
-            QDGraphics localQDGraphics2 = localQTDrawable.getGWorld();
-            if (!localQDGraphics1.equals(localQDGraphics2)) {
+            QDGraphics gWorld = qtDrawable.getGWorld();
+            if (!port.equals(gWorld)) {
 
-                localQTDrawable.setGWorld(localQDGraphics1);
-                if (paramBoolean) {
+                qtDrawable.setGWorld(port);
+                if (displayable) {
                     QTUtils.checkFreeMemory();
                     if (this.canvas.clientListener != null) {
                         this.canvas.clientListener.componentShown(new ComponentEvent(this.canvas, 102));
@@ -124,11 +124,11 @@ class QTCanvasHelper {
         }
     }
 
-    boolean shouldRedrawQTPlayer(Rectangle paramRectangle) {
+    boolean shouldRedrawQTPlayer(Rectangle rectangle) {
         if ((!this.canvas.isWin)
             && (((this.mClient instanceof QTPlayer)) || ((this.mClient instanceof GroupDrawable))
                 || ((this.mClient instanceof ImageDrawer)))
-            && (this.canvas.isShowing()) && (!paramRectangle.equals(this.canvas.getBounds()))) {
+            && (this.canvas.isShowing()) && (!rectangle.equals(this.canvas.getBounds()))) {
             return true;
         }
 
@@ -136,9 +136,9 @@ class QTCanvasHelper {
     }
 
     void doClientSetBounds() throws QTException {
-        Point localPoint = this.canvas.getNGLocation();
+        Point ngLocation = this.canvas.getNGLocation();
 
         this.mClient
-                .setDisplayBounds(new QDRect(localPoint.x, localPoint.y, this.canvas.currentWidth, this.canvas.currentHeight));
+                .setDisplayBounds(new QDRect(ngLocation.x, ngLocation.y, this.canvas.currentWidth, this.canvas.currentHeight));
     }
 }

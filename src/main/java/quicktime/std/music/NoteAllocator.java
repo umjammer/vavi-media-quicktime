@@ -54,12 +54,12 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      *
      * @see "QuickTime::OpenADefaultComponent"
      */
-    public NoteAllocator(int paramInt) throws QTException {
-        super(1852798049, paramInt);
+    public NoteAllocator(int subType) throws QTException {
+        super(1852798049, subType);
     }
 
-    NoteAllocator(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    NoteAllocator(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -85,12 +85,12 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * @see "QuickTime::NAGetIndNoteChannel"
      */
     public NoteChannel getIndNoteChannel(int index) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = NAGetIndNoteChannel(_ID(), index, arrayOfInt1, arrayOfInt2);
+        int[] noteChannel = new int[1];
+        int[] count = new int[1];
+        int i = NAGetIndNoteChannel(_ID(), index, noteChannel, count);
         if (i < 0)
             StdQTException.checkError(i);
-        return new NoteChannel(this, arrayOfInt1[0], this);
+        return new NoteChannel(this, noteChannel[0], this);
     }
 
     /**
@@ -113,12 +113,12 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      */
     public void pickArrangement(String prompt, Track track, String songName) throws StdQTException {
         String str1 = prompt;
-        Track localTrack = track;
+        Track t = track;
         String str2 = songName;
         int i = _ID();
         if (QTSession.isCurrentOS(4)) {
             this.res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
-                NoteAllocator.this.res = NoteAllocator.NAPickArrangement(i, 0, QTUtils.String2PString(str1, 255), 0, 0, QTObject.ID(localTrack), QTUtils.String2PString(str2, 255));
+                NoteAllocator.this.res = NoteAllocator.NAPickArrangement(i, 0, QTUtils.String2PString(str1, 255), 0, 0, QTObject.ID(t), QTUtils.String2PString(str2, 255));
                 return NoteAllocator.this.res;
             });
             StdQTException.checkError(this.res);
@@ -144,12 +144,12 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
         String str1 = author;
         String str2 = copyright;
         String str3 = other;
-        Pict localPict = p;
+        Pict pict = p;
         String str4 = title;
         int i = _ID();
         if (QTSession.isCurrentOS(4)) {
             this.res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
-                NoteAllocator.this.res = NoteAllocator.NACopyrightDialog(i, QTObject.ID(localPict), QTUtils.String2PString(str1, 255), QTUtils.String2PString(str2, 255), QTUtils.String2PString(str3, 255), QTUtils.String2PString(str4, 255), 0, 0);
+                NoteAllocator.this.res = NoteAllocator.NACopyrightDialog(i, QTObject.ID(pict), QTUtils.String2PString(str1, 255), QTUtils.String2PString(str2, 255), QTUtils.String2PString(str3, 255), QTUtils.String2PString(str4, 255), 0, 0);
                 return NoteAllocator.this.res;
             });
             StdQTException.checkError(this.res);
@@ -187,9 +187,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * @see "QuickTime::NARegisterMusicDevice"
      */
     public String registerMusicDevice_SoundBank(QTFile soundBankFile) throws QTException {
-        byte[] arrayOfByte = new byte[32];
-        StdQTException.checkError(NARegisterMusicDevice(_ID(), 0, arrayOfByte, new SynthesizerConnections(soundBankFile).getBytes()));
-        return QTUtils.PString2String(arrayOfByte, 0);
+        byte[] name = new byte[32];
+        StdQTException.checkError(NARegisterMusicDevice(_ID(), 0, name, new SynthesizerConnections(soundBankFile).getBytes()));
+        return QTUtils.PString2String(name, 0);
     }
 
     /**
@@ -225,19 +225,19 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * @see "QuickTime::NAGetRegisteredMusicDevice"
      */
     public MusicComponentInfo getRegisteredMusicDevice(int index) throws StdQTException {
-        byte[] arrayOfByte = new byte[256];
-        int[] arrayOfInt1 = new int[1];
-        SynthesizerConnections localSynthesizerConnections = new SynthesizerConnections();
-        int[] arrayOfInt2 = new int[1];
-        int i = NAGetRegisteredMusicDevice(_ID(), index, arrayOfInt1, arrayOfByte, localSynthesizerConnections.getBytes(), arrayOfInt2);
+        byte[] name = new byte[256];
+        int[] synthType = new int[1];
+        SynthesizerConnections synthesizerConnections = new SynthesizerConnections();
+        int[] mc = new int[1];
+        int i = NAGetRegisteredMusicDevice(_ID(), index, synthType, name, synthesizerConnections.getBytes(), mc);
         if (i < 0)
             StdQTException.checkError(i);
-        MusicComponentInfo localMusicComponentInfo = new MusicComponentInfo();
-        localMusicComponentInfo.synthType = arrayOfInt1[0];
-        localMusicComponentInfo.name = new String(arrayOfByte, 1, arrayOfByte[0]);
-        localMusicComponentInfo.mc = new MusicComponent(arrayOfInt2[0], null);
-        localMusicComponentInfo.connections = localSynthesizerConnections;
-        return localMusicComponentInfo;
+        MusicComponentInfo registeredMusicDevice = new MusicComponentInfo();
+        registeredMusicDevice.synthType = synthType[0];
+        registeredMusicDevice.name = new String(name, 1, name[0]);
+        registeredMusicDevice.mc = new MusicComponent(mc[0], null);
+        registeredMusicDevice.connections = synthesizerConnections;
+        return registeredMusicDevice;
     }
 
     /**
@@ -247,9 +247,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * @see "QuickTime::NAGetDefaultMIDIInput()"
      */
     public SynthesizerConnections getDefaultMIDIInput() throws StdQTException {
-        SynthesizerConnections localSynthesizerConnections = new SynthesizerConnections();
-        StdQTException.checkError(NAGetDefaultMIDIInput(_ID(), localSynthesizerConnections.getBytes()));
-        return localSynthesizerConnections;
+        SynthesizerConnections defaultMIDIInput = new SynthesizerConnections();
+        StdQTException.checkError(NAGetDefaultMIDIInput(_ID(), defaultMIDIInput.getBytes()));
+        return defaultMIDIInput;
     }
 
     /**
@@ -280,9 +280,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * @see "QuickTime::NAGetMIDIPorts()"
      */
     public QTMIDIPortList getMIDIInPorts() throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NAGetMIDIPorts(_ID(), arrayOfInt, null));
-        return new QTMIDIPortList(arrayOfInt[0]);
+        int[] inputPorts = new int[1];
+        StdQTException.checkError(NAGetMIDIPorts(_ID(), inputPorts, null));
+        return new QTMIDIPortList(inputPorts[0]);
     }
 
     /**
@@ -293,9 +293,9 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
      * @see "QuickTime::NAGetMIDIPorts()"
      */
     public QTMIDIPortList getMIDIOutPorts() throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NAGetMIDIPorts(_ID(), null, arrayOfInt));
-        return new QTMIDIPortList(arrayOfInt[0]);
+        int[] outputPorts = new int[1];
+        StdQTException.checkError(NAGetMIDIPorts(_ID(), null, outputPorts));
+        return new QTMIDIPortList(outputPorts[0]);
     }
 
     /**
@@ -308,51 +308,51 @@ public final class NoteAllocator extends Component implements QuickTimeLib {
         StdQTException.checkError(NALoseDefaultMIDIInput(_ID()));
     }
 
-    private static int NAGetIndNoteChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return MusicManager.NAGetIndNoteChannel(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static int NAGetIndNoteChannel(int na, int index, int[] noteChannel, int[] count) {
+        return MusicManager.NAGetIndNoteChannel(na, index, noteChannel, count);
     }
 
-    private static int NATask(int paramInt) {
-        return MusicManager.NATask(paramInt);
+    private static int NATask(int na) {
+        return MusicManager.NATask(na);
     }
 
-    private static int NAPickArrangement(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, int paramInt3, int paramInt4, int paramInt5, byte[] paramArrayOfByte2) {
-        return MusicManager.NAPickArrangement(paramInt1, paramInt2, paramArrayOfByte1, paramInt3, paramInt4, paramInt5, paramArrayOfByte2);
+    private static int NAPickArrangement(int na, int filterProc, byte[] prompt, int zero1, int zero2, int t, byte[] songName) {
+        return MusicManager.NAPickArrangement(na, filterProc, prompt, zero1, zero2, t, songName);
     }
 
-    private static int NACopyrightDialog(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte[] paramArrayOfByte4, int paramInt3, int paramInt4) {
-        return MusicManager.NACopyrightDialog(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4, paramInt3, paramInt4);
+    private static int NACopyrightDialog(int na, int p, byte[] author, byte[] copyright, byte[] other, byte[] title, int filterProc, int refCon) {
+        return MusicManager.NACopyrightDialog(na, p, author, copyright, other, title, filterProc, refCon);
     }
 
-    private static int NAGetRegisteredMusicDevice(int paramInt1, int paramInt2, int[] paramArrayOfInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt2) {
-        return MusicManager.NAGetRegisteredMusicDevice(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt2);
+    private static int NAGetRegisteredMusicDevice(int na, int index, int[] synthType, byte[] name, byte[] connections, int[] mc) {
+        return MusicManager.NAGetRegisteredMusicDevice(na, index, synthType, name, connections, mc);
     }
 
-    private static int NARegisterMusicDevice(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return MusicManager.NARegisterMusicDevice(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2);
+    private static int NARegisterMusicDevice(int na, int synthType, byte[] name, byte[] connections) {
+        return MusicManager.NARegisterMusicDevice(na, synthType, name, connections);
     }
 
-    private static int NAUnregisterMusicDevice(int paramInt1, int paramInt2) {
-        return MusicManager.NAUnregisterMusicDevice(paramInt1, paramInt2);
+    private static int NAUnregisterMusicDevice(int na, int index) {
+        return MusicManager.NAUnregisterMusicDevice(na, index);
     }
 
-    private static int NAGetDefaultMIDIInput(int paramInt, byte[] paramArrayOfByte) {
-        return MusicManager.NAGetDefaultMIDIInput(paramInt, paramArrayOfByte);
+    private static int NAGetDefaultMIDIInput(int na, byte[] midiIn) {
+        return MusicManager.NAGetDefaultMIDIInput(na, midiIn);
     }
 
-    private static int NASetDefaultMIDIInput(int paramInt, byte[] paramArrayOfByte) {
-        return MusicManager.NASetDefaultMIDIInput(paramInt, paramArrayOfByte);
+    private static int NASetDefaultMIDIInput(int na, byte[] midiIn) {
+        return MusicManager.NASetDefaultMIDIInput(na, midiIn);
     }
 
-    private static int NASaveMusicConfiguration(int paramInt) {
-        return MusicManager.NASaveMusicConfiguration(paramInt);
+    private static int NASaveMusicConfiguration(int na) {
+        return MusicManager.NASaveMusicConfiguration(na);
     }
 
-    private static int NAGetMIDIPorts(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return MusicManager.NAGetMIDIPorts(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int NAGetMIDIPorts(int na, int[] inputPorts, int[] outputPorts) {
+        return MusicManager.NAGetMIDIPorts(na, inputPorts, outputPorts);
     }
 
-    private static int NALoseDefaultMIDIInput(int paramInt) {
-        return MusicManager.NALoseDefaultMIDIInput(paramInt);
+    private static int NALoseDefaultMIDIInput(int na) {
+        return MusicManager.NALoseDefaultMIDIInput(na);
     }
 }

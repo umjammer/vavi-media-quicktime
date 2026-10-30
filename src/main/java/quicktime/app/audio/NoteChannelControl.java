@@ -217,9 +217,9 @@ public class NoteChannelControl implements MusicPart {
         }
         int i = this.t.getTimeBase().getTime(1000);
         this.channel.playNote(note, velocity);
-        EndNote localEndNote = new EndNote(this.t.getTimeBase(), 1000, i + duration, 1, this.channel, note);
-        localEndNote.callMeWhen();
-        this.activeNotes.addElement(localEndNote);
+        EndNote endNote = new EndNote(this.t.getTimeBase(), 1000, i + duration, 1, this.channel, note);
+        endNote.callMeWhen();
+        this.activeNotes.addElement(endNote);
     }
 
     class EndNote extends TimeCallBack {
@@ -228,10 +228,10 @@ public class NoteChannelControl implements MusicPart {
 
         NoteChannel nc;
 
-        EndNote(TimeBase paramTimeBase, int paramInt1, int paramInt2, int paramInt3, NoteChannel paramNoteChannel, float paramFloat) throws QTException {
-            super(paramTimeBase, paramInt1, paramInt2, paramInt3);
-            this.note = paramFloat;
-            this.nc = paramNoteChannel;
+        EndNote(TimeBase tb, int scale, int value, int flags, NoteChannel nc, float note) throws QTException {
+            super(tb, scale, value, flags);
+            this.note = note;
+            this.nc = nc;
         }
 
         @Override
@@ -245,7 +245,7 @@ public class NoteChannelControl implements MusicPart {
                 if (NoteChannelControl.this.activeNotes.isEmpty()) {
                     try {
                         NoteChannelControl.this.t.setActive(false);
-                    } catch (QTException localQTException2) {
+                    } catch (QTException e) {
                         NoteChannelControl.this.t = null;
                     }
                 }
@@ -253,10 +253,10 @@ public class NoteChannelControl implements MusicPart {
             }
         }
 
-        public boolean equals(Object paramObject) {
-            if (paramObject == this)
+        public boolean equals(Object qtObject) {
+            if (qtObject == this)
                 return true;
-            if ((paramObject instanceof EndNote endNote)) {
+            if ((qtObject instanceof EndNote endNote)) {
                 return (this.value == endNote.value) && (this.note == endNote.note) && (this.nc.equals(endNote.nc));
             }
             return false;
@@ -269,20 +269,20 @@ public class NoteChannelControl implements MusicPart {
         }
 
         @Override
-        public void timeChanged(int paramInt) throws QTException {
-            Enumeration<EndNote> localEnumeration = NoteChannelControl.this.activeNotes.elements();
-            while (localEnumeration.hasMoreElements()) localEnumeration.nextElement().execute();
+        public void timeChanged(int newTime) throws QTException {
+            Enumeration<EndNote> enumeration = NoteChannelControl.this.activeNotes.elements();
+            while (enumeration.hasMoreElements()) enumeration.nextElement().execute();
         }
 
         @Override
-        public boolean tickle(float paramFloat, int paramInt) throws QTException {
+        public boolean tickle(float er, int time) throws QTException {
             return false;
         }
     }
 
     protected final void dispose() throws Throwable {
-        Enumeration<EndNote> localEnumeration = this.activeNotes.elements();
-        while (localEnumeration.hasMoreElements()) localEnumeration.nextElement().cancelAndCleanup();
+        Enumeration<EndNote> enumeration = this.activeNotes.elements();
+        while (enumeration.hasMoreElements()) enumeration.nextElement().cancelAndCleanup();
         this.activeNotes.removeAllElements();
     }
 }

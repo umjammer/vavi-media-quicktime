@@ -14,8 +14,8 @@ import quicktime.util.QTHandle;
 
 public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLib {
 
-    MovieMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    MovieMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -25,10 +25,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public int getCurrentMoviePropertyDuration() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1685418593, arrayOfInt);
+        int[] value = new int[1];
+        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1685418593, value);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -38,10 +38,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public int getCurrentMoviePropertyTimeScale() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953066355, arrayOfInt);
+        int[] value = new int[1];
+        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953066355, value);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -51,10 +51,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.QTException
      */
     public TimeRecord getCurrentMoviePropertyTime() throws QTException {
-        TimeRecord localTimeRecord = new TimeRecord();
-        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953066358, QTObject.ID(localTimeRecord));
+        TimeRecord value = new TimeRecord();
+        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953066358, QTObject.ID(value));
         StdQTException.checkError(i);
-        return localTimeRecord;
+        return value;
     }
 
     /**
@@ -64,10 +64,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public QDRect getCurrentMoviePropertyNaturalBounds() throws StdQTException {
-        QDRect localQDRect = new QDRect();
-        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1851880546, localQDRect.getRect());
+        QDRect currentMoviePropertyNaturalBounds = new QDRect();
+        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1851880546, currentMoviePropertyNaturalBounds.getRect());
         StdQTException.checkError(i);
-        return localQDRect;
+        return currentMoviePropertyNaturalBounds;
     }
 
     /**
@@ -77,10 +77,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public Matrix getCurrentMoviePropertyMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1836348024, localMatrix.getBytes());
+        Matrix currentMoviePropertyMatrix = new Matrix();
+        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1836348024, currentMoviePropertyMatrix.getBytes());
         StdQTException.checkError(i);
-        return localMatrix;
+        return currentMoviePropertyMatrix;
     }
 
     /**
@@ -91,11 +91,11 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public int[] getCurrentMoviePropertyTrackList() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953264500, arrayOfInt);
+        int[] value = { 0 };
+        int i = MovieMediaGetCurrentMovieProperty(_ID(), 1953264500, value);
         StdQTException.checkError(i);
-        int j = arrayOfInt[0];
-        return arrayOfInt;
+        int j = value[0];
+        return value;
     }
 
     /**
@@ -106,10 +106,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public int getCurrentTrackPropertyMediaType(int trackID) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = MovieMediaGetCurrentTrackProperty(_ID(), 1836349808, trackID, arrayOfInt);
+        int[] value = { 0 };
+        int i = MovieMediaGetCurrentTrackProperty(_ID(), 1836349808, trackID, value);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -122,10 +122,10 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
      */
     public DataRef getChildMovieDataReference(int dataRefID, int dataRefIndex) throws QTException {
         int i = 0;
-        byte[] arrayOfByte = { 0 };
-        int j = MovieMediaGetChildMovieDataReference(_ID(), dataRefID, dataRefIndex, i, arrayOfByte, dataRefID, dataRefIndex);
+        byte[] dataRef = { 0 };
+        int j = MovieMediaGetChildMovieDataReference(_ID(), dataRefID, dataRefIndex, i, dataRef, dataRefID, dataRefIndex);
         StdQTException.checkError(j);
-        return new DataRef(new QTHandle(arrayOfByte));
+        return new DataRef(new QTHandle(dataRef));
     }
 
     /**
@@ -152,39 +152,39 @@ public class MovieMediaHandler extends VisualMediaHandler implements QuickTimeLi
         StdQTException.checkError(i);
     }
 
-    private static int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(paramInt1, paramInt2, paramArrayOfInt);
+    private static int MovieMediaGetCurrentMovieProperty(int mh, int whichProperty, int[] value) {
+        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(mh, whichProperty, value);
     }
 
-    private static int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MovieMediaGetCurrentMovieProperty(int mh, int whichProperty, byte[] value) {
+        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(mh, whichProperty, value);
     }
 
-    private static int MovieMediaGetCurrentMovieProperty(int paramInt1, int paramInt2, int paramInt3) {
-        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(paramInt1, paramInt2, paramInt3);
+    private static int MovieMediaGetCurrentMovieProperty(int mh, int whichProperty, int value) {
+        return MediaHandlerManager.MovieMediaGetCurrentMovieProperty(mh, whichProperty, value);
     }
 
-    private static int MovieMediaGetCurrentTrackProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return MediaHandlerManager.MovieMediaGetCurrentTrackProperty(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static int MovieMediaGetCurrentTrackProperty(int mh, int trackID, int whichProperty, int[] value) {
+        return MediaHandlerManager.MovieMediaGetCurrentTrackProperty(mh, trackID, whichProperty, value);
     }
 
-    private static int MovieMediaGetChildMovieDataReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte, int paramInt5, int paramInt6) {
-        return MediaHandlerManager.MovieMediaGetChildMovieDataReference(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte, paramInt5, paramInt6);
+    private static int MovieMediaGetChildMovieDataReference(int mh, int id, int index, int dataRefType, byte[] dataRef, int dataRefIndex, int flags) {
+        return MediaHandlerManager.MovieMediaGetChildMovieDataReference(mh, id, index, dataRefType, dataRef, dataRefIndex, flags);
     }
 
-    private static int MovieMediaSetChildMovieDataReference(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MovieMediaSetChildMovieDataReference(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static int MovieMediaSetChildMovieDataReference(int mh, int id, int dataRefType, byte[] dataRef) {
+        return MediaHandlerManager.MovieMediaSetChildMovieDataReference(mh, id, dataRefType, dataRef);
     }
 
-    private static int MovieMediaLoadChildMovieFromDataReference(int paramInt1, int paramInt2) {
-        return MediaHandlerManager.MovieMediaLoadChildMovieFromDataReference(paramInt1, paramInt2);
+    private static int MovieMediaLoadChildMovieFromDataReference(int mh, int id) {
+        return MediaHandlerManager.MovieMediaLoadChildMovieFromDataReference(mh, id);
     }
 
-    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(int[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 }

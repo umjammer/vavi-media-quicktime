@@ -17,10 +17,10 @@ public final class QDFont implements QuickTimeLib {
      * @return the name of the font. If the font specified in the familyID parameter does not exist, theName contains an empty string.
      * @see "QuickDraw::GetFontName()"
      */
-    public static String getFontName(int paramInt) {
-        byte[] arrayOfByte = new byte[255];
-        GetFontName((short) paramInt, arrayOfByte);
-        return QTUtils.PString2String(arrayOfByte, 0);
+    public static String getFontName(int familyID) {
+        byte[] name = new byte[255];
+        GetFontName((short) familyID, name);
+        return QTUtils.PString2String(name, 0);
     }
 
     /**
@@ -31,17 +31,17 @@ public final class QDFont implements QuickTimeLib {
      * @see "QuickDraw::GetFNum()"
      */
     public static int getFNum(String theName) {
-        byte[] arrayOfByte = QTUtils.String2PString(theName, 255);
-        short[] arrayOfShort = {0};
-        GetFNum(arrayOfByte, arrayOfShort);
-        return arrayOfShort[0];
+        byte[] name = QTUtils.String2PString(theName, 255);
+        short[] familyID = {0};
+        GetFNum(name, familyID);
+        return familyID[0];
     }
 
-    private static void GetFontName(short paramShort, byte[] paramArrayOfByte) {
-        QuickDrawManager.GetFontName(paramShort, paramArrayOfByte);
+    private static void GetFontName(short familyID, byte[] name) {
+        QuickDrawManager.GetFontName(familyID, name);
     }
 
-    private static void GetFNum(byte[] paramArrayOfByte, short[] paramArrayOfShort) {
-        QuickDrawManager.GetFNum(paramArrayOfByte, paramArrayOfShort);
+    private static void GetFNum(byte[] name, short[] familyID) {
+        QuickDrawManager.GetFNum(name, familyID);
     }
 }

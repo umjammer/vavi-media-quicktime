@@ -81,7 +81,7 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
 
     private ComponentListener clientListener;
 
-    JQTCanvas(Presentable paramPresentable) throws QTException {
+    JQTCanvas(Presentable client) throws QTException {
         this.initialWidth = 1;
         this.initialHeight = 1;
         this.minWidth = 1;
@@ -90,8 +90,8 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
         this.minHeight = 1;
         this.maxWidth = Integer.MAX_VALUE;
         this.maxHeight = Integer.MAX_VALUE;
-        doSetClient(paramPresentable,
-                    paramPresentable != null ? paramPresentable.getDisplayBounds() : null,
+        doSetClient(client,
+                    client != null ? client.getDisplayBounds() : null,
                     getMinimumSize(),
                     getMaximumSize(),
                     true);
@@ -108,51 +108,51 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
     }
 
     @Override
-    public void setGraphicsImporterDrawer(GraphicsImporterDrawer paramGraphicsImporterDrawer) throws QTException {
-        doSetClient(paramGraphicsImporterDrawer,
-                    paramGraphicsImporterDrawer != null ? paramGraphicsImporterDrawer.getDisplayBounds() : null,
+    public void setGraphicsImporterDrawer(GraphicsImporterDrawer img) throws QTException {
+        doSetClient(img,
+                    img != null ? img.getDisplayBounds() : null,
                     getMinimumSize(),
                     getMaximumSize(),
                     false);
     }
 
     @Override
-    public void setMoviePlayer(MoviePlayer paramMoviePlayer) throws QTException {
-        doSetClient(paramMoviePlayer,
-                    paramMoviePlayer != null ? paramMoviePlayer.getDisplayBounds() : null,
+    public void setMoviePlayer(MoviePlayer movPlayer) throws QTException {
+        doSetClient(movPlayer,
+                    movPlayer != null ? movPlayer.getDisplayBounds() : null,
                     getMinimumSize(),
                     getMaximumSize(),
                     false);
     }
 
     @Override
-    public void paint(Graphics paramGraphics) {
+    public void paint(Graphics graphics) {
         if ((!this.inited) && (this.client != null)) {
             this.client.addedTo(this);
             this.inited = true;
-            super.paint(paramGraphics);
+            super.paint(graphics);
         }
 
         if (this.image != null) {
-            Dimension localDimension = getSize();
-            paramGraphics.drawImage(this.image, 0, 0, localDimension.width, localDimension.height, this);
+            Dimension size = getSize();
+            graphics.drawImage(this.image, 0, 0, size.width, size.height, this);
         }
     }
 
-    public void setFlashScaling(boolean paramBoolean) {
-        flashScaling = paramBoolean;
+    public void setFlashScaling(boolean flashScaling) {
+        flashScaling = flashScaling;
     }
 
     public boolean isFlashScaling() {
         return flashScaling;
     }
 
-    Image imageFromEncodedImage(RawEncodedImage paramRawEncodedImage, QDRect paramQDRect) {
-        paramRawEncodedImage.copyToArray(0, this.pixels, 0, this.pixels.length);
-        MemoryImageSource localMemoryImageSource = new MemoryImageSource(paramQDRect
-                .getWidth(), paramQDRect.getHeight(), this.colorModel, this.pixels, 0, paramRawEncodedImage.getRowBytes() / 4);
+    Image imageFromEncodedImage(RawEncodedImage rawEncodedImage, QDRect rect) {
+        rawEncodedImage.copyToArray(0, this.pixels, 0, this.pixels.length);
+        MemoryImageSource memoryImageSource = new MemoryImageSource(rect
+                .getWidth(), rect.getHeight(), this.colorModel, this.pixels, 0, rawEncodedImage.getRowBytes() / 4);
 
-        return getToolkit().createImage(localMemoryImageSource);
+        return getToolkit().createImage(memoryImageSource);
     }
 
     private void removeClient() {
@@ -161,7 +161,7 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
         }
         try {
             this.client.setGWorld(QDGraphics.scratch);
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         } finally {
             this.client.removedFrom(this);
             this.client = null;
@@ -180,33 +180,33 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
 
     @Override
     public Dimension getMinimumSize() {
-        Dimension localDimension = null;
-        localDimension = new Dimension(this.minWidth, this.minHeight);
-        return localDimension;
+        Dimension minimumSize = null;
+        minimumSize = new Dimension(this.minWidth, this.minHeight);
+        return minimumSize;
     }
 
     @Override
     public Dimension getMaximumSize() {
-        Dimension localDimension = null;
-        localDimension = new Dimension(32767, 32767);
-        return localDimension;
+        Dimension maximumSize = null;
+        maximumSize = new Dimension(32767, 32767);
+        return maximumSize;
     }
 
     @Override
     public Dimension getPreferredSize() {
-        Dimension localDimension = null;
-        localDimension = new Dimension(this.prefWidth, this.prefHeight);
-        return localDimension;
+        Dimension preferredSize = null;
+        preferredSize = new Dimension(this.prefWidth, this.prefHeight);
+        return preferredSize;
     }
 
-    void setInitialWidthAndHeight(QDRect paramQDRect, Dimension paramDimension1, Dimension paramDimension2) {
-        this.initialWidth = paramQDRect.getWidth();
-        this.initialHeight = paramQDRect.getHeight();
+    void setInitialWidthAndHeight(QDRect rect, Dimension minSize, Dimension maxSize) {
+        this.initialWidth = rect.getWidth();
+        this.initialHeight = rect.getHeight();
 
-        this.minWidth = Math.max(paramDimension1.width, 0);
-        this.minHeight = Math.max(paramDimension1.height, 0);
-        this.maxWidth = Math.max(paramDimension2.width, this.minWidth);
-        this.maxHeight = Math.max(paramDimension2.height, this.minHeight);
+        this.minWidth = Math.max(minSize.width, 0);
+        this.minHeight = Math.max(minSize.height, 0);
+        this.maxWidth = Math.max(maxSize.width, this.minWidth);
+        this.maxHeight = Math.max(maxSize.height, this.minHeight);
         if (this.initialWidth < this.minWidth) {
             this.initialWidth = this.minWidth;
         } else if (this.initialWidth > this.maxWidth) {
@@ -223,41 +223,41 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
                                + " " + this.prefHeight);
     }
 
-    private void doSetClient(Presentable paramPresentable,
-                             QDRect paramQDRect,
-                             Dimension paramDimension1,
-                             Dimension paramDimension2,
-                             boolean paramBoolean) throws QTException {
-        if (paramPresentable == this.client) {
+    private void doSetClient(Presentable client,
+                             QDRect rect,
+                             Dimension minSize,
+                             Dimension maxSize,
+                             boolean doLayout) throws QTException {
+        if (client == this.client) {
             return;
         }
         if (this.client != null) {
             removeClient();
         }
-        if (paramPresentable != null) {
-            this.client = paramPresentable;
+        if (client != null) {
+            this.client = client;
 
-            if (paramBoolean) {
-                setPreferredSize(new Dimension(paramQDRect.getWidth(), paramQDRect.getHeight()));
-                setInitialWidthAndHeight(paramQDRect, paramDimension1, paramDimension2);
-                this.currentX = paramQDRect.getX();
-                this.currentY = paramQDRect.getY();
+            if (doLayout) {
+                setPreferredSize(new Dimension(rect.getWidth(), rect.getHeight()));
+                setInitialWidthAndHeight(rect, minSize, maxSize);
+                this.currentX = rect.getX();
+                this.currentY = rect.getY();
                 this.currentWidth = this.initialWidth;
                 this.currentHeight = this.initialHeight;
 
                 doParentLayout();
             }
-            setPreferredSize(new Dimension(paramQDRect.getWidth(), paramQDRect.getHeight()));
-            setInitialWidthAndHeight(paramQDRect, paramDimension1, paramDimension2);
-            this.currentX = paramQDRect.getX();
-            this.currentY = paramQDRect.getY();
+            setPreferredSize(new Dimension(rect.getWidth(), rect.getHeight()));
+            setInitialWidthAndHeight(rect, minSize, maxSize);
+            this.currentX = rect.getX();
+            this.currentY = rect.getY();
             this.currentWidth = this.initialWidth;
             this.currentHeight = this.initialHeight;
 
             doParentLayout();
 
             this.client.redraw(null);
-            this.ip = new QTImageProducer(this.client, new Dimension(paramQDRect.getWidth(), paramQDRect.getHeight()));
+            this.ip = new QTImageProducer(this.client, new Dimension(rect.getWidth(), rect.getHeight()));
             this.image = createImage(this.ip);
             prepareImage(this.image, this);
             if ((this.client instanceof DrawingNotifier))
@@ -267,75 +267,75 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
     }
 
     @Override
-    public Image createImage(ImageProducer paramImageProducer) {
+    public Image createImage(ImageProducer imageProducer) {
         if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
             boolean bool = false;
 
-            QTImageProducer localQTImageProducer = (QTImageProducer) paramImageProducer;
+            QTImageProducer qtImageProducer = (QTImageProducer) imageProducer;
 
-            Dimension localDimension = localQTImageProducer.getSize();
-            QDGraphics localQDGraphics = localQTImageProducer.getGWorld();
-            this.gw = localQDGraphics;
+            Dimension size = qtImageProducer.getSize();
+            QDGraphics gw = qtImageProducer.getGWorld();
+            this.gw = gw;
 
-            BufferedImage localBufferedImage = (BufferedImage) MacDirectColorModel
-                    .GetWrappedGWorldImage(QTObject.ID(localQDGraphics), 32, localDimension.width, localDimension.height, bool);
+            BufferedImage image = (BufferedImage) MacDirectColorModel
+                    .GetWrappedGWorldImage(QTObject.ID(gw), 32, size.width, size.height, bool);
 
-            return localBufferedImage;
+            return image;
         }
 
-        return super.createImage(paramImageProducer);
+        return super.createImage(imageProducer);
     }
 
     @Override
-    public void setBounds(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public void setBounds(int x, int y, int width, int height) {
         if (this.debug) {
-            logger.log(Level.DEBUG, "setBounds( " + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
+            logger.log(Level.DEBUG, "setBounds( " + x + ", " + y + ", " + width + ", " + height + ")");
         }
-        Dimension localDimension = setCurrentWidthHeight(paramInt3, paramInt4);
+        Dimension dimension = setCurrentWidthHeight(width, height);
         if (flashScaling) {
-            setPreferredSize(localDimension);
-            this.initialWidth = paramInt3;
-            this.initialHeight = paramInt4;
+            setPreferredSize(dimension);
+            this.initialWidth = width;
+            this.initialHeight = height;
             try {
                 this.client.redraw(null);
-                this.ip = new QTImageProducer(this.client, localDimension);
+                this.ip = new QTImageProducer(this.client, dimension);
                 this.image = createImage(this.ip);
                 prepareImage(this.image, this);
-            } catch (QTException localQTException) {
-                localQTException.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
             repaint();
         }
 
-        this.currentX = paramInt1;
-        this.currentY = paramInt2;
+        this.currentX = x;
+        this.currentY = y;
 
-        super.reshape(this.currentX, this.currentY, localDimension.width, localDimension.height);
+        super.reshape(this.currentX, this.currentY, dimension.width, dimension.height);
     }
 
     /**
      * @deprecated
      */
     @Override
-    public final void reshape(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        logger.log(Level.DEBUG, "reshape( " + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
-        setBounds(paramInt1, paramInt2, paramInt3, paramInt4);
+    public final void reshape(int x, int y, int width, int height) {
+        logger.log(Level.DEBUG, "reshape( " + x + ", " + y + ", " + width + ", " + height + ")");
+        setBounds(x, y, width, height);
     }
 
     private void doParentLayout() {
         logger.log(Level.DEBUG, "doParentLayout()");
-        Container localContainer = getParent();
-        if (localContainer != null) {
+        Container parent = getParent();
+        if (parent != null) {
             invalidate();
-            localContainer.validate();
+            parent.validate();
             return;
         }
         super.reshape(this.currentX, this.currentY, this.currentWidth, this.currentHeight);
     }
 
-    private Dimension setCurrentWidthHeight(int paramInt1, int paramInt2) {
+    private Dimension setCurrentWidthHeight(int width, int height) {
         if (this.debug) {
-            logger.log(Level.DEBUG, "setCurrentWidthHeight( " + paramInt1 + ", " + paramInt2 + ", " + this.minWidth + ", "
+            logger.log(Level.DEBUG, "setCurrentWidthHeight( " + width + ", " + height + ", " + this.minWidth + ", "
                                + this.minHeight);
         }
 
@@ -348,21 +348,21 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
         } else if (this.currentHeight > this.maxHeight) {
             this.currentHeight = this.maxHeight;
         }
-        this.currentWidth = paramInt1;
-        this.currentHeight = paramInt2;
+        this.currentWidth = width;
+        this.currentHeight = height;
         return new Dimension(this.currentWidth, this.currentHeight);
     }
 
     @Override
-    public void drawingComplete(Presentable paramPresentable) {
+    public void drawingComplete(Presentable presentable) {
         if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
             repaint();
             return;
         }
         try {
             this.ip.updateConsumers(null);
-        } catch (QTException localQTException) {
-            localQTException.printStackTrace();
+        } catch (QTException e) {
+            e.printStackTrace();
         }
     }
 
@@ -371,11 +371,11 @@ class JQTCanvas extends JComponent implements DrawingListener, QTJComponent {
         return this;
     }
 
-    public void addQTClientListener(ComponentListener paramComponentListener) {
-        this.clientListener = AWTEventMulticaster.add(this.clientListener, paramComponentListener);
+    public void addQTClientListener(ComponentListener componentListener) {
+        this.clientListener = AWTEventMulticaster.add(this.clientListener, componentListener);
     }
 
-    public void removeQTClientListener(ComponentListener paramComponentListener) {
-        this.clientListener = AWTEventMulticaster.remove(this.clientListener, paramComponentListener);
+    public void removeQTClientListener(ComponentListener componentListener) {
+        this.clientListener = AWTEventMulticaster.remove(this.clientListener, componentListener);
     }
 }

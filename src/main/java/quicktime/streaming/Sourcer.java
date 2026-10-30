@@ -27,8 +27,8 @@ public class Sourcer extends Component implements QTStreamingLib {
         }
     }
 
-    Sourcer(int paramInt) throws QTException {
-        super(paramInt);
+    Sourcer(int component) throws QTException {
+        super(component);
         initialize(null);
     }
 
@@ -64,19 +64,19 @@ public class Sourcer extends Component implements QTStreamingLib {
         initialize(initParams);
     }
 
-    private static int allocate(int paramInt1, int paramInt2, int paramInt3) throws QTException {
-        ComponentDescription localComponentDescription = new ComponentDescription(paramInt1);
-        localComponentDescription.setSubType(paramInt2);
-        localComponentDescription.setManufacturer(paramInt3);
-        ComponentIdentifier localComponentIdentifier = ComponentIdentifier.find(localComponentDescription);
-        return QTObject.ID(localComponentIdentifier);
+    private static int allocate(int type, int subType, int manufacturer) throws QTException {
+        ComponentDescription desc = new ComponentDescription(type);
+        desc.setSubType(subType);
+        desc.setManufacturer(manufacturer);
+        ComponentIdentifier componentIdentifier = ComponentIdentifier.find(desc);
+        return QTObject.ID(componentIdentifier);
     }
 
-    protected void initialize(SourcerInitParams paramSourcerInitParams) throws QTException {
-        if (paramSourcerInitParams == null) {
+    protected void initialize(SourcerInitParams inInitParams) throws QTException {
+        if (inInitParams == null) {
             QTException.checkError(QTSSourcerInitialize(_ID(), 0));
         } else {
-            QTException.checkError(QTSSourcerInitialize(_ID(), QTObject.ID(paramSourcerInitParams)));
+            QTException.checkError(QTSSourcerInitialize(_ID(), QTObject.ID(inInitParams)));
         }
     }
 
@@ -105,9 +105,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @see "QuickTime::QTSSourcerGetInfo"
      */
     public QTPointer getInfo(int selector) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetInfo(_ID(), selector, arrayOfByte));
-        return new QTPointer(arrayOfByte);
+        byte[] ioParams = { 0 };
+        QTException.checkError(QTSSourcerGetInfo(_ID(), selector, ioParams));
+        return new QTPointer(ioParams);
     }
 
     /**
@@ -127,9 +127,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public SourcerCallbackParams getCallbackParams() throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetInfo(_ID(), 1935893104, arrayOfByte));
-        return new SourcerCallbackParams(arrayOfByte);
+        byte[] ioParams = { 0 };
+        QTException.checkError(QTSSourcerGetInfo(_ID(), 1935893104, ioParams));
+        return new SourcerCallbackParams(ioParams);
     }
 
     /**
@@ -149,9 +149,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public SourcerLoopParams getLoopParams() throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetInfo(_ID(), 1819242352, arrayOfByte));
-        return new SourcerLoopParams(arrayOfByte);
+        byte[] ioParams = { 0 };
+        QTException.checkError(QTSSourcerGetInfo(_ID(), 1819242352, ioParams));
+        return new SourcerLoopParams(ioParams);
     }
 
     /**
@@ -171,9 +171,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public SourcerTrackParams getSourcerTrackParams() throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetInfo(_ID(), 1953653099, arrayOfByte));
-        return new SourcerTrackParams(arrayOfByte);
+        byte[] ioParams = { 0 };
+        QTException.checkError(QTSSourcerGetInfo(_ID(), 1953653099, ioParams));
+        return new SourcerTrackParams(ioParams);
     }
 
     /**
@@ -184,9 +184,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int idle(long inTime, int flags) throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSSourcerIdle(_ID(), inTime, flags, arrayOfInt));
-        return arrayOfInt[0];
+        int[] outFlags = { 0 };
+        QTException.checkError(QTSSourcerIdle(_ID(), inTime, flags, outFlags));
+        return outFlags[0];
     }
 
     /**
@@ -228,9 +228,9 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public boolean isEnable(int flags) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSSourcerGetEnable(_ID(), arrayOfByte, flags));
-        return arrayOfByte[0] != 0;
+        byte[] enableMode = { 0 };
+        QTException.checkError(QTSSourcerGetEnable(_ID(), enableMode, flags));
+        return enableMode[0] != 0;
     }
 
     /**
@@ -250,40 +250,40 @@ public class Sourcer extends Component implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int getTimeScale() throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSSourcerGetTimeScale(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] timeScale = { 0 };
+        QTException.checkError(QTSSourcerGetTimeScale(_ID(), timeScale));
+        return timeScale[0];
     }
 
-    public static int QTSSourcerInitialize(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSSourcerInitialize(paramInt1, paramInt2);
+    public static int QTSSourcerInitialize(int sourcer, int inInitParams) {
+        return StreamingManager.QTSSourcerInitialize(sourcer, inInitParams);
     }
 
-    public static int QTSSourcerSetInfo(int paramInt1, int paramInt2, int paramInt3) {
-        return StreamingManager.QTSSourcerSetInfo(paramInt1, paramInt2, paramInt3);
+    public static int QTSSourcerSetInfo(int sourcer, int selector, int ioParams) {
+        return StreamingManager.QTSSourcerSetInfo(sourcer, selector, ioParams);
     }
 
-    public static int QTSSourcerGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSSourcerGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    public static int QTSSourcerGetInfo(int sourcer, int selector, byte[] ioParams) {
+        return StreamingManager.QTSSourcerGetInfo(sourcer, selector, ioParams);
     }
 
-    public static int QTSSourcerIdle(int paramInt1, long paramLong, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSSourcerIdle(paramInt1, paramLong, paramInt2, paramArrayOfInt);
+    public static int QTSSourcerIdle(int sourcer, long inTime, int inFlags, int[] outFlags) {
+        return StreamingManager.QTSSourcerIdle(sourcer, inTime, inFlags, outFlags);
     }
 
-    public static int QTSSourcerSetEnable(int paramInt1, byte paramByte, int paramInt2) {
-        return StreamingManager.QTSSourcerSetEnable(paramInt1, paramByte, paramInt2);
+    public static int QTSSourcerSetEnable(int sourcer, byte enableMode, int flags) {
+        return StreamingManager.QTSSourcerSetEnable(sourcer, enableMode, flags);
     }
 
-    public static int QTSSourcerGetEnable(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return StreamingManager.QTSSourcerGetEnable(paramInt1, paramArrayOfByte, paramInt2);
+    public static int QTSSourcerGetEnable(int sourcer, byte[] enableMode, int flags) {
+        return StreamingManager.QTSSourcerGetEnable(sourcer, enableMode, flags);
     }
 
-    public static int QTSSourcerSetTimeScale(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSSourcerSetTimeScale(paramInt1, paramInt2);
+    public static int QTSSourcerSetTimeScale(int sourcer, int timeScale) {
+        return StreamingManager.QTSSourcerSetTimeScale(sourcer, timeScale);
     }
 
-    public static int QTSSourcerGetTimeScale(int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSSourcerGetTimeScale(paramInt, paramArrayOfInt);
+    public static int QTSSourcerGetTimeScale(int sourcer, int[] timeScale) {
+        return StreamingManager.QTSSourcerGetTimeScale(sourcer, timeScale);
     }
 }

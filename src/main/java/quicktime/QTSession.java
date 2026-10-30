@@ -159,8 +159,8 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      */
     public static boolean isClassSigned() {
         if (theClass != null) {
-            Object[] arrayOfObject = theClass.getSigners();
-            return arrayOfObject != null;
+            Object[] signers = theClass.getSigners();
+            return signers != null;
         }
         return false;
     }
@@ -262,10 +262,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
                     try {
                         Class.forName("java.awt.Frame");
                         if (dispatchFrame == null) {
-                            QTFrame localQTFrame = new QTFrame();
-                            localQTFrame.setLayout(null);
-                            localQTFrame.pack();
-                            dispatchFrame = localQTFrame;
+                            QTFrame qtFrame = new QTFrame();
+                            qtFrame.setLayout(null);
+                            qtFrame.pack();
+                            dispatchFrame = qtFrame;
                         }
                     } catch (ClassNotFoundException _) {
                     }
@@ -292,20 +292,20 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
         @Override
         public void addNotify() {
             super.addNotify();
-            Object localObject;
+            Object drawingSurfaceInfo;
             if ((QTSession.isCurrentOS(2)) && (QTSession.getJavaVersion() >= 65540)) {
-                localObject = new WinJNIDrawingSurface(this);
-                ((WinJNIDrawingSurface) localObject).lock();
-                this.HWND = ((WinJNIDrawingSurface) localObject).getHWnd();
-                ((WinJNIDrawingSurface) localObject).unlock();
+                drawingSurfaceInfo = new WinJNIDrawingSurface(this);
+                ((WinJNIDrawingSurface) drawingSurfaceInfo).lock();
+                this.HWND = ((WinJNIDrawingSurface) drawingSurfaceInfo).getHWnd();
+                ((WinJNIDrawingSurface) drawingSurfaceInfo).unlock();
                 QTSession.CreatePortAssociation(this.HWND, 0, 258);
             } else {
                 java.awt.peer.ComponentPeer peer = sun.awt.AWTAccessor.getComponentAccessor().getPeer(this);
                 if (peer instanceof DrawingSurface) {
-                    localObject = ((DrawingSurface) peer).getDrawingSurfaceInfo();
-                    ((DrawingSurfaceInfo) localObject).lock();
-                    this.HWND = ((Win32DrawingSurface) ((DrawingSurfaceInfo) localObject).getSurface()).getHWnd();
-                    ((DrawingSurfaceInfo) localObject).unlock();
+                    drawingSurfaceInfo = ((DrawingSurface) peer).getDrawingSurfaceInfo();
+                    ((DrawingSurfaceInfo) drawingSurfaceInfo).lock();
+                    this.HWND = ((Win32DrawingSurface) ((DrawingSurfaceInfo) drawingSurfaceInfo).getSurface()).getHWnd();
+                    ((DrawingSurfaceInfo) drawingSurfaceInfo).unlock();
                     QTSession.CreatePortAssociation(this.HWND, 0, 258);
                 }
             }
@@ -454,12 +454,12 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @see "QuickTime::Gestalt()"
      * @see "QuickTime::EnterMovies()"
      */
-    public static void open(int paramInt1, int minorVersion, int initFlag) throws QTException {
+    public static void open(int majorVersion, int minorVersion, int initFlag) throws QTException {
         initialize(0);
         int i = gestalt(1903454573);
         qtPresent = true;
         version = i;
-        if ((getMajorVersion() < paramInt1) || ((getMajorVersion() == paramInt1) && (getMinorVersion() < minorVersion))) {
+        if ((getMajorVersion() < majorVersion) || ((getMajorVersion() == majorVersion) && (getMinorVersion() < minorVersion))) {
             close();
             throw new QTException("Version of QuickTime not found");
         }
@@ -483,8 +483,8 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @see "QuickTime::Gestalt()"
      * @see "QuickTime::EnterMovies()"
      */
-    public static void open(Class<?> paramClass) throws QTException {
-        open(3, 0, 0, paramClass);
+    public static void open(Class<?> signedClass) throws QTException {
+        open(3, 0, 0, signedClass);
     }
 
     /**
@@ -497,8 +497,8 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @param initFlag can also initialize VR or 3D.
      * @throws quicktime.QTException
      */
-    public static void open(int initFlag, Class<?> paramClass) throws QTException {
-        open(3, 0, initFlag, paramClass);
+    public static void open(int initFlag, Class<?> signedClass) throws QTException {
+        open(3, 0, initFlag, signedClass);
     }
 
     /**
@@ -516,12 +516,12 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @see "QuickTime::Gestalt()"
      * @see "QuickTime::EnterMovies()"
      */
-    public static void open(int paramInt1, int minorVersion, int initFlag, Class<?> signedClass) throws QTException {
+    public static void open(int majorVersion, int minorVersion, int initFlag, Class<?> signedClass) throws QTException {
         initialize(0, signedClass);
         int i = gestalt(1903454573);
         qtPresent = true;
         version = i;
-        if ((getMajorVersion() < paramInt1) || ((getMajorVersion() == paramInt1) && (getMinorVersion() < minorVersion))) {
+        if ((getMajorVersion() < majorVersion) || ((getMajorVersion() == majorVersion) && (getMinorVersion() < minorVersion))) {
             close();
             throw new QTException("Version of QuickTime not found");
         }
@@ -672,7 +672,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             try {
                 int i = gestalt(1902392164);
                 return i == 1;
-            } catch (QTException localQTException) {
+            } catch (QTException e) {
                 return false;
             }
         }
@@ -689,7 +689,7 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
             int i = gestalt(1903457906);
             int j = i & 0x1;
             return j != 0;
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         }
         return false;
     }
@@ -704,10 +704,10 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
      * @see "QuickTime::Gestalt()"
      */
     public static int gestalt(int selector) throws QTException {
-        int[] arrayOfInt = {0};
-        int i = Gestalt(selector, arrayOfInt);
+        int[] response = {0};
+        int i = Gestalt(selector, response);
         QTException.checkError(i);
-        return arrayOfInt[0];
+        return response[0];
     }
 
     /**
@@ -775,38 +775,38 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
 
     private static final Vector<Object> canvases = new Vector<>();
 
-    static boolean isQTCanvas(Object paramObject) {
-        Class<?> localClass = paramObject.getClass();
-        while ((localClass != null) && ((localClass.getName().equals("quicktime.app.view.QTJavaAWTCanvas")) || (localClass.getName().equals("quicktime.app.view.QTJavaCocoaCanvas")))) {
-            localClass = localClass.getSuperclass();
+    static boolean isQTCanvas(Object canvas) {
+        Class<?> superclass = canvas.getClass();
+        while ((superclass != null) && ((superclass.getName().equals("quicktime.app.view.QTJavaAWTCanvas")) || (superclass.getName().equals("quicktime.app.view.QTJavaCocoaCanvas")))) {
+            superclass = superclass.getSuperclass();
         }
-        return localClass != null;
+        return superclass != null;
     }
 
     /**
      * Adds a canvas to a registry of active canvases. You should not need to
      * call this method.
      */
-    public static void addActiveCanvas(Object paramObject) {
-        if (!isQTCanvas(paramObject))
+    public static void addActiveCanvas(Object canvas) {
+        if (!isQTCanvas(canvas))
             return;
-        if (canvases.contains(paramObject))
+        if (canvases.contains(canvas))
             return;
-        canvases.addElement(paramObject);
+        canvases.addElement(canvas);
     }
 
     /**
      * Removes a canvas from a registry of active canvases. You should not need to
      * call this method.
      */
-    public static void removeActiveCanvas(Object paramObject) {
-        canvases.removeElement(paramObject);
+    public static void removeActiveCanvas(Object canvas) {
+        canvases.removeElement(canvas);
     }
 
     private static void removeAllCanvases() {
         while (!canvases.isEmpty()) {
-            Component localComponent = (Component) canvases.elementAt(0);
-            removeActiveCanvas(localComponent);
+            Component component = (Component) canvases.elementAt(0);
+            removeActiveCanvas(component);
         }
     }
 
@@ -834,15 +834,15 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     static void setJavaThreadHook() {
     }
 
-    private static void DestroyPortAssociation(int paramInt) {
-        PlatformManager.DestroyPortAssociation(paramInt);
+    private static void DestroyPortAssociation(int cgp) {
+        PlatformManager.DestroyPortAssociation(cgp);
     }
 
-    private static int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3) {
-        return PlatformManager.CreatePortAssociation(paramInt1, paramInt2, paramInt3);
+    private static int CreatePortAssociation(int theWnd, int storage, int flags) {
+        return PlatformManager.CreatePortAssociation(theWnd, storage, flags);
     }
 
-    private static short InitializeQTML(int paramInt) {
+    private static short InitializeQTML(int flag) {
         return 0;
     }
 
@@ -856,8 +856,8 @@ public final class QTSession implements QuickTimeLib, QuickTimeVRLib, QuickDraw3
     private static void ExitMovies() {
     }
 
-    private static short Gestalt(int paramInt, int[] paramArrayOfInt) {
-        return PlatformManager.Gestalt(paramInt, paramArrayOfInt);
+    private static short Gestalt(int selector, int[] response) {
+        return PlatformManager.Gestalt(selector, response);
     }
 
     private static short InitializeQTVR() {

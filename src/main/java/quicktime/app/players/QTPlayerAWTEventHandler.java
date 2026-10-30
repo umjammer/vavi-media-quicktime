@@ -60,8 +60,8 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
      * @deprecated
      * @since QTJava 6.1
      */
-    protected QTPlayerAWTEventHandler(QTPlayer paramQTPlayer, Object interest) {
-        this.player = paramQTPlayer;
+    protected QTPlayerAWTEventHandler(QTPlayer player, Object interest) {
+        this.player = player;
         this.component = ((Component) interest);
     }
 
@@ -74,37 +74,37 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
     protected void addedTo() {
         this.component.addMouseListener(this);
         this.component.addKeyListener(this);
-        Object localObject1 = this.component.getParent();
-        Object localObject2 = localObject1;
-        while (localObject2 != null) {
-            localObject1 = localObject2;
-            if ((localObject1 instanceof Window))
+        Object parentWindow = this.component.getParent();
+        Object parent = parentWindow;
+        while (parent != null) {
+            parentWindow = parent;
+            if ((parentWindow instanceof Window))
                 break;
-            localObject2 = ((Container) localObject1).getParent();
+            parent = ((Container) parentWindow).getParent();
         }
-        if ((localObject1 instanceof Window)) {
-            this.parentWindow = ((Window) localObject1);
+        if ((parentWindow instanceof Window)) {
+            this.parentWindow = ((Window) parentWindow);
             this.wa = new WindowAdapter() {
 
                 @Override
-                public void windowActivated(WindowEvent paramAnonymousWindowEvent) {
+                public void windowActivated(WindowEvent e) {
                     try {
                         QTPlayerAWTEventHandler.this.player.controller.activate(QTPlayerAWTEventHandler.this.player.getGWorld(), true);
                         QTPlayerAWTEventHandler.this.player.controller.activate();
                         QTPlayerAWTEventHandler.this.player.redraw(null);
-                    } catch (QTException localQTException) {
+                    } catch (QTException ex) {
                     }
                 }
 
                 @Override
-                public void windowDeactivated(WindowEvent paramAnonymousWindowEvent) {
+                public void windowDeactivated(WindowEvent e) {
                     synchronized (QTSession.terminationLock()) {
                         if (QTSession.isInitialized()) {
                             try {
                                 QTPlayerAWTEventHandler.this.player.controller.deactivate();
                                 QTPlayerAWTEventHandler.this.player.controller.activate(QTPlayerAWTEventHandler.this.player.getGWorld(), false);
                                 QTPlayerAWTEventHandler.this.player.redraw(null);
-                            } catch (QTException localQTException) {
+                            } catch (QTException ex) {
                             }
                         } else {
                             QTPlayerAWTEventHandler.this.player.removedFrom(QTPlayerAWTEventHandler.this.component);
@@ -137,11 +137,11 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
      * @deprecated
      */
     @Override
-    public void keyPressed(KeyEvent paramKeyEvent) {
+    public void keyPressed(KeyEvent e) {
         try {
-            this.player.controller.key(paramKeyEvent.getKeyCode(), paramKeyEvent.getModifiers());
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "keyPressed");
+            this.player.controller.key(e.getKeyCode(), e.getModifiers());
+        } catch (QTException ex) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(ex), this, "keyPressed");
         }
     }
 
@@ -150,11 +150,11 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
      * @deprecated
      */
     @Override
-    public void mousePressed(MouseEvent paramMouseEvent) {
+    public void mousePressed(MouseEvent e) {
         try {
-            this.player.controller.click(new QDPoint(paramMouseEvent.getX(), paramMouseEvent.getY()), paramMouseEvent.getModifiers());
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mousePressed");
+            this.player.controller.click(new QDPoint(e.getX(), e.getY()), e.getModifiers());
+        } catch (QTException ex) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(ex), this, "mousePressed");
         }
     }
 
@@ -162,41 +162,41 @@ public class QTPlayerAWTEventHandler extends QTPlayerEventHandler implements Mou
      * @deprecated
      */
     @Override
-    public void keyReleased(KeyEvent paramKeyEvent) {
+    public void keyReleased(KeyEvent e) {
     }
 
     /**
      * @deprecated
      */
     @Override
-    public void keyTyped(KeyEvent paramKeyEvent) {
+    public void keyTyped(KeyEvent e) {
     }
 
     /**
      * @deprecated
      */
     @Override
-    public void mouseClicked(MouseEvent paramMouseEvent) {
+    public void mouseClicked(MouseEvent e) {
     }
 
     /**
      * @deprecated
      */
     @Override
-    public void mouseEntered(MouseEvent paramMouseEvent) {
+    public void mouseEntered(MouseEvent e) {
     }
 
     /**
      * @deprecated
      */
     @Override
-    public void mouseExited(MouseEvent paramMouseEvent) {
+    public void mouseExited(MouseEvent e) {
     }
 
     /**
      * @deprecated
      */
     @Override
-    public void mouseReleased(MouseEvent paramMouseEvent) {
+    public void mouseReleased(MouseEvent e) {
     }
 }

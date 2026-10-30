@@ -58,24 +58,24 @@ public final class SndInfo implements SoundLib, InterfaceLib {
      * @see "QuickTime::ParseAIFFHeader"
      */
     public static SndInfo parseAIFFHeader(OpenFile file) throws SoundException {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseAIFFHeader((short) QTObject.ID(file), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        return new SndInfo(localSoundComponentData, arrayOfInt1[0], arrayOfInt2[0]);
+        int[] numFrames = {0};
+        int[] dataOffset = {0};
+        SoundComponentData sndData = new SoundComponentData();
+        SoundException.checkError(ParseAIFFHeader((short) QTObject.ID(file), sndData.getBytes(), numFrames, dataOffset));
+        return new SndInfo(sndData, numFrames[0], dataOffset[0]);
     }
 
-    SndInfo(SoundComponentData paramSoundComponentData, int paramInt1, int paramInt2) {
-        this.sndData = paramSoundComponentData;
-        this.numFrames = paramInt1;
-        this.dataOffset = paramInt2;
+    SndInfo(SoundComponentData sndData, int numFrames, int dataOffset) {
+        this.sndData = sndData;
+        this.numFrames = numFrames;
+        this.dataOffset = dataOffset;
     }
 
-    private static short ParseAIFFHeader(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SoundManager.ParseAIFFHeader(paramShort, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2);
+    private static short ParseAIFFHeader(short fRefNum, byte[] scd, int[] numFrames, int[] dataOffset) {
+        return SoundManager.ParseAIFFHeader(fRefNum, scd, numFrames, dataOffset);
     }
 
-    private static short SetupAIFFHeader(short paramShort1, short paramShort2, int paramInt1, short paramShort3, int paramInt2, int paramInt3, int paramInt4) {
-        return SoundManager.SetupAIFFHeader(paramShort1, paramShort2, paramInt1, paramShort3, paramInt2, paramInt3, paramInt4);
+    private static short SetupAIFFHeader(short fRefNum, short numChannels, int sampleRate, short sampleSize, int compressionType, int numBytes, int numFrames) {
+        return SoundManager.SetupAIFFHeader(fRefNum, numChannels, sampleRate, sampleSize, compressionType, numBytes, numFrames);
     }
 }

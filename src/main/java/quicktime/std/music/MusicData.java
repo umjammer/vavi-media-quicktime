@@ -53,8 +53,8 @@ public class MusicData extends QTHandle {
      *  of the size of the general event. This size is in bytes.
      * @return the stuffed representation of this type of music event in big endian order
      */
-    public static int stuffGeneralEvent_Footer(int paramInt1, int length) {
-        int i = 0xC0000000 | paramInt1 << 16 | length << 0;
+    public static int stuffGeneralEvent_Footer(int subType, int length) {
+        int i = 0xC0000000 | subType << 16 | length << 0;
         return EndianOrder.flipNativeToBigEndian32(i);
     }
 
@@ -112,10 +112,10 @@ public class MusicData extends QTHandle {
      * @param duration the duration in the time scale of the TunePlayer or the MusicMedia
      * @return the stuffed representation of this type of extended music event.
      */
-    public static long stuffXNoteEvent(int part, int pitch, int paramInt3, int duration) {
+    public static long stuffXNoteEvent(int part, int pitch, int velocity, int duration) {
         long l1 = 0x90000000L | (long) part << 16 | pitch << 0;
         l1 = EndianOrder.flipNativeToBigEndian64(l1);
-        long l2 = 0x80000000L | duration << 0 | (long) paramInt3 << 22;
+        long l2 = 0x80000000L | duration << 0 | (long) velocity << 22;
         l2 = EndianOrder.flipNativeToBigEndian64(l2);
         l1 &= 0xFFFFFFFFL;
         l2 &= 0xFFFFFFFFL;
@@ -363,12 +363,12 @@ public class MusicData extends QTHandle {
         return qtma_EXT(x, 0, 16);
     }
 
-    private static int qtma_MASK(int paramInt) {
-        return (1 << paramInt) - 1;
+    private static int qtma_MASK(int bits) {
+        return (1 << bits) - 1;
     }
 
-    private static int qtma_EXT(int paramInt1, int paramInt2, int paramInt3) {
-        return EndianOrder.flipBigEndianToNative32(paramInt1) >>> paramInt2 & qtma_MASK(paramInt3);
+    private static int qtma_EXT(int value, int shift, int bits) {
+        return EndianOrder.flipBigEndianToNative32(value) >>> shift & qtma_MASK(bits);
     }
 
     /**
@@ -507,9 +507,9 @@ public class MusicData extends QTHandle {
         if (generalSubtype_Footer(i) != 1) {
             throw new QTException(-50);
         }
-        NoteRequest localNoteRequest = new NoteRequest();
-        copyToArray(offset * 4, localNoteRequest.getBytes(), 0, localNoteRequest.getSize());
-        return localNoteRequest;
+        NoteRequest noteRequest = new NoteRequest();
+        copyToArray(offset * 4, noteRequest.getBytes(), 0, noteRequest.getSize());
+        return noteRequest;
     }
 
     /**

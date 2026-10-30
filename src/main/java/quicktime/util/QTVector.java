@@ -15,10 +15,10 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
 
     private final int mElSize;
 
-    protected QTVector(int paramInt1, int paramInt2) throws QTException {
-        super(paramInt1 * paramInt2, true);
+    protected QTVector(int elSize, int numElements) throws QTException {
+        super(elSize * numElements, true);
         this.mInitialSize = getSize();
-        this.mElSize = paramInt1;
+        this.mElSize = elSize;
     }
 
     protected int mNumElements = 0;
@@ -31,17 +31,17 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
         return false;
     }
 
-    protected void insertElement(QTPointerRef paramQTPointerRef, int paramInt) throws UtilException, ArrayIndexOutOfBoundsException {
-        if (paramInt >= this.mNumElements)
+    protected void insertElement(QTPointerRef qtPointerRef, int index) throws UtilException, ArrayIndexOutOfBoundsException {
+        if (index >= this.mNumElements)
             throw new ArrayIndexOutOfBoundsException("QTVector:insert past end");
         if (doSizeCheck()) {
             throw new ArrayIndexOutOfBoundsException("QTVector is full");
         }
-        int i = _ID() + this.mElSize * paramInt;
-        if (paramInt != this.mNumElements - 1) {
-            BlockMove(i + 0, i + this.mElSize, this.mElSize * (this.mNumElements - paramInt));
+        int i = _ID() + this.mElSize * index;
+        if (index != this.mNumElements - 1) {
+            BlockMove(i + 0, i + this.mElSize, this.mElSize * (this.mNumElements - index));
         }
-        int j = QTObject.ID(paramQTPointerRef);
+        int j = QTObject.ID(qtPointerRef);
         BlockMove(j + 0, i + 0, this.mElSize);
         this.mNumElements += 1;
     }
@@ -50,24 +50,24 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
      * remove element at specified position
      * java.lang.ArrayIndexOutOfBoundsException
      */
-    public void remove(int paramInt) throws ArrayIndexOutOfBoundsException, UtilException {
-        if ((paramInt >= this.mNumElements) || (this.mNumElements == 0)) {
+    public void remove(int index) throws ArrayIndexOutOfBoundsException, UtilException {
+        if ((index >= this.mNumElements) || (this.mNumElements == 0)) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        int i = _ID() + this.mElSize * paramInt;
-        int j = this.mElSize * (this.mNumElements - paramInt - 1);
+        int i = _ID() + this.mElSize * index;
+        int j = this.mElSize * (this.mNumElements - index - 1);
         if (j > 0) {
             BlockMove(i + this.mElSize, i + 0, j);
         }
         this.mNumElements -= 1;
     }
 
-    protected void getElement(QTPointerRef paramQTPointerRef, int paramInt) throws ArrayIndexOutOfBoundsException, UtilException {
-        if ((paramInt >= this.mNumElements) || (this.mNumElements == 0)) {
+    protected void getElement(QTPointerRef qtPointerRef, int index) throws ArrayIndexOutOfBoundsException, UtilException {
+        if ((index >= this.mNumElements) || (this.mNumElements == 0)) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        int i = QTObject.ID(paramQTPointerRef);
-        int j = _ID() + this.mElSize * paramInt;
+        int i = QTObject.ID(qtPointerRef);
+        int j = _ID() + this.mElSize * index;
         BlockMove(j, i, this.mElSize);
     }
 
@@ -97,7 +97,7 @@ public abstract class QTVector extends QTPointerRef implements QuickTimeLib {
 
     protected abstract QTPointerRef makeElement();
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int size) {
+        MemoryManager.BlockMove(src, dst, size);
     }
 }

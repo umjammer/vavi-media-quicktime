@@ -65,30 +65,30 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
         setZ(z);
     }
 
-    private Vector3D(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private Vector3D(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[12];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        Vector3D localVector3D = (Vector3D) clone();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        Vector3D vector3D = (Vector3D) clone();
         try {
-            EndianOrder.flipNativeToBigEndian(localVector3D, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+            EndianOrder.flipNativeToBigEndian(vector3D, 0, getEndianDescriptor());
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
-        paramObjectOutputStream.write(localVector3D.getBytes());
+        out.write(vector3D.getBytes());
     }
 
     /**
@@ -115,22 +115,22 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
     /**
      * sets the position in the X direction
      */
-    public void setX(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setX(float x) {
+        setFloatAt(0, x);
     }
 
     /**
      * sets the position in the Y direction
      */
-    public void setY(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setY(float y) {
+        setFloatAt(4, y);
     }
 
     /**
      * sets the position in the Z direction
      */
-    public void setZ(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setZ(float z) {
+        setFloatAt(8, z);
     }
 
     /**
@@ -142,9 +142,9 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
      * @return a new scaled vector.
      */
     public Vector3D scale(float scalar) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Vector3D_Scale(getBytes(), scalar, localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Vector3D_Scale(getBytes(), scalar, vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -162,9 +162,9 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
      * @return the normalized form of the vector
      */
     public Vector3D normalize() {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Vector3D_Normalize(getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Vector3D_Normalize(getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -174,9 +174,9 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
      * @return the sum of v1 and v2.
      */
     public Vector3D add(Vector3D v2) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Vector3D_Add(getBytes(), v2.getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Vector3D_Add(getBytes(), v2.getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -186,9 +186,9 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
      * @return the result of subtracting v2 from this.
      */
     public Vector3D subtract(Vector3D v2) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Vector3D_Subtract(getBytes(), v2.getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Vector3D_Subtract(getBytes(), v2.getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -198,9 +198,9 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
      * @return a vector
      */
     public Vector3D cross(Vector3D v2) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Vector3D_Cross(getBytes(), v2.getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Vector3D_Cross(getBytes(), v2.getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -222,9 +222,9 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
      * @return a three-dimensional vector
      */
     public Vector3D transformQuaternion(Quaternion quaternion) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Vector3D_TransformQuaternion(getBytes(), quaternion.getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Vector3D_TransformQuaternion(getBytes(), quaternion.getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -242,35 +242,35 @@ public final class Vector3D extends QTByteObject implements QuickTimeLib, QuickD
         return super.toString() + "[x=" + getX() + ",y=" + getY() + ",z=" + getX() + "]";
     }
 
-    private static int Q3Vector3D_Scale(byte[] paramArrayOfByte1, float paramFloat, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector3D_Scale(paramArrayOfByte1, paramFloat, paramArrayOfByte2);
+    private static int Q3Vector3D_Scale(byte[] vector3D, float scalar, byte[] result) {
+        return QD3DManager.Q3Vector3D_Scale(vector3D, scalar, result);
     }
 
-    private static float Q3Vector3D_Length(byte[] paramArrayOfByte) {
-        return QD3DManager.Q3Vector3D_Length(paramArrayOfByte);
+    private static float Q3Vector3D_Length(byte[] vector3D) {
+        return QD3DManager.Q3Vector3D_Length(vector3D);
     }
 
-    private static int Q3Vector3D_Normalize(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector3D_Normalize(paramArrayOfByte1, paramArrayOfByte2);
+    private static int Q3Vector3D_Normalize(byte[] vector3D, byte[] result) {
+        return QD3DManager.Q3Vector3D_Normalize(vector3D, result);
     }
 
-    private static int Q3Vector3D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Vector3D_Add(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Vector3D_Add(byte[] v1, byte[] v2, byte[] result) {
+        return QD3DManager.Q3Vector3D_Add(v1, v2, result);
     }
 
-    private static int Q3Vector3D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Vector3D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Vector3D_Subtract(byte[] v1, byte[] v2, byte[] result) {
+        return QD3DManager.Q3Vector3D_Subtract(v1, v2, result);
     }
 
-    private static int Q3Vector3D_Cross(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Vector3D_Cross(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Vector3D_Cross(byte[] v1, byte[] v2, byte[] result) {
+        return QD3DManager.Q3Vector3D_Cross(v1, v2, result);
     }
 
-    private static float Q3Vector3D_Dot(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector3D_Dot(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Vector3D_Dot(byte[] v1, byte[] v2) {
+        return QD3DManager.Q3Vector3D_Dot(v1, v2);
     }
 
-    private static int Q3Vector3D_TransformQuaternion(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Vector3D_TransformQuaternion(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Vector3D_TransformQuaternion(byte[] vector3D, byte[] quaternion, byte[] result) {
+        return QD3DManager.Q3Vector3D_TransformQuaternion(vector3D, quaternion, result);
     }
 }

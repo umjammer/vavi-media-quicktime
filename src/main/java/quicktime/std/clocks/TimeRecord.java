@@ -35,8 +35,8 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
         setScale(scale);
     }
 
-    protected TimeRecord(int paramInt, Object paramObject) {
-        super(paramInt, 16, paramObject);
+    protected TimeRecord(int nativeRep, Object ref) {
+        super(nativeRep, 16, ref);
     }
 
     /**
@@ -123,19 +123,19 @@ public class TimeRecord extends QTPointerRef implements QuickTimeLib {
         return super.toString() + "[value=" + getValue() + ",scale=" + getScale() + "]";
     }
 
-    private static void ConvertTime(int paramInt1, int paramInt2) {
-        ClockManager.ConvertTime(paramInt1, paramInt2);
+    private static void ConvertTime(int tr, int newBase) {
+        ClockManager.ConvertTime(tr, newBase);
     }
 
-    private static void ConvertTimeScale(int paramInt1, int paramInt2) {
-        ClockManager.ConvertTimeScale(paramInt1, paramInt2);
+    private static void ConvertTimeScale(int tr, int newScale) {
+        ClockManager.ConvertTimeScale(tr, newScale);
     }
 
-    private static void AddTime(int paramInt1, int paramInt2) {
-        ClockManager.AddTime(paramInt1, paramInt2);
+    private static void AddTime(int dst, int src) {
+        ClockManager.AddTime(dst, src);
     }
 
-    private static void SubtractTime(int paramInt1, int paramInt2) {
-        ClockManager.SubtractTime(paramInt1, paramInt2);
+    private static void SubtractTime(int dst, int src) {
+        ClockManager.SubtractTime(dst, src);
     }
 }

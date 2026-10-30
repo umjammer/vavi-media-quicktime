@@ -220,30 +220,30 @@ public class QTMouseController implements ListenerController {
     protected boolean translateAndIsWithin(QTMouseEvent e) {
         if (this.displaySpace != null) {
             try {
-                QDRect localQDRect1 = this.displaySpace.getDisplayBounds();
-                int i = localQDRect1.getX();
-                int j = localQDRect1.getY();
+                QDRect displayBounds = this.displaySpace.getDisplayBounds();
+                int i = displayBounds.getX();
+                int j = displayBounds.getY();
                 if (this.compSpace != null) {
                     int k = i;
                     int m = j;
-                    SWCompositor localSWCompositor1 = this.compSpace.getParent();
-                    while (localSWCompositor1 != null) {
-                        SWCompositor localSWCompositor2 = localSWCompositor1;
-                        QDRect localQDRect2 = localSWCompositor2.getDisplayBounds();
-                        k += localQDRect2.getX();
-                        m += localQDRect2.getY();
-                        localSWCompositor1 = localSWCompositor2.getParent();
+                    SWCompositor parent = this.compSpace.getParent();
+                    while (parent != null) {
+                        SWCompositor swCompositor2 = parent;
+                        QDRect rect2 = swCompositor2.getDisplayBounds();
+                        k += rect2.getX();
+                        m += rect2.getY();
+                        parent = swCompositor2.getParent();
                     }
                     e.translate(-k, -m);
                 } else {
                     e.translate(-i, -j);
                 }
-                if (localQDRect1.inside(e.getX() + i, e.getY() + j)) {
+                if (displayBounds.inside(e.getX() + i, e.getY() + j)) {
                     return true;
                 }
                 return false;
-            } catch (QTException localQTException) {
-                QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this.compSpace, "getDisplayBounds");
+            } catch (QTException ex) {
+                QTRuntimeException.handleOrThrow(new QTRuntimeException(ex), this.compSpace, "getDisplayBounds");
             }
         }
         return true;
@@ -284,23 +284,23 @@ public class QTMouseController implements ListenerController {
             removeMouseEnterExitListener((MouseEnterExitListener) l);
     }
 
-    void addMouseButtonListener(MouseButtonListener paramMouseButtonListener) {
-        boolean bool = hasMouseButtonListener();
-        this.mouseButtonListener = QTEventCaster.add(this.mouseButtonListener, paramMouseButtonListener);
-        updateMouseButtonListener(bool);
+    void addMouseButtonListener(MouseButtonListener listener) {
+        boolean hadListener = hasMouseButtonListener();
+        this.mouseButtonListener = QTEventCaster.add(this.mouseButtonListener, listener);
+        updateMouseButtonListener(hadListener);
     }
 
-    void removeMouseButtonListener(MouseButtonListener paramMouseButtonListener) {
-        boolean bool = hasMouseButtonListener();
-        this.mouseButtonListener = QTEventCaster.remove(this.mouseButtonListener, paramMouseButtonListener);
-        updateMouseButtonListener(bool);
+    void removeMouseButtonListener(MouseButtonListener oldl) {
+        boolean hadListener = hasMouseButtonListener();
+        this.mouseButtonListener = QTEventCaster.remove(this.mouseButtonListener, oldl);
+        updateMouseButtonListener(hadListener);
     }
 
-    void updateMouseButtonListener(boolean paramBoolean) {
+    void updateMouseButtonListener(boolean hadListener) {
         if (this.handler != null) {
-            if ((paramBoolean) && (!hasMouseButtonListener())) {
+            if ((hadListener) && (!hasMouseButtonListener())) {
                 this.handler.removeMouseButtonListener();
-            } else if ((hasMouseButtonListener()) && (!paramBoolean))
+            } else if ((hasMouseButtonListener()) && (!hadListener))
                 this.handler.addMouseButtonListener();
         }
     }
@@ -387,23 +387,23 @@ public class QTMouseController implements ListenerController {
         this.mouseButtonListener.mouseReleased(e);
     }
 
-    void addMouseMoveListener(MouseMoveListener paramMouseMoveListener) {
-        boolean bool = hasMouseMoveListener();
-        this.mouseMoveListener = QTEventCaster.add(this.mouseMoveListener, paramMouseMoveListener);
-        updateMouseMoveListener(bool);
+    void addMouseMoveListener(MouseMoveListener listener) {
+        boolean hadListener = hasMouseMoveListener();
+        this.mouseMoveListener = QTEventCaster.add(this.mouseMoveListener, listener);
+        updateMouseMoveListener(hadListener);
     }
 
-    void removeMouseMoveListener(MouseMoveListener paramMouseMoveListener) {
-        boolean bool = hasMouseMoveListener();
-        this.mouseMoveListener = QTEventCaster.remove(this.mouseMoveListener, paramMouseMoveListener);
-        updateMouseMoveListener(bool);
+    void removeMouseMoveListener(MouseMoveListener oldl) {
+        boolean hadListener = hasMouseMoveListener();
+        this.mouseMoveListener = QTEventCaster.remove(this.mouseMoveListener, oldl);
+        updateMouseMoveListener(hadListener);
     }
 
-    void updateMouseMoveListener(boolean paramBoolean) {
+    void updateMouseMoveListener(boolean hadListener) {
         if (this.handler != null) {
-            if ((paramBoolean) && (!hasMouseMoveListener())) {
+            if ((hadListener) && (!hasMouseMoveListener())) {
                 this.handler.removeMouseMoveListener();
-            } else if ((hasMouseMoveListener()) && (!paramBoolean))
+            } else if ((hasMouseMoveListener()) && (!hadListener))
                 this.handler.addMouseMoveListener();
         }
     }
@@ -412,8 +412,8 @@ public class QTMouseController implements ListenerController {
         return this.mouseMoveListener != null;
     }
 
-    boolean isInterestedInMouseMoveEvents(QTMouseEvent paramQTMouseEvent) {
-        return (this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()));
+    boolean isInterestedInMouseMoveEvents(QTMouseEvent qtMouseEvent) {
+        return (this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(qtMouseEvent.getModifiers()));
     }
 
     /**
@@ -503,23 +503,23 @@ public class QTMouseController implements ListenerController {
             this.mouseMoveListener.mouseMoved(e);
     }
 
-    void addMouseEnterExitListener(MouseEnterExitListener paramMouseEnterExitListener) {
-        boolean bool = hasMouseEnterExitListener();
-        this.mouseEnterExitListener = QTEventCaster.add(this.mouseEnterExitListener, paramMouseEnterExitListener);
-        updateMouseEnterExitListener(bool);
+    void addMouseEnterExitListener(MouseEnterExitListener listener) {
+        boolean hadListener = hasMouseEnterExitListener();
+        this.mouseEnterExitListener = QTEventCaster.add(this.mouseEnterExitListener, listener);
+        updateMouseEnterExitListener(hadListener);
     }
 
-    void removeMouseEnterExitListener(MouseEnterExitListener paramMouseEnterExitListener) {
-        boolean bool = hasMouseEnterExitListener();
-        this.mouseEnterExitListener = QTEventCaster.remove(this.mouseEnterExitListener, paramMouseEnterExitListener);
-        updateMouseEnterExitListener(bool);
+    void removeMouseEnterExitListener(MouseEnterExitListener oldl) {
+        boolean hadListener = hasMouseEnterExitListener();
+        this.mouseEnterExitListener = QTEventCaster.remove(this.mouseEnterExitListener, oldl);
+        updateMouseEnterExitListener(hadListener);
     }
 
-    void updateMouseEnterExitListener(boolean paramBoolean) {
+    void updateMouseEnterExitListener(boolean hadListener) {
         if (this.handler != null) {
-            if ((paramBoolean) && (!hasMouseEnterExitListener())) {
+            if ((hadListener) && (!hasMouseEnterExitListener())) {
                 this.handler.removeMouseEnterExitListener();
-            } else if ((hasMouseEnterExitListener()) && (!paramBoolean))
+            } else if ((hasMouseEnterExitListener()) && (!hadListener))
                 this.handler.addMouseEnterExitListener();
         }
     }

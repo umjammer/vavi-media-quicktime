@@ -21,9 +21,9 @@ public final class SCInfo {
      */
     public final short notSyncFlag;
 
-    public SCInfo(QTHandleRef paramQTHandleRef, int paramInt, short paramShort) {
-        this.imageData = paramQTHandleRef;
-        this.dataSize = paramInt;
-        this.notSyncFlag = paramShort;
+    public SCInfo(QTHandleRef imageData, int dataSize, short notSyncFlag) {
+        this.imageData = imageData;
+        this.dataSize = dataSize;
+        this.notSyncFlag = notSyncFlag;
     }
 }

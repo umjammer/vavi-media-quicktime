@@ -30,8 +30,8 @@ public final class QTVRNodeLocation extends QTVRAtom {
     /**
      * Creates a QTVRNodeLocation object from a byte array
      */
-    public QTVRNodeLocation(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRNodeLocation(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -40,12 +40,12 @@ public final class QTVRNodeLocation extends QTVRAtom {
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 5);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 4, 5);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     public static EndianDescriptor getEndianDescriptor() {
@@ -55,17 +55,17 @@ public final class QTVRNodeLocation extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRNodeLocation localQTVRNodeLocation = new QTVRNodeLocation();
-        paramObjectInputStream.read(localQTVRNodeLocation.getBytes());
-        System.arraycopy(localQTVRNodeLocation.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRNodeLocation qtvrNodeLocation = new QTVRNodeLocation();
+        in.read(qtvrNodeLocation.getBytes());
+        System.arraycopy(qtvrNodeLocation.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRNodeLocation localQTVRNodeLocation = (QTVRNodeLocation) clone();
-        paramObjectOutputStream.write(localQTVRNodeLocation.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRNodeLocation qtvrNodeLocation = (QTVRNodeLocation) clone();
+        out.write(qtvrNodeLocation.getBytes());
     }
 
     /**
@@ -75,8 +75,8 @@ public final class QTVRNodeLocation extends QTVRAtom {
     public Object clone() {
         try {
             return new QTVRNodeLocation(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
@@ -90,15 +90,15 @@ public final class QTVRNodeLocation extends QTVRAtom {
     /**
      * set the nodeType
      */
-    public void setNodeType(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setNodeType(int nodeType) {
+        setIntAt(4, nodeType);
     }
 
     /**
      * set the nodeType from a string
      */
-    public void setNodeType(String paramString) {
-        setIntAt(4, QTUtils.toOSType(paramString));
+    public void setNodeType(String nodeType) {
+        setIntAt(4, QTUtils.toOSType(nodeType));
     }
 
     /**
@@ -111,8 +111,8 @@ public final class QTVRNodeLocation extends QTVRAtom {
     /**
      * set the locationFlags
      */
-    public void setLocationFlags(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setLocationFlags(int locationFlags) {
+        setIntAt(8, locationFlags);
     }
 
     /**
@@ -125,15 +125,15 @@ public final class QTVRNodeLocation extends QTVRAtom {
     /**
      * set the locationData
      */
-    public void setLocationData(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setLocationData(int locationData) {
+        setIntAt(12, locationData);
     }
 
     /**
      * set the reserved1
      */
-    public void setReserved1(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setReserved1(int reserved1) {
+        setIntAt(16, reserved1);
     }
 
     /**
@@ -146,8 +146,8 @@ public final class QTVRNodeLocation extends QTVRAtom {
     /**
      * set the reserved2
      */
-    public void setReserved2(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setReserved2(int reserved2) {
+        setIntAt(20, reserved2);
     }
 
     /**

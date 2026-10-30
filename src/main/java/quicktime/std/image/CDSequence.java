@@ -22,9 +22,9 @@ public class CDSequence extends QTObject implements QuickTimeLib {
 
     protected final QDGraphics cdPort;
 
-    CDSequence(int paramInt, QDGraphics paramQDGraphics) throws QTException {
-        super(paramInt);
-        this.cdPort = paramQDGraphics;
+    CDSequence(int nativeRep, QDGraphics cdPort) throws QTException {
+        super(nativeRep);
+        this.cdPort = cdPort;
     }
 
     /**
@@ -67,20 +67,20 @@ public class CDSequence extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final boolean equivalentImageDescription(ImageDescription newDesc) throws StdQTException {
-        byte[] arrayOfByte = new byte[1];
-        StdQTException.checkError(CDSequenceEquivalentImageDescription(_ID(), QTObject.ID(newDesc), arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] equivalent = new byte[1];
+        StdQTException.checkError(CDSequenceEquivalentImageDescription(_ID(), QTObject.ID(newDesc), equivalent));
+        return equivalent[0] != 0;
     }
 
-    private static short CDSequenceSetTimeBase(int paramInt1, int paramInt2) {
-        return ClockManager.CDSequenceSetTimeBase(paramInt1, paramInt2);
+    private static short CDSequenceSetTimeBase(int sequenceID, int timeBase) {
+        return ClockManager.CDSequenceSetTimeBase(sequenceID, timeBase);
     }
 
-    private static short CDSequenceBusy(int paramInt) {
-        return ImageCompressionManager.CDSequenceBusy(paramInt);
+    private static short CDSequenceBusy(int seqID) {
+        return ImageCompressionManager.CDSequenceBusy(seqID);
     }
 
-    private static short CDSequenceEquivalentImageDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.CDSequenceEquivalentImageDescription(paramInt1, paramInt2, paramArrayOfByte);
+    private static short CDSequenceEquivalentImageDescription(int seqID, int newDesc, byte[] equivalent) {
+        return ImageCompressionManager.CDSequenceEquivalentImageDescription(seqID, newDesc, equivalent);
     }
 }

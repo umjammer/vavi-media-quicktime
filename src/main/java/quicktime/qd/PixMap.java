@@ -36,10 +36,10 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      * @return a PixMap object
      * @see "quicktime.std.qd.QDGraphics#getPixMap"
      */
-    public static PixMap fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) {
-        int[] arrayOfInt = { 0 };
-        int i = GraphicsExportGetInputPixmap(QTObject.ID(paramGraphicsExporter), arrayOfInt);
-        return new PixMap(arrayOfInt[0], paramGraphicsExporter, false);
+    public static PixMap fromGraphicsExporter(GraphicsExporter ge) {
+        int[] pixMap = { 0 };
+        int i = GraphicsExportGetInputPixmap(QTObject.ID(ge), pixMap);
+        return new PixMap(pixMap[0], ge, false);
     }
 
     /**
@@ -81,10 +81,10 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
         return new PixMap(i, null, true);
     }
 
-    private PixMap(int paramInt, Object paramObject, boolean paramBoolean) {
-        super(paramInt, paramObject, true);
+    private PixMap(int nativeRep, Object ref, boolean isOff) {
+        super(nativeRep, ref, true);
         doLock();
-        this.isOff = paramBoolean;
+        this.isOff = isOff;
     }
 
     /**
@@ -136,13 +136,13 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
      */
     public QDRect getBounds() {
         if (QTSession.isCurrentOS(4)) {
-            QDRect localObject = new QDRect();
-            GetPixBounds(_ID(), localObject.getBytes());
-            return localObject;
+            QDRect bounds = new QDRect();
+            GetPixBounds(_ID(), bounds.getBytes());
+            return bounds;
         }
-        Object localObject = new byte[8];
-        getBytesAt(6, 8, (byte[]) localObject, 0);
-        return QDRect.fromArray((byte[]) localObject, 8);
+        Object destArray = new byte[8];
+        getBytesAt(6, 8, (byte[]) destArray, 0);
+        return QDRect.fromArray((byte[]) destArray, 8);
     }
 
     /**
@@ -177,35 +177,35 @@ public final class PixMap extends QTHandleRef implements QuickTimeLib {
         return super.toString() + "[Bounds=" + getBounds() + "]";
     }
 
-    private static int GraphicsExportGetInputPixmap(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputPixmap(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputPixmap(int ge, int[] pixMap) {
+        return GraphicsExportManager.GraphicsExportGetInputPixmap(ge, pixMap);
     }
 
-    private static int GetGWorldPixMap(int paramInt) {
-        return QuickDrawManager.GetGWorldPixMap(paramInt);
+    private static int GetGWorldPixMap(int gworld) {
+        return QuickDrawManager.GetGWorldPixMap(gworld);
     }
 
-    private static byte LockPixels(int paramInt) {
-        return QuickDrawManager.LockPixels(paramInt);
+    private static byte LockPixels(int pixMap) {
+        return QuickDrawManager.LockPixels(pixMap);
     }
 
-    private static void UnlockPixels(int paramInt) {
-        QuickDrawManager.UnlockPixels(paramInt);
+    private static void UnlockPixels(int pixMap) {
+        QuickDrawManager.UnlockPixels(pixMap);
     }
 
-    private static int GetTrackMatte(int paramInt) {
-        return MovieToolbox.GetTrackMatte(paramInt);
+    private static int GetTrackMatte(int track) {
+        return MovieToolbox.GetTrackMatte(track);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int getIntFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    private static int getIntFromHandle(int h, int offset) {
+        return MemoryManager.getIntFromHandle(h, offset);
     }
 
-    private static int GetPixBounds(int paramInt, byte[] paramArrayOfByte) {
-        return QuickDrawManager.GetPixBounds(paramInt, paramArrayOfByte);
+    private static int GetPixBounds(int pixMap, byte[] rect) {
+        return QuickDrawManager.GetPixBounds(pixMap, rect);
     }
 }

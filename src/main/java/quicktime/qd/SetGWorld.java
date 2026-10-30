@@ -22,8 +22,8 @@ public final class SetGWorld implements QuickTimeLib {
      * @see #reset
      * @deprecated
      */
-    public SetGWorld(QDGraphics paramQDGraphics) throws QDException {
-        this(paramQDGraphics, null);
+    public SetGWorld(QDGraphics qdGraphics) throws QDException {
+        this(qdGraphics, null);
     }
 
     /**
@@ -35,14 +35,14 @@ public final class SetGWorld implements QuickTimeLib {
      * @see #reset
      * @deprecated
      */
-    public SetGWorld(QDGraphics paramQDGraphics, GDevice paramGDevice) throws QDException {
-        int i = QTObject.ID(paramQDGraphics);
+    public SetGWorld(QDGraphics qdGraphics, GDevice gDevice) throws QDException {
+        int i = QTObject.ID(qdGraphics);
         if (i == 0)
             throw new QDException(-50);
         if (i == -1)
             return;
         getGWorld(this.savedPort, this.savedDevice);
-        setGWorld(i, QTObject.ID(paramGDevice));
+        setGWorld(i, QTObject.ID(gDevice));
     }
 
     private final int[] savedPort = {0};
@@ -64,11 +64,11 @@ public final class SetGWorld implements QuickTimeLib {
         }
     }
 
-    private static void getGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void getGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 
-    private static void setGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void setGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 }

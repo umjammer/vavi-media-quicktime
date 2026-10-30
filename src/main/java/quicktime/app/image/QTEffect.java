@@ -277,10 +277,10 @@ public class QTEffect implements QTDrawable, Redrawable {
             return;
         }
         this.effectSample = effectParams;
-        Atom localAtom = this.effectSample.findChildByID_Atom(Atom.kParentIsContainer, 2003329396, 1);
+        Atom atom = this.effectSample.findChildByID_Atom(Atom.kParentIsContainer, 2003329396, 1);
         this.effectSample.lock();
-        AtomData localAtomData = this.effectSample.getAtomData(localAtom);
-        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(localAtomData.getInt(0)));
+        AtomData atomData = this.effectSample.getAtomData(atom);
+        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(atomData.getInt(0)));
         this.effectSamplePtr = RawEncodedImage.fromQTPointer(this.effectSample.toQTPointer());
         setUpSequence();
     }
@@ -296,12 +296,12 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @throws quicktime.QTException
      */
     protected synchronized boolean setUpSequence() throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        if ((QDGraphics.scratch.equals(getGWorld())) || (this.effectSamplePtr == null) || (localQDRect == null)) {
+        QDRect displayBounds = getDisplayBounds();
+        if ((QDGraphics.scratch.equals(getGWorld())) || (this.effectSamplePtr == null) || (displayBounds == null)) {
             return false;
         }
-        this.mat.setTx(localQDRect.getX());
-        this.mat.setTy(localQDRect.getY());
+        this.mat.setTx(displayBounds.getX());
+        this.mat.setTy(displayBounds.getY());
         this.effectSequence = new DSequence(this.effectDesc, this.effectSamplePtr, getGWorld(), null, this.mat, getClip(), 0, 512, null);
         if (this.gMode != null) {
             this.effectSequence.setGraphicsMode(this.gMode);
@@ -339,11 +339,11 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @throws quicktime.QTException
      */
     public void checkForEffect(int effectType) throws QTException {
-        ComponentDescription localComponentDescription = new ComponentDescription();
-        localComponentDescription.setType(QTUtils.toOSType("imdc"));
-        localComponentDescription.setSubType(effectType);
-        ComponentIdentifier localComponentIdentifier = ComponentIdentifier.find(localComponentDescription);
-        if (localComponentIdentifier == null) {
+        ComponentDescription desc = new ComponentDescription();
+        desc.setType(QTUtils.toOSType("imdc"));
+        desc.setSubType(effectType);
+        ComponentIdentifier componentIdentifier = ComponentIdentifier.find(desc);
+        if (componentIdentifier == null) {
             throw new StdQTException(-50);
         }
     }
@@ -410,10 +410,10 @@ public class QTEffect implements QTDrawable, Redrawable {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**
@@ -473,8 +473,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      * @see ()
      */
     public Dimension getInitialSize() throws QTException {
-        QDDimension localQDDimension = getOriginalSize();
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+        QDDimension originalSize = getOriginalSize();
+        return new Dimension(originalSize.getWidth(), originalSize.getHeight());
     }
 
     /**
@@ -510,8 +510,8 @@ public class QTEffect implements QTDrawable, Redrawable {
      * the new matrix.
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.mat = paramMatrix.copy();
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.mat = matrix.copy();
         if (this.effectSequence != null) {
             this.effectSequence.setMatrix(this.mat);
         }

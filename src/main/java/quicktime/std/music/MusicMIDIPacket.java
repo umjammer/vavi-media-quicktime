@@ -25,20 +25,20 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
     private static final long serialVersionUID = -3977273754888819406L;
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[255];
-        paramObjectInputStream.read(getBytes());
+        in.read(getBytes());
         setShortInArray(getBytes(), 0, EndianOrder.flipBigEndianToNative16(getShortFromArray(getBytes(), 0)));
         setIntInArray(getBytes(), 2, EndianOrder.flipBigEndianToNative32(getIntFromArray(getBytes(), 2)));
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[255];
-        System.arraycopy(getBytes(), 0, arrayOfByte, 0, 255);
-        setShortInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 0)));
-        setIntInArray(arrayOfByte, 2, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), 2)));
-        paramObjectOutputStream.write(arrayOfByte);
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[255];
+        System.arraycopy(getBytes(), 0, movie, 0, 255);
+        setShortInArray(movie, 0, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 0)));
+        setIntInArray(movie, 2, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), 2)));
+        out.write(movie);
     }
 
     /**
@@ -53,9 +53,9 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
     /**
      * The incoming byte[] contains MIDI data only.
      */
-    public MusicMIDIPacket(byte[] paramArrayOfByte) {
+    public MusicMIDIPacket(byte[] mData) {
         this();
-        setMIDIData(paramArrayOfByte);
+        setMIDIData(mData);
     }
 
     /**
@@ -66,9 +66,9 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
      */
     public byte[] getMIDIData() {
         int i = getShortAt(0);
-        byte[] arrayOfByte = new byte[i];
-        getBytesAt(6, i, arrayOfByte, 0);
-        return arrayOfByte;
+        byte[] destArray = new byte[i];
+        getBytesAt(6, i, destArray, 0);
+        return destArray;
     }
 
     /**
@@ -121,19 +121,19 @@ public final class MusicMIDIPacket extends QTByteObject implements PrimitivesLib
         return new MusicMIDIPacket(this.bytes);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 }

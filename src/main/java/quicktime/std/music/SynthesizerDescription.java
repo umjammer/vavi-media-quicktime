@@ -24,15 +24,15 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
         super(132);
     }
 
-    private SynthesizerDescription(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private SynthesizerDescription(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[kNativeSize];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         int i = getIntFromArray(arrayOfByte, 0);
         int j = EndianOrder.flipBigEndianToNative32(i);
         setIntInArray(getBytes(), 0, j);
@@ -45,18 +45,18 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         int i = getIntFromArray(getBytes(), 0);
         int j = EndianOrder.flipNativeToBigEndian32(i);
-        setIntInArray(arrayOfByte, 0, j);
-        System.arraycopy(getBytes(), 4, arrayOfByte, 0, 32);
+        setIntInArray(movie, 0, j);
+        System.arraycopy(getBytes(), 4, movie, 0, 32);
         for (int k = 36; k < 116; k += 4) {
             int m = getIntFromArray(getBytes(), k);
             int n = EndianOrder.flipNativeToBigEndian32(m);
-            setIntInArray(arrayOfByte, k, n);
+            setIntInArray(movie, k, n);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -160,28 +160,28 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
     /**
      * Returns true if controller number (1->128) is available.
      */
-    public boolean controllerAvailable(int paramInt) {
-        return doMask(paramInt, 84);
+    public boolean controllerAvailable(int controller) {
+        return doMask(controller, 84);
     }
 
     /**
      * Return true if the general MIDI instrument (1->128) is available.
      */
-    public boolean gmInstrumentAvailable(int paramInt) {
-        return doMask(paramInt, 100);
+    public boolean gmInstrumentAvailable(int instrument) {
+        return doMask(instrument, 100);
     }
 
     /**
      * Return true if the general MIDI drum kit (1->128) is available.
      */
-    public boolean gmDrumAvailable(int paramInt) {
-        return doMask(paramInt, 116);
+    public boolean gmDrumAvailable(int drum) {
+        return doMask(drum, 116);
     }
 
-    private boolean doMask(int paramInt1, int paramInt2) {
-        int i = paramInt1 < 116 ? 64 : paramInt1 < 100 ? 32 : paramInt1 < 84 ? 0 : 96;
-        int j = paramInt1 == 0 ? 0 : 1 << --paramInt1 - i;
-        return (j & getIntAt(paramInt2 + i / 32)) != 0;
+    private boolean doMask(int number, int offset) {
+        int i = number < 116 ? 64 : number < 100 ? 32 : number < 84 ? 0 : 96;
+        int j = number == 0 ? 0 : 1 << --number - i;
+        return (j & getIntAt(offset + i / 32)) != 0;
     }
 
     /**
@@ -199,19 +199,19 @@ public final class SynthesizerDescription extends QTByteObject implements Primit
         return new SynthesizerDescription(this.bytes);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

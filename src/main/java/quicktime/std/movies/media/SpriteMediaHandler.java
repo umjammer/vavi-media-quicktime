@@ -15,8 +15,8 @@ import quicktime.util.StringHandle;
 
 public final class SpriteMediaHandler extends VisualMediaHandler implements QuickTimeLib {
 
-    SpriteMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    SpriteMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -95,10 +95,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetSpriteProperty()"
      */
     public Matrix getMatrix(int spriteID) throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 1, localMatrix.getBytes());
+        Matrix matrix = new Matrix();
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 1, matrix.getBytes());
         StdQTException.checkError(i);
-        return localMatrix;
+        return matrix;
     }
 
     /**
@@ -110,10 +110,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetSpriteProperty()"
      */
     public boolean getVisible(int spriteID) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 4, arrayOfShort);
+        short[] propertyValue = new short[1];
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 4, propertyValue);
         StdQTException.checkError(i);
-        return arrayOfShort[0] != 0;
+        return propertyValue[0] != 0;
     }
 
     /**
@@ -125,10 +125,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetSpriteProperty()"
      */
     public int getLayer(int spriteID) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 5, arrayOfShort);
+        short[] propertyValue = new short[1];
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 5, propertyValue);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return propertyValue[0];
     }
 
     /**
@@ -140,10 +140,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetSpriteProperty()"
      */
     public GraphicsMode getGraphicsMode(int spriteID) throws StdQTException {
-        GraphicsMode localGraphicsMode = new GraphicsMode();
-        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 6, localGraphicsMode.getBytes());
+        GraphicsMode graphicsMode = new GraphicsMode();
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 6, graphicsMode.getBytes());
         StdQTException.checkError(i);
-        return localGraphicsMode;
+        return graphicsMode;
     }
 
     /**
@@ -155,10 +155,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetSpriteProperty()"
      */
     public int getImageIndex(int spriteID) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 100, arrayOfShort);
+        short[] propertyValue = new short[1];
+        int i = SpriteMediaGetSpriteProperty(_ID(), spriteID, 100, propertyValue);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return propertyValue[0];
     }
 
     /**
@@ -171,10 +171,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaHitTestAllSprites()"
      */
     public int hitTestAllSprites(int flags, QDPoint loc) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SpriteMediaHitTestAllSprites(_ID(), flags, loc.getPoint(), arrayOfInt);
+        int[] spriteHitIndex = new int[1];
+        int i = SpriteMediaHitTestAllSprites(_ID(), flags, loc.getPoint(), spriteHitIndex);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return spriteHitIndex[0];
     }
 
     /**
@@ -188,10 +188,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaHitTestOneSprite()"
      */
     public boolean hitTestOneSprite(int spriteID, int flags, QDPoint loc) throws StdQTException {
-        byte[] arrayOfByte = new byte[1];
-        int i = SpriteMediaHitTestOneSprite(_ID(), spriteID, flags, loc.getPoint(), arrayOfByte);
+        byte[] wasHit = new byte[1];
+        int i = SpriteMediaHitTestOneSprite(_ID(), spriteID, flags, loc.getPoint(), wasHit);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return wasHit[0] != 0;
     }
 
     /**
@@ -202,10 +202,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaCountSprites()"
      */
     public int countSprites() throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SpriteMediaCountSprites(_ID(), arrayOfShort);
+        short[] numSprites = new short[1];
+        int i = SpriteMediaCountSprites(_ID(), numSprites);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return numSprites[0];
     }
 
     /**
@@ -216,10 +216,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaCountImages()"
      */
     public int countImages() throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SpriteMediaCountImages(_ID(), arrayOfShort);
+        short[] numImages = new short[1];
+        int i = SpriteMediaCountImages(_ID(), numImages);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return numImages[0];
     }
 
     /**
@@ -231,10 +231,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetIndImageDescription()"
      */
     public ImageDescription getIndImageDescription(int imageIndex) throws QTException {
-        ImageDescription localImageDescription = new ImageDescription(0);
-        int i = SpriteMediaGetIndImageDescription(_ID(), (short) imageIndex, QTObject.ID(localImageDescription));
+        ImageDescription imageDescription = new ImageDescription(0);
+        int i = SpriteMediaGetIndImageDescription(_ID(), (short) imageIndex, QTObject.ID(imageDescription));
         StdQTException.checkError(i);
-        return localImageDescription;
+        return imageDescription;
     }
 
     /**
@@ -245,10 +245,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetDisplayedSampleNumber()"
      */
     public int getDisplayedSampleNumber() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SpriteMediaGetDisplayedSampleNumber(_ID(), arrayOfInt);
+        int[] sampleNum = new int[1];
+        int i = SpriteMediaGetDisplayedSampleNumber(_ID(), sampleNum);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return sampleNum[0];
     }
 
     /**
@@ -260,10 +260,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetSpriteName()"
      */
     public String getSpriteName(int spriteID) throws StdQTException {
-        byte[] arrayOfByte = new byte[255];
-        int i = SpriteMediaGetSpriteName(_ID(), spriteID, arrayOfByte);
+        byte[] spriteName = new byte[255];
+        int i = SpriteMediaGetSpriteName(_ID(), spriteID, spriteName);
         StdQTException.checkError(i);
-        return QTUtils.PString2String(arrayOfByte, 0);
+        return QTUtils.PString2String(spriteName, 0);
     }
 
     /**
@@ -275,10 +275,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetImageName()"
      */
     public String getImageName(int imageIndex) throws StdQTException {
-        byte[] arrayOfByte = new byte[256];
-        int i = SpriteMediaGetImageName(_ID(), (short) imageIndex, arrayOfByte);
+        byte[] imageName = new byte[256];
+        int i = SpriteMediaGetImageName(_ID(), (short) imageIndex, imageName);
         StdQTException.checkError(i);
-        return QTUtils.PString2String(arrayOfByte, 0);
+        return QTUtils.PString2String(imageName, 0);
     }
 
     /**
@@ -290,10 +290,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaSpriteIndexToID()"
      */
     public int spriteIndexToID(int spriteIndex) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SpriteMediaSpriteIndexToID(_ID(), (short) spriteIndex, arrayOfInt);
+        int[] spriteID = new int[1];
+        int i = SpriteMediaSpriteIndexToID(_ID(), (short) spriteIndex, spriteID);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return spriteID[0];
     }
 
     /**
@@ -305,10 +305,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaSpriteIDToIndex()"
      */
     public short spriteIDtoIndex(int spriteID) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SpriteMediaSpriteIDToIndex(_ID(), spriteID, arrayOfShort);
+        short[] spriteIndex = new short[1];
+        int i = SpriteMediaSpriteIDToIndex(_ID(), spriteID, spriteIndex);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return spriteIndex[0];
     }
 
     /**
@@ -333,10 +333,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetActionVariable()"
      */
     public float getActionVariable(int variableID) throws StdQTException {
-        float[] arrayOfFloat = new float[1];
-        int i = SpriteMediaGetActionVariable(_ID(), variableID, arrayOfFloat);
+        float[] value = new float[1];
+        int i = SpriteMediaGetActionVariable(_ID(), variableID, value);
         StdQTException.checkError(i);
-        return arrayOfFloat[0];
+        return value[0];
     }
 
     /**
@@ -361,22 +361,22 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetActionVariableAsString()"
      */
     public String getActionVariableAsString(int variableID) throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = SpriteMediaGetActionVariableAsString(_ID(), variableID, arrayOfInt);
+        int[] theCString = {0};
+        int i = SpriteMediaGetActionVariableAsString(_ID(), variableID, theCString);
         StdQTException.checkError(i);
         try {
-            MyStringHandle localMyStringHandle = new MyStringHandle(arrayOfInt[0], this, 1);
-            return localMyStringHandle.toJavaString();
-        } catch (QTException localQTException) {
-            localQTException.printStackTrace();
+            MyStringHandle myStringHandle = new MyStringHandle(theCString[0], this, 1);
+            return myStringHandle.toJavaString();
+        } catch (QTException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     static class MyStringHandle extends StringHandle {
 
-        protected MyStringHandle(int paramInt1, Object paramObject, int paramInt2) {
-            super(paramInt1, paramObject, paramInt2);
+        protected MyStringHandle(int nativeRep, Object ref, int strFormat) {
+            super(nativeRep, ref, strFormat);
         }
     }
 
@@ -388,10 +388,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetIndImageProperty()"
      */
     public int getSpriteImageGroupID(int imageIndex) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SpriteMediaGetIndImageProperty(_ID(), (short) imageIndex, 1001, arrayOfInt);
+        int[] imagePropertyValue = new int[1];
+        int i = SpriteMediaGetIndImageProperty(_ID(), (short) imageIndex, 1001, imagePropertyValue);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return imagePropertyValue[0];
     }
 
     /**
@@ -402,10 +402,10 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
      * @see "QuickTime::SpriteMediaGetIndImageProperty()"
      */
     public QDPoint getSpriteImageRegistrationPoint(int imageIndex) throws StdQTException {
-        byte[] arrayOfByte = new byte[8];
-        int i = SpriteMediaGetIndImageProperty(_ID(), (short) imageIndex, 1000, arrayOfByte);
+        byte[] imagePropertyValue = new byte[8];
+        int i = SpriteMediaGetIndImageProperty(_ID(), (short) imageIndex, 1000, imagePropertyValue);
         StdQTException.checkError(i);
-        return QDPoint.fromArray(arrayOfByte, 8);
+        return QDPoint.fromArray(imagePropertyValue, 8);
     }
 
     /**
@@ -439,103 +439,103 @@ public final class SpriteMediaHandler extends VisualMediaHandler implements Quic
         StdQTException.checkError(i);
     }
 
-    private static int SpriteMediaDisposeImage(int paramInt1, int paramInt2) {
-        return SpriteManager.SpriteMediaDisposeImage(paramInt1, paramInt2);
+    private static int SpriteMediaDisposeImage(int mh, int imageIndex) {
+        return SpriteManager.SpriteMediaDisposeImage(mh, imageIndex);
     }
 
-    private static int SpriteMediaNewImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return SpriteManager.SpriteMediaNewImage(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int SpriteMediaNewImage(int mh, int dataRef, int dataRefType, int desiredID) {
+        return SpriteManager.SpriteMediaNewImage(mh, dataRef, dataRefType, desiredID);
     }
 
-    private static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaSetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static int SpriteMediaSetSpriteProperty(int mh, int spriteIndex, int propertyType, byte[] propertyValue) {
+        return SpriteManager.SpriteMediaSetSpriteProperty(mh, spriteIndex, propertyType, propertyValue);
     }
 
-    private static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return SpriteManager.SpriteMediaSetSpriteProperty(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int SpriteMediaSetSpriteProperty(int mh, int spriteIndex, int propertyType, int propertyValue) {
+        return SpriteManager.SpriteMediaSetSpriteProperty(mh, spriteIndex, propertyType, propertyValue);
     }
 
-    private static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
-        return SpriteManager.SpriteMediaSetSpriteProperty(paramInt1, paramInt2, paramInt3, paramShort);
+    private static int SpriteMediaSetSpriteProperty(int mh, int spriteIndex, int propertyType, short propertyValue) {
+        return SpriteManager.SpriteMediaSetSpriteProperty(mh, spriteIndex, propertyType, propertyValue);
     }
 
-    private static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaGetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static int SpriteMediaGetSpriteProperty(int mh, int spriteIndex, int propertyType, byte[] propertyValue) {
+        return SpriteManager.SpriteMediaGetSpriteProperty(mh, spriteIndex, propertyType, propertyValue);
     }
 
-    private static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteMediaGetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static int SpriteMediaGetSpriteProperty(int mh, int spriteIndex, int propertyType, int[] propertyValue) {
+        return SpriteManager.SpriteMediaGetSpriteProperty(mh, spriteIndex, propertyType, propertyValue);
     }
 
-    private static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort) {
-        return SpriteManager.SpriteMediaGetSpriteProperty(paramInt1, paramInt2, paramInt3, paramArrayOfShort);
+    private static int SpriteMediaGetSpriteProperty(int mh, int spriteIndex, int propertyType, short[] propertyValue) {
+        return SpriteManager.SpriteMediaGetSpriteProperty(mh, spriteIndex, propertyType, propertyValue);
     }
 
-    private static int SpriteMediaHitTestAllSprites(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteMediaHitTestAllSprites(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static int SpriteMediaHitTestAllSprites(int mh, int flags, int loc, int[] spriteHitIndex) {
+        return SpriteManager.SpriteMediaHitTestAllSprites(mh, flags, loc, spriteHitIndex);
     }
 
-    private static int SpriteMediaHitTestOneSprite(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaHitTestOneSprite(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    private static int SpriteMediaHitTestOneSprite(int mh, int spriteIndex, int flags, int loc, byte[] wasHit) {
+        return SpriteManager.SpriteMediaHitTestOneSprite(mh, spriteIndex, flags, loc, wasHit);
     }
 
-    private static int SpriteMediaCountSprites(int paramInt, short[] paramArrayOfShort) {
-        return SpriteManager.SpriteMediaCountSprites(paramInt, paramArrayOfShort);
+    private static int SpriteMediaCountSprites(int mh, short[] numSprites) {
+        return SpriteManager.SpriteMediaCountSprites(mh, numSprites);
     }
 
-    private static int SpriteMediaCountImages(int paramInt, short[] paramArrayOfShort) {
-        return SpriteManager.SpriteMediaCountImages(paramInt, paramArrayOfShort);
+    private static int SpriteMediaCountImages(int mh, short[] numImages) {
+        return SpriteManager.SpriteMediaCountImages(mh, numImages);
     }
 
-    private static int SpriteMediaGetIndImageDescription(int paramInt1, short paramShort, int paramInt2) {
-        return SpriteManager.SpriteMediaGetIndImageDescription(paramInt1, paramShort, paramInt2);
+    private static int SpriteMediaGetIndImageDescription(int mh, short imageIndex, int imageDescription) {
+        return SpriteManager.SpriteMediaGetIndImageDescription(mh, imageIndex, imageDescription);
     }
 
-    private static int SpriteMediaGetDisplayedSampleNumber(int paramInt, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteMediaGetDisplayedSampleNumber(paramInt, paramArrayOfInt);
+    private static int SpriteMediaGetDisplayedSampleNumber(int mh, int[] sampleNum) {
+        return SpriteManager.SpriteMediaGetDisplayedSampleNumber(mh, sampleNum);
     }
 
-    private static int SpriteMediaGetSpriteName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaGetSpriteName(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SpriteMediaGetSpriteName(int mh, int spriteID, byte[] spriteName) {
+        return SpriteManager.SpriteMediaGetSpriteName(mh, spriteID, spriteName);
     }
 
-    private static int SpriteMediaGetImageName(int paramInt, short paramShort, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaGetImageName(paramInt, paramShort, paramArrayOfByte);
+    private static int SpriteMediaGetImageName(int mh, short imageIndex, byte[] imageName) {
+        return SpriteManager.SpriteMediaGetImageName(mh, imageIndex, imageName);
     }
 
-    private static int SpriteMediaSpriteIndexToID(int paramInt, short paramShort, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteMediaSpriteIndexToID(paramInt, paramShort, paramArrayOfInt);
+    private static int SpriteMediaSpriteIndexToID(int mh, short spriteIndex, int[] spriteID) {
+        return SpriteManager.SpriteMediaSpriteIndexToID(mh, spriteIndex, spriteID);
     }
 
-    private static int SpriteMediaSpriteIDToIndex(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return SpriteManager.SpriteMediaSpriteIDToIndex(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SpriteMediaSpriteIDToIndex(int mh, int spriteID, short[] spriteIndex) {
+        return SpriteManager.SpriteMediaSpriteIDToIndex(mh, spriteID, spriteIndex);
     }
 
-    private static int SpriteMediaSetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
-        return SpriteManager.SpriteMediaSetActionVariable(paramInt1, paramInt2, paramArrayOfFloat);
+    private static int SpriteMediaSetActionVariable(int mh, int variableID, float[] value) {
+        return SpriteManager.SpriteMediaSetActionVariable(mh, variableID, value);
     }
 
-    private static int SpriteMediaGetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
-        return SpriteManager.SpriteMediaGetActionVariable(paramInt1, paramInt2, paramArrayOfFloat);
+    private static int SpriteMediaGetActionVariable(int mh, int variableID, float[] value) {
+        return SpriteManager.SpriteMediaGetActionVariable(mh, variableID, value);
     }
 
-    private static int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaGetIndImageProperty(paramInt1, paramShort, paramInt2, paramArrayOfByte);
+    private static int SpriteMediaGetIndImageProperty(int mh, short imageIndex, int imagePropertyType, byte[] imagePropertyValue) {
+        return SpriteManager.SpriteMediaGetIndImageProperty(mh, imageIndex, imagePropertyType, imagePropertyValue);
     }
 
-    private static int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteMediaGetIndImageProperty(paramInt1, paramShort, paramInt2, paramArrayOfInt);
+    private static int SpriteMediaGetIndImageProperty(int mh, short imageIndex, int imagePropertyType, int[] imagePropertyValue) {
+        return SpriteManager.SpriteMediaGetIndImageProperty(mh, imageIndex, imagePropertyType, imagePropertyValue);
     }
 
-    private static int SpriteMediaSetActionVariableToString(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaSetActionVariableToString(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SpriteMediaSetActionVariableToString(int mh, int variableID, byte[] theCString) {
+        return SpriteManager.SpriteMediaSetActionVariableToString(mh, variableID, theCString);
     }
 
-    private static int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteMediaGetActionVariableAsString(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SpriteMediaGetActionVariableAsString(int mh, int variableID, byte[] theCString) {
+        return SpriteManager.SpriteMediaGetActionVariableAsString(mh, variableID, theCString);
     }
 
-    private static int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteMediaGetActionVariableAsString(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SpriteMediaGetActionVariableAsString(int mh, int variableID, int[] theCString) {
+        return SpriteManager.SpriteMediaGetActionVariableAsString(mh, variableID, theCString);
     }
 }

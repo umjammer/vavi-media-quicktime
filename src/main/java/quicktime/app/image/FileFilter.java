@@ -43,8 +43,8 @@ public class FileFilter implements FilenameFilter {
      * Create the filter with the flag set (if true - the default) which will test
      * the suffix and prefix or if false it will test the prefix only
      */
-    public FileFilter(boolean paramBoolean) {
-        this.testSuffix = paramBoolean;
+    public FileFilter(boolean testSuffix) {
+        this.testSuffix = testSuffix;
     }
 
     /**
@@ -119,10 +119,10 @@ public class FileFilter implements FilenameFilter {
      * It returns the resulting number.
      * java.lang.NumberFormatException
      */
-    protected int testFrameNumber(String paramString) throws NumberFormatException {
+    protected int testFrameNumber(String fileName) throws NumberFormatException {
         int i = this.prefix.length();
-        int j = paramString.length() - this.suffix.length();
-        String str = paramString.substring(i, j);
+        int j = fileName.length() - this.suffix.length();
+        String str = fileName.substring(i, j);
         return Integer.parseInt(str);
     }
 
@@ -144,7 +144,7 @@ public class FileFilter implements FilenameFilter {
             try {
                 testFrameNumber(fName);
                 bool = true;
-            } catch (NumberFormatException localNumberFormatException) {
+            } catch (NumberFormatException e) {
                 bool = false;
             }
         }
@@ -164,7 +164,7 @@ public class FileFilter implements FilenameFilter {
      * The default implementation returns the list as is.
      * @return the ordered list of files that the sequence will be created from.
      */
-    protected String[] postProcess(String[] paramArrayOfString) {
-        return paramArrayOfString;
+    protected String[] postProcess(String[] fileNames) {
+        return fileNames;
     }
 }

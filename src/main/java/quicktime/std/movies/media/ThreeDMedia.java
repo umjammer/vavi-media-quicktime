@@ -30,8 +30,8 @@ public final class ThreeDMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    ThreeDMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    ThreeDMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -40,8 +40,8 @@ public final class ThreeDMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new ThreeDMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new ThreeDMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class ThreeDMedia extends Media {
      * @throws quicktime.QTException
      */
     public ThreeDDescription getThreeDDescription(int index) throws QTException {
-        ThreeDDescription localThreeDDescription = new ThreeDDescription(1902392164);
-        getNativeSampleDescription(index, localThreeDDescription);
-        return localThreeDDescription;
+        ThreeDDescription threeDDescription = new ThreeDDescription(1902392164);
+        getNativeSampleDescription(index, threeDDescription);
+        return threeDDescription;
     }
 }

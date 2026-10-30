@@ -38,8 +38,8 @@ public class GroupController extends MouseController {
      * @deprecated
      * @since QTJava 6.1
      */
-    public GroupController(MouseResponder mr, boolean paramBoolean) {
-        super(mr, paramBoolean);
+    public GroupController(MouseResponder mr, boolean wholeSpace) {
+        super(mr, wholeSpace);
     }
 
     private boolean isActive = false;
@@ -126,17 +126,17 @@ public class GroupController extends MouseController {
             return;
         try {
             synchronized (this.group) {
-                MouseResponder localMouseResponder = getResponder();
-                if ((localMouseResponder.isInterested(4)) && (localMouseResponder.isActive())) {
-                    QTDrawable localQTDrawable = this.current;
+                MouseResponder responder = getResponder();
+                if ((responder.isInterested(4)) && (responder.isActive())) {
+                    QTDrawable current = this.current;
                     doDragTarget(e);
-                    this.current = localQTDrawable;
-                    Region localRegion1 = new Region(this.current.getDisplayBounds());
-                    localMouseResponder.mouseDragged(e);
-                    Region localRegion2 = new Region(this.current.getDisplayBounds());
-                    Region localRegion3 = localRegion1.union(localRegion2).diff(localRegion2);
-                    if (!localRegion3.empty()) {
-                        this.group.redrawMember(this.current, localRegion3);
+                    this.current = current;
+                    Region region1 = new Region(this.current.getDisplayBounds());
+                    responder.mouseDragged(e);
+                    Region regionB = new Region(this.current.getDisplayBounds());
+                    Region invalidRgn = region1.union(regionB).diff(regionB);
+                    if (!invalidRgn.empty()) {
+                        this.group.redrawMember(this.current, invalidRgn);
                     }
                     if (!this.group.hasMember(this.current))
                         deactivateResponder();

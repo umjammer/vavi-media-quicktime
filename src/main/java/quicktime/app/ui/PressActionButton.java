@@ -52,8 +52,8 @@ public class PressActionButton extends QTButton {
      * the user presses the mouse and it is also in the button.
      * If this is false, the action will fire ONLY when the user first presses the button.
      */
-    public void setContinuousPressAction(boolean paramBoolean) {
-        this.doContinuousPress = paramBoolean;
+    public void setContinuousPressAction(boolean continuousPressAction) {
+        this.doContinuousPress = continuousPressAction;
     }
 
     /**
@@ -81,8 +81,8 @@ public class PressActionButton extends QTButton {
                         PressActionButton.this.fireAction();
                     try {
                         Thread.sleep(1L);
-                    } catch (InterruptedException localInterruptedException) {
-                        localInterruptedException.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }).start();

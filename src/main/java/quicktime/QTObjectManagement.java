@@ -70,17 +70,17 @@ final class QTObjectManagement implements
     private static final String trackEditStateName = "TrackEditState";
     private static final String userDataName = "UserData";
 
-    static boolean isMember(int paramInt) {
+    static boolean isMember(int id) {
         while (lock)
             Thread.yield();
         if (qtObjs == null)
             return false;
-        Integer localInteger = paramInt;
+        Integer localInteger = id;
         return qtObjs.containsKey(localInteger);
     }
 
-    static boolean add(QTObject paramQTObject, int paramInt1, int paramInt2) {
-        if ((paramQTObject == null) || (paramInt1 == 0)) {
+    static boolean add(QTObject qtObject, int id, int ownerID) {
+        if ((qtObject == null) || (id == 0)) {
 
             return false;
         }
@@ -88,19 +88,19 @@ final class QTObjectManagement implements
         if (qtObjs == null) {
             qtObjs = new Hashtable<>();
         }
-        if (qtObjs.containsKey(paramInt1)) {
+        if (qtObjs.containsKey(id)) {
             return false;
         }
 
         String str1 = null;
 
-        if ((paramQTObject instanceof quicktime.std.comp.Component)) {
-            if ((paramQTObject instanceof quicktime.std.movies.MovieController)) {
+        if ((qtObject instanceof quicktime.std.comp.Component)) {
+            if ((qtObject instanceof quicktime.std.movies.MovieController)) {
                 str1 = "MovieController";
             } else
                 str1 = "Component";
-        } else if ((paramQTObject instanceof quicktime.util.QTHandleRef)) {
-            str1 = switch (paramQTObject) {
+        } else if ((qtObject instanceof quicktime.util.QTHandleRef)) {
+            str1 = switch (qtObject) {
                 case quicktime.qd.Region region -> "Region";
                 case Polygon polygon -> "Polygon";
                 case quicktime.qd.Pict pict -> "Pict";
@@ -110,40 +110,40 @@ final class QTObjectManagement implements
                 case quicktime.std.sg.SGDeviceList sgDeviceList -> "SGDeviceList";
                 default -> "QTHandleRef";
             };
-        } else if ((paramQTObject instanceof QTPointerRef)) {
-            String str2 = paramQTObject.getClass().getName();
-            if (str2.endsWith("QDGraphics")) {
+        } else if ((qtObject instanceof QTPointerRef)) {
+            String name = qtObject.getClass().getName();
+            if (name.endsWith("QDGraphics")) {
                 str1 = "QDGraphics";
-            } else if (str2.endsWith("CodecNameList")) {
+            } else if (name.endsWith("CodecNameList")) {
                 str1 = "CodecNameList";
             } else {
                 str1 = "QTPointerRef";
             }
-        } else if (((paramQTObject instanceof quicktime.std.image.DSequence))
-                   || ((paramQTObject instanceof quicktime.std.image.CSequence))) {
+        } else if (((qtObject instanceof quicktime.std.image.DSequence))
+                   || ((qtObject instanceof quicktime.std.image.CSequence))) {
             str1 = "CDSequence";
-        } else if ((paramQTObject instanceof quicktime.std.movies.Movie)) {
+        } else if ((qtObject instanceof quicktime.std.movies.Movie)) {
             str1 = "Movie";
-        } else if ((paramQTObject instanceof quicktime.std.anim.SpriteWorld)) {
+        } else if ((qtObject instanceof quicktime.std.anim.SpriteWorld)) {
             str1 = "SpriteWorld";
-        } else if ((paramQTObject instanceof quicktime.std.movies.MovieEditState)) {
+        } else if ((qtObject instanceof quicktime.std.movies.MovieEditState)) {
             str1 = "MovieEditState";
-        } else if ((paramQTObject instanceof SPBDevice)) {
+        } else if ((qtObject instanceof SPBDevice)) {
             str1 = "SPBDevice";
-        } else if ((paramQTObject instanceof SndChannel)) {
+        } else if ((qtObject instanceof SndChannel)) {
             str1 = "SndChannel";
-        } else if ((paramQTObject instanceof quicktime.std.clocks.TimeBase)) {
+        } else if ((qtObject instanceof quicktime.std.clocks.TimeBase)) {
             str1 = "TimeBase";
-        } else if ((paramQTObject instanceof quicktime.std.movies.TrackEditState)) {
+        } else if ((qtObject instanceof quicktime.std.movies.TrackEditState)) {
             str1 = "TrackEditState";
-        } else if ((paramQTObject instanceof UserData)) {
+        } else if ((qtObject instanceof UserData)) {
             str1 = "UserData";
-        } else if ((paramQTObject instanceof quicktime.std.music.NoteChannel)) {
+        } else if ((qtObject instanceof quicktime.std.music.NoteChannel)) {
             str1 = "NoteChannel";
         } else if ((!QTSession.hasSecurityRestrictions()) && (!QTSession.isCurrentOS(2))) {
-            if ((paramQTObject instanceof quicktime.streaming.Presentation)) {
+            if ((qtObject instanceof quicktime.streaming.Presentation)) {
                 str1 = "Presentation";
-            } else if ((paramQTObject instanceof quicktime.streaming.Stream)) {
+            } else if ((qtObject instanceof quicktime.streaming.Stream)) {
                 str1 = "Stream";
             }
         }
@@ -151,19 +151,19 @@ final class QTObjectManagement implements
             return false;
         }
 
-        if (paramInt2 != 0) {
-            str1 = str1 + "_" + paramInt2;
+        if (ownerID != 0) {
+            str1 = str1 + "_" + ownerID;
         }
 
-        qtObjs.put(paramInt1, str1);
+        qtObjs.put(id, str1);
         return true;
     }
 
-    static boolean remove(int paramInt, QTObject paramQTObject) throws QTException {
-        Integer localInteger = paramInt;
+    static boolean remove(int id, QTObject qtObject) throws QTException {
+        Integer localInteger = id;
         if (qtObjs.containsKey(localInteger)) {
             try {
-                disposeSessionObject(paramInt, (String) qtObjs.get(localInteger), paramQTObject);
+                disposeSessionObject(id, (String) qtObjs.get(localInteger), qtObject);
             } catch (QTException e) {
                 throw e;
             } finally {
@@ -184,66 +184,66 @@ final class QTObjectManagement implements
             Thread.yield();
         lock = true;
 
-        Enumeration<Integer> localEnumeration = qtObjs.keys();
-        while (localEnumeration.hasMoreElements()) {
-            Integer localObject1 = localEnumeration.nextElement();
-            String localObject2 = (String) qtObjs.get(localObject1);
+        Enumeration<Integer> enumeration = qtObjs.keys();
+        while (enumeration.hasMoreElements()) {
+            Integer id = enumeration.nextElement();
+            String localObject2 = (String) qtObjs.get(id);
 
             if (localObject2.startsWith("SGDeviceList")) {
                 try {
-                    disposeSessionObject(localObject1, "SGDeviceList");
+                    disposeSessionObject(id, "SGDeviceList");
                 } catch (QTException e) {
                     logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
             if (localObject2.startsWith("NoteChannel")) {
                 try {
-                    disposeSessionObject(localObject1, "NoteChannel");
+                    disposeSessionObject(id, "NoteChannel");
                 } catch (QTException e) {
                     logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
             if (localObject2.startsWith("SpriteWorld")) {
                 try {
-                    disposeSessionObject(localObject1, "SpriteWorld");
+                    disposeSessionObject(id, "SpriteWorld");
                 } catch (QTException e) {
                     logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
             if (localObject2.startsWith("CDSequence")) {
                 try {
-                    disposeSessionObject(localObject1, "CDSequence");
+                    disposeSessionObject(id, "CDSequence");
                 } catch (QTException e) {
                     logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
         }
-        localEnumeration = qtObjs.keys();
-        Vector<Integer> localObject1 = new Vector<>();
-        Vector<Integer> localObject2 = new Vector<>();
+        enumeration = qtObjs.keys();
+        Vector<Integer> vector1 = new Vector<>();
+        Vector<Integer> vector2 = new Vector<>();
         Integer localInteger;
-        while (localEnumeration.hasMoreElements()) {
-            localInteger = localEnumeration.nextElement();
-            String str = (String) qtObjs.get(localInteger);
-            if ((str.startsWith("Movie")) && (!str.startsWith("MovieController")) && (!str.startsWith("MovieEditState"))) {
-                localObject1.add(localInteger);
-            } else if (str.startsWith("QDGraphics")) {
-                localObject2.add(localInteger);
-            } else if ((!str.startsWith("SGDeviceList")) &&
-                       (!str.startsWith("NoteChannel")) &&
-                       (!str.startsWith("SpriteWorld")) &&
-                       (!str.startsWith("CDSequence"))) {
+        while (enumeration.hasMoreElements()) {
+            localInteger = enumeration.nextElement();
+            String name = (String) qtObjs.get(localInteger);
+            if ((name.startsWith("Movie")) && (!name.startsWith("MovieController")) && (!name.startsWith("MovieEditState"))) {
+                vector1.add(localInteger);
+            } else if (name.startsWith("QDGraphics")) {
+                vector2.add(localInteger);
+            } else if ((!name.startsWith("SGDeviceList")) &&
+                       (!name.startsWith("NoteChannel")) &&
+                       (!name.startsWith("SpriteWorld")) &&
+                       (!name.startsWith("CDSequence"))) {
                 try {
-                    disposeSessionObject(localInteger, str);
+                    disposeSessionObject(localInteger, name);
                 } catch (QTException e) {
                     logger.log(Level.ERROR, e.getMessage(), e);
                 }
             }
         }
 
-        localEnumeration = localObject1.elements();
-        while (localEnumeration.hasMoreElements()) {
-            localInteger = localEnumeration.nextElement();
+        enumeration = vector1.elements();
+        while (enumeration.hasMoreElements()) {
+            localInteger = enumeration.nextElement();
             try {
                 disposeSessionObject(localInteger, "Movie");
             } catch (QTException e) {
@@ -251,9 +251,9 @@ final class QTObjectManagement implements
             }
         }
 
-        localEnumeration = localObject2.elements();
-        while (localEnumeration.hasMoreElements()) {
-            localInteger = localEnumeration.nextElement();
+        enumeration = vector2.elements();
+        while (enumeration.hasMoreElements()) {
+            localInteger = enumeration.nextElement();
             try {
                 disposeSessionObject(localInteger, "QDGraphics");
             } catch (QTException e) {
@@ -265,103 +265,103 @@ final class QTObjectManagement implements
         lock = false;
 
         qtObjs = null;
-        localObject1.removeAllElements();
-        localObject1 = null;
-        localObject2.removeAllElements();
-        localObject2 = null;
+        vector1.removeAllElements();
+        vector1 = null;
+        vector2.removeAllElements();
+        vector2 = null;
     }
 
-    private static int pullIDFromName(String paramString) {
-        int i = paramString.lastIndexOf("_");
+    private static int pullIDFromName(String name) {
+        int i = name.lastIndexOf("_");
         if (i != -1) {
-            String str = paramString.substring(i + 1);
+            String str = name.substring(i + 1);
             return Integer.parseInt(str);
         }
 
         return 0;
     }
 
-    private static void disposeSessionObject(int paramInt, String paramString, Object paramObject) throws QTException {
+    private static void disposeSessionObject(int id, String name, Object object) throws QTException {
         try {
-            if (paramObject == null) {
-                disposeSessionObject(paramInt, paramString);
-            } else if ((paramObject instanceof SndChannel)) {
-                boolean bool = ((SndChannel) paramObject).isQuietNow();
-                int i = SndDisposeChannel(paramInt, (byte) (bool ? 1 : 0));
+            if (object == null) {
+                disposeSessionObject(id, name);
+            } else if ((object instanceof SndChannel)) {
+                boolean bool = ((SndChannel) object).isQuietNow();
+                int i = SndDisposeChannel(id, (byte) (bool ? 1 : 0));
 
                 QTException.checkError(i);
             } else {
-                disposeSessionObject(paramInt, paramString);
+                disposeSessionObject(id, name);
             }
         } catch (UnsatisfiedLinkError | UnsupportedOperationException ignored) {
         }
     }
 
-    private static void disposeSessionObject(int paramInt, String paramString) throws QTException {
+    private static void disposeSessionObject(int id, String name) throws QTException {
         try {
             Object localObject = null;
 
             int i = 0;
-            if (paramString.startsWith("AtomContainer")) {
-                i = QTDisposeAtomContainer(paramInt);
-            } else if (paramString.startsWith("Component")) {
-                i = CloseComponent(paramInt);
-            } else if (paramString.startsWith("CDSequence")) {
-                i = CDSequenceEnd(paramInt);
-            } else if (paramString.startsWith("CodecNameList")) {
-                i = DisposeCodecNameList(paramInt);
-            } else if (paramString.startsWith("ColorTable")) {
-                DisposeCTable(paramInt);
-            } else if (paramString.startsWith("QDGraphics")) {
-                DisposeGWorld(paramInt);
-            } else if (paramString.startsWith("QTHandleRef")) {
-                DisposeHandle(paramInt);
+            if (name.startsWith("AtomContainer")) {
+                i = QTDisposeAtomContainer(id);
+            } else if (name.startsWith("Component")) {
+                i = CloseComponent(id);
+            } else if (name.startsWith("CDSequence")) {
+                i = CDSequenceEnd(id);
+            } else if (name.startsWith("CodecNameList")) {
+                i = DisposeCodecNameList(id);
+            } else if (name.startsWith("ColorTable")) {
+                DisposeCTable(id);
+            } else if (name.startsWith("QDGraphics")) {
+                DisposeGWorld(id);
+            } else if (name.startsWith("QTHandleRef")) {
+                DisposeHandle(id);
 
-            } else if (paramString.startsWith("MovieEditState")) {
-                i = DisposeMovieEditState(paramInt);
-            } else if (paramString.startsWith("MovieController")) {
-                DisposeMovieController(paramInt);
-            } else if (paramString.startsWith("Movie")) {
-                DisposeMovie(paramInt);
+            } else if (name.startsWith("MovieEditState")) {
+                i = DisposeMovieEditState(id);
+            } else if (name.startsWith("MovieController")) {
+                DisposeMovieController(id);
+            } else if (name.startsWith("Movie")) {
+                DisposeMovie(id);
             } else {
                 int j;
-                if (paramString.startsWith("NoteChannel")) {
-                    j = pullIDFromName(paramString);
+                if (name.startsWith("NoteChannel")) {
+                    j = pullIDFromName(name);
                     if (j != 0) {
-                        i = NADisposeNoteChannel(j, paramInt);
+                        i = NADisposeNoteChannel(j, id);
                     }
-                } else if (paramString.startsWith("Pict")) {
-                    KillPicture(paramInt);
-                } else if (paramString.startsWith("PixMap")) {
-                    DisposeMatte(paramInt);
-                } else if (paramString.startsWith("QTPointerRef")) {
-                    DisposePtr(paramInt);
-                } else if (paramString.startsWith("Region")) {
-                    DisposeRgn(paramInt);
-                } else if (paramString.startsWith("Polygon")) {
-                    KillPoly(paramInt);
-                } else if (paramString.startsWith("Presentation")) {
-                    i = QTSDisposePresentation(paramInt, 0);
-                } else if (paramString.startsWith("SndChannel")) {
-                    i = SndDisposeChannel(paramInt, (byte) 1);
-                } else if (paramString.startsWith("SPBDevice")) {
-                    SPBCloseDevice(paramInt);
-                } else if (paramString.startsWith("SGDeviceList")) {
+                } else if (name.startsWith("Pict")) {
+                    KillPicture(id);
+                } else if (name.startsWith("PixMap")) {
+                    DisposeMatte(id);
+                } else if (name.startsWith("QTPointerRef")) {
+                    DisposePtr(id);
+                } else if (name.startsWith("Region")) {
+                    DisposeRgn(id);
+                } else if (name.startsWith("Polygon")) {
+                    KillPoly(id);
+                } else if (name.startsWith("Presentation")) {
+                    i = QTSDisposePresentation(id, 0);
+                } else if (name.startsWith("SndChannel")) {
+                    i = SndDisposeChannel(id, (byte) 1);
+                } else if (name.startsWith("SPBDevice")) {
+                    SPBCloseDevice(id);
+                } else if (name.startsWith("SGDeviceList")) {
 
-                    j = pullIDFromName(paramString);
+                    j = pullIDFromName(name);
                     if (j != 0) {
-                        i = SGDisposeDeviceList(j, paramInt);
+                        i = SGDisposeDeviceList(j, id);
                     }
-                } else if (paramString.startsWith("SpriteWorld")) {
-                    DisposeSpriteWorld(paramInt);
-                } else if (paramString.startsWith("Stream")) {
-                    i = QTSDisposeStream(paramInt, 0);
-                } else if (paramString.startsWith("TimeBase")) {
-                    DisposeTimeBase(paramInt);
-                } else if (paramString.startsWith("TrackEditState")) {
-                    i = DisposeTrackEditState(paramInt);
-                } else if (paramString.startsWith("UserData")) {
-                    i = DisposeUserData(paramInt);
+                } else if (name.startsWith("SpriteWorld")) {
+                    DisposeSpriteWorld(id);
+                } else if (name.startsWith("Stream")) {
+                    i = QTSDisposeStream(id, 0);
+                } else if (name.startsWith("TimeBase")) {
+                    DisposeTimeBase(id);
+                } else if (name.startsWith("TrackEditState")) {
+                    i = DisposeTrackEditState(id);
+                } else if (name.startsWith("UserData")) {
+                    i = DisposeUserData(id);
                 }
             }
 
@@ -370,103 +370,103 @@ final class QTObjectManagement implements
         }
     }
 
-    private static short QTDisposeAtomContainer(int paramInt) {
-        return AtomManager.QTDisposeAtomContainer(paramInt);
+    private static short QTDisposeAtomContainer(int container) {
+        return AtomManager.QTDisposeAtomContainer(container);
     }
 
-    private static void DisposeCTable(int paramInt) {
-        QuickDrawManager.DisposeCTable(paramInt);
+    private static void DisposeCTable(int ctab) {
+        QuickDrawManager.DisposeCTable(ctab);
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 
-    private static void DisposeRgn(int paramInt) {
-        QuickDrawManager.DisposeRgn(paramInt);
+    private static void DisposeRgn(int rgn) {
+        QuickDrawManager.DisposeRgn(rgn);
     }
 
-    private static short DisposeCodecNameList(int paramInt) {
-        return ImageCompressionManager.DisposeCodecNameList(paramInt);
+    private static short DisposeCodecNameList(int list) {
+        return ImageCompressionManager.DisposeCodecNameList(list);
     }
 
-    private static void DisposeMatte(int paramInt) {
-        QuickDrawManager.DisposeMatte(paramInt);
+    private static void DisposeMatte(int pixMap) {
+        QuickDrawManager.DisposeMatte(pixMap);
     }
 
-    private static void DisposePtr(int paramInt) {
-        MemoryManager.DisposePtr(paramInt);
+    private static void DisposePtr(int p) {
+        MemoryManager.DisposePtr(p);
     }
 
-    private static short DisposeMovieEditState(int paramInt) {
-        return MovieToolbox.DisposeMovieEditState(paramInt);
+    private static short DisposeMovieEditState(int state) {
+        return MovieToolbox.DisposeMovieEditState(state);
     }
 
-    private static void DisposeTimeBase(int paramInt) {
-        ClockManager.DisposeTimeBase(paramInt);
+    private static void DisposeTimeBase(int tb) {
+        ClockManager.DisposeTimeBase(tb);
     }
 
-    private static short DisposeTrackEditState(int paramInt) {
-        return MovieToolbox.DisposeTrackEditState(paramInt);
+    private static short DisposeTrackEditState(int state) {
+        return MovieToolbox.DisposeTrackEditState(state);
     }
 
-    private static short DisposeUserData(int paramInt) {
-        return MovieToolbox.DisposeUserData(paramInt);
+    private static short DisposeUserData(int userData) {
+        return MovieToolbox.DisposeUserData(userData);
     }
 
-    private static void DisposeMovieController(int paramInt) {
-        MovieControllerManager.DisposeMovieController(paramInt);
+    private static void DisposeMovieController(int mc) {
+        MovieControllerManager.DisposeMovieController(mc);
     }
 
-    private static void DisposeMovie(int paramInt) {
-        MovieToolbox.DisposeMovie(paramInt);
+    private static void DisposeMovie(int movie) {
+        MovieToolbox.DisposeMovie(movie);
     }
 
-    private static short CloseComponent(int paramInt) {
-        return ComponentManager.CloseComponent(paramInt);
+    private static short CloseComponent(int ci) {
+        return ComponentManager.CloseComponent(ci);
     }
 
-    private static short CDSequenceEnd(int paramInt) {
-        return ImageCompressionManager.CDSequenceEnd(paramInt);
+    private static short CDSequenceEnd(int seqID) {
+        return ImageCompressionManager.CDSequenceEnd(seqID);
     }
 
-    private static void DisposeSpriteWorld(int paramInt) {
-        SpriteManager.DisposeSpriteWorld(paramInt);
+    private static void DisposeSpriteWorld(int spriteWorld) {
+        SpriteManager.DisposeSpriteWorld(spriteWorld);
     }
 
-    private static void KillPicture(int paramInt) {
-        QuickDrawManager.KillPicture(paramInt);
+    private static void KillPicture(int pict) {
+        QuickDrawManager.KillPicture(pict);
     }
 
-    private static void KillPoly(int paramInt) {
-        QuickDrawManager.KillPoly(paramInt);
+    private static void KillPoly(int poly) {
+        QuickDrawManager.KillPoly(poly);
     }
 
-    private static void DisposeGWorld(int paramInt) {
-        QuickDrawManager.DisposeGWorld(paramInt);
+    private static void DisposeGWorld(int gworld) {
+        QuickDrawManager.DisposeGWorld(gworld);
     }
 
-    private static short SPBCloseDevice(int paramInt) {
-        return SoundManager.SPBCloseDevice(paramInt);
+    private static short SPBCloseDevice(int inRefNum) {
+        return SoundManager.SPBCloseDevice(inRefNum);
     }
 
-    private static short SndDisposeChannel(int paramInt, byte paramByte) {
-        return SoundManager.SndDisposeChannel(paramInt, paramByte);
+    private static short SndDisposeChannel(int chan, byte quietNow) {
+        return SoundManager.SndDisposeChannel(chan, quietNow);
     }
 
-    private static int NADisposeNoteChannel(int paramInt1, int paramInt2) {
-        return MusicManager.NADisposeNoteChannel(paramInt1, paramInt2);
+    private static int NADisposeNoteChannel(int na, int noteChannel) {
+        return MusicManager.NADisposeNoteChannel(na, noteChannel);
     }
 
-    private static int SGDisposeDeviceList(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGDisposeDeviceList(paramInt1, paramInt2);
+    private static int SGDisposeDeviceList(int sg, int list) {
+        return SequenceGrabberManager.SGDisposeDeviceList(sg, list);
     }
 
-    private static short QTSDisposePresentation(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSDisposePresentation(paramInt1, paramInt2);
+    private static short QTSDisposePresentation(int presentation, int flags) {
+        return StreamingManager.QTSDisposePresentation(presentation, flags);
     }
 
-    private static short QTSDisposeStream(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSDisposeStream(paramInt1, paramInt2);
+    private static short QTSDisposeStream(int stream, int flags) {
+        return StreamingManager.QTSDisposeStream(stream, flags);
     }
 }

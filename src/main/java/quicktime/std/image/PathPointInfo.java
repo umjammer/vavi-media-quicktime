@@ -18,8 +18,8 @@ public class PathPointInfo {
      */
     public final QDPoint point;
 
-    PathPointInfo(QDPoint paramQDPoint, boolean paramBoolean) {
-        this.point = paramQDPoint;
-        this.isOnPath = paramBoolean;
+    PathPointInfo(QDPoint point, boolean isOnPath) {
+        this.point = point;
+        this.isOnPath = isOnPath;
     }
 }

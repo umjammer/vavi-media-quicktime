@@ -26,10 +26,10 @@ public class JDirectLinker {
         public MethodSpec() {
         }
 
-        public MethodSpec(String paramString1, String paramString2, int paramInt) {
-            this.name = paramString1;
-            this.signature = paramString2;
-            this.frameSize = paramInt;
+        public MethodSpec(String name, String signature, int frameSize) {
+            this.name = name;
+            this.signature = signature;
+            this.frameSize = frameSize;
         }
 
         public String toString() {
@@ -43,8 +43,8 @@ public class JDirectLinker {
 
         final int libraryHandle;
 
-        Library(String paramString) {
-            this.libraryName = (paramString + ".dll");
+        Library(String name) {
+            this.libraryName = (name + ".dll");
             this.libraryHandle = JDirectLinker.loadNativeLibrary(this.libraryName);
         }
 
@@ -53,113 +53,113 @@ public class JDirectLinker {
         }
     }
 
-    public static Object loadLibrary(String paramString) {
-        return new Library(paramString);
+    public static Object loadLibrary(String name) {
+        return new Library(name);
     }
 
-    public static void linkNativeMethods(Class<?> paramClass, String[] paramArrayOfString) {
-        int[] arrayOfInt = loadNativeLibraries(paramArrayOfString);
-        MethodSpec[] arrayOfMethodSpec = getNativeMethods(paramClass);
-        int i = arrayOfMethodSpec.length;
-        for (MethodSpec localMethodSpec : arrayOfMethodSpec) {
-            linkNativeMethod(paramClass, localMethodSpec.name, localMethodSpec.signature, localMethodSpec.frameSize, arrayOfInt);
+    public static void linkNativeMethods(Class<?> clazz, String[] libraryNames) {
+        int[] libraryHandles = loadNativeLibraries(libraryNames);
+        MethodSpec[] nativeMethods = getNativeMethods(clazz);
+        int i = nativeMethods.length;
+        for (MethodSpec methodSpec : nativeMethods) {
+            linkNativeMethod(clazz, methodSpec.name, methodSpec.signature, methodSpec.frameSize, libraryHandles);
         }
     }
 
     /**
      * Uses interfaces to supply the DLL handles.
      */
-    public static void linkNativeMethods(Class<?> paramClass) {
-        int[] arrayOfInt = gatherLibraries(paramClass);
-        MethodSpec[] arrayOfMethodSpec = getNativeMethods(paramClass);
-        int i = arrayOfMethodSpec.length;
-        for (MethodSpec localMethodSpec : arrayOfMethodSpec) {
-            linkNativeMethod(paramClass, localMethodSpec.name, localMethodSpec.signature, localMethodSpec.frameSize, arrayOfInt);
+    public static void linkNativeMethods(Class<?> clazz) {
+        int[] libraryHandles = gatherLibraries(clazz);
+        MethodSpec[] nativeMethods = getNativeMethods(clazz);
+        int i = nativeMethods.length;
+        for (MethodSpec methodSpec : nativeMethods) {
+            linkNativeMethod(clazz, methodSpec.name, methodSpec.signature, methodSpec.frameSize, libraryHandles);
         }
     }
 
-    private static int[] gatherLibraries(Class<?> paramClass) {
-        Vector<Library> localVector = new Vector<>();
-        while (paramClass != null) {
-            examineInterfaces(localVector, paramClass.getInterfaces());
-            paramClass = paramClass.getSuperclass();
+    private static int[] gatherLibraries(Class<?> clazz) {
+        Vector<Library> vector = new Vector<>();
+        while (clazz != null) {
+            examineInterfaces(vector, clazz.getInterfaces());
+            clazz = clazz.getSuperclass();
         }
-        int i = localVector.size();
+        int i = vector.size();
         int[] arrayOfInt = new int[i];
         for (int j = 0; j < i; j++) {
-            Library localLibrary = localVector.elementAt(j);
-            arrayOfInt[j] = localLibrary.libraryHandle;
+            Library library = vector.elementAt(j);
+            arrayOfInt[j] = library.libraryHandle;
         }
         return arrayOfInt;
     }
 
-    private static void examineInterfaces(Vector<Library> paramVector, Class<?>[] paramArrayOfClass) {
-        int i = paramArrayOfClass.length;
-        for (Class<?> localClass : paramArrayOfClass) {
-            if ((SharedLibrary.class != localClass) && (SharedLibrary.class.isAssignableFrom(localClass))) {
+    private static void examineInterfaces(Vector<Library> vector, Class<?>[] classes) {
+        int i = classes.length;
+        for (Class<?> clazz : classes) {
+            if ((SharedLibrary.class != clazz) && (SharedLibrary.class.isAssignableFrom(clazz))) {
                 try {
-                    Field localField = localClass.getDeclaredField("libraryInstance");
-                    if (localField != null) {
-                        Library localLibrary = (Library) localField.get(localClass);
-                        if (localLibrary != null) {
-                            paramVector.addElement(localLibrary);
+                    Field declaredField = clazz.getDeclaredField("libraryInstance");
+                    if (declaredField != null) {
+                        Library library = (Library) declaredField.get(clazz);
+                        if (library != null) {
+                            vector.addElement(library);
                         }
                     }
                 } catch (NoSuchFieldException _) {
-                } catch (IllegalAccessException localIllegalAccessException) {
-                    logger.log(Level.DEBUG, "JDirectLinker.examineInterfaces: can't access library field from interface: " + localClass.getName());
-                } catch (Throwable localThrowable) {
-                    logger.log(Level.DEBUG, "JDirectLinker.examineInterfaces: exception: " + localThrowable);
+                } catch (IllegalAccessException e) {
+                    logger.log(Level.DEBUG, "JDirectLinker.examineInterfaces: can't access library field from interface: " + clazz.getName());
+                } catch (Throwable e) {
+                    logger.log(Level.DEBUG, "JDirectLinker.examineInterfaces: exception: " + e);
                 }
-                Class<?>[] arrayOfClass = localClass.getInterfaces();
-                if (arrayOfClass.length != 0) {
-                    examineInterfaces(paramVector, arrayOfClass);
+                Class<?>[] interfaces = clazz.getInterfaces();
+                if (interfaces.length != 0) {
+                    examineInterfaces(vector, interfaces);
                 }
             }
         }
     }
 
-    private static native int[] loadNativeLibraries(String[] paramArrayOfString) throws UnsatisfiedLinkError;
+    private static native int[] loadNativeLibraries(String[] libraryNames) throws UnsatisfiedLinkError;
 
-    private static native void linkNativeMethod(Class<?> paramClass, String paramString1, String paramString2, int paramInt, int[] paramArrayOfInt) throws UnsatisfiedLinkError;
+    private static native void linkNativeMethod(Class<?> clazz, String name, String signature, int frameSize, int[] libraryHandles) throws UnsatisfiedLinkError;
 
-    private static int loadNativeLibrary(String paramString) {
-        return PlatformManager.loadNativeLibrary(paramString);
+    private static int loadNativeLibrary(String libName) {
+        return PlatformManager.loadNativeLibrary(libName);
     }
 
-    private static void unloadNativeLibrary(int paramInt) {
-        PlatformManager.unloadNativeLibrary(paramInt);
+    private static void unloadNativeLibrary(int library) {
+        PlatformManager.unloadNativeLibrary(library);
     }
 
-    private static MethodSpec[] getNativeMethods(Class<?> paramClass) {
-        Vector<MethodSpec> localVector = new Vector<>();
-        Method[] arrayOfMethod = paramClass.getDeclaredMethods();
-        int i = arrayOfMethod.length;
-        for (Method localMethod : arrayOfMethod) {
-            if (Modifier.isNative(localMethod.getModifiers())) {
-                String str1 = localMethod.getName();
-                String str2 = getSignature(localMethod);
-                int k = getFrameSize(localMethod);
-                localVector.addElement(new MethodSpec(str1, str2, k));
+    private static MethodSpec[] getNativeMethods(Class<?> clazz) {
+        Vector<MethodSpec> vector = new Vector<>();
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        int i = declaredMethods.length;
+        for (Method method : declaredMethods) {
+            if (Modifier.isNative(method.getModifiers())) {
+                String name = method.getName();
+                String signature = getSignature(method);
+                int k = getFrameSize(method);
+                vector.addElement(new MethodSpec(name, signature, k));
             }
         }
-        MethodSpec[] arrayOfMethodSpec = new MethodSpec[localVector.size()];
-        localVector.copyInto(arrayOfMethodSpec);
-        return arrayOfMethodSpec;
+        MethodSpec[] nativeMethods = new MethodSpec[vector.size()];
+        vector.copyInto(nativeMethods);
+        return nativeMethods;
     }
 
-    private static int getFrameSize(Method paramMethod) {
+    private static int getFrameSize(Method method) {
         int i = 0;
-        Class<?>[] arrayOfClass = paramMethod.getParameterTypes();
-        int j = arrayOfClass.length;
-        for (Class<?> ofClass : arrayOfClass) i += getArgSize(ofClass);
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        int j = parameterTypes.length;
+        for (Class<?> ofClass : parameterTypes) i += getArgSize(ofClass);
         return i;
     }
 
-    private static int getArgSize(Class<?> paramClass) {
-        String str = paramClass.getName();
-        if (paramClass.isPrimitive()) {
-            int i = Character.toUpperCase(str.charAt(0));
+    private static int getArgSize(Class<?> clazz) {
+        String name = clazz.getName();
+        if (clazz.isPrimitive()) {
+            int i = Character.toUpperCase(name.charAt(0));
             return switch (i) {
                 case 68, 76 -> 8;
                 default -> 4;
@@ -168,26 +168,26 @@ public class JDirectLinker {
         return 4;
     }
 
-    private static String getSignature(Method paramMethod) {
+    private static String getSignature(Method method) {
         StringBuilder sb = new StringBuilder();
         sb.append('(');
-        Class<?>[] arrayOfClass = paramMethod.getParameterTypes();
-        int i = arrayOfClass.length;
-        for (Class<?> ofClass : arrayOfClass) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        int i = parameterTypes.length;
+        for (Class<?> ofClass : parameterTypes) {
             sb.append(getSignature(ofClass));
         }
         sb.append(')');
-        sb.append(getSignature(paramMethod.getReturnType()));
+        sb.append(getSignature(method.getReturnType()));
         return sb.toString();
     }
 
-    private static String getSignature(Class<?> paramClass) {
-        String str = paramClass.getName();
-        if (paramClass.isPrimitive()) {
-            char i = Character.toUpperCase(str.charAt(0));
+    private static String getSignature(Class<?> clazz) {
+        String name = clazz.getName();
+        if (clazz.isPrimitive()) {
+            char i = Character.toUpperCase(name.charAt(0));
             switch(i) {
                 case 66:
-                    if (paramClass == Byte.TYPE) {
+                    if (clazz == Byte.TYPE) {
                         return "B";
                     }
                     return "Z";
@@ -197,10 +197,10 @@ public class JDirectLinker {
             char[] arrayOfChar = { i };
             return new String(arrayOfChar);
         }
-        if (paramClass.isArray()) {
-            return "[" + getSignature(paramClass.getComponentType());
+        if (clazz.isArray()) {
+            return "[" + getSignature(clazz.getComponentType());
         }
-        return "L" + str.replace('.', '/') + ";";
+        return "L" + name.replace('.', '/') + ";";
     }
 
     static {

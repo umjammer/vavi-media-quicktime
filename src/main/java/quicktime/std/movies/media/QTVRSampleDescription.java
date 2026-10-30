@@ -27,13 +27,13 @@ public final class QTVRSampleDescription extends SampleDescription {
     /**
      * This constructor makes a new QTVRSampleDescription object.
      */
-    public QTVRSampleDescription(AtomContainer paramAtomContainer) throws QTException {
-        super(allocate(paramAtomContainer), true, 1903457906);
-        copyFromArray(16, paramAtomContainer.getBytes(), 0, paramAtomContainer.getSize());
+    public QTVRSampleDescription(AtomContainer atomContainer) throws QTException {
+        super(allocate(atomContainer), true, 1903457906);
+        copyFromArray(16, atomContainer.getBytes(), 0, atomContainer.getSize());
     }
 
-    private static int allocate(AtomContainer paramAtomContainer) {
-        return 16 + paramAtomContainer.getSize();
+    private static int allocate(AtomContainer atomContainer) {
+        return 16 + atomContainer.getSize();
     }
 
     /**
@@ -44,10 +44,10 @@ public final class QTVRSampleDescription extends SampleDescription {
     }
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec = new EndianFlipSpec(16, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 4, 1);
+        ed.addFlipSpec(spec);
+        return ed;
     }
 
     /**
@@ -60,17 +60,17 @@ public final class QTVRSampleDescription extends SampleDescription {
         return ed;
     }
 
-    public void setVRWorld(AtomContainer paramAtomContainer) throws QTException {
-        int i = 16 + paramAtomContainer.getSize();
+    public void setVRWorld(AtomContainer vrWorld) throws QTException {
+        int i = 16 + vrWorld.getSize();
         setSize(i);
-        copyFromArray(16, paramAtomContainer.getBytes(), 0, i);
+        copyFromArray(16, vrWorld.getBytes(), 0, i);
         setIntAt(0, i);
     }
 
     public AtomContainer getVRWorld() throws QTException {
         int i = getSize() - 16;
-        QTHandle localQTHandle = new QTHandle(i, false);
-        localQTHandle.copyFromArray(0, getBytes(), 16, i);
-        return AtomContainer.fromQTHandle(localQTHandle);
+        QTHandle qtHandle = new QTHandle(i, false);
+        qtHandle.copyFromArray(0, getBytes(), 16, i);
+        return AtomContainer.fromQTHandle(qtHandle);
     }
 }

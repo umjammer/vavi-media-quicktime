@@ -136,8 +136,8 @@ public class QTMouseEvent extends EventObject {
         this.clickCount = clickCount;
     }
 
-    private QTMouseEvent(Object paramObject, int paramInt1, int paramInt2, int paramInt3, long paramLong, int paramInt4, int paramInt5, boolean paramBoolean) {
-        super(paramObject);
+    private QTMouseEvent(Object source, int eventType, int x, int y, long when, int modifiers, int clickCount, boolean popupTrigger) {
+        super(source);
     }
 
     /**
@@ -221,8 +221,8 @@ public class QTMouseEvent extends EventObject {
         return this.eventType;
     }
 
-    void setEventType(int paramInt) {
-        this.eventType = paramInt;
+    void setEventType(int eventType) {
+        this.eventType = eventType;
     }
 
     /**

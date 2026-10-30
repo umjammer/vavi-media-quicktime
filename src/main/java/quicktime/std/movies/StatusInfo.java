@@ -5,9 +5,9 @@ package quicktime.std.movies;
  */
 public final class StatusInfo {
 
-    StatusInfo(int paramInt, Track paramTrack) {
-        this.problemTrack = paramTrack;
-        this.err = paramInt;
+    StatusInfo(int err, Track problemTrack) {
+        this.problemTrack = problemTrack;
+        this.err = err;
     }
 
     /**

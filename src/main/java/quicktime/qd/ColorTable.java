@@ -35,11 +35,11 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
      * @see quicktime.std.image.ImageDescription#getCTable()
      */
     public static ColorTable fromImageDescription(ImageDescription id) throws QTException {
-        int[] arrayOfInt = new int[1];
+        int[] ctable = new int[1];
         if ((id.getClutID() == -1) || (id.getClutID() == 0))
             return null;
-        StdQTException.checkError(GetImageDescriptionCTable(QTObject.ID(id), arrayOfInt));
-        return (arrayOfInt[0] == -1) || (arrayOfInt[0] == 0) ? null : new ColorTable(arrayOfInt[0], false);
+        StdQTException.checkError(GetImageDescriptionCTable(QTObject.ID(id), ctable));
+        return (ctable[0] == -1) || (ctable[0] == 0) ? null : new ColorTable(ctable[0], false);
     }
 
     /**
@@ -51,10 +51,10 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
      * @see quicktime.std.movies.Movie#getColorTable
      */
     public static ColorTable fromMovie(Movie m) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = GetMovieColorTable(QTObject.ID(m), arrayOfInt);
+        int[] ctab = new int[1];
+        int i = GetMovieColorTable(QTObject.ID(m), ctab);
         StdQTException.checkError(i);
-        return arrayOfInt[0] == -1 ? null : new ColorTable(arrayOfInt[0], false);
+        return ctab[0] == -1 ? null : new ColorTable(ctab[0], false);
     }
 
     /**
@@ -66,8 +66,8 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
      * @return a ColorTable object
      * @see "quicktime.std.qd.PixMap"
      */
-    public static ColorTable fromPixMap(PixMap paramPixMap) {
-        return new ColorTable(getIntFromHandle(QTObject.ID(paramPixMap), 42), paramPixMap, false);
+    public static ColorTable fromPixMap(PixMap pixMap) {
+        return new ColorTable(getIntFromHandle(QTObject.ID(pixMap), 42), pixMap, false);
     }
 
     /**
@@ -77,18 +77,18 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.ImageCompressionDialog#getInfoColorTable()
      */
-    public static ColorTable fromCompressionDialog(ImageCompressionDialog paramImageCompressionDialog) throws QTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SCGetInfo(QTObject.ID(paramImageCompressionDialog), 1668052340, arrayOfInt));
-        return arrayOfInt[0] == 0 ? null : new ColorTable(arrayOfInt[0], false);
+    public static ColorTable fromCompressionDialog(ImageCompressionDialog ci) throws QTException {
+        int[] destArray = { 0 };
+        StdQTException.checkError(SCGetInfo(QTObject.ID(ci), 1668052340, destArray));
+        return destArray[0] == 0 ? null : new ColorTable(destArray[0], false);
     }
 
-    private ColorTable(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, null, paramBoolean);
+    private ColorTable(int nativeRep, boolean locked) throws QTException {
+        super(nativeRep, null, locked);
     }
 
-    private ColorTable(int paramInt, Object paramObject, boolean paramBoolean) {
-        super(paramInt, paramObject, paramBoolean);
+    private ColorTable(int nativeRep, Object ref, boolean locked) {
+        super(nativeRep, ref, locked);
     }
 
     /**
@@ -114,19 +114,19 @@ public final class ColorTable extends QTHandleRef implements QuickTimeLib {
         return super.toString() + "[ctSeed=" + getCtSeed() + ",ctFlags=0x" + Integer.toHexString(getShortAt(4)) + ",numEntries=" + getCtSize() + "]";
     }
 
-    private static short GetImageDescriptionCTable(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetImageDescriptionCTable(paramInt, paramArrayOfInt);
+    private static short GetImageDescriptionCTable(int desc, int[] ctable) {
+        return ImageCompressionManager.GetImageDescriptionCTable(desc, ctable);
     }
 
-    private static short GetMovieColorTable(int paramInt, int[] paramArrayOfInt) {
-        return MovieToolbox.GetMovieColorTable(paramInt, paramArrayOfInt);
+    private static short GetMovieColorTable(int movie, int[] ctab) {
+        return MovieToolbox.GetMovieColorTable(movie, ctab);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCGetInfo(int ci, int type, int[] destArray) {
+        return ImageCompressionManager.SCGetInfo(ci, type, destArray);
     }
 
-    private static int getIntFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    private static int getIntFromHandle(int h, int offset) {
+        return MemoryManager.getIntFromHandle(h, offset);
     }
 }

@@ -26,26 +26,26 @@ public class GenericMedia extends Media {
 
     private int mediaType;
 
-    protected GenericMedia(Track paramTrack, int paramInt1, DataRef paramDataRef, int paramInt2) throws QTException {
-        super(paramTrack, paramInt2, paramInt1, paramDataRef);
-        this.mediaType = paramInt2;
+    protected GenericMedia(Track track, int timeScale, DataRef dataRef, int mediaType) throws QTException {
+        super(track, mediaType, timeScale, dataRef);
+        this.mediaType = mediaType;
     }
 
-    protected GenericMedia(Track paramTrack, int paramInt1, int paramInt2) throws QTException {
-        this(paramTrack, paramInt1, null, paramInt2);
+    protected GenericMedia(Track track, int timeScale, int mediaType) throws QTException {
+        this(track, timeScale, null, mediaType);
     }
 
-    protected GenericMedia(Integer paramInteger) throws QTException {
-        this(paramInteger.intValue());
+    protected GenericMedia(Integer integer) throws QTException {
+        this(integer.intValue());
     }
 
-    GenericMedia(int paramInt) throws QTException {
-        super(null, paramInt);
+    GenericMedia(int nativeRep) throws QTException {
+        super(null, nativeRep);
     }
 
-    void setIDs(int paramInt, Track paramTrack) {
-        this.track = paramTrack;
-        this.mediaType = paramInt;
+    void setIDs(int mediaType, Track track) {
+        this.track = track;
+        this.mediaType = mediaType;
     }
 
     /**
@@ -61,7 +61,7 @@ public class GenericMedia extends Media {
     }
 
     @Override
-    protected MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new MediaHandler(paramInt, paramObject);
+    protected MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new MediaHandler(nativeRep, ref);
     }
 }

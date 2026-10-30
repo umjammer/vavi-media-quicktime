@@ -11,8 +11,8 @@ public final class QTGetExternalMovieRecord extends QTPointerRef implements quic
      */
     public static final int kNativeSize = 20;
 
-    QTGetExternalMovieRecord(int paramInt, Object paramObject) {
-        super(paramInt, 20, paramObject);
+    QTGetExternalMovieRecord(int nativeRep, Object ref) {
+        super(nativeRep, 20, ref);
     }
 
     /**
@@ -54,11 +54,11 @@ public final class QTGetExternalMovieRecord extends QTPointerRef implements quic
         return new MovieController(getIntAt(16), this);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 }

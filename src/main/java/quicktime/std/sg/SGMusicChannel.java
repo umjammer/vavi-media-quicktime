@@ -16,8 +16,8 @@ import quicktime.std.music.ToneDescription;
  */
 public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
 
-    SGMusicChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
+    SGMusicChannel(int type, SequenceGrabber owner) throws StdQTException {
+        super(type, owner);
     }
 
     /**
@@ -54,10 +54,10 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
      * @see "QuickTime::SGGetInstrument"
      */
     public ToneDescription getInstrument() throws StdQTException {
-        ToneDescription localToneDescription = new ToneDescription();
-        int i = SGGetInstrument(_ID(), localToneDescription.getBytes());
+        ToneDescription instrument = new ToneDescription();
+        int i = SGGetInstrument(_ID(), instrument.getBytes());
         StdQTException.checkError(i);
-        return localToneDescription;
+        return instrument;
     }
 
     /**
@@ -72,11 +72,11 @@ public final class SGMusicChannel extends AudioChannel implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static int SGGetInstrument(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetInstrument(paramInt, paramArrayOfByte);
+    private static int SGGetInstrument(int ref, byte[] tone) {
+        return SequenceGrabberManager.SGGetInstrument(ref, tone);
     }
 
-    private static int SGSetInstrument(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetInstrument(paramInt, paramArrayOfByte);
+    private static int SGSetInstrument(int ref, byte[] tone) {
+        return SequenceGrabberManager.SGSetInstrument(ref, tone);
     }
 }

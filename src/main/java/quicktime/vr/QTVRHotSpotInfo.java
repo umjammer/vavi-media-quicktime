@@ -33,8 +33,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
      * Creates a QTVRHotSpotInfo object from a byte array
      * Used in cloning
      */
-    public QTVRHotSpotInfo(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRHotSpotInfo(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -43,17 +43,17 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRHotSpotInfo localQTVRHotSpotInfo = new QTVRHotSpotInfo();
-        paramObjectInputStream.read(localQTVRHotSpotInfo.getBytes());
-        System.arraycopy(localQTVRHotSpotInfo.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRHotSpotInfo qtvrHotSpotInfo = new QTVRHotSpotInfo();
+        in.read(qtvrHotSpotInfo.getBytes());
+        System.arraycopy(qtvrHotSpotInfo.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRHotSpotInfo localQTVRHotSpotInfo = (QTVRHotSpotInfo) clone();
-        paramObjectOutputStream.write(localQTVRHotSpotInfo.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRHotSpotInfo qtvrHotSpotInfo = (QTVRHotSpotInfo) clone();
+        out.write(qtvrHotSpotInfo.getBytes());
     }
 
     /**
@@ -63,18 +63,18 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     public Object clone() {
         try {
             return new QTVRHotSpotInfo(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 16);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 4, 16);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     public static EndianDescriptor getEndianDescriptor() {
@@ -94,16 +94,16 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
      * set the hotSpotType
      * 'link' 'undf' 'url '
      */
-    public void setHotSpotType(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setHotSpotType(int hotSpotType) {
+        setIntAt(4, hotSpotType);
     }
 
     /**
      * sets the hotSpotType using a string
      * "link" "undf" "url "
      */
-    public void setHotSpotType(String paramString) {
-        setIntAt(4, QTUtils.toOSType(paramString));
+    public void setHotSpotType(String hotSpotType) {
+        setIntAt(4, QTUtils.toOSType(hotSpotType));
     }
 
     /**
@@ -118,8 +118,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
      * ID of the QTVRString atom
      * zero means no name atom
      */
-    public void setNameAtomID(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setNameAtomID(int nameAtomID) {
+        setIntAt(8, nameAtomID);
     }
 
     /**
@@ -134,8 +134,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
      * ID of the QTVRString atom
      * zero means no comment atom
      */
-    public void setCommentAtomID(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setCommentAtomID(int commentAtomID) {
+        setIntAt(12, commentAtomID);
     }
 
     /**
@@ -148,8 +148,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the mouseOver cursorID
      */
-    public void setMouseOverCursorID(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setMouseOverCursorID(int mouseOverCursorID) {
+        setIntAt(16, mouseOverCursorID);
     }
 
     /**
@@ -162,8 +162,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the mouseDown cursorID
      */
-    public void setMouseDownCursorID(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setMouseDownCursorID(int mouseDownCursorID) {
+        setIntAt(20, mouseDownCursorID);
     }
 
     /**
@@ -176,8 +176,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the mouseUp cursorID
      */
-    public void setMouseUpCursorID(int paramInt) {
-        setIntAt(24, paramInt);
+    public void setMouseUpCursorID(int mouseUpCursorID) {
+        setIntAt(24, mouseUpCursorID);
     }
 
     /**
@@ -190,8 +190,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the bestPan
      */
-    public void setBestPan(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setBestPan(float bestPan) {
+        setFloatAt(28, bestPan);
     }
 
     /**
@@ -204,8 +204,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the bestTilt
      */
-    public void setBestTilt(float paramFloat) {
-        setFloatAt(32, paramFloat);
+    public void setBestTilt(float bestTilt) {
+        setFloatAt(32, bestTilt);
     }
 
     /**
@@ -218,8 +218,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the bestFOV
      */
-    public void setBestFOV(float paramFloat) {
-        setFloatAt(36, paramFloat);
+    public void setBestFOV(float bestFOV) {
+        setFloatAt(36, bestFOV);
     }
 
     /**
@@ -232,9 +232,9 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the bestViewCenter
      */
-    public void setBestViewCenter(QDPoint paramQDPoint) {
-        setFloatAt(40, paramQDPoint.getXF());
-        setFloatAt(44, paramQDPoint.getYF());
+    public void setBestViewCenter(QDPoint bestViewCenter) {
+        setFloatAt(40, bestViewCenter.getXF());
+        setFloatAt(44, bestViewCenter.getYF());
     }
 
     /**
@@ -247,11 +247,11 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the hotSpotRect
      */
-    public void setHotSpotRect(QDRect paramQDRect) {
-        setIntAt(48, paramQDRect.getY());
-        setIntAt(50, paramQDRect.getX());
-        setIntAt(52, paramQDRect.getY() + paramQDRect.getHeight());
-        setIntAt(54, paramQDRect.getX() + paramQDRect.getWidth());
+    public void setHotSpotRect(QDRect hotSpotRect) {
+        setIntAt(48, hotSpotRect.getY());
+        setIntAt(50, hotSpotRect.getX());
+        setIntAt(52, hotSpotRect.getY() + hotSpotRect.getHeight());
+        setIntAt(54, hotSpotRect.getX() + hotSpotRect.getWidth());
     }
 
     /**
@@ -264,15 +264,15 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the flags
      */
-    public void setFlags(int paramInt) {
-        setIntAt(56, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(56, flags);
     }
 
     /**
      * set the reserved1
      */
-    public void setReserved1(int paramInt) {
-        setIntAt(60, paramInt);
+    public void setReserved1(int reserved1) {
+        setIntAt(60, reserved1);
     }
 
     /**
@@ -285,8 +285,8 @@ public final class QTVRHotSpotInfo extends QTVRAtom {
     /**
      * set the reserved2
      */
-    public void setReserved2(int paramInt) {
-        setIntAt(64, paramInt);
+    public void setReserved2(int reserved2) {
+        setIntAt(64, reserved2);
     }
 
     /**

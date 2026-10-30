@@ -38,10 +38,10 @@ public abstract class EventDispatcher {
      * Register a custom event handler maker that will make an EventDispatcher
      * based on the type of controller, event interest and Space.
      */
-    public static void registerMaker(EventDispatcherMaker paramEventDispatcherMaker) {
+    public static void registerMaker(EventDispatcherMaker eventDispatcherMaker) {
         if (vec == null)
             vec = new Vector<>();
-        vec.addElement(paramEventDispatcherMaker);
+        vec.addElement(eventDispatcherMaker);
     }
 
     /**
@@ -49,9 +49,9 @@ public abstract class EventDispatcher {
      * @since QTJava 6.1
      * Remove a custom event handler maker.
      */
-    public static void removeMaker(EventDispatcherMaker paramEventDispatcherMaker) {
+    public static void removeMaker(EventDispatcherMaker eventDispatcherMaker) {
         if (vec != null)
-            vec.removeElement(paramEventDispatcherMaker);
+            vec.removeElement(eventDispatcherMaker);
         if (vec.isEmpty()) {
             vec = null;
         }
@@ -60,24 +60,24 @@ public abstract class EventDispatcher {
     /**
      * @deprecated
      */
-    static EventDispatcher makeDispatcher(ListenerController paramListenerController, Space paramSpace, Object paramObject) {
+    static EventDispatcher makeDispatcher(ListenerController listenerController, Space interest, Object source) {
         if (vec != null) {
             for (int i = 0; i < vec.size(); i++) {
-                EventDispatcherMaker localObject = vec.elementAt(i);
-                EventDispatcher localEventDispatcher = localObject.make(paramListenerController, paramSpace, paramObject);
-                if (localEventDispatcher != null) {
-                    return localEventDispatcher;
+                EventDispatcherMaker eventDispatcherMaker = vec.elementAt(i);
+                EventDispatcher dispatcher = eventDispatcherMaker.make(listenerController, interest, source);
+                if (dispatcher != null) {
+                    return dispatcher;
                 }
             }
         }
-        Class<?> localClass = paramObject.getClass();
-        String localObject = localClass.getName();
-        while (!localClass.getName().equals("java.lang.Object")) {
-            localObject = localClass.getName();
-            localClass = localClass.getSuperclass();
+        Class<?> superclass = source.getClass();
+        String name = superclass.getName();
+        while (!superclass.getName().equals("java.lang.Object")) {
+            name = superclass.getName();
+            superclass = superclass.getSuperclass();
         }
-        if ((localObject.equals("java.awt.Component")) && ((paramListenerController instanceof QTMouseController))) {
-            return new AWTMouseEventDispatcher((QTMouseController) paramListenerController, paramSpace, paramObject);
+        if ((name.equals("java.awt.Component")) && ((listenerController instanceof QTMouseController))) {
+            return new AWTMouseEventDispatcher((QTMouseController) listenerController, interest, source);
         }
         return null;
     }

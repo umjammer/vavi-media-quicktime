@@ -62,8 +62,8 @@ public class DragAction extends DragAdapter {
      * @deprecated
      */
     @Deprecated
-    public void setActionable(Actionable paramActionable) {
-        this.actor = paramActionable;
+    public void setActionable(Actionable actionable) {
+        this.actor = actionable;
     }
 
     /**
@@ -73,8 +73,8 @@ public class DragAction extends DragAdapter {
      * @deprecated
      */
     @Deprecated
-    public void setTransformer(TransformMatrix paramTransformMatrix) {
-        this.transformer = paramTransformMatrix;
+    public void setTransformer(TransformMatrix transformer) {
+        this.transformer = transformer;
     }
 
     /**
@@ -101,8 +101,8 @@ public class DragAction extends DragAdapter {
     public void mousePressed(QTMouseEvent event) {
         try {
             this.transformer.initialize((QTDisplaySpace) event.getSource(), (Transformable) event.getTarget(), event.getX(), event.getY());
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mousePressed");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "mousePressed");
         }
     }
 
@@ -120,8 +120,8 @@ public class DragAction extends DragAdapter {
         try {
             if ((this.transformer.transformTarget(event.getX(), event.getY())) && (this.actor != null))
                 this.actor.trigger();
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mouseDragged");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "mouseDragged");
         }
     }
 }

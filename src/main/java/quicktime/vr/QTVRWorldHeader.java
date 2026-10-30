@@ -30,8 +30,8 @@ public final class QTVRWorldHeader extends QTVRAtom {
      * Creates a QTVRWorldHeader object from a byte array
      * Used in cloning
      */
-    public QTVRWorldHeader(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRWorldHeader(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -40,17 +40,17 @@ public final class QTVRWorldHeader extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRWorldHeader localQTVRWorldHeader = new QTVRWorldHeader();
-        paramObjectInputStream.read(localQTVRWorldHeader.getBytes());
-        System.arraycopy(localQTVRWorldHeader.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRWorldHeader qtvrWorldHeader = new QTVRWorldHeader();
+        in.read(qtvrWorldHeader.getBytes());
+        System.arraycopy(qtvrWorldHeader.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRWorldHeader localQTVRWorldHeader = (QTVRWorldHeader) clone();
-        paramObjectOutputStream.write(localQTVRWorldHeader.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRWorldHeader qtvrWorldHeader = (QTVRWorldHeader) clone();
+        out.write(qtvrWorldHeader.getBytes());
     }
 
     /**
@@ -66,12 +66,12 @@ public final class QTVRWorldHeader extends QTVRAtom {
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 5);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 4, 5);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     /**
@@ -84,8 +84,8 @@ public final class QTVRWorldHeader extends QTVRAtom {
     /**
      * set the name AtomID
      */
-    public void setNameAtomID(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setNameAtomID(int nameAtomID) {
+        setIntAt(4, nameAtomID);
     }
 
     /**
@@ -98,8 +98,8 @@ public final class QTVRWorldHeader extends QTVRAtom {
     /**
      * set the default NodeID
      */
-    public void setDefaultNodeID(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setDefaultNodeID(int defaultNodeID) {
+        setIntAt(8, defaultNodeID);
     }
 
     /**
@@ -112,15 +112,15 @@ public final class QTVRWorldHeader extends QTVRAtom {
     /**
      * set the vrWorldFlags
      */
-    public void setVRWorldFlags(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setVRWorldFlags(int vrWorldFlags) {
+        setIntAt(12, vrWorldFlags);
     }
 
     /**
      * set the reserved1
      */
-    public void setReserved1(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setReserved1(int reserved1) {
+        setIntAt(16, reserved1);
     }
 
     /**
@@ -133,8 +133,8 @@ public final class QTVRWorldHeader extends QTVRAtom {
     /**
      * set the reserved2
      */
-    public void setReserved2(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setReserved2(int reserved2) {
+        setIntAt(20, reserved2);
     }
 
     /**

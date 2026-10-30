@@ -23,14 +23,14 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetIndexedDevice"
      */
     public static String getIndexedDevice(int count) throws SoundException {
-        byte[] arrayOfByte = new byte[256];
-        int[] arrayOfInt = {0};
-        int i = SPBGetIndexedDevice((short) count, arrayOfByte, arrayOfInt);
+        byte[] deviceName = new byte[256];
+        int[] deviceIconHandle = {0};
+        int i = SPBGetIndexedDevice((short) count, deviceName, deviceIconHandle);
         if (i == 65315)
             return null;
-        DisposeHandle(arrayOfInt[0]);
+        DisposeHandle(deviceIconHandle[0]);
         SoundException.checkError(i);
-        return QTUtils.PString2String(arrayOfByte, 0);
+        return QTUtils.PString2String(deviceName, 0);
     }
 
     /**
@@ -41,9 +41,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SGGetSoundInputDriver"
      * @see quicktime.std.sg.SGSoundChannel#getInputDriver()
      */
-    public static SPBDevice fromSoundChannel(SGSoundChannel paramSGSoundChannel) throws StdQTException {
-        int i = SGGetSoundInputDriver(QTObject.ID(paramSGSoundChannel));
-        return new SPBDevice(i, paramSGSoundChannel);
+    public static SPBDevice fromSoundChannel(SGSoundChannel ref) throws StdQTException {
+        int i = SGGetSoundInputDriver(QTObject.ID(ref));
+        return new SPBDevice(i, ref);
     }
 
     /**
@@ -57,41 +57,41 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         super(allocate(deviceName, permission), null);
     }
 
-    private static int allocate(String paramString, int paramInt) throws SoundException {
-        int[] arrayOfInt = {0};
-        if ((paramInt == 1) && (QTSession.hasSecurityRestrictions())) {
+    private static int allocate(String str, int permission) throws SoundException {
+        int[] inRefNum = {0};
+        if ((permission == 1) && (QTSession.hasSecurityRestrictions())) {
             throw new SecurityException("Only able to record sound with security settings when class is signed");
         }
-        SoundException.checkError(SPBOpenDevice(paramString == null ? null : QTUtils.String2PString(paramString, 255), (short) paramInt, arrayOfInt));
-        return arrayOfInt[0];
+        SoundException.checkError(SPBOpenDevice(str == null ? null : QTUtils.String2PString(str, 255), (short) permission, inRefNum));
+        return inRefNum[0];
     }
 
-    private SPBDevice(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    private SPBDevice(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
-    private void getDeviceInfo(int paramInt, byte[] paramArrayOfByte) throws SoundException {
-        SoundException.checkError(SPBGetDeviceInfo(_ID(), paramInt, paramArrayOfByte));
+    private void getDeviceInfo(int selector, byte[] info) throws SoundException {
+        SoundException.checkError(SPBGetDeviceInfo(_ID(), selector, info));
     }
 
-    private void getDeviceInfo(int paramInt1, int paramInt2) throws SoundException {
-        SoundException.checkError(SPBGetDeviceInfo(_ID(), paramInt1, paramInt2));
+    private void getDeviceInfo(int selector, int info) throws SoundException {
+        SoundException.checkError(SPBGetDeviceInfo(_ID(), selector, info));
     }
 
-    private void getDeviceInfo(int paramInt, short[] paramArrayOfShort) throws SoundException {
-        SoundException.checkError(SPBGetDeviceInfo(_ID(), paramInt, paramArrayOfShort));
+    private void getDeviceInfo(int selector, short[] info) throws SoundException {
+        SoundException.checkError(SPBGetDeviceInfo(_ID(), selector, info));
     }
 
-    private void getDeviceInfo(int paramInt, int[] paramArrayOfInt) throws SoundException {
-        SoundException.checkError(SPBGetDeviceInfo(_ID(), paramInt, paramArrayOfInt));
+    private void getDeviceInfo(int selector, int[] info) throws SoundException {
+        SoundException.checkError(SPBGetDeviceInfo(_ID(), selector, info));
     }
 
-    private void setDeviceInfo(int paramInt, short[] paramArrayOfShort) throws SoundException {
-        SoundException.checkError(SPBSetDeviceInfo(_ID(), paramInt, paramArrayOfShort));
+    private void setDeviceInfo(int selector, short[] info) throws SoundException {
+        SoundException.checkError(SPBSetDeviceInfo(_ID(), selector, info));
     }
 
-    private void setDeviceInfo(int paramInt, int[] paramArrayOfInt) throws SoundException {
-        SoundException.checkError(SPBSetDeviceInfo(_ID(), paramInt, paramArrayOfInt));
+    private void setDeviceInfo(int selector, int[] info) throws SoundException {
+        SoundException.checkError(SPBSetDeviceInfo(_ID(), selector, info));
     }
 
     /**
@@ -103,9 +103,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBMillisecondsToBytes"
      */
     public int millisecondsToBytes(int msecs) throws SoundException {
-        int[] arrayOfInt = {msecs};
-        SoundException.checkError(SPBMillisecondsToBytes(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] value = {msecs};
+        SoundException.checkError(SPBMillisecondsToBytes(_ID(), value));
+        return value[0];
     }
 
     /**
@@ -117,9 +117,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBBytesToMilliseconds"
      */
     public int bytesToMilliseconds(int bytes) throws SoundException {
-        int[] arrayOfInt = {bytes};
-        SoundException.checkError(SPBBytesToMilliseconds(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] value = {bytes};
+        SoundException.checkError(SPBBytesToMilliseconds(_ID(), value));
+        return value[0];
     }
 
     /**
@@ -130,8 +130,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setLevelMeterOnOff(boolean flag) throws SoundException {
-        short[] arrayOfShort = {(short) (flag ? 1 : 0)};
-        setDeviceInfo(1819108724, arrayOfShort);
+        short[] info = {(short) (flag ? 1 : 0)};
+        setDeviceInfo(1819108724, info);
     }
 
     /**
@@ -142,9 +142,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public boolean getLevelMeterOnOff() throws SoundException {
-        short[] arrayOfShort = {0, 0};
-        getDeviceInfo(1819108724, arrayOfShort);
-        return arrayOfShort[0] != 0;
+        short[] info = {0, 0};
+        getDeviceInfo(1819108724, info);
+        return info[0] != 0;
     }
 
     /**
@@ -155,9 +155,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getLevelMeterLevel() throws SoundException {
-        short[] arrayOfShort = {0, 0};
-        getDeviceInfo(1819108724, arrayOfShort);
-        return arrayOfShort[1];
+        short[] info = {0, 0};
+        getDeviceInfo(1819108724, info);
+        return info[1];
     }
 
     /**
@@ -168,8 +168,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setAutomaticGainControl(boolean flag) throws SoundException {
-        short[] arrayOfShort = {(short) (flag ? 1 : 0)};
-        setDeviceInfo(1634165536, arrayOfShort);
+        short[] info = {(short) (flag ? 1 : 0)};
+        setDeviceInfo(1634165536, info);
     }
 
     /**
@@ -180,9 +180,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public boolean getAutomaticGainControl() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1634165536, arrayOfShort);
-        return arrayOfShort[0] != 0;
+        short[] info = {0};
+        getDeviceInfo(1634165536, info);
+        return info[0] != 0;
     }
 
     /**
@@ -193,8 +193,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setInputGain(float gain) throws SoundException {
-        int[] arrayOfInt = {QTUtils.X2Fix(gain)};
-        setDeviceInfo(1734437230, arrayOfInt);
+        int[] info = {QTUtils.X2Fix(gain)};
+        setDeviceInfo(1734437230, info);
     }
 
     /**
@@ -205,9 +205,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public float getInputGain() throws SoundException {
-        int[] arrayOfInt = {0};
-        getDeviceInfo(1734437230, arrayOfInt);
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        int[] info = {0};
+        getDeviceInfo(1734437230, info);
+        return QTUtils.Fix2X(info[0]);
     }
 
     /**
@@ -218,9 +218,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getInputSource() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1936684402, arrayOfShort);
-        return arrayOfShort[0];
+        short[] info = {0};
+        getDeviceInfo(1936684402, info);
+        return info[0];
     }
 
     /**
@@ -228,9 +228,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      *
      * @see "QuickTime::SPBGetDeviceInfo"
      */
-    public void setInputSource(int paramInt) throws SoundException {
-        short[] arrayOfShort = {(short) paramInt};
-        setDeviceInfo(1936684402, arrayOfShort);
+    public void setInputSource(int inputSource) throws SoundException {
+        short[] info = {(short) inputSource};
+        setDeviceInfo(1936684402, info);
     }
 
     /**
@@ -238,21 +238,21 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * supported by the sound input device
      */
     public String[] getInputSourceNames() throws SoundException {
-        byte[] arrayOfByte1 = new byte[4];
-        getDeviceInfo(1936613741, arrayOfByte1);
-        int j = getIntFromArray(arrayOfByte1, 0);
+        byte[] info = new byte[4];
+        getDeviceInfo(1936613741, info);
+        int j = getIntFromArray(info, 0);
         int i = getShortFromHandle(j, 0);
-        String[] arrayOfString = new String[i];
+        String[] inputSourceNames = new String[i];
         int k = 0;
         for (int m = 0; m < i; m++) {
             int n = getByteFromHandle(j, k + 2);
-            byte[] arrayOfByte2 = new byte[n + 1];
-            copyPointerToArray(getIntFromPointer(j, 0), k + 2, arrayOfByte2, 0, n + 1);
-            arrayOfString[m] = QTUtils.PString2String(arrayOfByte2, 0);
+            byte[] pString = new byte[n + 1];
+            copyPointerToArray(getIntFromPointer(j, 0), k + 2, pString, 0, n + 1);
+            inputSourceNames[m] = QTUtils.PString2String(pString, 0);
             k = k + n + 1;
         }
         DisposeHandle(j);
-        return arrayOfString;
+        return inputSourceNames;
     }
 
     /**
@@ -263,9 +263,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getChannelAvailable() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1667785078, arrayOfShort);
-        return arrayOfShort[0];
+        short[] info = {0};
+        getDeviceInfo(1667785078, info);
+        return info[0];
     }
 
     /**
@@ -276,9 +276,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getNumberChannels() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1667785070, arrayOfShort);
-        return arrayOfShort[0];
+        short[] info = {0};
+        getDeviceInfo(1667785070, info);
+        return info[0];
     }
 
     /**
@@ -289,8 +289,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setNumberChannels(int channels) throws SoundException {
-        short[] arrayOfShort = {(short) channels};
-        setDeviceInfo(1667785070, arrayOfShort);
+        short[] info = {(short) channels};
+        setDeviceInfo(1667785070, info);
     }
 
     /**
@@ -301,9 +301,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getPlayThruOnOff() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1886155880, arrayOfShort);
-        return arrayOfShort[0];
+        short[] info = {0};
+        getDeviceInfo(1886155880, info);
+        return info[0];
     }
 
     /**
@@ -311,9 +311,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      *
      * @see "QuickTime::SPBGetDeviceInfo"
      */
-    public void setPlayThruOnOff(int paramInt) throws SoundException {
-        short[] arrayOfShort = {(short) paramInt};
-        setDeviceInfo(1886155880, arrayOfShort);
+    public void setPlayThruOnOff(int playThruOnOff) throws SoundException {
+        short[] info = {(short) playThruOnOff};
+        setDeviceInfo(1886155880, info);
     }
 
     /**
@@ -324,8 +324,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setSampleRate(float rate) throws SoundException {
-        int[] arrayOfInt = {QTUtils.X2UFix(rate)};
-        setDeviceInfo(1936875892, arrayOfInt);
+        int[] info = {QTUtils.X2UFix(rate)};
+        setDeviceInfo(1936875892, info);
     }
 
     /**
@@ -336,9 +336,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public float getSampleRate() throws SoundException {
-        int[] arrayOfInt = {0};
-        getDeviceInfo(1936875892, arrayOfInt);
-        return QTUtils.UFix2X(arrayOfInt[0]);
+        int[] info = {0};
+        getDeviceInfo(1936875892, info);
+        return QTUtils.UFix2X(info[0]);
     }
 
     /**
@@ -349,21 +349,21 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public float[] getSampleRateAvailable() throws SoundException {
-        byte[] arrayOfByte = new byte[6];
-        getDeviceInfo(1936941430, arrayOfByte);
-        int i = getShortFromArray(arrayOfByte, 0);
-        float[] arrayOfFloat = null;
+        byte[] info = new byte[6];
+        getDeviceInfo(1936941430, info);
+        int i = getShortFromArray(info, 0);
+        float[] sampleRateAvailable = null;
         if (i == 0) {
-            arrayOfFloat = new float[2];
+            sampleRateAvailable = new float[2];
         } else {
-            arrayOfFloat = new float[i];
+            sampleRateAvailable = new float[i];
         }
-        for (int j = 0; j < arrayOfFloat.length; j++) {
-            int k = getIntFromHandle(getIntFromArray(arrayOfByte, 2), j * 4);
-            arrayOfFloat[j] = QTUtils.UFix2X(k);
+        for (int j = 0; j < sampleRateAvailable.length; j++) {
+            int k = getIntFromHandle(getIntFromArray(info, 2), j * 4);
+            sampleRateAvailable[j] = QTUtils.UFix2X(k);
         }
-        DisposeHandle(getIntFromArray(arrayOfByte, 2));
-        return arrayOfFloat;
+        DisposeHandle(getIntFromArray(info, 2));
+        return sampleRateAvailable;
     }
 
     /**
@@ -374,8 +374,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setSampleSize(int sampleSize) throws SoundException {
-        short[] arrayOfShort = {(short) sampleSize};
-        setDeviceInfo(1936943482, arrayOfShort);
+        short[] info = {(short) sampleSize};
+        setDeviceInfo(1936943482, info);
     }
 
     /**
@@ -386,9 +386,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getSampleSize() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1936943482, arrayOfShort);
-        return arrayOfShort[0];
+        short[] info = {0};
+        getDeviceInfo(1936943482, info);
+        return info[0];
     }
 
     /**
@@ -399,13 +399,13 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int[] getSampleSizeAvailable() throws SoundException {
-        byte[] arrayOfByte = new byte[6];
-        getDeviceInfo(1936941430, arrayOfByte);
-        int i = getShortFromArray(arrayOfByte, 0);
-        int[] arrayOfInt = new int[i];
-        for (int j = 0; j < i; j++) arrayOfInt[j] = getShortFromHandle(getIntFromArray(arrayOfByte, 2), j * 2);
-        DisposeHandle(getIntFromArray(arrayOfByte, 2));
-        return arrayOfInt;
+        byte[] info = new byte[6];
+        getDeviceInfo(1936941430, info);
+        int i = getShortFromArray(info, 0);
+        int[] sampleSizeAvailable = new int[i];
+        for (int j = 0; j < i; j++) sampleSizeAvailable[j] = getShortFromHandle(getIntFromArray(info, 2), j * 2);
+        DisposeHandle(getIntFromArray(info, 2));
+        return sampleSizeAvailable;
     }
 
     /**
@@ -417,8 +417,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setStereoInputGain(float leftChannel, float rightChannel) throws SoundException {
-        int[] arrayOfInt = {QTUtils.X2Fix(leftChannel), QTUtils.X2Fix(rightChannel)};
-        setDeviceInfo(1936154985, arrayOfInt);
+        int[] info = {QTUtils.X2Fix(leftChannel), QTUtils.X2Fix(rightChannel)};
+        setDeviceInfo(1936154985, info);
     }
 
     /**
@@ -429,9 +429,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public float getStereoInputGainLeft() throws SoundException {
-        int[] arrayOfInt = {0, 0};
-        getDeviceInfo(1936154985, arrayOfInt);
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        int[] info = {0, 0};
+        getDeviceInfo(1936154985, info);
+        return QTUtils.Fix2X(info[0]);
     }
 
     /**
@@ -442,9 +442,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public float getStereoInputGainRight() throws SoundException {
-        int[] arrayOfInt = {0, 0};
-        getDeviceInfo(1936154985, arrayOfInt);
-        return QTUtils.Fix2X(arrayOfInt[1]);
+        int[] info = {0, 0};
+        getDeviceInfo(1936154985, info);
+        return QTUtils.Fix2X(info[1]);
     }
 
     /**
@@ -455,9 +455,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public boolean getContinuousRecording() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1668247156, arrayOfShort);
-        return arrayOfShort[0] == 1;
+        short[] info = {0};
+        getDeviceInfo(1668247156, info);
+        return info[0] == 1;
     }
 
     /**
@@ -469,8 +469,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setContinuousRecording(boolean isContinuous) throws SoundException {
-        short[] arrayOfShort = {(short) (isContinuous ? 1 : 0)};
-        setDeviceInfo(1668247156, arrayOfShort);
+        short[] info = {(short) (isContinuous ? 1 : 0)};
+        setDeviceInfo(1668247156, info);
     }
 
     /**
@@ -481,8 +481,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void setCompressionType(int compType) throws SoundException {
-        int[] arrayOfInt = {compType};
-        setDeviceInfo(1668246896, arrayOfInt);
+        int[] info = {compType};
+        setDeviceInfo(1668246896, info);
     }
 
     /**
@@ -493,9 +493,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int getCompressionType() throws SoundException {
-        int[] arrayOfInt = {0};
-        getDeviceInfo(1668246896, arrayOfInt);
-        return arrayOfInt[0];
+        int[] info = {0};
+        getDeviceInfo(1668246896, info);
+        return info[0];
     }
 
     /**
@@ -506,13 +506,13 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public int[] getCompressionAvailable() throws SoundException {
-        byte[] arrayOfByte = new byte[6];
-        getDeviceInfo(1668112758, arrayOfByte);
-        int i = getShortFromArray(arrayOfByte, 0);
-        int[] arrayOfInt = new int[i];
-        for (int j = 0; j < i; j++) arrayOfInt[j] = getIntFromHandle(getIntFromArray(arrayOfByte, 2), j * 4);
-        DisposeHandle(getIntFromArray(arrayOfByte, 2));
-        return arrayOfInt;
+        byte[] info = new byte[6];
+        getDeviceInfo(1668112758, info);
+        int i = getShortFromArray(info, 0);
+        int[] compressionAvailable = new int[i];
+        for (int j = 0; j < i; j++) compressionAvailable[j] = getIntFromHandle(getIntFromArray(info, 2), j * 4);
+        DisposeHandle(getIntFromArray(info, 2));
+        return compressionAvailable;
     }
 
     /**
@@ -523,9 +523,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public boolean hasOptionsDialog() throws SoundException {
-        short[] arrayOfShort = {0};
-        getDeviceInfo(1869640804, arrayOfShort);
-        return arrayOfShort[0] != 0;
+        short[] info = {0};
+        getDeviceInfo(1869640804, info);
+        return info[0] != 0;
     }
 
     /**
@@ -534,8 +534,8 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public void showOptionsDialog() throws SoundException {
-        int[] arrayOfInt = {0};
-        setDeviceInfo(1869640804, arrayOfInt);
+        int[] info = {0};
+        setDeviceInfo(1869640804, info);
     }
 
     /**
@@ -546,9 +546,9 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SPBGetDeviceInfo"
      */
     public String getName() throws SoundException {
-        byte[] arrayOfByte = new byte[256];
-        getDeviceInfo(1851878757, arrayOfByte);
-        return QTUtils.PString2String(arrayOfByte, 0);
+        byte[] info = new byte[256];
+        getDeviceInfo(1851878757, info);
+        return QTUtils.PString2String(info, 0);
     }
 
     /**
@@ -561,10 +561,10 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
         int i = getNumberChannels();
         int j = NewPtr(i * 2);
         getDeviceInfo(1819107683, j);
-        int[] arrayOfInt = new int[i];
-        for (int k = 0; k < i; k++) arrayOfInt[k] = getShortFromPointer(j, k * 2);
+        int[] activeLevels = new int[i];
+        for (int k = 0; k < i; k++) activeLevels[k] = getShortFromPointer(j, k * 2);
         DisposePtr(j);
-        return arrayOfInt;
+        return activeLevels;
     }
 
     /**
@@ -575,96 +575,96 @@ public final class SPBDevice extends QTObject implements QuickTimeLib {
     public String toString() {
         try {
             return getClass().getName() + "[name=" + getName() + "]";
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         }
         return super.toString();
     }
 
-    private static int SGGetSoundInputDriver(int paramInt) {
-        return SequenceGrabberManager.SGGetSoundInputDriver(paramInt);
+    private static int SGGetSoundInputDriver(int ref) {
+        return SequenceGrabberManager.SGGetSoundInputDriver(ref);
     }
 
-    private static short SPBOpenDevice(byte[] paramArrayOfByte, short paramShort, int[] paramArrayOfInt) {
-        return SoundManager.SPBOpenDevice(paramArrayOfByte, paramShort, paramArrayOfInt);
+    private static short SPBOpenDevice(byte[] deviceName, short permission, int[] inRefNum) {
+        return SoundManager.SPBOpenDevice(deviceName, permission, inRefNum);
     }
 
-    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static short SPBGetDeviceInfo(int inRefNum, int selector, int[] info) {
+        return SoundManager.SPBGetDeviceInfo(inRefNum, selector, info);
     }
 
-    private static short SPBSetDeviceInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SoundManager.SPBSetDeviceInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static short SPBSetDeviceInfo(int inRefNum, int selector, int[] info) {
+        return SoundManager.SPBSetDeviceInfo(inRefNum, selector, info);
     }
 
-    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static short SPBGetDeviceInfo(int inRefNum, int selector, short[] info) {
+        return SoundManager.SPBGetDeviceInfo(inRefNum, selector, info);
     }
 
-    private static short SPBSetDeviceInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return SoundManager.SPBSetDeviceInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static short SPBSetDeviceInfo(int inRefNum, int selector, short[] info) {
+        return SoundManager.SPBSetDeviceInfo(inRefNum, selector, info);
     }
 
-    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SPBGetDeviceInfo(int inRefNum, int selector, byte[] info) {
+        return SoundManager.SPBGetDeviceInfo(inRefNum, selector, info);
     }
 
-    private static short SPBGetDeviceInfo(int paramInt1, int paramInt2, int paramInt3) {
-        return SoundManager.SPBGetDeviceInfo(paramInt1, paramInt2, paramInt3);
+    private static short SPBGetDeviceInfo(int inRefNum, int selector, int info) {
+        return SoundManager.SPBGetDeviceInfo(inRefNum, selector, info);
     }
 
-    private static short SPBMillisecondsToBytes(int paramInt, int[] paramArrayOfInt) {
-        return SoundManager.SPBMillisecondsToBytes(paramInt, paramArrayOfInt);
+    private static short SPBMillisecondsToBytes(int inRefNum, int[] value) {
+        return SoundManager.SPBMillisecondsToBytes(inRefNum, value);
     }
 
-    private static short SPBBytesToMilliseconds(int paramInt, int[] paramArrayOfInt) {
-        return SoundManager.SPBBytesToMilliseconds(paramInt, paramArrayOfInt);
+    private static short SPBBytesToMilliseconds(int inRefNum, int[] value) {
+        return SoundManager.SPBBytesToMilliseconds(inRefNum, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static byte getByteFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
+    private static byte getByteFromHandle(int h, int offset) {
+        return MemoryManager.getByteFromHandle(h, offset);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static int getIntFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    private static int getIntFromHandle(int h, int offset) {
+        return MemoryManager.getIntFromHandle(h, offset);
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 
-    private static short getShortFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    private static short getShortFromHandle(int h, int offset) {
+        return MemoryManager.getShortFromHandle(h, offset);
     }
 
-    private static short SPBGetIndexedDevice(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return SoundManager.SPBGetIndexedDevice(paramShort, paramArrayOfByte, paramArrayOfInt);
+    private static short SPBGetIndexedDevice(short count, byte[] deviceName, int[] deviceIconHandle) {
+        return SoundManager.SPBGetIndexedDevice(count, deviceName, deviceIconHandle);
     }
 
-    private static int NewPtr(int paramInt) {
-        return MemoryManager.NewPtr(paramInt);
+    private static int NewPtr(int size) {
+        return MemoryManager.NewPtr(size);
     }
 
-    private static void DisposePtr(int paramInt) {
-        MemoryManager.DisposePtr(paramInt);
+    private static void DisposePtr(int p) {
+        MemoryManager.DisposePtr(p);
     }
 }

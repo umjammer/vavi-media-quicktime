@@ -26,55 +26,55 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
 
     private final SequenceGrabber sg;
 
-    SGDispatcher(SequenceGrabber paramSequenceGrabber, SGDataProc paramSGDataProc) {
+    SGDispatcher(SequenceGrabber sg, SGDataProc cb) {
         this.methodName = "callbackProc";
         this.methodSig = "(IIIIIISI)S";
         this.procInfo = 3932128;
-        this.cb = paramSGDataProc;
-        this.sg = paramSequenceGrabber;
+        this.cb = cb;
+        this.sg = sg;
     }
 
-    private short callbackProc(int paramInt1,
-                               int paramInt2,
-                               int paramInt3,
-                               int paramInt4,
-                               int paramInt5,
-                               int paramInt6,
-                               short paramShort,
-                               int paramInt7) {
-        ComponentDescription localComponentDescription = new ComponentDescription();
-        int i = GetComponentInfo(paramInt1, localComponentDescription.getBytes(), 0, 0, 0);
+    private short callbackProc(int component,
+                               int nativeRep,
+                               int size,
+                               int ptr,
+                               int chRefCon,
+                               int time,
+                               short writeType,
+                               int refCon) {
+        ComponentDescription componentDescription = new ComponentDescription();
+        int i = GetComponentInfo(component, componentDescription.getBytes(), 0, 0, 0);
         if (i < 0) {
             return (short) i;
         }
         try {
-            int j = localComponentDescription.getSubType();
-            SGChannel localObject = null;
+            int j = componentDescription.getSubType();
+            SGChannel chan = null;
             if (j == 1936684398) {
-                localObject = new SGSoundChannel(paramInt1, this.sg);
+                chan = new SGSoundChannel(component, this.sg);
             } else if (j == 1986618469) {
-                localObject = new SGVideoChannel(paramInt1, this.sg);
+                chan = new SGVideoChannel(component, this.sg);
             } else if (j == 1836413801) {
-                localObject = new SGMusicChannel(paramInt1, this.sg);
+                chan = new SGMusicChannel(component, this.sg);
             } else if (j == 1952807028) {
-                localObject = new SGTextChannel(paramInt1, this.sg);
+                chan = new SGTextChannel(component, this.sg);
             } else {
                 return -2005;
             }
-            SGPtr localSGPtr = new SGPtr(paramInt2, paramInt3, this);
+            SGPtr sgPtr = new SGPtr(nativeRep, size, this);
 
-            int k = this.cb.execute(localObject,
-                    localSGPtr,
-                    paramInt4 == 0 ? 0 : getIntFromPointer(paramInt4, 0),
-                    paramInt5,
-                    paramInt6,
-                    paramShort);
-            if (paramInt4 != 0) {
-                setIntInPointer(paramInt4, 0, k);
+            int k = this.cb.execute(chan,
+                    sgPtr,
+                    ptr == 0 ? 0 : getIntFromPointer(ptr, 0),
+                    chRefCon,
+                    time,
+                    writeType);
+            if (ptr != 0) {
+                setIntInPointer(ptr, 0, k);
             }
             return 0;
-        } catch (QTException localQTException) {
-            return (short) localQTException.errorCode();
+        } catch (QTException e) {
+            return (short) e.errorCode();
         }
     }
 
@@ -88,22 +88,22 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
         this.mMethodClosure = null;
     }
 
-    private static short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
-        return ComponentManager.GetComponentInfo(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4);
+    private static short GetComponentInfo(int component, byte[] desc, int nameHandle, int infoHandle, int iconHandle) {
+        return ComponentManager.GetComponentInfo(component, desc, nameHandle, infoHandle, iconHandle);
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
     static class SGMethodClosure extends MethodClosure {
 
-        SGMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        SGMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -113,15 +113,15 @@ final class SGDispatcher implements PrimitivesLib, QuickTimeLib {
 
     static class SGPtr extends QTPointerRef {
 
-        SGPtr(int paramInt1, int paramInt2, Object paramObject) {
-            super(paramInt1, paramInt2, paramObject);
+        SGPtr(int nativeRep, int size, Object ref) {
+            super(nativeRep, size, ref);
         }
     }
 
     static class SGHdl extends QTHandleRef {
 
-        SGHdl(int paramInt) {
-            super(paramInt, null, false);
+        SGHdl(int nativeRep) {
+            super(nativeRep, null, false);
         }
     }
 }

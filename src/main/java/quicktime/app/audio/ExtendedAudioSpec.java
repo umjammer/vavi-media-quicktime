@@ -21,5 +21,5 @@ public interface ExtendedAudioSpec extends AudioSpec {
      * @deprecated
      * Sets the balance of the channel * @deprecated since QTJava 6.1
      */
-    void setBalance(float paramFloat) throws QTException;
+    void setBalance(float val) throws QTException;
 }

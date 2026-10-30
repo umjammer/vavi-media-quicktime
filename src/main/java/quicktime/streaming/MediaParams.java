@@ -102,8 +102,8 @@ public class MediaParams extends QTPointerRef {
     /**
      * Sets the height of the video component
      */
-    public void setHeight(float paramFloat) {
-        setIntAt(4, QTUtils.X2Fix(paramFloat));
+    public void setHeight(float height) {
+        setIntAt(4, QTUtils.X2Fix(height));
     }
 
     /**
@@ -125,9 +125,9 @@ public class MediaParams extends QTPointerRef {
      * gets the matrix of the video component
      */
     public Matrix getMatrix() {
-        Matrix localMatrix = new Matrix();
-        getBytesAt(8, 36, localMatrix.getBytes(), 0);
-        return localMatrix;
+        Matrix matrix = new Matrix();
+        getBytesAt(8, 36, matrix.getBytes(), 0);
+        return matrix;
     }
 
     /**
@@ -205,9 +205,9 @@ public class MediaParams extends QTPointerRef {
      * gets the operand color of the graphics mode
      */
     public QDColor getOpColor() {
-        QDColor localQDColor = new QDColor();
-        getBytesAt(58, 6, localQDColor.getBytes(), 0);
-        return localQDColor;
+        QDColor opColor = new QDColor();
+        getBytesAt(58, 6, opColor.getBytes(), 0);
+        return opColor;
     }
 
     /**

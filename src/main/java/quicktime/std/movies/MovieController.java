@@ -80,9 +80,9 @@ public class MovieController extends Component implements QuickTimeLib {
             mcHashtable.clear();
             currentSessionID = sessionAllocated;
         }
-        Vector<Movie> localVector = new Vector<>();
-        localVector.addElement(this.movieRef);
-        mcHashtable.put(_ID(), localVector);
+        Vector<Movie> vector = new Vector<>();
+        vector.addElement(this.movieRef);
+        mcHashtable.put(_ID(), vector);
     }
 
     /**
@@ -132,13 +132,13 @@ public class MovieController extends Component implements QuickTimeLib {
 
     private int currentPort = 0;
 
-    private static int allocate(Movie paramMovie, int paramInt) throws StdQTException, QDException {
-        QDRect localQDRect = paramMovie.getBounds();
+    private static int allocate(Movie movie, int flags) throws StdQTException, QDException {
+        QDRect bounds = movie.getBounds();
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            i = NewMovieController(QTObject.ID(paramMovie), localQDRect.getRect(), paramInt | 0x1);
+            i = NewMovieController(QTObject.ID(movie), bounds.getRect(), flags | 0x1);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -147,21 +147,21 @@ public class MovieController extends Component implements QuickTimeLib {
         return i;
     }
 
-    MovieController(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
-        if (paramObject == null) {
+    MovieController(int nativeRep, Object ref) {
+        super(nativeRep, ref);
+        if (ref == null) {
             throw new QTRuntimeException("Wrong use of Constructor");
         }
         try {
             if (QTSession.isCurrentOS(4))
                 setDragEnabled(false);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException.getMessage());
+        } catch (QTException e) {
+            throw new QTRuntimeException(e.getMessage());
         }
     }
 
-    protected static Object mm(int paramInt, Object paramObject) {
-        return new Movie(paramInt, paramObject);
+    protected static Object mm(int time, Object ref) {
+        return new Movie(time, ref);
     }
 
     static final Hashtable<Integer, Vector<Movie>> mcHashtable = new Hashtable<>();
@@ -180,16 +180,16 @@ public class MovieController extends Component implements QuickTimeLib {
 
     @Override
     protected void _dispose() throws QTException {
-        Vector<Movie> localObject = mcHashtable.remove(_ID());
-        if (localObject != null)
-            localObject.removeAllElements();
+        Vector<Movie> vector = mcHashtable.remove(_ID());
+        if (vector != null)
+            vector.removeAllElements();
     }
 
     private void initControllerSize() throws StdQTException {
-        QDRect localQDRect1 = getMovie().getBounds();
-        QDRect localQDRect2 = getBounds();
-        this.cWidth = (localQDRect2.getWidth() - localQDRect1.getWidth());
-        this.cHeight = (localQDRect2.getHeight() - localQDRect1.getHeight());
+        QDRect bounds = getMovie().getBounds();
+        QDRect rect2 = getBounds();
+        this.cWidth = (rect2.getWidth() - bounds.getWidth());
+        this.cHeight = (rect2.getHeight() - bounds.getHeight());
     }
 
     /**
@@ -217,13 +217,13 @@ public class MovieController extends Component implements QuickTimeLib {
                     GetGWorld(savedPort, savedDevice);
                 }
                 SetGWorld(this.currentPort, 0);
-                QDGraphics localQDGraphics = getPort();
-                Region localRegion = localQDGraphics.getVisClipRgn();
+                QDGraphics port = getPort();
+                Region rgn = port.getVisClipRgn();
                 i = MCIdle(_ID());
                 if ((QTSession.getJavaVersion() == 65539) && (QTSession.isCurrentOS(4))) {
                     long l = System.currentTimeMillis();
                     if (l - this.lastFlush > deltaTime) {
-                        QDFlushPortBuffer(this.currentPort, QTObject.ID(localRegion));
+                        QDFlushPortBuffer(this.currentPort, QTObject.ID(rgn));
                         this.lastFlush = System.currentTimeMillis();
                     }
                 }
@@ -263,7 +263,7 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.clocks.QTCallBack
      */
-    public final void setActionFilter(ActionFilter filter, boolean paramBoolean) throws StdQTException {
+    public final void setActionFilter(ActionFilter filter, boolean doIdle) throws StdQTException {
         if (filter == null) {
             removeActionFilter();
             return;
@@ -271,7 +271,7 @@ public class MovieController extends Component implements QuickTimeLib {
         if (this.uppRef != null) {
             removeActionFilter();
         }
-        this.uppRef = new MoviesDispatcher(this, filter, paramBoolean);
+        this.uppRef = new MoviesDispatcher(this, filter, doIdle);
         synchronized (QTNative.globalsLock) {
             StdQTException.checkError(MCSetActionFilterWithRefCon(_ID(), this.uppRef.ID(), 0));
         }
@@ -433,55 +433,55 @@ public class MovieController extends Component implements QuickTimeLib {
         return i == 1;
     }
 
-    private boolean doAction(short paramShort, int[] paramArrayOfInt) throws StdQTException {
+    private boolean doAction(short action, int[] param) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCDoAction(_ID(), paramShort, paramArrayOfInt);
+            i = MCDoAction(_ID(), action, param);
         }
         StdQTException.checkError(i);
         return i != 0;
     }
 
-    private boolean doAction(short paramShort, int paramInt) throws StdQTException {
+    private boolean doAction(short action, int param) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCDoAction(_ID(), paramShort, paramInt);
+            i = MCDoAction(_ID(), action, param);
         }
         StdQTException.checkError(i);
         return i != 0;
     }
 
-    private boolean doAction(short paramShort, short[] paramArrayOfShort) throws StdQTException {
+    private boolean doAction(short action, short[] param) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCDoAction(_ID(), paramShort, paramArrayOfShort);
+            i = MCDoAction(_ID(), action, param);
         }
         StdQTException.checkError(i);
         return i != 0;
     }
 
-    private boolean doAction(short paramShort1, short paramShort2) throws StdQTException {
+    private boolean doAction(short action, short param) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCDoAction(_ID(), paramShort1, paramShort2);
+            i = MCDoAction(_ID(), action, param);
         }
         StdQTException.checkError(i);
         return i != 0;
     }
 
-    private boolean doAction(short paramShort, byte[] paramArrayOfByte) throws StdQTException {
+    private boolean doAction(short action, byte[] param) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCDoAction(_ID(), paramShort, paramArrayOfByte);
+            i = MCDoAction(_ID(), action, param);
         }
         StdQTException.checkError(i);
         return i != 0;
     }
 
-    private boolean doAction(short paramShort, byte paramByte) throws StdQTException {
+    private boolean doAction(short action, byte param) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCDoAction(_ID(), paramShort, paramByte);
+            i = MCDoAction(_ID(), action, param);
         }
         StdQTException.checkError(i);
         return i != 0;
@@ -529,8 +529,8 @@ public class MovieController extends Component implements QuickTimeLib {
      * Your application can use this action to set a movie's volume.
      * @see "QuickTime::MCDoAction()"
      */
-    public final void setVolume(float paramFloat) throws StdQTException {
-        doAction((short) 14, QTUtils.X2ShortFix(paramFloat));
+    public final void setVolume(float volume) throws StdQTException {
+        doAction((short) 14, QTUtils.X2ShortFix(volume));
     }
 
     /**
@@ -812,8 +812,8 @@ public class MovieController extends Component implements QuickTimeLib {
      * This method allows your application to enable or disable responding to keys.
      * @see "QuickTime::MCDoAction()"
      */
-    public final void setControllerKeysEnabled(boolean paramBoolean) throws StdQTException {
-        doAction((short) 48, (byte) (paramBoolean ? 1 : 0));
+    public final void setControllerKeysEnabled(boolean controllerKeysEnabled) throws StdQTException {
+        doAction((short) 48, (byte) (controllerKeysEnabled ? 1 : 0));
     }
 
     /**
@@ -824,9 +824,9 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final QDRect getTimeSliderRect() throws StdQTException {
-        QDRect localQDRect = new QDRect();
-        doAction((short) 49, localQDRect.getRect());
-        return localQDRect;
+        QDRect timeSliderRect = new QDRect();
+        doAction((short) 49, timeSliderRect.getRect());
+        return timeSliderRect;
     }
 
     /**
@@ -860,9 +860,9 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public final TimeRecord getSelectionBegin() throws QTException {
-        TimeRecord localTimeRecord = new TimeRecord();
-        doAction((short) 53, QTObject.ID(localTimeRecord));
-        return localTimeRecord;
+        TimeRecord selectionBegin = new TimeRecord();
+        doAction((short) 53, QTObject.ID(selectionBegin));
+        return selectionBegin;
     }
 
     /**
@@ -872,9 +872,9 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public final TimeRecord getSelectionDuration() throws QTException {
-        TimeRecord localTimeRecord = new TimeRecord();
-        doAction((short) 54, QTObject.ID(localTimeRecord));
-        return localTimeRecord;
+        TimeRecord selectionDuration = new TimeRecord();
+        doAction((short) 54, QTObject.ID(selectionDuration));
+        return selectionDuration;
     }
 
     /**
@@ -975,13 +975,13 @@ public class MovieController extends Component implements QuickTimeLib {
      */
     public final void linkToURL(String url) throws QTException {
         if (url.startsWith("file:")) {
-            Path localObject = Path.of(URI.create(url));
-            if (!Files.isReadable(localObject)) {
+            Path path = Path.of(URI.create(url));
+            if (!Files.isReadable(path)) {
                 return;
             }
         }
-        QTObject localObject = new StringHandle(url, 1);
-        doAction((short) 59, QTObject.ID(localObject));
+        QTObject qtObject = new StringHandle(url, 1);
+        doAction((short) 59, QTObject.ID(qtObject));
     }
 
     /**
@@ -1055,9 +1055,9 @@ public class MovieController extends Component implements QuickTimeLib {
      */
     public final QDRect getBounds() throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            QDRect localQDRect = new QDRect();
-            StdQTException.checkError(MCGetControllerBoundsRect(_ID(), localQDRect.getRect()));
-            return localQDRect;
+            QDRect bounds = new QDRect();
+            StdQTException.checkError(MCGetControllerBoundsRect(_ID(), bounds.getRect()));
+            return bounds;
         }
     }
 
@@ -1146,11 +1146,11 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int getCurrentTime() throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] scale = new int[1];
         int i = 0;
         int j = 0;
         synchronized (QTNative.globalsLock) {
-            i = MCGetCurrentTime(_ID(), arrayOfInt);
+            i = MCGetCurrentTime(_ID(), scale);
         }
         StdQTException.checkError(GetMoviesError());
         return i;
@@ -1163,12 +1163,12 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int getTimeScale() throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] scale = new int[1];
         synchronized (QTNative.globalsLock) {
-            MCGetCurrentTime(_ID(), arrayOfInt);
+            MCGetCurrentTime(_ID(), scale);
         }
         StdQTException.checkError(GetMoviesError());
-        return arrayOfInt[0];
+        return scale[0];
     }
 
     /**
@@ -1338,11 +1338,11 @@ public class MovieController extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int getControllerInfo() throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] info = new int[1];
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(MCGetControllerInfo(_ID(), arrayOfInt));
+            StdQTException.checkError(MCGetControllerInfo(_ID(), info));
         }
-        return arrayOfInt[0];
+        return info[0];
     }
 
     /**
@@ -1375,12 +1375,12 @@ public class MovieController extends Component implements QuickTimeLib {
      * @return true if the point is in the controller's control area.
      * @throws quicktime.std.StdQTException
      */
-    public final boolean inController(QDPoint paramQDPoint) throws StdQTException {
-        byte[] arrayOfByte = new byte[1];
+    public final boolean inController(QDPoint point) throws StdQTException {
+        byte[] inController = new byte[1];
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(MCPtInController(_ID(), paramQDPoint.getPoint(), arrayOfByte));
+            StdQTException.checkError(MCPtInController(_ID(), point.getPoint(), inController));
         }
-        return arrayOfByte[0] == 1;
+        return inController[0] == 1;
     }
 
     /**
@@ -1464,183 +1464,183 @@ public class MovieController extends Component implements QuickTimeLib {
         }
     }
 
-    private static void QDFlushPortBuffer(int paramInt1, int paramInt2) {
-        QuickDrawManager.QDFlushPortBuffer(paramInt1, paramInt2);
+    private static void QDFlushPortBuffer(int port, int rgn) {
+        QuickDrawManager.QDFlushPortBuffer(port, rgn);
     }
 
-    private static int MCNewAttachedController(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieControllerManager.MCNewAttachedController(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int MCNewAttachedController(int mc, int movie, int window, int where) {
+        return MovieControllerManager.MCNewAttachedController(mc, movie, window, where);
     }
 
-    private static int NewMovieController(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return MovieControllerManager.NewMovieController(paramInt1, paramArrayOfByte, paramInt2);
+    private static int NewMovieController(int movie, byte[] rect, int flags) {
+        return MovieControllerManager.NewMovieController(movie, rect, flags);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int MCIdle(int paramInt) {
-        return MovieControllerManager.MCIdle(paramInt);
+    private static int MCIdle(int mc) {
+        return MovieControllerManager.MCIdle(mc);
     }
 
-    private static int MCSetActionFilterWithRefCon(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieControllerManager.MCSetActionFilterWithRefCon(paramInt1, paramInt2, paramInt3);
+    private static int MCSetActionFilterWithRefCon(int mc, int proc, int refCon) {
+        return MovieControllerManager.MCSetActionFilterWithRefCon(mc, proc, refCon);
     }
 
-    private static int MCRemoveMovie(int paramInt) {
-        return MovieControllerManager.MCRemoveMovie(paramInt);
+    private static int MCRemoveMovie(int mc) {
+        return MovieControllerManager.MCRemoveMovie(mc);
     }
 
-    private static int MCSetMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieControllerManager.MCSetMovie(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int MCSetMovie(int mc, int movie, int window, int where) {
+        return MovieControllerManager.MCSetMovie(mc, movie, window, where);
     }
 
-    private static int MCGetIndMovie(int paramInt, short paramShort) {
-        return MovieControllerManager.MCGetIndMovie(paramInt, paramShort);
+    private static int MCGetIndMovie(int mc, short index) {
+        return MovieControllerManager.MCGetIndMovie(mc, index);
     }
 
-    private static int MCGetControllerPort(int paramInt) {
-        return MovieControllerManager.MCGetControllerPort(paramInt);
+    private static int MCGetControllerPort(int mc) {
+        return MovieControllerManager.MCGetControllerPort(mc);
     }
 
-    private static int MCClick(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieControllerManager.MCClick(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int MCClick(int mc, int window, int where, int when, int modifiers) {
+        return MovieControllerManager.MCClick(mc, window, where, when, modifiers);
     }
 
     private static int TickCount() {
         return ClockManager.TickCount();
     }
 
-    private static int MCKey(int paramInt1, byte paramByte, int paramInt2) {
-        return MovieControllerManager.MCKey(paramInt1, paramByte, paramInt2);
+    private static int MCKey(int mc, byte key, int modifiers) {
+        return MovieControllerManager.MCKey(mc, key, modifiers);
     }
 
-    private static int MCDoAction(int paramInt, short paramShort, int[] paramArrayOfInt) {
-        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramArrayOfInt);
+    private static int MCDoAction(int mc, short action, int[] param) {
+        return MovieControllerManager.MCDoAction(mc, action, param);
     }
 
-    private static int MCDoAction(int paramInt1, short paramShort, int paramInt2) {
-        return MovieControllerManager.MCDoAction(paramInt1, paramShort, paramInt2);
+    private static int MCDoAction(int mc, short action, int param) {
+        return MovieControllerManager.MCDoAction(mc, action, param);
     }
 
-    private static int MCDoAction(int paramInt, short paramShort, short[] paramArrayOfShort) {
-        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramArrayOfShort);
+    private static int MCDoAction(int mc, short action, short[] param) {
+        return MovieControllerManager.MCDoAction(mc, action, param);
     }
 
-    private static int MCDoAction(int paramInt, short paramShort1, short paramShort2) {
-        return MovieControllerManager.MCDoAction(paramInt, paramShort1, paramShort2);
+    private static int MCDoAction(int mc, short action, short param) {
+        return MovieControllerManager.MCDoAction(mc, action, param);
     }
 
-    private static int MCDoAction(int paramInt, short paramShort, byte paramByte) {
-        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramByte);
+    private static int MCDoAction(int mc, short action, byte param) {
+        return MovieControllerManager.MCDoAction(mc, action, param);
     }
 
-    private static int MCDoAction(int paramInt, short paramShort, byte[] paramArrayOfByte) {
-        return MovieControllerManager.MCDoAction(paramInt, paramShort, paramArrayOfByte);
+    private static int MCDoAction(int mc, short action, byte[] param) {
+        return MovieControllerManager.MCDoAction(mc, action, param);
     }
 
-    private static int MCSetControllerAttached(int paramInt, byte paramByte) {
-        return MovieControllerManager.MCSetControllerAttached(paramInt, paramByte);
+    private static int MCSetControllerAttached(int mc, byte attach) {
+        return MovieControllerManager.MCSetControllerAttached(mc, attach);
     }
 
-    private static int MCIsControllerAttached(int paramInt) {
-        return MovieControllerManager.MCIsControllerAttached(paramInt);
+    private static int MCIsControllerAttached(int mc) {
+        return MovieControllerManager.MCIsControllerAttached(mc);
     }
 
-    private static int MCSetControllerBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        return MovieControllerManager.MCSetControllerBoundsRect(paramInt, paramArrayOfByte);
+    private static int MCSetControllerBoundsRect(int mc, byte[] rect) {
+        return MovieControllerManager.MCSetControllerBoundsRect(mc, rect);
     }
 
-    private static int MCGetControllerBoundsRect(int paramInt, byte[] paramArrayOfByte) {
-        return MovieControllerManager.MCGetControllerBoundsRect(paramInt, paramArrayOfByte);
+    private static int MCGetControllerBoundsRect(int mc, byte[] rect) {
+        return MovieControllerManager.MCGetControllerBoundsRect(mc, rect);
     }
 
-    private static int MCSetControllerPort(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCSetControllerPort(paramInt1, paramInt2);
+    private static int MCSetControllerPort(int mc, int port) {
+        return MovieControllerManager.MCSetControllerPort(mc, port);
     }
 
-    private static int MCSetVisible(int paramInt, byte paramByte) {
-        return MovieControllerManager.MCSetVisible(paramInt, paramByte);
+    private static int MCSetVisible(int mc, byte visible) {
+        return MovieControllerManager.MCSetVisible(mc, visible);
     }
 
-    private static int MCGetVisible(int paramInt) {
-        return MovieControllerManager.MCGetVisible(paramInt);
+    private static int MCGetVisible(int mc) {
+        return MovieControllerManager.MCGetVisible(mc);
     }
 
-    private static int MCMovieChanged(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCMovieChanged(paramInt1, paramInt2);
+    private static int MCMovieChanged(int mc, int movie) {
+        return MovieControllerManager.MCMovieChanged(mc, movie);
     }
 
-    private static int MCSetDuration(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCSetDuration(paramInt1, paramInt2);
+    private static int MCSetDuration(int mc, int duration) {
+        return MovieControllerManager.MCSetDuration(mc, duration);
     }
 
-    private static int MCGetCurrentTime(int paramInt, int[] paramArrayOfInt) {
-        return MovieControllerManager.MCGetCurrentTime(paramInt, paramArrayOfInt);
+    private static int MCGetCurrentTime(int mc, int[] scale) {
+        return MovieControllerManager.MCGetCurrentTime(mc, scale);
     }
 
-    private static int MCActivate(int paramInt1, int paramInt2, byte paramByte) {
-        return MovieControllerManager.MCActivate(paramInt1, paramInt2, paramByte);
+    private static int MCActivate(int mc, int window, byte activate) {
+        return MovieControllerManager.MCActivate(mc, window, activate);
     }
 
-    private static int MCEnableEditing(int paramInt, byte paramByte) {
-        return MovieControllerManager.MCEnableEditing(paramInt, paramByte);
+    private static int MCEnableEditing(int mc, byte enabled) {
+        return MovieControllerManager.MCEnableEditing(mc, enabled);
     }
 
-    private static int MCIsEditingEnabled(int paramInt) {
-        return MovieControllerManager.MCIsEditingEnabled(paramInt);
+    private static int MCIsEditingEnabled(int mc) {
+        return MovieControllerManager.MCIsEditingEnabled(mc);
     }
 
-    private static int MCCopy(int paramInt) {
-        return MovieControllerManager.MCCopy(paramInt);
+    private static int MCCopy(int mc) {
+        return MovieControllerManager.MCCopy(mc);
     }
 
-    private static int MCCut(int paramInt) {
-        return MovieControllerManager.MCCut(paramInt);
+    private static int MCCut(int mc) {
+        return MovieControllerManager.MCCut(mc);
     }
 
-    private static int MCPaste(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCPaste(paramInt1, paramInt2);
+    private static int MCPaste(int mc, int movie) {
+        return MovieControllerManager.MCPaste(mc, movie);
     }
 
-    private static int MCClear(int paramInt) {
-        return MovieControllerManager.MCClear(paramInt);
+    private static int MCClear(int mc) {
+        return MovieControllerManager.MCClear(mc);
     }
 
-    private static int MCUndo(int paramInt) {
-        return MovieControllerManager.MCUndo(paramInt);
+    private static int MCUndo(int mc) {
+        return MovieControllerManager.MCUndo(mc);
     }
 
-    private static int MCPositionController(int paramInt1, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt2) {
-        return MovieControllerManager.MCPositionController(paramInt1, paramArrayOfByte1, paramArrayOfByte2, paramInt2);
+    private static int MCPositionController(int mc, byte[] movieRect, byte[] controllerRect, int flags) {
+        return MovieControllerManager.MCPositionController(mc, movieRect, controllerRect, flags);
     }
 
-    private static int MCGetControllerInfo(int paramInt, int[] paramArrayOfInt) {
-        return MovieControllerManager.MCGetControllerInfo(paramInt, paramArrayOfInt);
+    private static int MCGetControllerInfo(int mc, int[] info) {
+        return MovieControllerManager.MCGetControllerInfo(mc, info);
     }
 
-    private static int MCSetClip(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieControllerManager.MCSetClip(paramInt1, paramInt2, paramInt3);
+    private static int MCSetClip(int mc, int theClip, int movieClip) {
+        return MovieControllerManager.MCSetClip(mc, theClip, movieClip);
     }
 
-    private static int MCPtInController(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MovieControllerManager.MCPtInController(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MCPtInController(int mc, int pt, byte[] inController) {
+        return MovieControllerManager.MCPtInController(mc, pt, inController);
     }
 
-    private static int MCInvalidate(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieControllerManager.MCInvalidate(paramInt1, paramInt2, paramInt3);
+    private static int MCInvalidate(int mc, int window, int rgn) {
+        return MovieControllerManager.MCInvalidate(mc, window, rgn);
     }
 
-    private static int MCDraw(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCDraw(paramInt1, paramInt2);
+    private static int MCDraw(int mc, int window) {
+        return MovieControllerManager.MCDraw(mc, window);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 }

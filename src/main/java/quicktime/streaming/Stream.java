@@ -24,8 +24,8 @@ public final class Stream extends QTObject implements QTStreamingLib {
         }
     }
 
-    Stream(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    Stream(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -53,9 +53,9 @@ public final class Stream extends QTObject implements QTStreamingLib {
         super(allocate(pres, dataType, data, flags));
     }
 
-    private static int allocate(Presentation paramPresentation, int paramInt1, QTPointerRef paramQTPointerRef, int paramInt2) throws QTException {
+    private static int allocate(Presentation presentation, int dataType, QTPointerRef data, int flags) throws QTException {
         int[] arrayOfInt = {0};
-        QTException.checkError(QTSPresNewStream(QTObject.ID(paramPresentation), paramInt1, QTObject.ID(paramQTPointerRef), paramQTPointerRef.getSize(), paramInt2, arrayOfInt[0]));
+        QTException.checkError(QTSPresNewStream(QTObject.ID(presentation), dataType, QTObject.ID(data), data.getSize(), flags, arrayOfInt[0]));
         return arrayOfInt[0];
     }
 
@@ -70,11 +70,11 @@ public final class Stream extends QTObject implements QTStreamingLib {
         return new Presentation(QTSGetStreamPresentation(_ID()), this);
     }
 
-    private static short QTSPresNewStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        return StreamingManager.QTSPresNewStream(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6);
+    private static short QTSPresNewStream(int presentation, int dataType, int data, int dataLength, int flags, int outStream) {
+        return StreamingManager.QTSPresNewStream(presentation, dataType, data, dataLength, flags, outStream);
     }
 
-    private static int QTSGetStreamPresentation(int paramInt) {
-        return StreamingManager.QTSGetStreamPresentation(paramInt);
+    private static int QTSGetStreamPresentation(int stream) {
+        return StreamingManager.QTSGetStreamPresentation(stream);
     }
 }

@@ -25,14 +25,14 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "quicktime.std.movies.media.TimeCodeMedia#getTimeCodeMediaHandler"
      * @see "quicktime.std.movies.media.Media#getMediaHandler"
      */
-    public static TimeCoder fromMedia(TimeCodeMedia paramTimeCodeMedia) throws StdQTException {
-        int i = GetMediaHandler(QTObject.ID(paramTimeCodeMedia));
+    public static TimeCoder fromMedia(TimeCodeMedia media) throws StdQTException {
+        int i = GetMediaHandler(QTObject.ID(media));
         StdQTException.checkError(GetMoviesError());
-        return new TimeCoder(i, paramTimeCodeMedia);
+        return new TimeCoder(i, media);
     }
 
-    private TimeCoder(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    private TimeCoder(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -69,9 +69,9 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "QuickTime::TCTimeCodeToString()"
      */
     public String timeCodeToString(TimeCodeDef tcdef, TimeCodeTime tct) throws StdQTException {
-        byte[] arrayOfByte = new byte[256];
-        StdQTException.checkError(TCTimeCodeToString(_ID(), tcdef.getBytes(), tct.getBytes(), arrayOfByte));
-        return new String(arrayOfByte, 1, arrayOfByte[0]);
+        byte[] str = new byte[256];
+        StdQTException.checkError(TCTimeCodeToString(_ID(), tcdef.getBytes(), tct.getBytes(), str));
+        return new String(str, 1, str[0]);
     }
 
     /**
@@ -85,10 +85,10 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "QuickTime::TCTimeCodeToString()"
      */
     public String timeCodeToString(TimeCodeDef tcdef, int counter) throws StdQTException {
-        byte[] arrayOfByte = new byte[256];
+        byte[] str = new byte[256];
         int[] arrayOfInt = {counter};
-        StdQTException.checkError(TCTimeCodeToString(_ID(), tcdef.getBytes(), arrayOfInt, arrayOfByte));
-        return new String(arrayOfByte, 1, arrayOfByte[0]);
+        StdQTException.checkError(TCTimeCodeToString(_ID(), tcdef.getBytes(), arrayOfInt, str));
+        return new String(str, 1, str[0]);
     }
 
     /**
@@ -101,10 +101,10 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "QuickTime::TCTimeCodeToFrameNumber()"
      */
     public int toFrameNumber(TimeCodeTime tcrec, TimeCodeDef tcdef) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = TCTimeCodeToFrameNumber(_ID(), tcdef.getBytes(), tcrec.getBytes(), arrayOfInt);
+        int[] frameNumber = new int[1];
+        int i = TCTimeCodeToFrameNumber(_ID(), tcdef.getBytes(), tcrec.getBytes(), frameNumber);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return frameNumber[0];
     }
 
     /**
@@ -117,10 +117,10 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "QuickTime::TCFrameNumberToTimeCode()"
      */
     public TimeCodeTime toTimeCode(int frameNumber, TimeCodeDef tcdef) throws StdQTException {
-        TimeCodeTime localTimeCodeTime = new TimeCodeTime();
-        int i = TCFrameNumberToTimeCode(_ID(), frameNumber, tcdef.getBytes(), localTimeCodeTime.getBytes());
+        TimeCodeTime timeCodeTime = new TimeCodeTime();
+        int i = TCFrameNumberToTimeCode(_ID(), frameNumber, tcdef.getBytes(), timeCodeTime.getBytes());
         StdQTException.checkError(i);
-        return localTimeCodeTime;
+        return timeCodeTime;
     }
 
     /**
@@ -192,9 +192,9 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "QuickTime::TCGetTimeCodeFlags()"
      */
     public int getFlags() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(TCGetTimeCodeFlags(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] flags = new int[1];
+        StdQTException.checkError(TCGetTimeCodeFlags(_ID(), flags));
+        return flags[0];
     }
 
     /**
@@ -216,52 +216,52 @@ public final class TimeCoder extends VisualMediaHandler implements QuickTimeLib 
      * @see "QuickTime::TCGetDisplayOptions()"
      */
     public TCTextOptions getDisplayOptions() throws StdQTException {
-        TCTextOptions localTCTextOptions = new TCTextOptions();
-        StdQTException.checkError(TCGetDisplayOptions(_ID(), localTCTextOptions.getBytes()));
-        return localTCTextOptions;
+        TCTextOptions displayOptions = new TCTextOptions();
+        StdQTException.checkError(TCGetDisplayOptions(_ID(), displayOptions.getBytes()));
+        return displayOptions;
     }
 
-    private static int GetMediaHandler(int paramInt) {
-        return MovieToolbox.GetMediaHandler(paramInt);
+    private static int GetMediaHandler(int media) {
+        return MovieToolbox.GetMediaHandler(media);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int TCTimeCodeToString(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return TimeCodeManager.TCTimeCodeToString(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int TCTimeCodeToString(int mh, byte[] tcdef, byte[] tcrec, byte[] str) {
+        return TimeCodeManager.TCTimeCodeToString(mh, tcdef, tcrec, str);
     }
 
-    private static int TCTimeCodeToString(int paramInt, byte[] paramArrayOfByte1, int[] paramArrayOfInt, byte[] paramArrayOfByte2) {
-        return TimeCodeManager.TCTimeCodeToString(paramInt, paramArrayOfByte1, paramArrayOfInt, paramArrayOfByte2);
+    private static int TCTimeCodeToString(int mh, byte[] tcdef, int[] counter, byte[] str) {
+        return TimeCodeManager.TCTimeCodeToString(mh, tcdef, counter, str);
     }
 
-    private static int TCTimeCodeToFrameNumber(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return TimeCodeManager.TCTimeCodeToFrameNumber(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    private static int TCTimeCodeToFrameNumber(int mh, byte[] tcdef, byte[] tcrec, int[] frameNumber) {
+        return TimeCodeManager.TCTimeCodeToFrameNumber(mh, tcdef, tcrec, frameNumber);
     }
 
-    private static int TCFrameNumberToTimeCode(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return TimeCodeManager.TCFrameNumberToTimeCode(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2);
+    private static int TCFrameNumberToTimeCode(int mh, int frameNumber, byte[] tcdef, byte[] tcrec) {
+        return TimeCodeManager.TCFrameNumberToTimeCode(mh, frameNumber, tcdef, tcrec);
     }
 
-    private static int TCSetSourceRef(int paramInt1, int paramInt2, int paramInt3) {
-        return TimeCodeManager.TCSetSourceRef(paramInt1, paramInt2, paramInt3);
+    private static int TCSetSourceRef(int mh, int tcdH, int srefH) {
+        return TimeCodeManager.TCSetSourceRef(mh, tcdH, srefH);
     }
 
-    private static int TCSetTimeCodeFlags(int paramInt1, int paramInt2, int paramInt3) {
-        return TimeCodeManager.TCSetTimeCodeFlags(paramInt1, paramInt2, paramInt3);
+    private static int TCSetTimeCodeFlags(int mh, int flags, int flagsMask) {
+        return TimeCodeManager.TCSetTimeCodeFlags(mh, flags, flagsMask);
     }
 
-    private static int TCGetTimeCodeFlags(int paramInt, int[] paramArrayOfInt) {
-        return TimeCodeManager.TCGetTimeCodeFlags(paramInt, paramArrayOfInt);
+    private static int TCGetTimeCodeFlags(int mh, int[] flags) {
+        return TimeCodeManager.TCGetTimeCodeFlags(mh, flags);
     }
 
-    private static int TCSetDisplayOptions(int paramInt, byte[] paramArrayOfByte) {
-        return TimeCodeManager.TCSetDisplayOptions(paramInt, paramArrayOfByte);
+    private static int TCSetDisplayOptions(int mh, byte[] options) {
+        return TimeCodeManager.TCSetDisplayOptions(mh, options);
     }
 
-    private static int TCGetDisplayOptions(int paramInt, byte[] paramArrayOfByte) {
-        return TimeCodeManager.TCGetDisplayOptions(paramInt, paramArrayOfByte);
+    private static int TCGetDisplayOptions(int mh, byte[] options) {
+        return TimeCodeManager.TCGetDisplayOptions(mh, options);
     }
 }

@@ -14,8 +14,8 @@ public final class QTPreferences implements QuickTimeLib {
 
     static class AC extends AtomContainer {
 
-        AC(int paramInt) {
-            super(paramInt, null, false);
+        AC(int nativeRep) {
+            super(nativeRep, null, false);
         }
     }
 
@@ -28,10 +28,10 @@ public final class QTPreferences implements QuickTimeLib {
      * @see "QuickTime::QTGetAccessKeys"
      */
     public static AtomContainer getAccessKeys(String keyType) throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = QTGetAccessKeys(QTUtils.String2PString(keyType, 255), 0, arrayOfInt);
+        int[] keys = {0};
+        int i = QTGetAccessKeys(QTUtils.String2PString(keyType, 255), 0, keys);
         StdQTException.checkError(i);
-        return new AC(arrayOfInt[0]);
+        return new AC(keys[0]);
     }
 
     /**
@@ -47,9 +47,9 @@ public final class QTPreferences implements QuickTimeLib {
      * @see "QuickTime::QTRegisterAccessKey"
      */
     public static void registerAccessKey(String keyType, int flags, String accessKey) throws QTException {
-        QTHandle localQTHandle = new QTHandle(accessKey.length(), false);
-        localQTHandle.copyFromArray(0, accessKey.getBytes(), 0, accessKey.length());
-        int i = QTRegisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(localQTHandle));
+        QTHandle qtHandle = new QTHandle(accessKey.length(), false);
+        qtHandle.copyFromArray(0, accessKey.getBytes(), 0, accessKey.length());
+        int i = QTRegisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(qtHandle));
         StdQTException.checkError(i);
     }
 
@@ -82,9 +82,9 @@ public final class QTPreferences implements QuickTimeLib {
      * @see "QuickTime::QTUnregisterAccessKey"
      */
     public static void unregisterAccessKey(String keyType, int flags, String accessKey) throws QTException {
-        QTHandle localQTHandle = new QTHandle(accessKey.length(), false);
-        localQTHandle.copyFromArray(0, accessKey.getBytes(), 0, accessKey.length());
-        int i = QTUnregisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(localQTHandle));
+        QTHandle qtHandle = new QTHandle(accessKey.length(), false);
+        qtHandle.copyFromArray(0, accessKey.getBytes(), 0, accessKey.length());
+        int i = QTUnregisterAccessKey(QTUtils.String2PString(keyType, 255), flags, QTObject.ID(qtHandle));
         StdQTException.checkError(i);
     }
 
@@ -113,12 +113,12 @@ public final class QTPreferences implements QuickTimeLib {
      * @see "QuickTime::GetQuickTimePreference"
      */
     public static AtomContainer getPreference(int preferenceType) throws QTException {
-        int[] arrayOfInt = {0};
-        int i = GetQuickTimePreference(preferenceType, arrayOfInt);
+        int[] container = {0};
+        int i = GetQuickTimePreference(preferenceType, container);
         StdQTException.checkError(i);
-        if (arrayOfInt[0] == 0)
+        if (container[0] == 0)
             return null;
-        return new AC(arrayOfInt[0]);
+        return new AC(container[0]);
     }
 
     /**
@@ -133,23 +133,23 @@ public final class QTPreferences implements QuickTimeLib {
         StdQTException.checkError(SetQuickTimePreference(preferenceType, QTObject.ID(prefAtom)));
     }
 
-    private static short QTGetAccessKeys(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt) {
-        return PlatformManager.QTGetAccessKeys(paramArrayOfByte, paramInt, paramArrayOfInt);
+    private static short QTGetAccessKeys(byte[] accessKeyType, int flags, int[] keys) {
+        return PlatformManager.QTGetAccessKeys(accessKeyType, flags, keys);
     }
 
-    private static short QTRegisterAccessKey(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        return PlatformManager.QTRegisterAccessKey(paramArrayOfByte, paramInt1, paramInt2);
+    private static short QTRegisterAccessKey(byte[] accessKeyType, int flags, int accessKey) {
+        return PlatformManager.QTRegisterAccessKey(accessKeyType, flags, accessKey);
     }
 
-    private static short QTUnregisterAccessKey(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        return PlatformManager.QTUnregisterAccessKey(paramArrayOfByte, paramInt1, paramInt2);
+    private static short QTUnregisterAccessKey(byte[] accessKeyType, int flags, int accessKey) {
+        return PlatformManager.QTUnregisterAccessKey(accessKeyType, flags, accessKey);
     }
 
-    private static short GetQuickTimePreference(int paramInt, int[] paramArrayOfInt) {
-        return PlatformManager.GetQuickTimePreference(paramInt, paramArrayOfInt);
+    private static short GetQuickTimePreference(int type, int[] container) {
+        return PlatformManager.GetQuickTimePreference(type, container);
     }
 
-    private static short SetQuickTimePreference(int paramInt1, int paramInt2) {
-        return PlatformManager.SetQuickTimePreference(paramInt1, paramInt2);
+    private static short SetQuickTimePreference(int type, int container) {
+        return PlatformManager.SetQuickTimePreference(type, container);
     }
 }

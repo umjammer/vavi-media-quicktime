@@ -95,8 +95,8 @@ public class SWController extends MouseController {
      * @deprecated
      * Set the flags for controlling the hit test behaviour of the SpriteWorld.* @deprecated since QTJava 6.1
      */
-    public void setFlags(int paramInt) {
-        this.flags = paramInt;
+    public void setFlags(int flags) {
+        this.flags = flags;
     }
 
     /**
@@ -137,20 +137,20 @@ public class SWController extends MouseController {
      */
     @Override
     protected void setTranslation() {
-        SWCompositor localSWCompositor1 = this.sd;
-        SWCompositor localSWCompositor2 = localSWCompositor1;
+        SWCompositor parent = this.sd;
+        SWCompositor swCompositor2 = parent;
         this.xLocationOffset = 0;
         this.yLocationOffset = 0;
         try {
-            while (localSWCompositor1 != null) {
-                localSWCompositor2 = localSWCompositor1;
-                QDRect localQDRect = localSWCompositor2.getDisplayBounds();
-                this.xLocationOffset += localQDRect.getX();
-                this.yLocationOffset += localQDRect.getY();
-                localSWCompositor1 = localSWCompositor2.getParent();
+            while (parent != null) {
+                swCompositor2 = parent;
+                QDRect displayBounds = swCompositor2.getDisplayBounds();
+                this.xLocationOffset += displayBounds.getX();
+                this.yLocationOffset += displayBounds.getY();
+                parent = swCompositor2.getParent();
             }
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), localSWCompositor2, "getDisplayBounds");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), swCompositor2, "getDisplayBounds");
         }
     }
 
@@ -169,31 +169,31 @@ public class SWController extends MouseController {
      */
     @Override
     protected Object getSelected(MouseEvent event) throws QTException {
-        QDRect localQDRect = this.sd.getDisplayBounds();
-        this.p.setX(event.getX() + localQDRect.getX());
-        this.p.setY(event.getY() + localQDRect.getY());
-        if (!localQDRect.inside(this.p.getX(), this.p.getY())) {
+        QDRect displayBounds = this.sd.getDisplayBounds();
+        this.p.setX(event.getX() + displayBounds.getX());
+        this.p.setY(event.getY() + displayBounds.getY());
+        if (!displayBounds.inside(this.p.getX(), this.p.getY())) {
             return null;
         }
         if (isWholespace()) {
             this.sd.hitTestFlag = this.flags;
             return this.sd.hitTest(this.p.getX(), this.p.getY());
         }
-        TwoDSprite localObject = null;
-        Enumeration localEnumeration = members();
-        while (localEnumeration.hasMoreElements()) {
+        TwoDSprite selected = null;
+        Enumeration enumeration = members();
+        while (enumeration.hasMoreElements()) {
             this.p.setX(event.getX());
             this.p.setY(event.getY());
-            TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-            if (localTwoDSprite.hitTest(this.flags, this.p)) {
-                if (localObject != null) {
-                    if (localTwoDSprite.getLayer() < localObject.getLayer())
-                        localObject = localTwoDSprite;
+            TwoDSprite twoDSprite = (TwoDSprite) enumeration.nextElement();
+            if (twoDSprite.hitTest(this.flags, this.p)) {
+                if (selected != null) {
+                    if (twoDSprite.getLayer() < selected.getLayer())
+                        selected = twoDSprite;
                 } else {
-                    localObject = localTwoDSprite;
+                    selected = twoDSprite;
                 }
             }
         }
-        return localObject;
+        return selected;
     }
 }

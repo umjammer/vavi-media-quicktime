@@ -124,9 +124,9 @@ public class GraphicsImporterDrawer implements QTDrawable, Compositable {
     public EncodedImage getImage() throws QTException {
         int i = this.mGraphicsImporter.getDataOffset();
         int j = this.mGraphicsImporter.getDataSize();
-        RawEncodedImage localRawEncodedImage = new RawEncodedImage(j, true);
-        this.mGraphicsImporter.readData(localRawEncodedImage, i, j);
-        return localRawEncodedImage;
+        RawEncodedImage image = new RawEncodedImage(j, true);
+        this.mGraphicsImporter.readData(image, i, j);
+        return image;
     }
 
     /**
@@ -165,8 +165,8 @@ public class GraphicsImporterDrawer implements QTDrawable, Compositable {
      * @see ()
      */
     public Dimension getInitialSize() throws QTException {
-        QDRect localQDRect = this.mGraphicsImporter.getNaturalBounds();
-        return new Dimension(localQDRect.getWidth(), localQDRect.getHeight());
+        QDRect naturalBounds = this.mGraphicsImporter.getNaturalBounds();
+        return new Dimension(naturalBounds.getWidth(), naturalBounds.getHeight());
     }
 
     /**
@@ -179,8 +179,8 @@ public class GraphicsImporterDrawer implements QTDrawable, Compositable {
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
-        QDRect localQDRect = this.mGraphicsImporter.getNaturalBounds();
-        return new QDDimension(localQDRect.getWidth(), localQDRect.getHeight());
+        QDRect naturalBounds = this.mGraphicsImporter.getNaturalBounds();
+        return new QDDimension(naturalBounds.getWidth(), naturalBounds.getHeight());
     }
 
     /**
@@ -203,8 +203,8 @@ public class GraphicsImporterDrawer implements QTDrawable, Compositable {
      * the new matrix.
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.mGraphicsImporter.setMatrix(paramMatrix);
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.mGraphicsImporter.setMatrix(matrix);
     }
 
     /**
@@ -231,10 +231,10 @@ public class GraphicsImporterDrawer implements QTDrawable, Compositable {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**
@@ -265,10 +265,10 @@ public class GraphicsImporterDrawer implements QTDrawable, Compositable {
     @Override
     public final synchronized void redraw(Region invalidRgn) throws QTException {
         if (invalidRgn != null) {
-            Region localRegion = this.mGraphicsImporter.getClip();
+            Region clip = this.mGraphicsImporter.getClip();
             this.mGraphicsImporter.setClip(invalidRgn);
             this.mGraphicsImporter.draw();
-            this.mGraphicsImporter.setClip(localRegion);
+            this.mGraphicsImporter.setClip(clip);
         } else {
             this.mGraphicsImporter.draw();
         }

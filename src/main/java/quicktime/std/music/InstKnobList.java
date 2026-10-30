@@ -56,8 +56,8 @@ public final class InstKnobList extends QTByteObject {
     /**
      * The knob flags to use if the requested knob is not in the list.
      */
-    public void setKnobFlags(int paramInt) {
-        setIntAt(4, EndianOrder.flipNativeToBigEndian32(paramInt));
+    public void setKnobFlags(int knobFlags) {
+        setIntAt(4, EndianOrder.flipNativeToBigEndian32(knobFlags));
     }
 
     /**
@@ -65,9 +65,9 @@ public final class InstKnobList extends QTByteObject {
      * The list is a zero based list.
      * @param knob the knob to set
      */
-    public void setKnob(int paramInt, InstKnob knob) {
-        setIntAt(paramInt * 8 + 8, knob.getNumber());
-        setIntAt(paramInt * 8 + 12, knob.getValue());
+    public void setKnob(int index, InstKnob knob) {
+        setIntAt(index * 8 + 8, knob.getNumber());
+        setIntAt(index * 8 + 12, knob.getValue());
     }
 
     /**
@@ -75,10 +75,10 @@ public final class InstKnobList extends QTByteObject {
      * The list is a zero based list.
      * @return a knob
      */
-    public InstKnob getKnob(int paramInt) {
-        InstKnob localInstKnob = new InstKnob();
-        localInstKnob._setNumber(getIntAt(paramInt * 8 + 8));
-        localInstKnob._setValue(getIntAt(paramInt * 8 + 12));
-        return localInstKnob;
+    public InstKnob getKnob(int index) {
+        InstKnob knob = new InstKnob();
+        knob._setNumber(getIntAt(index * 8 + 8));
+        knob._setValue(getIntAt(index * 8 + 12));
+        return knob;
     }
 }

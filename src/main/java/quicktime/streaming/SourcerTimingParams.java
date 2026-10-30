@@ -18,8 +18,8 @@ public final class SourcerTimingParams extends QTPointer {
         super(60, true);
     }
 
-    SourcerTimingParams(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    SourcerTimingParams(byte[] byteArray) throws QTException {
+        super(byteArray);
     }
 
     /**

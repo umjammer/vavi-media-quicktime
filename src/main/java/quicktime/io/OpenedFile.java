@@ -21,37 +21,37 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
     static final int kMovie = 1;
     static final int kStd = 2;
 
-    OpenedFile(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTException {
-        super(allocate(paramQTFile, paramInt1, paramInt2));
-        this.f = paramQTFile;
-        this.fileType = paramInt2;
+    OpenedFile(QTFile f, int permissions, int fileType) throws QTException {
+        super(allocate(f, permissions, fileType));
+        this.f = f;
+        this.fileType = fileType;
     }
 
-    private static int allocate(QTFile paramQTFile, int paramInt1, int paramInt2) throws QTIOException {
+    private static int allocate(QTFile qtFile, int permissions, int fileType) throws QTIOException {
         try {
-            QTFile.checkSecurity(paramQTFile.getCanonicalPath(), paramInt1);
-        } catch (IOException localIOException) {
-            throw new QTIOException(localIOException.getMessage());
+            QTFile.checkSecurity(qtFile.getCanonicalPath(), permissions);
+        } catch (IOException e) {
+            throw new QTIOException(e.getMessage());
         }
-        short[] arrayOfShort = { 0 };
+        short[] resRefNum = { 0 };
         byte b = 0;
-        if ((paramInt1 & 0x100) != 0) {
+        if ((permissions & 0x100) != 0) {
             b = 1;
-        } else if ((paramInt1 & 0x200) != 0)
+        } else if ((permissions & 0x200) != 0)
             b = 2;
         else {
-            throw new SecurityException(paramQTFile.getPath());
+            throw new SecurityException(qtFile.getPath());
         }
         int i;
-        if (paramInt2 == 1) {
-            i = OpenMovieFile(paramQTFile.getFSSpec(true, paramInt1), arrayOfShort, b);
-        } else if (paramInt2 == 2) {
-            i = FSpOpenDF(paramQTFile.getFSSpec(true, paramInt1), b, arrayOfShort);
+        if (fileType == 1) {
+            i = OpenMovieFile(qtFile.getFSSpec(true, permissions), resRefNum, b);
+        } else if (fileType == 2) {
+            i = FSpOpenDF(qtFile.getFSSpec(true, permissions), b, resRefNum);
         } else {
-            throw new QTIOException(-50, paramQTFile.getPath() + ":Unknown File Type=" + paramInt2);
+            throw new QTIOException(-50, qtFile.getPath() + ":Unknown File Type=" + fileType);
         }
-        QTIOException.checkError(i, paramQTFile.getPath());
-        return arrayOfShort[0];
+        QTIOException.checkError(i, qtFile.getPath());
+        return resRefNum[0];
     }
 
     private boolean closed = false;
@@ -91,19 +91,19 @@ public abstract class OpenedFile extends QTObject implements QuickTimeLib {
         close();
     }
 
-    private static short OpenMovieFile(byte[] paramArrayOfByte, short[] paramArrayOfShort, byte paramByte) {
-        return MovieToolbox.OpenMovieFile(paramArrayOfByte, paramArrayOfShort, paramByte);
+    private static short OpenMovieFile(byte[] fsspec, short[] resRefNum, byte permission) {
+        return MovieToolbox.OpenMovieFile(fsspec, resRefNum, permission);
     }
 
-    private static short CloseMovieFile(short paramShort) {
-        return MovieToolbox.CloseMovieFile(paramShort);
+    private static short CloseMovieFile(short resRefNum) {
+        return MovieToolbox.CloseMovieFile(resRefNum);
     }
 
-    private static short FSpOpenDF(byte[] paramArrayOfByte, byte paramByte, short[] paramArrayOfShort) {
-        return FileManager.FSpOpenDF(paramArrayOfByte, paramByte, paramArrayOfShort);
+    private static short FSpOpenDF(byte[] fsspec, byte permission, short[] refNum) {
+        return FileManager.FSpOpenDF(fsspec, permission, refNum);
     }
 
-    private static short FSClose(short paramShort) {
-        return FileManager.FSClose(paramShort);
+    private static short FSClose(short refNum) {
+        return FileManager.FSClose(refNum);
     }
 }

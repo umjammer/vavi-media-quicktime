@@ -28,10 +28,10 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
         }
     }
 
-    CBRunner(QTCallBack paramQTCallBack) {
-        this.cb = paramQTCallBack;
+    CBRunner(QTCallBack cb) {
+        this.cb = cb;
 
-        this.callBackTimeBase = GetCallBackTimeBase(quicktime.QTObject.ID(paramQTCallBack));
+        this.callBackTimeBase = GetCallBackTimeBase(quicktime.QTObject.ID(cb));
 
         if (QTSession.isCurrentOS(1)) {
             this.mInterruptClosure = new InterruptClosure(960, this);
@@ -44,13 +44,13 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
             this.mMethodClosure = new CBMethodClosure(this, "callBackProc", "(II)V", 960);
         }
         privActStrCached = "CBThread-" + nCBThreads++ + "-";
-        if ((paramQTCallBack instanceof TimeCallBack)) {
+        if ((cb instanceof TimeCallBack)) {
             privActStrCached += "TC";
-        } else if ((paramQTCallBack instanceof TimeJumpCallBack)) {
+        } else if ((cb instanceof TimeJumpCallBack)) {
             privActStrCached += "TJ";
-        } else if ((paramQTCallBack instanceof RateCallBack)) {
+        } else if ((cb instanceof RateCallBack)) {
             privActStrCached += "RC";
-        } else if ((paramQTCallBack instanceof ExtremesCallBack)) {
+        } else if ((cb instanceof ExtremesCallBack)) {
             privActStrCached += "EC";
         }
         if (QTSession.getJavaVersion() == 65537) {
@@ -101,7 +101,7 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
         throw new quicktime.QTRuntimeException("No Method Closure object created");
     }
 
-    private void callBackProc(int paramInt1, int paramInt2) {
+    private void callBackProc(int cb, int refCon) {
         doNotify();
     }
 
@@ -171,21 +171,21 @@ final class CBRunner implements Runnable, quicktime.jdirect.QuickTimeLib {
         notifyAll();
     }
 
-    private static int GetTimeBaseEffectiveRate(int paramInt) {
-        return ClockManager.GetTimeBaseEffectiveRate(paramInt);
+    private static int GetTimeBaseEffectiveRate(int tb) {
+        return ClockManager.GetTimeBaseEffectiveRate(tb);
     }
 
-    private static int GetTimeBaseTime(int paramInt1, int paramInt2, int paramInt3) {
-        return ClockManager.GetTimeBaseTime(paramInt1, paramInt2, paramInt3);
+    private static int GetTimeBaseTime(int tb, int scale, int tr) {
+        return ClockManager.GetTimeBaseTime(tb, scale, tr);
     }
 
-    private static int GetCallBackTimeBase(int paramInt) {
-        return ClockManager.GetCallBackTimeBase(paramInt);
+    private static int GetCallBackTimeBase(int cb) {
+        return ClockManager.GetCallBackTimeBase(cb);
     }
 
     static class CBMethodClosure extends quicktime.jdirect.MethodClosure {
-        CBMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        CBMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {

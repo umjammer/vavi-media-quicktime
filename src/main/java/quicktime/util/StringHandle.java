@@ -25,9 +25,9 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
      * @return the name.
      * @see quicktime.std.image.CodecName#getName()
      */
-    public static StringHandle fromCodecName(CodecName paramCodecName) {
-        int i = getIntFromPointer(QTObject.ID(paramCodecName), 40);
-        return new StringHandle(i, paramCodecName, 2);
+    public static StringHandle fromCodecName(CodecName codecName) {
+        int i = getIntFromPointer(QTObject.ID(codecName), 40);
+        return new StringHandle(i, codecName, 2);
     }
 
     /**
@@ -52,9 +52,9 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
         }
     }
 
-    protected StringHandle(int paramInt1, Object paramObject, int paramInt2) {
-        super(paramInt1, paramObject, false);
-        this.strFormat = paramInt2;
+    protected StringHandle(int nativeRep, Object ref, int strFormat) {
+        super(nativeRep, ref, false);
+        this.strFormat = strFormat;
     }
 
     /**
@@ -103,12 +103,12 @@ public class StringHandle extends QTHandleRef implements QuickTimeLib {
     public String toString() {
         try {
             return getClass().getName() + "[" + toJavaString() + "]";
-        } catch (UtilException localUtilException) {
+        } catch (UtilException e) {
         }
         return getClass().getName() + "[]";
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 }

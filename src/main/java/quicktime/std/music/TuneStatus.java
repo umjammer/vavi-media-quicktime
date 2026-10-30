@@ -27,9 +27,9 @@ public final class TuneStatus extends QTByteObject implements PrimitivesLib {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int i = 0; i < 12; i += 4) {
             setIntInArray(this.bytes, i, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, i)));
         }
@@ -40,19 +40,19 @@ public final class TuneStatus extends QTByteObject implements PrimitivesLib {
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         for (int i = 0; i < 12; i += 4) {
-            setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
+            setIntInArray(movie, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
         for (int i = 12; i < 16; i += 2) {
-            setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
+            setShortInArray(movie, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
-        setIntInArray(arrayOfByte, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 16)));
+        setIntInArray(movie, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 16)));
         for (int i = 16; i < 32; i += 4) {
-            setIntInArray(arrayOfByte, i, 0);
+            setIntInArray(movie, i, 0);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     int getTuneDataPtr() {
@@ -94,19 +94,19 @@ public final class TuneStatus extends QTByteObject implements PrimitivesLib {
         return getIntAt(16);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

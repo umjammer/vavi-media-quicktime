@@ -53,15 +53,15 @@ public abstract class ActionFilter {
         return false;
     }
 
-    public boolean execute(MovieController paramMovieController, int paramInt, float[] paramArrayOfFloat) {
+    public boolean execute(MovieController movieController, int action, float[] params) {
         return false;
     }
 
-    public boolean execute(MovieController paramMovieController, int paramInt, boolean[] paramArrayOfBoolean) {
+    public boolean execute(MovieController movieController, int action, boolean[] params) {
         return false;
     }
 
-    public boolean execute(MovieController paramMovieController, int paramInt, int[] paramArrayOfInt) {
+    public boolean execute(MovieController movieController, int action, int[] params) {
         return false;
     }
 
@@ -122,10 +122,10 @@ public abstract class ActionFilter {
      * mcActionGetSelectionDuration
      *
      * @param mc the movie controller the action is invoked upon
-     * @param action the id of the action that invoked this method
+     * @param timeRecord the id of the action that invoked this method
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController mc, int paramInt, TimeRecord action) {
+    public boolean execute(MovieController mc, int action, TimeRecord timeRecord) {
         return false;
     }
 
@@ -234,7 +234,7 @@ public abstract class ActionFilter {
      * @param action the id of the action that invoked this method
      * @return true if you handled the action otherwise false
      */
-    public boolean execute(MovieController mc, int action, QTGetExternalMovieRecord paramQTGetExternalMovieRecord) {
+    public boolean execute(MovieController mc, int action, QTGetExternalMovieRecord qtGetExternalMovieRecord) {
         return false;
     }
 

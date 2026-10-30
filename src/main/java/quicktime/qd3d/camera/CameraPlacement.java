@@ -59,15 +59,15 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
         setUpVector(upVector);
     }
 
-    private CameraPlacement(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private CameraPlacement(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[36];
         byte[] arrayOfByte = new byte[36];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         for (int i = 0; i < 36; i += 4) {
             int j = getIntFromArray(arrayOfByte, i);
             int k = EndianOrder.flipBigEndianToNative32(j);
@@ -76,32 +76,32 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = getBytes();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = getBytes();
         for (int i = 0; i < 36; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipNativeToBigEndian32(j);
-            setIntInArray(arrayOfByte, i, k);
+            setIntInArray(movie, i, k);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
      * returns the camera placement's cameraLocation
      */
     public Point3D getCameraLocation() {
-        Point3D localPoint3D = new Point3D();
-        System.arraycopy(getBytes(), 0, localPoint3D.getBytes(), 0, localPoint3D.getBytes().length);
-        return localPoint3D;
+        Point3D cameraLocation = new Point3D();
+        System.arraycopy(getBytes(), 0, cameraLocation.getBytes(), 0, cameraLocation.getBytes().length);
+        return cameraLocation;
     }
 
     /**
      * returns the camera placement's pointOfInterest
      */
     public Point3D getPointOfInterest() {
-        Point3D localPoint3D = new Point3D();
-        System.arraycopy(getBytes(), 12, localPoint3D.getBytes(), 0, localPoint3D.getBytes().length);
-        return localPoint3D;
+        Point3D point3D = new Point3D();
+        System.arraycopy(getBytes(), 12, point3D.getBytes(), 0, point3D.getBytes().length);
+        return point3D;
     }
 
     /**
@@ -114,28 +114,28 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
     /**
      * sets the camera placement's cameraLocation
      */
-    public void setCameraLocation(Point3D paramPoint3D) {
-        setFloatAt(0, paramPoint3D.getX());
-        setFloatAt(4, paramPoint3D.getY());
-        setFloatAt(8, paramPoint3D.getZ());
+    public void setCameraLocation(Point3D cameraLocation) {
+        setFloatAt(0, cameraLocation.getX());
+        setFloatAt(4, cameraLocation.getY());
+        setFloatAt(8, cameraLocation.getZ());
     }
 
     /**
      * sets the camera placement's pointOfInterest
      */
-    public void setPointOfInterest(Point3D paramPoint3D) {
-        setFloatAt(12, paramPoint3D.getX());
-        setFloatAt(16, paramPoint3D.getY());
-        setFloatAt(20, paramPoint3D.getZ());
+    public void setPointOfInterest(Point3D pointOfInterest) {
+        setFloatAt(12, pointOfInterest.getX());
+        setFloatAt(16, pointOfInterest.getY());
+        setFloatAt(20, pointOfInterest.getZ());
     }
 
     /**
      * sets the camera placement's upVector
      */
-    public void setUpVector(Vector3D paramVector3D) {
-        setFloatAt(24, paramVector3D.getX());
-        setFloatAt(28, paramVector3D.getY());
-        setFloatAt(32, paramVector3D.getZ());
+    public void setUpVector(Vector3D upVector) {
+        setFloatAt(24, upVector.getX());
+        setFloatAt(28, upVector.getY());
+        setFloatAt(32, upVector.getZ());
     }
 
     /**
@@ -153,11 +153,11 @@ public final class CameraPlacement extends QTByteObject implements PrimitivesLib
         return super.toString() + "[location=" + getCameraLocation() + ",interest=" + getPointOfInterest() + ",upVector=" + getUpVector() + "]";
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

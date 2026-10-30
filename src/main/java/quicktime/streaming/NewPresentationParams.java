@@ -81,9 +81,9 @@ public final class NewPresentationParams extends QTPointerRef {
         return this.data;
     }
 
-    private void setEditList(EditList paramEditList) {
-        setIntAt(12, QTObject.ID(paramEditList));
-        this.el = paramEditList;
+    private void setEditList(EditList editList) {
+        setIntAt(12, QTObject.ID(editList));
+        this.el = editList;
     }
 
     /**
@@ -131,13 +131,13 @@ public final class NewPresentationParams extends QTPointerRef {
         setIntAt(24, QTObject.ID(mp));
     }
 
-    public void setNotificationProc(StreamNotifyProc paramStreamNotifyProc) {
-        if (paramStreamNotifyProc == null) {
+    public void setNotificationProc(StreamNotifyProc notificationProc) {
+        if (notificationProc == null) {
             setIntAt(28, 0);
             this.notifyUPP.cleanup();
             this.notifyUPP = null;
         } else {
-            this.notifyUPP = new StreamDispatcher(paramStreamNotifyProc);
+            this.notifyUPP = new StreamDispatcher(notificationProc);
             setIntAt(28, this.notifyUPP.ID());
         }
     }

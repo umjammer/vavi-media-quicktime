@@ -35,5 +35,5 @@ public interface Transformable {
      * This method sets the current matrix of the Transformable object to
      * the new matrix.
      */
-    void setMatrix(Matrix paramMatrix) throws QTException;
+    void setMatrix(Matrix matrix) throws QTException;
 }

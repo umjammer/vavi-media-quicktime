@@ -39,8 +39,8 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
         super(kNativeSize);
         try {
             this.realObject = new quicktime.util.QTPointer(kNativeSize, true);
-        } catch (quicktime.QTException localQTException) {
-            throw new quicktime.QTRuntimeException(localQTException);
+        } catch (quicktime.QTException e) {
+            throw new quicktime.QTRuntimeException(e);
         }
         setIntAt(0, QTObject.ID(device));
         setIntInPointer(QTObject.ID(this.realObject), 0, QTObject.ID(device));
@@ -52,15 +52,15 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
         setBuffer(buffer);
     }
 
-    public void setCompletionProc(SICompletion paramSICompletion) {
+    public void setCompletionProc(SICompletion completionProc) {
         if (this.runner != null)
             this.runner.cleanup();
-        if (paramSICompletion == null) {
+        if (completionProc == null) {
             setIntAt(20, 0);
             setIntInPointer(QTObject.ID(this.realObject), 20, 0);
             this.runner = null;
         } else {
-            this.runner = new SoundRunner(this, paramSICompletion);
+            this.runner = new SoundRunner(this, completionProc);
             int i = this.runner.getClosure();
             setIntAt(20, i);
             setIntInPointer(QTObject.ID(this.realObject), 20, i);
@@ -307,39 +307,39 @@ public final class SPB extends QTByteObject implements quicktime.jdirect.QuickTi
         SoundException.checkError(i);
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
-        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    private static void setShortInPointer(int ptr, int offset, short value) {
+        MemoryManager.setShortInPointer(ptr, offset, value);
     }
 
-    private static short SPBRecord(int paramInt, byte paramByte) {
-        return SoundManager.SPBRecord(paramInt, paramByte);
+    private static short SPBRecord(int spb, byte async) {
+        return SoundManager.SPBRecord(spb, async);
     }
 
-    private static short SPBPauseRecording(int paramInt) {
-        return SoundManager.SPBPauseRecording(paramInt);
+    private static short SPBPauseRecording(int inRefNum) {
+        return SoundManager.SPBPauseRecording(inRefNum);
     }
 
-    private static short SPBResumeRecording(int paramInt) {
-        return SoundManager.SPBResumeRecording(paramInt);
+    private static short SPBResumeRecording(int inRefNum) {
+        return SoundManager.SPBResumeRecording(inRefNum);
     }
 
-    private static short SPBStopRecording(int paramInt) {
-        return SoundManager.SPBStopRecording(paramInt);
+    private static short SPBStopRecording(int inRefNum) {
+        return SoundManager.SPBStopRecording(inRefNum);
     }
 
-    private static short SPBGetRecordingStatus(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
-        return SoundManager.SPBGetRecordingStatus(paramInt, paramArrayOfShort1, paramArrayOfShort2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    private static short SPBGetRecordingStatus(int inRefNum, short[] recordingStatus, short[] meterLevel, int[] totalSamplesToRecord, int[] numberOfSamplesRecorded, int[] totalMsecsToRecord, int[] numberOfMsecsRecorded) {
+        return SoundManager.SPBGetRecordingStatus(inRefNum, recordingStatus, meterLevel, totalSamplesToRecord, numberOfSamplesRecorded, totalMsecsToRecord, numberOfMsecsRecorded);
     }
 }

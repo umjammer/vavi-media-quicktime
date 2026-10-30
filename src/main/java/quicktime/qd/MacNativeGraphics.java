@@ -8,9 +8,9 @@ import quicktime.internal.awt.MacDrawingSurface;
 final class MacNativeGraphics extends NativeGraphics {
     final MacDrawingSurface nd;
 
-    MacNativeGraphics(DrawingSurfaceInfo paramDrawingSurfaceInfo) {
-        super(paramDrawingSurfaceInfo);
-        this.nd = ((MacDrawingSurface) paramDrawingSurfaceInfo.getSurface());
+    MacNativeGraphics(DrawingSurfaceInfo dsi) {
+        super(dsi);
+        this.nd = ((MacDrawingSurface) dsi.getSurface());
     }
 
     @Override

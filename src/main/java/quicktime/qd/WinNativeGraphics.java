@@ -20,21 +20,21 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
     private static void _destroyPorts() {
         Enumeration<Integer> e = hWndVector.elements();
         while (e.hasMoreElements()) {
-            Integer localObject = e.nextElement();
+            Integer nativeWindow = e.nextElement();
 
-            DestroyPortAssociation(GetNativeWindowPort(localObject));
+            DestroyPortAssociation(GetNativeWindowPort(nativeWindow));
         }
         hWndVector.removeAllElements();
     }
 
-    WinNativeGraphics(int paramInt) {
+    WinNativeGraphics(int hWnd) {
         super((Object) null);
-        this.hWnd = paramInt;
+        this.hWnd = hWnd;
         createAssociation();
     }
 
-    WinNativeGraphics(WinJNIDrawingSurface paramWinJNIDrawingSurface) {
-        super(paramWinJNIDrawingSurface);
+    WinNativeGraphics(WinJNIDrawingSurface jnidrawingsurfaceinfo) {
+        super(jnidrawingsurfaceinfo);
         if (QTSession.getJavaVersion() >= 65540) {
             this.jnidrawingsurfaceinfo.lock();
 
@@ -44,12 +44,12 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
         createAssociation();
     }
 
-    WinNativeGraphics(DrawingSurfaceInfo paramDrawingSurfaceInfo) {
-        super(paramDrawingSurfaceInfo);
+    WinNativeGraphics(DrawingSurfaceInfo dsi) {
+        super(dsi);
 
-        Win32DrawingSurface localWin32DrawingSurface = (Win32DrawingSurface) this.dsi.getSurface();
+        Win32DrawingSurface surface = (Win32DrawingSurface) this.dsi.getSurface();
         this.dsi.lock();
-        this.hWnd = localWin32DrawingSurface.getHWnd();
+        this.hWnd = surface.getHWnd();
         this.dsi.unlock();
         createAssociation();
     }
@@ -111,15 +111,15 @@ final class WinNativeGraphics extends NativeGraphics implements QuickTimeLib {
         return getClass().getName() + "[vector=" + hWndVector + ",hWnd=" + this.hWnd + "]";
     }
 
-    private static void DestroyPortAssociation(int paramInt) {
-        PlatformManager.DestroyPortAssociation(paramInt);
+    private static void DestroyPortAssociation(int cgp) {
+        PlatformManager.DestroyPortAssociation(cgp);
     }
 
-    private static int GetNativeWindowPort(int paramInt) {
-        return PlatformManager.GetNativeWindowPort(paramInt);
+    private static int GetNativeWindowPort(int nativeWindow) {
+        return PlatformManager.GetNativeWindowPort(nativeWindow);
     }
 
-    private static int CreatePortAssociation(int paramInt1, int paramInt2, int paramInt3) {
-        return PlatformManager.CreatePortAssociation(paramInt1, paramInt2, paramInt3);
+    private static int CreatePortAssociation(int theWnd, int storage, int flags) {
+        return PlatformManager.CreatePortAssociation(theWnd, storage, flags);
     }
 }

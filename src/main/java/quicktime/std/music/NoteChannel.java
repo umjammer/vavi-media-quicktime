@@ -31,18 +31,18 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
 
     private final NoteAllocator na;
 
-    private static int allocate(NoteAllocator paramNoteAllocator, NoteRequest paramNoteRequest) throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NANewNoteChannel(QTObject.ID(paramNoteAllocator), paramNoteRequest.getBytes(), arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(NoteAllocator na, NoteRequest noteRequest) throws QTException {
+        int[] outChannel = new int[1];
+        StdQTException.checkError(NANewNoteChannel(QTObject.ID(na), noteRequest.getBytes(), outChannel));
+        return outChannel[0];
     }
 
-    private static int allocate(NoteAllocator paramNoteAllocator, int paramInt) throws QTException {
-        ToneDescription localToneDescription = new ToneDescription(paramNoteAllocator, paramInt);
-        NoteRequest localNoteRequest = new NoteRequest(localToneDescription);
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NANewNoteChannel(QTObject.ID(paramNoteAllocator), localNoteRequest.getBytes(), arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(NoteAllocator na, int gmNumber) throws QTException {
+        ToneDescription td = new ToneDescription(na, gmNumber);
+        NoteRequest noteRequest = new NoteRequest(td);
+        int[] outChannel = new int[1];
+        StdQTException.checkError(NANewNoteChannel(QTObject.ID(na), noteRequest.getBytes(), outChannel));
+        return outChannel[0];
     }
 
     /**
@@ -52,8 +52,8 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * once the NoteChannel is created.
      * @see "QuickTime::NANewNoteChannel"
      */
-    public NoteChannel(int paramInt1, int paramInt2) throws QTException {
-        this(new NoteRequest(paramInt1, paramInt2));
+    public NoteChannel(int gmNumber, int poly) throws QTException {
+        this(new NoteRequest(gmNumber, poly));
     }
 
     /**
@@ -88,9 +88,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
         this.na = na;
     }
 
-    NoteChannel(NoteAllocator paramNoteAllocator, int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
-        this.na = paramNoteAllocator;
+    NoteChannel(NoteAllocator na, int nativeRep, Object ref) {
+        super(nativeRep, ref);
+        this.na = na;
     }
 
     /**
@@ -107,10 +107,10 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getIndexInfo() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        StdQTException.checkError(NAGetNoteChannelInfo(QTObject.ID(this.na), _ID(), arrayOfInt1, arrayOfInt2));
-        return arrayOfInt1[0];
+        int[] index = new int[1];
+        int[] part = new int[1];
+        StdQTException.checkError(NAGetNoteChannelInfo(QTObject.ID(this.na), _ID(), index, part));
+        return index[0];
     }
 
     /**
@@ -120,10 +120,10 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getPartInfo() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        StdQTException.checkError(NAGetNoteChannelInfo(QTObject.ID(this.na), _ID(), arrayOfInt1, arrayOfInt2));
-        return arrayOfInt2[0];
+        int[] index = new int[1];
+        int[] part = new int[1];
+        StdQTException.checkError(NAGetNoteChannelInfo(QTObject.ID(this.na), _ID(), index, part));
+        return part[0];
     }
 
     /**
@@ -134,11 +134,11 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public MusicComponent getMusicComponent() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = NAGetRegisteredMusicDevice(QTObject.ID(this.na), getIndexInfo(), 0, 0, 0, arrayOfInt);
+        int[] mc = new int[1];
+        int i = NAGetRegisteredMusicDevice(QTObject.ID(this.na), getIndexInfo(), 0, 0, 0, mc);
         if (i < 0)
             StdQTException.checkError(i);
-        return new MusicComponent(arrayOfInt[0], this);
+        return new MusicComponent(mc[0], this);
     }
 
     /**
@@ -232,9 +232,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public float getController(int controllerNumber) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(NAGetController(QTObject.ID(this.na), _ID(), controllerNumber, arrayOfInt));
-        return QTUtils.ShortFix2X((short) arrayOfInt[0]);
+        int[] controllerValue = { 0 };
+        StdQTException.checkError(NAGetController(QTObject.ID(this.na), _ID(), controllerNumber, controllerValue));
+        return QTUtils.ShortFix2X((short) controllerValue[0]);
     }
 
     /**
@@ -269,9 +269,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getKnob(int knobNumber) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NAGetKnob(QTObject.ID(this.na), _ID(), knobNumber, arrayOfInt));
-        return arrayOfInt[0];
+        int[] knobValue = new int[1];
+        StdQTException.checkError(NAGetKnob(QTObject.ID(this.na), _ID(), knobNumber, knobValue));
+        return knobValue[0];
     }
 
     /**
@@ -293,9 +293,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int findTone(ToneDescription td) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NAFindNoteChannelTone(QTObject.ID(this.na), _ID(), td.getBytes(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] instrumentNumber = new int[1];
+        StdQTException.checkError(NAFindNoteChannelTone(QTObject.ID(this.na), _ID(), td.getBytes(), instrumentNumber));
+        return instrumentNumber[0];
     }
 
     /**
@@ -306,8 +306,8 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public void setAtomicInstrument(AtomicInstrument instrument, int flags) throws StdQTException {
-        QTPointerRef localQTPointerRef = instrument.toQTPointer();
-        int i = NASetAtomicInstrument(QTObject.ID(this.na), _ID(), QTObject.ID(localQTPointerRef), flags);
+        QTPointerRef qtPointerRef = instrument.toQTPointer();
+        int i = NASetAtomicInstrument(QTObject.ID(this.na), _ID(), QTObject.ID(qtPointerRef), flags);
         if (!instrument.isLocked())
             instrument.unlock();
         StdQTException.checkError(i);
@@ -330,9 +330,9 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public NoteRequest getNoteRequest() throws QTException {
-        NoteRequest localNoteRequest = new NoteRequest();
-        StdQTException.checkError(NAGetNoteRequest(QTObject.ID(this.na), _ID(), localNoteRequest.getBytes()));
-        return localNoteRequest;
+        NoteRequest noteRequest = new NoteRequest();
+        StdQTException.checkError(NAGetNoteRequest(QTObject.ID(this.na), _ID(), noteRequest.getBytes()));
+        return noteRequest;
     }
 
     /**
@@ -364,8 +364,8 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
      * Get the NoteRequest that corresponds to this NoteChannel.
      * @see "QuickTime::NASendMIDI"
      */
-    public void sendMIDI(MusicMIDIPacket paramMusicMIDIPacket) throws StdQTException {
-        int i = NASendMIDI(QTObject.ID(this.na), _ID(), paramMusicMIDIPacket.getBytes());
+    public void sendMIDI(MusicMIDIPacket musicMIDIPacket) throws StdQTException {
+        int i = NASendMIDI(QTObject.ID(this.na), _ID(), musicMIDIPacket.getBytes());
         StdQTException.checkError(i);
     }
 
@@ -379,83 +379,83 @@ public final class NoteChannel extends QTObject implements QuickTimeLib {
         StdQTException.checkError(NASetNoteChannelSoundLocalization(QTObject.ID(this.na), _ID(), QTObject.ID(slData)));
     }
 
-    private static int NANewNoteChannel(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return MusicManager.NANewNoteChannel(paramInt, paramArrayOfByte, paramArrayOfInt);
+    private static int NANewNoteChannel(int na, byte[] noteRequest, int[] outChannel) {
+        return MusicManager.NANewNoteChannel(na, noteRequest, outChannel);
     }
 
-    private static int NAGetNoteChannelInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return MusicManager.NAGetNoteChannelInfo(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static int NAGetNoteChannelInfo(int na, int noteChannel, int[] index, int[] part) {
+        return MusicManager.NAGetNoteChannelInfo(na, noteChannel, index, part);
     }
 
-    private static int NAPrerollNoteChannel(int paramInt1, int paramInt2) {
-        return MusicManager.NAPrerollNoteChannel(paramInt1, paramInt2);
+    private static int NAPrerollNoteChannel(int na, int noteChannel) {
+        return MusicManager.NAPrerollNoteChannel(na, noteChannel);
     }
 
-    private static int NAUnrollNoteChannel(int paramInt1, int paramInt2) {
-        return MusicManager.NAUnrollNoteChannel(paramInt1, paramInt2);
+    private static int NAUnrollNoteChannel(int na, int noteChannel) {
+        return MusicManager.NAUnrollNoteChannel(na, noteChannel);
     }
 
-    private static int NAResetNoteChannel(int paramInt1, int paramInt2) {
-        return MusicManager.NAResetNoteChannel(paramInt1, paramInt2);
+    private static int NAResetNoteChannel(int na, int noteChannel) {
+        return MusicManager.NAResetNoteChannel(na, noteChannel);
     }
 
-    private static int NASetNoteChannelVolume(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.NASetNoteChannelVolume(paramInt1, paramInt2, paramInt3);
+    private static int NASetNoteChannelVolume(int na, int noteChannel, int volume) {
+        return MusicManager.NASetNoteChannelVolume(na, noteChannel, volume);
     }
 
-    private static int NAPlayNote(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MusicManager.NAPlayNote(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int NAPlayNote(int na, int noteChannel, int pitch, int velocity) {
+        return MusicManager.NAPlayNote(na, noteChannel, pitch, velocity);
     }
 
-    private static int NAGetController(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return MusicManager.NAGetController(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static int NAGetController(int na, int noteChannel, int controllerNumber, int[] controllerValue) {
+        return MusicManager.NAGetController(na, noteChannel, controllerNumber, controllerValue);
     }
 
-    private static int NASetController(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MusicManager.NASetController(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int NASetController(int na, int noteChannel, int controllerNumber, int controllerValue) {
+        return MusicManager.NASetController(na, noteChannel, controllerNumber, controllerValue);
     }
 
-    private static int NAGetKnob(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return MusicManager.NAGetKnob(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static int NAGetKnob(int na, int noteChannel, int knobNumber, int[] knobValue) {
+        return MusicManager.NAGetKnob(na, noteChannel, knobNumber, knobValue);
     }
 
-    private static int NASetKnob(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MusicManager.NASetKnob(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int NASetKnob(int na, int noteChannel, int knobNumber, int knobValue) {
+        return MusicManager.NASetKnob(na, noteChannel, knobNumber, knobValue);
     }
 
-    private static int NAFindNoteChannelTone(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return MusicManager.NAFindNoteChannelTone(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
+    private static int NAFindNoteChannelTone(int na, int noteChannel, byte[] td, int[] instrumentNumber) {
+        return MusicManager.NAFindNoteChannelTone(na, noteChannel, td, instrumentNumber);
     }
 
-    private static int NASetAtomicInstrument(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MusicManager.NASetAtomicInstrument(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int NASetAtomicInstrument(int na, int noteChannel, int instrument, int flags) {
+        return MusicManager.NASetAtomicInstrument(na, noteChannel, instrument, flags);
     }
 
-    private static int NASetInstrumentNumber(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.NASetInstrumentNumber(paramInt1, paramInt2, paramInt3);
+    private static int NASetInstrumentNumber(int na, int noteChannel, int instrumentNumber) {
+        return MusicManager.NASetInstrumentNumber(na, noteChannel, instrumentNumber);
     }
 
-    private static int NAGetNoteRequest(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.NAGetNoteRequest(paramInt1, paramInt2, paramArrayOfByte);
+    private static int NAGetNoteRequest(int na, int noteChannel, byte[] nrOut) {
+        return MusicManager.NAGetNoteRequest(na, noteChannel, nrOut);
     }
 
-    private static int NAPickEditInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        return MusicManager.NAPickEditInstrument(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4, paramInt5, paramInt6);
+    private static int NAPickEditInstrument(int na, int filterProc, byte[] prompt, int refCon, int nc, int instrument, int modifiers) {
+        return MusicManager.NAPickEditInstrument(na, filterProc, prompt, refCon, nc, instrument, modifiers);
     }
 
-    private static int NASendMIDI(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.NASendMIDI(paramInt1, paramInt2, paramArrayOfByte);
+    private static int NASendMIDI(int na, int noteChannel, byte[] mp) {
+        return MusicManager.NASendMIDI(na, noteChannel, mp);
     }
 
-    private static int NASetNoteChannelSoundLocalization(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.NASetNoteChannelSoundLocalization(paramInt1, paramInt2, paramInt3);
+    private static int NASetNoteChannelSoundLocalization(int na, int noteChannel, int data) {
+        return MusicManager.NASetNoteChannelSoundLocalization(na, noteChannel, data);
     }
 
-    private static int NASetNoteChannelBalance(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.NASetNoteChannelBalance(paramInt1, paramInt2, paramInt3);
+    private static int NASetNoteChannelBalance(int na, int noteChannel, int balance) {
+        return MusicManager.NASetNoteChannelBalance(na, noteChannel, balance);
     }
 
-    private static int NAGetRegisteredMusicDevice(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt) {
-        return MusicManager.NAGetRegisteredMusicDevice(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt);
+    private static int NAGetRegisteredMusicDevice(int na, int index, int synthType, int name, int connections, int[] mc) {
+        return MusicManager.NAGetRegisteredMusicDevice(na, index, synthType, name, connections, mc);
     }
 }

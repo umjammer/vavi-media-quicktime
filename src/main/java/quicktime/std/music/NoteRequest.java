@@ -57,25 +57,25 @@ public final class NoteRequest extends NoteRequestInfo implements Cloneable {
         setPolyphony(poly);
     }
 
-    private NoteRequest(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private NoteRequest(byte[] bytes) {
+        super(bytes);
     }
 
     /**
      * Sets the ToneDescription.
      */
-    public void setToneDescription(ToneDescription paramToneDescription) {
-        byte[] arrayOfByte = paramToneDescription.getBytes();
-        setBytesAt(8, arrayOfByte.length, arrayOfByte, 0);
+    public void setToneDescription(ToneDescription toneDescription) {
+        byte[] srcArray = toneDescription.getBytes();
+        setBytesAt(8, srcArray.length, srcArray, 0);
     }
 
     /**
      * Returns a copy of the current contained ToneDescription
      */
     public ToneDescription getToneDescription() {
-        ToneDescription localToneDescription = new ToneDescription();
-        getBytesAt(8, localToneDescription.getBytes().length, localToneDescription.getBytes(), 0);
-        return localToneDescription;
+        ToneDescription toneDescription = new ToneDescription();
+        getBytesAt(8, toneDescription.getBytes().length, toneDescription.getBytes(), 0);
+        return toneDescription;
     }
 
     /**

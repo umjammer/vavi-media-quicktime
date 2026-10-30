@@ -13,12 +13,12 @@ public interface MouseEnterExitListener extends MouseMoveListener {
      * @since QTJava 6.1
      * Invoked when the mouse enters a space.
      */
-    void mouseEntered(QTMouseEvent paramQTMouseEvent);
+    void mouseEntered(QTMouseEvent qtMouseEvent);
 
     /**
      * @deprecated
      * @since QTJava 6.1
      * Invoked when the mouse exits a space.
      */
-    void mouseExited(QTMouseEvent paramQTMouseEvent);
+    void mouseExited(QTMouseEvent qtMouseEvent);
 }

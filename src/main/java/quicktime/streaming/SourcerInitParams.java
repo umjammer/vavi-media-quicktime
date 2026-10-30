@@ -20,8 +20,8 @@ public final class SourcerInitParams extends QTPointer {
         super(20, true);
     }
 
-    SourcerInitParams(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    SourcerInitParams(byte[] byteArray) throws QTException {
+        super(byteArray);
     }
 
     /**

@@ -20,16 +20,16 @@ public final class SourcerCallbackParams extends QTPointer {
         super(kNativeSize, true);
     }
 
-    SourcerCallbackParams(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    SourcerCallbackParams(byte[] byteArray) throws QTException {
+        super(byteArray);
     }
 
     /**
      * Constructs an SourcerCallbackParams object based on the native SourcerCallbackParams structure
      * @param proc the notify proc to be registered with the sourcer
      */
-    public SourcerCallbackParams(int paramInt, StreamNotifyProc proc) throws QTException {
-        this(1, paramInt, proc);
+    public SourcerCallbackParams(int flags, StreamNotifyProc proc) throws QTException {
+        this(1, flags, proc);
     }
 
     /**

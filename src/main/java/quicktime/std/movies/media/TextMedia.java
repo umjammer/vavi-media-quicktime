@@ -30,8 +30,8 @@ public final class TextMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    TextMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    TextMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -40,8 +40,8 @@ public final class TextMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new TextMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new TextMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class TextMedia extends Media {
      * @throws quicktime.QTException
      */
     public TextDescription getTextDescription(int index) throws QTException {
-        TextDescription localTextDescription = new TextDescription();
-        getNativeSampleDescription(index, localTextDescription);
-        return localTextDescription;
+        TextDescription textDescription = new TextDescription();
+        getNativeSampleDescription(index, textDescription);
+        return textDescription;
     }
 }

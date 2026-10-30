@@ -30,15 +30,15 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @see quicktime.std.sg.SequenceGrabber#getGWorldDevice()
      */
     public static GDevice fromSequenceGrabber(SequenceGrabber sg) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = SGGetGWorld(QTObject.ID(sg), arrayOfInt1, arrayOfInt2);
+        int[] port = new int[1];
+        int[] gdh = new int[1];
+        int i = SGGetGWorld(QTObject.ID(sg), port, gdh);
         StdQTException.checkError(i);
-        return new GDevice(arrayOfInt2[0]);
+        return new GDevice(gdh[0]);
     }
 
-    private GDevice(int paramInt) {
-        super(paramInt, new Object(), false);
+    private GDevice(int nativeRep) {
+        super(nativeRep, new Object(), false);
     }
 
     /**
@@ -91,8 +91,8 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @see "QuickDraw::InitGDevice"
      * @param mode the device configuration mode
      */
-    public void init(int paramInt1, int mode) {
-        InitGDevice((short) paramInt1, mode, _ID());
+    public void init(int refNum, int mode) {
+        InitGDevice((short) refNum, mode, _ID());
     }
 
     /**
@@ -148,9 +148,9 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @return a QDRect
      */
     public QDRect getBounds() {
-        byte[] arrayOfByte = new byte[8];
-        getBytesAt(34, 8, arrayOfByte, 0);
-        return QDRect.fromArray(arrayOfByte, 8);
+        byte[] destArray = new byte[8];
+        getBytesAt(34, 8, destArray, 0);
+        return QDRect.fromArray(destArray, 8);
     }
 
     /**
@@ -175,10 +175,10 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public float getScale() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        short[] arrayOfShort = { 0 };
-        StdQTException.checkError(GDGetScale(_ID(), arrayOfInt, arrayOfShort));
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        int[] scale = { 0 };
+        short[] flags = { 0 };
+        StdQTException.checkError(GDGetScale(_ID(), scale, flags));
+        return QTUtils.Fix2X(scale[0]);
     }
 
     /**
@@ -188,10 +188,10 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getFlags() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        short[] arrayOfShort = { 0 };
-        StdQTException.checkError(GDGetScale(_ID(), arrayOfInt, arrayOfShort));
-        return arrayOfShort[0];
+        int[] scale = { 0 };
+        short[] flags = { 0 };
+        StdQTException.checkError(GDGetScale(_ID(), scale, flags));
+        return flags[0];
     }
 
     /**
@@ -204,8 +204,8 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
         StdQTException.checkError(GDSetScale(_ID(), QTUtils.X2Fix(scale), (short) flags));
     }
 
-    private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SequenceGrabberManager.SGGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int SGGetGWorld(int sg, int[] port, int[] gdh) {
+        return SequenceGrabberManager.SGGetGWorld(sg, port, gdh);
     }
 
     private static int GetGDevice() {
@@ -220,36 +220,36 @@ public final class GDevice extends QTHandleRef implements QuickTimeLib {
         return QuickDrawManager.GetMainDevice();
     }
 
-    private static int GetMaxDevice(byte[] paramArrayOfByte) {
-        return QuickDrawManager.GetMaxDevice(paramArrayOfByte);
+    private static int GetMaxDevice(byte[] rect) {
+        return QuickDrawManager.GetMaxDevice(rect);
     }
 
-    private static void InitGDevice(short paramShort, int mode, int paramInt2) {
-        QuickDrawManager.InitGDevice(paramShort, mode, paramInt2);
+    private static void InitGDevice(short refNum, int mode, int gd) {
+        QuickDrawManager.InitGDevice(refNum, mode, gd);
     }
 
-    private static void SetDeviceAttribute(int paramInt, short paramShort, byte paramByte) {
-        QuickDrawManager.SetDeviceAttribute(paramInt, paramShort, paramByte);
+    private static void SetDeviceAttribute(int gd, short attribute, byte value) {
+        QuickDrawManager.SetDeviceAttribute(gd, attribute, value);
     }
 
-    private static void SetGDevice(int paramInt) {
-        QuickDrawManager.SetGDevice(paramInt);
+    private static void SetGDevice(int gd) {
+        QuickDrawManager.SetGDevice(gd);
     }
 
-    private static int GetNextDevice(int paramInt) {
-        return QuickDrawManager.GetNextDevice(paramInt);
+    private static int GetNextDevice(int gd) {
+        return QuickDrawManager.GetNextDevice(gd);
     }
 
-    private static int TestDeviceAttribute(int paramInt, short paramShort) {
-        return QuickDrawManager.TestDeviceAttribute(paramInt, paramShort);
+    private static int TestDeviceAttribute(int gd, short attribute) {
+        return QuickDrawManager.TestDeviceAttribute(gd, attribute);
     }
 
-    private static short GDHasScale(int paramInt, short paramShort, int[] paramArrayOfInt) {
-        return QuickDrawManager.GDHasScale(paramInt, paramShort, paramArrayOfInt);
+    private static short GDHasScale(int gd, short depth, int[] scale) {
+        return QuickDrawManager.GDHasScale(gd, depth, scale);
     }
 
-    private static short GDGetScale(int paramInt, int[] paramArrayOfInt, short[] paramArrayOfShort) {
-        return QuickDrawManager.GDGetScale(paramInt, paramArrayOfInt, paramArrayOfShort);
+    private static short GDGetScale(int gd, int[] scale, short[] flags) {
+        return QuickDrawManager.GDGetScale(gd, scale, flags);
     }
 
     private static short GDSetScale(int gd, int scale, short flags) {

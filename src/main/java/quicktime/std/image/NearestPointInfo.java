@@ -21,9 +21,9 @@ public class NearestPointInfo {
      */
     public final float deltaDistance;
 
-    NearestPointInfo(int paramInt1, int paramInt2, float paramFloat) {
-        this.contourIndex = paramInt1;
-        this.pointIndex = paramInt2;
-        this.deltaDistance = paramFloat;
+    NearestPointInfo(int contourIndex, int pointIndex, float deltaDistance) {
+        this.contourIndex = contourIndex;
+        this.pointIndex = pointIndex;
+        this.deltaDistance = deltaDistance;
     }
 }

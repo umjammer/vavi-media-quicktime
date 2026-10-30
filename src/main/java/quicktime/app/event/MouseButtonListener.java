@@ -13,19 +13,19 @@ public interface MouseButtonListener extends QTMouseListener {
      * @since QTJava 6.1
      * Invoked when the mouse has been clicked in a space.
      */
-    void mouseClicked(QTMouseEvent paramQTMouseEvent);
+    void mouseClicked(QTMouseEvent qtMouseEvent);
 
     /**
      * @deprecated
      * @since QTJava 6.1
      * Invoked when the mouse has been pressed in a space.
      */
-    void mousePressed(QTMouseEvent paramQTMouseEvent);
+    void mousePressed(QTMouseEvent event);
 
     /**
      * @deprecated
      * @since QTJava 6.1
      * Invoked when a mouse button has been released where the press occured within the space.
      */
-    void mouseReleased(QTMouseEvent paramQTMouseEvent);
+    void mouseReleased(QTMouseEvent qtMouseEvent);
 }

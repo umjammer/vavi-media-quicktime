@@ -86,11 +86,11 @@ public class EndianFlipSpec {
      * Returns true if the supplied object has the same values as this object.
      * @return a boolean
      */
-    public boolean equals(Object paramObject) {
-        if (paramObject == this)
+    public boolean equals(Object obj) {
+        if (obj == this)
             return true;
-        if ((paramObject instanceof EndianFlipSpec localEndianFlipSpec)) {
-            return (localEndianFlipSpec.offset == this.offset) && (localEndianFlipSpec.sizeFlag == this.sizeFlag) && (localEndianFlipSpec.num == this.num);
+        if ((obj instanceof EndianFlipSpec endianFlipSpec)) {
+            return (endianFlipSpec.offset == this.offset) && (endianFlipSpec.sizeFlag == this.sizeFlag) && (endianFlipSpec.num == this.num);
         }
         return false;
     }

@@ -25,12 +25,12 @@ public final class Clock extends Component implements QuickTimeLib, SoundLib {
      * Opens the specified component,'clok', with the given subType.
      * @see "QuickTime::OpenADefaultComponent"
      */
-    public Clock(int paramInt) throws QTException {
-        super(1668050795, paramInt);
+    public Clock(int subType) throws QTException {
+        super(1668050795, subType);
     }
 
-    Clock(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    Clock(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -40,10 +40,10 @@ public final class Clock extends Component implements QuickTimeLib, SoundLib {
      * @throws quicktime.QTException
      */
     public TimeRecord getTime() throws QTException {
-        TimeRecord localTimeRecord = new TimeRecord();
-        int i = ClockGetTime(_ID(), QTObject.ID(localTimeRecord));
+        TimeRecord tr = new TimeRecord();
+        int i = ClockGetTime(_ID(), QTObject.ID(tr));
         StdQTException.checkError(i);
-        return localTimeRecord;
+        return tr;
     }
 
     /**
@@ -52,17 +52,17 @@ public final class Clock extends Component implements QuickTimeLib, SoundLib {
      * @return the clock
      * @throws quicktime.sound.SoundException
      */
-    public static Clock fromSndChannel(SndChannel paramSndChannel) throws SoundException {
-        int[] arrayOfInt = { 0 };
-        SoundException.checkError(SndGetInfo(QTObject.ID(paramSndChannel), 1935895659, arrayOfInt));
-        return new Clock(arrayOfInt[0], paramSndChannel);
+    public static Clock fromSndChannel(SndChannel chan) throws SoundException {
+        int[] info = { 0 };
+        SoundException.checkError(SndGetInfo(QTObject.ID(chan), 1935895659, info));
+        return new Clock(info[0], chan);
     }
 
-    private static short SndGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static short SndGetInfo(int chan, int selector, int[] info) {
+        return SoundManager.SndGetInfo(chan, selector, info);
     }
 
-    private static int ClockGetTime(int paramInt1, int paramInt2) {
-        return ClockManager.ClockGetTime(paramInt1, paramInt2);
+    private static int ClockGetTime(int clock, int tr) {
+        return ClockManager.ClockGetTime(clock, tr);
     }
 }

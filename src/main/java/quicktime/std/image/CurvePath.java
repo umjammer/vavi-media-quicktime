@@ -16,20 +16,20 @@ public final class CurvePath extends QTHandle implements QuickTimeLib {
 
     private final Curve c;
 
-    private static int allocate(Curve paramCurve) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = CurveNewPath(QTObject.ID(paramCurve), arrayOfInt);
+    private static int allocate(Curve effect) throws StdQTException {
+        int[] pathHandle = { 0 };
+        int i = CurveNewPath(QTObject.ID(effect), pathHandle);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return pathHandle[0];
     }
 
     /**
      * This method is used to create a new path.
      * @see "QuickTime::CurveNewPath"
      */
-    public CurvePath(Curve paramCurve) throws StdQTException {
-        super(allocate(paramCurve), null, false);
-        this.c = paramCurve;
+    public CurvePath(Curve c) throws StdQTException {
+        super(allocate(c), null, false);
+        this.c = c;
     }
 
     /**
@@ -46,11 +46,11 @@ public final class CurvePath extends QTHandle implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static int CurveNewPath(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.CurveNewPath(paramInt, paramArrayOfInt);
+    private static int CurveNewPath(int effect, int[] pathHandle) {
+        return ImageCompressionManager.CurveNewPath(effect, pathHandle);
     }
 
-    private static int CurveInsertPointIntoPath(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, byte paramByte) {
-        return ImageCompressionManager.CurveInsertPointIntoPath(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramByte);
+    private static int CurveInsertPointIntoPath(int effect, byte[] point, int pathHandle, int contourIndex, int pointIndex, byte isOnPath) {
+        return ImageCompressionManager.CurveInsertPointIntoPath(effect, point, pathHandle, contourIndex, pointIndex, isOnPath);
     }
 }

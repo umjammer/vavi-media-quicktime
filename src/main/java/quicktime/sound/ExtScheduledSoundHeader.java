@@ -25,8 +25,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
      * @param rate the sample rate of the sound data
      * @param sampleSizeBits number of bits per each sample.
      */
-    public ExtScheduledSoundHeader(QTPointerRef data, int numChannels, float rate, int sampleSizeBits, int paramInt3) throws QTException {
-        this(data, numChannels, rate, data.getSize() / numChannels / (sampleSizeBits / 8), sampleSizeBits, paramInt3, 0, 0);
+    public ExtScheduledSoundHeader(QTPointerRef data, int numChannels, float rate, int sampleSizeBits, int format) throws QTException {
+        this(data, numChannels, rate, data.getSize() / numChannels / (sampleSizeBits / 8), sampleSizeBits, format, 0, 0);
     }
 
     /**
@@ -89,8 +89,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
         setIntAt(94, 106);
     }
 
-    ExtScheduledSoundHeader(int paramInt, Object paramObject) {
-        super(paramInt, 106, paramObject);
+    ExtScheduledSoundHeader(int nativeRep, Object ref) {
+        super(nativeRep, 106, ref);
     }
 
     /**
@@ -228,8 +228,8 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
     /**
      * Sets the value of the extended flags field.
      */
-    public void setExtendedFlags(int paramInt) {
-        setIntAt(98, paramInt);
+    public void setExtendedFlags(int extendedFlags) {
+        setIntAt(98, extendedFlags);
     }
 
     /**
@@ -247,7 +247,7 @@ public final class ExtScheduledSoundHeader extends QTPointerRef implements Inter
                 "]";
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int size) {
+        MemoryManager.BlockMove(src, dst, size);
     }
 }

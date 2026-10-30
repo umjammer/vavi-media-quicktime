@@ -17,13 +17,13 @@ final class SoundRunner {
 
     private SoundMethodClosure mMethodClosure;
 
-    SoundRunner(SPB paramSPB, SICompletion paramSICompletion) {
-        this.soundParamBlock = paramSPB;
-        this.completion = paramSICompletion;
+    SoundRunner(SPB soundParamBlock, SICompletion completion) {
+        this.soundParamBlock = soundParamBlock;
+        this.completion = completion;
     }
 
-    SoundRunner(SoundCallBack paramSoundCallBack) {
-        this.callback = paramSoundCallBack;
+    SoundRunner(SoundCallBack callback) {
+        this.callback = callback;
     }
 
     private SInterruptClosure mInterruptClosure;
@@ -40,15 +40,15 @@ final class SoundRunner {
 
     private boolean completionDone = false;
 
-    void setSndChannel(SndChannel paramSndChannel) {
-        this.sndChan = paramSndChannel;
+    void setSndChannel(SndChannel sndChannel) {
+        this.sndChan = sndChannel;
     }
 
-    private void siCompletion(int paramInt) {
+    private void siCompletion(int spb) {
         doNotify();
     }
 
-    private void sndCallBack(int paramInt1, int paramInt2) {
+    private void sndCallBack(int chan, int cmd) {
         doNotify();
     }
 
@@ -172,8 +172,8 @@ final class SoundRunner {
 
     static class SoundMethodClosure extends MethodClosure {
 
-        SoundMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        SoundMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -183,8 +183,8 @@ final class SoundRunner {
 
     static class SInterruptClosure extends com.apple.mrj.jdirect.CompletionRoutineNotifier {
 
-        SInterruptClosure(int paramInt, Object paramObject) {
-            super(paramInt, paramObject);
+        SInterruptClosure(int routine, Object target) {
+            super(routine, target);
         }
 
         int fetchPointer() {

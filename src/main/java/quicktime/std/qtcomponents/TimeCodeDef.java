@@ -24,9 +24,9 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
     @Serial
     private static final long serialVersionUID = -1950218889120312012L;
 
-    TimeCodeDef(int paramInt) {
+    TimeCodeDef(int ptr) {
         super(kNativeSize);
-        copyPointerToArray(paramInt, 0, getBytes(), 0, kNativeSize);
+        copyPointerToArray(ptr, 0, getBytes(), 0, kNativeSize);
     }
 
     /**
@@ -36,14 +36,14 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
         super(kNativeSize);
     }
 
-    private TimeCodeDef(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private TimeCodeDef(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(getBytes());
+        in.read(getBytes());
         for (int i = 0; i < 12; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipBigEndianToNative32(j);
@@ -52,15 +52,15 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
-        System.arraycopy(getBytes(), 0, arrayOfByte, 0, kNativeSize);
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
+        System.arraycopy(getBytes(), 0, movie, 0, kNativeSize);
         for (int i = 0; i < 12; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipNativeToBigEndian32(j);
-            setIntInArray(arrayOfByte, i, k);
+            setIntInArray(movie, i, k);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -150,15 +150,15 @@ public final class TimeCodeDef extends QTByteObject implements PrimitivesLib, Cl
         return new TimeCodeDef(this.bytes);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

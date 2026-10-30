@@ -18,8 +18,8 @@ import quicktime.util.QTUtils;
  */
 public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
 
-    SGTextChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
+    SGTextChannel(int type, SequenceGrabber owner) throws StdQTException {
+        super(type, owner);
     }
 
     /**
@@ -67,8 +67,8 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      *
      * @see "QuickTime::SGSetFontSize"
      */
-    public void setFontSize(int paramInt) throws StdQTException {
-        int i = SGSetFontSize(_ID(), (short) paramInt);
+    public void setFontSize(int fontSize) throws StdQTException {
+        int i = SGSetFontSize(_ID(), (short) fontSize);
         StdQTException.checkError(i);
     }
 
@@ -114,10 +114,10 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
      * @see "QuickTime::SGGetTextReturnToSpaceValue"
      */
     public int getReturnToSpaceValue() throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int i = SGGetTextReturnToSpaceValue(_ID(), arrayOfShort);
+        short[] value = new short[1];
+        int i = SGGetTextReturnToSpaceValue(_ID(), value);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return value[0];
     }
 
     /**
@@ -132,31 +132,31 @@ public final class SGTextChannel extends VisualChannel implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static int SGSetFontName(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetFontName(paramInt, paramArrayOfByte);
+    private static int SGSetFontName(int ref, byte[] name) {
+        return SequenceGrabberManager.SGSetFontName(ref, name);
     }
 
-    private static int SGSetFontSize(int paramInt, short paramShort) {
-        return SequenceGrabberManager.SGSetFontSize(paramInt, paramShort);
+    private static int SGSetFontSize(int ref, short size) {
+        return SequenceGrabberManager.SGSetFontSize(ref, size);
     }
 
-    private static int SGSetTextForeColor(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetTextForeColor(paramInt, paramArrayOfByte);
+    private static int SGSetTextForeColor(int ref, byte[] color) {
+        return SequenceGrabberManager.SGSetTextForeColor(ref, color);
     }
 
-    private static int SGSetTextBackColor(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetTextBackColor(paramInt, paramArrayOfByte);
+    private static int SGSetTextBackColor(int ref, byte[] color) {
+        return SequenceGrabberManager.SGSetTextBackColor(ref, color);
     }
 
-    private static int SGSetJustification(int paramInt, short paramShort) {
-        return SequenceGrabberManager.SGSetJustification(paramInt, paramShort);
+    private static int SGSetJustification(int ref, short justification) {
+        return SequenceGrabberManager.SGSetJustification(ref, justification);
     }
 
-    private static int SGGetTextReturnToSpaceValue(int paramInt, short[] paramArrayOfShort) {
-        return SequenceGrabberManager.SGGetTextReturnToSpaceValue(paramInt, paramArrayOfShort);
+    private static int SGGetTextReturnToSpaceValue(int ref, short[] value) {
+        return SequenceGrabberManager.SGGetTextReturnToSpaceValue(ref, value);
     }
 
-    private static int SGSetTextReturnToSpaceValue(int paramInt, short paramShort) {
-        return SequenceGrabberManager.SGSetTextReturnToSpaceValue(paramInt, paramShort);
+    private static int SGSetTextReturnToSpaceValue(int ref, short value) {
+        return SequenceGrabberManager.SGSetTextReturnToSpaceValue(ref, value);
     }
 }

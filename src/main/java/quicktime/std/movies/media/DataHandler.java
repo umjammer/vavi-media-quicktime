@@ -12,8 +12,8 @@ import quicktime.std.comp.Component;
  */
 public final class DataHandler extends Component implements QuickTimeLib {
 
-    DataHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    DataHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -26,20 +26,20 @@ public final class DataHandler extends Component implements QuickTimeLib {
         this(allocate(dataRef, flags), null);
     }
 
-    private static int allocate(DataRef paramDataRef, int paramInt) throws StdQTException {
-        int i = GetDataHandler(QTObject.ID(paramDataRef), paramDataRef.getType(), paramInt);
+    private static int allocate(DataRef dataRef, int flags) throws StdQTException {
+        int i = GetDataHandler(QTObject.ID(dataRef), dataRef.getType(), flags);
         if (i == 0)
             throw new StdQTException(63524);
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(OpenAComponent(i, arrayOfInt));
-        return arrayOfInt[0];
+        int[] ci = new int[1];
+        StdQTException.checkError(OpenAComponent(i, ci));
+        return ci[0];
     }
 
-    private static int GetDataHandler(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.GetDataHandler(paramInt1, paramInt2, paramInt3);
+    private static int GetDataHandler(int dataRef, int dataHandlerSubType, int flags) {
+        return ComponentManager.GetDataHandler(dataRef, dataHandlerSubType, flags);
     }
 
-    private static short OpenAComponent(int paramInt, int[] paramArrayOfInt) {
-        return ComponentManager.OpenAComponent(paramInt, paramArrayOfInt);
+    private static short OpenAComponent(int component, int[] ci) {
+        return ComponentManager.OpenAComponent(component, ci);
     }
 }

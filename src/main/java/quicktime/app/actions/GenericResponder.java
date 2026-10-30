@@ -466,37 +466,37 @@ public class GenericResponder extends MouseResponder {
 
     static class GREventMulticaster extends AWTEventMulticaster implements QTMouseMotionListener {
 
-        GREventMulticaster(EventListener paramEventListener1, EventListener paramEventListener2) {
-            super(paramEventListener1, paramEventListener2);
+        GREventMulticaster(EventListener eventListener1, EventListener eventListener2) {
+            super(eventListener1, eventListener2);
         }
 
-        public static QTMouseMotionListener add(QTMouseMotionListener paramQTMouseMotionListener1, QTMouseMotionListener paramQTMouseMotionListener2) {
-            if (paramQTMouseMotionListener1 == null)
-                return paramQTMouseMotionListener2;
-            if (paramQTMouseMotionListener2 == null)
-                return paramQTMouseMotionListener1;
-            return new GREventMulticaster(paramQTMouseMotionListener1, paramQTMouseMotionListener2);
+        public static QTMouseMotionListener add(QTMouseMotionListener qtMouseMotionListener1, QTMouseMotionListener qtMouseMotionListener2) {
+            if (qtMouseMotionListener1 == null)
+                return qtMouseMotionListener2;
+            if (qtMouseMotionListener2 == null)
+                return qtMouseMotionListener1;
+            return new GREventMulticaster(qtMouseMotionListener1, qtMouseMotionListener2);
         }
 
-        public static QTMouseMotionListener remove(QTMouseMotionListener paramQTMouseMotionListener1, QTMouseMotionListener paramQTMouseMotionListener2) {
-            if ((paramQTMouseMotionListener1 == paramQTMouseMotionListener2) || (paramQTMouseMotionListener1 == null))
+        public static QTMouseMotionListener remove(QTMouseMotionListener qtMouseMotionListener1, QTMouseMotionListener qtMouseMotionListener2) {
+            if ((qtMouseMotionListener1 == qtMouseMotionListener2) || (qtMouseMotionListener1 == null))
                 return null;
-            if ((paramQTMouseMotionListener1 instanceof GREventMulticaster)) {
-                return (QTMouseMotionListener) ((GREventMulticaster) paramQTMouseMotionListener1).remove(paramQTMouseMotionListener2);
+            if ((qtMouseMotionListener1 instanceof GREventMulticaster)) {
+                return (QTMouseMotionListener) ((GREventMulticaster) qtMouseMotionListener1).remove(qtMouseMotionListener2);
             }
-            return paramQTMouseMotionListener1;
+            return qtMouseMotionListener1;
         }
 
         @Override
-        public void mouseEnteredTarget(MouseEvent paramMouseEvent) {
-            ((QTMouseMotionListener) this.a).mouseEnteredTarget(paramMouseEvent);
-            ((QTMouseMotionListener) this.b).mouseEnteredTarget(paramMouseEvent);
+        public void mouseEnteredTarget(MouseEvent e) {
+            ((QTMouseMotionListener) this.a).mouseEnteredTarget(e);
+            ((QTMouseMotionListener) this.b).mouseEnteredTarget(e);
         }
 
         @Override
-        public void mouseExitedTarget(MouseEvent paramMouseEvent) {
-            ((QTMouseMotionListener) this.a).mouseExitedTarget(paramMouseEvent);
-            ((QTMouseMotionListener) this.b).mouseExitedTarget(paramMouseEvent);
+        public void mouseExitedTarget(MouseEvent e) {
+            ((QTMouseMotionListener) this.a).mouseExitedTarget(e);
+            ((QTMouseMotionListener) this.b).mouseExitedTarget(e);
         }
     }
 }

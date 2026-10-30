@@ -27,18 +27,18 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
 
     private transient int size;
 
-    protected QTPointerRef(int paramInt, boolean paramBoolean) throws QTException {
-        this(allocate(paramInt, paramBoolean), paramInt, null);
+    protected QTPointerRef(int size, boolean clear) throws QTException {
+        this(allocate(size, clear), size, null);
         UtilException.checkError(MemError());
     }
 
-    protected QTPointerRef(int paramInt1, int paramInt2, Object paramObject) {
-        super(paramInt1, paramObject);
-        this.size = paramInt2;
+    protected QTPointerRef(int nativeRep, int size, Object ref) {
+        super(nativeRep, ref);
+        this.size = size;
     }
 
-    private static int allocate(int paramInt, boolean paramBoolean) throws UtilException {
-        int i = paramBoolean ? NewPtrClear(paramInt) : NewPtr(paramInt);
+    private static int allocate(int size, boolean clear) throws UtilException {
+        int i = clear ? NewPtrClear(size) : NewPtr(size);
         if (i == 0)
             throw new UtilException(-108);
         return i;
@@ -62,17 +62,17 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
      * @return a byte array - copy of pointer data
      */
     public byte[] getBytes() {
-        byte[] arrayOfByte = new byte[this.size];
-        getBytesAt(0, this.size, arrayOfByte, 0);
-        return arrayOfByte;
+        byte[] bytes = new byte[this.size];
+        getBytesAt(0, this.size, bytes, 0);
+        return bytes;
     }
 
-    protected void getBytesAt(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        copyPointerToArray(_ID(), paramInt1, paramArrayOfByte, paramInt3, paramInt2);
+    protected void getBytesAt(int ptrOffset, int size, byte[] array, int arrayOffset) {
+        copyPointerToArray(_ID(), ptrOffset, array, arrayOffset, size);
     }
 
-    protected void setBytesAt(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        copyArrayToPointer(paramArrayOfByte, paramInt3, _ID(), paramInt1, paramInt2);
+    protected void setBytesAt(int ptrOffset, int size, byte[] array, int arrayOffset) {
+        copyArrayToPointer(array, arrayOffset, _ID(), ptrOffset, size);
     }
 
     /**
@@ -278,228 +278,228 @@ public class QTPointerRef extends QTObject implements QuickTimeLib, PrimitivesLi
         return super.toString() + "[size=" + getSize() + "]";
     }
 
-    protected int makeAndCopyPtr(int paramInt1, int paramInt2) {
+    protected int makeAndCopyPtr(int offset, int size) {
         int i = 0;
         try {
-            i = allocate(paramInt2, false);
-        } catch (UtilException localUtilException) {
-            throw new QTRuntimeException(localUtilException);
+            i = allocate(size, false);
+        } catch (UtilException e) {
+            throw new QTRuntimeException(e);
         }
-        BlockMove(_ID() + paramInt1, i, this.size);
+        BlockMove(_ID() + offset, i, this.size);
         return i;
     }
 
-    protected byte getByteAt(int paramInt) {
-        return getByteFromPointer(_ID(), paramInt);
+    protected byte getByteAt(int offset) {
+        return getByteFromPointer(_ID(), offset);
     }
 
-    protected short getShortAt(int paramInt) {
-        return getShortFromPointer(_ID(), paramInt);
+    protected short getShortAt(int offset) {
+        return getShortFromPointer(_ID(), offset);
     }
 
-    protected int getIntAt(int paramInt) {
-        return getIntFromPointer(_ID(), paramInt);
+    protected int getIntAt(int offset) {
+        return getIntFromPointer(_ID(), offset);
     }
 
-    protected long getLongAt(int paramInt) {
-        return getLongFromPointer(_ID(), paramInt);
+    protected long getLongAt(int offset) {
+        return getLongFromPointer(_ID(), offset);
     }
 
-    protected float getFloatAt(int paramInt) {
-        return getFloatFromPointer(_ID(), paramInt);
+    protected float getFloatAt(int offset) {
+        return getFloatFromPointer(_ID(), offset);
     }
 
-    protected double getDoubleAt(int paramInt) {
-        return getDoubleFromPointer(_ID(), paramInt);
+    protected double getDoubleAt(int offset) {
+        return getDoubleFromPointer(_ID(), offset);
     }
 
-    protected void setByteAt(int paramInt, byte paramByte) {
-        setByteInPointer(_ID(), paramInt, paramByte);
+    protected void setByteAt(int offset, byte value) {
+        setByteInPointer(_ID(), offset, value);
     }
 
-    protected void setShortAt(int paramInt, short paramShort) {
-        setShortInPointer(_ID(), paramInt, paramShort);
+    protected void setShortAt(int offset, short value) {
+        setShortInPointer(_ID(), offset, value);
     }
 
-    protected void setIntAt(int paramInt1, int paramInt2) {
-        setIntInPointer(_ID(), paramInt1, paramInt2);
+    protected void setIntAt(int offset, int value) {
+        setIntInPointer(_ID(), offset, value);
     }
 
-    protected void setLongAt(int paramInt, long paramLong) {
-        setLongInPointer(_ID(), paramInt, paramLong);
+    protected void setLongAt(int offset, long value) {
+        setLongInPointer(_ID(), offset, value);
     }
 
-    protected void setFloatAt(int paramInt, float paramFloat) {
-        setFloatInPointer(_ID(), paramInt, paramFloat);
+    protected void setFloatAt(int offset, float value) {
+        setFloatInPointer(_ID(), offset, value);
     }
 
-    protected void setDoubleAt(int paramInt, double paramDouble) {
-        setDoubleInPointer(_ID(), paramInt, paramDouble);
+    protected void setDoubleAt(int offset, double value) {
+        setDoubleInPointer(_ID(), offset, value);
     }
 
-    protected int strlen(int paramInt) {
+    protected int strlen(int offset) {
         int i = 0;
-        while (getByteAt(paramInt++) != 0) i++;
+        while (getByteAt(offset++) != 0) i++;
         return i;
     }
 
-    protected String getCStringAt(int paramInt) throws UtilException {
-        int i = strlen(paramInt);
+    protected String getCStringAt(int offset) throws UtilException {
+        int i = strlen(offset);
         if (i > getSize()) {
             throw new UtilException(-50);
         }
         byte[] arrayOfByte = new byte[i];
-        getBytesAt(paramInt, i, arrayOfByte, 0);
+        getBytesAt(offset, i, arrayOfByte, 0);
         return new String(arrayOfByte);
     }
 
-    protected void setCStringAt(int paramInt1, int paramInt2, String paramString) throws UtilException {
-        paramInt2 = Math.min(paramInt2, paramString.length());
-        if (paramInt2 + paramInt1 > getSize()) {
+    protected void setCStringAt(int offset, int length, String str) throws UtilException {
+        length = Math.min(length, str.length());
+        if (length + offset > getSize()) {
             throw new UtilException(-50);
         }
-        byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
-        setByteAt(paramInt1 + paramInt2, (byte) 0);
+        byte[] bytes = str.getBytes();
+        setBytesAt(offset, length, bytes, 0);
+        setByteAt(offset + length, (byte) 0);
     }
 
-    protected String getPStringAt(int paramInt) throws UtilException {
-        int i = getByteAt(paramInt++);
+    protected String getPStringAt(int offset) throws UtilException {
+        int i = getByteAt(offset++);
         if (i > getSize()) {
             throw new UtilException(-50);
         }
         byte[] arrayOfByte = new byte[i];
-        getBytesAt(paramInt, i, arrayOfByte, 0);
+        getBytesAt(offset, i, arrayOfByte, 0);
         return new String(arrayOfByte);
     }
 
-    protected void setPStringAt(int paramInt1, int paramInt2, String paramString) throws UtilException {
-        paramInt2 = Math.min(Math.min(paramInt2, paramString.length()), 255);
-        if (paramInt2 + paramInt1 > getSize()) {
+    protected void setPStringAt(int offset, int length, String str) throws UtilException {
+        length = Math.min(Math.min(length, str.length()), 255);
+        if (length + offset > getSize()) {
             throw new UtilException(-50);
         }
-        setByteAt(paramInt1++, (byte) paramInt2);
-        byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
+        setByteAt(offset++, (byte) length);
+        byte[] bytes = str.getBytes();
+        setBytesAt(offset, length, bytes, 0);
     }
 
     private static short MemError() {
         return MemoryManager.MemError();
     }
 
-    private static int NewPtrClear(int paramInt) {
-        return MemoryManager.NewPtrClear(paramInt);
+    private static int NewPtrClear(int size) {
+        return MemoryManager.NewPtrClear(size);
     }
 
-    private static int NewPtr(int paramInt) {
-        return MemoryManager.NewPtr(paramInt);
+    private static int NewPtr(int size) {
+        return MemoryManager.NewPtr(size);
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int size) {
+        MemoryManager.BlockMove(src, dst, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, short[] paramArrayOfShort, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfShort, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, short[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, char[] paramArrayOfChar, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfChar, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, char[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfInt, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, int[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfFloat, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, float[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, long[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, double[] paramArrayOfDouble, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfDouble, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, double[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(byte[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyArrayToPointer(short[] paramArrayOfShort, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfShort, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(short[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyArrayToPointer(char[] paramArrayOfChar, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfChar, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(char[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(int[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyArrayToPointer(float[] paramArrayOfFloat, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfFloat, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(float[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyArrayToPointer(long[] paramArrayOfLong, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfLong, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(long[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyArrayToPointer(double[] paramArrayOfDouble, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfDouble, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(double[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static long getLongFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getLongFromPointer(paramInt1, paramInt2);
+    private static long getLongFromPointer(int ptr, int offset) {
+        return MemoryManager.getLongFromPointer(ptr, offset);
     }
 
-    private static double getDoubleFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getDoubleFromPointer(paramInt1, paramInt2);
+    private static double getDoubleFromPointer(int ptr, int offset) {
+        return MemoryManager.getDoubleFromPointer(ptr, offset);
     }
 
-    private static float getFloatFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getFloatFromPointer(paramInt1, paramInt2);
+    private static float getFloatFromPointer(int ptr, int offset) {
+        return MemoryManager.getFloatFromPointer(ptr, offset);
     }
 
-    private static void setByteInPointer(int paramInt1, int paramInt2, byte paramByte) {
-        MemoryManager.setByteInPointer(paramInt1, paramInt2, paramByte);
+    private static void setByteInPointer(int ptr, int offset, byte value) {
+        MemoryManager.setByteInPointer(ptr, offset, value);
     }
 
-    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
-        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    private static void setShortInPointer(int ptr, int offset, short value) {
+        MemoryManager.setShortInPointer(ptr, offset, value);
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static void setLongInPointer(int paramInt1, int paramInt2, long paramLong) {
-        MemoryManager.setLongInPointer(paramInt1, paramInt2, paramLong);
+    private static void setLongInPointer(int ptr, int offset, long value) {
+        MemoryManager.setLongInPointer(ptr, offset, value);
     }
 
-    private static void setFloatInPointer(int paramInt1, int paramInt2, float paramFloat) {
-        MemoryManager.setFloatInPointer(paramInt1, paramInt2, paramFloat);
+    private static void setFloatInPointer(int ptr, int offset, float value) {
+        MemoryManager.setFloatInPointer(ptr, offset, value);
     }
 
-    private static void setDoubleInPointer(int paramInt1, int paramInt2, double paramDouble) {
-        MemoryManager.setDoubleInPointer(paramInt1, paramInt2, paramDouble);
+    private static void setDoubleInPointer(int ptr, int offset, double value) {
+        MemoryManager.setDoubleInPointer(ptr, offset, value);
     }
 }

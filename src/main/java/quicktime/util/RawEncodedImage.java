@@ -24,17 +24,17 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * This will return a RawEncodedImage object from a pointer. It will not copy
      * the pointer but will reference the same data.
      */
-    public static RawEncodedImage fromQTPointer(QTPointerRef paramQTPointerRef) {
-        return new RawEncodedImage(QTObject.ID(paramQTPointerRef), paramQTPointerRef.getSize(), paramQTPointerRef, -1);
+    public static RawEncodedImage fromQTPointer(QTPointerRef nativeRep) {
+        return new RawEncodedImage(QTObject.ID(nativeRep), nativeRep.getSize(), nativeRep, -1);
     }
 
     /**
      * This will return a RawEncodedImage object from a handle. It will not copy
      * the handle but will reference the same data.
      */
-    public static RawEncodedImage fromQTHandle(QTHandleRef paramQTHandleRef) {
-        paramQTHandleRef.lock();
-        return fromQTPointer(paramQTHandleRef.toQTPointer());
+    public static RawEncodedImage fromQTHandle(QTHandleRef qtHandleRef) {
+        qtHandleRef.lock();
+        return fromQTPointer(qtHandleRef.toQTPointer());
     }
 
     /**
@@ -62,19 +62,19 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
      * @see "QuickTime::GetSpriteProperty ()"
      * @see quicktime.std.anim.Sprite#getImageData()
      */
-    public static RawEncodedImage fromSprite(Sprite paramSprite) throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = GetSpriteProperty(QTObject.ID(paramSprite), 3, arrayOfInt);
+    public static RawEncodedImage fromSprite(Sprite sprite) throws StdQTException {
+        int[] propertyValue = {0};
+        int i = GetSpriteProperty(QTObject.ID(sprite), 3, propertyValue);
         StdQTException.checkError(i);
-        return new RawEncodedImage(arrayOfInt[0], paramSprite.getImageDataSize(), paramSprite, -1);
+        return new RawEncodedImage(propertyValue[0], sprite.getImageDataSize(), sprite, -1);
     }
 
     /**
      * This will return a RawEncodedImage object from a byte array. It will copy
      * the bytes.
      */
-    public RawEncodedImage(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    public RawEncodedImage(byte[] byteArray) throws QTException {
+        super(byteArray);
         this.rowBytes = -1;
     }
 
@@ -124,9 +124,9 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
         this.rowBytes = rowBytes;
     }
 
-    private RawEncodedImage(int paramInt1, int paramInt2, Object paramObject, int paramInt3) {
-        super(paramInt1, paramInt2, paramObject);
-        this.rowBytes = paramInt3;
+    private RawEncodedImage(int nativeRep, int size, Object ref, int rowBytes) {
+        super(nativeRep, size, ref);
+        this.rowBytes = rowBytes;
     }
 
     /**
@@ -245,23 +245,23 @@ public final class RawEncodedImage extends QTPointer implements QuickTimeLib, En
         this.rowBytes = rowBytes;
     }
 
-    private static int GetPixBaseAddr(int paramInt) {
-        return QuickDrawManager.GetPixBaseAddr(paramInt);
+    private static int GetPixBaseAddr(int pixMap) {
+        return QuickDrawManager.GetPixBaseAddr(pixMap);
     }
 
-    private static short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfInt);
+    private static short GetSpriteProperty(int sprite, int propertyType, int[] propertyValue) {
+        return SpriteManager.GetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short getShortFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    private static short getShortFromHandle(int h, int offset) {
+        return MemoryManager.getShortFromHandle(h, offset);
     }
 
-    private static int getIntFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromHandle(paramInt1, paramInt2);
+    private static int getIntFromHandle(int h, int offset) {
+        return MemoryManager.getIntFromHandle(h, offset);
     }
 
-    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(int[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 }

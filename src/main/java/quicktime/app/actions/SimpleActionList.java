@@ -74,16 +74,16 @@ public class SimpleActionList extends TickleList {
                     break;
                 this.list = this.list.next;
             } while (this.list != null);
-            localObject1 = this.list;
-            TickleNode localTickleNode = localObject1 != null ? ((TickleNode) localObject1).next : null;
-            while (localTickleNode != null) {
-                Object localObject2 = ((Targetable) localTickleNode.action).getTarget();
+            TickleNode tickleNode3 = this.list;
+            TickleNode tickleNode = tickleNode3 != null ? tickleNode3.next : null;
+            while (tickleNode != null) {
+                Object localObject2 = ((Targetable) tickleNode.action).getTarget();
                 if ((localObject2 != null) && (localObject2.equals(target))) {
-                    ((TickleNode) localObject1).next = localTickleNode.next;
-                    localTickleNode = localTickleNode.next;
+                    tickleNode3.next = tickleNode.next;
+                    tickleNode = tickleNode.next;
                 } else {
-                    localObject1 = localTickleNode;
-                    localTickleNode = localTickleNode.next;
+                    tickleNode3 = tickleNode;
+                    tickleNode = tickleNode.next;
                 }
             }
         }
@@ -93,12 +93,12 @@ public class SimpleActionList extends TickleList {
 
         TickleNode current;
 
-        TargetEnumerator(TickleNode paramTickleNode, SimpleActionList param1) {
-            this(paramTickleNode);
+        TargetEnumerator(TickleNode current, SimpleActionList list) {
+            this(current);
         }
 
-        private TargetEnumerator(TickleNode paramTickleNode) {
-            this.current = paramTickleNode;
+        private TargetEnumerator(TickleNode current) {
+            this.current = current;
         }
 
         @Override
@@ -115,11 +115,11 @@ public class SimpleActionList extends TickleList {
         public Object nextElement() {
             if (this.current == null)
                 throw new NoSuchElementException("ActionList");
-            TickleNode localTickleNode = this.current;
+            TickleNode tickleNode = this.current;
             this.current = this.current.next;
-            Object localObject = ((Targetable) localTickleNode.action).getTarget();
-            this.rt.addElement(localObject);
-            return localObject;
+            Object target = ((Targetable) tickleNode.action).getTarget();
+            this.rt.addElement(target);
+            return target;
         }
 
         private final Vector<Object> rt = new Vector<>();

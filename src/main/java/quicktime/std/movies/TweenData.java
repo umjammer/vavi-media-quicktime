@@ -173,8 +173,8 @@ public final class TweenData extends QTByteObject {
         return this.type;
     }
 
-    private static int allocSize(int paramInt) throws QTException {
-        int i = switch (paramInt) {
+    private static int allocSize(int tweenType) throws QTException {
+        int i = switch (tweenType) {
             case 1 -> 2;
             case 2, 3, 10 -> 4;
             case 4 -> 4;

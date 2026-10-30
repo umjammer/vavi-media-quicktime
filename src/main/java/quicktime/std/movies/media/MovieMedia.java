@@ -30,8 +30,8 @@ public final class MovieMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    MovieMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    MovieMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -40,8 +40,8 @@ public final class MovieMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new MovieMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new MovieMediaHandler(nativeRep, ref);
     }
 
     /**

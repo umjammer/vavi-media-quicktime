@@ -18,8 +18,8 @@ public final class SourcerLoopParams extends QTPointer {
         super(20, true);
     }
 
-    SourcerLoopParams(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    SourcerLoopParams(byte[] byteArray) throws QTException {
+        super(byteArray);
     }
 
     /**

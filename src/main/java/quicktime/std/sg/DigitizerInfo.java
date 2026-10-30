@@ -26,14 +26,14 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
         super(kNativeSize);
     }
 
-    DigitizerInfo(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    DigitizerInfo(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         setShortInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, 0)));
         for (int i = 4; i < 18; i += 4) {
             setIntInArray(this.bytes, i, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, i)));
@@ -44,19 +44,19 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
-        setShortInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 0)));
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
+        setShortInArray(movie, 0, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), 0)));
         for (int i = 2; i < 18; i += 4) {
-            setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
+            setIntInArray(movie, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
-        setIntInArray(arrayOfByte, 20, 0);
-        setIntInArray(arrayOfByte, 24, 0);
+        setIntInArray(movie, 20, 0);
+        setIntInArray(movie, 24, 0);
         for (int i = 28; i < 38; i += 2) {
-            setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
+            setShortInArray(movie, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
-        setIntInArray(arrayOfByte, 38, 0);
-        paramObjectOutputStream.write(arrayOfByte);
+        setIntInArray(movie, 38, 0);
+        out.write(movie);
     }
 
     /**
@@ -141,19 +141,19 @@ public final class DigitizerInfo extends QTByteObject implements PrimitivesLib, 
                 " \nOutputCapabilityFlags: " + getOutputCapabilityFlags();
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

@@ -39,10 +39,10 @@ public abstract class QTPlayerEventHandler {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static void registerEventHandlerMaker(QTPlayerEventHandlerMaker paramQTPlayerEventHandlerMaker) {
+    public static void registerEventHandlerMaker(QTPlayerEventHandlerMaker qtPlayerEventHandlerMaker) {
         if (vec == null)
             vec = new Vector<>();
-        vec.addElement(paramQTPlayerEventHandlerMaker);
+        vec.addElement(qtPlayerEventHandlerMaker);
     }
 
     /**
@@ -51,32 +51,32 @@ public abstract class QTPlayerEventHandler {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static void removeEventHandlerMaker(QTPlayerEventHandlerMaker paramQTPlayerEventHandlerMaker) {
+    public static void removeEventHandlerMaker(QTPlayerEventHandlerMaker qtPlayerEventHandlerMaker) {
         if (vec != null)
-            vec.removeElement(paramQTPlayerEventHandlerMaker);
+            vec.removeElement(qtPlayerEventHandlerMaker);
         if (vec.isEmpty()) {
             vec = null;
         }
     }
 
-    static QTPlayerEventHandler make(QTPlayer paramQTPlayer, Object paramObject) {
+    static QTPlayerEventHandler make(QTPlayer player, Object addedToInterest) {
         if (vec != null) {
             for (int i = 0; i < vec.size(); i++) {
-                QTPlayerEventHandlerMaker localObject = vec.elementAt(i);
-                QTPlayerEventHandler localQTPlayerEventHandler = localObject.make(paramQTPlayer, paramObject);
-                if (localQTPlayerEventHandler != null) {
-                    return localQTPlayerEventHandler;
+                QTPlayerEventHandlerMaker qtPlayerEventHandlerMaker = vec.elementAt(i);
+                QTPlayerEventHandler qtPlayerEventHandler = qtPlayerEventHandlerMaker.make(player, addedToInterest);
+                if (qtPlayerEventHandler != null) {
+                    return qtPlayerEventHandler;
                 }
             }
         }
-        Class<?> localClass = paramObject.getClass();
-        String localObject = localClass.getName();
-        while (!localClass.getName().equals("java.lang.Object")) {
-            localObject = localClass.getName();
-            localClass = localClass.getSuperclass();
+        Class<?> superclass = addedToInterest.getClass();
+        String name = superclass.getName();
+        while (!superclass.getName().equals("java.lang.Object")) {
+            name = superclass.getName();
+            superclass = superclass.getSuperclass();
         }
-        if (localObject.equals("java.awt.Component")) {
-            return new QTPlayerAWTEventHandler(paramQTPlayer, paramObject);
+        if (name.equals("java.awt.Component")) {
+            return new QTPlayerAWTEventHandler(player, addedToInterest);
         }
         return null;
     }

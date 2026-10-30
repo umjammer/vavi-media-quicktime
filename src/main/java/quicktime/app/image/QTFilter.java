@@ -66,8 +66,8 @@ public class QTFilter extends QTEffect {
      * @since QTJava 6.1
      * Creates a QTFilter of specified frame setting and an initialSize of 0, 0.
      */
-    public QTFilter(int paramInt) throws QTException {
-        this(paramInt, new QDDimension(0, 0));
+    public QTFilter(int multiFrameFlag) throws QTException {
+        this(multiFrameFlag, new QDDimension(0, 0));
     }
 
     /**
@@ -76,8 +76,8 @@ public class QTFilter extends QTEffect {
      * @deprecated
      * @since QTJava 4.0
      */
-    public QTFilter(int paramInt, Dimension d) throws QTException {
-        this(paramInt, new QDDimension(d.width, d.height));
+    public QTFilter(int multiFrameFlag, Dimension d) throws QTException {
+        this(multiFrameFlag, new QDDimension(d.width, d.height));
     }
 
     /**
@@ -86,9 +86,9 @@ public class QTFilter extends QTEffect {
      * Creates a QTFilter of specified frame setting and initSize.
      * @param d the initSize of the effect.
      */
-    public QTFilter(int paramInt, QDDimension d) throws QTException {
-        super(paramInt, d);
-        if (paramInt == 2) {
+    public QTFilter(int multiFrameFlag, QDDimension d) throws QTException {
+        super(multiFrameFlag, d);
+        if (multiFrameFlag == 2) {
         }
     }
 
@@ -119,17 +119,17 @@ public class QTFilter extends QTEffect {
             return;
         }
         this.effectSample = effectParams;
-        Atom localAtom1 = Atom.kParentIsContainer;
-        int i = this.effectSample.countChildrenOfType(localAtom1, 1936876320);
+        Atom parentAtom = Atom.kParentIsContainer;
+        int i = this.effectSample.countChildrenOfType(parentAtom, 1936876320);
         for (int j = 0; j < i; j++) {
-            Atom localObject = this.effectSample.findChildByIndex_Atom(localAtom1, 1936876320, 1);
-            this.effectSample.removeAtom(localObject);
+            Atom atom = this.effectSample.findChildByIndex_Atom(parentAtom, 1936876320, 1);
+            this.effectSample.removeAtom(atom);
         }
-        this.effectSample.insertChild(localAtom1, 1936876320, 1, 0, EndianOrder.flipNativeToBigEndian32(this.srcA));
-        Atom localAtom2 = this.effectSample.findChildByID_Atom(localAtom1, 2003329396, 1);
+        this.effectSample.insertChild(parentAtom, 1936876320, 1, 0, EndianOrder.flipNativeToBigEndian32(this.srcA));
+        Atom atom2 = this.effectSample.findChildByID_Atom(parentAtom, 2003329396, 1);
         this.effectSample.lock();
-        AtomData localObject = this.effectSample.getAtomData(localAtom2);
-        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(localObject.getInt(0)));
+        AtomData atomData = this.effectSample.getAtomData(atom2);
+        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(atomData.getInt(0)));
         this.effectSamplePtr = RawEncodedImage.fromQTPointer(this.effectSample.toQTPointer());
         setUpSequence();
     }
@@ -214,9 +214,9 @@ public class QTFilter extends QTEffect {
 
         ImageSequenceDataSource imgDataSeq;
 
-        ImageContainer(ImageSpec paramImageSpec) throws QTException {
+        ImageContainer(ImageSpec image) throws QTException {
             super();
-            this.image = paramImageSpec;
+            this.image = image;
             this.imgDesc = this.image.getDescription();
             this.encImage = this.image.getImage();
             if ((this.image instanceof DrawingNotifier)) {
@@ -228,11 +228,11 @@ public class QTFilter extends QTEffect {
             }
         }
 
-        void prepareSequence(int paramInt) throws QTException {
+        void prepareSequence(int sourceType) throws QTException {
             if (this.imgDataSeq != null) {
                 this.imgDataSeq.dispose();
             }
-            this.imgDataSeq = new ImageSequenceDataSource(QTFilter.this.effectSequence, paramInt, 1, this.imgDesc);
+            this.imgDataSeq = new ImageSequenceDataSource(QTFilter.this.effectSequence, sourceType, 1, this.imgDesc);
             this.imgDataSeq.setSourceData(this.encImage);
         }
 
@@ -269,8 +269,8 @@ public class QTFilter extends QTEffect {
                 try {
                     this.imgDataSeq.setSourceData(this.encImage);
                     this.imgDataSeq.changedSourceData();
-                } catch (QTException localQTException) {
-                    localQTException.printStackTrace();
+                } catch (QTException e) {
+                    e.printStackTrace();
                 }
                 if ((!QTFilter.this.inEffect) && (this == QTFilter.this.drawSourceListener)) {
                     requestRedraw();
@@ -297,8 +297,8 @@ public class QTFilter extends QTEffect {
                 if (!running) break;
                 try {
                     QTFilter.this.redraw(null);
-                } catch (QTException localQTException) {
-                    localQTException.printStackTrace();
+                } catch (QTException e) {
+                    e.printStackTrace();
                 }
             }
         }

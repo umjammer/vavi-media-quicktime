@@ -14,19 +14,19 @@ public class QTException extends Exception {
      * If the error code is unknown then the string "Unknown Error Code" will be returned.
      * @return a string that represents the current error code of the QTException.
      */
-    public static String errorCodeToString(int paramInt) {
+    public static String errorCodeToString(int errorCode) {
         try {
-            if (paramInt == -108) {
+            if (errorCode == -108) {
                 return "memFullErr";
             }
-            Class<?> localClass = ClassLoader.getSystemClassLoader().loadClass("quicktime.Errors");
-            Field[] arrayOfField = localClass.getFields();
-            for (Field field : arrayOfField) {
-                if (field.getInt(null) == paramInt)
+            Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass("quicktime.Errors");
+            Field[] fields = clazz.getFields();
+            for (Field field : fields) {
+                if (field.getInt(null) == errorCode)
                     return field.getName();
             }
-        } catch (Exception localException) {
-            return "Exception generated: " + localException;
+        } catch (Exception e) {
+            return "Exception generated: " + e;
         }
         return "Unknown Error Code";
     }
@@ -69,10 +69,10 @@ public class QTException extends Exception {
      * codecNothingToBlitErr
      * codecOffscreenFailedErr
      */
-    public static int isDrawingError(int paramInt) {
-        return switch (paramInt) {
+    public static int isDrawingError(int errorCode) {
+        return switch (errorCode) {
             case -8988, -8985, -8984, -8983, -8982, -8981, -8980, -8976 -> 0;
-            default -> paramInt;
+            default -> errorCode;
         };
     }
 

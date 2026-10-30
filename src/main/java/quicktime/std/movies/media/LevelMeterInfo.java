@@ -15,8 +15,8 @@ public final class LevelMeterInfo extends QTByteObject {
         super(4);
     }
 
-    LevelMeterInfo(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    LevelMeterInfo(byte[] bytes) {
+        super(bytes);
     }
 
     /**

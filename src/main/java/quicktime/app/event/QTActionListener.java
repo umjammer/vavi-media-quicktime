@@ -14,5 +14,5 @@ public interface QTActionListener extends EventListener {
      * @since QTJava 6.1
      * Invoked when an action occurs.
      */
-    void actionPerformed(QTActionEvent paramQTActionEvent);
+    void actionPerformed(QTActionEvent qtActionEvent);
 }

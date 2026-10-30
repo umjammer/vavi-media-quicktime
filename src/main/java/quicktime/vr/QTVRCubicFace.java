@@ -31,16 +31,16 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
      * Creates a QTVRCubicFace object from a byte array
      * Used in cloning
      */
-    public QTVRCubicFace(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
-        if (paramArrayOfByte.length != kNativeSize) {
+    public QTVRCubicFace(byte[] bytes) throws QTException {
+        super(bytes);
+        if (bytes.length != kNativeSize) {
             throw new QTException(-50);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(16);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(16);
+        return ed;
     }
 
     public static EndianDescriptor getEndianDescriptor() {
@@ -50,25 +50,25 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRCubicFace localQTVRCubicFace = new QTVRCubicFace();
-        paramObjectInputStream.read(localQTVRCubicFace.getBytes());
-        System.arraycopy(localQTVRCubicFace.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRCubicFace qtvrCubicFace = new QTVRCubicFace();
+        in.read(qtvrCubicFace.getBytes());
+        System.arraycopy(qtvrCubicFace.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRCubicFace localQTVRCubicFace = (QTVRCubicFace) clone();
-        paramObjectOutputStream.write(localQTVRCubicFace.getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRCubicFace qtvrCubicFace = (QTVRCubicFace) clone();
+        out.write(qtvrCubicFace.getBytes());
     }
 
     @Override
     protected Object clone() {
         try {
             return new QTVRCubicFace(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
@@ -82,8 +82,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * set the orientationW
      */
-    public void setOrientationW(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setOrientationW(float orientationW) {
+        setFloatAt(0, orientationW);
     }
 
     /**
@@ -96,8 +96,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * set the orientationX
      */
-    public void setOrientationX(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setOrientationX(float orientationX) {
+        setFloatAt(4, orientationX);
     }
 
     /**
@@ -110,8 +110,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * set the orientationY
      */
-    public void setOrientationY(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setOrientationY(float orientationY) {
+        setFloatAt(8, orientationY);
     }
 
     /**
@@ -124,8 +124,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * set the orientationZ
      */
-    public void setOrientationZ(float paramFloat) {
-        setFloatAt(12, paramFloat);
+    public void setOrientationZ(float orientationZ) {
+        setFloatAt(12, orientationZ);
     }
 
     /**
@@ -138,9 +138,9 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * set the center
      */
-    public void setCenter(QDPoint paramQDPoint) {
-        setFloatAt(16, paramQDPoint.getXF());
-        setFloatAt(20, paramQDPoint.getYF());
+    public void setCenter(QDPoint center) {
+        setFloatAt(16, center.getXF());
+        setFloatAt(20, center.getYF());
     }
 
     /**
@@ -153,8 +153,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * aspect>1 => tall pixels; aspect <1 => squat pixels (default = 1)
      */
-    public void setAspect(float paramFloat) {
-        setFloatAt(24, paramFloat);
+    public void setAspect(float aspect) {
+        setFloatAt(24, aspect);
     }
 
     /**
@@ -167,8 +167,8 @@ public final class QTVRCubicFace extends QTByteObject implements Cloneable {
     /**
      * set the skew
      */
-    public void setSkew(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setSkew(float skew) {
+        setFloatAt(28, skew);
     }
 
     /**

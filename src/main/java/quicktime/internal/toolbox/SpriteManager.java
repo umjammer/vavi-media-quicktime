@@ -19,242 +19,242 @@ public final class SpriteManager {
     }
 
     /** used by SpriteWorld */
-    public static void DisposeAllSprites(int paramInt) {
+    public static void DisposeAllSprites(int spriteWorld) {
         throw new UnsupportedToolboxException("DisposeAllSprites");
     }
 
     /** used by Sprite */
-    public static void DisposeSprite(int paramInt) {
+    public static void DisposeSprite(int sprite) {
         throw new UnsupportedToolboxException("DisposeSprite");
     }
 
     /** used by QTObjectManagement */
-    public static void DisposeSpriteWorld(int paramInt) {
+    public static void DisposeSpriteWorld(int spriteWorld) {
         throw new UnsupportedToolboxException("DisposeSpriteWorld");
     }
 
     /** used by Sprite */
-    public static short GetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static short GetSpriteProperty(int sprite, int propertyType, byte[] propertyValue) {
         throw new UnsupportedToolboxException("GetSpriteProperty");
     }
 
     /** used by ImageDescription, RawEncodedImage, Sprite */
-    public static short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+    public static short GetSpriteProperty(int sprite, int propertyType, int[] propertyValue) {
         throw new UnsupportedToolboxException("GetSpriteProperty");
     }
 
     /** used by Sprite */
-    public static short GetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+    public static short GetSpriteProperty(int sprite, int propertyType, short[] propertyValue) {
         throw new UnsupportedToolboxException("GetSpriteProperty");
     }
 
     /** used by Sprite */
-    public static void InvalidateSprite(int paramInt) {
+    public static void InvalidateSprite(int sprite) {
         throw new UnsupportedToolboxException("InvalidateSprite");
     }
 
     /** used by SpriteWorld */
-    public static short InvalidateSpriteWorld(int paramInt, byte[] paramArrayOfByte) {
+    public static short InvalidateSpriteWorld(int spriteWorld, byte[] invalidArea) {
         throw new UnsupportedToolboxException("InvalidateSpriteWorld");
     }
 
     /** used by Sprite */
-    public static short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte paramByte, short paramShort) {
+    public static short NewSprite(int[] newSprite, int spriteWorld, int idh, byte[] imageDataPtr, byte[] matrix, byte visible, short layer) {
         throw new UnsupportedToolboxException("NewSprite");
     }
 
     /** used by Sprite */
-    public static short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, byte paramByte, short paramShort) {
+    public static short NewSprite(int[] newSprite, int spriteWorld, int idh, int imageDataPtr, byte[] matrix, byte visible, short layer) {
         throw new UnsupportedToolboxException("NewSprite");
     }
 
     /** used by Sprite */
-    public static short NewSprite(int[] paramArrayOfInt1, int paramInt1, int paramInt2, int[] paramArrayOfInt2, byte[] paramArrayOfByte, byte paramByte, short paramShort) {
+    public static short NewSprite(int[] newSprite, int spriteWorld, int idh, int[] imageDataPtr, byte[] matrix, byte visible, short layer) {
         throw new UnsupportedToolboxException("NewSprite");
     }
 
     /** used by SpriteWorld */
-    public static short NewSpriteWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
+    public static short NewSpriteWorld(int[] newSpriteWorld, int destination, int spriteLayer, byte[] backgroundColor, int background) {
         throw new UnsupportedToolboxException("NewSpriteWorld");
     }
 
     /** used by Sprite */
-    public static short SetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static short SetSpriteProperty(int sprite, int propertyType, byte[] propertyValue) {
         throw new UnsupportedToolboxException("SetSpriteProperty");
     }
 
     /** used by Sprite */
-    public static short SetSpriteProperty(int paramInt1, int paramInt2, int paramInt3) {
+    public static short SetSpriteProperty(int sprite, int propertyType, int propertyValue) {
         throw new UnsupportedToolboxException("SetSpriteProperty");
     }
 
     /** used by Sprite */
-    public static short SetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+    public static short SetSpriteProperty(int sprite, int propertyType, int[] propertyValue) {
         throw new UnsupportedToolboxException("SetSpriteProperty");
     }
 
     /** used by Sprite */
-    public static short SetSpriteProperty(int paramInt1, int paramInt2, short paramShort) {
+    public static short SetSpriteProperty(int sprite, int propertyType, short propertyValue) {
         throw new UnsupportedToolboxException("SetSpriteProperty");
     }
 
     /** used by Sprite */
-    public static short SetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+    public static short SetSpriteProperty(int sprite, int propertyType, short[] propertyValue) {
         throw new UnsupportedToolboxException("SetSpriteProperty");
     }
 
     /** used by SpriteWorld */
-    public static short SetSpriteWorldClip(int paramInt1, int paramInt2) {
+    public static short SetSpriteWorldClip(int spriteWorld, int clipRgn) {
         throw new UnsupportedToolboxException("SetSpriteWorldClip");
     }
 
     /** used by SpriteWorld */
-    public static short SetSpriteWorldFlags(int paramInt1, int paramInt2, int paramInt3) {
+    public static short SetSpriteWorldFlags(int spriteWorld, int flags, int flagsMask) {
         throw new UnsupportedToolboxException("SetSpriteWorldFlags");
     }
 
     /** used by SpriteWorld */
-    public static short SetSpriteWorldGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static short SetSpriteWorldGraphicsMode(int spriteWorld, int mode, byte[] opColor) {
         throw new UnsupportedToolboxException("SetSpriteWorldGraphicsMode");
     }
 
     /** used by Sprite */
-    public static short SpriteHitTest(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+    public static short SpriteHitTest(int sprite, int flags, int loc, byte[] wasHit) {
         throw new UnsupportedToolboxException("SpriteHitTest");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaCountImages(int paramInt, short[] paramArrayOfShort) {
+    public static int SpriteMediaCountImages(int mh, short[] numImages) {
         throw new UnsupportedToolboxException("SpriteMediaCountImages");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaCountSprites(int paramInt, short[] paramArrayOfShort) {
+    public static int SpriteMediaCountSprites(int mh, short[] numSprites) {
         throw new UnsupportedToolboxException("SpriteMediaCountSprites");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaDisposeImage(int paramInt1, int paramInt2) {
+    public static int SpriteMediaDisposeImage(int mh, int imageIndex) {
         throw new UnsupportedToolboxException("SpriteMediaDisposeImage");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
+    public static int SpriteMediaGetActionVariable(int mh, int variableID, float[] value) {
         throw new UnsupportedToolboxException("SpriteMediaGetActionVariable");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static int SpriteMediaGetActionVariableAsString(int mh, int variableID, byte[] theCString) {
         throw new UnsupportedToolboxException("SpriteMediaGetActionVariableAsString");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetActionVariableAsString(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+    public static int SpriteMediaGetActionVariableAsString(int mh, int variableID, int[] theCString) {
         throw new UnsupportedToolboxException("SpriteMediaGetActionVariableAsString");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetDisplayedSampleNumber(int paramInt, int[] paramArrayOfInt) {
+    public static int SpriteMediaGetDisplayedSampleNumber(int mh, int[] sampleNum) {
         throw new UnsupportedToolboxException("SpriteMediaGetDisplayedSampleNumber");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetImageName(int paramInt, short paramShort, byte[] paramArrayOfByte) {
+    public static int SpriteMediaGetImageName(int mh, short imageIndex, byte[] imageName) {
         throw new UnsupportedToolboxException("SpriteMediaGetImageName");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetIndImageDescription(int paramInt1, short paramShort, int paramInt2) {
+    public static int SpriteMediaGetIndImageDescription(int mh, short imageIndex, int imageDescription) {
         throw new UnsupportedToolboxException("SpriteMediaGetIndImageDescription");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, byte[] paramArrayOfByte) {
+    public static int SpriteMediaGetIndImageProperty(int mh, short imageIndex, int imagePropertyType, byte[] imagePropertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaGetIndImageProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetIndImageProperty(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt) {
+    public static int SpriteMediaGetIndImageProperty(int mh, short imageIndex, int imagePropertyType, int[] imagePropertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaGetIndImageProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetSpriteName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static int SpriteMediaGetSpriteName(int mh, int spriteID, byte[] spriteName) {
         throw new UnsupportedToolboxException("SpriteMediaGetSpriteName");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+    public static int SpriteMediaGetSpriteProperty(int mh, int spriteIndex, int propertyType, byte[] propertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaGetSpriteProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+    public static int SpriteMediaGetSpriteProperty(int mh, int spriteIndex, int propertyType, int[] propertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaGetSpriteProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaGetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short[] paramArrayOfShort) {
+    public static int SpriteMediaGetSpriteProperty(int mh, int spriteIndex, int propertyType, short[] propertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaGetSpriteProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaHitTestAllSprites(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+    public static int SpriteMediaHitTestAllSprites(int mh, int flags, int loc, int[] spriteHitIndex) {
         throw new UnsupportedToolboxException("SpriteMediaHitTestAllSprites");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaHitTestOneSprite(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
+    public static int SpriteMediaHitTestOneSprite(int mh, int spriteIndex, int flags, int loc, byte[] wasHit) {
         throw new UnsupportedToolboxException("SpriteMediaHitTestOneSprite");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaNewImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public static int SpriteMediaNewImage(int mh, int dataRef, int dataRefType, int desiredID) {
         throw new UnsupportedToolboxException("SpriteMediaNewImage");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSetActionVariable(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
+    public static int SpriteMediaSetActionVariable(int mh, int variableID, float[] value) {
         throw new UnsupportedToolboxException("SpriteMediaSetActionVariable");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSetActionVariableToString(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static int SpriteMediaSetActionVariableToString(int mh, int variableID, byte[] theCString) {
         throw new UnsupportedToolboxException("SpriteMediaSetActionVariableToString");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
+    public static int SpriteMediaSetSpriteProperty(int mh, int spriteIndex, int propertyType, byte[] propertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaSetSpriteProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public static int SpriteMediaSetSpriteProperty(int mh, int spriteIndex, int propertyType, int propertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaSetSpriteProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSetSpriteProperty(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
+    public static int SpriteMediaSetSpriteProperty(int mh, int spriteIndex, int propertyType, short propertyValue) {
         throw new UnsupportedToolboxException("SpriteMediaSetSpriteProperty");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSpriteIDToIndex(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
+    public static int SpriteMediaSpriteIDToIndex(int mh, int spriteID, short[] spriteIndex) {
         throw new UnsupportedToolboxException("SpriteMediaSpriteIDToIndex");
     }
 
     /** used by SpriteMediaHandler */
-    public static int SpriteMediaSpriteIndexToID(int paramInt, short paramShort, int[] paramArrayOfInt) {
+    public static int SpriteMediaSpriteIndexToID(int mh, short spriteIndex, int[] spriteID) {
         throw new UnsupportedToolboxException("SpriteMediaSpriteIndexToID");
     }
 
     /** used by SpriteWorld */
-    public static short SpriteWorldHitTest(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
+    public static short SpriteWorldHitTest(int spriteWorld, int flags, int loc, int[] spriteHit) {
         throw new UnsupportedToolboxException("SpriteWorldHitTest");
     }
 
     /** used by SpriteWorld */
-    public static short SpriteWorldIdle(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
+    public static short SpriteWorldIdle(int spriteWorld, int flagsIn, int[] flagsOut) {
         throw new UnsupportedToolboxException("SpriteWorldIdle");
     }
 

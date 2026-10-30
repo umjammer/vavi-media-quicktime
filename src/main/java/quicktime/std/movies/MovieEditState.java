@@ -17,8 +17,8 @@ public final class MovieEditState extends QTObject {
 
     private final Movie m;
 
-    MovieEditState(Movie paramMovie, int paramInt) throws QTException {
-        super(paramInt);
-        this.m = paramMovie;
+    MovieEditState(Movie m, int nativeRep) throws QTException {
+        super(nativeRep);
+        this.m = m;
     }
 }

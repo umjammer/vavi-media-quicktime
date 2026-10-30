@@ -43,12 +43,12 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::OpenADefaultComponent"
      * @deprecated <I>should use NoteAllocator calls to get a MusicComponent Instance</I>
      */
-    public MusicComponent(int paramInt) throws QTException {
-        super(1836413801, paramInt);
+    public MusicComponent(int subType) throws QTException {
+        super(1836413801, subType);
     }
 
-    MusicComponent(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    MusicComponent(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -59,9 +59,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::MusicGetDescription"
      */
     public SynthesizerDescription getDescription() throws StdQTException {
-        SynthesizerDescription localSynthesizerDescription = new SynthesizerDescription();
-        StdQTException.checkError(MusicGetDescription(_ID(), localSynthesizerDescription.getBytes()));
-        return localSynthesizerDescription;
+        SynthesizerDescription description = new SynthesizerDescription();
+        StdQTException.checkError(MusicGetDescription(_ID(), description.getBytes()));
+        return description;
     }
 
     /**
@@ -75,11 +75,11 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::MusicGetPartAtomicInstrument"
      */
     public AtomicInstrument getPartAtomicInstrument(int part, int flags) throws StdQTException {
-        int[] arrayOfInt = {0};
-        StdQTException.checkError(MusicGetPartAtomicInstrument(_ID(), part, arrayOfInt, flags));
-        if (arrayOfInt[0] == 0)
+        int[] ai = {0};
+        StdQTException.checkError(MusicGetPartAtomicInstrument(_ID(), part, ai, flags));
+        if (ai[0] == 0)
             return null;
-        return new AtomicInstrument(arrayOfInt[0], this);
+        return new AtomicInstrument(ai[0], this);
     }
 
     /**
@@ -120,9 +120,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::MusicGetPartName"
      */
     public String getPartName(int part) throws StdQTException {
-        byte[] arrayOfByte = new byte[32];
-        StdQTException.checkError(MusicGetPartName(_ID(), part, arrayOfByte));
-        return QTUtils.PString2String(arrayOfByte, 0);
+        byte[] name = new byte[32];
+        StdQTException.checkError(MusicGetPartName(_ID(), part, name));
+        return QTUtils.PString2String(name, 0);
     }
 
     /**
@@ -173,9 +173,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::MusicGetInstrumentKnobDescription"
      */
     public KnobDescription getInstrumentKnobDescrption(int knobIndex) throws StdQTException {
-        KnobDescription localKnobDescription = new KnobDescription();
-        StdQTException.checkError(MusicGetInstrumentKnobDescription(_ID(), knobIndex, localKnobDescription.getBytes()));
-        return localKnobDescription;
+        KnobDescription instrumentKnobDescrption = new KnobDescription();
+        StdQTException.checkError(MusicGetInstrumentKnobDescription(_ID(), knobIndex, instrumentKnobDescrption.getBytes()));
+        return instrumentKnobDescrption;
     }
 
     /**
@@ -187,9 +187,9 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::MusicGetDrumKnobDescription"
      */
     public KnobDescription getDrumKnobDescrption(int knobIndex) throws StdQTException {
-        KnobDescription localKnobDescription = new KnobDescription();
-        StdQTException.checkError(MusicGetDrumKnobDescription(_ID(), knobIndex, localKnobDescription.getBytes()));
-        return localKnobDescription;
+        KnobDescription drumKnobDescrption = new KnobDescription();
+        StdQTException.checkError(MusicGetDrumKnobDescription(_ID(), knobIndex, drumKnobDescrption.getBytes()));
+        return drumKnobDescrption;
     }
 
     /**
@@ -201,52 +201,52 @@ public final class MusicComponent extends Component implements QuickTimeLib {
      * @see "QuickTime::MusicGetKnobDescription"
      */
     public KnobDescription getKnobDescrption(int knobIndex) throws StdQTException {
-        KnobDescription localKnobDescription = new KnobDescription();
-        StdQTException.checkError(MusicGetKnobDescription(_ID(), knobIndex, localKnobDescription.getBytes()));
-        return localKnobDescription;
+        KnobDescription knobDescrption = new KnobDescription();
+        StdQTException.checkError(MusicGetKnobDescription(_ID(), knobIndex, knobDescrption.getBytes()));
+        return knobDescrption;
     }
 
-    private static int MusicGetDescription(int paramInt, byte[] paramArrayOfByte) {
-        return MusicManager.MusicGetDescription(paramInt, paramArrayOfByte);
+    private static int MusicGetDescription(int mc, byte[] pd) {
+        return MusicManager.MusicGetDescription(mc, pd);
     }
 
-    private static int MusicGetPartAtomicInstrument(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
-        return MusicManager.MusicGetPartAtomicInstrument(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    private static int MusicGetPartAtomicInstrument(int mc, int part, int[] ai, int flags) {
+        return MusicManager.MusicGetPartAtomicInstrument(mc, part, ai, flags);
     }
 
-    private static int MusicGetPartName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.MusicGetPartName(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MusicGetPartName(int mc, int part, byte[] name) {
+        return MusicManager.MusicGetPartName(mc, part, name);
     }
 
-    private static int MusicSetPartName(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.MusicSetPartName(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MusicSetPartName(int mc, int part, byte[] name) {
+        return MusicManager.MusicSetPartName(mc, part, name);
     }
 
-    private static int MusicGetKnob(int paramInt1, int paramInt2) {
-        return MusicManager.MusicGetKnob(paramInt1, paramInt2);
+    private static int MusicGetKnob(int mc, int knobID) {
+        return MusicManager.MusicGetKnob(mc, knobID);
     }
 
-    private static int MusicSetKnob(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.MusicSetKnob(paramInt1, paramInt2, paramInt3);
+    private static int MusicSetKnob(int mc, int knobID, int knobValue) {
+        return MusicManager.MusicSetKnob(mc, knobID, knobValue);
     }
 
-    private static int MusicGetMasterTune(int paramInt) {
-        return MusicManager.MusicGetMasterTune(paramInt);
+    private static int MusicGetMasterTune(int mc) {
+        return MusicManager.MusicGetMasterTune(mc);
     }
 
-    private static int MusicSetMasterTune(int paramInt1, int paramInt2) {
-        return MusicManager.MusicSetMasterTune(paramInt1, paramInt2);
+    private static int MusicSetMasterTune(int mc, int masterTune) {
+        return MusicManager.MusicSetMasterTune(mc, masterTune);
     }
 
-    private static int MusicGetInstrumentKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.MusicGetInstrumentKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MusicGetInstrumentKnobDescription(int mc, int knobIndex, byte[] mkd) {
+        return MusicManager.MusicGetInstrumentKnobDescription(mc, knobIndex, mkd);
     }
 
-    private static int MusicGetDrumKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.MusicGetDrumKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MusicGetDrumKnobDescription(int mc, int knobIndex, byte[] mkd) {
+        return MusicManager.MusicGetDrumKnobDescription(mc, knobIndex, mkd);
     }
 
-    private static int MusicGetKnobDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.MusicGetKnobDescription(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MusicGetKnobDescription(int mc, int knobIndex, byte[] mkd) {
+        return MusicManager.MusicGetKnobDescription(mc, knobIndex, mkd);
     }
 }

@@ -175,13 +175,13 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
 
         SWCompositor theCompositor;
 
-        ASpriteWorld(QDGraphics paramQDGraphics1, QDGraphics paramQDGraphics2, QDColor paramQDColor, QDGraphics paramQDGraphics3, SWCompositor paramSWCompositor) throws QTException {
-            super(paramQDGraphics1, paramQDGraphics2, paramQDColor, paramQDGraphics3);
-            this.theCompositor = paramSWCompositor;
+        ASpriteWorld(QDGraphics port, QDGraphics spriteLayer, QDColor backgroundColor, QDGraphics background, SWCompositor theCompositor) throws QTException {
+            super(port, spriteLayer, backgroundColor, background);
+            this.theCompositor = theCompositor;
         }
 
-        void _idle(int paramInt) throws QTException {
-            SWCompositor.this.lastDrawRequiresDrawing = idle(paramInt);
+        void _idle(int flagsIn) throws QTException {
+            SWCompositor.this.lastDrawRequiresDrawing = idle(flagsIn);
             if (SWCompositor.this.recordMovie) {
                 SWCompositor.this.recordMovie = SWCompositor.this.rm.frameReady();
                 if (!SWCompositor.this.recordMovie)
@@ -271,11 +271,11 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
             return null;
         if (this.invalList == null)
             return null;
-        Enumeration<DrawingListener> localEnumeration = this.invalList.members();
-        while (localEnumeration.hasMoreElements()) {
-            Invalidator localInvalidator = (Invalidator) localEnumeration.nextElement();
-            if (localInvalidator.getTarget().equals(member))
-                return localInvalidator;
+        Enumeration<DrawingListener> enumeration = this.invalList.members();
+        while (enumeration.hasMoreElements()) {
+            Invalidator memberInvalidator = (Invalidator) enumeration.nextElement();
+            if (memberInvalidator.getTarget().equals(member))
+                return memberInvalidator;
         }
         return null;
     }
@@ -368,9 +368,9 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @deprecated
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
+    public void setMatrix(Matrix matrix) throws QTException {
         if (this.mSpriteWorld != null) {
-            this.mSpriteWorld.setMatrix(paramMatrix);
+            this.mSpriteWorld.setMatrix(matrix);
         }
     }
 
@@ -383,8 +383,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @deprecated
      */
     public Dimension getInitialSize() throws QTException {
-        QDRect localQDRect = this.mSpriteGWorld.getPortRect();
-        return new Dimension(localQDRect.getWidth(), localQDRect.getHeight());
+        QDRect portRect = this.mSpriteGWorld.getPortRect();
+        return new Dimension(portRect.getWidth(), portRect.getHeight());
     }
 
     /**
@@ -398,8 +398,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
-        QDRect localQDRect = this.mSpriteGWorld.getPortRect();
-        return new QDDimension(localQDRect.getWidth(), localQDRect.getHeight());
+        QDRect portRect = this.mSpriteGWorld.getPortRect();
+        return new QDDimension(portRect.getWidth(), portRect.getHeight());
     }
 
     /**
@@ -475,9 +475,9 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
         } else {
             this.savedMatrix.setTx(bounds.getX());
             this.savedMatrix.setTy(bounds.getY());
-            QDRect localQDRect = this.mSpriteGWorld.getPortRect();
-            this.savedMatrix.setSx(bounds.getWidth() / localQDRect.getWidth());
-            this.savedMatrix.setSy(bounds.getHeight() / localQDRect.getHeight());
+            QDRect portRect = this.mSpriteGWorld.getPortRect();
+            this.savedMatrix.setSx(bounds.getWidth() / portRect.getWidth());
+            this.savedMatrix.setSy(bounds.getHeight() / portRect.getHeight());
         }
         this.bnds = bounds;
     }
@@ -493,10 +493,10 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**
@@ -530,16 +530,16 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     @Override
     public final void redraw(Region invalidRgn) throws QTException {
         if (this.mSpriteWorld != null) {
-            QDRect localQDRect1 = null;
+            QDRect invalidArea = null;
             if (invalidRgn != null) {
-                QDRect localQDRect2 = invalidRgn.getRgnBBox();
-                localQDRect1 = localQDRect2.union(getDisplayBounds());
-                if (localQDRect2.equals(localQDRect1)) {
-                    localQDRect1 = null;
+                QDRect rgnBBox = invalidRgn.getRgnBBox();
+                invalidArea = rgnBBox.union(getDisplayBounds());
+                if (rgnBBox.equals(invalidArea)) {
+                    invalidArea = null;
                 } else
-                    localQDRect1 = localQDRect2.intersection(getDisplayBounds());
+                    invalidArea = rgnBBox.intersection(getDisplayBounds());
             }
-            this.mSpriteWorld.invalidate(localQDRect1);
+            this.mSpriteWorld.invalidate(invalidArea);
             idle();
         }
     }
@@ -629,14 +629,14 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
             if ((getClip() != null) && (!getClip().pointIn(this.hitTestPoint))) {
                 return null;
             }
-            Sprite localSprite = this.mSpriteWorld.hitTest(this.hitTestFlag, this.hitTestPoint);
-            if (localSprite == null)
+            Sprite sprite = this.mSpriteWorld.hitTest(this.hitTestFlag, this.hitTestPoint);
+            if (sprite == null)
                 return null;
-            Enumeration localEnumeration = sprites();
-            while (localEnumeration.hasMoreElements()) {
-                TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-                if (localSprite.equals(localTwoDSprite.getSprite())) {
-                    return localTwoDSprite;
+            Enumeration enumeration = sprites();
+            while (enumeration.hasMoreElements()) {
+                TwoDSprite twoDSprite = (TwoDSprite) enumeration.nextElement();
+                if (sprite.equals(twoDSprite.getSprite())) {
+                    return twoDSprite;
                 }
             }
         }
@@ -685,8 +685,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      */
     @Override
     public boolean tickle(float er, int time) throws QTException {
-        Timer localTimer = getTimer();
-        if ((localTimer.isActive()) && (this.mSpriteWorld != null)) {
+        Timer timer = getTimer();
+        if ((timer.isActive()) && (this.mSpriteWorld != null)) {
             super.tickle(er, time);
             if (this.invalList != null)
                 this.invalList.tickle(er, time);
@@ -835,8 +835,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     protected synchronized void postProcessAdd(Object member, TwoDSprite s) throws QTException {
         doDynamicImageAdd(member, s);
         s.setParent(this);
-        if ((member instanceof Notifier localNotifier)) {
-            localNotifier.addNotifyListener(s);
+        if ((member instanceof Notifier notifier)) {
+            notifier.addNotifyListener(s);
         }
         memberAdded(member);
         if (this.mSpriteWorld != null) {
@@ -881,17 +881,17 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @deprecated
      */
     protected void saveMembers() throws QTException {
-        boolean bool = this.autoRedraw;
+        boolean autoRedraw = this.autoRedraw;
         try {
             this.autoRedraw = false;
-            for (Enumeration localEnumeration = sprites(); localEnumeration.hasMoreElements(); ) {
-                TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-                doDynamicImageRemove(getSpriteMember(localTwoDSprite), localTwoDSprite);
-                localTwoDSprite.removeNotify();
+            for (Enumeration enumeration = sprites(); enumeration.hasMoreElements(); ) {
+                TwoDSprite twoDSprite = (TwoDSprite) enumeration.nextElement();
+                doDynamicImageRemove(getSpriteMember(twoDSprite), twoDSprite);
+                twoDSprite.removeNotify();
             }
         } finally {
-            Enumeration localEnumeration;
-            this.autoRedraw = bool;
+            Enumeration enumeration;
+            this.autoRedraw = autoRedraw;
         }
     }
 
@@ -906,17 +906,17 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @deprecated
      */
     protected void createMembers() throws QTException {
-        boolean bool = this.autoRedraw;
+        boolean autoRedraw = this.autoRedraw;
         try {
             this.autoRedraw = false;
-            for (Enumeration localEnumeration = sprites(); localEnumeration.hasMoreElements(); ) {
-                TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-                localTwoDSprite.createSprite(this.mSpriteWorld);
-                doDynamicImageAdd(getSpriteMember(localTwoDSprite), localTwoDSprite);
+            for (Enumeration enumeration = sprites(); enumeration.hasMoreElements(); ) {
+                TwoDSprite twoDSprite = (TwoDSprite) enumeration.nextElement();
+                twoDSprite.createSprite(this.mSpriteWorld);
+                doDynamicImageAdd(getSpriteMember(twoDSprite), twoDSprite);
             }
         } finally {
-            Enumeration localEnumeration;
-            this.autoRedraw = bool;
+            Enumeration enumeration;
+            this.autoRedraw = autoRedraw;
         }
     }
 
@@ -929,31 +929,31 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
     public String toString() {
         try {
             return getClass().getName() + "[sw=" + this.mSpriteWorld + ",timer=" + getTimer() + ",grafPort=" + getGWorld() + ",bounds=" + getDisplayBounds() + "]";
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         }
         return getClass().getName();
     }
 
-    private void doDynamicImageAdd(Object paramObject, TwoDSprite paramTwoDSprite) throws QTException {
-        if ((this.mSpriteWorld != null) && ((paramObject instanceof DynamicImage))) {
-            Invalidator localInvalidator = ((DynamicImage) paramObject).addedToCompositor(this, paramTwoDSprite);
-            if (localInvalidator != null) {
+    private void doDynamicImageAdd(Object image, TwoDSprite twoDSprite) throws QTException {
+        if ((this.mSpriteWorld != null) && ((image instanceof DynamicImage))) {
+            Invalidator invalidator = ((DynamicImage) image).addedToCompositor(this, twoDSprite);
+            if (invalidator != null) {
                 if (this.invalList == null)
                     this.invalList = new TickleList();
-                this.invalList.addMember(localInvalidator);
+                this.invalList.addMember(invalidator);
             }
         }
     }
 
-    private void doDynamicImageRemove(Object paramObject, TwoDSprite paramTwoDSprite) throws QTException {
-        if ((this.mSpriteWorld != null) && ((paramObject instanceof DynamicImage))) {
-            ((DynamicImage) paramObject).removedFromCompositor(this);
+    private void doDynamicImageRemove(Object image, TwoDSprite twoDSprite) throws QTException {
+        if ((this.mSpriteWorld != null) && ((image instanceof DynamicImage))) {
+            ((DynamicImage) image).removedFromCompositor(this);
             if (this.invalList != null) {
-                Enumeration localEnumeration = this.invalList.members();
-                while (localEnumeration.hasMoreElements()) {
-                    Invalidator localInvalidator = (Invalidator) localEnumeration.nextElement();
-                    if (localInvalidator.getTarget().equals(paramTwoDSprite)) {
-                        this.invalList.removeMember(localInvalidator);
+                Enumeration enumeration = this.invalList.members();
+                while (enumeration.hasMoreElements()) {
+                    Invalidator invalidator = (Invalidator) enumeration.nextElement();
+                    if (invalidator.getTarget().equals(twoDSprite)) {
+                        this.invalList.removeMember(invalidator);
                     }
                 }
                 if (this.invalList.isEmpty()) {
@@ -969,14 +969,14 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @deprecated
      */
     @Override
-    public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
+    public synchronized void addDrawingListener(DrawingListener drawingListener) {
         if (this.listenerList == null) {
             this.listenerList = new Vector<>();
         }
-        if (this.listenerList.contains(paramDrawingListener)) {
+        if (this.listenerList.contains(drawingListener)) {
             return;
         }
-        this.listenerList.addElement(paramDrawingListener);
+        this.listenerList.addElement(drawingListener);
     }
 
     /**
@@ -985,8 +985,8 @@ public abstract class SWCompositor extends SimpleSpace implements QTDisplaySpace
      * @deprecated
      */
     @Override
-    public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
-        this.listenerList.removeElement(paramDrawingListener);
+    public synchronized void removeDrawingListener(DrawingListener drawingListener) {
+        this.listenerList.removeElement(drawingListener);
         if (this.listenerList.isEmpty()) {
             this.listenerList = null;
         }

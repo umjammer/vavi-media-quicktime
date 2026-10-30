@@ -36,15 +36,15 @@ public final class ViewAngleAspectCameraData extends CameraData implements Primi
      * @param fov The field of view
      * @param aspectRatio The aspect ratio of x to y
      */
-    public ViewAngleAspectCameraData(CameraData paramCameraData, float fov, float aspectRatio) {
+    public ViewAngleAspectCameraData(CameraData cameraBytes, float fov, float aspectRatio) {
         this();
-        setCameraBytes(paramCameraData);
+        setCameraBytes(cameraBytes);
         setFov(fov);
         setAspectRatio(aspectRatio);
     }
 
-    private ViewAngleAspectCameraData(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private ViewAngleAspectCameraData(byte[] bytes) {
+        super(bytes);
     }
 
     /**
@@ -64,15 +64,15 @@ public final class ViewAngleAspectCameraData extends CameraData implements Primi
     /**
      * sets the field of view
      */
-    public void setFov(float paramFloat) {
-        setFloatAt(60, paramFloat);
+    public void setFov(float fov) {
+        setFloatAt(60, fov);
     }
 
     /**
      * sets the aspect ratio
      */
-    public void setAspectRatio(float paramFloat) {
-        setFloatAt(64, paramFloat);
+    public void setAspectRatio(float aspectRatio) {
+        setFloatAt(64, aspectRatio);
     }
 
     /**
@@ -83,11 +83,11 @@ public final class ViewAngleAspectCameraData extends CameraData implements Primi
         return new ViewAngleAspectCameraData(this.bytes);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

@@ -83,7 +83,7 @@ public class QTImage implements QuickTimeLib {
      * @see "QuickTime::CompressImage"
      */
     public static ImageDescription compress(QDGraphics src, QDRect srcRect, int quality, int cType, EncodedImage data) throws QTException {
-        ImageDescription localImageDescription = new ImageDescription(0);
+        ImageDescription desc = new ImageDescription(0);
         if (src == null) {
             throw new StdQTException(-50);
         }
@@ -93,17 +93,17 @@ public class QTImage implements QuickTimeLib {
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
             if ((data instanceof ByteEncodedImage)) {
-                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(localImageDescription), ((ByteEncodedImage) data).getBytes());
+                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(desc), ((ByteEncodedImage) data).getBytes());
             } else if ((data instanceof IntEncodedImage)) {
-                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(localImageDescription), ((IntEncodedImage) data).getInts());
+                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(desc), ((IntEncodedImage) data).getInts());
             } else if ((data instanceof RawEncodedImage)) {
-                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) data));
+                i = CompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), quality, cType, QTObject.ID(desc), QTObject.ID((RawEncodedImage) data));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return localImageDescription;
+        return desc;
     }
 
     /**
@@ -129,7 +129,7 @@ public class QTImage implements QuickTimeLib {
      * @see "QuickTime::FCompressImage"
      */
     public static ImageDescription fCompress(QDGraphics src, QDRect srcRect, int colorDepth, int quality, int cType, CodecComponent c, ColorTable clut, int flags, EncodedImage data) throws QTException {
-        ImageDescription localImageDescription = new ImageDescription(0);
+        ImageDescription desc = new ImageDescription(0);
         if (src == null) {
             throw new StdQTException(-50);
         }
@@ -139,17 +139,17 @@ public class QTImage implements QuickTimeLib {
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
             if ((data instanceof ByteEncodedImage)) {
-                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(localImageDescription), ((ByteEncodedImage) data).getBytes());
+                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(desc), ((ByteEncodedImage) data).getBytes());
             } else if ((data instanceof IntEncodedImage)) {
-                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(localImageDescription), ((IntEncodedImage) data).getInts());
+                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(desc), ((IntEncodedImage) data).getInts());
             } else if ((data instanceof RawEncodedImage)) {
-                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) data));
+                i = FCompressImage(QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), QTObject.ID(clut), (short) flags, 0, 0, 0, QTObject.ID(desc), QTObject.ID((RawEncodedImage) data));
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return localImageDescription;
+        return desc;
     }
 
     /**
@@ -170,35 +170,35 @@ public class QTImage implements QuickTimeLib {
      * @see "QuickTime::ConvertImage"
      */
     public static ImageDescription convert(ImageDescription srcDD, EncodedImage srcData, int colorDepth, ColorTable clut, int accuracy, int quality, int cType, CodecComponent codec, EncodedImage outData) throws QTException {
-        ImageDescription localImageDescription = new ImageDescription(0);
+        ImageDescription dstDD = new ImageDescription(0);
         int i = -50;
         if ((srcData instanceof ByteEncodedImage)) {
             if ((outData instanceof ByteEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((ByteEncodedImage) outData).getBytes());
+                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), ((ByteEncodedImage) outData).getBytes());
             } else if ((outData instanceof IntEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((IntEncodedImage) outData).getInts());
+                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), ((IntEncodedImage) outData).getInts());
             } else if ((outData instanceof RawEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) outData));
+                i = ConvertImage(QTObject.ID(srcDD), ((ByteEncodedImage) srcData).getBytes(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), QTObject.ID((RawEncodedImage) outData));
             }
         } else if ((srcData instanceof IntEncodedImage)) {
             if ((outData instanceof ByteEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((ByteEncodedImage) outData).getBytes());
+                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), ((ByteEncodedImage) outData).getBytes());
             } else if ((outData instanceof IntEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((IntEncodedImage) outData).getInts());
+                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), ((IntEncodedImage) outData).getInts());
             } else if ((outData instanceof RawEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) outData));
+                i = ConvertImage(QTObject.ID(srcDD), ((IntEncodedImage) srcData).getInts(), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), QTObject.ID((RawEncodedImage) outData));
             }
         } else if ((srcData instanceof RawEncodedImage)) {
             if ((outData instanceof ByteEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((ByteEncodedImage) outData).getBytes());
+                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), ((ByteEncodedImage) outData).getBytes());
             } else if ((outData instanceof IntEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), ((IntEncodedImage) outData).getInts());
+                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), ((IntEncodedImage) outData).getInts());
             } else if ((outData instanceof RawEncodedImage)) {
-                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(localImageDescription), QTObject.ID((RawEncodedImage) outData));
+                i = ConvertImage(QTObject.ID(srcDD), QTObject.ID((RawEncodedImage) srcData), (short) colorDepth, QTObject.ID(clut), accuracy, quality, cType, QTObject.ID(codec), QTObject.ID(dstDD), QTObject.ID((RawEncodedImage) outData));
             }
         }
         StdQTException.checkError(i);
-        return localImageDescription;
+        return dstDD;
     }
 
     /**
@@ -348,7 +348,7 @@ public class QTImage implements QuickTimeLib {
      * @see "see QuickTime::GetMaxCompressionSize"
      */
     public static int getMaxCompressionSize(QDGraphics src, QDRect srcRect, int colorDepth, int quality, int cType, CodecComponent c) throws StdQTException, QDException {
-        int[] arrayOfInt = new int[1];
+        int[] size = new int[1];
         if (src == null) {
             throw new StdQTException(-50);
         }
@@ -357,12 +357,12 @@ public class QTImage implements QuickTimeLib {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
-            i = GetMaxCompressionSize(QTObject.ID(src.getPixMap()), srcRect == null ? null : srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), arrayOfInt);
+            i = GetMaxCompressionSize(QTObject.ID(src.getPixMap()), srcRect == null ? null : srcRect.getRect(), (short) colorDepth, quality, cType, QTObject.ID(c), size);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return size[0];
     }
 
     /**
@@ -375,17 +375,17 @@ public class QTImage implements QuickTimeLib {
      * @see "QuickTime::GetCompressedImageSize"
      */
     public static int getCompressedSize(ImageDescription desc, EncodedImage data) throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] size = new int[1];
         int i = -50;
         if ((data instanceof ByteEncodedImage)) {
-            i = GetCompressedImageSize(QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), 0, 0, arrayOfInt);
+            i = GetCompressedImageSize(QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), 0, 0, size);
         } else if ((data instanceof IntEncodedImage)) {
-            i = GetCompressedImageSize(QTObject.ID(desc), ((IntEncodedImage) data).getInts(), 0, 0, arrayOfInt);
+            i = GetCompressedImageSize(QTObject.ID(desc), ((IntEncodedImage) data).getInts(), 0, 0, size);
         } else if ((data instanceof RawEncodedImage)) {
-            i = GetCompressedImageSize(QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), 0, 0, arrayOfInt);
+            i = GetCompressedImageSize(QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), 0, 0, size);
         }
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return size[0];
     }
 
     /**
@@ -405,7 +405,7 @@ public class QTImage implements QuickTimeLib {
      * @see "see QuickTime::GetCompressionTime"
      */
     public static int getCompressionTime(QDGraphics src, QDRect srcRect, int colorDepth, int cType, CodecComponent c, int spatialQuality, int temporalQuality) throws StdQTException, QDException {
-        int[] arrayOfInt = new int[1];
+        int[] time = new int[1];
         int i = 0;
         int j = 0;
         synchronized (QTNative.globalsLock) {
@@ -415,13 +415,13 @@ public class QTImage implements QuickTimeLib {
                 SetGWorld(QTObject.ID(src), 0);
                 i = QTObject.ID(src.getPixMap());
             }
-            j = GetCompressionTime(i, srcRect == null ? null : srcRect.getRect(), (short) colorDepth, cType, QTObject.ID(c), spatialQuality, temporalQuality, arrayOfInt);
+            j = GetCompressionTime(i, srcRect == null ? null : srcRect.getRect(), (short) colorDepth, cType, QTObject.ID(c), spatialQuality, temporalQuality, time);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
         }
         StdQTException.checkError(j);
-        return arrayOfInt[0];
+        return time[0];
     }
 
     /**
@@ -439,7 +439,7 @@ public class QTImage implements QuickTimeLib {
      * @see "QuickTime::GetSimilarity"
      */
     public static float getSimilarity(QDGraphics src, QDRect srcRect, ImageDescription desc, EncodedImage data) throws StdQTException, QDException {
-        int[] arrayOfInt = new int[1];
+        int[] similarity = new int[1];
         if (src == null) {
             throw new StdQTException(-50);
         }
@@ -449,168 +449,168 @@ public class QTImage implements QuickTimeLib {
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
             if ((data instanceof ByteEncodedImage)) {
-                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getRect(), QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), arrayOfInt);
+                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getRect(), QTObject.ID(desc), ((ByteEncodedImage) data).getBytes(), similarity);
             } else if ((data instanceof IntEncodedImage)) {
-                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getBytes(), QTObject.ID(desc), ((IntEncodedImage) data).getInts(), arrayOfInt);
+                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getBytes(), QTObject.ID(desc), ((IntEncodedImage) data).getInts(), similarity);
             } else if ((data instanceof RawEncodedImage)) {
-                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getBytes(), QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), arrayOfInt);
+                i = GetSimilarity(QTObject.ID(src.getPixMap()), srcRect.getBytes(), QTObject.ID(desc), QTObject.ID((RawEncodedImage) data), similarity);
             }
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        return QTUtils.Fix2X(similarity[0]);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static short CompressImage(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return ImageCompressionManager.CompressImage(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short CompressImage(int src, byte[] srcRect, int quality, int cType, int desc, int data) {
+        return ImageCompressionManager.CompressImage(src, srcRect, quality, cType, desc, data);
     }
 
-    private static short CompressImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte2) {
-        return ImageCompressionManager.CompressImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramInt4, paramArrayOfByte2);
+    private static short CompressImage(int src, byte[] srcRect, int quality, int cType, int desc, byte[] data) {
+        return ImageCompressionManager.CompressImage(src, srcRect, quality, cType, desc, data);
     }
 
-    private static short CompressImage(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
-        return ImageCompressionManager.CompressImage(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    private static short CompressImage(int src, byte[] srcRect, int quality, int cType, int desc, int[] data) {
+        return ImageCompressionManager.CompressImage(src, srcRect, quality, cType, desc, data);
     }
 
-    private static short FCompressImage(int paramInt1, byte[] paramArrayOfByte, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int paramInt10) {
-        return ImageCompressionManager.FCompressImage(paramInt1, paramArrayOfByte, paramShort1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort2, paramInt6, paramInt7, paramInt8, paramInt9, paramInt10);
+    private static short FCompressImage(int src, byte[] srcRect, short colorDepth, int quality, int cType, int codec, int ctable, short flags, int bufferSize, int progressProc, int completionProc, int desc, int data) {
+        return ImageCompressionManager.FCompressImage(src, srcRect, colorDepth, quality, cType, codec, ctable, flags, bufferSize, progressProc, completionProc, desc, data);
     }
 
-    private static short FCompressImage(int paramInt1, byte[] paramArrayOfByte1, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, byte[] paramArrayOfByte2) {
-        return ImageCompressionManager.FCompressImage(paramInt1, paramArrayOfByte1, paramShort1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort2, paramInt6, paramInt7, paramInt8, paramInt9, paramArrayOfByte2);
+    private static short FCompressImage(int src, byte[] srcRect, short colorDepth, int quality, int cType, int codec, int ctable, short flags, int bufferSize, int progressProc, int completionProc, int desc, byte[] data) {
+        return ImageCompressionManager.FCompressImage(src, srcRect, colorDepth, quality, cType, codec, ctable, flags, bufferSize, progressProc, completionProc, desc, data);
     }
 
-    private static short FCompressImage(int paramInt1, byte[] paramArrayOfByte, short paramShort1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, short paramShort2, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int[] paramArrayOfInt) {
-        return ImageCompressionManager.FCompressImage(paramInt1, paramArrayOfByte, paramShort1, paramInt2, paramInt3, paramInt4, paramInt5, paramShort2, paramInt6, paramInt7, paramInt8, paramInt9, paramArrayOfInt);
+    private static short FCompressImage(int src, byte[] srcRect, short colorDepth, int quality, int cType, int codec, int ctable, short flags, int bufferSize, int progressProc, int completionProc, int desc, int[] data) {
+        return ImageCompressionManager.FCompressImage(src, srcRect, colorDepth, quality, cType, codec, ctable, flags, bufferSize, progressProc, completionProc, desc, data);
     }
 
-    private static short ConvertImage(int paramInt1, byte[] paramArrayOfByte1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte2) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfByte1, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfByte2);
+    private static short ConvertImage(int srcDD, byte[] srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, byte[] dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int[] paramArrayOfInt) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfInt);
+    private static short ConvertImage(int srcDD, byte[] srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int[] dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    private static short ConvertImage(int srcDD, byte[] srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, int[] paramArrayOfInt, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfInt, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfByte);
+    private static short ConvertImage(int srcDD, int[] srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, byte[] dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, int[] paramArrayOfInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfInt1, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfInt2);
+    private static short ConvertImage(int srcDD, int[] srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int[] dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, int[] paramArrayOfInt, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramArrayOfInt, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    private static short ConvertImage(int srcDD, int[] srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramInt2, paramShort, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramArrayOfByte);
+    private static short ConvertImage(int srcDD, int srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, byte[] dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, int[] paramArrayOfInt) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramInt2, paramShort, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramArrayOfInt);
+    private static short ConvertImage(int srcDD, int srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int[] dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short ConvertImage(int paramInt1, int paramInt2, short paramShort, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, int paramInt9) {
-        return ImageCompressionManager.ConvertImage(paramInt1, paramInt2, paramShort, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramInt9);
+    private static short ConvertImage(int srcDD, int srcData, short colorDepth, int ctable, int accuracy, int quality, int cType, int codec, int dstDD, int dstData) {
+        return ImageCompressionManager.ConvertImage(srcDD, srcData, colorDepth, ctable, accuracy, quality, cType, codec, dstDD, dstData);
     }
 
-    private static short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte1, int paramInt5, int paramInt6, byte[] paramArrayOfByte2, int paramInt7) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte1, paramInt5, paramInt6, paramArrayOfByte2, paramInt7);
+    private static short TrimImage(int desc, int inData, int inBufferSize, int dataProc, byte[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt, int paramInt5, int paramInt6, byte[] paramArrayOfByte, int paramInt7) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt, paramInt5, paramInt6, paramArrayOfByte, paramInt7);
+    private static short TrimImage(int desc, int inData, int inBufferSize, int dataProc, int[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, byte[] paramArrayOfByte, int paramInt8) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramArrayOfByte, paramInt8);
+    private static short TrimImage(int desc, int inData, int inBufferSize, int dataProc, int outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, int paramInt4, int paramInt5, byte[] paramArrayOfByte2, int paramInt6) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramArrayOfByte1, paramInt4, paramInt5, paramArrayOfByte2, paramInt6);
+    private static short TrimImage(int desc, int[] inData, int inBufferSize, int dataProc, byte[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2, int paramInt4, int paramInt5, byte[] paramArrayOfByte, int paramInt6) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2, paramInt4, paramInt5, paramArrayOfByte, paramInt6);
+    private static short TrimImage(int desc, int[] inData, int inBufferSize, int dataProc, int[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, byte[] paramArrayOfByte, int paramInt7) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfInt, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramArrayOfByte, paramInt7);
+    private static short TrimImage(int desc, int[] inData, int inBufferSize, int dataProc, int outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int paramInt4, int paramInt5, byte[] paramArrayOfByte3, int paramInt6) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramInt4, paramInt5, paramArrayOfByte3, paramInt6);
+    private static short TrimImage(int desc, byte[] inData, int inBufferSize, int dataProc, byte[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4, int paramInt5, byte[] paramArrayOfByte2, int paramInt6) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfInt, paramInt4, paramInt5, paramArrayOfByte2, paramInt6);
+    private static short TrimImage(int desc, byte[] inData, int inBufferSize, int dataProc, int[] outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short TrimImage(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, byte[] paramArrayOfByte2, int paramInt7) {
-        return ImageCompressionManager.TrimImage(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramArrayOfByte2, paramInt7);
+    private static short TrimImage(int desc, byte[] inData, int inBufferSize, int dataProc, int outData, int outBufferSize, int flushProc, byte[] trimRect, int progressProc) {
+        return ImageCompressionManager.TrimImage(desc, inData, inBufferSize, dataProc, outData, outBufferSize, flushProc, trimRect, progressProc);
     }
 
-    private static short DecompressImage(byte[] paramArrayOfByte1, int paramInt1, int paramInt2, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, short paramShort, int paramInt3) {
-        return ImageCompressionManager.DecompressImage(paramArrayOfByte1, paramInt1, paramInt2, paramArrayOfByte2, paramArrayOfByte3, paramShort, paramInt3);
+    private static short DecompressImage(byte[] data, int desc, int dst, byte[] srcRect, byte[] dstRect, short mode, int mask) {
+        return ImageCompressionManager.DecompressImage(data, desc, dst, srcRect, dstRect, mode, mask);
     }
 
-    private static short DecompressImage(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt3) {
-        return ImageCompressionManager.DecompressImage(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramShort, paramInt3);
+    private static short DecompressImage(int[] data, int desc, int dst, byte[] srcRect, byte[] dstRect, short mode, int mask) {
+        return ImageCompressionManager.DecompressImage(data, desc, dst, srcRect, dstRect, mode, mask);
     }
 
-    private static short DecompressImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt4) {
-        return ImageCompressionManager.DecompressImage(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2, paramShort, paramInt4);
+    private static short DecompressImage(int data, int desc, int dst, byte[] srcRect, byte[] dstRect, short mode, int mask) {
+        return ImageCompressionManager.DecompressImage(data, desc, dst, srcRect, dstRect, mode, mask);
     }
 
-    private static short FDecompressImage(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort, int paramInt4, int paramInt5, byte[] paramArrayOfByte3, int paramInt6, int paramInt7, int paramInt8, int paramInt9, int paramInt10) {
-        return ImageCompressionManager.FDecompressImage(paramInt1, paramInt2, paramInt3, paramArrayOfByte1, paramArrayOfByte2, paramShort, paramInt4, paramInt5, paramArrayOfByte3, paramInt6, paramInt7, paramInt8, paramInt9, paramInt10);
+    private static short FDecompressImage(int data, int desc, int dst, byte[] srcRect, byte[] matrix, short mode, int mask, int matte, byte[] matteRect, int accuracy, int codec, int bufferSize, int dataProc, int progressProc) {
+        return ImageCompressionManager.FDecompressImage(data, desc, dst, srcRect, matrix, mode, mask, matte, matteRect, accuracy, codec, bufferSize, dataProc, progressProc);
     }
 
-    private static short GetMaxCompressionSize(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetMaxCompressionSize(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    private static short GetMaxCompressionSize(int src, byte[] srcRect, short colorDepth, int quality, int cType, int codec, int[] size) {
+        return ImageCompressionManager.GetMaxCompressionSize(src, srcRect, colorDepth, quality, cType, codec, size);
     }
 
-    private static short GetCompressedImageSize(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCompressedImageSize(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt);
+    private static short GetCompressedImageSize(int desc, byte[] data, int bufferSize, int dataProc, int[] size) {
+        return ImageCompressionManager.GetCompressedImageSize(desc, data, bufferSize, dataProc, size);
     }
 
-    private static short GetCompressedImageSize(int paramInt1, int[] paramArrayOfInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GetCompressedImageSize(paramInt1, paramArrayOfInt1, paramInt2, paramInt3, paramArrayOfInt2);
+    private static short GetCompressedImageSize(int desc, int[] data, int bufferSize, int dataProc, int[] size) {
+        return ImageCompressionManager.GetCompressedImageSize(desc, data, bufferSize, dataProc, size);
     }
 
-    private static short GetCompressedImageSize(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCompressedImageSize(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    private static short GetCompressedImageSize(int desc, int data, int bufferSize, int dataProc, int[] size) {
+        return ImageCompressionManager.GetCompressedImageSize(desc, data, bufferSize, dataProc, size);
     }
 
-    private static short GetCompressionTime(int paramInt1, byte[] paramArrayOfByte, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCompressionTime(paramInt1, paramArrayOfByte, paramShort, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt);
+    private static short GetCompressionTime(int src, byte[] srcRect, short colorDepth, int cType, int codec, int spatialQuality, int temporalQuality, int[] time) {
+        return ImageCompressionManager.GetCompressionTime(src, srcRect, colorDepth, cType, codec, spatialQuality, temporalQuality, time);
     }
 
-    private static short GetSimilarity(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetSimilarity(paramInt1, paramArrayOfByte1, paramInt2, paramArrayOfByte2, paramArrayOfInt);
+    private static short GetSimilarity(int src, byte[] srcRect, int desc, byte[] data, int[] similarity) {
+        return ImageCompressionManager.GetSimilarity(src, srcRect, desc, data, similarity);
     }
 
-    private static short GetSimilarity(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.GetSimilarity(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static short GetSimilarity(int src, byte[] srcRect, int desc, int[] data, int[] similarity) {
+        return ImageCompressionManager.GetSimilarity(src, srcRect, desc, data, similarity);
     }
 
-    private static short GetSimilarity(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetSimilarity(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt);
+    private static short GetSimilarity(int src, byte[] srcRect, int desc, int data, int[] similarity) {
+        return ImageCompressionManager.GetSimilarity(src, srcRect, desc, data, similarity);
     }
 }

@@ -30,8 +30,8 @@ public final class StreamMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    StreamMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    StreamMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -40,8 +40,8 @@ public final class StreamMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new StreamMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new StreamMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class StreamMedia extends Media {
      * @throws quicktime.QTException
      */
     public StreamDescription getStreamDescription(int index) throws QTException {
-        StreamDescription localStreamDescription = new StreamDescription();
-        getNativeSampleDescription(index, localStreamDescription);
-        return localStreamDescription;
+        StreamDescription streamDescription = new StreamDescription();
+        getNativeSampleDescription(index, streamDescription);
+        return streamDescription;
     }
 }

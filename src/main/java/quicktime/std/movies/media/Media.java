@@ -27,61 +27,61 @@ public abstract class Media extends QTObject implements QuickTimeLib {
 
     Track track;
 
-    private static Media makeGenericMedia(int paramInt1, int paramInt2, Track paramTrack) throws QTException {
-        String str = mediaObjects.get(paramInt1);
+    private static Media makeGenericMedia(int mediaType, int nativeRep, Track track) throws QTException {
+        String str = mediaObjects.get(mediaType);
         try {
-            GenericMedia localGenericMedia = null;
+            GenericMedia instance = null;
             if (str == null) {
-                localGenericMedia = new GenericMedia(paramInt2);
+                instance = new GenericMedia(nativeRep);
             } else {
-                Class<?> localClass = ClassLoader.getSystemClassLoader().loadClass(str);
-                Class<?>[] arrayOfClass = new Class[1];
-                arrayOfClass[0] = Class.forName("java.lang.Integer");
-                Constructor<?> localConstructor = localClass.getDeclaredConstructor(arrayOfClass);
+                Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(str);
+                Class<?>[] classes = new Class[1];
+                classes[0] = Class.forName("java.lang.Integer");
+                Constructor<?> declaredConstructor = clazz.getDeclaredConstructor(classes);
                 Object[] arrayOfObject = new Object[1];
-                arrayOfObject[0] = paramInt2;
-                localGenericMedia = (GenericMedia) localConstructor.newInstance(arrayOfObject);
+                arrayOfObject[0] = nativeRep;
+                instance = (GenericMedia) declaredConstructor.newInstance(arrayOfObject);
             }
-            localGenericMedia.setIDs(paramInt1, paramTrack);
-            return localGenericMedia;
-        } catch (Exception localException) {
-            throw new QTException(localException.toString());
+            instance.setIDs(mediaType, track);
+            return instance;
+        } catch (Exception e) {
+            throw new QTException(e.toString());
         }
     }
 
-    private static Media fromGenericType(int paramInt1, Track paramTrack, int paramInt2, DataRef paramDataRef) throws QTException {
-        int i = NewTrackMedia(QTObject.ID(paramTrack), paramInt1, paramInt2, QTObject.ID(paramDataRef), paramDataRef != null ? paramDataRef.getType() : 0);
+    private static Media fromGenericType(int mediaType, Track track, int timeScale, DataRef dataRef) throws QTException {
+        int i = NewTrackMedia(QTObject.ID(track), mediaType, timeScale, QTObject.ID(dataRef), dataRef != null ? dataRef.getType() : 0);
         StdQTException.checkError(GetMoviesError());
-        return makeGenericMedia(paramInt1, i, paramTrack);
+        return makeGenericMedia(mediaType, i, track);
     }
 
-    private static Media makeMedia(int paramInt, Track paramTrack) throws QTException {
-        if (paramInt == 0) {
+    private static Media makeMedia(int media, Track track) throws QTException {
+        if (media == 0) {
             return null;
         }
-        int[] arrayOfInt = new int[1];
-        GetMediaHandlerDescription(paramInt, arrayOfInt, null, null);
+        int[] mediaType = new int[1];
+        GetMediaHandlerDescription(media, mediaType, null, null);
         StdQTException.checkError(GetMoviesError());
-        return switch (arrayOfInt[0]) {
-            case 1735291491 -> new BaseMedia(paramInt, paramTrack);
-            case 1297106247 -> new MPEGMedia(paramInt, paramTrack);
-            case 1836413801 -> new MusicMedia(paramInt, paramTrack);
-            case 1936684398 -> new SoundMedia(paramInt, paramTrack);
-            case 1936749172 -> new SpriteMedia(paramInt, paramTrack);
-            case 1952807028 -> new TextMedia(paramInt, paramTrack);
-            case 1902392164 -> new ThreeDMedia(paramInt, paramTrack);
-            case 1953325924 -> new TimeCodeMedia(paramInt, paramTrack);
-            case 1953981806 -> new TweenMedia(paramInt, paramTrack);
-            case 1986618469 -> new VideoMedia(paramInt, paramTrack);
-            case 1718383464 -> new FlashMedia(paramInt, paramTrack);
-            case 1937011309 -> new StreamMedia(paramInt, paramTrack);
-            case 1836019574 -> new MovieMedia(paramInt, paramTrack);
-            default -> makeGenericMedia(arrayOfInt[0], paramInt, paramTrack);
+        return switch (mediaType[0]) {
+            case 1735291491 -> new BaseMedia(media, track);
+            case 1297106247 -> new MPEGMedia(media, track);
+            case 1836413801 -> new MusicMedia(media, track);
+            case 1936684398 -> new SoundMedia(media, track);
+            case 1936749172 -> new SpriteMedia(media, track);
+            case 1952807028 -> new TextMedia(media, track);
+            case 1902392164 -> new ThreeDMedia(media, track);
+            case 1953325924 -> new TimeCodeMedia(media, track);
+            case 1953981806 -> new TweenMedia(media, track);
+            case 1986618469 -> new VideoMedia(media, track);
+            case 1718383464 -> new FlashMedia(media, track);
+            case 1937011309 -> new StreamMedia(media, track);
+            case 1836019574 -> new MovieMedia(media, track);
+            default -> makeGenericMedia(mediaType[0], media, track);
         };
     }
 
-    protected static void addMediaType(int paramInt, String paramString) {
-        mediaObjects.put(paramInt, paramString);
+    protected static void addMediaType(int type, String className) {
+        mediaObjects.put(type, className);
     }
 
     /**
@@ -96,25 +96,25 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      *  is no known dataRef then null can be passed in.
      * @throws quicktime.QTException
      */
-    public static Media newFromType(int mediaType, Track paramTrack, int timeScale, DataRef dataRef) throws QTException {
-        if ((mediaType == 0) || (paramTrack == null)) {
+    public static Media newFromType(int mediaType, Track itsTrack, int timeScale, DataRef dataRef) throws QTException {
+        if ((mediaType == 0) || (itsTrack == null)) {
             throw new QTException(-50);
         }
         return switch (mediaType) {
-            case 1735291491 -> new BaseMedia(paramTrack, timeScale, dataRef);
-            case 1297106247 -> new MPEGMedia(paramTrack, timeScale, dataRef);
-            case 1836413801 -> new MusicMedia(paramTrack, timeScale, dataRef);
-            case 1936684398 -> new SoundMedia(paramTrack, timeScale, dataRef);
-            case 1936749172 -> new SpriteMedia(paramTrack, timeScale, dataRef);
-            case 1952807028 -> new TextMedia(paramTrack, timeScale, dataRef);
-            case 1902392164 -> new ThreeDMedia(paramTrack, timeScale, dataRef);
-            case 1953325924 -> new TimeCodeMedia(paramTrack, timeScale, dataRef);
-            case 1953981806 -> new TweenMedia(paramTrack, timeScale, dataRef);
-            case 1986618469 -> new VideoMedia(paramTrack, timeScale, dataRef);
-            case 1718383464 -> new FlashMedia(paramTrack, timeScale, dataRef);
-            case 1937011309 -> new StreamMedia(paramTrack, timeScale, dataRef);
-            case 1836019574 -> new MovieMedia(paramTrack, timeScale, dataRef);
-            default -> fromGenericType(mediaType, paramTrack, timeScale, dataRef);
+            case 1735291491 -> new BaseMedia(itsTrack, timeScale, dataRef);
+            case 1297106247 -> new MPEGMedia(itsTrack, timeScale, dataRef);
+            case 1836413801 -> new MusicMedia(itsTrack, timeScale, dataRef);
+            case 1936684398 -> new SoundMedia(itsTrack, timeScale, dataRef);
+            case 1936749172 -> new SpriteMedia(itsTrack, timeScale, dataRef);
+            case 1952807028 -> new TextMedia(itsTrack, timeScale, dataRef);
+            case 1902392164 -> new ThreeDMedia(itsTrack, timeScale, dataRef);
+            case 1953325924 -> new TimeCodeMedia(itsTrack, timeScale, dataRef);
+            case 1953981806 -> new TweenMedia(itsTrack, timeScale, dataRef);
+            case 1986618469 -> new VideoMedia(itsTrack, timeScale, dataRef);
+            case 1718383464 -> new FlashMedia(itsTrack, timeScale, dataRef);
+            case 1937011309 -> new StreamMedia(itsTrack, timeScale, dataRef);
+            case 1836019574 -> new MovieMedia(itsTrack, timeScale, dataRef);
+            default -> fromGenericType(mediaType, itsTrack, timeScale, dataRef);
         };
     }
 
@@ -142,20 +142,20 @@ public abstract class Media extends QTObject implements QuickTimeLib {
         return makeMedia(i, theTrack);
     }
 
-    protected Media(Track paramTrack, int paramInt1, int paramInt2, DataRef paramDataRef) throws QTException {
-        super(allocate(paramTrack, paramInt1, paramInt2, paramDataRef));
-        this.track = paramTrack;
+    protected Media(Track track, int mediaType, int timeScale, DataRef dataRef) throws QTException {
+        super(allocate(track, mediaType, timeScale, dataRef));
+        this.track = track;
     }
 
-    private static int allocate(Track paramTrack, int paramInt1, int paramInt2, DataRef paramDataRef) throws StdQTException {
-        int i = NewTrackMedia(QTObject.ID(paramTrack), paramInt1, paramInt2, QTObject.ID(paramDataRef), paramDataRef != null ? paramDataRef.getType() : 0);
+    private static int allocate(Track track, int mediaType, int timeScale, DataRef dataRef) throws StdQTException {
+        int i = NewTrackMedia(QTObject.ID(track), mediaType, timeScale, QTObject.ID(dataRef), dataRef != null ? dataRef.getType() : 0);
         StdQTException.checkError(GetMoviesError());
         return i;
     }
 
-    Media(Track paramTrack, int paramInt) throws QTException {
-        super(paramInt);
-        this.track = paramTrack;
+    Media(Track track, int nativeRep) throws QTException {
+        super(nativeRep);
+        this.track = track;
     }
 
     protected final int getNativeMediaHandler() throws StdQTException {
@@ -164,8 +164,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
         return i;
     }
 
-    protected final void getNativeSampleDescription(int paramInt, SampleDescription paramSampleDescription) throws StdQTException {
-        GetMediaSampleDescription(_ID(), paramInt, QTObject.ID(paramSampleDescription));
+    protected final void getNativeSampleDescription(int index, SampleDescription descH) throws StdQTException {
+        GetMediaSampleDescription(_ID(), index, QTObject.ID(descH));
         StdQTException.checkError(GetMoviesError());
     }
 
@@ -177,9 +177,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public SampleDescription getSampleDescription(int index) throws QTException {
-        SampleDescription localSampleDescription = makeDescription();
-        getNativeSampleDescription(index, localSampleDescription);
-        return localSampleDescription;
+        SampleDescription descH = makeDescription();
+        getNativeSampleDescription(index, descH);
+        return descH;
     }
 
     /**
@@ -212,8 +212,8 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param index Identifies the data reference for this data handler.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataHandler(int index, DataHandler paramDataHandler) throws StdQTException {
-        StdQTException.checkError(SetMediaDataHandler(_ID(), (short) index, QTObject.ID(paramDataHandler)));
+    public final void setDataHandler(int index, DataHandler dataHandler) throws StdQTException {
+        StdQTException.checkError(SetMediaDataHandler(_ID(), (short) index, QTObject.ID(dataHandler)));
     }
 
     /**
@@ -358,12 +358,12 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final HandlerInfo getHandlerDescription() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        byte[] arrayOfByte = new byte[255];
-        int[] arrayOfInt2 = new int[1];
-        GetMediaHandlerDescription(_ID(), arrayOfInt1, arrayOfByte, arrayOfInt2);
+        int[] mediaType = new int[1];
+        byte[] creatorName = new byte[255];
+        int[] creatorManufacturer = new int[1];
+        GetMediaHandlerDescription(_ID(), mediaType, creatorName, creatorManufacturer);
         StdQTException.checkError(GetMoviesError());
-        return new HandlerInfo(arrayOfInt1[0], new String(arrayOfByte, 1, arrayOfByte[0]), arrayOfInt2[0]);
+        return new HandlerInfo(mediaType[0], new String(creatorName, 1, creatorName[0]), creatorManufacturer[0]);
     }
 
     /**
@@ -430,12 +430,12 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final HandlerInfo getDataHandlerDescription(int index) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        byte[] arrayOfByte = new byte[255];
-        int[] arrayOfInt2 = new int[1];
-        GetMediaDataHandlerDescription(_ID(), (short) index, arrayOfInt1, arrayOfByte, arrayOfInt2);
+        int[] dhType = new int[1];
+        byte[] creatorName = new byte[255];
+        int[] creatorManufacturer = new int[1];
+        GetMediaDataHandlerDescription(_ID(), (short) index, dhType, creatorName, creatorManufacturer);
         StdQTException.checkError(GetMoviesError());
-        return new HandlerInfo(arrayOfInt1[0], new String(arrayOfByte, 1, arrayOfByte[0]), arrayOfInt2[0]);
+        return new HandlerInfo(dhType[0], new String(creatorName, 1, creatorName[0]), creatorManufacturer[0]);
     }
 
     /**
@@ -482,11 +482,11 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final TimeInfo sampleNumToMediaTime(int logicalSampleNum) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        SampleNumToMediaTime(_ID(), logicalSampleNum, arrayOfInt1, arrayOfInt2);
+        int[] sampleTime = new int[1];
+        int[] sampleDuration = new int[1];
+        SampleNumToMediaTime(_ID(), logicalSampleNum, sampleTime, sampleDuration);
         StdQTException.checkError(GetMoviesError());
-        return new TimeInfo(arrayOfInt1[0], arrayOfInt2[0]);
+        return new TimeInfo(sampleTime[0], sampleDuration[0]);
     }
 
     /**
@@ -497,12 +497,12 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final SampleTimeInfo timeToSampleNum(int time) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        MediaTimeToSampleNum(_ID(), time, arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int[] sampleNum = new int[1];
+        int[] sampleTime = new int[1];
+        int[] sampleDuration = new int[1];
+        MediaTimeToSampleNum(_ID(), time, sampleNum, sampleTime, sampleDuration);
         StdQTException.checkError(GetMoviesError());
-        return new SampleTimeInfo(arrayOfInt2[0], arrayOfInt3[0], arrayOfInt1[0]);
+        return new SampleTimeInfo(sampleTime[0], sampleDuration[0], sampleNum[0]);
     }
 
     /**
@@ -519,9 +519,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int addSample(QTHandleRef data, int dataOffset, int dataSize, int durationPerSample, SampleDescription sampleDesc, int numberOfSamples, int sampleFlags) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(AddMediaSample(_ID(), QTObject.ID(data), dataOffset, dataSize, durationPerSample, QTObject.ID(sampleDesc), numberOfSamples, (short) sampleFlags, arrayOfInt));
-        return arrayOfInt[0];
+        int[] sampleTime = new int[1];
+        StdQTException.checkError(AddMediaSample(_ID(), QTObject.ID(data), dataOffset, dataSize, durationPerSample, QTObject.ID(sampleDesc), numberOfSamples, (short) sampleFlags, sampleTime));
+        return sampleTime[0];
     }
 
     /**
@@ -534,16 +534,16 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public final MediaSample getSample(int maxSizeToGrow, int time, int maxNumberOfSamples) throws QTException {
-        QTHandle localQTHandle = new QTHandle();
-        SampleDescription localSampleDescription = makeDescription();
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int[] arrayOfInt4 = new int[1];
-        int[] arrayOfInt5 = new int[1];
-        short[] arrayOfShort = new short[1];
-        StdQTException.checkError(GetMediaSample(_ID(), QTObject.ID(localQTHandle), maxSizeToGrow, arrayOfInt1, time, arrayOfInt2, arrayOfInt3, QTObject.ID(localSampleDescription), arrayOfInt4, maxNumberOfSamples, arrayOfInt5, arrayOfShort));
-        return new MediaSample(arrayOfInt2[0], arrayOfInt3[0], localQTHandle, 0, arrayOfInt1[0], arrayOfInt5[0], localSampleDescription, arrayOfInt4[0], arrayOfShort[0]);
+        QTHandle dataOut = new QTHandle();
+        SampleDescription descH = makeDescription();
+        int[] size = new int[1];
+        int[] sampleTime = new int[1];
+        int[] durationPerSample = new int[1];
+        int[] descIndex = new int[1];
+        int[] numberOfSamples = new int[1];
+        short[] sampleFlags = new short[1];
+        StdQTException.checkError(GetMediaSample(_ID(), QTObject.ID(dataOut), maxSizeToGrow, size, time, sampleTime, durationPerSample, QTObject.ID(descH), descIndex, maxNumberOfSamples, numberOfSamples, sampleFlags));
+        return new MediaSample(sampleTime[0], durationPerSample[0], dataOut, 0, size[0], numberOfSamples[0], descH, descIndex[0], sampleFlags[0]);
     }
 
     /**
@@ -559,9 +559,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int addSampleReference(int dataOffset, int dataSize, int durationPerSample, SampleDescription sampleDesc, int numberOfSamples, int sampleFlags) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(AddMediaSampleReference(_ID(), dataOffset, dataSize, durationPerSample, QTObject.ID(sampleDesc), numberOfSamples, (short) sampleFlags, arrayOfInt));
-        return arrayOfInt[0];
+        int[] sampleTime = new int[1];
+        StdQTException.checkError(AddMediaSampleReference(_ID(), dataOffset, dataSize, durationPerSample, QTObject.ID(sampleDesc), numberOfSamples, (short) sampleFlags, sampleTime));
+        return sampleTime[0];
     }
 
     /**
@@ -573,16 +573,16 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public final SampleInfo getSampleReference(int time, int maxNumberOfSamples) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int[] arrayOfInt4 = new int[1];
-        SampleDescription localSampleDescription = makeDescription();
-        int[] arrayOfInt5 = new int[1];
-        int[] arrayOfInt6 = new int[1];
-        short[] arrayOfShort = new short[1];
-        StdQTException.checkError(GetMediaSampleReference(_ID(), arrayOfInt1, arrayOfInt2, time, arrayOfInt3, arrayOfInt4, QTObject.ID(localSampleDescription), arrayOfInt5, maxNumberOfSamples, arrayOfInt6, arrayOfShort));
-        return new SampleInfo(arrayOfInt3[0], arrayOfInt4[0], arrayOfInt1[0], arrayOfInt2[0], arrayOfInt6[0], localSampleDescription, arrayOfInt5[0], arrayOfShort[0]);
+        int[] dataOffset = new int[1];
+        int[] size = new int[1];
+        int[] sampleTime = new int[1];
+        int[] durationPerSample = new int[1];
+        SampleDescription descH = makeDescription();
+        int[] descIndex = new int[1];
+        int[] numberOfSamples = new int[1];
+        short[] sampleFlags = new short[1];
+        StdQTException.checkError(GetMediaSampleReference(_ID(), dataOffset, size, time, sampleTime, durationPerSample, QTObject.ID(descH), descIndex, maxNumberOfSamples, numberOfSamples, sampleFlags));
+        return new SampleInfo(sampleTime[0], durationPerSample[0], dataOffset[0], size[0], numberOfSamples[0], descH, descIndex[0], sampleFlags[0]);
     }
 
     /**
@@ -596,10 +596,10 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int addSampleReference(SampleDescription sampleDescription, int numOfSamples, SampleReferenceVector sampleRefs) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = AddMediaSampleReferences(_ID(), QTObject.ID(sampleDescription), numOfSamples, QTObject.ID(sampleRefs), arrayOfInt);
+        int[] sampleTime = new int[1];
+        int i = AddMediaSampleReferences(_ID(), QTObject.ID(sampleDescription), numOfSamples, QTObject.ID(sampleRefs), sampleTime);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return sampleTime[0];
     }
 
     /**
@@ -611,16 +611,16 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public final SampleReferenceInfo getSampleReferences(int time, int maxNumberOfSamples) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        SampleDescription localSampleDescription = makeDescription();
-        SampleReferenceVector localSampleReferenceVector = new SampleReferenceVector(maxNumberOfSamples);
-        int i = QTObject.ID(localSampleReferenceVector);
-        int j = GetMediaSampleReferences(_ID(), time, arrayOfInt1, QTObject.ID(localSampleDescription), arrayOfInt2, maxNumberOfSamples, arrayOfInt3, i);
+        int[] sampleTime = new int[1];
+        int[] descIndex = new int[1];
+        int[] actualNumberOfEntries = new int[1];
+        SampleDescription descH = makeDescription();
+        SampleReferenceVector sampleRefs = new SampleReferenceVector(maxNumberOfSamples);
+        int i = QTObject.ID(sampleRefs);
+        int j = GetMediaSampleReferences(_ID(), time, sampleTime, QTObject.ID(descH), descIndex, maxNumberOfSamples, actualNumberOfEntries, i);
         StdQTException.checkError(j);
-        localSampleReferenceVector._setNumSamples(arrayOfInt3[0]);
-        return new SampleReferenceInfo(arrayOfInt1[0], localSampleDescription, arrayOfInt2[0], localSampleReferenceVector);
+        sampleRefs._setNumSamples(actualNumberOfEntries[0]);
+        return new SampleReferenceInfo(sampleTime[0], descH, descIndex[0], sampleRefs);
     }
 
     /**
@@ -640,9 +640,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int getPreferredChunkSize() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetMediaPreferredChunkSize(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] maxChunkSize = new int[1];
+        StdQTException.checkError(GetMediaPreferredChunkSize(_ID(), maxChunkSize));
+        return maxChunkSize[0];
     }
 
     /**
@@ -663,10 +663,10 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @return the sample number of the shadow sync.
      * @throws quicktime.std.StdQTException
      */
-    public final int getShadowSync(int paramInt) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetMediaShadowSync(_ID(), paramInt, arrayOfInt));
-        return arrayOfInt[0];
+    public final int getShadowSync(int frameDiffSampleNum) throws StdQTException {
+        int[] syncSampleNum = new int[1];
+        StdQTException.checkError(GetMediaShadowSync(_ID(), frameDiffSampleNum, syncSampleNum));
+        return syncSampleNum[0];
     }
 
     /**
@@ -679,11 +679,11 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final TimeInfo getNextInterestingTime(int interestingTimeFlags, int time, float rate) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        GetMediaNextInterestingTime(_ID(), (short) interestingTimeFlags, time, QTUtils.X2Fix(rate), arrayOfInt1, arrayOfInt2);
+        int[] interestingTime = new int[1];
+        int[] interestingDuration = new int[1];
+        GetMediaNextInterestingTime(_ID(), (short) interestingTimeFlags, time, QTUtils.X2Fix(rate), interestingTime, interestingDuration);
         StdQTException.checkError(GetMoviesError());
-        return new TimeInfo(arrayOfInt1[0], arrayOfInt2[0]);
+        return new TimeInfo(interestingTime[0], interestingDuration[0]);
     }
 
     /**
@@ -717,16 +717,16 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @param index the index value at which to add the data.
      * @throws quicktime.std.StdQTException
      */
-    public final void setDataRef(int index, DataRef paramDataRef) throws StdQTException {
-        StdQTException.checkError(SetMediaDataRef(_ID(), (short) index, QTObject.ID(paramDataRef), paramDataRef.getType()));
+    public final void setDataRef(int index, DataRef dataRef) throws StdQTException {
+        StdQTException.checkError(SetMediaDataRef(_ID(), (short) index, QTObject.ID(dataRef), dataRef.getType()));
     }
 
     /**
      * No QTDocumentation.
      * @see "QuickTime::SetMediaDataRefAttributes()"
      */
-    public final void setDataRefAttributes(int paramInt1, int paramInt2) throws StdQTException {
-        StdQTException.checkError(SetMediaDataRefAttributes(_ID(), (short) paramInt1, paramInt2));
+    public final void setDataRefAttributes(int index, int attributes) throws StdQTException {
+        StdQTException.checkError(SetMediaDataRefAttributes(_ID(), (short) index, attributes));
     }
 
     /**
@@ -737,9 +737,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int addDataRef(DataRef dataReference) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        StdQTException.checkError(AddMediaDataRef(_ID(), arrayOfShort, QTObject.ID(dataReference), dataReference.getType()));
-        return arrayOfShort[0];
+        short[] index = new short[1];
+        StdQTException.checkError(AddMediaDataRef(_ID(), index, QTObject.ID(dataReference), dataReference.getType()));
+        return index[0];
     }
 
     /**
@@ -749,9 +749,9 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final int getDataRefCount() throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        StdQTException.checkError(GetMediaDataRefCount(_ID(), arrayOfShort));
-        return arrayOfShort[0];
+        short[] count = new short[1];
+        StdQTException.checkError(GetMediaDataRefCount(_ID(), count));
+        return count[0];
     }
 
     /**
@@ -790,18 +790,18 @@ public abstract class Media extends QTObject implements QuickTimeLib {
      * @see "QuickTime::GetMediaPlayHints()"
      */
     public final int getPlayHints() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        GetMediaPlayHints(_ID(), arrayOfInt);
+        int[] flags = { 0 };
+        GetMediaPlayHints(_ID(), flags);
         StdQTException.checkError(GetMoviesError());
-        return arrayOfInt[0];
+        return flags[0];
     }
 
     /**
      * No QT Documentation.
      * @see "QuickTime::SetMediaPropertyAtom()"
      */
-    public final void setPropertyAtom(AtomContainer paramAtomContainer) throws StdQTException {
-        StdQTException.checkError(SetMediaPropertyAtom(_ID(), QTObject.ID(paramAtomContainer)));
+    public final void setPropertyAtom(AtomContainer propertyAtom) throws StdQTException {
+        StdQTException.checkError(SetMediaPropertyAtom(_ID(), QTObject.ID(propertyAtom)));
     }
 
     /**
@@ -863,205 +863,205 @@ public abstract class Media extends QTObject implements QuickTimeLib {
 
     abstract SampleDescription makeDescription() throws QTException;
 
-    abstract MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException;
+    abstract MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException;
 
-    private static int NewTrackMedia(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.NewTrackMedia(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int NewTrackMedia(int track, int mediaType, int timeScale, int dataRef, int dataRefType) {
+        return MovieToolbox.NewTrackMedia(track, mediaType, timeScale, dataRef, dataRefType);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static void GetMediaHandlerDescription(int paramInt, int[] paramArrayOfInt1, byte[] paramArrayOfByte, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMediaHandlerDescription(paramInt, paramArrayOfInt1, paramArrayOfByte, paramArrayOfInt2);
+    private static void GetMediaHandlerDescription(int media, int[] mediaType, byte[] creatorName, int[] creatorManufacturer) {
+        MovieToolbox.GetMediaHandlerDescription(media, mediaType, creatorName, creatorManufacturer);
     }
 
-    private static int GetTrackMedia(int paramInt) {
-        return MovieToolbox.GetTrackMedia(paramInt);
+    private static int GetTrackMedia(int track) {
+        return MovieToolbox.GetTrackMedia(track);
     }
 
-    private static int GetMediaHandler(int paramInt) {
-        return MovieToolbox.GetMediaHandler(paramInt);
+    private static int GetMediaHandler(int media) {
+        return MovieToolbox.GetMediaHandler(media);
     }
 
-    private static void GetMediaSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.GetMediaSampleDescription(paramInt1, paramInt2, paramInt3);
+    private static void GetMediaSampleDescription(int media, int index, int descH) {
+        MovieToolbox.GetMediaSampleDescription(media, index, descH);
     }
 
-    private static short SetMediaSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.SetMediaSampleDescription(paramInt1, paramInt2, paramInt3);
+    private static short SetMediaSampleDescription(int media, int index, int descH) {
+        return MovieToolbox.SetMediaSampleDescription(media, index, descH);
     }
 
-    private static int GetMediaDataHandler(int paramInt, short paramShort) {
-        return MovieToolbox.GetMediaDataHandler(paramInt, paramShort);
+    private static int GetMediaDataHandler(int media, short index) {
+        return MovieToolbox.GetMediaDataHandler(media, index);
     }
 
-    private static short SetMediaDataHandler(int paramInt1, short paramShort, int paramInt2) {
-        return MovieToolbox.SetMediaDataHandler(paramInt1, paramShort, paramInt2);
+    private static short SetMediaDataHandler(int media, short index, int dataHandler) {
+        return MovieToolbox.SetMediaDataHandler(media, index, dataHandler);
     }
 
-    private static short SetMediaHandler(int paramInt1, int paramInt2) {
-        return MovieToolbox.SetMediaHandler(paramInt1, paramInt2);
+    private static short SetMediaHandler(int media, int handler) {
+        return MovieToolbox.SetMediaHandler(media, handler);
     }
 
-    private static int GetMediaCreationTime(int paramInt) {
-        return MovieToolbox.GetMediaCreationTime(paramInt);
+    private static int GetMediaCreationTime(int media) {
+        return MovieToolbox.GetMediaCreationTime(media);
     }
 
-    private static int GetMediaModificationTime(int paramInt) {
-        return MovieToolbox.GetMediaModificationTime(paramInt);
+    private static int GetMediaModificationTime(int media) {
+        return MovieToolbox.GetMediaModificationTime(media);
     }
 
-    private static int GetMediaTimeScale(int paramInt) {
-        return MovieToolbox.GetMediaTimeScale(paramInt);
+    private static int GetMediaTimeScale(int media) {
+        return MovieToolbox.GetMediaTimeScale(media);
     }
 
-    private static void SetMediaTimeScale(int paramInt1, int paramInt2) {
-        MovieToolbox.SetMediaTimeScale(paramInt1, paramInt2);
+    private static void SetMediaTimeScale(int media, int scale) {
+        MovieToolbox.SetMediaTimeScale(media, scale);
     }
 
-    private static int GetMediaDuration(int paramInt) {
-        return MovieToolbox.GetMediaDuration(paramInt);
+    private static int GetMediaDuration(int media) {
+        return MovieToolbox.GetMediaDuration(media);
     }
 
-    private static short GetMediaLanguage(int paramInt) {
-        return MovieToolbox.GetMediaLanguage(paramInt);
+    private static short GetMediaLanguage(int media) {
+        return MovieToolbox.GetMediaLanguage(media);
     }
 
-    private static void SetMediaLanguage(int paramInt, short paramShort) {
-        MovieToolbox.SetMediaLanguage(paramInt, paramShort);
+    private static void SetMediaLanguage(int media, short language) {
+        MovieToolbox.SetMediaLanguage(media, language);
     }
 
-    private static short GetMediaQuality(int paramInt) {
-        return MovieToolbox.GetMediaQuality(paramInt);
+    private static short GetMediaQuality(int media) {
+        return MovieToolbox.GetMediaQuality(media);
     }
 
-    private static void SetMediaQuality(int paramInt, short paramShort) {
-        MovieToolbox.SetMediaQuality(paramInt, paramShort);
+    private static void SetMediaQuality(int media, short quality) {
+        MovieToolbox.SetMediaQuality(media, quality);
     }
 
-    private static short SetMediaInputMap(int paramInt1, int paramInt2) {
-        return MovieToolbox.SetMediaInputMap(paramInt1, paramInt2);
+    private static short SetMediaInputMap(int media, int inputMap) {
+        return MovieToolbox.SetMediaInputMap(media, inputMap);
     }
 
-    private static short BeginMediaEdits(int paramInt) {
-        return MovieToolbox.BeginMediaEdits(paramInt);
+    private static short BeginMediaEdits(int media) {
+        return MovieToolbox.BeginMediaEdits(media);
     }
 
-    private static short EndMediaEdits(int paramInt) {
-        return MovieToolbox.EndMediaEdits(paramInt);
+    private static short EndMediaEdits(int media) {
+        return MovieToolbox.EndMediaEdits(media);
     }
 
-    private static short SetMediaDefaultDataRefIndex(int paramInt, short paramShort) {
-        return MovieToolbox.SetMediaDefaultDataRefIndex(paramInt, paramShort);
+    private static short SetMediaDefaultDataRefIndex(int media, short index) {
+        return MovieToolbox.SetMediaDefaultDataRefIndex(media, index);
     }
 
-    private static void GetMediaDataHandlerDescription(int paramInt, short paramShort, int[] paramArrayOfInt1, byte[] paramArrayOfByte, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMediaDataHandlerDescription(paramInt, paramShort, paramArrayOfInt1, paramArrayOfByte, paramArrayOfInt2);
+    private static void GetMediaDataHandlerDescription(int media, short index, int[] dhType, byte[] creatorName, int[] creatorManufacturer) {
+        MovieToolbox.GetMediaDataHandlerDescription(media, index, dhType, creatorName, creatorManufacturer);
     }
 
-    private static int GetMediaSampleDescriptionCount(int paramInt) {
-        return MovieToolbox.GetMediaSampleDescriptionCount(paramInt);
+    private static int GetMediaSampleDescriptionCount(int media) {
+        return MovieToolbox.GetMediaSampleDescriptionCount(media);
     }
 
-    private static int GetMediaSampleCount(int paramInt) {
-        return MovieToolbox.GetMediaSampleCount(paramInt);
+    private static int GetMediaSampleCount(int media) {
+        return MovieToolbox.GetMediaSampleCount(media);
     }
 
-    private static int GetMediaSyncSampleCount(int paramInt) {
-        return MovieToolbox.GetMediaSyncSampleCount(paramInt);
+    private static int GetMediaSyncSampleCount(int media) {
+        return MovieToolbox.GetMediaSyncSampleCount(media);
     }
 
-    private static void SampleNumToMediaTime(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.SampleNumToMediaTime(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static void SampleNumToMediaTime(int media, int sampleNum, int[] sampleTime, int[] sampleDuration) {
+        MovieToolbox.SampleNumToMediaTime(media, sampleNum, sampleTime, sampleDuration);
     }
 
-    private static void MediaTimeToSampleNum(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        MovieToolbox.MediaTimeToSampleNum(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static void MediaTimeToSampleNum(int media, int time, int[] sampleNum, int[] sampleTime, int[] sampleDuration) {
+        MovieToolbox.MediaTimeToSampleNum(media, time, sampleNum, sampleTime, sampleDuration);
     }
 
-    private static short AddMediaSample(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, short paramShort, int[] paramArrayOfInt) {
-        return MovieToolbox.AddMediaSample(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramShort, paramArrayOfInt);
+    private static short AddMediaSample(int media, int dataIn, int inOffset, int size, int durationPerSample, int descH, int numberOfSamples, short sampleFlags, int[] sampleTime) {
+        return MovieToolbox.AddMediaSample(media, dataIn, inOffset, size, durationPerSample, descH, numberOfSamples, sampleFlags, sampleTime);
     }
 
-    private static short GetMediaSample(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int paramInt5, int[] paramArrayOfInt4, int paramInt6, int[] paramArrayOfInt5, short[] paramArrayOfShort) {
-        return MovieToolbox.GetMediaSample(paramInt1, paramInt2, paramInt3, paramArrayOfInt1, paramInt4, paramArrayOfInt2, paramArrayOfInt3, paramInt5, paramArrayOfInt4, paramInt6, paramArrayOfInt5, paramArrayOfShort);
+    private static short GetMediaSample(int media, int dataOut, int maxSizeToGrow, int[] size, int time, int[] sampleTime, int[] durationPerSample, int descH, int[] descIndex, int maxNumberOfSamples, int[] numberOfSamples, short[] sampleFlags) {
+        return MovieToolbox.GetMediaSample(media, dataOut, maxSizeToGrow, size, time, sampleTime, durationPerSample, descH, descIndex, maxNumberOfSamples, numberOfSamples, sampleFlags);
     }
 
-    private static short AddMediaSampleReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, short paramShort, int[] paramArrayOfInt) {
-        return MovieToolbox.AddMediaSampleReference(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramShort, paramArrayOfInt);
+    private static short AddMediaSampleReference(int media, int dataOffset, int size, int durationPerSample, int descH, int numberOfSamples, short sampleFlags, int[] sampleTime) {
+        return MovieToolbox.AddMediaSampleReference(media, dataOffset, size, durationPerSample, descH, numberOfSamples, sampleFlags, sampleTime);
     }
 
-    private static short GetMediaSampleReference(int paramInt1, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int paramInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4, int paramInt3, int[] paramArrayOfInt5, int paramInt4, int[] paramArrayOfInt6, short[] paramArrayOfShort) {
-        return MovieToolbox.GetMediaSampleReference(paramInt1, paramArrayOfInt1, paramArrayOfInt2, paramInt2, paramArrayOfInt3, paramArrayOfInt4, paramInt3, paramArrayOfInt5, paramInt4, paramArrayOfInt6, paramArrayOfShort);
+    private static short GetMediaSampleReference(int media, int[] dataOffset, int[] size, int time, int[] sampleTime, int[] durationPerSample, int descH, int[] descIndex, int maxNumberOfSamples, int[] numberOfSamples, short[] sampleFlags) {
+        return MovieToolbox.GetMediaSampleReference(media, dataOffset, size, time, sampleTime, durationPerSample, descH, descIndex, maxNumberOfSamples, numberOfSamples, sampleFlags);
     }
 
-    private static short AddMediaSampleReferences(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
-        return MovieToolbox.AddMediaSampleReferences(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    private static short AddMediaSampleReferences(int media, int descH, int numberOfRefs, int refs, int[] sampleTime) {
+        return MovieToolbox.AddMediaSampleReferences(media, descH, numberOfRefs, refs, sampleTime);
     }
 
-    private static short GetMediaSampleReferences(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int paramInt3, int[] paramArrayOfInt2, int paramInt4, int[] paramArrayOfInt3, int paramInt5) {
-        return MovieToolbox.GetMediaSampleReferences(paramInt1, paramInt2, paramArrayOfInt1, paramInt3, paramArrayOfInt2, paramInt4, paramArrayOfInt3, paramInt5);
+    private static short GetMediaSampleReferences(int media, int time, int[] sampleTime, int descH, int[] descIndex, int maxNumberOfEntries, int[] actualNumberOfEntries, int refs) {
+        return MovieToolbox.GetMediaSampleReferences(media, time, sampleTime, descH, descIndex, maxNumberOfEntries, actualNumberOfEntries, refs);
     }
 
-    private static short SetMediaPreferredChunkSize(int paramInt1, int paramInt2) {
-        return MovieToolbox.SetMediaPreferredChunkSize(paramInt1, paramInt2);
+    private static short SetMediaPreferredChunkSize(int media, int maxChunkSize) {
+        return MovieToolbox.SetMediaPreferredChunkSize(media, maxChunkSize);
     }
 
-    private static short GetMediaPreferredChunkSize(int paramInt, int[] paramArrayOfInt) {
-        return MovieToolbox.GetMediaPreferredChunkSize(paramInt, paramArrayOfInt);
+    private static short GetMediaPreferredChunkSize(int media, int[] maxChunkSize) {
+        return MovieToolbox.GetMediaPreferredChunkSize(media, maxChunkSize);
     }
 
-    private static short SetMediaShadowSync(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.SetMediaShadowSync(paramInt1, paramInt2, paramInt3);
+    private static short SetMediaShadowSync(int media, int frameDiffSampleNum, int syncSampleNum) {
+        return MovieToolbox.SetMediaShadowSync(media, frameDiffSampleNum, syncSampleNum);
     }
 
-    private static short GetMediaShadowSync(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MovieToolbox.GetMediaShadowSync(paramInt1, paramInt2, paramArrayOfInt);
+    private static short GetMediaShadowSync(int media, int frameDiffSampleNum, int[] syncSampleNum) {
+        return MovieToolbox.GetMediaShadowSync(media, frameDiffSampleNum, syncSampleNum);
     }
 
-    private static void GetMediaNextInterestingTime(int paramInt1, short paramShort, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMediaNextInterestingTime(paramInt1, paramShort, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMediaNextInterestingTime(int media, short flags, int time, int rate, int[] interestingTime, int[] interestingDuration) {
+        MovieToolbox.GetMediaNextInterestingTime(media, flags, time, rate, interestingTime, interestingDuration);
     }
 
-    private static int GetMediaDataSize(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.GetMediaDataSize(paramInt1, paramInt2, paramInt3);
+    private static int GetMediaDataSize(int media, int time, int duration) {
+        return MovieToolbox.GetMediaDataSize(media, time, duration);
     }
 
-    private static short SetMediaDataRef(int paramInt1, short paramShort, int paramInt2, int paramInt3) {
-        return MovieToolbox.SetMediaDataRef(paramInt1, paramShort, paramInt2, paramInt3);
+    private static short SetMediaDataRef(int media, short index, int dataRef, int dataRefType) {
+        return MovieToolbox.SetMediaDataRef(media, index, dataRef, dataRefType);
     }
 
-    private static short SetMediaDataRefAttributes(int paramInt1, short paramShort, int paramInt2) {
-        return MovieToolbox.SetMediaDataRefAttributes(paramInt1, paramShort, paramInt2);
+    private static short SetMediaDataRefAttributes(int media, short index, int attributes) {
+        return MovieToolbox.SetMediaDataRefAttributes(media, index, attributes);
     }
 
-    private static short AddMediaDataRef(int paramInt1, short[] paramArrayOfShort, int paramInt2, int paramInt3) {
-        return MovieToolbox.AddMediaDataRef(paramInt1, paramArrayOfShort, paramInt2, paramInt3);
+    private static short AddMediaDataRef(int media, short[] index, int dataRef, int dataRefType) {
+        return MovieToolbox.AddMediaDataRef(media, index, dataRef, dataRefType);
     }
 
-    private static short GetMediaDataRefCount(int paramInt, short[] paramArrayOfShort) {
-        return MovieToolbox.GetMediaDataRefCount(paramInt, paramArrayOfShort);
+    private static short GetMediaDataRefCount(int media, short[] count) {
+        return MovieToolbox.GetMediaDataRefCount(media, count);
     }
 
-    private static void SetMediaPlayHints(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetMediaPlayHints(paramInt1, paramInt2, paramInt3);
+    private static void SetMediaPlayHints(int media, int flags, int flagsMask) {
+        MovieToolbox.SetMediaPlayHints(media, flags, flagsMask);
     }
 
-    private static void GetMediaPlayHints(int paramInt, int[] paramArrayOfInt) {
-        MovieToolbox.GetMediaPlayHints(paramInt, paramArrayOfInt);
+    private static void GetMediaPlayHints(int media, int[] flags) {
+        MovieToolbox.GetMediaPlayHints(media, flags);
     }
 
-    private static short SetMediaPropertyAtom(int paramInt1, int paramInt2) {
-        return MovieToolbox.SetMediaPropertyAtom(paramInt1, paramInt2);
+    private static short SetMediaPropertyAtom(int media, int propertyAtom) {
+        return MovieToolbox.SetMediaPropertyAtom(media, propertyAtom);
     }
 
-    private static short LoadMediaIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.LoadMediaIntoRam(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short LoadMediaIntoRam(int media, int time, int duration, int flags) {
+        return MovieToolbox.LoadMediaIntoRam(media, time, duration, flags);
     }
 
-    private static short CopyMediaUserData(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.CopyMediaUserData(paramInt1, paramInt2, paramInt3);
+    private static short CopyMediaUserData(int src, int dst, int copyRule) {
+        return MovieToolbox.CopyMediaUserData(src, dst, copyRule);
     }
 }

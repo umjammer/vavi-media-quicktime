@@ -23,12 +23,12 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
     public static final int kNativeSize = 38;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(16, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(20, 4, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 4, 1);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(20, 4, 3);
+        ed.addFlipSpec(spec);
+        return ed;
     }
 
     /**
@@ -49,8 +49,8 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
         super(kNativeSize, true, 1953325924);
     }
 
-    private TimeCodeDescription(int paramInt) {
-        super(paramInt, null, false);
+    private TimeCodeDescription(int nativeRep) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -67,10 +67,10 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
      * @return time code definition
      */
     public TimeCodeDef getTimeCodeDef() {
-        TimeCodeDef localTimeCodeDef = new TimeCodeDef(lockAndDeref(20));
+        TimeCodeDef timeCodeDef = new TimeCodeDef(lockAndDeref(20));
         if (!isLocked())
             unlock();
-        return localTimeCodeDef;
+        return timeCodeDef;
     }
 
     /**
@@ -93,7 +93,7 @@ public final class TimeCodeDescription extends SampleDescription implements Prim
         return getClass().getName() + "[format=" + QTUtils.fromOSType(getDataFormat()) + getTimeCodeDef() + "]";
     }
 
-    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(byte[] destArray, int arrayOffset, int ptr, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, arrayOffset, ptr, length, size);
     }
 }

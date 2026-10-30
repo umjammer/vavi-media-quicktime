@@ -35,8 +35,8 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     private static final int kAttributesOffset = 8;
     private static final int kContentsOffset = 12;
 
-    XMLElement(int paramInt) throws QTException {
-        super(paramInt, owner);
+    XMLElement(int nativeRep) throws QTException {
+        super(nativeRep, owner);
     }
 
     /**
@@ -70,8 +70,8 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
         int i = getIntFromPointer(_ID(), kIdentifierOffset);
         if (i == -1) {
             int j = getIntFromPointer(_ID(), kNameOffset);
-            String str = getStringFromPointer(j);
-            return str;
+            String name = getStringFromPointer(j);
+            return name;
         }
         logger.log(Level.DEBUG, "XMLElement.getName() called but not xmlIdentifierUnrecognized");
         throw new StdQTException(-50);
@@ -86,9 +86,9 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     public int countAttributes() throws StdQTException, QTException {
         int i = getIntFromPointer(_ID(), kAttributesOffset);
         if (i != 0) {
-            XMLAttribute localXMLAttribute = new XMLAttribute(i);
+            XMLAttribute xmlAttribute = new XMLAttribute(i);
             for (int j = 0; ; j++) {
-                if (localXMLAttribute.getNthIdentifier(j) == 0) {
+                if (xmlAttribute.getNthIdentifier(j) == 0) {
                     return j;
                 }
             }
@@ -105,12 +105,12 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     public XMLAttribute[] getAttributes() throws StdQTException, QTException {
         int i = countAttributes();
         if (i != 0) {
-            XMLAttribute[] arrayOfXMLAttribute = new XMLAttribute[i];
+            XMLAttribute[] attributes = new XMLAttribute[i];
             int j = getIntFromPointer(_ID(), kAttributesOffset);
             for (int k = 0; k < i; k++) {
-                arrayOfXMLAttribute[k] = new XMLAttribute(j, k);
+                attributes[k] = new XMLAttribute(j, k);
             }
-            return arrayOfXMLAttribute;
+            return attributes;
         }
         return null;
     }
@@ -124,9 +124,9 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
     public int countContents() throws StdQTException, QTException {
         int i = getIntFromPointer(_ID(), kContentsOffset);
         if (i != 0) {
-            XMLContent localXMLContent = new XMLContent(i);
+            XMLContent xmlContent = new XMLContent(i);
             for (int j = 0; ; j++) {
-                if (localXMLContent.getNthIdentifier(j) == 0) {
+                if (xmlContent.getNthIdentifier(j) == 0) {
                     return j;
                 }
             }
@@ -144,38 +144,38 @@ public final class XMLElement extends QTObject implements PrimitivesLib {
         int i = countContents();
         if (i != 0) {
             int j = getIntFromPointer(_ID(), kContentsOffset);
-            XMLContent[] arrayOfXMLContent = new XMLContent[i];
+            XMLContent[] contents = new XMLContent[i];
             for (int k = 0; k < i; k++) {
-                arrayOfXMLContent[k] = new XMLContent(j, k);
+                contents[k] = new XMLContent(j, k);
             }
-            return arrayOfXMLContent;
+            return contents;
         }
         return null;
     }
 
-    private String getStringFromPointer(int paramInt) {
-        if (paramInt != 0) {
+    private String getStringFromPointer(int ptr) {
+        if (ptr != 0) {
             int i = 0;
             int j = 0;
-            while (getByteFromPointer(paramInt, j++) != 0) {
+            while (getByteFromPointer(ptr, j++) != 0) {
                 i++;
             }
-            byte[] arrayOfByte = new byte[i];
-            copyPointerToArray(paramInt, 0, arrayOfByte, 0, i);
-            return QTUtils.CString2String(arrayOfByte, 0);
+            byte[] cString = new byte[i];
+            copyPointerToArray(ptr, 0, cString, 0, i);
+            return QTUtils.CString2String(cString, 0);
         }
         return "";
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 }

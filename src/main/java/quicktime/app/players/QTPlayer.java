@@ -120,8 +120,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @deprecated
      */
     public Dimension getInitialSize() throws QTException {
-        QDDimension localQDDimension = getOriginalSize();
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+        QDDimension originalSize = getOriginalSize();
+        return new Dimension(originalSize.getWidth(), originalSize.getHeight());
     }
 
     /**
@@ -135,9 +135,9 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
-        QDDimension localQDDimension = this.controller.getRequiredSize();
-        QDRect localQDRect = this.controller.getMovie().getNaturalBoundsRect();
-        return new QDDimension(localQDRect.getWidth() + localQDDimension.getWidth(), localQDRect.getHeight() + localQDDimension.getHeight());
+        QDDimension requiredSize = this.controller.getRequiredSize();
+        QDRect naturalBoundsRect = this.controller.getMovie().getNaturalBoundsRect();
+        return new QDDimension(naturalBoundsRect.getWidth() + requiredSize.getWidth(), naturalBoundsRect.getHeight() + requiredSize.getHeight());
     }
 
     /**
@@ -161,8 +161,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @deprecated
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.controller.getMovie().setMatrix(paramMatrix);
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.controller.getMovie().setMatrix(matrix);
         this.controller.movieChanged();
         this.controller.idle();
     }
@@ -228,7 +228,7 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
             try {
                 this.controller.invalidate(getGWorld(), invalidRgn);
                 this.controller.idle();
-            } catch (StdQTException localStdQTException) {
+            } catch (StdQTException e) {
                 this.controller.draw();
             }
         } else {
@@ -247,22 +247,22 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      */
     @Override
     public synchronized void setDisplayBounds(QDRect bounds) throws QTException {
-        QDDimension localQDDimension = this.controller.getRequiredSize();
-        if ((bounds.getHeight() < localQDDimension.getHeight()) || (bounds.getWidth() < localQDDimension.getWidth())) {
+        QDDimension requiredSize = this.controller.getRequiredSize();
+        if ((bounds.getHeight() < requiredSize.getHeight()) || (bounds.getWidth() < requiredSize.getWidth())) {
             if (this.controller.getVisible()) {
                 this.controller.setVisible(false);
                 this.setControllerVisibleFlag = true;
             }
-            bounds.setHeight(bounds.getHeight() + localQDDimension.getHeight());
-            bounds.setWidth(bounds.getWidth() + localQDDimension.getWidth());
+            bounds.setHeight(bounds.getHeight() + requiredSize.getHeight());
+            bounds.setWidth(bounds.getWidth() + requiredSize.getWidth());
         } else {
             if (this.setControllerVisibleFlag) {
                 this.controller.setVisible(true);
                 this.setControllerVisibleFlag = false;
             }
             if ((!this.reserveSize) && (!this.controller.getVisible())) {
-                bounds.setHeight(bounds.getHeight() + localQDDimension.getHeight());
-                bounds.setWidth(bounds.getWidth() + localQDDimension.getWidth());
+                bounds.setHeight(bounds.getHeight() + requiredSize.getHeight());
+                bounds.setWidth(bounds.getWidth() + requiredSize.getWidth());
             }
         }
         this.controller.setBounds(bounds);
@@ -285,10 +285,10 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**
@@ -466,8 +466,8 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @deprecated
      */
     @Override
-    public void setVolume(float paramFloat) throws QTException {
-        float f = Math.abs(paramFloat);
+    public void setVolume(float vol) throws QTException {
+        float f = Math.abs(vol);
         if (isMuted()) {
             this.controller.setVolume(f * -1.0F);
         } else {
@@ -511,9 +511,9 @@ public class QTPlayer extends Tasking implements QTDrawable, Playable, AudioSpec
      * @since QTJava 6.1
      * @deprecated
      */
-    public void setControllerVisible(boolean paramBoolean) throws QTException {
-        this.controller.setVisible(paramBoolean);
-        if ((this.setControllerVisibleFlag) && (!paramBoolean)) {
+    public void setControllerVisible(boolean controllerVisible) throws QTException {
+        this.controller.setVisible(controllerVisible);
+        if ((this.setControllerVisibleFlag) && (!controllerVisible)) {
             this.setControllerVisibleFlag = false;
         }
     }

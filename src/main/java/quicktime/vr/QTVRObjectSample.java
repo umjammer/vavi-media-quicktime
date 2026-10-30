@@ -74,8 +74,8 @@ public final class QTVRObjectSample extends QTVRAtom {
      * Creates a QTVRObjectSample object from a byte array
      * Used in cloning
      */
-    public QTVRObjectSample(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRObjectSample(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -84,17 +84,17 @@ public final class QTVRObjectSample extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRObjectSample localQTVRObjectSample = new QTVRObjectSample();
-        paramObjectInputStream.read(localQTVRObjectSample.getBytes());
-        System.arraycopy(localQTVRObjectSample.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRObjectSample qtvrObjectSample = new QTVRObjectSample();
+        in.read(qtvrObjectSample.getBytes());
+        System.arraycopy(qtvrObjectSample.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRObjectSample localQTVRObjectSample = (QTVRObjectSample) clone();
-        paramObjectOutputStream.write(localQTVRObjectSample.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRObjectSample qtvrObjectSample = (QTVRObjectSample) clone();
+        out.write(qtvrObjectSample.getBytes());
     }
 
     /**
@@ -104,18 +104,18 @@ public final class QTVRObjectSample extends QTVRAtom {
     public Object clone() {
         try {
             return new QTVRObjectSample(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 6);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(12, 4, 19);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 6);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(12, 4, 19);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     /**

@@ -72,32 +72,32 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
         setHeight(height);
     }
 
-    private CameraViewPort(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private CameraViewPort(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[16];
-        CameraViewPort localCameraViewPort = new CameraViewPort();
-        paramObjectInputStream.read(localCameraViewPort.getBytes());
+        CameraViewPort cameraViewPort = new CameraViewPort();
+        in.read(cameraViewPort.getBytes());
         try {
-            EndianOrder.flipBigEndianToNative(localCameraViewPort, 0, getEndianDescriptor());
+            EndianOrder.flipBigEndianToNative(cameraViewPort, 0, getEndianDescriptor());
         } catch (UtilException e) {
             e.printStackTrace();
         }
-        System.arraycopy(localCameraViewPort.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        System.arraycopy(cameraViewPort.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        CameraViewPort localCameraViewPort = (CameraViewPort) clone();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        CameraViewPort cameraViewPort = (CameraViewPort) clone();
         try {
-            EndianOrder.flipNativeToBigEndian(localCameraViewPort, 0, getEndianDescriptor());
+            EndianOrder.flipNativeToBigEndian(cameraViewPort, 0, getEndianDescriptor());
         } catch (UtilException e) {
             e.printStackTrace();
         }
-        paramObjectOutputStream.write(localCameraViewPort.getBytes());
+        out.write(cameraViewPort.getBytes());
     }
 
     /**
@@ -124,23 +124,23 @@ public final class CameraViewPort extends QTByteObject implements Cloneable {
     /**
      * sets the camera viewport's origin
      */
-    public void setOrigin(QDPoint paramQDPoint) {
-        setFloatAt(0, paramQDPoint.getXF());
-        setFloatAt(4, paramQDPoint.getYF());
+    public void setOrigin(QDPoint origin) {
+        setFloatAt(0, origin.getXF());
+        setFloatAt(4, origin.getYF());
     }
 
     /**
      * sets the camera viewport's width
      */
-    public void setWidth(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setWidth(float width) {
+        setFloatAt(8, width);
     }
 
     /**
      * sets the camera viewport's height
      */
-    public void setHeight(float paramFloat) {
-        setFloatAt(12, paramFloat);
+    public void setHeight(float height) {
+        setFloatAt(12, height);
     }
 
     /**

@@ -21,22 +21,22 @@ public final class TextDescription extends SampleDescription {
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(16, 4, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(24, 2, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(30, 2, 4);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-        EndianFlipSpec localEndianFlipSpec4 = new EndianFlipSpec(38, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec4);
-        EndianFlipSpec localEndianFlipSpec5 = new EndianFlipSpec(42, 2, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec5);
-        EndianFlipSpec localEndianFlipSpec6 = new EndianFlipSpec(47, 2, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec6);
-        EndianFlipSpec localEndianFlipSpec7 = new EndianFlipSpec(50, 2, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec7);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 4, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(24, 2, 3);
+        ed.addFlipSpec(endianFlipSpec2);
+        EndianFlipSpec endianFlipSpec3 = new EndianFlipSpec(30, 2, 4);
+        ed.addFlipSpec(endianFlipSpec3);
+        EndianFlipSpec endianFlipSpec4 = new EndianFlipSpec(38, 4, 1);
+        ed.addFlipSpec(endianFlipSpec4);
+        EndianFlipSpec endianFlipSpec5 = new EndianFlipSpec(42, 2, 3);
+        ed.addFlipSpec(endianFlipSpec5);
+        EndianFlipSpec endianFlipSpec6 = new EndianFlipSpec(47, 2, 1);
+        ed.addFlipSpec(endianFlipSpec6);
+        EndianFlipSpec endianFlipSpec7 = new EndianFlipSpec(50, 2, 3);
+        ed.addFlipSpec(endianFlipSpec7);
+        return ed;
     }
 
     /**
@@ -56,8 +56,8 @@ public final class TextDescription extends SampleDescription {
         super(58, true, 1952807028);
     }
 
-    private TextDescription(int paramInt) {
-        super(paramInt, null, false);
+    private TextDescription(int nativeRep) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -81,51 +81,51 @@ public final class TextDescription extends SampleDescription {
      * @return the default style.
      */
     public ScrpSTElement getDefaultStyle() {
-        ScrpSTElement localScrpSTElement = new ScrpSTElement();
-        copyToArray(38, localScrpSTElement.getBytes(), 0, localScrpSTElement.getSize());
-        return localScrpSTElement;
+        ScrpSTElement defaultStyle = new ScrpSTElement();
+        copyToArray(38, defaultStyle.getBytes(), 0, defaultStyle.getSize());
+        return defaultStyle;
     }
 
-    public void setDisplayFlags(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setDisplayFlags(int displayFlags) {
+        setIntAt(16, displayFlags);
     }
 
     public int getDisplayFlags() {
         return getIntAt(16);
     }
 
-    public void setTextJustification(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setTextJustification(int textJustification) {
+        setIntAt(20, textJustification);
     }
 
     public int getTextJustification() {
         return getIntAt(20);
     }
 
-    public void setBackgroundColor(QDColor paramQDColor) {
-        setBytesAt(24, 6, paramQDColor.getRGBColor(), 0);
+    public void setBackgroundColor(QDColor backgroundColor) {
+        setBytesAt(24, 6, backgroundColor.getRGBColor(), 0);
     }
 
     public QDColor getBackgroundColor() {
-        byte[] arrayOfByte = new byte[6];
-        getBytesAt(24, 6, arrayOfByte, 0);
-        return QDColor.fromArray(arrayOfByte, 6);
+        byte[] destArray = new byte[6];
+        getBytesAt(24, 6, destArray, 0);
+        return QDColor.fromArray(destArray, 6);
     }
 
-    public void setDefaultTextBox(QDRect paramQDRect) {
-        setBytesAt(30, 8, paramQDRect.getRect(), 0);
+    public void setDefaultTextBox(QDRect defaultTextBox) {
+        setBytesAt(30, 8, defaultTextBox.getRect(), 0);
     }
 
     public QDRect getDefaultTextBox() {
-        byte[] arrayOfByte = new byte[8];
-        getBytesAt(30, 8, arrayOfByte, 0);
-        return QDRect.fromArray(arrayOfByte, 8);
+        byte[] destArray = new byte[8];
+        getBytesAt(30, 8, destArray, 0);
+        return QDRect.fromArray(destArray, 8);
     }
 
-    public void setDefaultFontName(String paramString) throws QTException {
-        if (getSize() < 58 + paramString.length() + 1)
-            setSize(58 + paramString.length() + 1);
-        setPStringAt(58, 255, paramString);
+    public void setDefaultFontName(String defaultFontName) throws QTException {
+        if (getSize() < 58 + defaultFontName.length() + 1)
+            setSize(58 + defaultFontName.length() + 1);
+        setPStringAt(58, 255, defaultFontName);
     }
 
     public String getDefaultFontName() throws QTException {

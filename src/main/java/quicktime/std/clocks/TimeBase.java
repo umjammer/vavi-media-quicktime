@@ -33,12 +33,12 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      *
      * @see quicktime.std.clocks.TimeRecord#getTimeBase()
      */
-    public static TimeBase fromTimeRecord(TimeRecord paramTimeRecord) {
-        int i = getIntFromPointer(QTObject.ID(paramTimeRecord), 12);
+    public static TimeBase fromTimeRecord(TimeRecord timeRecord) {
+        int i = getIntFromPointer(QTObject.ID(timeRecord), 12);
         if (i == 0) {
             return null;
         }
-        return new TimeBase(i, paramTimeRecord);
+        return new TimeBase(i, timeRecord);
     }
 
     /**
@@ -48,21 +48,21 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::GetCallBackTimeBase()"
      * @see quicktime.std.clocks.QTCallBack#getTimeBase()
      */
-    public static TimeBase fromQTCallBack(QTCallBack paramQTCallBack) {
+    public static TimeBase fromQTCallBack(QTCallBack cb) {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = GetCallBackTimeBase(QTObject.ID(paramQTCallBack));
+            i = GetCallBackTimeBase(QTObject.ID(cb));
         }
-        return new TimeBase(i, paramQTCallBack);
+        return new TimeBase(i, cb);
     }
 
     /**
      * @return the current time base - can be null
      * @see quicktime.std.image.ICMFrameTime#getBase()
      */
-    public static TimeBase fromICMFrameTime(ICMFrameTime paramICMFrameTime) {
-        int i = getIntFromArray(paramICMFrameTime.getBytes(), 12);
-        return i == 0 ? null : new TimeBase(i, paramICMFrameTime);
+    public static TimeBase fromICMFrameTime(ICMFrameTime icmFrameTime) {
+        int i = getIntFromArray(icmFrameTime.getBytes(), 12);
+        return i == 0 ? null : new TimeBase(i, icmFrameTime);
     }
 
     /**
@@ -73,13 +73,13 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::GetMovieTimeBase()"
      * @see quicktime.std.movies.Movie#getTimeBase()
      */
-    public static TimeBase fromMovie(Movie paramMovie) throws StdQTException {
+    public static TimeBase fromMovie(Movie movie) throws StdQTException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = GetMovieTimeBase(QTObject.ID(paramMovie));
+            i = GetMovieTimeBase(QTObject.ID(movie));
             StdQTException.checkError(GetMoviesError());
         }
-        return new TimeBase(i, paramMovie);
+        return new TimeBase(i, movie);
     }
 
     /**
@@ -90,12 +90,12 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::TuneGetTimeBase"
      * @see quicktime.std.music.TunePlayer#getTimeBase()
      */
-    public static TimeBase fromTunePlayer(TunePlayer paramTunePlayer) throws StdQTException {
-        int[] arrayOfInt = {0};
+    public static TimeBase fromTunePlayer(TunePlayer tp) throws StdQTException {
+        int[] tb = {0};
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(TuneGetTimeBase(QTObject.ID(paramTunePlayer), arrayOfInt));
+            StdQTException.checkError(TuneGetTimeBase(QTObject.ID(tp), tb));
         }
-        return new TimeBase(arrayOfInt[0], paramTunePlayer);
+        return new TimeBase(tb[0], tp);
     }
 
     /**
@@ -106,12 +106,12 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::QTSPresGetTimeBase"
      * @see quicktime.streaming.Presentation#getTimeBase()
      */
-    public static TimeBase fromPresentation(Presentation paramPresentation) throws StdQTException {
-        int[] arrayOfInt = {0};
+    public static TimeBase fromPresentation(Presentation presentation) throws StdQTException {
+        int[] timeBase = {0};
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(QTSPresGetTimeBase(QTObject.ID(paramPresentation), arrayOfInt));
+            StdQTException.checkError(QTSPresGetTimeBase(QTObject.ID(presentation), timeBase));
         }
-        return new TimeBase(arrayOfInt[0], paramPresentation);
+        return new TimeBase(timeBase[0], presentation);
     }
 
     /**
@@ -122,12 +122,12 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::TuneGetTimeBase"
      * @see "quicktime.std.music.SequenceGrabber#getTimeBase"
      */
-    public static TimeBase fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        int[] arrayOfInt = {0};
+    public static TimeBase fromSequenceGrabber(SequenceGrabber sg) throws StdQTException {
+        int[] timeBase = {0};
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SGGetTimeBase(QTObject.ID(paramSequenceGrabber), arrayOfInt));
+            StdQTException.checkError(SGGetTimeBase(QTObject.ID(sg), timeBase));
         }
-        return new TimeBase(arrayOfInt[0], paramSequenceGrabber);
+        return new TimeBase(timeBase[0], sg);
     }
 
     /**
@@ -138,11 +138,11 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::QTGetWallClockTimeBase"
      */
     public TimeBase fromWallClock() throws StdQTException {
-        int[] arrayOfInt = {0};
+        int[] tb = {0};
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(QTGetWallClockTimeBase(arrayOfInt));
+            StdQTException.checkError(QTGetWallClockTimeBase(tb));
         }
-        return new TimeBase(arrayOfInt[0], this);
+        return new TimeBase(tb[0], this);
     }
 
     /**
@@ -160,8 +160,8 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
         return i;
     }
 
-    private TimeBase(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    private TimeBase(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -194,11 +194,11 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::GetTimeBaseTime"
      */
     public TimeRecord getTRTime(int scale) throws QTException {
-        TimeRecord localTimeRecord = new TimeRecord();
+        TimeRecord tr = new TimeRecord();
         synchronized (QTNative.globalsLock) {
-            GetTimeBaseTime(_ID(), scale, QTObject.ID(localTimeRecord));
+            GetTimeBaseTime(_ID(), scale, QTObject.ID(tr));
         }
-        return localTimeRecord;
+        return tr;
     }
 
     /**
@@ -268,12 +268,12 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @see "QuickTime::GetTimeBaseStartTime"
      */
     public TimeRecord getTRStartTime(int scale) throws QTException {
-        TimeRecord localTimeRecord = null;
+        TimeRecord tr = null;
         synchronized (QTNative.globalsLock) {
-            localTimeRecord = new TimeRecord();
-            GetTimeBaseStartTime(_ID(), scale, QTObject.ID(localTimeRecord));
+            tr = new TimeRecord();
+            GetTimeBaseStartTime(_ID(), scale, QTObject.ID(tr));
         }
-        return localTimeRecord;
+        return tr;
     }
 
     /**
@@ -316,12 +316,12 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
      * @throws quicktime.QTException
      * @see "QuickTime::GetTimeBaseStopTime"
      */
-    public TimeRecord getTRStopTime(int paramInt) throws QTException {
-        TimeRecord localTimeRecord = new TimeRecord();
+    public TimeRecord getTRStopTime(int scale) throws QTException {
+        TimeRecord tr = new TimeRecord();
         synchronized (QTNative.globalsLock) {
-            GetTimeBaseStopTime(_ID(), paramInt, QTObject.ID(localTimeRecord));
+            GetTimeBaseStopTime(_ID(), scale, QTObject.ID(tr));
         }
-        return localTimeRecord;
+        return tr;
     }
 
     /**
@@ -517,24 +517,24 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
         }
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static int GetCallBackTimeBase(int paramInt) {
-        return ClockManager.GetCallBackTimeBase(paramInt);
+    private static int GetCallBackTimeBase(int cb) {
+        return ClockManager.GetCallBackTimeBase(cb);
     }
 
-    private static int GetMovieTimeBase(int paramInt) {
-        return MovieToolbox.GetMovieTimeBase(paramInt);
+    private static int GetMovieTimeBase(int movie) {
+        return MovieToolbox.GetMovieTimeBase(movie);
     }
 
-    private static int TuneGetTimeBase(int paramInt, int[] paramArrayOfInt) {
-        return MusicManager.TuneGetTimeBase(paramInt, paramArrayOfInt);
+    private static int TuneGetTimeBase(int tp, int[] tb) {
+        return MusicManager.TuneGetTimeBase(tp, tb);
     }
 
     private static short GetMoviesError() {
@@ -549,87 +549,87 @@ public final class TimeBase extends QTObject implements QuickTimeLib, QTStreamin
         return ClockManager.NewTimeBase();
     }
 
-    private static int GetTimeBaseTime(int paramInt1, int paramInt2, int paramInt3) {
-        return ClockManager.GetTimeBaseTime(paramInt1, paramInt2, paramInt3);
+    private static int GetTimeBaseTime(int tb, int scale, int tr) {
+        return ClockManager.GetTimeBaseTime(tb, scale, tr);
     }
 
-    private static void SetTimeBaseTime(int paramInt1, int paramInt2) {
-        ClockManager.SetTimeBaseTime(paramInt1, paramInt2);
+    private static void SetTimeBaseTime(int tb, int tr) {
+        ClockManager.SetTimeBaseTime(tb, tr);
     }
 
-    private static void SetTimeBaseValue(int paramInt1, int paramInt2, int paramInt3) {
-        ClockManager.SetTimeBaseValue(paramInt1, paramInt2, paramInt3);
+    private static void SetTimeBaseValue(int tb, int value, int scale) {
+        ClockManager.SetTimeBaseValue(tb, value, scale);
     }
 
-    private static int GetTimeBaseRate(int paramInt) {
-        return ClockManager.GetTimeBaseRate(paramInt);
+    private static int GetTimeBaseRate(int tb) {
+        return ClockManager.GetTimeBaseRate(tb);
     }
 
-    private static void SetTimeBaseRate(int paramInt1, int paramInt2) {
-        ClockManager.SetTimeBaseRate(paramInt1, paramInt2);
+    private static void SetTimeBaseRate(int tb, int rate) {
+        ClockManager.SetTimeBaseRate(tb, rate);
     }
 
-    private static int GetTimeBaseEffectiveRate(int paramInt) {
-        return ClockManager.GetTimeBaseEffectiveRate(paramInt);
+    private static int GetTimeBaseEffectiveRate(int tb) {
+        return ClockManager.GetTimeBaseEffectiveRate(tb);
     }
 
-    private static int GetTimeBaseStartTime(int paramInt1, int paramInt2, int paramInt3) {
-        return ClockManager.GetTimeBaseStartTime(paramInt1, paramInt2, paramInt3);
+    private static int GetTimeBaseStartTime(int tb, int scale, int tr) {
+        return ClockManager.GetTimeBaseStartTime(tb, scale, tr);
     }
 
-    private static void SetTimeBaseStartTime(int paramInt1, int paramInt2) {
-        ClockManager.SetTimeBaseStartTime(paramInt1, paramInt2);
+    private static void SetTimeBaseStartTime(int tb, int tr) {
+        ClockManager.SetTimeBaseStartTime(tb, tr);
     }
 
-    private static int GetTimeBaseStopTime(int paramInt1, int paramInt2, int paramInt3) {
-        return ClockManager.GetTimeBaseStopTime(paramInt1, paramInt2, paramInt3);
+    private static int GetTimeBaseStopTime(int tb, int scale, int tr) {
+        return ClockManager.GetTimeBaseStopTime(tb, scale, tr);
     }
 
-    private static void SetTimeBaseStopTime(int paramInt1, int paramInt2) {
-        ClockManager.SetTimeBaseStopTime(paramInt1, paramInt2);
+    private static void SetTimeBaseStopTime(int tb, int tr) {
+        ClockManager.SetTimeBaseStopTime(tb, tr);
     }
 
-    private static int GetTimeBaseFlags(int paramInt) {
-        return ClockManager.GetTimeBaseFlags(paramInt);
+    private static int GetTimeBaseFlags(int tb) {
+        return ClockManager.GetTimeBaseFlags(tb);
     }
 
-    private static void SetTimeBaseFlags(int paramInt1, int paramInt2) {
-        ClockManager.SetTimeBaseFlags(paramInt1, paramInt2);
+    private static void SetTimeBaseFlags(int tb, int flags) {
+        ClockManager.SetTimeBaseFlags(tb, flags);
     }
 
-    private static int GetTimeBaseStatus(int paramInt1, int paramInt2) {
-        return ClockManager.GetTimeBaseStatus(paramInt1, paramInt2);
+    private static int GetTimeBaseStatus(int tb, int unpinnedTime) {
+        return ClockManager.GetTimeBaseStatus(tb, unpinnedTime);
     }
 
-    private static void SetTimeBaseZero(int paramInt1, int paramInt2) {
-        ClockManager.SetTimeBaseZero(paramInt1, paramInt2);
+    private static void SetTimeBaseZero(int tb, int zero) {
+        ClockManager.SetTimeBaseZero(tb, zero);
     }
 
-    private static void SetTimeBaseMasterTimeBase(int paramInt1, int paramInt2, int paramInt3) {
-        ClockManager.SetTimeBaseMasterTimeBase(paramInt1, paramInt2, paramInt3);
+    private static void SetTimeBaseMasterTimeBase(int tb, int master, int slaveZero) {
+        ClockManager.SetTimeBaseMasterTimeBase(tb, master, slaveZero);
     }
 
-    private static int GetTimeBaseMasterTimeBase(int paramInt) {
-        return ClockManager.GetTimeBaseMasterTimeBase(paramInt);
+    private static int GetTimeBaseMasterTimeBase(int tb) {
+        return ClockManager.GetTimeBaseMasterTimeBase(tb);
     }
 
-    private static void SetTimeBaseMasterClock(int paramInt1, int paramInt2, int paramInt3) {
-        ClockManager.SetTimeBaseMasterClock(paramInt1, paramInt2, paramInt3);
+    private static void SetTimeBaseMasterClock(int tb, int clock, int slaveZero) {
+        ClockManager.SetTimeBaseMasterClock(tb, clock, slaveZero);
     }
 
-    private static int GetTimeBaseMasterClock(int paramInt) {
-        return ClockManager.GetTimeBaseMasterClock(paramInt);
+    private static int GetTimeBaseMasterClock(int tb) {
+        return ClockManager.GetTimeBaseMasterClock(tb);
     }
 
-    private static int SGGetTimeBase(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetTimeBase(paramInt, paramArrayOfInt);
+    private static int SGGetTimeBase(int sg, int[] timeBase) {
+        return SequenceGrabberManager.SGGetTimeBase(sg, timeBase);
     }
 
-    private static short QTSPresGetTimeBase(int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetTimeBase(paramInt, paramArrayOfInt);
+    private static short QTSPresGetTimeBase(int presentation, int[] timeBase) {
+        return StreamingManager.QTSPresGetTimeBase(presentation, timeBase);
     }
 
-    private static short QTGetWallClockTimeBase(int[] paramArrayOfInt) {
-        return ClockManager.QTGetWallClockTimeBase(paramArrayOfInt);
+    private static short QTGetWallClockTimeBase(int[] tb) {
+        return ClockManager.QTGetWallClockTimeBase(tb);
     }
 }

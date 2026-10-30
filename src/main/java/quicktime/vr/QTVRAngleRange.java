@@ -30,9 +30,9 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
      * Creates a QTVRAngleRange object from a byte array
      * Used in cloning
      */
-    public QTVRAngleRange(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
-        if (paramArrayOfByte.length != 8) {
+    public QTVRAngleRange(byte[] bytes) throws QTException {
+        super(bytes);
+        if (bytes.length != 8) {
             throw new QTException(-50);
         }
     }
@@ -44,25 +44,25 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[8];
-        QTVRAngleRange localQTVRAngleRange = new QTVRAngleRange();
-        paramObjectInputStream.read(localQTVRAngleRange.getBytes());
-        System.arraycopy(localQTVRAngleRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRAngleRange qtvrAngleRange = new QTVRAngleRange();
+        in.read(qtvrAngleRange.getBytes());
+        System.arraycopy(qtvrAngleRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRAngleRange localQTVRAngleRange = (QTVRAngleRange) clone();
-        paramObjectOutputStream.write(localQTVRAngleRange.getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRAngleRange qtvrAngleRange = (QTVRAngleRange) clone();
+        out.write(qtvrAngleRange.getBytes());
     }
 
     @Override
     protected Object clone() {
         try {
             return new QTVRAngleRange(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
@@ -76,8 +76,8 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
     /**
      * set the minimumAngle
      */
-    public void setMinimumAngle(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setMinimumAngle(float minimumAngle) {
+        setFloatAt(0, minimumAngle);
     }
 
     /**
@@ -90,8 +90,8 @@ public final class QTVRAngleRange extends QTByteObject implements Cloneable {
     /**
      * set the maximumAngle
      */
-    public void setMaximumAngle(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setMaximumAngle(float maximumAngle) {
+        setFloatAt(4, maximumAngle);
     }
 
     /**

@@ -62,19 +62,19 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
         stuff(na, gmNumber);
     }
 
-    private ToneDescription(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private ToneDescription(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[76];
-        paramObjectInputStream.read(getBytes());
+        in.read(getBytes());
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        paramObjectOutputStream.write(getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.write(getBytes());
     }
 
     /**
@@ -207,12 +207,12 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
      * Returns a string representation of this object
      */
     public String toString() {
-        String str = "";
+        String instrumentName = "";
         try {
-            str = getInstrumentName();
+            instrumentName = getInstrumentName();
         } catch (UtilException _) {
         }
-        return getClass().getName() + "[synthType=" + QTUtils.fromOSType(getSynthesizerType()) + ",instNum=" + getInstrumentNumber() + ",gmNum=" + getGMNumber() + ",instName=" + str + "]";
+        return getClass().getName() + "[synthType=" + QTUtils.fromOSType(getSynthesizerType()) + ",instNum=" + getInstrumentNumber() + ",gmNum=" + getGMNumber() + ",instName=" + instrumentName + "]";
     }
 
     /**
@@ -223,12 +223,12 @@ public final class ToneDescription extends QTByteObject implements QuickTimeLib,
         return new ToneDescription(getBytes());
     }
 
-    private static int NAStuffToneDescription(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MusicManager.NAStuffToneDescription(paramInt1, paramInt2, paramArrayOfByte);
+    private static int NAStuffToneDescription(int na, int gmNumber, byte[] td) {
+        return MusicManager.NAStuffToneDescription(na, gmNumber, td);
     }
 
-    private static int NAPickInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        return MusicManager.NAPickInstrument(paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramInt3, paramInt4, paramInt5, paramInt6);
+    private static int NAPickInstrument(int na, int filterProc, byte[] prompt, byte[] sd, int flags, int refCon, int reserved1, int reserved2) {
+        return MusicManager.NAPickInstrument(na, filterProc, prompt, sd, flags, refCon, reserved1, reserved2);
     }
 
     private static int GetMainEventLoop() {

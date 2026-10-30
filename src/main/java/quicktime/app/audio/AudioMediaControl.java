@@ -41,9 +41,9 @@ public class AudioMediaControl implements ExtendedAudioSpec {
         this(media, (quicktime.std.movies.media.AudioMediaHandler) media.getHandler());
     }
 
-    private AudioMediaControl(Media paramMedia, quicktime.std.movies.media.AudioMediaHandler paramAudioMediaHandler) throws quicktime.QTException {
-        this.audioMedia = paramMedia;
-        this.audioHandler = paramAudioMediaHandler;
+    private AudioMediaControl(Media audioMedia, quicktime.std.movies.media.AudioMediaHandler audioHandler) throws quicktime.QTException {
+        this.audioMedia = audioMedia;
+        this.audioHandler = audioHandler;
         this.muted = (this.audioMedia.getTrack().getVolume() < 0.0F);
     }
 

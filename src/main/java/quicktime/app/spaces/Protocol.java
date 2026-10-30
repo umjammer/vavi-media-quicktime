@@ -38,11 +38,11 @@ public class Protocol implements Collection<Class<?>> {
     /**
      * @deprecated
      */
-    public Protocol(Class[] paramArrayOfClass) {
-        if (paramArrayOfClass != null) {
-            this.defaultProtocolLimit = paramArrayOfClass.length;
+    public Protocol(Class[] classes) {
+        if (classes != null) {
+            this.defaultProtocolLimit = classes.length;
             for (int i = 0; i < this.defaultProtocolLimit; i++) {
-                this.protocolsVec.addElement(paramArrayOfClass[i]);
+                this.protocolsVec.addElement(classes[i]);
             }
         }
     }
@@ -54,9 +54,9 @@ public class Protocol implements Collection<Class<?>> {
      * @since QTJava 6.1
      * @deprecated
      */
-    public Protocol(Class<?> paramClass) {
-        if (paramClass != null)
-            this.protocolsVec.addElement(paramClass);
+    public Protocol(Class<?> clazz) {
+        if (clazz != null)
+            this.protocolsVec.addElement(clazz);
     }
 
     private final Vector<Class<?>> protocolsVec = new Vector<>();
@@ -73,9 +73,9 @@ public class Protocol implements Collection<Class<?>> {
      */
     public Enumeration<Class<?>> defaultProtocol() {
         if (this.defaultProtocolLimit > 0) {
-            Vector<Class<?>> localVector = new Vector<>();
-            for (int i = 0; i < this.defaultProtocolLimit; i++) localVector.addElement(this.protocolsVec.elementAt(i));
-            return localVector.elements();
+            Vector<Class<?>> vector = new Vector<>();
+            for (int i = 0; i < this.defaultProtocolLimit; i++) vector.addElement(this.protocolsVec.elementAt(i));
+            return vector.elements();
         }
         return null;
     }
@@ -188,9 +188,9 @@ public class Protocol implements Collection<Class<?>> {
      * @deprecated
      */
     public boolean passProtocol(Object object) {
-        for (Enumeration<Class<?>> localEnumeration = members(); localEnumeration.hasMoreElements(); ) {
-            Class<?> localClass = localEnumeration.nextElement();
-            if (!localClass.isInstance(object))
+        for (Enumeration<Class<?>> enumeration = members(); enumeration.hasMoreElements(); ) {
+            Class<?> clazz = enumeration.nextElement();
+            if (!clazz.isInstance(object))
                 return false;
         }
         return true;

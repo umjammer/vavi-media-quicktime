@@ -71,19 +71,19 @@ public final class MediaEQSpectrumBands extends QTByteObject implements Primitiv
         DisposePtr(getIntAt(2));
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static int NewPtrClear(int paramInt) {
-        return MemoryManager.NewPtrClear(paramInt);
+    private static int NewPtrClear(int size) {
+        return MemoryManager.NewPtrClear(size);
     }
 
-    private static void DisposePtr(int paramInt) {
-        MemoryManager.DisposePtr(paramInt);
+    private static void DisposePtr(int p) {
+        MemoryManager.DisposePtr(p);
     }
 }

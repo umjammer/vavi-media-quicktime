@@ -42,14 +42,14 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
         StdQTException.checkError(i);
     }
 
-    private CodecInfo(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private CodecInfo(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[72];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int i = 32; i < 36; i += 2) {
             setShortInArray(this.bytes, 32, EndianOrder.flipBigEndianToNative16(getShortFromArray(this.bytes, i)));
         }
@@ -65,9 +65,9 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[72];
-        System.arraycopy(getBytes(), 0, arrayOfByte, 0, 72);
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[72];
+        System.arraycopy(getBytes(), 0, movie, 0, 72);
         for (int i = 32; i < 36; i += 2) {
             setShortInArray(this.bytes, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, i)));
         }
@@ -81,7 +81,7 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
             setShortInArray(this.bytes, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, i)));
         }
         setIntInArray(this.bytes, 60, 0);
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -91,10 +91,10 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
      * @throws quicktime.std.StdQTException
      */
     public static int codecVersion() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = CodecManagerVersion(arrayOfInt);
+        int[] version = new int[1];
+        int i = CodecManagerVersion(version);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return version[0];
     }
 
     /**
@@ -228,27 +228,27 @@ public final class CodecInfo extends QTByteObject implements QuickTimeLib, Clone
         return new CodecInfo(this.bytes);
     }
 
-    private static short GetCodecInfo(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        return ImageCompressionManager.GetCodecInfo(paramArrayOfByte, paramInt1, paramInt2);
+    private static short GetCodecInfo(byte[] info, int cType, int codec) {
+        return ImageCompressionManager.GetCodecInfo(info, cType, codec);
     }
 
-    private static short CodecManagerVersion(int[] paramArrayOfInt) {
-        return ImageCompressionManager.CodecManagerVersion(paramArrayOfInt);
+    private static short CodecManagerVersion(int[] version) {
+        return ImageCompressionManager.CodecManagerVersion(version);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 }

@@ -292,14 +292,14 @@ public abstract class QTButton extends UIElement {
      * @since QTJava 6.1
      * This method is called by the ButtonActivator when the mouse enters the button
      */
-    protected void entered(QTMouseEvent paramQTMouseEvent) throws QTException {
+    protected void entered(QTMouseEvent qtMouseEvent) throws QTException {
         this.outOfBounds = false;
         if (this.pressedFlag) {
             setCurrentImage(this.pressedImage);
         } else if (this.rolloverImage != null)
             setCurrentImage(this.rolloverImage);
         if (this.mouseTargetListener != null) {
-            this.mouseTargetListener.mouseTargetEntered(paramQTMouseEvent);
+            this.mouseTargetListener.mouseTargetEntered(qtMouseEvent);
         }
     }
 
@@ -308,11 +308,11 @@ public abstract class QTButton extends UIElement {
      * @since QTJava 6.1
      * This method is called by the ButtonActivator when the mouse exits the button
      */
-    protected void exited(QTMouseEvent paramQTMouseEvent) throws QTException {
+    protected void exited(QTMouseEvent qtMouseEvent) throws QTException {
         this.outOfBounds = true;
         setCurrentImage(this.releasedImage);
         if (this.mouseTargetListener != null) {
-            this.mouseTargetListener.mouseTargetExited(paramQTMouseEvent);
+            this.mouseTargetListener.mouseTargetExited(qtMouseEvent);
         }
     }
 

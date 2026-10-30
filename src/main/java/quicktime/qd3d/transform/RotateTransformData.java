@@ -59,32 +59,32 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
         setRadian(radians);
     }
 
-    private RotateTransformData(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private RotateTransformData(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[8];
-        RotateTransformData localRotateTransformData = new RotateTransformData();
-        paramObjectInputStream.read(localRotateTransformData.getBytes());
+        RotateTransformData rotateTransformData = new RotateTransformData();
+        in.read(rotateTransformData.getBytes());
         try {
-            EndianOrder.flipBigEndianToNative(localRotateTransformData, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+            EndianOrder.flipBigEndianToNative(rotateTransformData, 0, getEndianDescriptor());
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
-        System.arraycopy(localRotateTransformData.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        System.arraycopy(rotateTransformData.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        RotateTransformData localRotateTransformData = (RotateTransformData) clone();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        RotateTransformData rotateTransformData = (RotateTransformData) clone();
         try {
-            EndianOrder.flipNativeToBigEndian(localRotateTransformData, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+            EndianOrder.flipNativeToBigEndian(rotateTransformData, 0, getEndianDescriptor());
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
-        paramObjectOutputStream.write(localRotateTransformData.getBytes());
+        out.write(rotateTransformData.getBytes());
     }
 
     /**
@@ -104,15 +104,15 @@ public final class RotateTransformData extends QTByteObject implements Cloneable
     /**
      * sets the the axis around which rotation will happen.
      */
-    public void setAxis(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setAxis(int axis) {
+        setIntAt(0, axis);
     }
 
     /**
      * sets angle of rotation in radians.
      */
-    public void setRadian(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setRadian(float radian) {
+        setFloatAt(4, radian);
     }
 
     /**

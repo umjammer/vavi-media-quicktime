@@ -13,9 +13,9 @@ public final class MediaSample extends SampleInfo {
      */
     public final QTHandle data;
 
-    MediaSample(int paramInt1, int paramInt2, QTHandle paramQTHandle, int paramInt3, int paramInt4, int paramInt5, SampleDescription paramSampleDescription, int paramInt6, int paramInt7) {
-        super(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramSampleDescription, paramInt6, paramInt7);
-        this.data = paramQTHandle;
+    MediaSample(int time, int duration, QTHandle data, int offset, int size, int numberOfSamples, SampleDescription description, int descriptionIndex, int flags) {
+        super(time, duration, offset, size, numberOfSamples, description, descriptionIndex, flags);
+        this.data = data;
     }
 
     /**

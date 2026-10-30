@@ -22,16 +22,16 @@ public final class XMLContent extends QTObject implements PrimitivesLib, QuickTi
     private static final int kElementOffset = 4;
     private static final int kDataOffset = 4;
 
-    XMLContent(int paramInt) throws QTException {
-        super(paramInt, owner);
+    XMLContent(int nativeRep) throws QTException {
+        super(nativeRep, owner);
     }
 
-    XMLContent(int paramInt1, int paramInt2) throws QTException {
-        super(paramInt1 + 20 * paramInt2, owner);
+    XMLContent(int ptr, int index) throws QTException {
+        super(ptr + 20 * index, owner);
     }
 
-    int getNthIdentifier(int paramInt) {
-        int i = 20 * paramInt;
+    int getNthIdentifier(int index) {
+        int i = 20 * index;
         int j = getIntFromPointer(_ID(), i);
         return j;
     }
@@ -72,29 +72,29 @@ public final class XMLContent extends QTObject implements PrimitivesLib, QuickTi
         throw new StdQTException(-50);
     }
 
-    private String getStringFromPointer(int paramInt) {
-        if (paramInt != 0) {
+    private String getStringFromPointer(int ptr) {
+        if (ptr != 0) {
             int i = 0;
             int j = 0;
-            while (getByteFromPointer(paramInt, j++) != 0) {
+            while (getByteFromPointer(ptr, j++) != 0) {
                 i++;
             }
-            byte[] arrayOfByte = new byte[i];
-            copyPointerToArray(paramInt, 0, arrayOfByte, 0, i);
-            return QTUtils.CString2String(arrayOfByte, 0);
+            byte[] cString = new byte[i];
+            copyPointerToArray(ptr, 0, cString, 0, i);
+            return QTUtils.CString2String(cString, 0);
         }
         return "";
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 }

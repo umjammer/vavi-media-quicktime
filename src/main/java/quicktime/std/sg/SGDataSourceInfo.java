@@ -9,8 +9,8 @@ public class SGDataSourceInfo {
 
     public final int mScriptTag;
 
-    SGDataSourceInfo(String paramString, int paramInt) {
-        this.mName = paramString;
-        this.mScriptTag = paramInt;
+    SGDataSourceInfo(String name, int scriptTag) {
+        this.mName = name;
+        this.mScriptTag = scriptTag;
     }
 }

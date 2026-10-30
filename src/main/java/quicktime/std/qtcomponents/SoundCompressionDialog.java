@@ -28,9 +28,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo()"
      */
     public float getInfoSampleRate() throws StdQTException {
-        int[] arrayOfInt = {0};
-        StdQTException.checkError(SCGetInfo(_ID(), 1936945780, arrayOfInt));
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        int[] info = {0};
+        StdQTException.checkError(SCGetInfo(_ID(), 1936945780, info));
+        return QTUtils.Fix2X(info[0]);
     }
 
     /**
@@ -41,8 +41,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCSetInfo()"
      */
     public void setInfoSampleRate(float rate) throws StdQTException {
-        int[] arrayOfInt = {QTUtils.X2Fix(rate)};
-        StdQTException.checkError(SCSetInfo(_ID(), 1936945780, arrayOfInt));
+        int[] info = {QTUtils.X2Fix(rate)};
+        StdQTException.checkError(SCSetInfo(_ID(), 1936945780, info));
     }
 
     /**
@@ -53,9 +53,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo()"
      */
     public int getInfoSampleSize() throws StdQTException {
-        short[] arrayOfShort = {0};
-        StdQTException.checkError(SCGetInfo(_ID(), 1936946035, arrayOfShort));
-        return arrayOfShort[0];
+        short[] info = {0};
+        StdQTException.checkError(SCGetInfo(_ID(), 1936946035, info));
+        return info[0];
     }
 
     /**
@@ -66,8 +66,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCSetInfo()"
      */
     public void setInfoSampleSize(int size) throws StdQTException {
-        short[] arrayOfShort = {(short) size};
-        StdQTException.checkError(SCSetInfo(_ID(), 1936946035, arrayOfShort));
+        short[] info = {(short) size};
+        StdQTException.checkError(SCSetInfo(_ID(), 1936946035, info));
     }
 
     /**
@@ -78,9 +78,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo()"
      */
     public int getInfoChannelCount() throws StdQTException {
-        short[] arrayOfShort = {0};
-        StdQTException.checkError(SCGetInfo(_ID(), 1936941923, arrayOfShort));
-        return arrayOfShort[0];
+        short[] info = {0};
+        StdQTException.checkError(SCGetInfo(_ID(), 1936941923, info));
+        return info[0];
     }
 
     /**
@@ -91,8 +91,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCSetInfo()"
      */
     public void setInfoChannelCount(int n) throws StdQTException {
-        short[] arrayOfShort = {(short) n};
-        StdQTException.checkError(SCSetInfo(_ID(), 1936941923, arrayOfShort));
+        short[] info = {(short) n};
+        StdQTException.checkError(SCSetInfo(_ID(), 1936941923, info));
     }
 
     /**
@@ -103,8 +103,8 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCSetInfo()"
      */
     public void setInfoCompression(int compType) throws StdQTException {
-        int[] arrayOfInt = {compType};
-        StdQTException.checkError(SCSetInfo(_ID(), 1936941940, arrayOfInt));
+        int[] info = {compType};
+        StdQTException.checkError(SCSetInfo(_ID(), 1936941940, info));
     }
 
     /**
@@ -115,9 +115,9 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo()"
      */
     public int getInfoCompression() throws StdQTException {
-        int[] arrayOfInt = {0};
-        StdQTException.checkError(SCGetInfo(_ID(), 1936941940, arrayOfInt));
-        return arrayOfInt[0];
+        int[] info = {0};
+        StdQTException.checkError(SCGetInfo(_ID(), 1936941940, info));
+        return info[0];
     }
 
     /**
@@ -148,68 +148,68 @@ public final class SoundCompressionDialog extends CompressionDialog implements Q
      */
     public int[] getInfoCompressionList() throws StdQTException {
         int i = NewHandle(4);
-        int[] arrayOfInt1 = {i};
-        int j = SCGetInfo(_ID(), 1668577644, arrayOfInt1);
+        int[] info = {i};
+        int j = SCGetInfo(_ID(), 1668577644, info);
         int k = GetHandleSize(i);
-        int[] arrayOfInt2 = null;
+        int[] infoCompressionList = null;
         if (k > 3) {
-            arrayOfInt2 = new int[k / 4];
-            copyPointerToArray(getIntFromPointer(i, 0), 0, arrayOfInt2, 0, k);
+            infoCompressionList = new int[k / 4];
+            copyPointerToArray(getIntFromPointer(i, 0), 0, infoCompressionList, 0, k);
         }
         DisposeHandle(i);
         StdQTException.checkError(j);
-        return arrayOfInt2;
+        return infoCompressionList;
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCGetInfo(int ci, int type, int[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramInt3);
+    private static int SCSetInfo(int ci, int type, int info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCSetInfo(int ci, int type, int[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SCGetInfo(int ci, int type, short[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SCSetInfo(int ci, int type, short[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SCGetInfo(int ci, int type, byte[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SCSetInfo(int ci, int type, byte[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static void copyArrayToPointer(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(int[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 
-    private static int NewHandle(int paramInt) {
-        return MemoryManager.NewHandle(paramInt);
+    private static int NewHandle(int size) {
+        return MemoryManager.NewHandle(size);
     }
 
-    private static int GetHandleSize(int paramInt) {
-        return MemoryManager.GetHandleSize(paramInt);
+    private static int GetHandleSize(int h) {
+        return MemoryManager.GetHandleSize(h);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfInt, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, int[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 }

@@ -12,32 +12,32 @@ final class WinNativeHelper {
 
     private static final Logger logger = System.getLogger(WinNativeHelper.class.getName());
 
-    static int getCompHWnd(Component paramComponent) {
-        return PlatformManager.getCompHWnd(paramComponent);
+    static int getCompHWnd(Component component) {
+        return PlatformManager.getCompHWnd(component);
     }
 
-    static int getDrawingSurfaceHWnd(Component paramComponent, int paramInt) {
-        return PlatformManager.getDrawingSurfaceHWnd(paramComponent, paramInt);
+    static int getDrawingSurfaceHWnd(Component component, int ds) {
+        return PlatformManager.getDrawingSurfaceHWnd(component, ds);
     }
 
-    static int getDrawingSurface(Component paramComponent) {
-        return PlatformManager.getDrawingSurface(paramComponent);
+    static int getDrawingSurface(Component component) {
+        return PlatformManager.getDrawingSurface(component);
     }
 
-    static int lockDrawingSurface(Component paramComponent, int paramInt) {
-        return PlatformManager.lockDrawingSurface(paramComponent, paramInt);
+    static int lockDrawingSurface(Component component, int ds) {
+        return PlatformManager.lockDrawingSurface(component, ds);
     }
 
-    static void unlockDrawingSurface(Component paramComponent, int paramInt) {
-        PlatformManager.unlockDrawingSurface(paramComponent, paramInt);
+    static void unlockDrawingSurface(Component component, int ds) {
+        PlatformManager.unlockDrawingSurface(component, ds);
     }
 
-    static void getBounds(Component paramComponent, int paramInt, int[] paramArrayOfInt) {
-        PlatformManager.getBounds(paramComponent, paramInt, paramArrayOfInt);
+    static void getBounds(Component component, int ds, int[] bounds) {
+        PlatformManager.getBounds(component, ds, bounds);
     }
 
-    static void freeDrawingSurface(Component paramComponent, int paramInt) {
-        PlatformManager.freeDrawingSurface(paramComponent, paramInt);
+    static void freeDrawingSurface(Component component, int ds) {
+        PlatformManager.freeDrawingSurface(component, ds);
     }
 
     static {

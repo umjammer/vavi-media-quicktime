@@ -106,21 +106,21 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     public synchronized void addedToSpace(Space s) {
         super.addedToSpace(s);
         for (int i = 0; i < this.memberVec.size(); i++) {
-            Object localObject = this.memberVec.elementAt(i);
+            Object member = this.memberVec.elementAt(i);
             if (this.compSpace != null) {
-                if (!(localObject instanceof TwoDSprite)) {
+                if (!(member instanceof TwoDSprite)) {
                     this.memberVec.removeElementAt(i);
-                    TwoDSprite localTwoDSprite = this.compSpace.getMemberSprite(localObject);
-                    if (localTwoDSprite != null) {
-                        this.memberVec.insertElementAt(localTwoDSprite, i);
+                    TwoDSprite memberSprite = this.compSpace.getMemberSprite(member);
+                    if (memberSprite != null) {
+                        this.memberVec.insertElementAt(memberSprite, i);
                     } else {
                         i--;
                     }
-                } else if (!this.space.hasMember(localObject)) {
+                } else if (!this.space.hasMember(member)) {
                     this.memberVec.removeElementAt(i);
                     i--;
                 }
-            } else if (!this.space.hasMember(localObject)) {
+            } else if (!this.space.hasMember(member)) {
                 this.memberVec.removeElementAt(i);
                 i--;
             }
@@ -137,10 +137,10 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     @Override
     protected void removeActiveHandler() {
         if ((this.mouseTargetListener != null) && (this.currentMouseMovedTarget != null)) {
-            QTMouseEvent localQTMouseEvent = new QTMouseEvent(this.space);
-            localQTMouseEvent.initialiseEventProfile(508, -1, -1, 0L, 0, 0);
-            localQTMouseEvent.setTarget(this.currentMouseMovedTarget);
-            doMouseTargetExit(localQTMouseEvent);
+            QTMouseEvent e = new QTMouseEvent(this.space);
+            e.initialiseEventProfile(508, -1, -1, 0L, 0, 0);
+            e.setTarget(this.currentMouseMovedTarget);
+            doMouseTargetExit(e);
             this.currentMouseMovedTarget = null;
         }
         super.removeActiveHandler();
@@ -199,11 +199,11 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         if (!hasMember(member)) {
             if (this.compSpace != null) {
                 if (!(member instanceof TwoDSprite)) {
-                    TwoDSprite localTwoDSprite = this.compSpace.getMemberSprite(member);
-                    if (localTwoDSprite == null) {
+                    TwoDSprite memberSprite = this.compSpace.getMemberSprite(member);
+                    if (memberSprite == null) {
                         return false;
                     }
-                    this.memberVec.addElement(localTwoDSprite);
+                    this.memberVec.addElement(memberSprite);
                     return true;
                 }
                 if (!this.compSpace.hasMember(member)) {
@@ -348,16 +348,16 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         super.removeQTMouseListener(l);
     }
 
-    void addMouseTargetListener(MouseTargetListener paramMouseTargetListener) {
-        boolean bool = hasMouseTargetListener();
-        this.mouseTargetListener = QTEventCaster.add(this.mouseTargetListener, paramMouseTargetListener);
-        updateMouseTargetListener(bool);
+    void addMouseTargetListener(MouseTargetListener listener) {
+        boolean flag = hasMouseTargetListener();
+        this.mouseTargetListener = QTEventCaster.add(this.mouseTargetListener, listener);
+        updateMouseTargetListener(flag);
     }
 
-    void removeMouseTargetListener(MouseTargetListener paramMouseTargetListener) {
-        boolean bool = hasMouseTargetListener();
-        this.mouseTargetListener = QTEventCaster.remove(this.mouseTargetListener, paramMouseTargetListener);
-        updateMouseTargetListener(bool);
+    void removeMouseTargetListener(MouseTargetListener listener) {
+        boolean flag = hasMouseTargetListener();
+        this.mouseTargetListener = QTEventCaster.remove(this.mouseTargetListener, listener);
+        updateMouseTargetListener(flag);
     }
 
     void updateMouseTargetListener(boolean flag) {
@@ -374,8 +374,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     }
 
     @Override
-    boolean isInterestedInMouseMoveEvents(QTMouseEvent paramQTMouseEvent) {
-        return ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) || (super.isInterestedInMouseMoveEvents(paramQTMouseEvent));
+    boolean isInterestedInMouseMoveEvents(QTMouseEvent qtMouseEvent) {
+        return ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(qtMouseEvent.getModifiers()))) || (super.isInterestedInMouseMoveEvents(qtMouseEvent));
     }
 
     /**
@@ -424,7 +424,7 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      * @since QTJava 6.1
      * @deprecated
      */
-    protected void doMouseReleased(QTMouseEvent e, boolean paramBoolean) {
+    protected void doMouseReleased(QTMouseEvent e, boolean clicked) {
         e.setTarget(this.mousePressTarget);
         this.mouseButtonListener.mouseReleased(e);
         if (this.inPressDraggingTarget) {
@@ -432,15 +432,15 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         } else {
             this.currentMouseMovedTarget = getHitTarget(e.getX(), e.getY());
             if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(e.getModifiers())))
-                if (paramBoolean) {
-                    Object localObject = getHitTarget(e.getX(), e.getY());
-                    if (localObject != null) {
+                if (clicked) {
+                    Object currentMouseMovedTarget = getHitTarget(e.getX(), e.getY());
+                    if (currentMouseMovedTarget != null) {
                         e.setEventType(507);
-                        e.setTarget(localObject);
+                        e.setTarget(currentMouseMovedTarget);
                         doMouseTargetEnter(e);
                         e.setEventType(502);
                     }
-                    this.currentMouseMovedTarget = localObject;
+                    this.currentMouseMovedTarget = currentMouseMovedTarget;
                 } else {
                     this.currentMouseMovedTarget = null;
                 }
@@ -459,9 +459,9 @@ public class QTMouseTargetController extends QTMouseController implements Collec
      */
     @Override
     protected void doMouseClicked(QTMouseEvent e) {
-        Object localObject = getHitTarget(e.getX(), e.getY());
-        if (localObject != null) {
-            e.setTarget(localObject);
+        Object target = getHitTarget(e.getX(), e.getY());
+        if (target != null) {
+            e.setTarget(target);
             this.mouseButtonListener.mouseClicked(e);
             e.setTarget(null);
         }
@@ -500,14 +500,14 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(e.getModifiers()))) {
             if (this.drawSpace != null) {
                 try {
-                    QTDrawable localQTDrawable = (QTDrawable) this.mousePressTarget;
-                    Region localRegion1 = null;
-                    localRegion1 = new Region(localQTDrawable.getDisplayBounds());
+                    QTDrawable qtDrawable = (QTDrawable) this.mousePressTarget;
+                    Region region1 = null;
+                    region1 = new Region(qtDrawable.getDisplayBounds());
                     this.mouseMoveListener.mouseDragged(e);
-                    Region localRegion2 = new Region(localQTDrawable.getDisplayBounds());
-                    Region localRegion3 = localRegion1.union(localRegion2).diff(localRegion2);
-                    if (!localRegion3.empty())
-                        this.drawSpace.redrawMember(localQTDrawable, localRegion3);
+                    Region regionB = new Region(qtDrawable.getDisplayBounds());
+                    Region invalidRgn = region1.union(regionB).diff(regionB);
+                    if (!invalidRgn.empty())
+                        this.drawSpace.redrawMember(qtDrawable, invalidRgn);
                 } catch (QTException ex) {
                     QTRuntimeException.handleOrThrow(new QTRuntimeException(ex), this, "mouseDragged");
                 }
@@ -516,19 +516,19 @@ public class QTMouseTargetController extends QTMouseController implements Collec
             }
         }
         if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(e.getModifiers()))) {
-            Object localObject = getHitTarget(e.getX(), e.getY());
-            if ((localObject == null) && (this.inPressDraggingTarget)) {
+            Object hitTarget = getHitTarget(e.getX(), e.getY());
+            if ((hitTarget == null) && (this.inPressDraggingTarget)) {
                 e.setEventType(508);
                 doMouseTargetExit(e);
                 e.setEventType(506);
                 this.inPressDraggingTarget = false;
-            } else if (localObject != null) {
-                if ((this.inPressDraggingTarget) && (localObject != this.mousePressTarget)) {
+            } else if (hitTarget != null) {
+                if ((this.inPressDraggingTarget) && (hitTarget != this.mousePressTarget)) {
                     e.setEventType(508);
                     doMouseTargetExit(e);
                     e.setEventType(506);
                     this.inPressDraggingTarget = false;
-                } else if ((!this.inPressDraggingTarget) && (localObject == this.mousePressTarget)) {
+                } else if ((!this.inPressDraggingTarget) && (hitTarget == this.mousePressTarget)) {
                     e.setEventType(507);
                     doMouseTargetEnter(e);
                     e.setEventType(506);
@@ -583,8 +583,8 @@ public class QTMouseTargetController extends QTMouseController implements Collec
                 this.currentMouseMovedTarget = null;
                 return;
             }
-            Object localObject = getHitTarget(e.getX(), e.getY());
-            if (localObject == null) {
+            Object currentMouseMovedTarget = getHitTarget(e.getX(), e.getY());
+            if (currentMouseMovedTarget == null) {
                 if (this.currentMouseMovedTarget != null) {
                     e.setEventType(508);
                     e.setTarget(this.currentMouseMovedTarget);
@@ -594,19 +594,19 @@ public class QTMouseTargetController extends QTMouseController implements Collec
                 }
             } else if (this.currentMouseMovedTarget == null) {
                 e.setEventType(507);
-                e.setTarget(localObject);
+                e.setTarget(currentMouseMovedTarget);
                 doMouseTargetEnter(e);
                 e.setEventType(503);
-                this.currentMouseMovedTarget = localObject;
-            } else if (this.currentMouseMovedTarget != localObject) {
+                this.currentMouseMovedTarget = currentMouseMovedTarget;
+            } else if (this.currentMouseMovedTarget != currentMouseMovedTarget) {
                 e.setEventType(508);
                 e.setTarget(this.currentMouseMovedTarget);
                 doMouseTargetExit(e);
                 e.setEventType(507);
-                e.setTarget(localObject);
+                e.setTarget(currentMouseMovedTarget);
                 doMouseTargetEnter(e);
                 e.setEventType(503);
-                this.currentMouseMovedTarget = localObject;
+                this.currentMouseMovedTarget = currentMouseMovedTarget;
             } else if ((this.mouseMoveListener != null) && (this.mouseMoveListener.matchModifierFilter(e.getModifiers()))) {
                 e.setTarget(this.currentMouseMovedTarget);
                 this.mouseMoveListener.mouseMoved(e);
@@ -674,49 +674,49 @@ public class QTMouseTargetController extends QTMouseController implements Collec
         super.doMouseExited(e);
     }
 
-    private void doMouseEnter_Target(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
-            Object localObject;
+    private void doMouseEnter_Target(QTMouseEvent e) {
+        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(e.getModifiers()))) {
+            Object currentMouseMovedTarget;
             if (this.mousePressTarget != null) {
-                localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
-                if ((localObject != null) && (!this.inPressDraggingTarget) && (localObject == this.mousePressTarget)) {
-                    paramQTMouseEvent.setEventType(507);
-                    paramQTMouseEvent.setTarget(this.mousePressTarget);
-                    doMouseTargetEnter(paramQTMouseEvent);
+                currentMouseMovedTarget = getHitTarget(e.getX(), e.getY());
+                if ((currentMouseMovedTarget != null) && (!this.inPressDraggingTarget) && (currentMouseMovedTarget == this.mousePressTarget)) {
+                    e.setEventType(507);
+                    e.setTarget(this.mousePressTarget);
+                    doMouseTargetEnter(e);
                     this.inPressDraggingTarget = true;
                 }
             } else {
-                localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
-                if (localObject != null) {
-                    paramQTMouseEvent.setEventType(507);
-                    paramQTMouseEvent.setTarget(localObject);
-                    doMouseTargetEnter(paramQTMouseEvent);
-                    this.currentMouseMovedTarget = localObject;
+                currentMouseMovedTarget = getHitTarget(e.getX(), e.getY());
+                if (currentMouseMovedTarget != null) {
+                    e.setEventType(507);
+                    e.setTarget(currentMouseMovedTarget);
+                    doMouseTargetEnter(e);
+                    this.currentMouseMovedTarget = currentMouseMovedTarget;
                 }
             }
-            paramQTMouseEvent.setTarget(null);
-            paramQTMouseEvent.setEventType(504);
+            e.setTarget(null);
+            e.setEventType(504);
         }
     }
 
-    private void doMouseExit_Target(QTMouseEvent paramQTMouseEvent) {
-        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))) {
+    private void doMouseExit_Target(QTMouseEvent e) {
+        if ((this.mouseTargetListener != null) && (this.mouseTargetListener.matchModifierFilter(e.getModifiers()))) {
             if (this.mousePressTarget != null) {
-                Object localObject = getHitTarget(paramQTMouseEvent.getX(), paramQTMouseEvent.getY());
-                if ((localObject == null) && (this.inPressDraggingTarget)) {
-                    paramQTMouseEvent.setEventType(508);
-                    paramQTMouseEvent.setTarget(this.mousePressTarget);
-                    doMouseTargetExit(paramQTMouseEvent);
+                Object hitTarget = getHitTarget(e.getX(), e.getY());
+                if ((hitTarget == null) && (this.inPressDraggingTarget)) {
+                    e.setEventType(508);
+                    e.setTarget(this.mousePressTarget);
+                    doMouseTargetExit(e);
                     this.inPressDraggingTarget = false;
                 }
             } else if (this.currentMouseMovedTarget != null) {
-                paramQTMouseEvent.setEventType(508);
-                paramQTMouseEvent.setTarget(this.currentMouseMovedTarget);
-                doMouseTargetExit(paramQTMouseEvent);
+                e.setEventType(508);
+                e.setTarget(this.currentMouseMovedTarget);
+                doMouseTargetExit(e);
                 this.currentMouseMovedTarget = null;
             }
-            paramQTMouseEvent.setTarget(null);
-            paramQTMouseEvent.setEventType(505);
+            e.setTarget(null);
+            e.setEventType(505);
         }
     }
 
@@ -733,38 +733,38 @@ public class QTMouseTargetController extends QTMouseController implements Collec
     protected Object getHitTarget(int x, int y) {
         if (this.displaySpace != null) {
             try {
-                QDRect localQDRect = this.displaySpace.getDisplayBounds();
-                int i = x + localQDRect.getX();
-                int j = y + localQDRect.getY();
-                if (!localQDRect.inside(i, j)) {
+                QDRect displayBounds = this.displaySpace.getDisplayBounds();
+                int i = x + displayBounds.getX();
+                int j = y + displayBounds.getY();
+                if (!displayBounds.inside(i, j)) {
                     return null;
                 }
                 if (isWholespace()) {
                     return this.displaySpace.hitTest(i, j);
                 }
                 if (this.drawSpace != null) {
-                    Object localObject = this.displaySpace.hitTest(i, j);
-                    if (hasMember(localObject)) {
-                        return localObject;
+                    Object hitTarget = this.displaySpace.hitTest(i, j);
+                    if (hasMember(hitTarget)) {
+                        return hitTarget;
                     }
                     return null;
                 }
-                TwoDSprite localObject = null;
-                Enumeration<?> localEnumeration = members();
+                TwoDSprite twoDSprite = null;
+                Enumeration<?> enumeration = members();
                 this.cachePoint.setX(i);
                 this.cachePoint.setY(j);
-                while (localEnumeration.hasMoreElements()) {
-                    TwoDSprite localTwoDSprite = (TwoDSprite) localEnumeration.nextElement();
-                    if (localTwoDSprite.hitTest(this.compSpace.hitTestFlag | 0x10, this.cachePoint)) {
-                        if (localObject != null) {
-                            if (localTwoDSprite.getLayer() < localObject.getLayer())
-                                localObject = localTwoDSprite;
+                while (enumeration.hasMoreElements()) {
+                    TwoDSprite twoDSprite2 = (TwoDSprite) enumeration.nextElement();
+                    if (twoDSprite2.hitTest(this.compSpace.hitTestFlag | 0x10, this.cachePoint)) {
+                        if (twoDSprite != null) {
+                            if (twoDSprite2.getLayer() < twoDSprite.getLayer())
+                                twoDSprite = twoDSprite2;
                         } else {
-                            localObject = localTwoDSprite;
+                            twoDSprite = twoDSprite2;
                         }
                     }
                 }
-                return localObject;
+                return twoDSprite;
             } catch (QTException e) {
                 QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this.displaySpace, "getDisplayBounds");
             }

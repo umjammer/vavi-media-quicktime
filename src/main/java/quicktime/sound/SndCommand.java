@@ -62,10 +62,10 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
 
     /**
      * Sets the first optional parameter.
-     * @param param1 optional command parameter
+     * @param value optional command parameter
      */
-    public void setParam1(int param1) {
-        setShortAt(2, (short) param1);
+    public void setParam1(int value) {
+        setShortAt(2, (short) value);
     }
 
     /**
@@ -78,10 +78,10 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
 
     /**
      * Sets the second optional parameter.
-     * @param param2 optional command parameter
+     * @param value optional command parameter
      */
-    public void setParam2(int param2) {
-        setIntAt(4, param2);
+    public void setParam2(int value) {
+        setIntAt(4, value);
     }
 
     /**
@@ -92,11 +92,11 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
         return getIntAt(4);
     }
 
-    public void setBuffer(ExtScheduledSoundHeader paramExtScheduledSoundHeader) {
+    public void setBuffer(ExtScheduledSoundHeader buffer) {
         int i = getCmd();
         if ((i == 81) || (i == 80) || (i == 52)) {
-            setIntAt(4, QTObject.ID(paramExtScheduledSoundHeader));
-            this.keepBuffer = paramExtScheduledSoundHeader;
+            setIntAt(4, QTObject.ID(buffer));
+            this.keepBuffer = buffer;
         }
     }
 
@@ -112,13 +112,13 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
      * Gets the value of the right volume IFF the cmd field is volumeCmd
      * otherwise this call returns.
      */
-    public void setVolumes(float paramFloat1, float paramFloat2) {
+    public void setVolumes(float left, float right) {
         int i = getCmd();
         if (i != 46) {
             return;
         }
-        int j = QTUtils.X2ShortFix(paramFloat2) << 16;
-        int k = QTUtils.X2ShortFix(paramFloat1);
+        int j = QTUtils.X2ShortFix(right) << 16;
+        int k = QTUtils.X2ShortFix(left);
         setIntAt(4, j | k);
     }
 
@@ -166,11 +166,11 @@ public final class SndCommand extends QTPointerRef implements PrimitivesLib {
         return getClass().getName() + "[cmd=" + getCmd() + ",param1=" + getParam1() + ",param2=" + getParam2() + "]";
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 }

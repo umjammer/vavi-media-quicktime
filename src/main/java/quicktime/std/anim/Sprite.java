@@ -27,9 +27,9 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
 
     private SpriteWorld sw;
 
-    Sprite(int paramInt, SpriteWorld paramSpriteWorld) throws QTException {
-        super(paramInt);
-        this.sw = paramSpriteWorld;
+    Sprite(int nativeRep, SpriteWorld sw) throws QTException {
+        super(nativeRep);
+        this.sw = sw;
     }
 
     /**
@@ -48,21 +48,21 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
         this.sw = itsSpriteWorld;
     }
 
-    private static int allocate(SpriteWorld paramSpriteWorld, ImageDescription paramImageDescription, EncodedImage paramEncodedImage, Matrix paramMatrix, boolean paramBoolean, int paramInt) throws StdQTException {
-        byte b = (byte) (paramBoolean ? 1 : 0);
-        int[] arrayOfInt = new int[1];
+    private static int allocate(SpriteWorld spriteWorld, ImageDescription idh, EncodedImage imageDataPtr, Matrix matrix, boolean visible, int layer) throws StdQTException {
+        byte b = (byte) (visible ? 1 : 0);
+        int[] newSprite = new int[1];
         int i = -50;
         synchronized (QTNative.globalsLock) {
-            if ((paramEncodedImage instanceof ByteEncodedImage)) {
-                i = NewSprite(arrayOfInt, QTObject.ID(paramSpriteWorld), QTObject.ID(paramImageDescription), ((ByteEncodedImage) paramEncodedImage).getBytes(), paramMatrix.getBytes(), b, (short) paramInt);
-            } else if ((paramEncodedImage instanceof IntEncodedImage)) {
-                i = NewSprite(arrayOfInt, QTObject.ID(paramSpriteWorld), QTObject.ID(paramImageDescription), ((IntEncodedImage) paramEncodedImage).getInts(), paramMatrix.getBytes(), b, (short) paramInt);
-            } else if ((paramEncodedImage instanceof RawEncodedImage)) {
-                i = NewSprite(arrayOfInt, QTObject.ID(paramSpriteWorld), QTObject.ID(paramImageDescription), QTObject.ID((RawEncodedImage) paramEncodedImage), paramMatrix.getBytes(), b, (short) paramInt);
+            if ((imageDataPtr instanceof ByteEncodedImage)) {
+                i = NewSprite(newSprite, QTObject.ID(spriteWorld), QTObject.ID(idh), ((ByteEncodedImage) imageDataPtr).getBytes(), matrix.getBytes(), b, (short) layer);
+            } else if ((imageDataPtr instanceof IntEncodedImage)) {
+                i = NewSprite(newSprite, QTObject.ID(spriteWorld), QTObject.ID(idh), ((IntEncodedImage) imageDataPtr).getInts(), matrix.getBytes(), b, (short) layer);
+            } else if ((imageDataPtr instanceof RawEncodedImage)) {
+                i = NewSprite(newSprite, QTObject.ID(spriteWorld), QTObject.ID(idh), QTObject.ID((RawEncodedImage) imageDataPtr), matrix.getBytes(), b, (short) layer);
             }
             StdQTException.checkError(i);
         }
-        return arrayOfInt[0];
+        return newSprite[0];
     }
 
     /**
@@ -94,11 +94,11 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::SpriteHitTest ()"
      */
     public boolean hitTest(int flags, QDPoint loc) throws StdQTException {
-        byte[] arrayOfByte = {0};
+        byte[] wasHit = {0};
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SpriteHitTest(_ID(), flags, loc.getPoint(), arrayOfByte));
+            StdQTException.checkError(SpriteHitTest(_ID(), flags, loc.getPoint(), wasHit));
         }
-        return arrayOfByte[0] != 0;
+        return wasHit[0] != 0;
     }
 
     /**
@@ -109,12 +109,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::GetSpriteProperty ()"
      */
     public Matrix getMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
+        Matrix matrix = new Matrix();
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 1, localMatrix.getBytes());
+            int i = GetSpriteProperty(_ID(), 1, matrix.getBytes());
             StdQTException.checkError(i);
         }
-        return localMatrix;
+        return matrix;
     }
 
     /**
@@ -151,12 +151,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * presented by the sprite.
      */
     public Dimension getInitialSize() throws StdQTException {
-        int[] arrayOfInt = {0};
+        int[] propertyValue = {0};
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
+            int i = GetSpriteProperty(_ID(), 2, propertyValue);
             StdQTException.checkError(i);
         }
-        return new Dimension(getShortFromHandle(arrayOfInt[0], 32), getShortFromHandle(arrayOfInt[0], 34));
+        return new Dimension(getShortFromHandle(propertyValue[0], 32), getShortFromHandle(propertyValue[0], 34));
     }
 
     /**
@@ -168,12 +168,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::GetSpriteProperty ()"
      */
     public QDDimension getOriginalSize() throws StdQTException {
-        int[] arrayOfInt = {0};
+        int[] propertyValue = {0};
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
+            int i = GetSpriteProperty(_ID(), 2, propertyValue);
             StdQTException.checkError(i);
         }
-        return new QDDimension(getShortFromHandle(arrayOfInt[0], 32), getShortFromHandle(arrayOfInt[0], 34));
+        return new QDDimension(getShortFromHandle(propertyValue[0], 32), getShortFromHandle(propertyValue[0], 34));
     }
 
     /**
@@ -184,11 +184,11 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::SetSpriteProperty ()"
      */
     public void setImageDescription(ImageDescription idh) throws StdQTException {
-        int[] arrayOfInt = {0};
+        int[] propertyValue = {0};
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 2, arrayOfInt);
+            int i = GetSpriteProperty(_ID(), 2, propertyValue);
             StdQTException.checkError(i);
-            if (arrayOfInt[0] == QTObject.ID(idh))
+            if (propertyValue[0] == QTObject.ID(idh))
                 return;
             i = SetSpriteProperty(_ID(), 2, QTObject.ID(idh));
             StdQTException.checkError(i);
@@ -247,10 +247,10 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::SetSpriteProperty ()"
      */
     public boolean setImageDataIfDifferent(EncodedImage data) throws StdQTException {
-        int[] arrayOfInt = {0};
+        int[] propertyValue = {0};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = GetSpriteProperty(_ID(), 3, arrayOfInt);
+            i = GetSpriteProperty(_ID(), 3, propertyValue);
             StdQTException.checkError(i);
         }
         i = -50;
@@ -266,7 +266,7 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
         }
         int[] ai1 = new int[] {0};
         GetSpriteProperty(_ID(), 3, ai1);
-        if (ai1[0] != arrayOfInt[0]) {
+        if (ai1[0] != propertyValue[0]) {
             setImageDataSize(data.getSize());
             return true;
         }
@@ -281,12 +281,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::GetSpriteProperty ()"
      */
     public boolean getVisible() throws StdQTException {
-        byte[] arrayOfByte = {0};
+        byte[] propertyValue = {0};
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 4, arrayOfByte);
+            int i = GetSpriteProperty(_ID(), 4, propertyValue);
             StdQTException.checkError(i);
         }
-        return arrayOfByte[0] != 0;
+        return propertyValue[0] != 0;
     }
 
     /**
@@ -312,12 +312,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::GetSpriteProperty ()"
      */
     public int getLayer() throws StdQTException {
-        short[] arrayOfShort = {0};
+        short[] propertyValue = {0};
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 5, arrayOfShort);
+            int i = GetSpriteProperty(_ID(), 5, propertyValue);
             StdQTException.checkError(i);
         }
-        return arrayOfShort[0];
+        return propertyValue[0];
     }
 
     /**
@@ -342,12 +342,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::GetSpriteProperty ()"
      */
     public GraphicsMode getGraphicsMode() throws StdQTException {
-        GraphicsMode localGraphicsMode = new GraphicsMode();
+        GraphicsMode graphicsMode = new GraphicsMode();
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 6, localGraphicsMode.getBytes());
+            int i = GetSpriteProperty(_ID(), 6, graphicsMode.getBytes());
             StdQTException.checkError(i);
         }
-        return localGraphicsMode;
+        return graphicsMode;
     }
 
     /**
@@ -374,12 +374,12 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
      * @see "QuickTime::GetSpriteProperty ()"
      */
     public int getImageDataSize() throws StdQTException {
-        int[] arrayOfInt = {0};
+        int[] propertyValue = {0};
         synchronized (QTNative.globalsLock) {
-            int i = GetSpriteProperty(_ID(), 7, arrayOfInt);
+            int i = GetSpriteProperty(_ID(), 7, propertyValue);
             StdQTException.checkError(i);
         }
-        return arrayOfInt[0];
+        return propertyValue[0];
     }
 
     /**
@@ -416,63 +416,63 @@ public final class Sprite extends QTObject implements QuickTimeLib, quicktime.jd
         }
     }
 
-    private static short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte paramByte, short paramShort) {
-        return SpriteManager.NewSprite(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramByte, paramShort);
+    private static short NewSprite(int[] newSprite, int spriteWorld, int idh, byte[] imageDataPtr, byte[] matrix, byte visible, short layer) {
+        return SpriteManager.NewSprite(newSprite, spriteWorld, idh, imageDataPtr, matrix, visible, layer);
     }
 
-    private static short NewSprite(int[] paramArrayOfInt1, int paramInt1, int paramInt2, int[] paramArrayOfInt2, byte[] paramArrayOfByte, byte paramByte, short paramShort) {
-        return SpriteManager.NewSprite(paramArrayOfInt1, paramInt1, paramInt2, paramArrayOfInt2, paramArrayOfByte, paramByte, paramShort);
+    private static short NewSprite(int[] newSprite, int spriteWorld, int idh, int[] imageDataPtr, byte[] matrix, byte visible, short layer) {
+        return SpriteManager.NewSprite(newSprite, spriteWorld, idh, imageDataPtr, matrix, visible, layer);
     }
 
-    private static short NewSprite(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, byte paramByte, short paramShort) {
-        return SpriteManager.NewSprite(paramArrayOfInt, paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramByte, paramShort);
+    private static short NewSprite(int[] newSprite, int spriteWorld, int idh, int imageDataPtr, byte[] matrix, byte visible, short layer) {
+        return SpriteManager.NewSprite(newSprite, spriteWorld, idh, imageDataPtr, matrix, visible, layer);
     }
 
-    private static void InvalidateSprite(int paramInt) {
-        SpriteManager.InvalidateSprite(paramInt);
+    private static void InvalidateSprite(int sprite) {
+        SpriteManager.InvalidateSprite(sprite);
     }
 
-    private static short SpriteHitTest(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return SpriteManager.SpriteHitTest(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static short SpriteHitTest(int sprite, int flags, int loc, byte[] wasHit) {
+        return SpriteManager.SpriteHitTest(sprite, flags, loc, wasHit);
     }
 
-    private static short GetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfShort);
+    private static short GetSpriteProperty(int sprite, int propertyType, short[] propertyValue) {
+        return SpriteManager.GetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short GetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfInt);
+    private static short GetSpriteProperty(int sprite, int propertyType, int[] propertyValue) {
+        return SpriteManager.GetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short GetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.GetSpriteProperty(paramInt1, paramInt2, paramArrayOfByte);
+    private static short GetSpriteProperty(int sprite, int propertyType, byte[] propertyValue) {
+        return SpriteManager.GetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short SetSpriteProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramArrayOfShort);
+    private static short SetSpriteProperty(int sprite, int propertyType, short[] propertyValue) {
+        return SpriteManager.SetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short SetSpriteProperty(int paramInt1, int paramInt2, short paramShort) {
-        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramShort);
+    private static short SetSpriteProperty(int sprite, int propertyType, short propertyValue) {
+        return SpriteManager.SetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short SetSpriteProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramArrayOfInt);
+    private static short SetSpriteProperty(int sprite, int propertyType, int[] propertyValue) {
+        return SpriteManager.SetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short SetSpriteProperty(int paramInt1, int paramInt2, int paramInt3) {
-        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramInt3);
+    private static short SetSpriteProperty(int sprite, int propertyType, int propertyValue) {
+        return SpriteManager.SetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static short SetSpriteProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.SetSpriteProperty(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SetSpriteProperty(int sprite, int propertyType, byte[] propertyValue) {
+        return SpriteManager.SetSpriteProperty(sprite, propertyType, propertyValue);
     }
 
-    private static void DisposeSprite(int paramInt) {
-        SpriteManager.DisposeSprite(paramInt);
+    private static void DisposeSprite(int sprite) {
+        SpriteManager.DisposeSprite(sprite);
     }
 
-    private static short getShortFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromHandle(paramInt1, paramInt2);
+    private static short getShortFromHandle(int h, int offset) {
+        return MemoryManager.getShortFromHandle(h, offset);
     }
 }

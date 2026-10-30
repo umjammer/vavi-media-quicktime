@@ -345,22 +345,22 @@ public final class MatrixManager {
     }
 
     /** used by Quaternion */
-    public static int Q3Quaternion_SetMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
+    public static int Q3Quaternion_SetMatrix(byte[] quaternion, byte[] matrix) {
         throw new UnsupportedToolboxException("Q3Quaternion_SetMatrix");
     }
 
     /** used by Presentation */
-    public static short QTSPresGetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static short QTSPresGetMatrix(int presentation, int stream, byte[] matrix) {
         throw new UnsupportedToolboxException("QTSPresGetMatrix");
     }
 
     /** used by Presentation */
-    public static short QTSPresSetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
+    public static short QTSPresSetMatrix(int presentation, int stream, byte[] matrix) {
         throw new UnsupportedToolboxException("QTSPresSetMatrix");
     }
 
     /** used by SpriteWorld */
-    public static short SetSpriteWorldMatrix(int paramInt, byte[] paramArrayOfByte) {
+    public static short SetSpriteWorldMatrix(int spriteWorld, byte[] matrix) {
         throw new UnsupportedToolboxException("SetSpriteWorldMatrix");
     }
 

@@ -9,12 +9,12 @@ import quicktime.jdirect.InterfaceLib;
 
 class HIToolBoxFunctions implements InterfaceLib {
 
-    static int SetEventLoopTimerNextFireTime(int paramInt, double paramDouble) {
-        return PlatformManager.SetEventLoopTimerNextFireTime(paramInt, paramDouble);
+    static int SetEventLoopTimerNextFireTime(int ref, double delay) {
+        return PlatformManager.SetEventLoopTimerNextFireTime(ref, delay);
     }
 
-    static int RemoveEventLoopTimer(int paramInt) {
-        return PlatformManager.RemoveEventLoopTimer(paramInt);
+    static int RemoveEventLoopTimer(int ref) {
+        return PlatformManager.RemoveEventLoopTimer(ref);
     }
 
     static void _UseMainRunLoopForCurrentThread() {
@@ -25,8 +25,8 @@ class HIToolBoxFunctions implements InterfaceLib {
         return PlatformManager.GetMainEventLoop();
     }
 
-    static int InstallEventLoopTimer(int paramInt1, double paramDouble1, double paramDouble2, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return PlatformManager.InstallEventLoopTimer(paramInt1, paramDouble1, paramDouble2, paramInt2, paramInt3, paramArrayOfInt);
+    static int InstallEventLoopTimer(int inEventLoop, double delay, double interval, int proc, int userData, int[] outTimer) {
+        return PlatformManager.InstallEventLoopTimer(inEventLoop, delay, interval, proc, userData, outTimer);
     }
 
     static {

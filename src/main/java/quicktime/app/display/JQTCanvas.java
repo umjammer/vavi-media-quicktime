@@ -122,10 +122,10 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     /**
      * @deprecated
      */
-    public JQTCanvas(int paramInt, float paramFloat1, float paramFloat2) {
-        this.resizeFlag = paramInt;
-        setAlignmentX(paramFloat1);
-        setAlignmentY(paramFloat2);
+    public JQTCanvas(int resizeFlag, float alignmentX, float alignmentY) {
+        this.resizeFlag = resizeFlag;
+        setAlignmentX(alignmentX);
+        setAlignmentY(alignmentY);
         this.initialWidth = 1;
         this.initialHeight = 1;
         setMinimumSize(new Dimension(1, 1));
@@ -173,24 +173,24 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      * This method is invoked by Swing to draw this component
      */
     @Override
-    public void paint(java.awt.Graphics paramGraphics) {
+    public void paint(java.awt.Graphics graphics) {
         if ((!this.inited) && (this.client != null)) {
             this.client.addedTo(this);
             this.inited = true;
-            super.paint(paramGraphics);
+            super.paint(graphics);
             return;
         }
         if (this.image != null) {
-            Dimension localDimension = getSize();
-            paramGraphics.drawImage(this.image, 0, 0, localDimension.width, localDimension.height, this);
+            Dimension size = getSize();
+            graphics.drawImage(this.image, 0, 0, size.width, size.height, this);
         }
     }
 
     /**
      * @deprecated
      */
-    public void setFlashScaling(boolean paramBoolean) {
-        flashScaling = paramBoolean;
+    public void setFlashScaling(boolean flashScaling) {
+        flashScaling = flashScaling;
     }
 
     /**
@@ -200,10 +200,10 @@ public class JQTCanvas extends JComponent implements DrawingListener {
         return flashScaling;
     }
 
-    java.awt.Image imageFromEncodedImage(RawEncodedImage paramRawEncodedImage, QDRect paramQDRect) {
-        paramRawEncodedImage.copyToArray(0, this.pixels, 0, this.pixels.length);
-        java.awt.image.MemoryImageSource localMemoryImageSource = new java.awt.image.MemoryImageSource(paramQDRect.getWidth(), paramQDRect.getHeight(), this.colorModel, this.pixels, 0, paramRawEncodedImage.getRowBytes() / 4);
-        return getToolkit().createImage(localMemoryImageSource);
+    java.awt.Image imageFromEncodedImage(RawEncodedImage rawEncodedImage, QDRect rect) {
+        rawEncodedImage.copyToArray(0, this.pixels, 0, this.pixels.length);
+        java.awt.image.MemoryImageSource memoryImageSource = new java.awt.image.MemoryImageSource(rect.getWidth(), rect.getHeight(), this.colorModel, this.pixels, 0, rawEncodedImage.getRowBytes() / 4);
+        return getToolkit().createImage(memoryImageSource);
     }
 
     /**
@@ -228,8 +228,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      *  Keep in mind that only controllerless clients are valid
      * @throws quicktime.QTException
      */
-    public void setClient(QTDrawable paramQTDrawable, boolean layoutFlag) throws QTException {
-        doSetClient(paramQTDrawable, paramQTDrawable != null ? paramQTDrawable.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), layoutFlag);
+    public void setClient(QTDrawable client, boolean layoutFlag) throws QTException {
+        doSetClient(client, client != null ? client.getDisplayBounds() : null, getMinimumSize(), getMaximumSize(), layoutFlag);
     }
 
     /**
@@ -246,8 +246,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      *  Keep in mind that only controllerless clients are valid
      * @throws quicktime.QTException
      */
-    public synchronized void setClient(QTDrawable paramQTDrawable, QDRect initialBounds) throws QTException {
-        doSetClient(paramQTDrawable, initialBounds, getMinimumSize(), getMaximumSize(), true);
+    public synchronized void setClient(QTDrawable client, QDRect initialBounds) throws QTException {
+        doSetClient(client, initialBounds, getMinimumSize(), getMaximumSize(), true);
     }
 
     /**
@@ -267,52 +267,52 @@ public class JQTCanvas extends JComponent implements DrawingListener {
         repaint();
     }
 
-    private void doSetClient(QTDrawable paramQTDrawable, QDRect paramQDRect, Dimension paramDimension1, Dimension paramDimension2, boolean paramBoolean) throws QTException {
-        if (paramQTDrawable == this.client) {
+    private void doSetClient(QTDrawable client, QDRect rect, Dimension minSize, Dimension maxSize, boolean doLayout) throws QTException {
+        if (client == this.client) {
             return;
         }
         if (this.client != null) {
             removeClient();
         }
-        if (paramQTDrawable != null) {
-            this.client = paramQTDrawable;
-            if (paramBoolean) {
-                setMinimumSize(paramDimension1);
-                setMaximumSize(paramDimension2);
-                setPreferredSize(new Dimension(paramQDRect.getWidth(), paramQDRect.getHeight()));
-                this.initialWidth = paramQDRect.getWidth();
-                this.initialHeight = paramQDRect.getHeight();
-                this.currentX = paramQDRect.getX();
-                this.currentY = paramQDRect.getY();
+        if (client != null) {
+            this.client = client;
+            if (doLayout) {
+                setMinimumSize(minSize);
+                setMaximumSize(maxSize);
+                setPreferredSize(new Dimension(rect.getWidth(), rect.getHeight()));
+                this.initialWidth = rect.getWidth();
+                this.initialHeight = rect.getHeight();
+                this.currentX = rect.getX();
+                this.currentY = rect.getY();
                 this.currentWidth = this.initialWidth;
                 this.currentHeight = this.initialHeight;
                 doParentLayout();
             }
-            if (((paramQTDrawable instanceof SWCompositor)) || ((paramQTDrawable instanceof quicktime.app.anim.Compositor))) {
-                SWCompositor localSWCompositor = (SWCompositor) paramQTDrawable;
-                this.gwBounds = localSWCompositor.getDisplayBounds();
-                this.gw = localSWCompositor.getGWorld();
+            if (((client instanceof SWCompositor)) || ((client instanceof quicktime.app.anim.Compositor))) {
+                SWCompositor swCompositor = (SWCompositor) client;
+                this.gwBounds = swCompositor.getDisplayBounds();
+                this.gw = swCompositor.getGWorld();
                 if (this.gw == null) {
                     this.gw = new quicktime.qd.QDGraphics(this.gwBounds);
-                    localSWCompositor.setGWorld(this.gw);
+                    swCompositor.setGWorld(this.gw);
                 }
                 if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                     boolean bool = false;
                     this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                 } else {
-                    this.pixels = new int[localSWCompositor.getImage().getRowBytes() / 4 * paramQDRect.getHeight()];
-                    this.image = imageFromEncodedImage((RawEncodedImage) localSWCompositor.getImage(), localSWCompositor.getDescription().getBounds());
+                    this.pixels = new int[swCompositor.getImage().getRowBytes() / 4 * rect.getHeight()];
+                    this.image = imageFromEncodedImage((RawEncodedImage) swCompositor.getImage(), swCompositor.getDescription().getBounds());
                 }
                 prepareImage(this.image, this);
-                localSWCompositor.addDrawingListener(this);
+                swCompositor.addDrawingListener(this);
             } else {
-                paramQTDrawable.redraw(null);
-                this.ip = new QTImageProducer(this.client, new Dimension(paramQDRect.getWidth(), paramQDRect.getHeight()));
+                client.redraw(null);
+                this.ip = new QTImageProducer(this.client, new Dimension(rect.getWidth(), rect.getHeight()));
                 this.image = createImage(this.ip);
                 prepareImage(this.image, this);
             }
-            if ((paramQTDrawable instanceof DrawingNotifier))
-                ((DrawingNotifier) paramQTDrawable).addDrawingListener(this);
+            if ((client instanceof DrawingNotifier))
+                ((DrawingNotifier) client).addDrawingListener(this);
         }
         repaint();
     }
@@ -321,17 +321,17 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      * @deprecated
      */
     @Override
-    public java.awt.Image createImage(java.awt.image.ImageProducer paramImageProducer) {
+    public java.awt.Image createImage(java.awt.image.ImageProducer imageProducer) {
         if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
             boolean bool = false;
-            QTImageProducer localQTImageProducer = (QTImageProducer) paramImageProducer;
-            Dimension localDimension = localQTImageProducer.getSize();
-            quicktime.qd.QDGraphics localQDGraphics = localQTImageProducer.getGWorld();
-            this.gw = localQDGraphics;
-            java.awt.image.BufferedImage localBufferedImage = (BufferedImage) MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(localQDGraphics), 32, localDimension.width, localDimension.height, bool);
-            return localBufferedImage;
+            QTImageProducer qtImageProducer = (QTImageProducer) imageProducer;
+            Dimension size = qtImageProducer.getSize();
+            quicktime.qd.QDGraphics gw = qtImageProducer.getGWorld();
+            this.gw = gw;
+            java.awt.image.BufferedImage image = (BufferedImage) MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(gw), 32, size.width, size.height, bool);
+            return image;
         }
-        return super.createImage(paramImageProducer);
+        return super.createImage(imageProducer);
     }
 
     /**
@@ -348,33 +348,33 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     @Override
     public void setBounds(int x, int y, int width, int height) {
         logger.log(Level.DEBUG, "setBounds( " + x + ", " + y + ", " + width + ", " + height + ")");
-        Dimension localDimension = setCurrentWidthHeight(width, height);
+        Dimension dimension = setCurrentWidthHeight(width, height);
         if (flashScaling) {
-            setPreferredSize(localDimension);
+            setPreferredSize(dimension);
             this.initialWidth = width;
             this.initialHeight = height;
             try {
                 if (((this.client instanceof SWCompositor)) || ((this.client instanceof quicktime.app.anim.Compositor))) {
-                    SWCompositor localSWCompositor = (SWCompositor) this.client;
+                    SWCompositor swCompositor = (SWCompositor) this.client;
                     this.gwBounds = new QDRect(getX(), getY(), width, height);
                     this.gw = new quicktime.qd.QDGraphics(this.gwBounds);
-                    localSWCompositor.setGWorld(this.gw);
+                    swCompositor.setGWorld(this.gw);
                     if ((QTSession.isCurrentOS(4)) && (useMacOSXAcceleration)) {
                         boolean bool = false;
                         this.image = MacDirectColorModel.GetWrappedGWorldImage(quicktime.QTObject.ID(this.gw), 32, this.gwBounds.getWidth(), this.gwBounds.getHeight(), bool);
                     } else {
-                        this.pixels = new int[localSWCompositor.getImage().getRowBytes() / 4 * this.gwBounds.getHeight()];
-                        this.image = imageFromEncodedImage((RawEncodedImage) localSWCompositor.getImage(), this.gwBounds);
+                        this.pixels = new int[swCompositor.getImage().getRowBytes() / 4 * this.gwBounds.getHeight()];
+                        this.image = imageFromEncodedImage((RawEncodedImage) swCompositor.getImage(), this.gwBounds);
                     }
                     prepareImage(this.image, this);
                 } else {
                     this.client.redraw(null);
-                    this.ip = new QTImageProducer(this.client, localDimension);
+                    this.ip = new QTImageProducer(this.client, dimension);
                     this.image = createImage(this.ip);
                     prepareImage(this.image, this);
                 }
-            } catch (QTException localQTException) {
-                localQTException.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
             repaint();
         }
@@ -393,7 +393,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
         logger.log(Level.DEBUG, "heightDiff: " + j);
         logger.log(Level.DEBUG, "currentX:" + this.currentX);
         logger.log(Level.DEBUG, "currentY:" + this.currentY);
-        super.reshape(this.currentX, this.currentY, localDimension.width, localDimension.height);
+        super.reshape(this.currentX, this.currentY, dimension.width, dimension.height);
     }
 
     /**
@@ -404,9 +404,9 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      * is specified by r.width and r.height
      */
     @Override
-    public void setBounds(Rectangle paramRectangle) {
-        logger.log(Level.DEBUG, "setBounds( " + paramRectangle + ")");
-        setBounds(paramRectangle.x, paramRectangle.y, paramRectangle.width, paramRectangle.height);
+    public void setBounds(Rectangle bounds) {
+        logger.log(Level.DEBUG, "setBounds( " + bounds + ")");
+        setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
     /**
@@ -440,17 +440,17 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      * replaced by setBounds(int, int, int, int).</I>
      */
     @Override
-    public final void reshape(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        logger.log(Level.DEBUG, "reshape( " + paramInt1 + ", " + paramInt2 + ", " + paramInt3 + ", " + paramInt4 + ")");
-        setBounds(paramInt1, paramInt2, paramInt3, paramInt4);
+    public final void reshape(int x, int y, int width, int height) {
+        logger.log(Level.DEBUG, "reshape( " + x + ", " + y + ", " + width + ", " + height + ")");
+        setBounds(x, y, width, height);
     }
 
     private void doParentLayout() {
         logger.log(Level.DEBUG, "doParentLayout()");
-        java.awt.Container localContainer = getParent();
-        if (localContainer != null) {
+        java.awt.Container parent = getParent();
+        if (parent != null) {
             invalidate();
-            localContainer.validate();
+            parent.validate();
             return;
         }
         super.reshape(this.currentX, this.currentY, getWidth(), getHeight());
@@ -635,24 +635,24 @@ public class JQTCanvas extends JComponent implements DrawingListener {
         return new Dimension(this.currentWidth, this.currentHeight);
     }
 
-    private Dimension getAspectSize(int paramInt1, int paramInt2) {
-        Dimension localDimension1 = getMinimumSize();
-        Dimension localDimension2 = getMaximumSize();
-        int i = localDimension1.width;
-        int j = localDimension1.height;
-        int k = localDimension2.width;
-        int m = localDimension2.height;
-        if (paramInt1 < i) {
-            paramInt1 = i;
-        } else if (paramInt1 > k)
-            paramInt1 = k;
-        if (paramInt2 < j) {
-            paramInt2 = j;
-        } else if (paramInt2 > m) {
-            paramInt2 = m;
+    private Dimension getAspectSize(int width, int height) {
+        Dimension minimumSize = getMinimumSize();
+        Dimension maximumSize = getMaximumSize();
+        int i = minimumSize.width;
+        int j = minimumSize.height;
+        int k = maximumSize.width;
+        int m = maximumSize.height;
+        if (width < i) {
+            width = i;
+        } else if (width > k)
+            width = k;
+        if (height < j) {
+            height = j;
+        } else if (height > m) {
+            height = m;
         }
-        float f1 = paramInt1 / (Math.max(this.initialWidth, 1));
-        float f2 = paramInt2 / (Math.max(this.initialHeight, 1));
+        float f1 = width / (Math.max(this.initialWidth, 1));
+        float f2 = height / (Math.max(this.initialHeight, 1));
         int n;
         int i1;
         if (f1 < f2) {
@@ -668,9 +668,9 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     /**
      * @deprecated
      */
-    public void setAlignment(float paramFloat1, float paramFloat2) {
-        setAlignmentX(paramFloat1);
-        setAlignmentY(paramFloat2);
+    public void setAlignment(float alignmentX, float alignmentY) {
+        setAlignmentX(alignmentX);
+        setAlignmentY(alignmentY);
     }
 
     /**
@@ -681,7 +681,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
      */
     public void setResizeFlag(int rFlag) {
         this.resizeFlag = rFlag;
-        Rectangle localRectangle = getBounds();
+        Rectangle bounds = getBounds();
         doParentLayout();
     }
 
@@ -713,8 +713,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
                 } else {
                     this.image = imageFromEncodedImage((RawEncodedImage) ((SWCompositor) drawable).getImage(), ((SWCompositor) drawable).getDescription().getBounds());
                 }
-            } catch (QTException localQTException1) {
-                localQTException1.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
             repaint();
         } else {
@@ -724,8 +724,8 @@ public class JQTCanvas extends JComponent implements DrawingListener {
             }
             try {
                 this.ip.updateConsumers(null);
-            } catch (QTException localQTException2) {
-                localQTException2.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -808,7 +808,7 @@ public class JQTCanvas extends JComponent implements DrawingListener {
     /**
      * @deprecated
      */
-    public void removeQTClientListener(ComponentListener paramComponentListener) {
-        this.clientListener = java.awt.AWTEventMulticaster.remove(this.clientListener, paramComponentListener);
+    public void removeQTClientListener(ComponentListener componentListener) {
+        this.clientListener = java.awt.AWTEventMulticaster.remove(this.clientListener, componentListener);
     }
 }

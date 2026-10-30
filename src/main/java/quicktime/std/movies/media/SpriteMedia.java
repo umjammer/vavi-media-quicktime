@@ -33,8 +33,8 @@ public final class SpriteMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    SpriteMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    SpriteMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -43,8 +43,8 @@ public final class SpriteMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new SpriteMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new SpriteMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -64,9 +64,9 @@ public final class SpriteMedia extends Media {
      * @deprecated
      */
     public SpriteDescription getSoundDescription(int index) throws QTException {
-        SpriteDescription localSpriteDescription = new SpriteDescription();
-        getNativeSampleDescription(index, localSpriteDescription);
-        return localSpriteDescription;
+        SpriteDescription soundDescription = new SpriteDescription();
+        getNativeSampleDescription(index, soundDescription);
+        return soundDescription;
     }
 
     /**
@@ -79,8 +79,8 @@ public final class SpriteMedia extends Media {
      * @see "QuickTime::GetMediaSampleDescription()"
      */
     public SpriteDescription getSpriteDescription(int index) throws QTException {
-        SpriteDescription localSpriteDescription = new SpriteDescription();
-        getNativeSampleDescription(index, localSpriteDescription);
-        return localSpriteDescription;
+        SpriteDescription spriteDescription = new SpriteDescription();
+        getNativeSampleDescription(index, spriteDescription);
+        return spriteDescription;
     }
 }

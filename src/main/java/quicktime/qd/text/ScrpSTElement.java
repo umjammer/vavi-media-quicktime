@@ -32,16 +32,16 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
     private static final long serialVersionUID = 939259602280929910L;
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 2, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(12, 2, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-        EndianFlipSpec localEndianFlipSpec4 = new EndianFlipSpec(14, 2, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec4);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 4, 1);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 2, 3);
+        ed.addFlipSpec(endianFlipSpec2);
+        EndianFlipSpec endianFlipSpec3 = new EndianFlipSpec(12, 2, 1);
+        ed.addFlipSpec(endianFlipSpec3);
+        EndianFlipSpec endianFlipSpec4 = new EndianFlipSpec(14, 2, 3);
+        ed.addFlipSpec(endianFlipSpec4);
+        return ed;
     }
 
     /**
@@ -62,15 +62,15 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         super(kNativeSize);
     }
 
-    private ScrpSTElement(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private ScrpSTElement(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[kNativeSize];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         setIntInArray(this.bytes, 0, EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 0)));
         setShortInArray(this.bytes, 4, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, 4)));
         setShortInArray(this.bytes, 6, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, 6)));
@@ -82,17 +82,17 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
-        setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
-        setShortInArray(arrayOfByte, 4, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 4)));
-        setShortInArray(arrayOfByte, 6, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 6)));
-        setShortInArray(arrayOfByte, 8, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 8)));
-        setShortInArray(arrayOfByte, 12, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 12)));
-        setShortInArray(arrayOfByte, 14, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 14)));
-        setShortInArray(arrayOfByte, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 16)));
-        setShortInArray(arrayOfByte, 18, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 18)));
-        paramObjectOutputStream.write(arrayOfByte);
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
+        setIntInArray(movie, 0, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
+        setShortInArray(movie, 4, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 4)));
+        setShortInArray(movie, 6, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 6)));
+        setShortInArray(movie, 8, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 8)));
+        setShortInArray(movie, 12, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 12)));
+        setShortInArray(movie, 14, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 14)));
+        setShortInArray(movie, 16, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 16)));
+        setShortInArray(movie, 18, EndianOrder.flipNativeToBigEndian16(getShortFromArray(this.bytes, 18)));
+        out.write(movie);
     }
 
     /**
@@ -103,32 +103,32 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         return new ScrpSTElement(getBytes());
     }
 
-    public void setColor(QDColor paramQDColor) {
-        if (paramQDColor == null) {
+    public void setColor(QDColor color) {
+        if (color == null) {
             setShortAt(14, (short) -1);
             setShortAt(16, (short) -1);
             setShortAt(18, (short) -1);
         } else {
-            System.arraycopy(paramQDColor.getRGBColor(), 0, this.bytes, 14, 6);
+            System.arraycopy(color.getRGBColor(), 0, this.bytes, 14, 6);
         }
     }
 
     public QDColor getColor() {
-        byte[] arrayOfByte = new byte[6];
-        System.arraycopy(this.bytes, 14, arrayOfByte, 0, 6);
-        return QDColor.fromArray(arrayOfByte, 6);
+        byte[] colorBytes = new byte[6];
+        System.arraycopy(this.bytes, 14, colorBytes, 0, 6);
+        return QDColor.fromArray(colorBytes, 6);
     }
 
-    public void setScriptSize(int paramInt) {
-        setShortAt(12, (short) paramInt);
+    public void setScriptSize(int scriptSize) {
+        setShortAt(12, (short) scriptSize);
     }
 
     public int getScriptSize() {
         return getShortAt(12);
     }
 
-    public void setFace(int paramInt) {
-        setByteAt(10, (byte) paramInt);
+    public void setFace(int face) {
+        setByteAt(10, (byte) face);
         setByteAt(11, (byte) 0);
     }
 
@@ -136,32 +136,32 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         return QTUtils.UByte2Int(getByteAt(10));
     }
 
-    public void setFont(int paramInt) {
-        setShortAt(8, (short) paramInt);
+    public void setFont(int font) {
+        setShortAt(8, (short) font);
     }
 
     public int getFont() {
         return getShortAt(8);
     }
 
-    public void setAscent(int paramInt) {
-        setShortAt(6, (short) paramInt);
+    public void setAscent(int ascent) {
+        setShortAt(6, (short) ascent);
     }
 
     public int getAscent() {
         return getShortAt(6);
     }
 
-    public void setHeight(int paramInt) {
-        setShortAt(4, (short) paramInt);
+    public void setHeight(int height) {
+        setShortAt(4, (short) height);
     }
 
     public int getHeight() {
         return getShortAt(4);
     }
 
-    public void setStartChar(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setStartChar(int startChar) {
+        setIntAt(0, startChar);
     }
 
     public int getStartChar() {
@@ -175,19 +175,19 @@ public final class ScrpSTElement extends QTByteObject implements PrimitivesLib {
         return getClass().getName() + "[" + ",startChar=" + getStartChar() + ",getHeight=" + getHeight() + ",getAscent=" + getAscent() + ",getFont=" + getFont() + ",getFace=" + getFace() + ",getSize=" + getSize() + ",getColor=" + getColor() + "]";
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 }

@@ -28,8 +28,8 @@ public abstract class NativeGraphics {
      * @throws quicktime.qd.NativeGraphicsException
      * @throws quicktime.QTUnknownOSException
      */
-    public static NativeGraphics getContext(Canvas paramCanvas) throws NativeGraphicsException, QTUnknownOSException {
-        return getContext((Component) paramCanvas);
+    public static NativeGraphics getContext(Canvas canvas) throws NativeGraphicsException, QTUnknownOSException {
+        return getContext((Component) canvas);
     }
 
     /**
@@ -40,22 +40,22 @@ public abstract class NativeGraphics {
      * @throws quicktime.qd.NativeGraphicsException
      * @throws quicktime.QTUnknownOSException
      */
-    public static NativeGraphics getContext(Component paramComponent) throws NativeGraphicsException, QTUnknownOSException {
-        ComponentPeer localComponentPeer = sun.awt.AWTAccessor.getComponentAccessor().getPeer(paramComponent);
-        if (localComponentPeer == null)
+    public static NativeGraphics getContext(Component comp) throws NativeGraphicsException, QTUnknownOSException {
+        ComponentPeer peer = sun.awt.AWTAccessor.getComponentAccessor().getPeer(comp);
+        if (peer == null)
             throw new NativeGraphicsException("AWT drawing environment is not initialised");
-        Object localObject;
+        Object dsi;
         if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-            localObject = ((DrawingSurface) localComponentPeer).getDrawingSurfaceInfo();
-            return new MacNativeGraphics((DrawingSurfaceInfo) localObject);
+            dsi = ((DrawingSurface) peer).getDrawingSurfaceInfo();
+            return new MacNativeGraphics((DrawingSurfaceInfo) dsi);
         }
         if (QTSession.isCurrentOS(2)) {
             if (QTSession.getJavaVersion() >= 65540) {
-                localObject = new WinJNIDrawingSurface(paramComponent);
-                return new WinNativeGraphics((WinJNIDrawingSurface) localObject);
+                dsi = new WinJNIDrawingSurface(comp);
+                return new WinNativeGraphics((WinJNIDrawingSurface) dsi);
             }
-            localObject = ((DrawingSurface) localComponentPeer).getDrawingSurfaceInfo();
-            return new WinNativeGraphics((DrawingSurfaceInfo) localObject);
+            dsi = ((DrawingSurface) peer).getDrawingSurfaceInfo();
+            return new WinNativeGraphics((DrawingSurfaceInfo) dsi);
         }
         throw new QTUnknownOSException();
     }
@@ -68,46 +68,46 @@ public abstract class NativeGraphics {
      * @throws quicktime.qd.NativeGraphicsException
      * @throws quicktime.QTUnknownOSException
      */
-    public static NativeGraphics getContext(Object paramObject) throws NativeGraphicsException, QTUnknownOSException {
-        Class<?> localClass = paramObject.getClass();
-        String str = localClass.getName();
-        while (!localClass.getName().equals("java.lang.Object")) {
-            str = localClass.getName();
-            localClass = localClass.getSuperclass();
+    public static NativeGraphics getContext(Object comp) throws NativeGraphicsException, QTUnknownOSException {
+        Class<?> superclass = comp.getClass();
+        String name = superclass.getName();
+        while (!superclass.getName().equals("java.lang.Object")) {
+            name = superclass.getName();
+            superclass = superclass.getSuperclass();
         }
-        if (str.equals("java.awt.Component")) {
-            ComponentPeer localComponentPeer = sun.awt.AWTAccessor.getComponentAccessor().getPeer((Component) paramObject);
-            if (localComponentPeer == null)
+        if (name.equals("java.awt.Component")) {
+            ComponentPeer peer = sun.awt.AWTAccessor.getComponentAccessor().getPeer((Component) comp);
+            if (peer == null)
                 throw new NativeGraphicsException("AWT drawing environment is not initialised");
-            Object localObject;
+            Object dsi;
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                localObject = ((DrawingSurface) localComponentPeer).getDrawingSurfaceInfo();
-                return new MacNativeGraphics((DrawingSurfaceInfo) localObject);
+                dsi = ((DrawingSurface) peer).getDrawingSurfaceInfo();
+                return new MacNativeGraphics((DrawingSurfaceInfo) dsi);
             }
             if (QTSession.isCurrentOS(2)) {
                 if (QTSession.getJavaVersion() >= 0x10004) {
-                    localObject = new WinJNIDrawingSurface((Component) paramObject);
-                    return new WinNativeGraphics((WinJNIDrawingSurface) localObject);
+                    dsi = new WinJNIDrawingSurface((Component) comp);
+                    return new WinNativeGraphics((WinJNIDrawingSurface) dsi);
                 }
-                localObject = ((DrawingSurface) localComponentPeer).getDrawingSurfaceInfo();
-                return new WinNativeGraphics((DrawingSurfaceInfo) localObject);
+                dsi = ((DrawingSurface) peer).getDrawingSurfaceInfo();
+                return new WinNativeGraphics((DrawingSurfaceInfo) dsi);
             }
             throw new QTUnknownOSException();
         }
         throw new NativeGraphicsException("Unknown Native Context");
     }
 
-    NativeGraphics(Object paramObject) {
+    NativeGraphics(Object component) {
         this.dsi = null;
         this.jnidrawingsurfaceinfo = null;
     }
 
-    NativeGraphics(DrawingSurfaceInfo paramDrawingSurfaceInfo) {
-        this.dsi = paramDrawingSurfaceInfo;
+    NativeGraphics(DrawingSurfaceInfo dsi) {
+        this.dsi = dsi;
     }
 
-    NativeGraphics(WinJNIDrawingSurface paramWinJNIDrawingSurface) {
-        this.jnidrawingsurfaceinfo = paramWinJNIDrawingSurface;
+    NativeGraphics(WinJNIDrawingSurface jnidrawingsurfaceinfo) {
+        this.jnidrawingsurfaceinfo = jnidrawingsurfaceinfo;
     }
 
     /**

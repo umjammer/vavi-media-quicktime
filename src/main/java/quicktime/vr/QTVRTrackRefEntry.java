@@ -31,45 +31,45 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
      * Creates a QTVRTrackRefEntry object from a byte array
      * Used in cloning
      */
-    public QTVRTrackRefEntry(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
-        if (paramArrayOfByte.length != kNativeSize) {
+    public QTVRTrackRefEntry(byte[] bytes) throws QTException {
+        super(bytes);
+        if (bytes.length != kNativeSize) {
             throw new QTException(-50);
         }
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRTrackRefEntry localQTVRTrackRefEntry = new QTVRTrackRefEntry();
-        paramObjectInputStream.read(localQTVRTrackRefEntry.getBytes());
-        System.arraycopy(localQTVRTrackRefEntry.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRTrackRefEntry qtvrTrackRefEntry = new QTVRTrackRefEntry();
+        in.read(qtvrTrackRefEntry.getBytes());
+        System.arraycopy(qtvrTrackRefEntry.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRTrackRefEntry localQTVRTrackRefEntry = (QTVRTrackRefEntry) clone();
-        paramObjectOutputStream.write(localQTVRTrackRefEntry.getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRTrackRefEntry qtvrTrackRefEntry = (QTVRTrackRefEntry) clone();
+        out.write(qtvrTrackRefEntry.getBytes());
     }
 
     @Override
     protected Object clone() {
         try {
             return new QTVRTrackRefEntry(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 2, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(6, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 4, 1);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 2, 1);
+        ed.addFlipSpec(endianFlipSpec2);
+        EndianFlipSpec endianFlipSpec3 = new EndianFlipSpec(6, 4, 1);
+        ed.addFlipSpec(endianFlipSpec3);
+        return ed;
     }
 
     /**
@@ -96,8 +96,8 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
      * kQTVRImageTrackRefType
      * kQTVRHotSpotTrackRefType
      */
-    public void setTrackRefType(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setTrackRefType(int trackRefType) {
+        setIntAt(0, trackRefType);
     }
 
     /**
@@ -116,8 +116,8 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
      * kQTVRQuarterTrackRes          = kQTVRQuarterRes,
      * kQTVRPreviewTrackRes          = 0x8000
      */
-    public void setTrackResolution(short paramShort) {
-        setShortAt(4, paramShort);
+    public void setTrackResolution(short trackResolution) {
+        setShortAt(4, trackResolution);
     }
 
     /**
@@ -130,8 +130,8 @@ public final class QTVRTrackRefEntry extends QTByteObject implements Cloneable {
     /**
      * set the trackRefIndex
      */
-    public void setTrackRefIndex(int paramInt) {
-        setIntAt(6, paramInt);
+    public void setTrackRefIndex(int trackRefIndex) {
+        setIntAt(6, trackRefIndex);
     }
 
     /**

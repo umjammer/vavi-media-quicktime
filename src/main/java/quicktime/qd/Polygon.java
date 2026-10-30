@@ -23,15 +23,15 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
 
     private static final int[] savedDevice = {0};
 
-    private static int allocate(QDGraphics paramQDGraphics) throws QTException {
-        if (paramQDGraphics == null) {
+    private static int allocate(QDGraphics port) throws QTException {
+        if (port == null) {
             throw new StdQTException(-50);
         }
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
+            SetGWorld(QTObject.ID(port), 0);
             i = OpenPoly();
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
@@ -46,15 +46,15 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
      *
      * @see "QuickDraw::OpenPoly"
      */
-    public Polygon(QDGraphics paramQDGraphics) throws QTException {
-        super(allocate(paramQDGraphics), null, false);
+    public Polygon(QDGraphics gw) throws QTException {
+        super(allocate(gw), null, false);
         if (QTObject.ID(this) == 0)
             QDException.checkError(-108);
-        this.gw = paramQDGraphics;
+        this.gw = gw;
     }
 
-    private Polygon(int paramInt) throws QTException {
-        super(paramInt, null, false);
+    private Polygon(int nativeRep) throws QTException {
+        super(nativeRep, null, false);
         if (QTObject.ID(this) == 0) {
             QDException.checkError(-108);
         }
@@ -97,9 +97,9 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
      * @return a rect
      */
     public QDRect getPolyBBox() {
-        byte[] arrayOfByte = new byte[8];
-        getBytesAt(2, 8, arrayOfByte, 0);
-        return QDRect.fromArray(arrayOfByte, 8);
+        byte[] destArray = new byte[8];
+        getBytesAt(2, 8, destArray, 0);
+        return QDRect.fromArray(destArray, 8);
     }
 
     /**
@@ -131,8 +131,8 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
     public Object clone() {
         try {
             return copy();
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
@@ -171,15 +171,15 @@ public final class Polygon extends QTHandleRef implements QuickTimeLib, Cloneabl
         QuickDrawManager.ClosePoly();
     }
 
-    private static void OffsetPoly(int paramInt, short paramShort1, short paramShort2) {
-        QuickDrawManager.OffsetPoly(paramInt, paramShort1, paramShort2);
+    private static void OffsetPoly(int poly, short dh, short dv) {
+        QuickDrawManager.OffsetPoly(poly, dh, dv);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] destArray1, int[] destArray2) {
+        QuickDrawManager.GetGWorld(destArray1, destArray2);
     }
 }

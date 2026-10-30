@@ -17,9 +17,9 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
 
     private final Curve comp;
 
-    private static int howManyBytes(GXPath[] paramArrayOfGXPath) {
+    private static int howManyBytes(GXPath[] gxPaths) {
         int i = 0;
-        for (GXPath gxPath : paramArrayOfGXPath) i += gxPath.getSize();
+        for (GXPath gxPath : gxPaths) i += gxPath.getSize();
         return i;
     }
 
@@ -61,10 +61,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @see "QuickTime::CurveCountPointsInPath"
      */
     public int countPointsInPath(int contourIndex) throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = CurveCountPointsInPath(QTObject.ID(this.comp), getBytes(), contourIndex, arrayOfInt);
+        int[] count = {0};
+        int i = CurveCountPointsInPath(QTObject.ID(this.comp), getBytes(), contourIndex, count);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return count[0];
     }
 
     /**
@@ -76,8 +76,8 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see "QuickTime::CurveSetPathPoint"
      */
-    public void setPathPoint(int contourIndex, int pointIndex, QDPoint paramQDPoint, boolean ptIsOnPath) throws StdQTException {
-        int i = CurveSetPathPoint(QTObject.ID(this.comp), getBytes(), contourIndex, pointIndex, paramQDPoint.getGXPoint(), (byte) (ptIsOnPath ? 1 : 0));
+    public void setPathPoint(int contourIndex, int pointIndex, QDPoint point, boolean ptIsOnPath) throws StdQTException {
+        int i = CurveSetPathPoint(QTObject.ID(this.comp), getBytes(), contourIndex, pointIndex, point.getGXPoint(), (byte) (ptIsOnPath ? 1 : 0));
         StdQTException.checkError(i);
     }
 
@@ -91,11 +91,11 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @see "QuickTime::CurveGetPathPoint"
      */
     public PathPointInfo getPathPoint(int contourIndex, int pointIndex) throws StdQTException {
-        QDPoint localQDPoint = new QDPoint(0.0F, 0.0F);
-        byte[] arrayOfByte = new byte[1];
-        int i = CurveGetPathPoint(QTObject.ID(this.comp), getBytes(), contourIndex, pointIndex, localQDPoint.getGXPoint(), arrayOfByte);
+        QDPoint point = new QDPoint(0.0F, 0.0F);
+        byte[] isOnPath = new byte[1];
+        int i = CurveGetPathPoint(QTObject.ID(this.comp), getBytes(), contourIndex, pointIndex, point.getGXPoint(), isOnPath);
         StdQTException.checkError(i);
-        return new PathPointInfo(localQDPoint, arrayOfByte[0] != 0);
+        return new PathPointInfo(point, isOnPath[0] != 0);
     }
 
     /**
@@ -108,14 +108,14 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @see "QuickTime::CurveLengthToPoint"
      */
     public QDPoint[] lengthToPoint(int index, int length) throws StdQTException {
-        QDPoint localQDPoint1 = new QDPoint(0.0F, 0.0F);
-        QDPoint localQDPoint2 = new QDPoint(0.0F, 0.0F);
-        int i = CurveLengthToPoint(QTObject.ID(this.comp), getBytes(), index, length, localQDPoint1.getGXPoint(), localQDPoint2.getGXPoint());
+        QDPoint point1 = new QDPoint(0.0F, 0.0F);
+        QDPoint point2 = new QDPoint(0.0F, 0.0F);
+        int i = CurveLengthToPoint(QTObject.ID(this.comp), getBytes(), index, length, point1.getGXPoint(), point2.getGXPoint());
         StdQTException.checkError(i);
-        QDPoint[] arrayOfQDPoint = new QDPoint[2];
-        arrayOfQDPoint[0] = localQDPoint1;
-        arrayOfQDPoint[1] = localQDPoint2;
-        return arrayOfQDPoint;
+        QDPoint[] points = new QDPoint[2];
+        points[0] = point1;
+        points[1] = point2;
+        return points;
     }
 
     /**
@@ -129,10 +129,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @see "QuickTime::CurveGetLength"
      */
     public long getLength(int index) throws StdQTException {
-        long[] arrayOfLong = {0L};
-        int i = CurveGetLength(QTObject.ID(this.comp), getBytes(), index, arrayOfLong);
+        long[] length = {0L};
+        int i = CurveGetLength(QTObject.ID(this.comp), getBytes(), index, length);
         StdQTException.checkError(i);
-        return arrayOfLong[0];
+        return length[0];
     }
 
     /**
@@ -147,10 +147,10 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @see "QuickTime::CurvePathPointToLength"
      */
     public float getPathPointToLength(int startDist, int endDist, QDPoint thePoint) throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = CurvePathPointToLength(QTObject.ID(this.comp), getBytes(), startDist, endDist, thePoint.getGXPoint(), arrayOfInt);
+        int[] length = {0};
+        int i = CurvePathPointToLength(QTObject.ID(this.comp), getBytes(), startDist, endDist, thePoint.getGXPoint(), length);
         StdQTException.checkError(i);
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        return QTUtils.Fix2X(length[0]);
     }
 
     /**
@@ -164,39 +164,39 @@ public final class GXPaths extends QTByteObject implements QuickTimeLib {
      * @see "QuickTime::CurveGetNearestPathPoint"
      */
     public NearestPointInfo getNearestPathPoint(QDPoint thePoint) throws StdQTException {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        int[] arrayOfInt3 = {0};
-        int i = CurveGetNearestPathPoint(QTObject.ID(this.comp), getBytes(), thePoint.getGXPoint(), arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int[] contourIndex = {0};
+        int[] pointIndex = {0};
+        int[] delta = {0};
+        int i = CurveGetNearestPathPoint(QTObject.ID(this.comp), getBytes(), thePoint.getGXPoint(), contourIndex, pointIndex, delta);
         StdQTException.checkError(i);
-        return new NearestPointInfo(arrayOfInt1[0], arrayOfInt2[0], QTUtils.Fix2X(arrayOfInt3[0]));
+        return new NearestPointInfo(contourIndex[0], pointIndex[0], QTUtils.Fix2X(delta[0]));
     }
 
-    private static int CurveCountPointsInPath(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.CurveCountPointsInPath(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfInt);
+    private static int CurveCountPointsInPath(int effect, byte[] paths, int contourIndex, int[] count) {
+        return ImageCompressionManager.CurveCountPointsInPath(effect, paths, contourIndex, count);
     }
 
     private static int CurveSetPathPoint(int effect, byte[] paths, int counterIndex, int pointIndex, byte[] point, byte isOnPath) {
         return ImageCompressionManager.CurveSetPathPoint(effect, paths, counterIndex, pointIndex, point, isOnPath);
     }
 
-    private static int CurveGetLength(int paramInt1, byte[] paramArrayOfByte, int paramInt2, long[] paramArrayOfLong) {
-        return ImageCompressionManager.CurveGetLength(paramInt1, paramArrayOfByte, paramInt2, paramArrayOfLong);
+    private static int CurveGetLength(int effect, byte[] paths, int contourIndex, long[] length) {
+        return ImageCompressionManager.CurveGetLength(effect, paths, contourIndex, length);
     }
 
-    private static int CurveGetPathPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return ImageCompressionManager.CurveGetPathPoint(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfByte3);
+    private static int CurveGetPathPoint(int effect, byte[] paths, int contourIndex, int pointIndex, byte[] point, byte[] isOnPath) {
+        return ImageCompressionManager.CurveGetPathPoint(effect, paths, contourIndex, pointIndex, point, isOnPath);
     }
 
-    private static int CurveLengthToPoint(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return ImageCompressionManager.CurveLengthToPoint(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfByte3);
+    private static int CurveLengthToPoint(int effect, byte[] paths, int contourIndex, int length, byte[] point, byte[] tangent) {
+        return ImageCompressionManager.CurveLengthToPoint(effect, paths, contourIndex, length, point, tangent);
     }
 
-    private static int CurveGetNearestPathPoint(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return ImageCompressionManager.CurveGetNearestPathPoint(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static int CurveGetNearestPathPoint(int effect, byte[] paths, byte[] point, int[] contourIndex, int[] pointIndex, int[] delta) {
+        return ImageCompressionManager.CurveGetNearestPathPoint(effect, paths, point, contourIndex, pointIndex, delta);
     }
 
-    private static int CurvePathPointToLength(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, int paramInt3, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.CurvePathPointToLength(paramInt1, paramArrayOfByte1, paramInt2, paramInt3, paramArrayOfByte2, paramArrayOfInt);
+    private static int CurvePathPointToLength(int effect, byte[] paths, int startDist, int endDist, byte[] point, int[] length) {
+        return ImageCompressionManager.CurvePathPointToLength(effect, paths, startDist, endDist, point, length);
     }
 }

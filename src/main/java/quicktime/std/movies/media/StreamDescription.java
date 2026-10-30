@@ -14,10 +14,10 @@ public final class StreamDescription extends SampleDescription {
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec = new EndianFlipSpec(16, 4, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 4, 3);
+        ed.addFlipSpec(spec);
+        return ed;
     }
 
     /**
@@ -49,8 +49,8 @@ public final class StreamDescription extends SampleDescription {
         super(28, true, mediaType);
     }
 
-    private StreamDescription(int paramInt, Object paramObject) {
-        super(paramInt, paramObject, false);
+    private StreamDescription(int nativeRep, Object ref) {
+        super(nativeRep, ref, false);
     }
 
     /**
@@ -61,16 +61,16 @@ public final class StreamDescription extends SampleDescription {
         return new StreamDescription(makeAndCopyHandle(), null);
     }
 
-    public void setFlags(int paramInt) {
-        setIntAt(24, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(24, flags);
     }
 
     public int getFlags() {
         return getIntAt(24);
     }
 
-    public void setVersion(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setVersion(int version) {
+        setIntAt(16, version);
     }
 
     public int getVersion() {

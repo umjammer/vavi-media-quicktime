@@ -4,8 +4,8 @@ package com.apple.mrj.jdirect;
 public class Linker {
 
     /**
-     * @param paramClass
+     * @param clazz
      */
-    public Linker(Class<?> paramClass) {
+    public Linker(Class<?> clazz) {
     }
 }

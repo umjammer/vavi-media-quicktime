@@ -11,7 +11,7 @@ interface Taskable {
 
     TaskThread getTasker();
 
-    void addedToTasker(TaskThread paramTaskThread);
+    void addedToTasker(TaskThread t);
 
     void removedFromTasker();
 

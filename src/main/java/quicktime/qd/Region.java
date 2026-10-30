@@ -50,12 +50,12 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see quicktime.std.image.GraphicsImporter#getClip()
      */
     public static Region fromGraphicsImporter(GraphicsImporter gi) throws QTException {
-        int[] arrayOfInt = new int[1];
-        int i = GraphicsImportGetClip(QTObject.ID(gi), arrayOfInt);
+        int[] clip = new int[1];
+        int i = GraphicsImportGetClip(QTObject.ID(gi), clip);
         QTException.checkError(i);
-        if (arrayOfInt[0] == 0)
+        if (clip[0] == 0)
             return null;
-        return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
+        return clip[0] == 0 ? null : new Region(clip[0]);
     }
 
     /**
@@ -68,10 +68,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see quicktime.std.image.GraphicsImporter#getClip()
      */
     public static Region fromGraphicsImporterDefault(GraphicsImporter gi) throws QTException {
-        int[] arrayOfInt = {0};
-        int i = GraphicsImportGetDefaultClip(QTObject.ID(gi), arrayOfInt);
+        int[] clip = {0};
+        int i = GraphicsImportGetDefaultClip(QTObject.ID(gi), clip);
         QTException.checkError(i);
-        return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
+        return clip[0] == 0 ? null : new Region(clip[0]);
     }
 
     /**
@@ -134,9 +134,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see quicktime.streaming.Presentation#getClip(quicktime.streaming.Stream)
      */
     public static Region fromPresentationClip(Presentation p, Stream s) throws QTException {
-        int[] arrayOfInt = {0};
-        StdQTException.checkError(QTSPresGetClip(QTObject.ID(p), QTObject.ID(s), arrayOfInt));
-        return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
+        int[] clip = {0};
+        StdQTException.checkError(QTSPresGetClip(QTObject.ID(p), QTObject.ID(s), clip));
+        return clip[0] == 0 ? null : new Region(clip[0]);
     }
 
     /**
@@ -230,9 +230,9 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      */
     public static Region fromMovieControllerClip(MovieController mc) throws QTException {
         synchronized (QTNative.globalsLock) {
-            int[] arrayOfInt = new int[1];
-            StdQTException.checkError(MCGetClip(QTObject.ID(mc), arrayOfInt, null));
-            return new Region(arrayOfInt[0]);
+            int[] theClip = new int[1];
+            StdQTException.checkError(MCGetClip(QTObject.ID(mc), theClip, null));
+            return new Region(theClip[0]);
         }
     }
 
@@ -246,13 +246,13 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see "QuickTime::MCDrawBadge()"
      * @see quicktime.std.movies.MovieController#drawBadge(quicktime.qd.Region, boolean)
      */
-    public static Region fromMovieControllerBadge(MovieController mc, Region movieRgn, boolean paramBoolean) throws QTException {
-        int[] arrayOfInt = null;
-        if (paramBoolean) {
-            arrayOfInt = new int[1];
+    public static Region fromMovieControllerBadge(MovieController mc, Region movieRgn, boolean returnBadgeRgn) throws QTException {
+        int[] badgeRgn = null;
+        if (returnBadgeRgn) {
+            badgeRgn = new int[1];
         }
-        StdQTException.checkError(MCDrawBadge(QTObject.ID(mc), QTObject.ID(movieRgn), arrayOfInt));
-        return paramBoolean ? new Region(arrayOfInt[0]) : null;
+        StdQTException.checkError(MCDrawBadge(QTObject.ID(mc), QTObject.ID(movieRgn), badgeRgn));
+        return returnBadgeRgn ? new Region(badgeRgn[0]) : null;
     }
 
     /**
@@ -344,10 +344,10 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see quicktime.std.sg.VisualChannel#getClip()
      */
     public static Region fromVideoChannel(VisualChannel vc) throws QTException {
-        int[] arrayOfInt = {0};
-        int i = SGGetChannelClip(QTObject.ID(vc), arrayOfInt);
+        int[] rgn = {0};
+        int i = SGGetChannelClip(QTObject.ID(vc), rgn);
         StdQTException.checkError(i);
-        return arrayOfInt[0] == 0 ? null : new Region(arrayOfInt[0]);
+        return rgn[0] == 0 ? null : new Region(rgn[0]);
     }
 
     /**
@@ -396,8 +396,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
         QDException.checkError(k);
     }
 
-    private Region(int paramInt) throws QTException {
-        super(paramInt, null, false);
+    private Region(int nativeRep) throws QTException {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -417,13 +417,13 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      */
     public QDRect getRgnBBox() {
         if (QTSession.isCurrentOS(4)) {
-            QDRect localObject = new QDRect();
-            GetRegionBounds(_ID(), localObject.getBytes());
-            return localObject;
+            QDRect rgnBBox = new QDRect();
+            GetRegionBounds(_ID(), rgnBBox.getBytes());
+            return rgnBBox;
         }
-        Object localObject = new byte[8];
-        getBytesAt(2, 8, (byte[]) localObject, 0);
-        return QDRect.fromArray((byte[]) localObject, 8);
+        Object destArray = new byte[8];
+        getBytesAt(2, 8, (byte[]) destArray, 0);
+        return QDRect.fromArray((byte[]) destArray, 8);
     }
 
     /**
@@ -519,8 +519,8 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
     public Object clone() {
         try {
             return copy();
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
@@ -727,11 +727,11 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
      * @see "QuickDraw::EqualRgn"
      * @see "QuickDraw::MacEqualRgn"
      */
-    public boolean equalRgn(Region paramRegion) {
+    public boolean equalRgn(Region b) {
         if ((isMacOS) || (QTSession.isCurrentOS(4))) {
-            return EqualRgn(_ID(), QTObject.ID(paramRegion)) != 0;
+            return EqualRgn(_ID(), QTObject.ID(b)) != 0;
         }
-        return MacEqualRgn(_ID(), QTObject.ID(paramRegion)) != 0;
+        return MacEqualRgn(_ID(), QTObject.ID(b)) != 0;
     }
 
     /**
@@ -775,20 +775,20 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
         return super.toString() + "[rgnBBox=" + getRgnBBox() + "]";
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] destArray1, int[] destArray2) {
+        QuickDrawManager.GetGWorld(destArray1, destArray2);
     }
 
     private static void OpenRgn() {
         QuickDrawManager.OpenRgn();
     }
 
-    private static void CloseRgn(int paramInt) {
-        QuickDrawManager.CloseRgn(paramInt);
+    private static void CloseRgn(int rgn) {
+        QuickDrawManager.CloseRgn(rgn);
     }
 
     private static int NewRgn() {
@@ -799,187 +799,187 @@ public final class Region extends QTHandleRef implements QuickTimeLib, QTStreami
         return MemoryManager.MemError();
     }
 
-    private static void SectRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.SectRgn(paramInt1, paramInt2, paramInt3);
+    private static void SectRgn(int a, int b, int dst) {
+        QuickDrawManager.SectRgn(a, b, dst);
     }
 
-    private static int GraphicsImportGetClip(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetClip(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetClip(int gi, int[] clip) {
+        return GraphicsImportManager.GraphicsImportGetClip(gi, clip);
     }
 
-    private static int GraphicsImportGetDefaultClip(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsImportManager.GraphicsImportGetDefaultClip(paramInt, paramArrayOfInt);
+    private static int GraphicsImportGetDefaultClip(int gi, int[] clip) {
+        return GraphicsImportManager.GraphicsImportGetDefaultClip(gi, clip);
     }
 
-    private static int GetMovieDisplayClipRgn(int paramInt) {
-        return MovieToolbox.GetMovieDisplayClipRgn(paramInt);
+    private static int GetMovieDisplayClipRgn(int movie) {
+        return MovieToolbox.GetMovieDisplayClipRgn(movie);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int GetMovieDisplayBoundsRgn(int paramInt) {
-        return MovieToolbox.GetMovieDisplayBoundsRgn(paramInt);
+    private static int GetMovieDisplayBoundsRgn(int movie) {
+        return MovieToolbox.GetMovieDisplayBoundsRgn(movie);
     }
 
-    private static int GetMovieClipRgn(int paramInt) {
-        return MovieToolbox.GetMovieClipRgn(paramInt);
+    private static int GetMovieClipRgn(int movie) {
+        return MovieToolbox.GetMovieClipRgn(movie);
     }
 
-    private static int GetMovieBoundsRgn(int paramInt) {
-        return MovieToolbox.GetMovieBoundsRgn(paramInt);
+    private static int GetMovieBoundsRgn(int movie) {
+        return MovieToolbox.GetMovieBoundsRgn(movie);
     }
 
-    private static int GetMovieSegmentDisplayBoundsRgn(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.GetMovieSegmentDisplayBoundsRgn(paramInt1, paramInt2, paramInt3);
+    private static int GetMovieSegmentDisplayBoundsRgn(int movie, int time, int duration) {
+        return MovieToolbox.GetMovieSegmentDisplayBoundsRgn(movie, time, duration);
     }
 
-    private static int MCGetControllerBoundsRgn(int paramInt) {
-        return MovieControllerManager.MCGetControllerBoundsRgn(paramInt);
+    private static int MCGetControllerBoundsRgn(int mc) {
+        return MovieControllerManager.MCGetControllerBoundsRgn(mc);
     }
 
-    private static int MCGetWindowRgn(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCGetWindowRgn(paramInt1, paramInt2);
+    private static int MCGetWindowRgn(int mc, int window) {
+        return MovieControllerManager.MCGetWindowRgn(mc, window);
     }
 
-    private static int MCGetClip(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return MovieControllerManager.MCGetClip(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int MCGetClip(int mc, int[] theClip, int[] movieClip) {
+        return MovieControllerManager.MCGetClip(mc, theClip, movieClip);
     }
 
-    private static int MCDrawBadge(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MovieControllerManager.MCDrawBadge(paramInt1, paramInt2, paramArrayOfInt);
+    private static int MCDrawBadge(int mc, int movieRgn, int[] badgeRgn) {
+        return MovieControllerManager.MCDrawBadge(mc, movieRgn, badgeRgn);
     }
 
-    private static int GetTrackClipRgn(int paramInt) {
-        return MovieToolbox.GetTrackClipRgn(paramInt);
+    private static int GetTrackClipRgn(int track) {
+        return MovieToolbox.GetTrackClipRgn(track);
     }
 
-    private static int GetTrackDisplayBoundsRgn(int paramInt) {
-        return MovieToolbox.GetTrackDisplayBoundsRgn(paramInt);
+    private static int GetTrackDisplayBoundsRgn(int track) {
+        return MovieToolbox.GetTrackDisplayBoundsRgn(track);
     }
 
-    private static int GetTrackMovieBoundsRgn(int paramInt) {
-        return MovieToolbox.GetTrackMovieBoundsRgn(paramInt);
+    private static int GetTrackMovieBoundsRgn(int track) {
+        return MovieToolbox.GetTrackMovieBoundsRgn(track);
     }
 
-    private static int GetTrackBoundsRgn(int paramInt) {
-        return MovieToolbox.GetTrackBoundsRgn(paramInt);
+    private static int GetTrackBoundsRgn(int track) {
+        return MovieToolbox.GetTrackBoundsRgn(track);
     }
 
-    private static int GetTrackSegmentDisplayBoundsRgn(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.GetTrackSegmentDisplayBoundsRgn(paramInt1, paramInt2, paramInt3);
+    private static int GetTrackSegmentDisplayBoundsRgn(int track, int time, int duration) {
+        return MovieToolbox.GetTrackSegmentDisplayBoundsRgn(track, time, duration);
     }
 
-    private static int SGGetChannelClip(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetChannelClip(paramInt, paramArrayOfInt);
+    private static int SGGetChannelClip(int ref, int[] rgn) {
+        return SequenceGrabberManager.SGGetChannelClip(ref, rgn);
     }
 
-    private static short BitMapToRegion(int paramInt1, int paramInt2) {
-        return QuickDrawManager.BitMapToRegion(paramInt1, paramInt2);
+    private static short BitMapToRegion(int rgn, int bitmap) {
+        return QuickDrawManager.BitMapToRegion(rgn, bitmap);
     }
 
-    private static void RectRgn(int paramInt, byte[] paramArrayOfByte) {
-        QuickDrawManager.RectRgn(paramInt, paramArrayOfByte);
+    private static void RectRgn(int rgn, byte[] r) {
+        QuickDrawManager.RectRgn(rgn, r);
     }
 
-    private static void MacCopyRgn(int paramInt1, int paramInt2) {
-        QuickDrawManager.MacCopyRgn(paramInt1, paramInt2);
+    private static void MacCopyRgn(int src, int dst) {
+        QuickDrawManager.MacCopyRgn(src, dst);
     }
 
-    private static void SetEmptyRgn(int paramInt) {
-        QuickDrawManager.SetEmptyRgn(paramInt);
+    private static void SetEmptyRgn(int rgn) {
+        QuickDrawManager.SetEmptyRgn(rgn);
     }
 
-    private static void MacSetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
-        QuickDrawManager.MacSetRectRgn(paramInt, paramShort1, paramShort2, paramShort3, paramShort4);
+    private static void MacSetRectRgn(int rgn, short left, short top, short right, short bottom) {
+        QuickDrawManager.MacSetRectRgn(rgn, left, top, right, bottom);
     }
 
-    private static void MacOffsetRgn(int paramInt, short paramShort1, short paramShort2) {
-        QuickDrawManager.MacOffsetRgn(paramInt, paramShort1, paramShort2);
+    private static void MacOffsetRgn(int rgn, short dh, short dv) {
+        QuickDrawManager.MacOffsetRgn(rgn, dh, dv);
     }
 
-    private static void InsetRgn(int paramInt, short paramShort1, short paramShort2) {
-        QuickDrawManager.InsetRgn(paramInt, paramShort1, paramShort2);
+    private static void InsetRgn(int rgn, short dh, short dv) {
+        QuickDrawManager.InsetRgn(rgn, dh, dv);
     }
 
-    private static void DisposeRgn(int paramInt) {
-        QuickDrawManager.DisposeRgn(paramInt);
+    private static void DisposeRgn(int rgn) {
+        QuickDrawManager.DisposeRgn(rgn);
     }
 
-    private static void MacUnionRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.MacUnionRgn(paramInt1, paramInt2, paramInt3);
+    private static void MacUnionRgn(int a, int b, int dst) {
+        QuickDrawManager.MacUnionRgn(a, b, dst);
     }
 
-    private static void DiffRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.DiffRgn(paramInt1, paramInt2, paramInt3);
+    private static void DiffRgn(int a, int b, int dst) {
+        QuickDrawManager.DiffRgn(a, b, dst);
     }
 
-    private static void MacXorRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.MacXorRgn(paramInt1, paramInt2, paramInt3);
+    private static void MacXorRgn(int a, int b, int dst) {
+        QuickDrawManager.MacXorRgn(a, b, dst);
     }
 
-    private static byte RectInRgn(byte[] paramArrayOfByte, int paramInt) {
-        return QuickDrawManager.RectInRgn(paramArrayOfByte, paramInt);
+    private static byte RectInRgn(byte[] r, int rgn) {
+        return QuickDrawManager.RectInRgn(r, rgn);
     }
 
-    private static byte MacEqualRgn(int paramInt1, int paramInt2) {
-        return QuickDrawManager.MacEqualRgn(paramInt1, paramInt2);
+    private static byte MacEqualRgn(int a, int b) {
+        return QuickDrawManager.MacEqualRgn(a, b);
     }
 
-    private static byte EmptyRgn(int paramInt) {
-        return QuickDrawManager.EmptyRgn(paramInt);
+    private static byte EmptyRgn(int rgn) {
+        return QuickDrawManager.EmptyRgn(rgn);
     }
 
-    private static void MapRgn(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        QuickDrawManager.MapRgn(paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    private static void MapRgn(int rgn, byte[] src, byte[] dst) {
+        QuickDrawManager.MapRgn(rgn, src, dst);
     }
 
-    private static byte PtInRgn(int paramInt1, int paramInt2) {
-        return QuickDrawManager.PtInRgn(paramInt1, paramInt2);
+    private static byte PtInRgn(int pt, int rgn) {
+        return QuickDrawManager.PtInRgn(pt, rgn);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void PaintRgn(int paramInt) {
-        QuickDrawManager.PaintRgn(paramInt);
+    private static void PaintRgn(int rgn) {
+        QuickDrawManager.PaintRgn(rgn);
     }
 
-    private static void CopyRgn(int paramInt1, int paramInt2) {
-        QuickDrawManager.CopyRgn(paramInt1, paramInt2);
+    private static void CopyRgn(int src, int dst) {
+        QuickDrawManager.CopyRgn(src, dst);
     }
 
-    private static void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
-        QuickDrawManager.SetRectRgn(paramInt, paramShort1, paramShort2, paramShort3, paramShort4);
+    private static void SetRectRgn(int rgn, short left, short top, short right, short bottom) {
+        QuickDrawManager.SetRectRgn(rgn, left, top, right, bottom);
     }
 
-    private static void OffsetRgn(int paramInt, short paramShort1, short paramShort2) {
-        QuickDrawManager.OffsetRgn(paramInt, paramShort1, paramShort2);
+    private static void OffsetRgn(int rgn, short dh, short dv) {
+        QuickDrawManager.OffsetRgn(rgn, dh, dv);
     }
 
-    private static void UnionRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.UnionRgn(paramInt1, paramInt2, paramInt3);
+    private static void UnionRgn(int a, int b, int dst) {
+        QuickDrawManager.UnionRgn(a, b, dst);
     }
 
-    private static void XorRgn(int paramInt1, int paramInt2, int paramInt3) {
-        QuickDrawManager.XorRgn(paramInt1, paramInt2, paramInt3);
+    private static void XorRgn(int a, int b, int dst) {
+        QuickDrawManager.XorRgn(a, b, dst);
     }
 
-    private static byte EqualRgn(int paramInt1, int paramInt2) {
-        return QuickDrawManager.EqualRgn(paramInt1, paramInt2);
+    private static byte EqualRgn(int a, int b) {
+        return QuickDrawManager.EqualRgn(a, b);
     }
 
-    private static byte GetRegionBounds(int paramInt, byte[] paramArrayOfByte) {
-        return QuickDrawManager.GetRegionBounds(paramInt, paramArrayOfByte);
+    private static byte GetRegionBounds(int rgn, byte[] rect) {
+        return QuickDrawManager.GetRegionBounds(rgn, rect);
     }
 
-    private static byte IsRegionRectangular(int paramInt) {
-        return QuickDrawManager.IsRegionRectangular(paramInt);
+    private static byte IsRegionRectangular(int rgn) {
+        return QuickDrawManager.IsRegionRectangular(rgn);
     }
 
-    private static short QTSPresGetClip(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetClip(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTSPresGetClip(int presentation, int stream, int[] clip) {
+        return StreamingManager.QTSPresGetClip(presentation, stream, clip);
     }
 }

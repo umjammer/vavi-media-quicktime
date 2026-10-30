@@ -8,8 +8,8 @@ import quicktime.util.QTUtils;
 
 public class VideoMediaHandler extends VisualMediaHandler implements QuickTimeLib {
 
-    protected VideoMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    protected VideoMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -41,20 +41,20 @@ public class VideoMediaHandler extends VisualMediaHandler implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public int getStallCount() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(VideoMediaGetStallCount(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] stalls = { 0 };
+        StdQTException.checkError(VideoMediaGetStallCount(_ID(), stalls));
+        return stalls[0];
     }
 
-    private static int VideoMediaResetStatistics(int paramInt) {
-        return MediaHandlerManager.VideoMediaResetStatistics(paramInt);
+    private static int VideoMediaResetStatistics(int mh) {
+        return MediaHandlerManager.VideoMediaResetStatistics(mh);
     }
 
-    private static int VideoMediaGetStatistics(int paramInt) {
-        return MediaHandlerManager.VideoMediaGetStatistics(paramInt);
+    private static int VideoMediaGetStatistics(int mh) {
+        return MediaHandlerManager.VideoMediaGetStatistics(mh);
     }
 
-    private static int VideoMediaGetStallCount(int paramInt, int[] paramArrayOfInt) {
-        return MediaHandlerManager.VideoMediaGetStallCount(paramInt, paramArrayOfInt);
+    private static int VideoMediaGetStallCount(int mh, int[] stalls) {
+        return MediaHandlerManager.VideoMediaGetStallCount(mh, stalls);
     }
 }

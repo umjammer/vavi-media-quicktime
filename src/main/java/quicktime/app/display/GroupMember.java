@@ -51,8 +51,8 @@ public class GroupMember implements Layerable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if ((obj instanceof GroupMember localGroupMember)) {
-            return (localGroupMember.layer == this.layer) && (localGroupMember.drawer == this.drawer);
+        if ((obj instanceof GroupMember groupMember)) {
+            return (groupMember.layer == this.layer) && (groupMember.drawer == this.drawer);
         }
         return false;
     }

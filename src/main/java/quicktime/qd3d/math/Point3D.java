@@ -67,30 +67,30 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
         setZ(z);
     }
 
-    private Point3D(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private Point3D(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        Point3D localPoint3D = (Point3D) clone();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        Point3D point3D = (Point3D) clone();
         try {
-            EndianOrder.flipNativeToBigEndian(localPoint3D, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+            EndianOrder.flipNativeToBigEndian(point3D, 0, getEndianDescriptor());
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
-        paramObjectOutputStream.write(localPoint3D.getBytes());
+        out.write(point3D.getBytes());
     }
 
     /**
@@ -117,22 +117,22 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
     /**
      * sets the position in the X direction
      */
-    public void setX(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setX(float x) {
+        setFloatAt(0, x);
     }
 
     /**
      * sets the position in the Y direction
      */
-    public void setY(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setY(float y) {
+        setFloatAt(4, y);
     }
 
     /**
      * sets the position in the Z direction
      */
-    public void setZ(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setZ(float z) {
+        setFloatAt(8, z);
     }
 
     /**
@@ -143,9 +143,9 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * @see "QuickDraw3D::Q3Point3D_Subtract"
      */
     public Vector3D subtract(Point3D p2) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Point3D_Subtract(getBytes(), p2.getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Point3D_Subtract(getBytes(), p2.getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -182,9 +182,9 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * @see "QuickDraw3D::Q3Point3D_RRatio"
      */
     public Point3D rRatio(Point3D p2, float r1, float r2) {
-        Point3D localPoint3D = new Point3D();
-        int i = Q3Point3D_RRatio(getBytes(), p2.getBytes(), r1, r2, localPoint3D.getBytes());
-        return localPoint3D;
+        Point3D point3D = new Point3D();
+        int i = Q3Point3D_RRatio(getBytes(), p2.getBytes(), r1, r2, point3D.getBytes());
+        return point3D;
     }
 
     /**
@@ -196,9 +196,9 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * @see "QuickDraw3D::Q3Point3D_Vector3D_Add"
      */
     public Point3D add(Vector3D vector3D) {
-        Point3D localPoint3D = new Point3D();
-        int i = Q3Point3D_Vector3D_Add(getBytes(), vector3D.getBytes(), localPoint3D.getBytes());
-        return localPoint3D;
+        Point3D point3D = new Point3D();
+        int i = Q3Point3D_Vector3D_Add(getBytes(), vector3D.getBytes(), point3D.getBytes());
+        return point3D;
     }
 
     /**
@@ -210,9 +210,9 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * @see "QuickDraw3D::Q3Point3D_Vector3D_Subtract"
      */
     public Point3D subtract(Vector3D vector3D) {
-        Point3D localPoint3D = new Point3D();
-        int i = Q3Point3D_Vector3D_Subtract(getBytes(), vector3D.getBytes(), localPoint3D.getBytes());
-        return localPoint3D;
+        Point3D point3D = new Point3D();
+        int i = Q3Point3D_Vector3D_Subtract(getBytes(), vector3D.getBytes(), point3D.getBytes());
+        return point3D;
     }
 
     /**
@@ -225,9 +225,9 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * @see "QuickDraw3D::Q3Point3D_CrossProductTri"
      */
     public Vector3D cross(Point3D point2, Point3D point3) {
-        Vector3D localVector3D = new Vector3D();
-        int i = Q3Point3D_CrossProductTri(getBytes(), point2.getBytes(), point3.getBytes(), localVector3D.getBytes());
-        return localVector3D;
+        Vector3D vector3D = new Vector3D();
+        int i = Q3Point3D_CrossProductTri(getBytes(), point2.getBytes(), point3.getBytes(), vector3D.getBytes());
+        return vector3D;
     }
 
     /**
@@ -240,9 +240,9 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
      * @see "QuickDraw3D::Q3Point3D_TransformQuaternion"
      */
     public Point3D transformQuaternion(Quaternion quaternion) {
-        Point3D localPoint3D = new Point3D();
-        int i = Q3Point3D_TransformQuaternion(getBytes(), quaternion.getBytes(), localPoint3D.getBytes());
-        return localPoint3D;
+        Point3D point3D = new Point3D();
+        int i = Q3Point3D_TransformQuaternion(getBytes(), quaternion.getBytes(), point3D.getBytes());
+        return point3D;
     }
 
     /**
@@ -260,35 +260,35 @@ public final class Point3D extends QTByteObject implements QuickTimeLib, QuickDr
         return super.toString() + "[x=" + getX() + ",y=" + getY() + ",z=" + getZ() + "]";
     }
 
-    private static int Q3Point3D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point3D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point3D_Subtract(byte[] p1, byte[] p2, byte[] result) {
+        return QD3DManager.Q3Point3D_Subtract(p1, p2, result);
     }
 
-    private static float Q3Point3D_Distance(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Point3D_Distance(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Point3D_Distance(byte[] p1, byte[] p2) {
+        return QD3DManager.Q3Point3D_Distance(p1, p2);
     }
 
-    private static float Q3Point3D_DistanceSquared(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Point3D_DistanceSquared(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Point3D_DistanceSquared(byte[] p1, byte[] p2) {
+        return QD3DManager.Q3Point3D_DistanceSquared(p1, p2);
     }
 
-    private static int Q3Point3D_RRatio(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat1, float paramFloat2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point3D_RRatio(paramArrayOfByte1, paramArrayOfByte2, paramFloat1, paramFloat2, paramArrayOfByte3);
+    private static int Q3Point3D_RRatio(byte[] p1, byte[] p2, float r1, float r2, byte[] result) {
+        return QD3DManager.Q3Point3D_RRatio(p1, p2, r1, r2, result);
     }
 
-    private static int Q3Point3D_Vector3D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point3D_Vector3D_Add(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point3D_Vector3D_Add(byte[] point3D, byte[] vector3D, byte[] result) {
+        return QD3DManager.Q3Point3D_Vector3D_Add(point3D, vector3D, result);
     }
 
-    private static int Q3Point3D_Vector3D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point3D_Vector3D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point3D_Vector3D_Subtract(byte[] point3D, byte[] vector3D, byte[] result) {
+        return QD3DManager.Q3Point3D_Vector3D_Subtract(point3D, vector3D, result);
     }
 
-    private static int Q3Point3D_CrossProductTri(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte[] paramArrayOfByte4) {
-        return QD3DManager.Q3Point3D_CrossProductTri(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramArrayOfByte4);
+    private static int Q3Point3D_CrossProductTri(byte[] point1, byte[] point2, byte[] point3, byte[] crossVector) {
+        return QD3DManager.Q3Point3D_CrossProductTri(point1, point2, point3, crossVector);
     }
 
-    private static int Q3Point3D_TransformQuaternion(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point3D_TransformQuaternion(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point3D_TransformQuaternion(byte[] point3D, byte[] quaternion, byte[] result) {
+        return QD3DManager.Q3Point3D_TransformQuaternion(point3D, quaternion, result);
     }
 }

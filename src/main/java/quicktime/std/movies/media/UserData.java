@@ -39,11 +39,11 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.GraphicsExporter#getMetaData()
      */
-    public static UserData fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = GraphicsExportGetMetaData(QTObject.ID(paramGraphicsExporter), arrayOfInt);
+    public static UserData fromGraphicsExporter(GraphicsExporter ge) throws StdQTException {
+        int[] userData = new int[1];
+        int i = GraphicsExportGetMetaData(QTObject.ID(ge), userData);
         StdQTException.checkError(i);
-        return new UserData(arrayOfInt[0], paramGraphicsExporter);
+        return new UserData(userData[0], ge);
     }
 
     /**
@@ -53,10 +53,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.Movie#getUserData()
      */
-    public static UserData fromMovie(Movie paramMovie) throws StdQTException {
-        int i = GetMovieUserData(QTObject.ID(paramMovie));
+    public static UserData fromMovie(Movie movie) throws StdQTException {
+        int i = GetMovieUserData(QTObject.ID(movie));
         StdQTException.checkError(GetMoviesError());
-        return new UserData(i, paramMovie);
+        return new UserData(i, movie);
     }
 
     /**
@@ -68,11 +68,11 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.sg.SequenceGrabber#getSettings()
      */
-    public static UserData fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SGGetSettings(QTObject.ID(paramSequenceGrabber), arrayOfInt, 0);
+    public static UserData fromSequenceGrabber(SequenceGrabber sg) throws StdQTException {
+        int[] userData = new int[1];
+        int i = SGGetSettings(QTObject.ID(sg), userData, 0);
         StdQTException.checkError(i);
-        return new UserData(arrayOfInt[0], null);
+        return new UserData(userData[0], null);
     }
 
     /**
@@ -81,11 +81,11 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SGGetChannelSettings"
      * @see quicktime.std.sg.SGChannel#getSettings()
      */
-    public static UserData fromSGChannel(SGChannel paramSGChannel) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SGGetChannelSettings(QTObject.ID(paramSGChannel.getSequenceGrabber()), QTObject.ID(paramSGChannel), arrayOfInt, 0);
+    public static UserData fromSGChannel(SGChannel ref) throws StdQTException {
+        int[] userData = new int[1];
+        int i = SGGetChannelSettings(QTObject.ID(ref.getSequenceGrabber()), QTObject.ID(ref), userData, 0);
         StdQTException.checkError(i);
-        return new UserData(arrayOfInt[0], null);
+        return new UserData(userData[0], null);
     }
 
     /**
@@ -95,10 +95,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.Track#getUserData()
      */
-    public static UserData fromTrack(Track paramTrack) throws StdQTException {
-        int i = GetTrackUserData(QTObject.ID(paramTrack));
+    public static UserData fromTrack(Track track) throws StdQTException {
+        int i = GetTrackUserData(QTObject.ID(track));
         StdQTException.checkError(GetMoviesError());
-        return i == 0 ? null : new UserData(i, paramTrack);
+        return i == 0 ? null : new UserData(i, track);
     }
 
     /**
@@ -108,10 +108,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.media.Media#getUserData()
      */
-    public static UserData fromMedia(Media paramMedia) throws StdQTException {
-        int i = GetMediaUserData(QTObject.ID(paramMedia));
+    public static UserData fromMedia(Media media) throws StdQTException {
+        int i = GetMediaUserData(QTObject.ID(media));
         StdQTException.checkError(GetMoviesError());
-        return new UserData(i, paramMedia);
+        return new UserData(i, media);
     }
 
     /**
@@ -124,9 +124,9 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @see quicktime.std.qtcomponents.TimeCoder#getUserDataSourceRef(quicktime.std.qtcomponents.TimeCodeDescription)
      */
     public static UserData fromTimeCoderSource(TimeCoder timeCoder, TimeCodeDescription tcd) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(TCGetSourceRef(QTObject.ID(timeCoder), QTObject.ID(tcd), arrayOfInt));
-        return new UserData(arrayOfInt[0], null);
+        int[] srefH = new int[1];
+        StdQTException.checkError(TCGetSourceRef(QTObject.ID(timeCoder), QTObject.ID(tcd), srefH));
+        return new UserData(srefH[0], null);
     }
 
     /**
@@ -146,22 +146,22 @@ public final class UserData extends QTObject implements QuickTimeLib {
         this(allocate(handle), null);
     }
 
-    private UserData(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    private UserData(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     private static int allocate() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = NewUserData(arrayOfInt);
+        int[] userData = new int[1];
+        int i = NewUserData(userData);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return userData[0];
     }
 
-    private static int allocate(QTHandle paramQTHandle) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = NewUserDataFromHandle(QTObject.ID(paramQTHandle), arrayOfInt);
+    private static int allocate(QTHandle h) throws StdQTException {
+        int[] userData = new int[1];
+        int i = NewUserDataFromHandle(QTObject.ID(h), userData);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return userData[0];
     }
 
     /**
@@ -171,10 +171,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public QTHandle putIntoHandle() throws QTException {
-        QTHandle localQTHandle = new QTHandle();
-        int i = PutUserDataIntoHandle(_ID(), QTObject.ID(localQTHandle));
+        QTHandle h = new QTHandle();
+        int i = PutUserDataIntoHandle(_ID(), QTObject.ID(h));
         StdQTException.checkError(i);
-        return localQTHandle;
+        return h;
     }
 
     /**
@@ -186,10 +186,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public QTHandle getData(int udType, int index) throws QTException {
-        QTHandle localQTHandle = new QTHandle();
-        int i = GetUserData(_ID(), QTObject.ID(localQTHandle), udType, index);
+        QTHandle h = new QTHandle();
+        int i = GetUserData(_ID(), QTObject.ID(h), udType, index);
         StdQTException.checkError(i);
-        return localQTHandle;
+        return h;
     }
 
     /**
@@ -252,10 +252,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public QTPointer getDataItem(int dataSize, int udType, int index) throws QTException {
-        QTPointer localQTPointer = new QTPointer(dataSize, true);
-        int i = GetUserDataItem(_ID(), QTObject.ID(localQTPointer), localQTPointer.getSize(), udType, index);
+        QTPointer data = new QTPointer(dataSize, true);
+        int i = GetUserDataItem(_ID(), QTObject.ID(data), data.getSize(), udType, index);
         StdQTException.checkError(i);
-        return localQTPointer;
+        return data;
     }
 
     /**
@@ -293,13 +293,13 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @param itlRegionTag Specifies the region code of the text to be added.
      * @throws quicktime.std.StdQTException
      */
-    public void addText(String paramString, int udType, int index, int itlRegionTag) throws StdQTException {
-        int i = NewHandle(paramString.length());
-        byte[] arrayOfByte = new byte[paramString.length()];
-        paramString.getBytes(0, paramString.length(), arrayOfByte, 0);
+    public void addText(String text, int udType, int index, int itlRegionTag) throws StdQTException {
+        int i = NewHandle(text.length());
+        byte[] arrayOfByte = new byte[text.length()];
+        text.getBytes(0, text.length(), arrayOfByte, 0);
         HLock(i);
         int j = getIntFromPointer(i, 0);
-        copyArrayToPointer(arrayOfByte, 0, j, 0, paramString.length());
+        copyArrayToPointer(arrayOfByte, 0, j, 0, text.length());
         int k = AddUserDataText(_ID(), i, udType, index, (short) itlRegionTag);
         DisposeHandle(i);
         StdQTException.checkError(k);
@@ -317,10 +317,10 @@ public final class UserData extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public QTHandle getText(int udType, int index, short itlRegionTag) throws QTException {
-        QTHandle localQTHandle = new QTHandle();
-        int i = GetUserDataText(_ID(), QTObject.ID(localQTHandle), udType, index, itlRegionTag);
+        QTHandle h = new QTHandle();
+        int i = GetUserDataText(_ID(), QTObject.ID(h), udType, index, itlRegionTag);
         StdQTException.checkError(i);
-        return localQTHandle;
+        return h;
     }
 
     /**
@@ -393,131 +393,131 @@ public final class UserData extends QTObject implements QuickTimeLib {
         StdQTException.checkError(CopyUserData(QTObject.ID(srcUserData), QTObject.ID(destUserData), copyRule));
     }
 
-    private static void copyArrayToPointer(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MemoryManager.copyArrayToPointer(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void copyArrayToPointer(byte[] array, int arrayOffset, int ptr, int ptrOffset, int size) {
+        MemoryManager.copyArrayToPointer(array, arrayOffset, ptr, ptrOffset, size);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static int NewHandle(int paramInt) {
-        return MemoryManager.NewHandle(paramInt);
+    private static int NewHandle(int size) {
+        return MemoryManager.NewHandle(size);
     }
 
-    private static int GetHandleSize(int paramInt) {
-        return MemoryManager.GetHandleSize(paramInt);
+    private static int GetHandleSize(int h) {
+        return MemoryManager.GetHandleSize(h);
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void HLock(int paramInt) {
-        MemoryManager.HLock(paramInt);
+    private static void HLock(int h) {
+        MemoryManager.HLock(h);
     }
 
-    private static int TCGetSourceRef(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return TimeCodeManager.TCGetSourceRef(paramInt1, paramInt2, paramArrayOfInt);
+    private static int TCGetSourceRef(int mh, int tcdH, int[] srefH) {
+        return TimeCodeManager.TCGetSourceRef(mh, tcdH, srefH);
     }
 
-    private static int GraphicsExportGetMetaData(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetMetaData(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetMetaData(int ge, int[] userData) {
+        return GraphicsExportManager.GraphicsExportGetMetaData(ge, userData);
     }
 
-    private static int GetMovieUserData(int paramInt) {
-        return MovieToolbox.GetMovieUserData(paramInt);
+    private static int GetMovieUserData(int movie) {
+        return MovieToolbox.GetMovieUserData(movie);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int SGGetSettings(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
-        return SequenceGrabberManager.SGGetSettings(paramInt1, paramArrayOfInt, paramInt2);
+    private static int SGGetSettings(int sg, int[] userData, int flags) {
+        return SequenceGrabberManager.SGGetSettings(sg, userData, flags);
     }
 
-    private static int SGGetChannelSettings(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
-        return SequenceGrabberManager.SGGetChannelSettings(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    private static int SGGetChannelSettings(int sg, int ref, int[] userData, int flags) {
+        return SequenceGrabberManager.SGGetChannelSettings(sg, ref, userData, flags);
     }
 
-    private static int GetTrackUserData(int paramInt) {
-        return MovieToolbox.GetTrackUserData(paramInt);
+    private static int GetTrackUserData(int track) {
+        return MovieToolbox.GetTrackUserData(track);
     }
 
-    private static int GetMediaUserData(int paramInt) {
-        return MovieToolbox.GetMediaUserData(paramInt);
+    private static int GetMediaUserData(int media) {
+        return MovieToolbox.GetMediaUserData(media);
     }
 
-    private static short NewUserData(int[] paramArrayOfInt) {
-        return MovieToolbox.NewUserData(paramArrayOfInt);
+    private static short NewUserData(int[] userData) {
+        return MovieToolbox.NewUserData(userData);
     }
 
-    private static short NewUserDataFromHandle(int paramInt, int[] paramArrayOfInt) {
-        return MovieToolbox.NewUserDataFromHandle(paramInt, paramArrayOfInt);
+    private static short NewUserDataFromHandle(int h, int[] userData) {
+        return MovieToolbox.NewUserDataFromHandle(h, userData);
     }
 
-    private static short PutUserDataIntoHandle(int paramInt1, int paramInt2) {
-        return MovieToolbox.PutUserDataIntoHandle(paramInt1, paramInt2);
+    private static short PutUserDataIntoHandle(int userData, int h) {
+        return MovieToolbox.PutUserDataIntoHandle(userData, h);
     }
 
-    private static short GetUserData(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.GetUserData(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short GetUserData(int userData, int h, int type, int index) {
+        return MovieToolbox.GetUserData(userData, h, type, index);
     }
 
-    private static short AddUserData(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.AddUserData(paramInt1, paramInt2, paramInt3);
+    private static short AddUserData(int userData, int h, int type) {
+        return MovieToolbox.AddUserData(userData, h, type);
     }
 
-    private static short RemoveUserData(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.RemoveUserData(paramInt1, paramInt2, paramInt3);
+    private static short RemoveUserData(int userData, int type, int index) {
+        return MovieToolbox.RemoveUserData(userData, type, index);
     }
 
-    private static short CountUserDataType(int paramInt1, int paramInt2) {
-        return MovieToolbox.CountUserDataType(paramInt1, paramInt2);
+    private static short CountUserDataType(int userData, int type) {
+        return MovieToolbox.CountUserDataType(userData, type);
     }
 
-    private static int GetNextUserDataType(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetNextUserDataType(paramInt1, paramInt2);
+    private static int GetNextUserDataType(int userData, int type) {
+        return MovieToolbox.GetNextUserDataType(userData, type);
     }
 
-    private static short GetUserDataItem(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.GetUserDataItem(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short GetUserDataItem(int userData, int data, int size, int type, int index) {
+        return MovieToolbox.GetUserDataItem(userData, data, size, type, index);
     }
 
-    private static short SetUserDataItem(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.SetUserDataItem(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short SetUserDataItem(int userData, int data, int size, int type, int index) {
+        return MovieToolbox.SetUserDataItem(userData, data, size, type, index);
     }
 
-    private static short AddUserDataText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort) {
-        return MovieToolbox.AddUserDataText(paramInt1, paramInt2, paramInt3, paramInt4, paramShort);
+    private static short AddUserDataText(int userData, int h, int type, int index, short language) {
+        return MovieToolbox.AddUserDataText(userData, h, type, index, language);
     }
 
-    private static short GetUserDataText(int paramInt1, int paramInt2, int paramInt3, int paramInt4, short paramShort) {
-        return MovieToolbox.GetUserDataText(paramInt1, paramInt2, paramInt3, paramInt4, paramShort);
+    private static short GetUserDataText(int userData, int h, int type, int index, short language) {
+        return MovieToolbox.GetUserDataText(userData, h, type, index, language);
     }
 
-    private static short RemoveUserDataText(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
-        return MovieToolbox.RemoveUserDataText(paramInt1, paramInt2, paramInt3, paramShort);
+    private static short RemoveUserDataText(int userData, int type, int index, short language) {
+        return MovieToolbox.RemoveUserDataText(userData, type, index, language);
     }
 
-    private static int MediaSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MediaSetGraphicsMode(int mh, int mode, byte[] opColor) {
+        return MediaHandlerManager.MediaSetGraphicsMode(mh, mode, opColor);
     }
 
-    private static int MediaGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    private static int MediaGetGraphicsMode(int mh, int[] mode, byte[] opColor) {
+        return MediaHandlerManager.MediaGetGraphicsMode(mh, mode, opColor);
     }
 
-    private static int MediaGetTrackOpaque(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetTrackOpaque(paramInt, paramArrayOfByte);
+    private static int MediaGetTrackOpaque(int mh, byte[] opaque) {
+        return MediaHandlerManager.MediaGetTrackOpaque(mh, opaque);
     }
 
-    private static short CopyUserData(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.CopyUserData(paramInt1, paramInt2, paramInt3);
+    private static short CopyUserData(int src, int dst, int copyRule) {
+        return MovieToolbox.CopyUserData(src, dst, copyRule);
     }
 }

@@ -19,9 +19,9 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
 
     private static final int kNativeSize = 44;
 
-    protected QTVRInterceptRecord(int paramInt, Object paramObject) {
-        super(paramInt, kNativeSize, paramObject);
-        if (paramObject == null) {
+    protected QTVRInterceptRecord(int nativeRep, Object ref) {
+        super(nativeRep, kNativeSize, ref);
+        if (ref == null) {
             throw new RuntimeException("Must have an owner");
         }
     }
@@ -216,42 +216,42 @@ public class QTVRInterceptRecord extends QTPointerRef implements PrimitivesLib {
      * @return a String
      */
     public String toString() {
-        String str = getClass().getName();
+        String name = getClass().getName();
         try {
-            str = str + "[selector=0x" + Integer.toHexString(getSelector());
-            str = str + ",paramCount=" + getParamCount();
-            str = switch (getSelector()) {
-                case 8192 -> str + ",pan angle (Radians)=" + getAngle();
-                case 8193 -> str + ",tilt angle (Radians)=" + getAngle();
-                case 8194 -> str + ",field of view (Radians)=" + getFieldOfView();
-                case 8195 -> str + ",view center=" + getViewCenter();
-                case 8202 -> str + ",hot spot ID=" + getHotSpotID();
+            name = name + "[selector=0x" + Integer.toHexString(getSelector());
+            name = name + ",paramCount=" + getParamCount();
+            name = switch (getSelector()) {
+                case 8192 -> name + ",pan angle (Radians)=" + getAngle();
+                case 8193 -> name + ",tilt angle (Radians)=" + getAngle();
+                case 8194 -> name + ",field of view (Radians)=" + getFieldOfView();
+                case 8195 -> name + ",view center=" + getViewCenter();
+                case 8202 -> name + ",hot spot ID=" + getHotSpotID();
                 case 8203 -> {
-                    str = str + ",hot spot ID=" + getHotSpotID();
-                    yield str + ",hotSpotType='" + QTUtils.fromOSType(getHotSpotType()) + "'";
+                    name = name + ",hot spot ID=" + getHotSpotID();
+                    yield name + ",hotSpotType='" + QTUtils.fromOSType(getHotSpotType()) + "'";
                 }
-                default -> str;
+                default -> name;
             };
-        } catch (QTException localQTException) {
-            str = str + "MISMATCHED SELECTOR";
+        } catch (QTException e) {
+            name = name + "MISMATCHED SELECTOR";
         }
-        str = str + "]";
-        return str;
+        name = name + "]";
+        return name;
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void setFloatInPointer(int paramInt1, int paramInt2, float paramFloat) {
-        MemoryManager.setFloatInPointer(paramInt1, paramInt2, paramFloat);
+    private static void setFloatInPointer(int ptr, int offset, float value) {
+        MemoryManager.setFloatInPointer(ptr, offset, value);
     }
 
-    private static float getFloatFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getFloatFromPointer(paramInt1, paramInt2);
+    private static float getFloatFromPointer(int ptr, int offset) {
+        return MemoryManager.getFloatFromPointer(ptr, offset);
     }
 }

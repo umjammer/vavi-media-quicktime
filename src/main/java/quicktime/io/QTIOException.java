@@ -25,9 +25,9 @@ public class QTIOException extends QTException {
      *
      * @param val the error number
      */
-    public QTIOException(int val, String paramString) {
+    public QTIOException(int val, String path) {
         super(val);
-        this.path = paramString;
+        this.path = path;
     }
 
     /**
@@ -37,9 +37,9 @@ public class QTIOException extends QTException {
      * @param err the result or error code if non-zero an exception is thrown
      * @throws quicktime.io.QTIOException
      */
-    public static void checkError(int err, String paramString) throws QTIOException {
+    public static void checkError(int err, String path) throws QTIOException {
         if (err < 0) {
-            throw new QTIOException(err, paramString);
+            throw new QTIOException(err, path);
         }
     }
 

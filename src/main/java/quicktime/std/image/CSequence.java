@@ -64,22 +64,22 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
         csImageDescription = null;
     }
 
-    private static int begin(QDGraphics paramQDGraphics, QDRect paramQDRect, int paramInt1, int paramInt2, CodecComponent paramCodecComponent, int paramInt3, int paramInt4, int paramInt5, ColorTable paramColorTable, int paramInt6) throws QTException {
+    private static int begin(QDGraphics port, QDRect rect, int colorDepth, int cType, CodecComponent codec, int spatialQuality, int temporalQuality, int keyFrameRate, ColorTable ctable, int flags) throws QTException {
         int i = 0;
-        int[] arrayOfInt = { 0 };
-        if ((paramQDGraphics == null) || (paramQDRect == null))
+        int[] seqID = { 0 };
+        if ((port == null) || (rect == null))
             throw new QTException(-50);
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
+            SetGWorld(QTObject.ID(port), 0);
             csImageDescription = new ImageDescription(0);
-            i = CompressSequenceBegin(arrayOfInt, QTObject.ID(paramQDGraphics.getPixMap()), 0, paramQDRect.getRect(), null, (short) paramInt1, paramInt2, QTObject.ID(paramCodecComponent), paramInt3, paramInt4, paramInt5, QTObject.ID(paramColorTable), (short) paramInt6, QTObject.ID(csImageDescription));
+            i = CompressSequenceBegin(seqID, QTObject.ID(port.getPixMap()), 0, rect.getRect(), null, (short) colorDepth, cType, QTObject.ID(codec), spatialQuality, temporalQuality, keyFrameRate, QTObject.ID(ctable), (short) flags, QTObject.ID(csImageDescription));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return seqID[0];
     }
 
     private static final int[] savedPort = { 0 };
@@ -131,8 +131,8 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public CompressedFrameInfo compressFrame(QDGraphics src, QDRect srcRect, int flags, IntEncodedImage data) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        byte[] arrayOfByte = new byte[1];
+        int[] dataSize = new int[1];
+        byte[] similarity = new byte[1];
         int i = 0;
         if ((src == null) || (srcRect == null)) {
             throw new StdQTException(-50);
@@ -141,12 +141,12 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
-            i = CompressSequenceFrame(_ID(), QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) flags, data.getInts(), arrayOfInt, arrayOfByte, 0);
+            i = CompressSequenceFrame(_ID(), QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) flags, data.getInts(), dataSize, similarity, 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return new CompressedFrameInfo(arrayOfInt[0], arrayOfByte[0]);
+        return new CompressedFrameInfo(dataSize[0], similarity[0]);
     }
 
     /**
@@ -165,8 +165,8 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public CompressedFrameInfo compressFrame(QDGraphics src, QDRect srcRect, int flags, ByteEncodedImage data) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        byte[] arrayOfByte = new byte[1];
+        int[] dataSize = new int[1];
+        byte[] similarity = new byte[1];
         int i = 0;
         if ((src == null) || (srcRect == null)) {
             throw new StdQTException(-50);
@@ -175,12 +175,12 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
-            i = CompressSequenceFrame(_ID(), QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) flags, data.getBytes(), arrayOfInt, arrayOfByte, 0);
+            i = CompressSequenceFrame(_ID(), QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) flags, data.getBytes(), dataSize, similarity, 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return new CompressedFrameInfo(arrayOfInt[0], arrayOfByte[0]);
+        return new CompressedFrameInfo(dataSize[0], similarity[0]);
     }
 
     /**
@@ -199,8 +199,8 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public CompressedFrameInfo compressFrame(QDGraphics src, QDRect srcRect, int flags, RawEncodedImage data) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        byte[] arrayOfByte = new byte[1];
+        int[] dataSize = new int[1];
+        byte[] similarity = new byte[1];
         int i = 0;
         if ((src == null) || (srcRect == null)) {
             throw new StdQTException(-50);
@@ -209,12 +209,12 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
-            i = CompressSequenceFrame(_ID(), QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) flags, QTObject.ID(data), arrayOfInt, arrayOfByte, 0);
+            i = CompressSequenceFrame(_ID(), QTObject.ID(src.getPixMap()), srcRect.getRect(), (short) flags, QTObject.ID(data), dataSize, similarity, 0);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return new CompressedFrameInfo(arrayOfInt[0], arrayOfByte[0]);
+        return new CompressedFrameInfo(dataSize[0], similarity[0]);
     }
 
     /**
@@ -227,7 +227,7 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getMaxCompressionSize(QDGraphics src) throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] size = new int[1];
         int i = 0;
         if (src == null)
             throw new StdQTException(-50);
@@ -235,12 +235,12 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(QTObject.ID(src), 0);
-            i = GetCSequenceMaxCompressionSize(_ID(), QTObject.ID(src.getPixMap()), arrayOfInt);
+            i = GetCSequenceMaxCompressionSize(_ID(), QTObject.ID(src.getPixMap()), size);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return size[0];
     }
 
     /**
@@ -272,9 +272,9 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getKeyFrameRate() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetCSequenceKeyFrameRate(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] keyFrameRate = new int[1];
+        StdQTException.checkError(GetCSequenceKeyFrameRate(_ID(), keyFrameRate));
+        return keyFrameRate[0];
     }
 
     /**
@@ -296,9 +296,9 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getFrameNumber() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetCSequenceFrameNumber(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] frameNumber = new int[1];
+        StdQTException.checkError(GetCSequenceFrameNumber(_ID(), frameNumber));
+        return frameNumber[0];
     }
 
     /**
@@ -359,9 +359,9 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public DataRateParams getDataRateParams() throws StdQTException {
-        DataRateParams localDataRateParams = new DataRateParams();
-        StdQTException.checkError(GetCSequenceDataRateParams(_ID(), localDataRateParams.getBytes()));
-        return localDataRateParams;
+        DataRateParams dataRateParams = new DataRateParams();
+        StdQTException.checkError(GetCSequenceDataRateParams(_ID(), dataRateParams.getBytes()));
+        return dataRateParams;
     }
 
     /**
@@ -375,70 +375,70 @@ public final class CSequence extends CDSequence implements QuickTimeLib {
         StdQTException.checkError(SetCSequencePreferredPacketSize(_ID(), preferredPacketSize));
     }
 
-    private void setFlushProc(Object paramObject, int paramInt) {
+    private void setFlushProc(Object proc, int refCon) {
     }
 
-    private static short CompressSequenceBegin(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, short paramShort1, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8, short paramShort2, int paramInt9) {
-        return ImageCompressionManager.CompressSequenceBegin(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte1, paramArrayOfByte2, paramShort1, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8, paramShort2, paramInt9);
+    private static short CompressSequenceBegin(int[] seqID, int src, int prev, byte[] srcRect, byte[] prevRect, short colorDepth, int cType, int codec, int spatialQuality, int temporalQuality, int keyFrameRate, int ctable, short flags, int desc) {
+        return ImageCompressionManager.CompressSequenceBegin(seqID, src, prev, srcRect, prevRect, colorDepth, cType, codec, spatialQuality, temporalQuality, keyFrameRate, ctable, flags, desc);
     }
 
-    private static short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, byte[] paramArrayOfByte2, int[] paramArrayOfInt, byte[] paramArrayOfByte3, int paramInt3) {
-        return ImageCompressionManager.CompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte1, paramShort, paramArrayOfByte2, paramArrayOfInt, paramArrayOfByte3, paramInt3);
+    private static short CompressSequenceFrame(int seqID, int src, byte[] srcRect, short flags, byte[] data, int[] dataSize, byte[] similarity, int asyncCompletion) {
+        return ImageCompressionManager.CompressSequenceFrame(seqID, src, srcRect, flags, data, dataSize, similarity, asyncCompletion);
     }
 
-    private static short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, int paramInt3, int[] paramArrayOfInt, byte[] paramArrayOfByte2, int paramInt4) {
-        return ImageCompressionManager.CompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte1, paramShort, paramInt3, paramArrayOfInt, paramArrayOfByte2, paramInt4);
+    private static short CompressSequenceFrame(int seqID, int src, byte[] srcRect, short flags, int data, int[] dataSize, byte[] similarity, int asyncCompletion) {
+        return ImageCompressionManager.CompressSequenceFrame(seqID, src, srcRect, flags, data, dataSize, similarity, asyncCompletion);
     }
 
-    private static short CompressSequenceFrame(int paramInt1, int paramInt2, byte[] paramArrayOfByte1, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte2, int paramInt3) {
-        return ImageCompressionManager.CompressSequenceFrame(paramInt1, paramInt2, paramArrayOfByte1, paramShort, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfByte2, paramInt3);
+    private static short CompressSequenceFrame(int seqID, int src, byte[] srcRect, short flags, int[] data, int[] dataSize, byte[] similarity, int asyncCompletion) {
+        return ImageCompressionManager.CompressSequenceFrame(seqID, src, srcRect, flags, data, dataSize, similarity, asyncCompletion);
     }
 
-    private static short GetCSequenceMaxCompressionSize(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCSequenceMaxCompressionSize(paramInt1, paramInt2, paramArrayOfInt);
+    private static short GetCSequenceMaxCompressionSize(int seqID, int src, int[] size) {
+        return ImageCompressionManager.GetCSequenceMaxCompressionSize(seqID, src, size);
     }
 
-    private static short SetCSequenceQuality(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.SetCSequenceQuality(paramInt1, paramInt2, paramInt3);
+    private static short SetCSequenceQuality(int seqID, int spatialQuality, int temporalQuality) {
+        return ImageCompressionManager.SetCSequenceQuality(seqID, spatialQuality, temporalQuality);
     }
 
-    private static short SetCSequenceKeyFrameRate(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SetCSequenceKeyFrameRate(paramInt1, paramInt2);
+    private static short SetCSequenceKeyFrameRate(int seqID, int keyFrameRate) {
+        return ImageCompressionManager.SetCSequenceKeyFrameRate(seqID, keyFrameRate);
     }
 
-    private static short GetCSequenceKeyFrameRate(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCSequenceKeyFrameRate(paramInt, paramArrayOfInt);
+    private static short GetCSequenceKeyFrameRate(int seqID, int[] keyFrameRate) {
+        return ImageCompressionManager.GetCSequenceKeyFrameRate(seqID, keyFrameRate);
     }
 
-    private static short SetCSequenceFrameNumber(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SetCSequenceFrameNumber(paramInt1, paramInt2);
+    private static short SetCSequenceFrameNumber(int seqID, int frameNumber) {
+        return ImageCompressionManager.SetCSequenceFrameNumber(seqID, frameNumber);
     }
 
-    private static short GetCSequenceFrameNumber(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCSequenceFrameNumber(paramInt, paramArrayOfInt);
+    private static short GetCSequenceFrameNumber(int seqID, int[] frameNumber) {
+        return ImageCompressionManager.GetCSequenceFrameNumber(seqID, frameNumber);
     }
 
-    private static short SetCSequencePrev(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SetCSequencePrev(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SetCSequencePrev(int seqID, int prev, byte[] prevRect) {
+        return ImageCompressionManager.SetCSequencePrev(seqID, prev, prevRect);
     }
 
-    private static short SetCSequenceDataRateParams(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SetCSequenceDataRateParams(paramInt, paramArrayOfByte);
+    private static short SetCSequenceDataRateParams(int seqID, byte[] params) {
+        return ImageCompressionManager.SetCSequenceDataRateParams(seqID, params);
     }
 
-    private static short GetCSequenceDataRateParams(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.GetCSequenceDataRateParams(paramInt, paramArrayOfByte);
+    private static short GetCSequenceDataRateParams(int seqID, byte[] params) {
+        return ImageCompressionManager.GetCSequenceDataRateParams(seqID, params);
     }
 
-    private static short SetCSequencePreferredPacketSize(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SetCSequencePreferredPacketSize(paramInt1, paramInt2);
+    private static short SetCSequencePreferredPacketSize(int seqID, int size) {
+        return ImageCompressionManager.SetCSequencePreferredPacketSize(seqID, size);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 }

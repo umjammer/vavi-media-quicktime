@@ -21,8 +21,8 @@ public final class SourcerTrackParams extends QTPointer {
         super(32, true);
     }
 
-    SourcerTrackParams(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    SourcerTrackParams(byte[] byteArray) throws QTException {
+        super(byteArray);
     }
 
     /**

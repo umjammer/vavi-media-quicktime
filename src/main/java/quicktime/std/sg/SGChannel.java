@@ -24,31 +24,31 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
 
     private SequenceGrabber owner;
 
-    SGChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
-        setOwner(paramSequenceGrabber);
+    SGChannel(int type, SequenceGrabber owner) throws StdQTException {
+        super(type, owner);
+        setOwner(owner);
     }
 
-    SGChannel(SequenceGrabber paramSequenceGrabber, int paramInt) throws StdQTException {
-        super(allocate(paramSequenceGrabber, paramInt), paramSequenceGrabber);
-        setOwner(paramSequenceGrabber);
+    SGChannel(SequenceGrabber owner, int channelType) throws StdQTException {
+        super(allocate(owner, channelType), owner);
+        setOwner(owner);
     }
 
-    private static int allocate(SequenceGrabber paramSequenceGrabber, int paramInt) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SGNewChannel(QTObject.ID(paramSequenceGrabber), paramInt, arrayOfInt);
+    private static int allocate(SequenceGrabber sg, int channelType) throws StdQTException {
+        int[] ref = new int[1];
+        int i = SGNewChannel(QTObject.ID(sg), channelType, ref);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return ref[0];
     }
 
-    private void setOwner(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        if (paramSequenceGrabber == null)
+    private void setOwner(SequenceGrabber owner) throws StdQTException {
+        if (owner == null)
             throw new StdQTException(-50);
-        this.owner = paramSequenceGrabber;
+        this.owner = owner;
     }
 
-    void disposeChannel(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        if (this.owner != paramSequenceGrabber) {
+    void disposeChannel(SequenceGrabber sequenceGrabber) throws StdQTException {
+        if (this.owner != sequenceGrabber) {
             throw new StdQTException(-50);
         }
         StdQTException.checkError(SGDisposeChannel(QTObject.ID(this.owner), _ID()));
@@ -64,10 +64,10 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetChannelSampleDescription()"
      */
     public final SampleDescription getSampleDescription() throws QTException {
-        SampleDescription localSampleDescription = makeDescription();
-        int i = SGGetChannelSampleDescription(_ID(), QTObject.ID(localSampleDescription));
+        SampleDescription desc = makeDescription();
+        int i = SGGetChannelSampleDescription(_ID(), QTObject.ID(desc));
         StdQTException.checkError(i);
-        return localSampleDescription;
+        return desc;
     }
 
     /**
@@ -83,18 +83,18 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGSettingsDialog"
      */
     public void settingsDialog() throws StdQTException {
-        int[] arrayOfInt = null;
+        int[] panelList = null;
         int i = _ID();
         int j;
         if (QTSession.isCurrentOS(4)) {
             j = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
-                int l = SGChannel.SGSettingsDialog(QTObject.ID(SGChannel.this.owner), i, (short) 0, arrayOfInt, 0, 0, 0);
+                int l = SGChannel.SGSettingsDialog(QTObject.ID(SGChannel.this.owner), i, (short) 0, panelList, 0, 0, 0);
                 return l;
             });
             StdQTException.checkError(j);
         } else {
             synchronized (QTNative.globalsLock) {
-                j = SGSettingsDialog(QTObject.ID(this.owner), _ID(), (short) 0, arrayOfInt, 0, 0, 0);
+                j = SGSettingsDialog(QTObject.ID(this.owner), _ID(), (short) 0, panelList, 0, 0, 0);
                 StdQTException.checkError(j);
             }
         }
@@ -158,11 +158,11 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGChannelGetDataSourceName"
      */
     public SGDataSourceInfo getDataSourceName() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        byte[] arrayOfByte = new byte[256];
-        int i = SGChannelGetDataSourceName(_ID(), arrayOfByte, arrayOfInt);
+        int[] scriptTag = new int[1];
+        byte[] name = new byte[256];
+        int i = SGChannelGetDataSourceName(_ID(), name, scriptTag);
         StdQTException.checkError(i);
-        return new SGDataSourceInfo(QTUtils.PString2String(arrayOfByte, 0), arrayOfInt[0]);
+        return new SGDataSourceInfo(QTUtils.PString2String(name, 0), scriptTag[0]);
     }
 
     /**
@@ -208,9 +208,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetChannelUsage"
      */
     public int getUsage() throws StdQTException {
-        int[] arrayOfInt = {0};
-        StdQTException.checkError(SGGetChannelUsage(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] usage = {0};
+        StdQTException.checkError(SGGetChannelUsage(_ID(), usage));
+        return usage[0];
     }
 
     /**
@@ -234,9 +234,9 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetChannelPlayFlags"
      */
     public int getPlayFlags() throws StdQTException {
-        int[] arrayOfInt = {0};
-        StdQTException.checkError(SGGetChannelPlayFlags(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] flags = {0};
+        StdQTException.checkError(SGGetChannelPlayFlags(_ID(), flags));
+        return flags[0];
     }
 
     /**
@@ -256,12 +256,12 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetChannelDeviceList"
      * @see #setDevice(String driverName) to set the input driver.
      */
-    public SGDeviceList getDeviceList(int paramInt) throws StdQTException {
-        int[] arrayOfInt = {0};
-        paramInt ^= 0x1;
-        int i = SGGetChannelDeviceList(_ID(), paramInt, arrayOfInt);
+    public SGDeviceList getDeviceList(int flags) throws StdQTException {
+        int[] list = {0};
+        flags ^= 0x1;
+        int i = SGGetChannelDeviceList(_ID(), flags, list);
         StdQTException.checkError(i);
-        return new SGDeviceList(arrayOfInt[0], null, this.owner);
+        return new SGDeviceList(list[0], null, this.owner);
     }
 
     /**
@@ -272,78 +272,78 @@ public abstract class SGChannel extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetChannelTimeScale"
      */
     public int getTimeScale() throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = SGGetChannelTimeScale(_ID(), arrayOfInt);
+        int[] scale = {0};
+        int i = SGGetChannelTimeScale(_ID(), scale);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return scale[0];
     }
 
     /**
      * @see "QuickTime::SGSetChannelOutput"
      */
-    public void setOutput(SGOutput paramSGOutput) throws StdQTException {
-        paramSGOutput.setChannel(this);
+    public void setOutput(SGOutput output) throws StdQTException {
+        output.setChannel(this);
     }
 
     abstract SampleDescription makeDescription() throws QTException;
 
-    private static int SGSetChannelDevice(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetChannelDevice(paramInt, paramArrayOfByte);
+    private static int SGSetChannelDevice(int ref, byte[] name) {
+        return SequenceGrabberManager.SGSetChannelDevice(ref, name);
     }
 
-    private static int SGNewChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGNewChannel(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SGNewChannel(int sg, int channelType, int[] ref) {
+        return SequenceGrabberManager.SGNewChannel(sg, channelType, ref);
     }
 
-    private static int SGSettingsDialog(int paramInt1, int paramInt2, short paramShort, int[] paramArrayOfInt, int paramInt3, int paramInt4, int paramInt5) {
-        return SequenceGrabberManager.SGSettingsDialog(paramInt1, paramInt2, paramShort, paramArrayOfInt, paramInt3, paramInt4, paramInt5);
+    private static int SGSettingsDialog(int sg, int ref, short numPanels, int[] panelList, int flags, int proc, int procRefNum) {
+        return SequenceGrabberManager.SGSettingsDialog(sg, ref, numPanels, panelList, flags, proc, procRefNum);
     }
 
-    private static int SGChannelSetDataSourceName(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return SequenceGrabberManager.SGChannelSetDataSourceName(paramInt1, paramArrayOfByte, paramInt2);
+    private static int SGChannelSetDataSourceName(int ref, byte[] name, int scriptTag) {
+        return SequenceGrabberManager.SGChannelSetDataSourceName(ref, name, scriptTag);
     }
 
-    private static int SGChannelGetDataSourceName(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGChannelGetDataSourceName(paramInt, paramArrayOfByte, paramArrayOfInt);
+    private static int SGChannelGetDataSourceName(int ref, byte[] name, int[] scriptTag) {
+        return SequenceGrabberManager.SGChannelGetDataSourceName(ref, name, scriptTag);
     }
 
-    private static int SGSetChannelSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return SequenceGrabberManager.SGSetChannelSettings(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int SGSetChannelSettings(int sg, int ref, int userData, int flags) {
+        return SequenceGrabberManager.SGSetChannelSettings(sg, ref, userData, flags);
     }
 
-    private static int SGInitChannel(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGInitChannel(paramInt1, paramInt2);
+    private static int SGInitChannel(int ref, int owner) {
+        return SequenceGrabberManager.SGInitChannel(ref, owner);
     }
 
-    private static int SGSetChannelUsage(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetChannelUsage(paramInt1, paramInt2);
+    private static int SGSetChannelUsage(int ref, int usage) {
+        return SequenceGrabberManager.SGSetChannelUsage(ref, usage);
     }
 
-    private static int SGGetChannelUsage(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetChannelUsage(paramInt, paramArrayOfInt);
+    private static int SGGetChannelUsage(int ref, int[] usage) {
+        return SequenceGrabberManager.SGGetChannelUsage(ref, usage);
     }
 
-    private static int SGSetChannelPlayFlags(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetChannelPlayFlags(paramInt1, paramInt2);
+    private static int SGSetChannelPlayFlags(int ref, int flags) {
+        return SequenceGrabberManager.SGSetChannelPlayFlags(ref, flags);
     }
 
-    private static int SGGetChannelPlayFlags(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetChannelPlayFlags(paramInt, paramArrayOfInt);
+    private static int SGGetChannelPlayFlags(int ref, int[] flags) {
+        return SequenceGrabberManager.SGGetChannelPlayFlags(ref, flags);
     }
 
-    private static int SGGetChannelDeviceList(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetChannelDeviceList(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SGGetChannelDeviceList(int ref, int flags, int[] list) {
+        return SequenceGrabberManager.SGGetChannelDeviceList(ref, flags, list);
     }
 
-    private static int SGGetChannelSampleDescription(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGGetChannelSampleDescription(paramInt1, paramInt2);
+    private static int SGGetChannelSampleDescription(int ref, int desc) {
+        return SequenceGrabberManager.SGGetChannelSampleDescription(ref, desc);
     }
 
-    private static int SGGetChannelTimeScale(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetChannelTimeScale(paramInt, paramArrayOfInt);
+    private static int SGGetChannelTimeScale(int ref, int[] scale) {
+        return SequenceGrabberManager.SGGetChannelTimeScale(ref, scale);
     }
 
-    private static int SGDisposeChannel(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGDisposeChannel(paramInt1, paramInt2);
+    private static int SGDisposeChannel(int sg, int ref) {
+        return SequenceGrabberManager.SGDisposeChannel(sg, ref);
     }
 }

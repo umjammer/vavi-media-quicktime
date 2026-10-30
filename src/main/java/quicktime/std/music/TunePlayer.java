@@ -28,14 +28,14 @@ public final class TunePlayer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.media.MusicMediaHandler#getIndexedTunePlayer(int)
      */
-    public static TunePlayer fromMusicMediaHandler(MusicMediaHandler paramMusicMediaHandler, int index) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(MusicMediaGetIndexedTunePlayer(QTObject.ID(paramMusicMediaHandler), index, arrayOfInt));
-        return new TunePlayer(arrayOfInt[0], paramMusicMediaHandler);
+    public static TunePlayer fromMusicMediaHandler(MusicMediaHandler ti, int index) throws StdQTException {
+        int[] tp = { 0 };
+        StdQTException.checkError(MusicMediaGetIndexedTunePlayer(QTObject.ID(ti), index, tp));
+        return new TunePlayer(tp[0], ti);
     }
 
-    private TunePlayer(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    private TunePlayer(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -86,9 +86,9 @@ public final class TunePlayer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getTimeScale() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(TuneGetTimeScale(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] scale = { 0 };
+        StdQTException.checkError(TuneGetTimeScale(_ID(), scale));
+        return scale[0];
     }
 
     /**
@@ -113,11 +113,11 @@ public final class TunePlayer extends Component implements QuickTimeLib {
      */
     public NoteChannel getIndexedNoteChannel(int index) throws StdQTException {
         if (index > 0) {
-            int[] arrayOfInt = { 0 };
-            int i = TuneGetIndexedNoteChannel(_ID(), index, arrayOfInt);
+            int[] nc = { 0 };
+            int i = TuneGetIndexedNoteChannel(_ID(), index, nc);
             if (i < 0)
                 throw new StdQTException(i);
-            return new NoteChannel(getNoteAllocator(), arrayOfInt[0], this);
+            return new NoteChannel(getNoteAllocator(), nc[0], this);
         }
         throw new StdQTException(63461);
     }
@@ -131,10 +131,10 @@ public final class TunePlayer extends Component implements QuickTimeLib {
      * @param tuneStopPosition sequence ending time
      * @throws quicktime.std.StdQTException
      */
-    public void queue(MusicData tune, float tuneRate, int tuneStartPosition, int tuneStopPosition, int paramInt3) throws StdQTException {
+    public void queue(MusicData tune, float tuneRate, int tuneStartPosition, int tuneStopPosition, int queueFlags) throws StdQTException {
         tune.lock();
         int pointer = getIntFromPointer(QTObject.ID(tune), 0);
-        StdQTException.checkError(TuneQueue(_ID(), pointer, QTUtils.X2Fix(tuneRate), tuneStartPosition, tuneStopPosition, paramInt3, 0, 0));
+        StdQTException.checkError(TuneQueue(_ID(), pointer, QTUtils.X2Fix(tuneRate), tuneStartPosition, tuneStopPosition, queueFlags, 0, 0));
     }
 
     /**
@@ -155,9 +155,9 @@ public final class TunePlayer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public TuneStatus getStatus() throws StdQTException {
-        TuneStatus localTuneStatus = new TuneStatus();
-        StdQTException.checkError(TuneGetStatus(_ID(), localTuneStatus.getBytes()));
-        return localTuneStatus;
+        TuneStatus status = new TuneStatus();
+        StdQTException.checkError(TuneGetStatus(_ID(), status.getBytes()));
+        return status;
     }
 
     /**
@@ -318,106 +318,106 @@ public final class TunePlayer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public MixStateInfo getPartMix(int partNumber) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int[] arrayOfInt3 = { 0 };
-        StdQTException.checkError(TuneGetPartMix(_ID(), partNumber, arrayOfInt1, arrayOfInt2, arrayOfInt3));
-        return new MixStateInfo(partNumber, QTUtils.Fix2X(arrayOfInt1[0]), QTUtils.Fix2X(arrayOfInt2[0]), arrayOfInt3[0]);
+        int[] volumeOut = { 0 };
+        int[] balanceOut = { 0 };
+        int[] mixFlagsOut = { 0 };
+        StdQTException.checkError(TuneGetPartMix(_ID(), partNumber, volumeOut, balanceOut, mixFlagsOut));
+        return new MixStateInfo(partNumber, QTUtils.Fix2X(volumeOut[0]), QTUtils.Fix2X(balanceOut[0]), mixFlagsOut[0]);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static int MusicMediaGetIndexedTunePlayer(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MusicManager.MusicMediaGetIndexedTunePlayer(paramInt1, paramInt2, paramArrayOfInt);
+    private static int MusicMediaGetIndexedTunePlayer(int ti, int sampleDescIndex, int[] tp) {
+        return MusicManager.MusicMediaGetIndexedTunePlayer(ti, sampleDescIndex, tp);
     }
 
-    private static int TuneSetHeader(int paramInt1, int paramInt2) {
-        return MusicManager.TuneSetHeader(paramInt1, paramInt2);
+    private static int TuneSetHeader(int tp, int header) {
+        return MusicManager.TuneSetHeader(tp, header);
     }
 
-    private static int TuneSetTimeScale(int paramInt1, int paramInt2) {
-        return MusicManager.TuneSetTimeScale(paramInt1, paramInt2);
+    private static int TuneSetTimeScale(int tp, int scale) {
+        return MusicManager.TuneSetTimeScale(tp, scale);
     }
 
-    private static int TuneGetTimeScale(int paramInt, int[] paramArrayOfInt) {
-        return MusicManager.TuneGetTimeScale(paramInt, paramArrayOfInt);
+    private static int TuneGetTimeScale(int tp, int[] scale) {
+        return MusicManager.TuneGetTimeScale(tp, scale);
     }
 
-    private static int TuneGetIndexedNoteChannel(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MusicManager.TuneGetIndexedNoteChannel(paramInt1, paramInt2, paramArrayOfInt);
+    private static int TuneGetIndexedNoteChannel(int tp, int i, int[] nc) {
+        return MusicManager.TuneGetIndexedNoteChannel(tp, i, nc);
     }
 
-    private static int TuneQueue(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6, int paramInt7, int paramInt8) {
-        return MusicManager.TuneQueue(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramInt6, paramInt7, paramInt8);
+    private static int TuneQueue(int tp, int tune, int tuneRate, int tuneStartPosition, int tuneStopPosition, int queueFlags, int callBackProc, int refCon) {
+        return MusicManager.TuneQueue(tp, tune, tuneRate, tuneStartPosition, tuneStopPosition, queueFlags, callBackProc, refCon);
     }
 
-    private static int TuneInstant(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.TuneInstant(paramInt1, paramInt2, paramInt3);
+    private static int TuneInstant(int tp, int tune, int tunePosition) {
+        return MusicManager.TuneInstant(tp, tune, tunePosition);
     }
 
-    private static int TuneGetStatus(int paramInt, byte[] paramArrayOfByte) {
-        return MusicManager.TuneGetStatus(paramInt, paramArrayOfByte);
+    private static int TuneGetStatus(int tp, byte[] status) {
+        return MusicManager.TuneGetStatus(tp, status);
     }
 
-    private static int TuneStop(int paramInt1, int paramInt2) {
-        return MusicManager.TuneStop(paramInt1, paramInt2);
+    private static int TuneStop(int tp, int stopFlags) {
+        return MusicManager.TuneStop(tp, stopFlags);
     }
 
-    private static int TuneSetVolume(int paramInt1, int paramInt2) {
-        return MusicManager.TuneSetVolume(paramInt1, paramInt2);
+    private static int TuneSetVolume(int tp, int volume) {
+        return MusicManager.TuneSetVolume(tp, volume);
     }
 
-    private static int TuneGetVolume(int paramInt) {
-        return MusicManager.TuneGetVolume(paramInt);
+    private static int TuneGetVolume(int tp) {
+        return MusicManager.TuneGetVolume(tp);
     }
 
-    private static int TunePreroll(int paramInt) {
-        return MusicManager.TunePreroll(paramInt);
+    private static int TunePreroll(int tp) {
+        return MusicManager.TunePreroll(tp);
     }
 
-    private static int TuneUnroll(int paramInt) {
-        return MusicManager.TuneUnroll(paramInt);
+    private static int TuneUnroll(int tp) {
+        return MusicManager.TuneUnroll(tp);
     }
 
-    private static int TuneSetNoteChannels(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3, int paramInt4) {
-        return MusicManager.TuneSetNoteChannels(paramInt1, paramInt2, paramArrayOfInt, paramInt3, paramInt4);
+    private static int TuneSetNoteChannels(int tp, int count, int[] noteChannelList, int playCallBackProc, int refCon) {
+        return MusicManager.TuneSetNoteChannels(tp, count, noteChannelList, playCallBackProc, refCon);
     }
 
-    private static int TuneSetPartTranspose(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MusicManager.TuneSetPartTranspose(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int TuneSetPartTranspose(int tp, int part, int transpose, int velocityShift) {
+        return MusicManager.TuneSetPartTranspose(tp, part, transpose, velocityShift);
     }
 
-    private static int TuneGetNoteAllocator(int paramInt) {
-        return MusicManager.TuneGetNoteAllocator(paramInt);
+    private static int TuneGetNoteAllocator(int tp) {
+        return MusicManager.TuneGetNoteAllocator(tp);
     }
 
-    private static int TuneSetSofter(int paramInt1, int paramInt2) {
-        return MusicManager.TuneSetSofter(paramInt1, paramInt2);
+    private static int TuneSetSofter(int tp, int softer) {
+        return MusicManager.TuneSetSofter(tp, softer);
     }
 
-    private static int TuneTask(int paramInt) {
-        return MusicManager.TuneTask(paramInt);
+    private static int TuneTask(int tp) {
+        return MusicManager.TuneTask(tp);
     }
 
-    private static int TuneSetBalance(int paramInt1, int paramInt2) {
-        return MusicManager.TuneSetBalance(paramInt1, paramInt2);
+    private static int TuneSetBalance(int tp, int balance) {
+        return MusicManager.TuneSetBalance(tp, balance);
     }
 
-    private static int TuneSetSoundLocalization(int paramInt1, int paramInt2) {
-        return MusicManager.TuneSetSoundLocalization(paramInt1, paramInt2);
+    private static int TuneSetSoundLocalization(int tp, int data) {
+        return MusicManager.TuneSetSoundLocalization(tp, data);
     }
 
-    private static int TuneSetHeaderWithSize(int paramInt1, int paramInt2, int paramInt3) {
-        return MusicManager.TuneSetHeaderWithSize(paramInt1, paramInt2, paramInt3);
+    private static int TuneSetHeaderWithSize(int tp, int header, int size) {
+        return MusicManager.TuneSetHeaderWithSize(tp, header, size);
     }
 
-    private static int TuneSetPartMix(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MusicManager.TuneSetPartMix(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int TuneSetPartMix(int tp, int partNumber, int volume, int balance, int mixFlags) {
+        return MusicManager.TuneSetPartMix(tp, partNumber, volume, balance, mixFlags);
     }
 
-    private static int TuneGetPartMix(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return MusicManager.TuneGetPartMix(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static int TuneGetPartMix(int tp, int partNumber, int[] volumeOut, int[] balanceOut, int[] mixFlagsOut) {
+        return MusicManager.TuneGetPartMix(tp, partNumber, volumeOut, balanceOut, mixFlagsOut);
     }
 }

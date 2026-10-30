@@ -30,8 +30,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
      * Creates a QTVRPanoImaging object from a byte array
      * Used in cloning
      */
-    public QTVRPanoImaging(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRPanoImaging(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -40,17 +40,17 @@ public final class QTVRPanoImaging extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRPanoImaging localQTVRPanoImaging = new QTVRPanoImaging();
-        paramObjectInputStream.read(localQTVRPanoImaging.getBytes());
-        System.arraycopy(localQTVRPanoImaging.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRPanoImaging qtvrPanoImaging = new QTVRPanoImaging();
+        in.read(qtvrPanoImaging.getBytes());
+        System.arraycopy(qtvrPanoImaging.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRPanoImaging localQTVRPanoImaging = (QTVRPanoImaging) clone();
-        paramObjectOutputStream.write(localQTVRPanoImaging.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRPanoImaging qtvrPanoImaging = (QTVRPanoImaging) clone();
+        out.write(qtvrPanoImaging.getBytes());
     }
 
     /**
@@ -60,18 +60,18 @@ public final class QTVRPanoImaging extends QTVRAtom {
     public Object clone() {
         try {
             return new QTVRPanoImaging(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 13);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 4, 13);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     public static EndianDescriptor getEndianDescriptor() {
@@ -90,8 +90,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
     /**
      * set the imaging Mode
      */
-    public void setImagingMode(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setImagingMode(int imagingMode) {
+        setIntAt(4, imagingMode);
     }
 
     /**
@@ -112,8 +112,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
      * kQTVRValidDirectDraw          = 1L << 2,
      * kQTVRValidFirstExtraProperty  = 1L << 3
      */
-    public void setImagingValidFlags(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setImagingValidFlags(int imagingValidFlags) {
+        setIntAt(8, imagingValidFlags);
     }
 
     /**
@@ -126,8 +126,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
     /**
      * set the panorama correction
      */
-    public void setCorrection(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setCorrection(int correction) {
+        setIntAt(12, correction);
     }
 
     /**
@@ -140,8 +140,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
     /**
      * set the panorama quality
      */
-    public void setQuality(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setQuality(int quality) {
+        setIntAt(16, quality);
     }
 
     /**
@@ -154,35 +154,35 @@ public final class QTVRPanoImaging extends QTVRAtom {
     /**
      * set the direct draw mode
      */
-    public void setDirectDraw(boolean paramBoolean) {
-        setIntAt(20, paramBoolean ? 1 : 0);
+    public void setDirectDraw(boolean directDraw) {
+        setIntAt(20, directDraw ? 1 : 0);
     }
 
     /**
      * returns the imagingProperty
      */
-    public int getImagingProperty(int paramInt) throws QTException {
-        if ((paramInt < 0) || (paramInt > 5))
+    public int getImagingProperty(int index) throws QTException {
+        if ((index < 0) || (index > 5))
             throw new QTException(-50);
-        int i = 24 + paramInt * 4;
+        int i = 24 + index * 4;
         return getIntAt(i);
     }
 
     /**
      * set the imagingProperty
      */
-    public void setImagingProperty(int paramInt1, int paramInt2) throws QTException {
-        if ((paramInt2 < 0) || (paramInt2 > 5))
+    public void setImagingProperty(int value, int index) throws QTException {
+        if ((index < 0) || (index > 5))
             throw new QTException(-50);
-        int i = 24 + paramInt2 * 4;
-        setIntAt(i, paramInt1);
+        int i = 24 + index * 4;
+        setIntAt(i, value);
     }
 
     /**
      * set the reserved1
      */
-    public void setReserved1(int paramInt) {
-        setIntAt(48, paramInt);
+    public void setReserved1(int reserved1) {
+        setIntAt(48, reserved1);
     }
 
     /**
@@ -195,8 +195,8 @@ public final class QTVRPanoImaging extends QTVRAtom {
     /**
      * set the reserved2
      */
-    public void setReserved2(int paramInt) {
-        setIntAt(52, paramInt);
+    public void setReserved2(int reserved2) {
+        setIntAt(52, reserved2);
     }
 
     /**
@@ -213,7 +213,7 @@ public final class QTVRPanoImaging extends QTVRAtom {
         String str = getClass().getName() + "[imagingMode=" + getImagingMode() + ",imagingValidFlags=" + getImagingValidFlags() + ",correction=" + getCorrection() + ",quality=" + getQuality() + ",directDraw=" + isDirectDraw();
         try {
             str = str + ",imagingProperties=[" + getImagingProperty(0) + "][" + getImagingProperty(1) + "][" + getImagingProperty(2) + "][" + getImagingProperty(3) + "][" + getImagingProperty(4) + "][" + getImagingProperty(5) + "]";
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         }
         return str + " ]";
     }

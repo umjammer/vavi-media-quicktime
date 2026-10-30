@@ -21,21 +21,21 @@ final class IODispatcher {
 
     private final MovieProgress mp;
 
-    IODispatcher(MovieProgress paramMovieProgress) {
+    IODispatcher(MovieProgress mp) {
         this.methodName = "movieProgress";
         this.methodSig = "(ISSII)S";
         this.procInfo = 64224;
-        this.mp = paramMovieProgress;
+        this.mp = mp;
     }
 
-    private short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
-        if (paramInt1 != 0) {
+    private short movieProgress(int movie, short message, short whatOperation, int percentDone, int refcon) {
+        if (movie != 0) {
             if (this.theCurrentMov == null) {
-                this.theCurrentMov = IOMovie.make(paramInt1, this);
-            } else if (quicktime.QTObject.ID(this.theCurrentMov) != paramInt1)
-                this.theCurrentMov = IOMovie.make(paramInt1, this);
+                this.theCurrentMov = IOMovie.make(movie, this);
+            } else if (quicktime.QTObject.ID(this.theCurrentMov) != movie)
+                this.theCurrentMov = IOMovie.make(movie, this);
         }
-        return (short) this.mp.execute(this.theCurrentMov, paramShort1, paramShort2, quicktime.util.QTUtils.Fix2X(paramInt2));
+        return (short) this.mp.execute(this.theCurrentMov, message, whatOperation, quicktime.util.QTUtils.Fix2X(percentDone));
     }
 
     int ID() {
@@ -49,8 +49,8 @@ final class IODispatcher {
     }
 
     static class IOMethodClosure extends MethodClosure {
-        IOMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        IOMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -63,8 +63,8 @@ final class IODispatcher {
             super(null);
         }
 
-        static Movie make(int paramInt, Object paramObject) {
-            return (Movie) MovieController.mm(paramInt, paramObject);
+        static Movie make(int time, Object ref) {
+            return (Movie) MovieController.mm(time, ref);
         }
     }
 }

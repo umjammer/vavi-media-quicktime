@@ -20,8 +20,8 @@ import quicktime.util.QTUtils;
  */
 public final class SGVideoChannel extends VisualChannel implements QuickTimeLib {
 
-    SGVideoChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
+    SGVideoChannel(int type, SequenceGrabber owner) throws StdQTException {
+        super(type, owner);
     }
 
     /**
@@ -70,10 +70,10 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @see "QuickTime::SGGetVideoCompressorType"
      */
     public int getCompressorType() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = SGGetVideoCompressorType(_ID(), arrayOfInt);
+        int[] type = new int[1];
+        int i = SGGetVideoCompressorType(_ID(), type);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return type[0];
     }
 
     /**
@@ -170,10 +170,10 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @see "QuickTime::SGGetVideoRect"
      */
     public QDRect getVideoRect() throws StdQTException {
-        QDRect localQDRect = new QDRect();
-        int i = SGGetVideoRect(_ID(), localQDRect.getRect());
+        QDRect videoRect = new QDRect();
+        int i = SGGetVideoRect(_ID(), videoRect.getRect());
         StdQTException.checkError(i);
-        return localQDRect;
+        return videoRect;
     }
 
     /**
@@ -184,10 +184,10 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @see "QuickTime::SGGetSrcVideoBounds"
      */
     public QDRect getSrcVideoBounds() throws StdQTException {
-        QDRect localQDRect = new QDRect();
-        int i = SGGetSrcVideoBounds(_ID(), localQDRect.getRect());
+        QDRect srcVideoBounds = new QDRect();
+        int i = SGGetSrcVideoBounds(_ID(), srcVideoBounds.getRect());
         StdQTException.checkError(i);
-        return localQDRect;
+        return srcVideoBounds;
     }
 
     /**
@@ -210,53 +210,53 @@ public final class SGVideoChannel extends VisualChannel implements QuickTimeLib 
      * @see "QuickTime::SGGetFrameRate"
      */
     public float getFrameRate() throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = SGGetFrameRate(_ID(), arrayOfInt);
+        int[] frameRate = {0};
+        int i = SGGetFrameRate(_ID(), frameRate);
         StdQTException.checkError(i);
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        return QTUtils.Fix2X(frameRate[0]);
     }
 
-    private static int SGSetVideoCompressorType(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetVideoCompressorType(paramInt1, paramInt2);
+    private static int SGSetVideoCompressorType(int ref, int type) {
+        return SequenceGrabberManager.SGSetVideoCompressorType(ref, type);
     }
 
-    private static int SGGetVideoCompressorType(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetVideoCompressorType(paramInt, paramArrayOfInt);
+    private static int SGGetVideoCompressorType(int ref, int[] type) {
+        return SequenceGrabberManager.SGGetVideoCompressorType(ref, type);
     }
 
-    private static int SGSetVideoCompressor(int paramInt1, short paramShort, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return SequenceGrabberManager.SGSetVideoCompressor(paramInt1, paramShort, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int SGSetVideoCompressor(int ref, short depth, int compressor, int spatialQuality, int temporalQuality, int keyFrameRate) {
+        return SequenceGrabberManager.SGSetVideoCompressor(ref, depth, compressor, spatialQuality, temporalQuality, keyFrameRate);
     }
 
-    private static int SGGetVideoDigitizerComponent(int paramInt) {
-        return SequenceGrabberManager.SGGetVideoDigitizerComponent(paramInt);
+    private static int SGGetVideoDigitizerComponent(int ref) {
+        return SequenceGrabberManager.SGGetVideoDigitizerComponent(ref);
     }
 
-    private static int SGSetVideoDigitizerComponent(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetVideoDigitizerComponent(paramInt1, paramInt2);
+    private static int SGSetVideoDigitizerComponent(int ref, int vdigRef) {
+        return SequenceGrabberManager.SGSetVideoDigitizerComponent(ref, vdigRef);
     }
 
-    private static int SGVideoDigitizerChanged(int paramInt) {
-        return SequenceGrabberManager.SGVideoDigitizerChanged(paramInt);
+    private static int SGVideoDigitizerChanged(int ref) {
+        return SequenceGrabberManager.SGVideoDigitizerChanged(ref);
     }
 
-    private static int SGSetVideoRect(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetVideoRect(paramInt, paramArrayOfByte);
+    private static int SGSetVideoRect(int ref, byte[] rect) {
+        return SequenceGrabberManager.SGSetVideoRect(ref, rect);
     }
 
-    private static int SGGetVideoRect(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetVideoRect(paramInt, paramArrayOfByte);
+    private static int SGGetVideoRect(int ref, byte[] rect) {
+        return SequenceGrabberManager.SGGetVideoRect(ref, rect);
     }
 
-    private static int SGGetSrcVideoBounds(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetSrcVideoBounds(paramInt, paramArrayOfByte);
+    private static int SGGetSrcVideoBounds(int ref, byte[] rect) {
+        return SequenceGrabberManager.SGGetSrcVideoBounds(ref, rect);
     }
 
-    private static int SGSetFrameRate(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetFrameRate(paramInt1, paramInt2);
+    private static int SGSetFrameRate(int ref, int frameRate) {
+        return SequenceGrabberManager.SGSetFrameRate(ref, frameRate);
     }
 
-    private static int SGGetFrameRate(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetFrameRate(paramInt, paramArrayOfInt);
+    private static int SGGetFrameRate(int ref, int[] frameRate) {
+        return SequenceGrabberManager.SGGetFrameRate(ref, frameRate);
     }
 }

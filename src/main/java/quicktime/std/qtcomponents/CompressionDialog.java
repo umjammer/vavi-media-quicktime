@@ -20,8 +20,8 @@ public class CompressionDialog extends Component implements QuickTimeLib {
 
     int res;
 
-    CompressionDialog(int paramInt) throws QTException {
-        super(1935893609, paramInt);
+    CompressionDialog(int subType) throws QTException {
+        super(1935893609, subType);
     }
 
     /**
@@ -61,9 +61,9 @@ public class CompressionDialog extends Component implements QuickTimeLib {
      * Sets all of the settings for a dialog.
      * @see "QuickTime::SCSetInfo()"
      */
-    public void setInfoState(QTHandleRef paramQTHandleRef) throws StdQTException {
-        int[] arrayOfInt = { QTObject.ID(paramQTHandleRef) };
-        StdQTException.checkError(SCSetInfo(_ID(), 1936946273, arrayOfInt));
+    public void setInfoState(QTHandleRef infoState) throws StdQTException {
+        int[] info = { QTObject.ID(infoState) };
+        StdQTException.checkError(SCSetInfo(_ID(), 1936946273, info));
     }
 
     /**
@@ -73,8 +73,8 @@ public class CompressionDialog extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public void setInfoPreferences(int flags) throws StdQTException {
-        int[] arrayOfInt = { flags };
-        StdQTException.checkError(SCSetInfo(_ID(), 1886545254, arrayOfInt));
+        int[] info = { flags };
+        StdQTException.checkError(SCSetInfo(_ID(), 1886545254, info));
     }
 
     /**
@@ -84,9 +84,9 @@ public class CompressionDialog extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getInfoPreferences() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SCGetInfo(_ID(), 1886545254, arrayOfInt));
-        return arrayOfInt[0];
+        int[] info = { 0 };
+        StdQTException.checkError(SCGetInfo(_ID(), 1886545254, info));
+        return info[0];
     }
 
     /**
@@ -107,8 +107,8 @@ public class CompressionDialog extends Component implements QuickTimeLib {
      * @see #setSettings
      */
     @Deprecated
-    public void setInfoState(AtomContainer paramAtomContainer) throws StdQTException {
-        StdQTException.checkError(SCSetSettingsFromAtomContainer(_ID(), QTObject.ID(paramAtomContainer)));
+    public void setInfoState(AtomContainer infoState) throws StdQTException {
+        StdQTException.checkError(SCSetSettingsFromAtomContainer(_ID(), QTObject.ID(infoState)));
     }
 
     /**
@@ -121,39 +121,39 @@ public class CompressionDialog extends Component implements QuickTimeLib {
         StdQTException.checkError(SCSetSettingsFromAtomContainer(_ID(), QTObject.ID(settings)));
     }
 
-    private static int SCRequestImageSettings(int paramInt) {
-        return ImageCompressionManager.SCRequestImageSettings(paramInt);
+    private static int SCRequestImageSettings(int ci) {
+        return ImageCompressionManager.SCRequestImageSettings(ci);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCGetInfo(int ci, int type, int[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramInt3);
+    private static int SCSetInfo(int ci, int type, int info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCSetInfo(int ci, int type, int[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SCGetInfo(int ci, int type, short[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SCSetInfo(int ci, int type, short[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SCGetInfo(int ci, int type, byte[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SCSetInfo(int ci, int type, byte[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SCSetSettingsFromAtomContainer(paramInt1, paramInt2);
+    private static int SCSetSettingsFromAtomContainer(int ci, int settings) {
+        return ImageCompressionManager.SCSetSettingsFromAtomContainer(ci, settings);
     }
 }

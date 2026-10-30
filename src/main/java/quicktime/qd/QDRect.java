@@ -39,14 +39,14 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      */
     public static final int kIsFixedRect = 16;
 
-    static boolean isObject(Object paramObject, String paramString) {
-        Class<?> localClass = paramObject.getClass();
-        String str = localClass.getName();
-        while (!localClass.getName().equals("java.lang.Object")) {
-            str = localClass.getName();
-            localClass = localClass.getSuperclass();
+    static boolean isObject(Object object, String className) {
+        Class<?> superclass = object.getClass();
+        String name = superclass.getName();
+        while (!superclass.getName().equals("java.lang.Object")) {
+            name = superclass.getName();
+            superclass = superclass.getSuperclass();
         }
-        return str.equals(paramString);
+        return name.equals(className);
     }
 
     /**
@@ -87,14 +87,14 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
             case 8:
                 return new QDRect(rectBytes, null);
             case 16:
-                QDRect localQDRect = new QDRect();
-                localQDRect.fixedRect = new byte[16];
-                System.arraycopy(rectBytes, 0, localQDRect.fixedRect, 0, 16);
-                localQDRect._setXI((int) localQDRect.getXF());
-                localQDRect._setYI((int) localQDRect.getYF());
-                localQDRect._setRightI((int) localQDRect.getRightF());
-                localQDRect._setBottomI((int) localQDRect.getBottomF());
-                return localQDRect;
+                QDRect rect = new QDRect();
+                rect.fixedRect = new byte[16];
+                System.arraycopy(rectBytes, 0, rect.fixedRect, 0, 16);
+                rect._setXI((int) rect.getXF());
+                rect._setYI((int) rect.getYF());
+                rect._setRightI((int) rect.getRightF());
+                rect._setBottomI((int) rect.getBottomF());
+                return rect;
         }
         throw new IllegalArgumentException("Unknown rect format");
     }
@@ -230,11 +230,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         this(origin.x, origin.y, size.width, size.height);
     }
 
-    private QDRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        super(paramArrayOfByte1);
-        if (paramArrayOfByte2 != null) {
+    private QDRect(byte[] rect, byte[] fixedRect) {
+        super(rect);
+        if (fixedRect != null) {
             this.fixedRect = new byte[16];
-            System.arraycopy(paramArrayOfByte2, 0, this.fixedRect, 0, 16);
+            System.arraycopy(fixedRect, 0, this.fixedRect, 0, 16);
         }
     }
 
@@ -244,10 +244,10 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     private static final long serialVersionUID = -5173727297383918112L;
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[24];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         for (int i = 0; i < 8; i += 2) {
             setShortInArray(getBytes(), i, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, i)));
         }
@@ -258,16 +258,16 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte1 = new byte[24];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[24];
         for (int i = 0; i < 8; i += 2) {
-            setShortInArray(arrayOfByte1, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
+            setShortInArray(movie, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
-        byte[] arrayOfByte2 = getFixedRect();
-        for (int j = 0; j < arrayOfByte2.length; j += 4) {
-            setIntInArray(arrayOfByte1, j + 8, EndianOrder.flipNativeToBigEndian32(getIntFromArray(arrayOfByte2, j)));
+        byte[] fixedRect = getFixedRect();
+        for (int j = 0; j < fixedRect.length; j += 4) {
+            setIntInArray(movie, j + 8, EndianOrder.flipNativeToBigEndian32(getIntFromArray(fixedRect, j)));
         }
-        paramObjectOutputStream.write(arrayOfByte1);
+        out.write(movie);
     }
 
     /**
@@ -381,15 +381,15 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     /**
      * Returns true if the QDRect argument is a different size.
      */
-    public boolean isDifferentSize(QDRect paramQDRect) {
-        return (getWidth() != paramQDRect.getWidth()) || (getHeight() != paramQDRect.getHeight());
+    public boolean isDifferentSize(QDRect rect) {
+        return (getWidth() != rect.getWidth()) || (getHeight() != rect.getHeight());
     }
 
     /**
      * Returns true if the QDRect argument has a different origin.
      */
-    public boolean isDifferentOrigin(QDRect paramQDRect) {
-        return (getX() != paramQDRect.getX()) || (getY() != paramQDRect.getY());
+    public boolean isDifferentOrigin(QDRect rect) {
+        return (getX() != rect.getX()) || (getY() != rect.getY());
     }
 
     /**
@@ -481,65 +481,65 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     /**
      * Reshapes the QDRect to x, y, width and height.
      */
-    public void reshape(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        setX(paramInt1);
-        setY(paramInt2);
-        setWidth(paramInt3);
-        setHeight(paramInt4);
+    public void reshape(int x, int y, int width, int height) {
+        setX(x);
+        setY(y);
+        setWidth(width);
+        setHeight(height);
     }
 
     /**
      * Reshapes the QDRect to x, y, width and height.
      */
-    public void reshape(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4) {
-        setX(paramFloat1);
-        setY(paramFloat2);
-        setWidth(paramFloat3);
-        setHeight(paramFloat4);
+    public void reshape(float x, float y, float width, float height) {
+        setX(x);
+        setY(y);
+        setWidth(width);
+        setHeight(height);
     }
 
     /**
      * Moves the QDRect to x, y.
      */
-    public void move(int paramInt1, int paramInt2) {
-        setX(paramInt1);
-        setY(paramInt2);
+    public void move(int x, int y) {
+        setX(x);
+        setY(y);
     }
 
     /**
      * Moves the QDRect to x, y.
      */
-    public void move(float paramFloat1, float paramFloat2) {
-        setX(paramFloat1);
-        setY(paramFloat2);
+    public void move(float x, float y) {
+        setX(x);
+        setY(y);
     }
 
     /**
      * Translates the QDRect deltaX and deltaY.
      */
-    public void translate(int paramInt1, int paramInt2) {
-        move(getX() + paramInt1, getY() + paramInt2);
+    public void translate(int dx, int dy) {
+        move(getX() + dx, getY() + dy);
     }
 
     /**
      * Translates the QDRect deltaX and deltaY.
      */
-    public void translate(float paramFloat1, float paramFloat2) {
-        move(getXF() + paramFloat1, getYF() + paramFloat2);
+    public void translate(float dx, float dy) {
+        move(getXF() + dx, getYF() + dy);
     }
 
     /**
      * Resizes the QDRect.
      */
-    public void resize(int paramInt1, int paramInt2) {
-        reshape(getX(), getY(), paramInt1, paramInt2);
+    public void resize(int width, int height) {
+        reshape(getX(), getY(), width, height);
     }
 
     /**
      * Resizes the QDRect.
      */
-    public void resize(float paramFloat1, float paramFloat2) {
-        reshape(getXF(), getYF(), paramFloat1, paramFloat2);
+    public void resize(float width, float height) {
+        reshape(getXF(), getYF(), width, height);
     }
 
     /**
@@ -565,11 +565,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     /**
      * Checks if two QDRects intersect.
      */
-    public boolean intersects(QDRect paramQDRect) {
-        if ((this.fixedRect != null) && (paramQDRect.fixedRect != null)) {
-            return (paramQDRect.getRightF() >= getXF()) && (paramQDRect.getBottomF() >= getYF()) && (paramQDRect.getXF() <= getRightF()) && (paramQDRect.getYF() <= getBottomF());
+    public boolean intersects(QDRect rect) {
+        if ((this.fixedRect != null) && (rect.fixedRect != null)) {
+            return (rect.getRightF() >= getXF()) && (rect.getBottomF() >= getYF()) && (rect.getXF() <= getRightF()) && (rect.getYF() <= getBottomF());
         }
-        return (paramQDRect.getRight() >= getX()) && (paramQDRect.getBottom() >= getY()) && (paramQDRect.getX() <= getRight()) && (paramQDRect.getY() <= getBottom());
+        return (rect.getRight() >= getX()) && (rect.getBottom() >= getY()) && (rect.getX() <= getRight()) && (rect.getY() <= getBottom());
     }
 
     /**
@@ -620,11 +620,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Adds a point to the QDRect. This results in the smallest
      * QDRect that contains both the existing rectangle and the new point.
      */
-    public void add(int paramInt1, int paramInt2) {
-        int i = Math.min(getX(), paramInt1);
-        int j = Math.max(getX() + getWidth(), paramInt1);
-        int k = Math.min(getY(), paramInt2);
-        int m = Math.max(getY() + getHeight(), paramInt2);
+    public void add(int x, int y) {
+        int i = Math.min(getX(), x);
+        int j = Math.max(getX() + getWidth(), x);
+        int k = Math.min(getY(), y);
+        int m = Math.max(getY() + getHeight(), y);
         setX(i);
         setY(k);
         setWidth(j - i);
@@ -635,11 +635,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * Adds a point to the QDRect. This results in the smallest
      * QDRect that contains both the existing rectangle and the new point.
      */
-    public void add(float paramFloat1, float paramFloat2) {
-        float f1 = Math.min(getXF(), paramFloat1);
-        float f2 = Math.max(getXF() + getWidthF(), paramFloat1);
-        float f3 = Math.min(getYF(), paramFloat2);
-        float f4 = Math.max(getYF() + getHeightF(), paramFloat2);
+    public void add(float x, float y) {
+        float f1 = Math.min(getXF(), x);
+        float f2 = Math.max(getXF() + getWidthF(), x);
+        float f3 = Math.min(getYF(), y);
+        float f4 = Math.max(getYF() + getHeightF(), y);
         setX(f1);
         setY(f3);
         setWidth(f2 - f1);
@@ -677,11 +677,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * h units larger on both the left and right side,
      * and v units larger at both the top and bottom.
      */
-    public void grow(int paramInt1, int paramInt2) {
-        setX(getX() - paramInt1);
-        setY(getY() - paramInt2);
-        setWidth(getWidth() + paramInt1 * 2);
-        setHeight(getHeight() + paramInt2 * 2);
+    public void grow(int dx, int dy) {
+        setX(getX() - dx);
+        setY(getY() - dy);
+        setWidth(getWidth() + dx * 2);
+        setHeight(getHeight() + dy * 2);
     }
 
     /**
@@ -690,11 +690,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
      * h units larger on both the left and right side,
      * and v units larger at both the top and bottom.
      */
-    public void grow(float paramFloat1, float paramFloat2) {
-        setX(getXF() - paramFloat1);
-        setY(getYF() - paramFloat2);
-        setWidth(getWidthF() + paramFloat1 * 2.0F);
-        setHeight(getHeightF() + paramFloat2 * 2.0F);
+    public void grow(float dx, float dy) {
+        setX(getXF() - dx);
+        setY(getYF() - dy);
+        setWidth(getWidthF() + dx * 2.0F);
+        setHeight(getHeightF() + dy * 2.0F);
     }
 
     /**
@@ -714,11 +714,11 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
     /**
      * Checks whether two QDRects are equal.
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ((paramObject instanceof QDRect localQDRect)) {
-            return (localQDRect.getXF() == getXF()) && (localQDRect.getYF() == getYF()) && (localQDRect.getRightF() == getRightF()) && (localQDRect.getBottomF() == getBottomF());
+        if ((obj instanceof QDRect rect)) {
+            return (rect.getXF() == getXF()) && (rect.getYF() == getYF()) && (rect.getRightF() == getRightF()) && (rect.getBottomF() == getBottomF());
         }
         return false;
     }
@@ -757,19 +757,19 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         return this.fixedRect != null ? QTUtils.Fix2X(getIntFromArray(this.fixedRect, 8)) : getRight();
     }
 
-    private void setRight(int paramInt) {
+    private void setRight(int right) {
         if (this.fixedRect != null)
-            setRight(paramInt);
+            setRight(right);
         else {
-            _setRightI(paramInt);
+            _setRightI(right);
         }
     }
 
-    private void setRight(float paramFloat) {
+    private void setRight(float right) {
         if (this.fixedRect == null)
             this.fixedRect = new byte[16];
-        _setRightF(paramFloat);
-        _setRightI((int) paramFloat);
+        _setRightF(right);
+        _setRightI((int) right);
     }
 
     private int getBottom() {
@@ -780,72 +780,72 @@ public final class QDRect extends QTByteObject implements PrimitivesLib, Cloneab
         return this.fixedRect != null ? QTUtils.Fix2X(getIntFromArray(this.fixedRect, 12)) : getBottom();
     }
 
-    private void setBottom(int paramInt) {
+    private void setBottom(int bottom) {
         if (this.fixedRect != null)
-            setBottom(paramInt);
+            setBottom(bottom);
         else {
-            _setBottomI(paramInt);
+            _setBottomI(bottom);
         }
     }
 
-    private void setBottom(float paramFloat) {
+    private void setBottom(float bottom) {
         if (this.fixedRect == null)
             this.fixedRect = new byte[16];
-        _setBottomF(paramFloat);
-        _setBottomI((int) paramFloat);
+        _setBottomF(bottom);
+        _setBottomI((int) bottom);
     }
 
-    private void _setXF(float paramFloat) {
-        int i = QTUtils.X2Fix(paramFloat);
+    private void _setXF(float x) {
+        int i = QTUtils.X2Fix(x);
         setIntInArray(this.fixedRect, 8, getIntFromArray(this.fixedRect, 8) - getIntFromArray(this.fixedRect, 0) + i);
         setIntInArray(this.fixedRect, 0, i);
     }
 
-    private void _setXI(int paramInt) {
-        setShortAt(6, (short) (getShortAt(6) - getShortAt(2) + paramInt));
-        setShortAt(2, (short) paramInt);
+    private void _setXI(int value) {
+        setShortAt(6, (short) (getShortAt(6) - getShortAt(2) + value));
+        setShortAt(2, (short) value);
     }
 
-    private void _setYF(float paramFloat) {
-        int i = QTUtils.X2Fix(paramFloat);
+    private void _setYF(float y) {
+        int i = QTUtils.X2Fix(y);
         setIntInArray(this.fixedRect, 12, getIntFromArray(this.fixedRect, 12) - getIntFromArray(this.fixedRect, 4) + i);
         setIntInArray(this.fixedRect, 4, i);
     }
 
-    private void _setYI(int paramInt) {
-        setShortAt(4, (short) (getShortAt(4) - getShortAt(0) + paramInt));
-        setShortAt(0, (short) paramInt);
+    private void _setYI(int value) {
+        setShortAt(4, (short) (getShortAt(4) - getShortAt(0) + value));
+        setShortAt(0, (short) value);
     }
 
-    private void _setRightF(float paramFloat) {
-        setIntInArray(this.fixedRect, 8, QTUtils.X2Fix(paramFloat));
+    private void _setRightF(float right) {
+        setIntInArray(this.fixedRect, 8, QTUtils.X2Fix(right));
     }
 
-    private void _setRightI(int paramInt) {
-        setShortAt(6, (short) paramInt);
+    private void _setRightI(int value) {
+        setShortAt(6, (short) value);
     }
 
-    private void _setBottomF(float paramFloat) {
-        setIntInArray(this.fixedRect, 12, QTUtils.X2Fix(paramFloat));
+    private void _setBottomF(float bottom) {
+        setIntInArray(this.fixedRect, 12, QTUtils.X2Fix(bottom));
     }
 
-    private void _setBottomI(int paramInt) {
-        setShortAt(4, (short) paramInt);
+    private void _setBottomI(int value) {
+        setShortAt(4, (short) value);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 }

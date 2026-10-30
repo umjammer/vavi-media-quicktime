@@ -18,10 +18,10 @@ public final class SpriteDescription extends SampleDescription {
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec = new EndianFlipSpec(16, 4, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 4, 3);
+        ed.addFlipSpec(spec);
+        return ed;
     }
 
     /**
@@ -38,8 +38,8 @@ public final class SpriteDescription extends SampleDescription {
         super(28, true, 1936749172);
     }
 
-    private SpriteDescription(int paramInt) {
-        super(paramInt, null, false);
+    private SpriteDescription(int nativeRep) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -50,24 +50,24 @@ public final class SpriteDescription extends SampleDescription {
         return new SpriteDescription(makeAndCopyHandle());
     }
 
-    public void setVersion(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setVersion(int version) {
+        setIntAt(16, version);
     }
 
     public int getVersion() {
         return getIntAt(16);
     }
 
-    public void setDecompressorType(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setDecompressorType(int decompressorType) {
+        setIntAt(20, decompressorType);
     }
 
     public int getDecompressorType() {
         return getIntAt(20);
     }
 
-    public void setSampleFlags(int paramInt) {
-        setIntAt(24, paramInt);
+    public void setSampleFlags(int sampleFlags) {
+        setIntAt(24, sampleFlags);
     }
 
     public int getSampleFlags() {

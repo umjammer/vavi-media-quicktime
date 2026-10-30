@@ -73,11 +73,11 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @throws quicktime.QTException
      */
     public void setLocation(int tx, int ty) throws QTException {
-        Matrix localMatrix = getMatrix();
-        if (localMatrix != null) {
-            localMatrix.setTx(tx);
-            localMatrix.setTy(ty);
-            setMatrix(localMatrix);
+        Matrix matrix = getMatrix();
+        if (matrix != null) {
+            matrix.setTx(tx);
+            matrix.setTy(ty);
+            setMatrix(matrix);
         }
     }
 
@@ -89,15 +89,15 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @throws quicktime.QTException
      */
     public void setSize(QDDimension size) throws QTException {
-        Matrix localMatrix1 = getMatrix();
-        float f1 = localMatrix1.getTx();
-        float f2 = localMatrix1.getTy();
-        if (localMatrix1 != null) {
-            Matrix localMatrix2 = new Matrix();
-            QDDimension localQDDimension = getOriginalSize();
-            localMatrix2.map(new QDRect(localQDDimension), new QDRect(size));
-            localMatrix2.translate(f1, f2);
-            setMatrix(localMatrix2);
+        Matrix matrix = getMatrix();
+        float f1 = matrix.getTx();
+        float f2 = matrix.getTy();
+        if (matrix != null) {
+            Matrix matrix2 = new Matrix();
+            QDDimension originalSize = getOriginalSize();
+            matrix2.map(new QDRect(originalSize), new QDRect(size));
+            matrix2.translate(f1, f2);
+            setMatrix(matrix2);
         }
     }
 
@@ -108,9 +108,9 @@ public class UIElement extends TwoDSprite implements DynamicImage {
      * @throws quicktime.QTException
      */
     public QDRect getBounds() throws QTException {
-        Matrix localMatrix = getMatrix();
-        QDDimension localQDDimension = getOriginalSize();
-        return new QDRect((int) localMatrix.getTx(), (int) localMatrix.getTy(), (int) (localMatrix.getSx() * localQDDimension.getWidth()), (int) (localMatrix.getSy() * localQDDimension.getHeight()));
+        Matrix matrix = getMatrix();
+        QDDimension originalSize = getOriginalSize();
+        return new QDRect((int) matrix.getTx(), (int) matrix.getTy(), (int) (matrix.getSx() * originalSize.getWidth()), (int) (matrix.getSy() * originalSize.getHeight()));
     }
 
     /**
@@ -211,8 +211,8 @@ public class UIElement extends TwoDSprite implements DynamicImage {
 
     class UIInvalidator extends Invalidator {
 
-        UIInvalidator(TwoDSprite paramTwoDSprite) {
-            super(paramTwoDSprite);
+        UIInvalidator(TwoDSprite s) {
+            super(s);
         }
 
         @Override

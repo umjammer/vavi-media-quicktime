@@ -37,28 +37,28 @@ public final class QTUtils implements QuickTimeLib {
     /**
      * Convert the modifier values in java InputEvents to those expected by QT.
      */
-    public static int convertEventModifier(int paramInt) {
-        if (paramInt == 0)
+    public static int convertEventModifier(int modifiers) {
+        if (modifiers == 0)
             return 0;
         int i = 0;
         if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-            if ((paramInt & 0x1) != 0)
+            if ((modifiers & 0x1) != 0)
                 i = 1 << kShiftModShiftMask;
-            if ((paramInt & 0x2) != 0)
+            if ((modifiers & 0x2) != 0)
                 i |= 1 << kControlModShiftMask;
-            if ((paramInt & 0x4) != 0)
+            if ((modifiers & 0x4) != 0)
                 i |= 1 << kCommandModShiftMask;
-            if ((paramInt & 0x8) != 0)
+            if ((modifiers & 0x8) != 0)
                 i |= 1 << kOptionModShiftMask;
         } else if (QTSession.isCurrentOS(2)) {
-            if (((paramInt & 0x2) != 0) && ((paramInt & 0x8) != 0)) {
+            if (((modifiers & 0x2) != 0) && ((modifiers & 0x8) != 0)) {
                 i = 1 << kOptionModShiftMask;
-            } else if ((paramInt & 0x2) != 0) {
+            } else if ((modifiers & 0x2) != 0) {
                 i = 1 << kCommandModShiftMask;
-            } else if ((paramInt & 0x8) != 0) {
+            } else if ((modifiers & 0x8) != 0) {
                 i = 1 << kControlModShiftMask;
             }
-            if ((paramInt & 0x1) != 0)
+            if ((modifiers & 0x1) != 0)
                 i |= 1 << kShiftModShiftMask;
         }
         return i;
@@ -67,8 +67,8 @@ public final class QTUtils implements QuickTimeLib {
     /**
      * Convert the key values in java KeyEvents to those expected by QT.
      */
-    public static int convertKeyValue(int paramInt) {
-        return switch (paramInt) {
+    public static int convertKeyValue(int keyCode) {
+        return switch (keyCode) {
             case 10 -> 13;
             case 37 -> 28;
             case 39 -> 29;
@@ -78,85 +78,85 @@ public final class QTUtils implements QuickTimeLib {
             case 35 -> 4;
             case 33 -> 11;
             case 34 -> 12;
-            default -> paramInt;
+            default -> keyCode;
         };
     }
 
     /**
      * Convert a float to a 16.16 Fixed format
      */
-    public static int X2Fix(float paramFloat) {
-        return (int) (paramFloat * 65536.0F);
+    public static int X2Fix(float x) {
+        return (int) (x * 65536.0F);
     }
 
     /**
      * Convert a float to a 16.16 Fixed format
      */
-    public static float Fix2X(int paramInt) {
-        return (float) (paramInt / 65536.0D);
+    public static float Fix2X(int fixed) {
+        return (float) (fixed / 65536.0D);
     }
 
     /**
      * Convert a 16.16 Unsigned Fixed format to a float
      */
-    public static int X2UFix(float paramFloat) {
-        return (int) (long) (paramFloat * 65536.0D);
+    public static int X2UFix(float x) {
+        return (int) (long) (x * 65536.0D);
     }
 
     /**
      * Convert a 16.16 Unsigned Fixed format to a float
      */
-    public static float UFix2X(int paramInt) {
-        return (float) ((paramInt & 0xFFFFFFFFL) / 65536.0D);
+    public static float UFix2X(int fixed) {
+        return (float) ((fixed & 0xFFFFFFFFL) / 65536.0D);
     }
 
     /**
      * Converts a float to a 2.30 Fract format
      */
-    public static int X2Fract(float paramFloat) {
-        return (int) (paramFloat * 1.07374182E9F);
+    public static int X2Fract(float x) {
+        return (int) (x * 1.07374182E9F);
     }
 
     /**
      * Convert a 2.30 Fract format to a float
      */
-    public static float Fract2X(int paramInt) {
-        return (float) (paramInt / 1.073741824E9D);
+    public static float Fract2X(int fract) {
+        return (float) (fract / 1.073741824E9D);
     }
 
     /**
      * Convert a float to a 8.8 Fixed format
      */
-    public static short X2ShortFix(float paramFloat) {
-        return (short) (int) (paramFloat * 256.0F);
+    public static short X2ShortFix(float x) {
+        return (short) (int) (x * 256.0F);
     }
 
     /**
      * Convert a 8.8 Fixed format to a float
      */
-    public static float ShortFix2X(short paramShort) {
-        return (float) (paramShort / 256.0D);
+    public static float ShortFix2X(short shortFixed) {
+        return (float) (shortFixed / 256.0D);
     }
 
     /**
      * converts an unsigned byte to int.
      */
-    public static int UByte2Int(byte paramByte) {
-        return paramByte & 0xFF;
+    public static int UByte2Int(byte b) {
+        return b & 0xFF;
     }
 
     /**
      * converts an unsigned short to int.
      */
-    public static int UShort2Int(short paramShort) {
-        return paramShort & 0xFFFF;
+    public static int UShort2Int(short s) {
+        return s & 0xFFFF;
     }
 
     /**
      * converts an unsigned int to long.
      */
-    public static long UInt2Long(int paramInt) {
-        return paramInt & 0xFFFFFFFFL;
+    public static long UInt2Long(int i) {
+        return i & 0xFFFFFFFFL;
     }
 
     /**
@@ -165,8 +165,8 @@ public final class QTUtils implements QuickTimeLib {
      */
     public static byte[] String2CString(String str) {
         byte[] arrayOfByte1 = new byte[str.length() + 1];
-        byte[] arrayOfByte2 = str.getBytes();
-        System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 0, str.length());
+        byte[] bytes = str.getBytes();
+        System.arraycopy(bytes, 0, arrayOfByte1, 0, str.length());
         arrayOfByte1[str.length()] = 0;
         return arrayOfByte1;
     }
@@ -177,15 +177,15 @@ public final class QTUtils implements QuickTimeLib {
      * @param len the maximum length of the Pstring, max length is 255.
      */
     public static byte[] String2PString(String str, int len) {
-        byte[] arrayOfByte1 = str.getBytes();
+        byte[] bytes = str.getBytes();
         int i;
         if (QTSession.isCurrentOS(1)) {
-            i = arrayOfByte1.length > len ? len : len > 255 ? 255 : arrayOfByte1.length;
+            i = bytes.length > len ? len : len > 255 ? 255 : bytes.length;
         } else
             i = str.length() > len ? len : len > 255 ? 255 : str.length();
         byte[] arrayOfByte2 = new byte[i + 1];
         arrayOfByte2[0] = ((byte) i);
-        System.arraycopy(arrayOfByte1, 0, arrayOfByte2, 1, i);
+        System.arraycopy(bytes, 0, arrayOfByte2, 1, i);
         return arrayOfByte2;
     }
 
@@ -193,12 +193,12 @@ public final class QTUtils implements QuickTimeLib {
      * Converts a CString into a java.lang.String. The offset specifies where the C string
      * begins and it terminates at the first 0 value that it finds.
      */
-    public static String CString2String(byte[] paramArrayOfByte, int paramInt) {
+    public static String CString2String(byte[] cString, int offset) {
         int i;
-        for (i = paramInt; i < paramArrayOfByte.length; i++) if (paramArrayOfByte[i] == 0)
+        for (i = offset; i < cString.length; i++) if (cString[i] == 0)
             break;
-        byte[] arrayOfByte = new byte[i - paramInt];
-        System.arraycopy(paramArrayOfByte, paramInt, arrayOfByte, 0, arrayOfByte.length);
+        byte[] arrayOfByte = new byte[i - offset];
+        System.arraycopy(cString, offset, arrayOfByte, 0, arrayOfByte.length);
         return new String(arrayOfByte);
     }
 
@@ -206,35 +206,35 @@ public final class QTUtils implements QuickTimeLib {
      * Converts a PString into a java.lang.String. The offset specifies where the count byte
      * is within the byte array that is passed in - typically 0.
      */
-    public static String PString2String(byte[] paramArrayOfByte, int paramInt) {
-        byte[] arrayOfByte = new byte[paramArrayOfByte[paramInt]];
-        System.arraycopy(paramArrayOfByte, paramInt + 1, arrayOfByte, 0, paramArrayOfByte[paramInt]);
+    public static String PString2String(byte[] pString, int offset) {
+        byte[] arrayOfByte = new byte[pString[offset]];
+        System.arraycopy(pString, offset + 1, arrayOfByte, 0, pString[offset]);
         return new String(arrayOfByte);
     }
 
     /**
      * Converts an OSType (4 character) string into an int.
      */
-    public static int toOSType(String paramString) {
-        StringBuilder paramStringBuilder = new StringBuilder(paramString);
+    public static int toOSType(String osType) {
+        StringBuilder paramStringBuilder = new StringBuilder(osType);
         while (paramStringBuilder.length() < 4) paramStringBuilder.append(" ");
-        paramString = paramStringBuilder.toString();
-        return toOSType(paramString.charAt(0), paramString.charAt(1), paramString.charAt(2), paramString.charAt(3));
+        osType = paramStringBuilder.toString();
+        return toOSType(osType.charAt(0), osType.charAt(1), osType.charAt(2), osType.charAt(3));
     }
 
     /**
      * Converts four characters into an OSType int
      */
-    public static int toOSType(char paramChar1, char paramChar2, char paramChar3, char paramChar4) {
-        return paramChar1 << '\030' | (paramChar2 & 0xFF) << '\020' | (paramChar3 & 0xFF) << '\b' | paramChar4 & 0xFF;
+    public static int toOSType(char c1, char c2, char c3, char c4) {
+        return c1 << '\030' | (c2 & 0xFF) << '\020' | (c3 & 0xFF) << '\b' | c4 & 0xFF;
     }
 
     /**
      * Converts an int into a 4 character string representing an OSType.
      * The OSType int is presumed to be the right endian layout.
      */
-    public static String fromOSType(int paramInt) {
-        char[] arrayOfChar = { (char) ((paramInt & 0xFF000000) >>> 24), (char) ((paramInt & 0xFF0000) >>> 16), (char) ((paramInt & 0xFF00) >>> 8), (char) (paramInt & 0xFF) };
+    public static String fromOSType(int osType) {
+        char[] arrayOfChar = { (char) ((osType & 0xFF000000) >>> 24), (char) ((osType & 0xFF0000) >>> 16), (char) ((osType & 0xFF00) >>> 8), (char) (osType & 0xFF) };
         return new String(arrayOfChar);
     }
 
@@ -243,10 +243,10 @@ public final class QTUtils implements QuickTimeLib {
      * called on objects which have been collected.
      */
     public static void reclaimMemory() {
-        Runtime localRuntime = Runtime.getRuntime();
-        localRuntime.gc();
-        localRuntime.gc();
-        localRuntime.gc();
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        runtime.gc();
+        runtime.gc();
     }
 
     /**
@@ -394,32 +394,32 @@ public final class QTUtils implements QuickTimeLib {
             case 0:
                 Enumeration<EndianFlipSpec> e = ed.flipSpecs();
                 if (e.hasMoreElements()) {
-                    EndianFlipSpec localEndianFlipSpec = e.nextElement();
+                    EndianFlipSpec endianFlipSpec = e.nextElement();
                     int i2;
                     int i3;
-                    switch(localEndianFlipSpec.sizeFlag) {
+                    switch(endianFlipSpec.sizeFlag) {
                         case 2:
-                            for (i1 = 0; i1 < localEndianFlipSpec.num; i1++) {
-                                i2 = srcOffset + i1 * 2 + localEndianFlipSpec.offset;
-                                i3 = destOffset + i1 * 2 + localEndianFlipSpec.offset;
+                            for (i1 = 0; i1 < endianFlipSpec.num; i1++) {
+                                i2 = srcOffset + i1 * 2 + endianFlipSpec.offset;
+                                i3 = destOffset + i1 * 2 + endianFlipSpec.offset;
                                 if ((i2 + 2 > j) || (i3 + 2 > k)) {
                                     throw new UtilException("Attempt to read or write beyond size");
                                 }
                                 flip16(src, i2, dest, i3, i);
                             }
                         case 4:
-                            for (i1 = 0; i1 < localEndianFlipSpec.num; i1++) {
-                                i2 = srcOffset + i1 * 4 + localEndianFlipSpec.offset;
-                                i3 = destOffset + i1 * 4 + localEndianFlipSpec.offset;
+                            for (i1 = 0; i1 < endianFlipSpec.num; i1++) {
+                                i2 = srcOffset + i1 * 4 + endianFlipSpec.offset;
+                                i3 = destOffset + i1 * 4 + endianFlipSpec.offset;
                                 if ((i2 + 4 > j) || (i3 + 4 > k)) {
                                     throw new UtilException("Attempt to read or write beyond size");
                                 }
                                 flip32(src, i2, dest, i3, i);
                             }
                         case 8:
-                            for (i1 = 0; i1 < localEndianFlipSpec.num; i1++) {
-                                i2 = srcOffset + i1 * 8 + localEndianFlipSpec.offset;
-                                i3 = destOffset + i1 * 8 + localEndianFlipSpec.offset;
+                            for (i1 = 0; i1 < endianFlipSpec.num; i1++) {
+                                i2 = srcOffset + i1 * 8 + endianFlipSpec.offset;
+                                i3 = destOffset + i1 * 8 + endianFlipSpec.offset;
                                 if ((i2 + 8 > j) || (i3 + 8 > k)) {
                                     throw new UtilException("Attempt to read or write beyond size");
                                 }
@@ -469,201 +469,201 @@ public final class QTUtils implements QuickTimeLib {
         }
     }
 
-    private static void flip16(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, int paramInt3) throws UtilException {
+    private static void flip16(Object src, int srcOffset, Object dest, int destOffset, int flipType) throws UtilException {
         short s;
-        switch(paramInt3) {
+        switch(flipType) {
             case 1:
-                s = getShortFromPointer(QTObject.ID((QTPointerRef) paramObject1), paramInt1);
+                s = getShortFromPointer(QTObject.ID((QTPointerRef) src), srcOffset);
                 s = endianFlip16(s);
-                setShortInPointer(QTObject.ID((QTPointerRef) paramObject2), paramInt2, s);
+                setShortInPointer(QTObject.ID((QTPointerRef) dest), destOffset, s);
                 break;
             case 16:
-                s = getShortFromArray((byte[]) paramObject1, paramInt1);
+                s = getShortFromArray((byte[]) src, srcOffset);
                 s = endianFlip16(s);
-                setShortInArray((byte[]) paramObject2, paramInt2, s);
+                setShortInArray((byte[]) dest, destOffset, s);
                 break;
             case 256:
-                s = getShortFromArray((int[]) paramObject1, paramInt1);
+                s = getShortFromArray((int[]) src, srcOffset);
                 s = endianFlip16(s);
-                setShortInArray((int[]) paramObject2, paramInt2, s);
+                setShortInArray((int[]) dest, destOffset, s);
                 break;
             case 4096:
-                s = getShortFromArray((float[]) paramObject1, paramInt1);
+                s = getShortFromArray((float[]) src, srcOffset);
                 s = endianFlip16(s);
-                setShortInArray((float[]) paramObject2, paramInt2, s);
+                setShortInArray((float[]) dest, destOffset, s);
                 break;
             default:
                 throw new UtilException("Unknown Format");
         }
     }
 
-    private static void flip32(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, int paramInt3) throws UtilException {
+    private static void flip32(Object src, int srcOffset, Object dest, int destOffset, int flipType) throws UtilException {
         int i;
-        switch(paramInt3) {
+        switch(flipType) {
             case 1:
-                i = getIntFromPointer(QTObject.ID((QTPointerRef) paramObject1), paramInt1);
+                i = getIntFromPointer(QTObject.ID((QTPointerRef) src), srcOffset);
                 i = endianFlip32(i);
-                setIntInPointer(QTObject.ID((QTPointerRef) paramObject2), paramInt2, i);
+                setIntInPointer(QTObject.ID((QTPointerRef) dest), destOffset, i);
                 break;
             case 16:
-                i = getIntFromArray((byte[]) paramObject1, paramInt1);
+                i = getIntFromArray((byte[]) src, srcOffset);
                 i = endianFlip32(i);
-                setIntInArray((byte[]) paramObject2, paramInt2, i);
+                setIntInArray((byte[]) dest, destOffset, i);
                 break;
             case 256:
-                i = getIntFromArray((int[]) paramObject1, paramInt1);
+                i = getIntFromArray((int[]) src, srcOffset);
                 i = endianFlip32(i);
-                setIntInArray((int[]) paramObject2, paramInt2, i);
+                setIntInArray((int[]) dest, destOffset, i);
                 break;
             case 4096:
-                i = getIntFromArray((float[]) paramObject1, paramInt1);
+                i = getIntFromArray((float[]) src, srcOffset);
                 i = endianFlip32(i);
-                setIntInArray((float[]) paramObject2, paramInt2, i);
+                setIntInArray((float[]) dest, destOffset, i);
                 break;
             default:
                 throw new UtilException("Unknown Format");
         }
     }
 
-    private static void flip64(Object paramObject1, int paramInt1, Object paramObject2, int paramInt2, int paramInt3) throws UtilException {
+    private static void flip64(Object src, int srcOffset, Object dest, int destOffset, int flipType) throws UtilException {
         long l;
-        switch(paramInt3) {
+        switch(flipType) {
             case 1:
-                l = getLongFromPointer(QTObject.ID((QTPointerRef) paramObject1), paramInt1);
+                l = getLongFromPointer(QTObject.ID((QTPointerRef) src), srcOffset);
                 l = endianFlip64(l);
-                setLongInPointer(QTObject.ID((QTPointerRef) paramObject2), paramInt2, l);
+                setLongInPointer(QTObject.ID((QTPointerRef) dest), destOffset, l);
                 break;
             case 16:
-                l = getLongFromArray((byte[]) paramObject1, paramInt1);
+                l = getLongFromArray((byte[]) src, srcOffset);
                 l = endianFlip64(l);
-                setLongInArray((byte[]) paramObject2, paramInt2, l);
+                setLongInArray((byte[]) dest, destOffset, l);
                 break;
             case 256:
-                l = getLongFromArray((int[]) paramObject1, paramInt1);
+                l = getLongFromArray((int[]) src, srcOffset);
                 l = endianFlip64(l);
-                setLongInArray((int[]) paramObject2, paramInt2, l);
+                setLongInArray((int[]) dest, destOffset, l);
                 break;
             case 4096:
-                l = getLongFromArray((float[]) paramObject1, paramInt1);
+                l = getLongFromArray((float[]) src, srcOffset);
                 l = endianFlip64(l);
-                setLongInArray((float[]) paramObject2, paramInt2, l);
+                setLongInArray((float[]) dest, destOffset, l);
                 break;
             default:
                 throw new UtilException("Unknown Format");
         }
     }
 
-    static void doBoundsChecks(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        if ((paramInt1 + paramInt3 * paramInt4 > paramInt2) || (paramInt5 + paramInt3 > paramInt6) || (paramInt1 < 0) || (paramInt5 < 0)) {
+    static void doBoundsChecks(int srcOffset, int srcLength, int count, int size, int destOffset, int destLength) {
+        if ((srcOffset + count * size > srcLength) || (destOffset + count > destLength) || (srcOffset < 0) || (destOffset < 0)) {
             throw new ArrayIndexOutOfBoundsException();
         }
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int size) {
+        MemoryManager.BlockMove(src, dst, size);
     }
 
-    private static int NewHandle(int paramInt) {
-        return MemoryManager.NewHandle(paramInt);
+    private static int NewHandle(int size) {
+        return MemoryManager.NewHandle(size);
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static short getShortFromArray(int[] paramArrayOfInt, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfInt, paramInt);
+    private static short getShortFromArray(int[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static short getShortFromArray(float[] paramArrayOfFloat, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfFloat, paramInt);
+    private static short getShortFromArray(float[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setShortInArray(int[] paramArrayOfInt, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfInt, paramInt, paramShort);
+    private static void setShortInArray(int[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setShortInArray(float[] paramArrayOfFloat, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfFloat, paramInt, paramShort);
+    private static void setShortInArray(float[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
-        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    private static void setShortInPointer(int ptr, int offset, short value) {
+        MemoryManager.setShortInPointer(ptr, offset, value);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static int getIntFromArray(int[] paramArrayOfInt, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
+    private static int getIntFromArray(int[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static int getIntFromArray(float[] paramArrayOfFloat, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfFloat, paramInt);
+    private static int getIntFromArray(float[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setIntInArray(int[] paramArrayOfInt, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfInt, paramInt1, paramInt2);
+    private static void setIntInArray(int[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setIntInArray(float[] paramArrayOfFloat, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfFloat, paramInt1, paramInt2);
+    private static void setIntInArray(float[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static long getLongFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
+    private static long getLongFromArray(byte[] array, int offset) {
+        return MemoryManager.getLongFromArray(array, offset);
     }
 
-    private static long getLongFromArray(int[] paramArrayOfInt, int paramInt) {
-        return MemoryManager.getLongFromArray(paramArrayOfInt, paramInt);
+    private static long getLongFromArray(int[] array, int offset) {
+        return MemoryManager.getLongFromArray(array, offset);
     }
 
-    private static long getLongFromArray(float[] paramArrayOfFloat, int paramInt) {
-        return MemoryManager.getLongFromArray(paramArrayOfFloat, paramInt);
+    private static long getLongFromArray(float[] array, int offset) {
+        return MemoryManager.getLongFromArray(array, offset);
     }
 
-    private static long getLongFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getLongFromPointer(paramInt1, paramInt2);
+    private static long getLongFromPointer(int ptr, int offset) {
+        return MemoryManager.getLongFromPointer(ptr, offset);
     }
 
-    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    private static void setLongInArray(byte[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 
-    private static void setLongInArray(int[] paramArrayOfInt, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfInt, paramInt, paramLong);
+    private static void setLongInArray(int[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 
-    private static void setLongInArray(float[] paramArrayOfFloat, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfFloat, paramInt, paramLong);
+    private static void setLongInArray(float[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 
-    private static void setLongInPointer(int paramInt1, int paramInt2, long paramLong) {
-        MemoryManager.setLongInPointer(paramInt1, paramInt2, paramLong);
+    private static void setLongInPointer(int ptr, int offset, long value) {
+        MemoryManager.setLongInPointer(ptr, offset, value);
     }
 }

@@ -22,9 +22,9 @@ public class GraphicsImporterInfo {
      */
     public final short mOutScriptTag;
 
-    public GraphicsImporterInfo(int paramInt, QTFile paramQTFile, short paramShort) {
-        this.mOutExportedType = paramInt;
-        this.mOutExportedSpec = paramQTFile;
-        this.mOutScriptTag = paramShort;
+    public GraphicsImporterInfo(int outExportedType, QTFile outExportedSpec, short outScriptTag) {
+        this.mOutExportedType = outExportedType;
+        this.mOutExportedSpec = outExportedSpec;
+        this.mOutScriptTag = outScriptTag;
     }
 }

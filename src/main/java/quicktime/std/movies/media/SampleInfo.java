@@ -39,14 +39,14 @@ public class SampleInfo extends TimeInfo {
      */
     public final int descriptionIndex;
 
-    SampleInfo(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, SampleDescription paramSampleDescription, int paramInt6, int paramInt7) {
-        super(paramInt1, paramInt2);
-        this.offset = paramInt3;
-        this.size = paramInt4;
-        this.numberOfSamples = paramInt5;
-        this.description = paramSampleDescription;
-        this.flags = paramInt7;
-        this.descriptionIndex = paramInt6;
+    SampleInfo(int time, int duration, int offset, int size, int numberOfSamples, SampleDescription description, int descriptionIndex, int flags) {
+        super(time, duration);
+        this.offset = offset;
+        this.size = size;
+        this.numberOfSamples = numberOfSamples;
+        this.description = description;
+        this.flags = flags;
+        this.descriptionIndex = descriptionIndex;
     }
 
     /**

@@ -335,15 +335,15 @@ public class RecordMovie {
     public boolean frameReady() throws QTException {
         synchronized (QTNative.globalsLock) {
             synchronized (this) {
-                CompressedFrameInfo localCompressedFrameInfo;
+                CompressedFrameInfo compressedFrameInfo;
                 if (this.inPreflightMode) {
-                    localCompressedFrameInfo = this.seq.compressFrame(this.gw, this.gwRect, 4, this.compressedImage);
+                    compressedFrameInfo = this.seq.compressFrame(this.gw, this.gwRect, 4, this.compressedImage);
                     return true;
                 }
                 if ((this.recording) && (this.currentRecordFrame++ <= this.recordFrames)) {
-                    localCompressedFrameInfo = this.seq.compressFrame(this.gw, this.gwRect, 4, this.compressedImage);
-                    int i = localCompressedFrameInfo.getSimilarity() == 0 ? 1 : 0;
-                    this.vidMedia.addSample(this.imageHandle, 0, localCompressedFrameInfo.getDataSize(), 600 / this.scale, this.recDesc, 1, i != 0 ? 0 : 1);
+                    compressedFrameInfo = this.seq.compressFrame(this.gw, this.gwRect, 4, this.compressedImage);
+                    int i = compressedFrameInfo.getSimilarity() == 0 ? 1 : 0;
+                    this.vidMedia.addSample(this.imageHandle, 0, compressedFrameInfo.getDataSize(), 600 / this.scale, this.recDesc, 1, i != 0 ? 0 : 1);
                     if (this.currentRecordFrame > this.recordFrames) {
                         cleanupMovie();
                         this.recording = false;

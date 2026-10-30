@@ -351,9 +351,9 @@ public abstract class TransformMatrix {
             return false;
         if (!obj.getClass().getName().equals(getClass().getName()))
             return false;
-        if ((obj instanceof TransformMatrix localTransformMatrix)) {
+        if ((obj instanceof TransformMatrix transformMatrix)) {
             if (this.target != null)
-                return this.target.equals(localTransformMatrix.target);
+                return this.target.equals(transformMatrix.target);
         }
         return false;
     }
@@ -407,19 +407,19 @@ public abstract class TransformMatrix {
      * @since QTJava 6.1
      * @deprecated
      */
-    public void initialize(quicktime.app.display.QTDisplaySpace space, quicktime.app.image.Transformable paramTransformable) throws quicktime.QTException {
-        this.target = paramTransformable;
-        quicktime.qd.QDRect localQDRect = space.getDisplayBounds();
-        Matrix localMatrix1 = space.getMatrix();
+    public void initialize(quicktime.app.display.QTDisplaySpace space, quicktime.app.image.Transformable target) throws quicktime.QTException {
+        this.target = target;
+        quicktime.qd.QDRect displayBounds = space.getDisplayBounds();
+        Matrix matrix = space.getMatrix();
         this.invSpaceMatrix = new Matrix();
-        Matrix localMatrix2 = localMatrix1.copy();
-        localMatrix2.setTx(0.0F);
-        localMatrix2.setTy(0.0F);
-        localMatrix2.inverse(this.invSpaceMatrix);
+        Matrix matrix2 = matrix.copy();
+        matrix2.setTx(0.0F);
+        matrix2.setTy(0.0F);
+        matrix2.inverse(this.invSpaceMatrix);
         this.origPt = new quicktime.qd.QDPoint[1];
         this.origPt[0] = new quicktime.qd.QDPoint(0, 0);
         this.origTargetMatrix = this.target.getMatrix();
-        this.spaceRect = localQDRect.copy();
+        this.spaceRect = displayBounds.copy();
         this.spaceRect.setX(0);
         this.spaceRect.setY(0);
         this.invSpaceMatrix.transformRect(this.spaceRect);
@@ -439,20 +439,20 @@ public abstract class TransformMatrix {
      * @since QTJava 6.1
      * @deprecated
      */
-    public void initialize(quicktime.app.display.QTDisplaySpace space, quicktime.app.image.Transformable paramTransformable, int x, int y) throws quicktime.QTException {
-        this.target = paramTransformable;
-        quicktime.qd.QDRect localQDRect = space.getDisplayBounds();
-        Matrix localMatrix1 = space.getMatrix();
+    public void initialize(quicktime.app.display.QTDisplaySpace space, quicktime.app.image.Transformable target, int x, int y) throws quicktime.QTException {
+        this.target = target;
+        quicktime.qd.QDRect displayBounds = space.getDisplayBounds();
+        Matrix matrix = space.getMatrix();
         this.invSpaceMatrix = new Matrix();
-        Matrix localMatrix2 = localMatrix1.copy();
-        localMatrix2.setTx(0.0F);
-        localMatrix2.setTy(0.0F);
-        localMatrix2.inverse(this.invSpaceMatrix);
+        Matrix matrix2 = matrix.copy();
+        matrix2.setTx(0.0F);
+        matrix2.setTy(0.0F);
+        matrix2.inverse(this.invSpaceMatrix);
         this.origPt = new quicktime.qd.QDPoint[1];
         this.origPt[0] = new quicktime.qd.QDPoint(x, y);
         this.invSpaceMatrix.transformPoints(this.origPt);
         this.origTargetMatrix = this.target.getMatrix();
-        this.spaceRect = localQDRect.copy();
+        this.spaceRect = displayBounds.copy();
         this.spaceRect.setX(0);
         this.spaceRect.setY(0);
         this.invSpaceMatrix.transformRect(this.spaceRect);
@@ -498,9 +498,9 @@ public abstract class TransformMatrix {
     private boolean completeTransformation() throws quicktime.QTException {
         boolean bool = false;
         if (this.constrained != 0) {
-            quicktime.qd.QDDimension localQDDimension = this.target.getOriginalSize();
-            int i = localQDDimension.getWidth();
-            int j = localQDDimension.getHeight();
+            quicktime.qd.QDDimension originalSize = this.target.getOriginalSize();
+            int i = originalSize.getWidth();
+            int j = originalSize.getHeight();
             float f1 = this.deltaMatrix.getTx();
             float f2 = this.deltaMatrix.getTy();
             this.setXLeft = this.spaceRect.getX();
@@ -533,46 +533,46 @@ public abstract class TransformMatrix {
         return bool;
     }
 
-    private boolean doConstraintsTesting(float paramFloat1, float paramFloat2, int paramInt1, int paramInt2) {
+    private boolean doConstraintsTesting(float x, float y, int width, int height) {
         boolean bool = false;
-        if (paramFloat1 < this.spaceRect.getX()) {
+        if (x < this.spaceRect.getX()) {
             if ((this.constrained & 0x1) != 0) {
                 this.deltaMatrix.setTx(this.setXLeft);
                 boundsReached(1);
                 bool = true;
-            } else if (((this.constrained & 0x10000) != 0) && (paramFloat1 <= -paramInt1)) {
-                this.deltaMatrix.setTx(-paramInt1 + this.specifiedLeftConstraint + this.setXLeft);
+            } else if (((this.constrained & 0x10000) != 0) && (x <= -width)) {
+                this.deltaMatrix.setTx(-width + this.specifiedLeftConstraint + this.setXLeft);
                 boundsReached(1);
                 bool = true;
             }
-        } else if (paramFloat1 + paramInt1 > this.spaceRect.getWidth()) {
+        } else if (x + width > this.spaceRect.getWidth()) {
             if ((this.constrained & 0x10) != 0) {
                 this.deltaMatrix.setTx(this.setXRight);
                 boundsReached(16);
                 bool = true;
-            } else if (((this.constrained & 0x100000) != 0) && (paramFloat1 >= this.spaceRect.getWidth())) {
-                this.deltaMatrix.setTx(this.setXRight + paramInt1 - this.specifiedRightConstraint);
+            } else if (((this.constrained & 0x100000) != 0) && (x >= this.spaceRect.getWidth())) {
+                this.deltaMatrix.setTx(this.setXRight + width - this.specifiedRightConstraint);
                 boundsReached(16);
                 bool = true;
             }
         }
-        if (paramFloat2 < this.spaceRect.getY()) {
+        if (y < this.spaceRect.getY()) {
             if ((this.constrained & 0x100) != 0) {
                 this.deltaMatrix.setTy(this.setYTop);
                 boundsReached(256);
                 bool = true;
-            } else if (((this.constrained & 0x1000000) != 0) && (paramFloat2 <= -paramInt2)) {
-                this.deltaMatrix.setTy(-paramInt2 + this.specifiedTopConstraint + this.setYTop);
+            } else if (((this.constrained & 0x1000000) != 0) && (y <= -height)) {
+                this.deltaMatrix.setTy(-height + this.specifiedTopConstraint + this.setYTop);
                 boundsReached(256);
                 bool = true;
             }
-        } else if (paramFloat2 + paramInt2 > this.spaceRect.getHeight()) {
+        } else if (y + height > this.spaceRect.getHeight()) {
             if ((this.constrained & 0x1000) != 0) {
                 this.deltaMatrix.setTy(this.setYBottom);
                 boundsReached(4096);
                 bool = true;
-            } else if (((this.constrained & 0x10000000) != 0) && (paramFloat2 >= this.spaceRect.getHeight())) {
-                this.deltaMatrix.setTy(this.setYBottom + paramInt2 - this.specifiedBottomConstraint);
+            } else if (((this.constrained & 0x10000000) != 0) && (y >= this.spaceRect.getHeight())) {
+                this.deltaMatrix.setTy(this.setYBottom + height - this.specifiedBottomConstraint);
                 boundsReached(4096);
                 bool = true;
             }

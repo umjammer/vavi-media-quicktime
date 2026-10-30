@@ -235,8 +235,8 @@ public class Dragger extends MouseResponder {
      * @since QTJava 6.1
      * @deprecated
      */
-    public void setActionable(Actionable paramActionable) {
-        this.actor = paramActionable;
+    public void setActionable(Actionable actionable) {
+        this.actor = actionable;
     }
 
     /**
@@ -322,22 +322,22 @@ public class Dragger extends MouseResponder {
     @Override
     public void mousePressed(MouseEvent event) {
         try {
-            QDRect localQDRect = this.space.getDisplayBounds();
+            QDRect displayBounds = this.space.getDisplayBounds();
             this.invSpaceMatrix = new Matrix();
-            Matrix localMatrix = this.space.getMatrix().copy();
-            localMatrix.setTx(0.0F);
-            localMatrix.setTy(0.0F);
-            localMatrix.inverse(this.invSpaceMatrix);
+            Matrix matrix = this.space.getMatrix().copy();
+            matrix.setTx(0.0F);
+            matrix.setTy(0.0F);
+            matrix.inverse(this.invSpaceMatrix);
             this.origPt = new QDPoint[1];
             this.origPt[0] = new QDPoint(event.getX(), event.getY());
             this.invSpaceMatrix.transformPoints(this.origPt);
             this.origTargetMatrix = this.target.getMatrix();
-            this.spaceRect = localQDRect.copy();
+            this.spaceRect = displayBounds.copy();
             this.spaceRect.setX(0);
             this.spaceRect.setY(0);
             this.invSpaceMatrix.transformRect(this.spaceRect);
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mousePressed");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "mousePressed");
         }
     }
 
@@ -354,78 +354,78 @@ public class Dragger extends MouseResponder {
     public void mouseDragged(MouseEvent event) {
         try {
             int i = 0;
-            QDPoint[] arrayOfQDPoint = new QDPoint[1];
-            arrayOfQDPoint[0] = new QDPoint(event.getX(), event.getY());
-            this.invSpaceMatrix.transformPoints(arrayOfQDPoint);
-            int j = arrayOfQDPoint[0].getX() - this.origPt[0].getX();
-            int k = arrayOfQDPoint[0].getY() - this.origPt[0].getY();
-            Matrix localMatrix = this.origTargetMatrix.copy();
-            localMatrix.translate(j, k);
-            QDDimension localQDDimension = this.target.getOriginalSize();
-            int m = localQDDimension.getWidth();
-            int n = localQDDimension.getHeight();
-            float f1 = localMatrix.getTx();
-            float f2 = localMatrix.getTy();
+            QDPoint[] qdPoints = new QDPoint[1];
+            qdPoints[0] = new QDPoint(event.getX(), event.getY());
+            this.invSpaceMatrix.transformPoints(qdPoints);
+            int j = qdPoints[0].getX() - this.origPt[0].getX();
+            int k = qdPoints[0].getY() - this.origPt[0].getY();
+            Matrix matrix = this.origTargetMatrix.copy();
+            matrix.translate(j, k);
+            QDDimension originalSize = this.target.getOriginalSize();
+            int m = originalSize.getWidth();
+            int n = originalSize.getHeight();
+            float f1 = matrix.getTx();
+            float f2 = matrix.getTy();
             int i1 = this.spaceRect.getX();
             int i2 = this.spaceRect.getWidth() - m;
             int i3 = this.spaceRect.getY();
             int i4 = this.spaceRect.getHeight() - n;
-            int i5 = localMatrix.getType();
+            int i5 = matrix.getType();
             switch (i5) {
                 case 0:
                 case 1:
                     break;
                 default:
-                    QDRect localQDRect = new QDRect(0, 0, m, n);
-                    localMatrix.transformRect(localQDRect);
-                    m = localQDRect.getWidth();
-                    n = localQDRect.getHeight();
-                    i1 = (int) (localMatrix.getTx() - localQDRect.getX() + 0.5F);
+                    QDRect rect = new QDRect(0, 0, m, n);
+                    matrix.transformRect(rect);
+                    m = rect.getWidth();
+                    n = rect.getHeight();
+                    i1 = (int) (matrix.getTx() - rect.getX() + 0.5F);
                     f1 -= i1;
-                    i3 = (int) (localMatrix.getTy() - localQDRect.getY() + 0.5F);
+                    i3 = (int) (matrix.getTy() - rect.getY() + 0.5F);
                     f2 -= i3;
                     i4 = this.spaceRect.getHeight() - n + i3;
                     i2 = this.spaceRect.getWidth() - m + i1;
             }
             if (f1 < this.spaceRect.getX()) {
                 if ((this.constrained & 0x1) != 0) {
-                    localMatrix.setTx(i1);
+                    matrix.setTx(i1);
                     i = 1;
                 } else if (f1 <= -m) {
-                    localMatrix.setTx(-m + this.xBufferIfUnConstrained + i1);
+                    matrix.setTx(-m + this.xBufferIfUnConstrained + i1);
                     i = 1;
                 }
             } else if (f1 + m > this.spaceRect.getWidth()) {
                 if ((this.constrained & 0x10) != 0) {
-                    localMatrix.setTx(i2);
+                    matrix.setTx(i2);
                     i = 1;
                 } else if (f1 >= this.spaceRect.getWidth()) {
-                    localMatrix.setTx(i2 + m - this.xBufferIfUnConstrained);
+                    matrix.setTx(i2 + m - this.xBufferIfUnConstrained);
                     i = 1;
                 }
             }
             if (f2 < this.spaceRect.getY()) {
                 if ((this.constrained & 0x100) != 0) {
-                    localMatrix.setTy(i3);
+                    matrix.setTy(i3);
                     i = 1;
                 } else if (f2 <= -n) {
-                    localMatrix.setTy(-n + this.yBufferIfUnConstrained + i3);
+                    matrix.setTy(-n + this.yBufferIfUnConstrained + i3);
                     i = 1;
                 }
             } else if (f2 + n > this.spaceRect.getHeight()) {
                 if ((this.constrained & 0x1000) != 0) {
-                    localMatrix.setTy(i4);
+                    matrix.setTy(i4);
                     i = 1;
                 } else if (f2 >= this.spaceRect.getHeight()) {
-                    localMatrix.setTy(i4 + n - this.yBufferIfUnConstrained);
+                    matrix.setTy(i4 + n - this.yBufferIfUnConstrained);
                     i = 1;
                 }
             }
-            this.target.setMatrix(localMatrix);
+            this.target.setMatrix(matrix);
             if ((i != 0) && (this.actor != null))
                 this.actor.trigger();
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "mouseDragged");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "mouseDragged");
         }
     }
 }

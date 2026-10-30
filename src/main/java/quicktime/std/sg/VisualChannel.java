@@ -12,12 +12,12 @@ import quicktime.std.image.Matrix;
 
 public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
 
-    VisualChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
+    VisualChannel(int type, SequenceGrabber owner) throws StdQTException {
+        super(type, owner);
     }
 
-    VisualChannel(SequenceGrabber paramSequenceGrabber, int paramInt) throws StdQTException {
-        super(paramSequenceGrabber, paramInt);
+    VisualChannel(SequenceGrabber owner, int channelType) throws StdQTException {
+        super(owner, channelType);
     }
 
     /**
@@ -37,9 +37,9 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public QDRect getBounds() throws StdQTException {
-        QDRect localQDRect = new QDRect();
-        StdQTException.checkError(SGGetChannelBounds(_ID(), localQDRect.getRect()));
-        return localQDRect;
+        QDRect bounds = new QDRect();
+        StdQTException.checkError(SGGetChannelBounds(_ID(), bounds.getRect()));
+        return bounds;
     }
 
     /**
@@ -67,8 +67,8 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
      * Allows you to set a channel's display transformation matrix.
      * @see "QuickTime::SGSetChannelMatrix"
      */
-    public void setMatrix(Matrix paramMatrix) throws StdQTException {
-        int i = SGSetChannelMatrix(_ID(), paramMatrix == null ? null : paramMatrix.getBytes());
+    public void setMatrix(Matrix matrix) throws StdQTException {
+        int i = SGSetChannelMatrix(_ID(), matrix == null ? null : matrix.getBytes());
         StdQTException.checkError(i);
     }
 
@@ -79,29 +79,29 @@ public abstract class VisualChannel extends SGChannel implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Matrix getMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        int i = SGGetChannelMatrix(_ID(), localMatrix.getBytes());
+        Matrix matrix = new Matrix();
+        int i = SGGetChannelMatrix(_ID(), matrix.getBytes());
         StdQTException.checkError(i);
-        return localMatrix;
+        return matrix;
     }
 
-    private static int SGSetChannelBounds(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetChannelBounds(paramInt, paramArrayOfByte);
+    private static int SGSetChannelBounds(int ref, byte[] bounds) {
+        return SequenceGrabberManager.SGSetChannelBounds(ref, bounds);
     }
 
-    private static int SGGetChannelBounds(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetChannelBounds(paramInt, paramArrayOfByte);
+    private static int SGGetChannelBounds(int ref, byte[] bounds) {
+        return SequenceGrabberManager.SGGetChannelBounds(ref, bounds);
     }
 
-    private static int SGSetChannelClip(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetChannelClip(paramInt1, paramInt2);
+    private static int SGSetChannelClip(int ref, int rgn) {
+        return SequenceGrabberManager.SGSetChannelClip(ref, rgn);
     }
 
-    private static int SGSetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetChannelMatrix(paramInt, paramArrayOfByte);
+    private static int SGSetChannelMatrix(int ref, byte[] matrix) {
+        return SequenceGrabberManager.SGSetChannelMatrix(ref, matrix);
     }
 
-    private static int SGGetChannelMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetChannelMatrix(paramInt, paramArrayOfByte);
+    private static int SGGetChannelMatrix(int ref, byte[] matrix) {
+        return SequenceGrabberManager.SGGetChannelMatrix(ref, matrix);
     }
 }

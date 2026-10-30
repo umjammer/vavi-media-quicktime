@@ -149,9 +149,9 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @throws quicktime.std.StdQTException
      */
     public SpatialSettings getInfoSpatialSettings() throws StdQTException {
-        SpatialSettings localSpatialSettings = new SpatialSettings();
-        StdQTException.checkError(SCGetInfo(_ID(), 1936749676, localSpatialSettings.getBytes()));
-        return localSpatialSettings;
+        SpatialSettings infoSpatialSettings = new SpatialSettings();
+        StdQTException.checkError(SCGetInfo(_ID(), 1936749676, infoSpatialSettings.getBytes()));
+        return infoSpatialSettings;
     }
 
     /**
@@ -171,9 +171,9 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @throws quicktime.std.StdQTException
      */
     public TemporalSettings getInfoTemporalSettings() throws StdQTException {
-        TemporalSettings localTemporalSettings = new TemporalSettings();
-        StdQTException.checkError(SCGetInfo(_ID(), 1953526380, localTemporalSettings.getBytes()));
-        return localTemporalSettings;
+        TemporalSettings infoTemporalSettings = new TemporalSettings();
+        StdQTException.checkError(SCGetInfo(_ID(), 1953526380, infoTemporalSettings.getBytes()));
+        return infoTemporalSettings;
     }
 
     /**
@@ -193,9 +193,9 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @throws quicktime.std.StdQTException
      */
     public DataRateSettings getInfoDataRateSettings() throws StdQTException {
-        DataRateSettings localDataRateSettings = new DataRateSettings();
-        StdQTException.checkError(SCGetInfo(_ID(), 1685217652, localDataRateSettings.getBytes()));
-        return localDataRateSettings;
+        DataRateSettings infoDataRateSettings = new DataRateSettings();
+        StdQTException.checkError(SCGetInfo(_ID(), 1685217652, infoDataRateSettings.getBytes()));
+        return infoDataRateSettings;
     }
 
     /**
@@ -205,8 +205,8 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @throws quicktime.std.StdQTException
      */
     public void setInfoColorTable(ColorTable ctab) throws StdQTException {
-        int[] arrayOfInt = { QTObject.ID(ctab) };
-        StdQTException.checkError(SCSetInfo(_ID(), 1668052340, arrayOfInt));
+        int[] info = { QTObject.ID(ctab) };
+        StdQTException.checkError(SCSetInfo(_ID(), 1668052340, info));
     }
 
     /**
@@ -282,9 +282,9 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetCompressFlags()"
      */
     public int getCompressFlags() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SCGetCompressFlags(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] flags = { 0 };
+        StdQTException.checkError(SCGetCompressFlags(_ID(), flags));
+        return flags[0];
     }
 
     /**
@@ -292,9 +292,9 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo(scSequenceIDType)"
      */
     public int getSequenceIDType() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SCGetInfo(_ID(), 1936028021, arrayOfInt));
-        return arrayOfInt[0];
+        int[] info = { 0 };
+        StdQTException.checkError(SCGetInfo(_ID(), 1936028021, info));
+        return info[0];
     }
 
     /**
@@ -302,18 +302,18 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo(scCodecFlagsType)"
      */
     public short getCodecFlagsType() throws StdQTException {
-        short[] arrayOfShort = { 0 };
-        StdQTException.checkError(SCGetInfo(_ID(), 1667656807, arrayOfShort));
-        return arrayOfShort[0];
+        short[] info = { 0 };
+        StdQTException.checkError(SCGetInfo(_ID(), 1667656807, info));
+        return info[0];
     }
 
     /**
      * Sets the imagecompressions control flags .
      * @see "QuickTime::SCSetInfo(scCodecFlagsType)"
      */
-    public void setCodecFlagsType(int paramInt) throws StdQTException {
-        short[] arrayOfShort = { (short) paramInt };
-        StdQTException.checkError(SCSetInfo(_ID(), 1667656807, arrayOfShort));
+    public void setCodecFlagsType(int codecFlagsType) throws StdQTException {
+        short[] info = { (short) codecFlagsType };
+        StdQTException.checkError(SCSetInfo(_ID(), 1667656807, info));
     }
 
     /**
@@ -329,76 +329,76 @@ public final class ImageCompressionDialog extends CompressionDialog implements Q
      * @see "QuickTime::SCGetInfo(scCodecFlagsType)"
      */
     public int getCodecManufacturerType() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SCGetInfo(_ID(), 1668114034, arrayOfInt));
-        return arrayOfInt[0];
+        int[] info = { 0 };
+        StdQTException.checkError(SCGetInfo(_ID(), 1668114034, info));
+        return info[0];
     }
 
-    private static int SCDefaultPixMapSettings(int paramInt1, int paramInt2, short paramShort) {
-        return ImageCompressionManager.SCDefaultPixMapSettings(paramInt1, paramInt2, paramShort);
+    private static int SCDefaultPixMapSettings(int ci, int src, short motion) {
+        return ImageCompressionManager.SCDefaultPixMapSettings(ci, src, motion);
     }
 
-    private static int SCDefaultPictHandleSettings(int paramInt1, int paramInt2, short paramShort) {
-        return ImageCompressionManager.SCDefaultPictHandleSettings(paramInt1, paramInt2, paramShort);
+    private static int SCDefaultPictHandleSettings(int ci, int srcPicture, short motion) {
+        return ImageCompressionManager.SCDefaultPictHandleSettings(ci, srcPicture, motion);
     }
 
-    private static int SCDefaultPictFileSettings(int paramInt, short paramShort1, short paramShort2) {
-        return ImageCompressionManager.SCDefaultPictFileSettings(paramInt, paramShort1, paramShort2);
+    private static int SCDefaultPictFileSettings(int ci, short srcRef, short motion) {
+        return ImageCompressionManager.SCDefaultPictFileSettings(ci, srcRef, motion);
     }
 
-    private static int SCRequestSequenceSettings(int paramInt) {
-        return ImageCompressionManager.SCRequestSequenceSettings(paramInt);
+    private static int SCRequestSequenceSettings(int ci) {
+        return ImageCompressionManager.SCRequestSequenceSettings(ci);
     }
 
-    private static int SCCompressPictureFile(int paramInt, short paramShort1, short paramShort2) {
-        return ImageCompressionManager.SCCompressPictureFile(paramInt, paramShort1, paramShort2);
+    private static int SCCompressPictureFile(int ci, short srcRefNum, short dstRefNum) {
+        return ImageCompressionManager.SCCompressPictureFile(ci, srcRefNum, dstRefNum);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCGetInfo(int ci, int type, int[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramInt3);
+    private static int SCSetInfo(int ci, int type, int info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SCSetInfo(int ci, int type, int[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SCGetInfo(int ci, int type, short[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfShort);
+    private static int SCSetInfo(int ci, int type, short[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SCGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SCGetInfo(int ci, int type, byte[] info) {
+        return ImageCompressionManager.SCGetInfo(ci, type, info);
     }
 
-    private static int SCSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.SCSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SCSetInfo(int ci, int type, byte[] info) {
+        return ImageCompressionManager.SCSetInfo(ci, type, info);
     }
 
-    private static int SCSetTestImagePictHandle(int paramInt1, int paramInt2, byte[] paramArrayOfByte, short paramShort) {
-        return ImageCompressionManager.SCSetTestImagePictHandle(paramInt1, paramInt2, paramArrayOfByte, paramShort);
+    private static int SCSetTestImagePictHandle(int ci, int testPict, byte[] testRect, short testFlags) {
+        return ImageCompressionManager.SCSetTestImagePictHandle(ci, testPict, testRect, testFlags);
     }
 
-    private static int SCSetTestImagePictFile(int paramInt, short paramShort1, byte[] paramArrayOfByte, short paramShort2) {
-        return ImageCompressionManager.SCSetTestImagePictFile(paramInt, paramShort1, paramArrayOfByte, paramShort2);
+    private static int SCSetTestImagePictFile(int ci, short testFileRef, byte[] testRect, short testFlags) {
+        return ImageCompressionManager.SCSetTestImagePictFile(ci, testFileRef, testRect, testFlags);
     }
 
-    private static int SCSetTestImagePixMap(int paramInt1, int paramInt2, byte[] paramArrayOfByte, short paramShort) {
-        return ImageCompressionManager.SCSetTestImagePixMap(paramInt1, paramInt2, paramArrayOfByte, paramShort);
+    private static int SCSetTestImagePixMap(int ci, int testPixMap, byte[] testRect, short testFlags) {
+        return ImageCompressionManager.SCSetTestImagePixMap(ci, testPixMap, testRect, testFlags);
     }
 
-    private static int SCSetCompressFlags(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.SCSetCompressFlags(paramInt1, paramInt2);
+    private static int SCSetCompressFlags(int ci, int flags) {
+        return ImageCompressionManager.SCSetCompressFlags(ci, flags);
     }
 
-    private static int SCGetCompressFlags(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCGetCompressFlags(paramInt, paramArrayOfInt);
+    private static int SCGetCompressFlags(int ci, int[] flags) {
+        return ImageCompressionManager.SCGetCompressFlags(ci, flags);
     }
 }

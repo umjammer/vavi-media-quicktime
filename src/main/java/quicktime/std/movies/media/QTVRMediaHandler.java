@@ -5,7 +5,7 @@ import quicktime.jdirect.QuickTimeLib;
 
 public final class QTVRMediaHandler extends MediaHandler implements QuickTimeLib {
 
-    QTVRMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    QTVRMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 }

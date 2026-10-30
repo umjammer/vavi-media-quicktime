@@ -125,10 +125,10 @@ public class EndianDescriptor {
             this.vec = new Vector<>();
         }
         for (int i = 0; i < this.vec.size(); i++) {
-            EndianFlipSpec localEndianFlipSpec = this.vec.elementAt(i);
-            if (spec.offset == localEndianFlipSpec.offset)
+            EndianFlipSpec endianFlipSpec = this.vec.elementAt(i);
+            if (spec.offset == endianFlipSpec.offset)
                 throw new QTRuntimeException("Each offset must be unique");
-            if (spec.offset < localEndianFlipSpec.offset) {
+            if (spec.offset < endianFlipSpec.offset) {
                 this.vec.insertElementAt(spec, i);
                 return;
             }
@@ -139,9 +139,9 @@ public class EndianDescriptor {
     /**
      * Removes a specified EndianFlipSpec (if found) from the EndianDescriptor.
      */
-    public void removeFlipSpec(EndianFlipSpec paramEndianFlipSpec) {
+    public void removeFlipSpec(EndianFlipSpec endianFlipSpec) {
         if (this.vec != null) {
-            this.vec.removeElement(paramEndianFlipSpec);
+            this.vec.removeElement(endianFlipSpec);
         }
     }
 
@@ -156,10 +156,10 @@ public class EndianDescriptor {
         if (this.vec == null)
             return null;
         for (int i = 0; i < this.vec.size(); i++) {
-            EndianFlipSpec localEndianFlipSpec = this.vec.elementAt(i);
-            if (offset == localEndianFlipSpec.offset)
-                return localEndianFlipSpec;
-            if (localEndianFlipSpec.offset > offset)
+            EndianFlipSpec flipSpec = this.vec.elementAt(i);
+            if (offset == flipSpec.offset)
+                return flipSpec;
+            if (flipSpec.offset > offset)
                 return null;
         }
         return null;

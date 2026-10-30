@@ -113,10 +113,10 @@ public class Timer implements Timeable {
         } else {
             this.theTimeBase = new TimeBase();
             this.theTimeBase.setStartTime(new TimeRecord());
-            TimeRecord localTimeRecord = new TimeRecord();
-            localTimeRecord.setValue(86400L);
-            localTimeRecord.setScale(1);
-            this.theTimeBase.setStopTime(localTimeRecord);
+            TimeRecord tr = new TimeRecord();
+            tr.setValue(86400L);
+            tr.setScale(1);
+            this.theTimeBase.setStopTime(tr);
             this.theTimeBase.setFlags(1);
         }
         this.tc = new TC(this.theTimeBase, scale, Math.abs(period), 0);
@@ -347,10 +347,10 @@ public class Timer implements Timeable {
         setActive(false);
     }
 
-    private synchronized void doTimeChanged(float paramFloat, int paramInt) throws QTException {
+    private synchronized void doTimeChanged(float lastKnownRate, int newTime) throws QTException {
         if (this.cbActive) {
-            timeChanged(paramInt);
-            this.lastKnownRate = paramFloat;
+            timeChanged(newTime);
+            this.lastKnownRate = lastKnownRate;
             if ((this.lastKnownRate != 0.0F) && (this.doesTickle) && (this.cbActive)) {
                 doReschedule(this.lastKnownRate, true);
             } else {
@@ -359,12 +359,12 @@ public class Timer implements Timeable {
         }
     }
 
-    private void doTickle(float paramFloat, int paramInt) throws QTException {
-        if (paramFloat != 0.0F) {
+    private void doTickle(float er, int time) throws QTException {
+        if (er != 0.0F) {
             synchronized (this) {
                 if (this.cbActive) {
-                    if ((tickle(paramFloat, paramInt)) && (this.cbActive)) {
-                        doReschedule(paramFloat, false);
+                    if ((tickle(er, time)) && (this.cbActive)) {
+                        doReschedule(er, false);
                     } else
                         setTickling(false);
                 }
@@ -372,12 +372,12 @@ public class Timer implements Timeable {
         }
     }
 
-    private void doReschedule(float paramFloat, boolean paramBoolean) throws QTException {
+    private void doReschedule(float rate, boolean reset) throws QTException {
         this.tc.cancel();
         int i = this.theTimeBase.getTime(this.tc.scale);
-        if (paramBoolean) {
+        if (reset) {
             this.tc.value = i;
-        } else if (paramFloat > 0.0F) {
+        } else if (rate > 0.0F) {
             this.tc.value += this.tc.period;
             if (this.tc.value <= i) {
                 this.tc.value = i;
@@ -395,25 +395,25 @@ public class Timer implements Timeable {
 
         int period;
 
-        TC(TimeBase paramTimeBase, int paramInt1, int paramInt2, int paramInt3) throws QTException {
-            super(paramTimeBase, paramInt1, paramInt2, 3);
-            this.period = paramInt2;
+        TC(TimeBase tb, int scale, int period, int flags) throws QTException {
+            super(tb, scale, period, 3);
+            this.period = period;
         }
 
         @Override
         public void execute() {
             try {
                 Timer.this.doTickle(this.rateWhenCalled, this.timeWhenCalledMsecs);
-            } catch (QTException localQTException) {
-                localQTException.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private class TJ extends TimeJumpCallBack {
 
-        TJ(TimeBase paramTimeBase) throws QTException {
-            super(paramTimeBase);
+        TJ(TimeBase tb) throws QTException {
+            super(tb);
         }
 
         @Override
@@ -424,16 +424,16 @@ public class Timer implements Timeable {
                 cancel();
                 if (Timer.this.isActive())
                     callMeWhen();
-            } catch (QTException localQTException) {
-                localQTException.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private class RC extends RateCallBack {
 
-        RC(TimeBase paramTimeBase) throws QTException {
-            super(paramTimeBase, 0.0F, 0);
+        RC(TimeBase tb) throws QTException {
+            super(tb, 0.0F, 0);
         }
 
         @Override
@@ -465,8 +465,8 @@ public class Timer implements Timeable {
                 if (Timer.this.isActive()) {
                     callMeWhen();
                 }
-            } catch (QTException localQTException) {
-                localQTException.printStackTrace();
+            } catch (QTException e) {
+                e.printStackTrace();
             }
         }
     }

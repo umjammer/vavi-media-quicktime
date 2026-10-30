@@ -39,11 +39,11 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsExporter#getInputDataReference
      */
-    public static DataRef fromGraphicsExporterInputDataRef(GraphicsExporter paramGraphicsExporter) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = GraphicsExportGetInputDataReference(QTObject.ID(paramGraphicsExporter), arrayOfInt1, arrayOfInt2);
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
+    public static DataRef fromGraphicsExporterInputDataRef(GraphicsExporter ge) throws QTException {
+        int[] dataRef = new int[1];
+        int[] dataRefType = new int[1];
+        int i = GraphicsExportGetInputDataReference(QTObject.ID(ge), dataRef, dataRefType);
+        return new DataRef(dataRef[0], dataRefType[0], 0);
     }
 
     /**
@@ -53,12 +53,12 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.image.GraphicsExporter#getOutputDataReference
      */
-    public static DataRef fromGraphicsExporterOutputDataRef(GraphicsExporter paramGraphicsExporter) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = GraphicsExportGetOutputDataReference(QTObject.ID(paramGraphicsExporter), arrayOfInt1, arrayOfInt2);
+    public static DataRef fromGraphicsExporterOutputDataRef(GraphicsExporter ge) throws QTException {
+        int[] dataRef = new int[1];
+        int[] dataRefType = new int[1];
+        int i = GraphicsExportGetOutputDataReference(QTObject.ID(ge), dataRef, dataRefType);
         StdQTException.checkError(i);
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
+        return new DataRef(dataRef[0], dataRefType[0], 0);
     }
 
     /**
@@ -68,12 +68,12 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.movies.Movie#getDefaultDataRef()
      */
-    public static DataRef fromMovie(Movie paramMovie) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = GetMovieDefaultDataRef(QTObject.ID(paramMovie), arrayOfInt1, arrayOfInt2);
+    public static DataRef fromMovie(Movie movie) throws QTException {
+        int[] dataRef = new int[1];
+        int[] dataRefType = new int[1];
+        int i = GetMovieDefaultDataRef(QTObject.ID(movie), dataRef, dataRefType);
         StdQTException.checkError(i);
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
+        return new DataRef(dataRef[0], dataRefType[0], 0);
     }
 
     /**
@@ -83,13 +83,13 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.sg.SequenceGrabber#getDataRef()
      */
-    public static DataRef fromSequenceGrabber(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int i = SGGetDataRef(QTObject.ID(paramSequenceGrabber), arrayOfInt1, arrayOfInt2, arrayOfInt3);
+    public static DataRef fromSequenceGrabber(SequenceGrabber sg) throws StdQTException {
+        int[] dataRef = new int[1];
+        int[] dataRefType = new int[1];
+        int[] flags = new int[1];
+        int i = SGGetDataRef(QTObject.ID(sg), dataRef, dataRefType, flags);
         StdQTException.checkError(i);
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0, paramSequenceGrabber);
+        return new DataRef(dataRef[0], dataRefType[0], 0, sg);
     }
 
     /**
@@ -100,12 +100,12 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.movies.media.Media#getDataRef(int)
      */
-    public static DataRef fromMedia(Media paramMedia, int index) throws QTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        StdQTException.checkError(GetMediaDataRef(QTObject.ID(paramMedia), (short) index, arrayOfInt1, arrayOfInt2, arrayOfInt3));
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0]);
+    public static DataRef fromMedia(Media media, int index) throws QTException {
+        int[] dataRef = new int[1];
+        int[] dataRefType = new int[1];
+        int[] dataRefAttributes = new int[1];
+        StdQTException.checkError(GetMediaDataRef(QTObject.ID(media), (short) index, dataRef, dataRefType, dataRefAttributes));
+        return new DataRef(dataRef[0], dataRefType[0], dataRefAttributes[0]);
     }
 
     /**
@@ -116,11 +116,11 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public static DataRef fromSGOutput(SequenceGrabber sg, SGOutput output) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = SGGetOutputDataReference(QTObject.ID(sg), QTObject.ID(output), arrayOfInt1, arrayOfInt2);
+        int[] dataRef = { 0 };
+        int[] dataRefType = { 0 };
+        int i = SGGetOutputDataReference(QTObject.ID(sg), QTObject.ID(output), dataRef, dataRefType);
         StdQTException.checkError(i);
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
+        return new DataRef(dataRef[0], dataRefType[0], 0);
     }
 
     /**
@@ -131,8 +131,8 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
     public DataRef(String url) throws QTException {
         super(4, false);
         if (url.startsWith("file")) {
-            QTFile localQTFile = new QTFile(url.substring(7).replace('/', File.separatorChar));
-            setAliasHandle(localQTFile.newAlias(true));
+            QTFile qtFile = new QTFile(url.substring(7).replace('/', File.separatorChar));
+            setAliasHandle(qtFile.newAlias(true));
         } else {
             setURLDataRef(QTUtils.String2CString(url));
         }
@@ -141,9 +141,9 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
     /**
      * This constructor creates a DataRef that represents a QTFile.
      */
-    public DataRef(QTFile paramQTFile) throws QTException {
+    public DataRef(QTFile qtFile) throws QTException {
         super(4, false);
-        setAliasHandle(paramQTFile.newAlias(true));
+        setAliasHandle(qtFile.newAlias(true));
     }
 
     /**
@@ -202,12 +202,12 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
             case 1835625829:
                 if (QTSession.getQTVersion() == 3)
                     throw new QTException(-50);
-                byte[] arrayOfByte = QTUtils.String2PString(hintString, 255);
-                setSize(13 + arrayOfByte.length);
+                byte[] destArray = QTUtils.String2PString(hintString, 255);
+                setSize(13 + destArray.length);
                 setByteAt(4, (byte) 0);
-                setIntAt(5, EndianOrder.flipNativeToBigEndian32(8 + arrayOfByte.length));
+                setIntAt(5, EndianOrder.flipNativeToBigEndian32(8 + destArray.length));
                 setIntAt(9, EndianOrder.flipNativeToBigEndian32(1835625829));
-                setBytesAt(13, arrayOfByte.length, arrayOfByte, 0);
+                setBytesAt(13, destArray.length, destArray, 0);
                 break;
             case 1702392864:
                 concatenate(new StringHandle("X." + hintString, 2));
@@ -217,39 +217,39 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
         }
     }
 
-    private DataRef(int paramInt1, int paramInt2, int paramInt3, Object paramObject) {
-        super(paramInt1, paramObject, false);
-        this.dataRefType = paramInt2;
-        this.dataRefAttributes = paramInt3;
+    private DataRef(int nativeRep, int dataRefType, int dataRefAttributes, Object ref) {
+        super(nativeRep, ref, false);
+        this.dataRefType = dataRefType;
+        this.dataRefAttributes = dataRefAttributes;
     }
 
-    private DataRef(int paramInt1, int paramInt2, int paramInt3) {
-        super(paramInt1, null, false);
-        this.dataRefType = paramInt2;
-        this.dataRefAttributes = paramInt3;
+    private DataRef(int nativeRep, int dataRefType, int dataRefAttributes) {
+        super(nativeRep, null, false);
+        this.dataRefType = dataRefType;
+        this.dataRefAttributes = dataRefAttributes;
     }
 
     private int dataRefAttributes = 0;
 
     private QTHandleRef hdl = null;
 
-    private void setAliasHandle(AliasHandle paramAliasHandle) throws QTException {
-        copyFromHandle(paramAliasHandle);
+    private void setAliasHandle(AliasHandle aliasHandle) throws QTException {
+        copyFromHandle(aliasHandle);
         this.dataRefType = 1634494835;
     }
 
-    private void setURLDataRef(byte[] paramArrayOfByte) throws QTException {
-        setSize(paramArrayOfByte.length);
-        copyFromArray(0, paramArrayOfByte, 0, paramArrayOfByte.length);
+    private void setURLDataRef(byte[] urlDataRef) throws QTException {
+        setSize(urlDataRef.length);
+        copyFromArray(0, urlDataRef, 0, urlDataRef.length);
         this.dataRefType = 1970433056;
         int i = GetDataHandler(_ID(), getType(), 1);
         if (i == 0)
             throw new QTException(63524);
     }
 
-    private void copyFromHandle(QTHandleRef paramQTHandleRef) throws QTException {
-        setSize(paramQTHandleRef.getSize());
-        copyFromHandle(0, paramQTHandleRef, 0, paramQTHandleRef.getSize());
+    private void copyFromHandle(QTHandleRef qtHandleRef) throws QTException {
+        setSize(qtHandleRef.getSize());
+        copyFromHandle(0, qtHandleRef, 0, qtHandleRef.getSize());
     }
 
     /**
@@ -277,9 +277,9 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
             return getCStringAt(0);
         }
         if (this.dataRefType == 1634494835) {
-            AliasHandle localAliasHandle = AliasHandle.fromDataRef(this);
-            QTFile localQTFile = QTFile.resolveAlias(localAliasHandle);
-            return localQTFile.getPath();
+            AliasHandle alias = AliasHandle.fromDataRef(this);
+            QTFile qtFile = QTFile.resolveAlias(alias);
+            return qtFile.getPath();
         }
         return null;
     }
@@ -298,46 +298,46 @@ public final class DataRef extends QTHandle implements QuickTimeLib {
      */
     public DataRef fromMovieAnchor(Movie theMovie) throws StdQTException {
         int i = 0;
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int[] arrayOfInt3 = { 0 };
-        i = GetMovieAnchorDataRef(QTObject.ID(theMovie), arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int[] dataRef = { 0 };
+        int[] dataRefType = { 0 };
+        int[] outFlags = { 0 };
+        i = GetMovieAnchorDataRef(QTObject.ID(theMovie), dataRef, dataRefType, outFlags);
         StdQTException.checkError(i);
-        if (arrayOfInt1[0] == 0) {
+        if (dataRef[0] == 0) {
             return null;
         }
-        return new DataRef(arrayOfInt1[0], arrayOfInt2[0], 0);
+        return new DataRef(dataRef[0], dataRefType[0], 0);
     }
 
-    private static short GetMediaDataRef(int paramInt, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return MovieToolbox.GetMediaDataRef(paramInt, paramShort, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static short GetMediaDataRef(int media, short index, int[] dataRef, int[] dataRefType, int[] dataRefAttributes) {
+        return MovieToolbox.GetMediaDataRef(media, index, dataRef, dataRefType, dataRefAttributes);
     }
 
-    private static short GetMovieDefaultDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return MovieToolbox.GetMovieDefaultDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static short GetMovieDefaultDataRef(int movie, int[] dataRef, int[] dataRefType) {
+        return MovieToolbox.GetMovieDefaultDataRef(movie, dataRef, dataRefType);
     }
 
-    private static int SGGetDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return SequenceGrabberManager.SGGetDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static int SGGetDataRef(int sg, int[] dataRef, int[] dataRefType, int[] flags) {
+        return SequenceGrabberManager.SGGetDataRef(sg, dataRef, dataRefType, flags);
     }
 
-    private static int GraphicsExportGetInputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetInputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetInputDataReference(int ge, int[] dataRef, int[] dataRefType) {
+        return GraphicsExportManager.GraphicsExportGetInputDataReference(ge, dataRef, dataRefType);
     }
 
-    private static int GraphicsExportGetOutputDataReference(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetOutputDataReference(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetOutputDataReference(int ge, int[] dataRef, int[] dataRefType) {
+        return GraphicsExportManager.GraphicsExportGetOutputDataReference(ge, dataRef, dataRefType);
     }
 
-    private static int GetDataHandler(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.GetDataHandler(paramInt1, paramInt2, paramInt3);
+    private static int GetDataHandler(int dataRef, int dataHandlerSubType, int flags) {
+        return ComponentManager.GetDataHandler(dataRef, dataHandlerSubType, flags);
     }
 
-    private static int SGGetOutputDataReference(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SequenceGrabberManager.SGGetOutputDataReference(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static int SGGetOutputDataReference(int sg, int output, int[] dataRef, int[] dataRefType) {
+        return SequenceGrabberManager.SGGetOutputDataReference(sg, output, dataRef, dataRefType);
     }
 
-    private static short GetMovieAnchorDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return MovieToolbox.GetMovieAnchorDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static short GetMovieAnchorDataRef(int movie, int[] dataRef, int[] dataRefType, int[] outFlags) {
+        return MovieToolbox.GetMovieAnchorDataRef(movie, dataRef, dataRefType, outFlags);
     }
 }

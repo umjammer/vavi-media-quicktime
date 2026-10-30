@@ -19,9 +19,9 @@ public final class XMLDoc extends QTObject implements PrimitivesLib, QuickTimeLi
 
     private XMLParser owner;
 
-    XMLDoc(int paramInt, XMLParser paramXMLParser) throws QTException {
-        super(paramInt, paramXMLParser);
-        this.owner = paramXMLParser;
+    XMLDoc(int nativeRep, XMLParser owner) throws QTException {
+        super(nativeRep, owner);
+        this.owner = owner;
     }
 
     /**
@@ -44,11 +44,11 @@ public final class XMLDoc extends QTObject implements PrimitivesLib, QuickTimeLi
         return new XMLElement(_ID() + 4);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static short XMLParseDisposeXMLDoc(int paramInt1, int paramInt2) {
-        return XMLParserManager.XMLParseDisposeXMLDoc(paramInt1, paramInt2);
+    private static short XMLParseDisposeXMLDoc(int ci, int document) {
+        return XMLParserManager.XMLParseDisposeXMLDoc(ci, document);
     }
 }

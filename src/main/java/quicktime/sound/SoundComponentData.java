@@ -31,9 +31,9 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int i = 0; i < 8; i += 4) {
             setIntInArray(this.bytes, i, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, i)));
         }
@@ -46,19 +46,19 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         for (int i = 0; i < 8; i += 4) {
-            setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
+            setIntInArray(movie, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
         for (int i = 8; i < 12; i += 2) {
-            setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
+            setShortInArray(movie, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
         for (int i = 12; i < 28; i += 4) {
-            setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
+            setIntInArray(movie, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
-        setIntInArray(arrayOfByte, 20, 0);
-        paramObjectOutputStream.write(arrayOfByte);
+        setIntInArray(movie, 20, 0);
+        out.write(movie);
     }
 
     /**
@@ -71,8 +71,8 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * A set of bit flags whose meanings are specific to a particular sound component.
      */
-    public void setFlags(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(0, flags);
     }
 
     /**
@@ -85,8 +85,8 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * The format of the data a sound component is producing.
      */
-    public void setFormat(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setFormat(int format) {
+        setIntAt(4, format);
     }
 
     /**
@@ -99,8 +99,8 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * The number of channels of sound in the output data stream.
      */
-    public void setNumChannels(int paramInt) {
-        setShortAt(8, (short) paramInt);
+    public void setNumChannels(int numChannels) {
+        setShortAt(8, (short) numChannels);
     }
 
     /**
@@ -113,8 +113,8 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * The size, in bits, of each sample in the output data stream.
      */
-    public void setSampleSize(int paramInt) {
-        setShortAt(10, (short) paramInt);
+    public void setSampleSize(int sampleSize) {
+        setShortAt(10, (short) sampleSize);
     }
 
     /**
@@ -127,8 +127,8 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * The sample rate for the audio data.
      */
-    public void setSampleRate(float paramFloat) {
-        setIntAt(12, QTUtils.X2UFix(paramFloat));
+    public void setSampleRate(float sampleRate) {
+        setIntAt(12, QTUtils.X2UFix(sampleRate));
     }
 
     /**
@@ -141,8 +141,8 @@ public final class SoundComponentData extends QTByteObject implements Primitives
     /**
      * The number of samples in the buffer pointed to by the buffer field. For compressed sounds, this field indicates the number of compressed samples in the sound, not the size of the buffer.
      */
-    public void setSampleCount(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setSampleCount(int sampleCount) {
+        setIntAt(16, sampleCount);
     }
 
     /**
@@ -158,11 +158,11 @@ public final class SoundComponentData extends QTByteObject implements Primitives
      * a paramErr exception is thrown as the buffer is not large enough to hold the specified samples.
      * This also means that the sample size and sample count fields must be set before the buffer is set.
      */
-    public void setBuffer(QTPointer paramQTPointer) throws SoundException {
-        if (paramQTPointer.getSize() < getSampleSize() / 8 * getSampleCount())
+    public void setBuffer(QTPointer buffer) throws SoundException {
+        if (buffer.getSize() < getSampleSize() / 8 * getSampleCount())
             throw new SoundException(-50);
-        setIntAt(20, QTObject.ID(paramQTPointer));
-        this.buff = paramQTPointer;
+        setIntAt(20, QTObject.ID(buffer));
+        this.buff = buffer;
     }
 
     /**
@@ -174,19 +174,19 @@ public final class SoundComponentData extends QTByteObject implements Primitives
         return getClass().getName() + "[flags=" + getFlags() + ",format=" + QTUtils.fromOSType(getFormat()) + ",numChannels=" + getNumChannels() + ",sampleSize=" + getSampleSize() + ",sampleRate=" + getSampleRate() + ",sampleCount=" + getSampleCount() + "]";
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

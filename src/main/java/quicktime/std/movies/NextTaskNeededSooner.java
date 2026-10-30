@@ -7,5 +7,5 @@ public interface NextTaskNeededSooner {
      *  @return an error code or zero if no error
      *  @see "quicktime.std.movies#setNextTaskNeededSoonerCallback(quicktime.std.movies.NextTaskNeededSooner)"
      */
-    int execute(int paramInt1, int paramInt2);
+    int execute(int duration, int flags);
 }

@@ -16,5 +16,5 @@ public interface QTVRInterceptor {
      *        function false.
      * @see quicktime.std.clocks.QTCallBack
      */
-    boolean execute(QTVRInstance vr, QTVRInterceptRecord paramQTVRInterceptRecord);
+    boolean execute(QTVRInstance vr, QTVRInterceptRecord qtvrMsg);
 }

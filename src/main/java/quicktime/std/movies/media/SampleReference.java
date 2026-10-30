@@ -45,8 +45,8 @@ public final class SampleReference extends QTPointerRef {
         return getIntAt(0);
     }
 
-    public void setDataOffset(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setDataOffset(int dataOffset) {
+        setIntAt(0, dataOffset);
     }
 
     /**
@@ -56,8 +56,8 @@ public final class SampleReference extends QTPointerRef {
         return getIntAt(4);
     }
 
-    public void setDataSize(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setDataSize(int dataSize) {
+        setIntAt(4, dataSize);
     }
 
     /**
@@ -67,8 +67,8 @@ public final class SampleReference extends QTPointerRef {
         return getIntAt(8);
     }
 
-    public void setDurationPerSample(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setDurationPerSample(int durationPerSample) {
+        setIntAt(8, durationPerSample);
     }
 
     /**
@@ -78,8 +78,8 @@ public final class SampleReference extends QTPointerRef {
         return getIntAt(12);
     }
 
-    public void setNumberOfSamples(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setNumberOfSamples(int numberOfSamples) {
+        setIntAt(12, numberOfSamples);
     }
 
     /**
@@ -89,7 +89,7 @@ public final class SampleReference extends QTPointerRef {
         return getShortAt(16);
     }
 
-    public void setFlags(int paramInt) {
-        setShortAt(16, (short) paramInt);
+    public void setFlags(int flags) {
+        setShortAt(16, (short) flags);
     }
 }

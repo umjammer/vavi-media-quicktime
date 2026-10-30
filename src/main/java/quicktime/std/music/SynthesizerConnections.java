@@ -49,33 +49,33 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
         setSoundBankFile(soundBankFile);
     }
 
-    protected SynthesizerConnections(int paramInt) {
-        super(paramInt);
+    protected SynthesizerConnections(int size) {
+        super(size);
     }
 
-    protected SynthesizerConnections(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    protected SynthesizerConnections(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        int i = paramObjectInputStream.readInt();
+    private void readObject(ObjectInputStream in) throws IOException {
+        int i = in.readInt();
         this.bytes = new byte[i];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int j = 0; j < 32; j += 4) {
             setIntInArray(this.bytes, j, EndianOrder.flipBigEndianToNative32(getIntFromArray(this.bytes, j)));
         }
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = getBytes();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = getBytes();
         int i = getSize();
-        paramObjectOutputStream.writeInt(i);
+        out.writeInt(i);
         for (int j = 0; j < 32; j += 2) {
-            setIntInArray(arrayOfByte, j, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), j)));
+            setIntInArray(movie, j, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), j)));
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -86,8 +86,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
      * @throws quicktime.QTException
      */
     public void setSoundBankFile(QTFile soundBankFile) throws QTException {
-        byte[] arrayOfByte = soundBankFile.getFSSpec(true, 256);
-        this.spec = new QTPointer(arrayOfByte);
+        byte[] byteArray = soundBankFile.getFSSpec(true, 256);
+        this.spec = new QTPointer(byteArray);
         setIntAt(24, QTObject.ID(this.spec));
     }
 
@@ -112,8 +112,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Set the MIDIManager client ID.
      */
-    public final void setClientID(int paramInt) {
-        setIntAt(0, paramInt);
+    public final void setClientID(int clientID) {
+        setIntAt(0, clientID);
     }
 
     /**
@@ -126,8 +126,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Set the ID of the port that receives MIDI information. (QT documents this as outputPortID).
      */
-    public final void setInputID(int paramInt) {
-        setIntAt(8, paramInt);
+    public final void setInputID(int inputID) {
+        setIntAt(8, inputID);
     }
 
     /**
@@ -140,8 +140,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Set the ID of the port that sends MIDI information. (QT documents this as inputPortID).
      */
-    public final void setOutputID(int paramInt) {
-        setIntAt(4, paramInt);
+    public final void setOutputID(int outputID) {
+        setIntAt(4, outputID);
     }
 
     /**
@@ -154,8 +154,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Set the system MIDI channel, or a slot number.
      */
-    public final void setMIDIChannel(int paramInt) {
-        setIntAt(12, paramInt);
+    public final void setMIDIChannel(int midiChannel) {
+        setIntAt(12, midiChannel);
     }
 
     /**
@@ -168,8 +168,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Set information about the type of connection.
      */
-    public final void setFlags(int paramInt) {
-        setIntAt(16, paramInt);
+    public final void setFlags(int flags) {
+        setIntAt(16, flags);
     }
 
     /**
@@ -182,8 +182,8 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
     /**
      * Set the unique id which may be used instead of an index to getinfo and unregister calls
      */
-    public final void setUniqueID(int paramInt) {
-        setIntAt(20, paramInt);
+    public final void setUniqueID(int uniqueID) {
+        setIntAt(20, uniqueID);
     }
 
     /**
@@ -201,19 +201,19 @@ public class SynthesizerConnections extends QTByteObject implements PrimitivesLi
         return new SynthesizerConnections(this.bytes);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

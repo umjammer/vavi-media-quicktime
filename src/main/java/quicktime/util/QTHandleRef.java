@@ -47,30 +47,30 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @return an image data object.
      * @throws quicktime.QTException
      */
-    public static SCInfo fromSCSequence(SCSequence paramSCSequence, QDGraphics src, QDRect srcRect) throws QTException {
+    public static SCInfo fromSCSequence(SCSequence scSequence, QDGraphics src, QDRect srcRect) throws QTException {
         if (src == null) {
             throw new StdQTException(-50);
         }
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        short[] arrayOfShort = { 0 };
-        int[] arrayOfInt3 = { 0 };
-        int[] arrayOfInt4 = { 0 };
+        int[] destArray1 = { 0 };
+        int[] destArray2 = { 0 };
+        short[] destArray = { 0 };
+        int[] ai = { 0 };
+        int[] ai1 = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(arrayOfInt3, arrayOfInt4);
+                GetGWorld(ai, ai1);
             SetGWorld(QTObject.ID(src), 0);
-            i = SCCompressSequenceFrame(QTObject.ID(paramSCSequence.getDialog()), QTObject.ID(src.getPixMap()), srcRect != null ? srcRect.getRect() : null, arrayOfInt1, arrayOfInt2, arrayOfShort);
+            i = SCCompressSequenceFrame(QTObject.ID(scSequence.getDialog()), QTObject.ID(src.getPixMap()), srcRect != null ? srcRect.getRect() : null, destArray1, destArray2, destArray);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                SetGWorld(arrayOfInt3[0], arrayOfInt4[0]);
+                SetGWorld(ai[0], ai1[0]);
             }
         }
         if (i == 1) {
             throw new StdQTException(-128);
         }
         StdQTException.checkError(i);
-        return new SCInfo(new QTHandleRef(arrayOfInt1[0], paramSCSequence, false), arrayOfInt2[0], arrayOfShort[0]);
+        return new SCInfo(new QTHandleRef(destArray1[0], scSequence, false), destArray2[0], destArray[0]);
     }
 
     /**
@@ -78,30 +78,30 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      * @see "QuickTime::SCRequestImageSettings()"
      * @see quicktime.std.qtcomponents.CompressionDialog#getInfoState()
      */
-    public static QTHandleRef fromCompressionDialogState(CompressionDialog paramCompressionDialog) throws QTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SCGetInfo(QTObject.ID(paramCompressionDialog), 1936946273, arrayOfInt));
-        return new QTHandleRef(arrayOfInt[0], null, false);
+    public static QTHandleRef fromCompressionDialogState(CompressionDialog ci) throws QTException {
+        int[] destArray = { 0 };
+        StdQTException.checkError(SCGetInfo(QTObject.ID(ci), 1936946273, destArray));
+        return new QTHandleRef(destArray[0], null, false);
     }
 
-    protected QTHandleRef(int paramInt, boolean paramBoolean) throws QTException {
-        super(allocate(paramInt, paramBoolean));
+    protected QTHandleRef(int size, boolean clear) throws QTException {
+        super(allocate(size, clear));
         UtilException.checkError(MemError());
         this.locked = false;
     }
 
-    protected QTHandleRef(int paramInt, Object paramObject, boolean paramBoolean) {
-        super(paramInt, paramObject);
-        this.locked = paramBoolean;
+    protected QTHandleRef(int nativeRep, Object ref, boolean locked) {
+        super(nativeRep, ref);
+        this.locked = locked;
     }
 
-    protected QTHandleRef(int handleOffset, Object paramObject, boolean paramBoolean, int destOffset) {
-        super(handleOffset, paramObject, destOffset);
-        this.locked = paramBoolean;
+    protected QTHandleRef(int handleOffset, Object ref, boolean locked, int destOffset) {
+        super(handleOffset, ref, destOffset);
+        this.locked = locked;
     }
 
-    private static int allocate(int paramInt, boolean paramBoolean) throws UtilException {
-        int i = paramBoolean ? NewHandleClear(paramInt) : NewHandle(paramInt);
+    private static int allocate(int size, boolean clear) throws UtilException {
+        int i = clear ? NewHandleClear(size) : NewHandle(size);
         if (i == 0)
             throw new UtilException(-108);
         return i;
@@ -124,9 +124,9 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
      */
     public byte[] getBytes() {
         int i = getSize();
-        byte[] arrayOfByte = new byte[i];
-        getBytesAt(0, i, arrayOfByte, 0);
-        return arrayOfByte;
+        byte[] destArray = new byte[i];
+        getBytesAt(0, i, destArray, 0);
+        return destArray;
     }
 
     protected final void getBytesAt(int handleOffset, int destOffset, byte[] destArray, int length) {
@@ -423,10 +423,10 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return getClass().getName() + "[size=" + getSize() + "]";
     }
 
-    protected final int lockAndDeref(int paramInt) {
+    protected final int lockAndDeref(int offset) {
         doLock();
         int i = getIntFromPointer(_ID(), 0);
-        return i + paramInt;
+        return i + offset;
     }
 
     protected final int makeAndCopyHandle() {
@@ -437,8 +437,8 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         int i = 0;
         try {
             i = allocate(destOffset, false);
-        } catch (UtilException localUtilException) {
-            throw new QTRuntimeException(localUtilException);
+        } catch (UtilException e) {
+            throw new QTRuntimeException(e);
         }
         HLock(i);
         BlockMove(lockAndDeref(0) + handleOffset, getIntFromPointer(i, 0) + 0, destOffset);
@@ -448,10 +448,10 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return i;
     }
 
-    protected void copyFromHandle(int handleOffset, QTHandleRef paramQTHandleRef, int destOffset, int length) {
-        BlockMove(paramQTHandleRef.lockAndDeref(0) + destOffset, getIntFromPointer(_ID(), 0) + handleOffset, length);
-        if (!paramQTHandleRef.isLocked()) {
-            paramQTHandleRef.unlock();
+    protected void copyFromHandle(int handleOffset, QTHandleRef qtHandleRef, int destOffset, int length) {
+        BlockMove(qtHandleRef.lockAndDeref(0) + destOffset, getIntFromPointer(_ID(), 0) + handleOffset, length);
+        if (!qtHandleRef.isLocked()) {
+            qtHandleRef.unlock();
         }
     }
 
@@ -479,101 +479,101 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return new QTPointerRef(lockAndDeref(offset), offset, this);
     }
 
-    protected byte getByteAt(int paramInt) {
-        return getByteFromHandle(_ID(), paramInt);
+    protected byte getByteAt(int offset) {
+        return getByteFromHandle(_ID(), offset);
     }
 
-    protected short getShortAt(int paramInt) {
-        return getShortFromHandle(_ID(), paramInt);
+    protected short getShortAt(int offset) {
+        return getShortFromHandle(_ID(), offset);
     }
 
-    protected int getIntAt(int paramInt) {
-        return getIntFromHandle(_ID(), paramInt);
+    protected int getIntAt(int offset) {
+        return getIntFromHandle(_ID(), offset);
     }
 
-    protected long getLongAt(int paramInt) {
-        return getLongFromHandle(_ID(), paramInt);
+    protected long getLongAt(int offset) {
+        return getLongFromHandle(_ID(), offset);
     }
 
-    protected float getFloatAt(int paramInt) {
-        return getFloatFromHandle(_ID(), paramInt);
+    protected float getFloatAt(int offset) {
+        return getFloatFromHandle(_ID(), offset);
     }
 
-    protected double getDoubleAt(int paramInt) {
-        return getDoubleFromHandle(_ID(), paramInt);
+    protected double getDoubleAt(int offset) {
+        return getDoubleFromHandle(_ID(), offset);
     }
 
-    protected void setByteAt(int paramInt, byte paramByte) {
-        setByteInHandle(_ID(), paramInt, paramByte);
+    protected void setByteAt(int offset, byte value) {
+        setByteInHandle(_ID(), offset, value);
     }
 
-    protected void setShortAt(int paramInt, short paramShort) {
-        setShortInHandle(_ID(), paramInt, paramShort);
+    protected void setShortAt(int offset, short value) {
+        setShortInHandle(_ID(), offset, value);
     }
 
     protected void setIntAt(int handleOffset, int destOffset) {
         setIntInHandle(_ID(), handleOffset, destOffset);
     }
 
-    protected void setLongAt(int paramInt, long paramLong) {
-        setLongInHandle(_ID(), paramInt, paramLong);
+    protected void setLongAt(int offset, long value) {
+        setLongInHandle(_ID(), offset, value);
     }
 
-    protected void setFloatAt(int paramInt, float paramFloat) {
-        setFloatInHandle(_ID(), paramInt, paramFloat);
+    protected void setFloatAt(int offset, float value) {
+        setFloatInHandle(_ID(), offset, value);
     }
 
-    protected void setDoubleAt(int paramInt, double paramDouble) {
-        setDoubleInHandle(_ID(), paramInt, paramDouble);
+    protected void setDoubleAt(int offset, double value) {
+        setDoubleInHandle(_ID(), offset, value);
     }
 
-    protected int strlen(int paramInt) {
+    protected int strlen(int offset) {
         int i = 0;
-        while (getByteAt(paramInt++) != 0) i++;
+        while (getByteAt(offset++) != 0) i++;
         return i;
     }
 
-    protected String getCStringAt(int paramInt) throws UtilException {
-        int i = strlen(paramInt);
+    protected String getCStringAt(int offset) throws UtilException {
+        int i = strlen(offset);
         if (i > getSize()) {
             throw new UtilException(-50);
         }
-        byte[] arrayOfByte = new byte[i];
-        getBytesAt(paramInt, i, arrayOfByte, 0);
-        return new String(arrayOfByte);
+        byte[] destArray = new byte[i];
+        getBytesAt(offset, i, destArray, 0);
+        return new String(destArray);
     }
 
-    protected void setCStringAt(int handleOffset, int destOffset, String paramString) throws UtilException {
-        destOffset = Math.min(destOffset, paramString.length());
-        if (destOffset + handleOffset > getSize()) {
+    protected void setCStringAt(int offset, int length, String str) throws UtilException {
+        length = Math.min(length, str.length());
+        if (length + offset > getSize()) {
             throw new UtilException(-50);
         }
-        byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(handleOffset, destOffset, arrayOfByte, 0);
-        setByteAt(handleOffset + destOffset, (byte) 0);
+        byte[] destArray = str.getBytes();
+        setBytesAt(offset, length, destArray, 0);
+        setByteAt(offset + length, (byte) 0);
     }
 
-    protected String getPStringAt(int paramInt) throws UtilException {
-        int i = getByteAt(paramInt++);
+    protected String getPStringAt(int offset) throws UtilException {
+        int i = getByteAt(offset++);
         if (i > getSize()) {
             throw new UtilException(-50);
         }
         if (i > 0) {
-            byte[] arrayOfByte = new byte[i];
-            getBytesAt(paramInt, i, arrayOfByte, 0);
-            return new String(arrayOfByte);
+            byte[] destArray = new byte[i];
+            getBytesAt(offset, i, destArray, 0);
+            return new String(destArray);
         }
         return "";
     }
 
-    protected void setPStringAt(int handleOffset, int destOffset, String paramString) throws UtilException {
-        destOffset = Math.min(Math.min(destOffset, paramString.length()), 255);
-        if (destOffset + handleOffset > getSize()) {
+    protected void setPStringAt(int offset, int length, String str) throws UtilException {
+        length = Math.min(Math.min(length, str.length()), 255);
+        if (length + offset > getSize()) {
             throw new UtilException(-50);
         }
-        setByteAt(handleOffset++, (byte) destOffset);
-        byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(handleOffset, destOffset, arrayOfByte, 0);
+        setByteAt(offset++, (byte) length);
+        byte[] destArray = str.getBytes();
+        setBytesAt(offset, length, destArray, 0);
     }
 
     private static int SCCompressSequenceFrame(int handleOffset, int destOffset, byte[] srcArray, int[] destArray1, int[] destArray2, short[] destArray) {
@@ -584,36 +584,36 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return ImageCompressionManager.SCGetInfo(handleOffset, destOffset, destArray);
     }
 
-    private static int GetHandleSize(int paramInt) {
-        return MemoryManager.GetHandleSize(paramInt);
+    private static int GetHandleSize(int h) {
+        return MemoryManager.GetHandleSize(h);
     }
 
-    private static void HLock(int paramInt) {
-        MemoryManager.HLock(paramInt);
+    private static void HLock(int h) {
+        MemoryManager.HLock(h);
     }
 
-    private static void HLockHi(int paramInt) {
-        MemoryManager.HLockHi(paramInt);
+    private static void HLockHi(int h) {
+        MemoryManager.HLockHi(h);
     }
 
-    private static void MoveHHi(int paramInt) {
-        MemoryManager.MoveHHi(paramInt);
+    private static void MoveHHi(int h) {
+        MemoryManager.MoveHHi(h);
     }
 
-    private static void HUnlock(int paramInt) {
-        MemoryManager.HUnlock(paramInt);
+    private static void HUnlock(int h) {
+        MemoryManager.HUnlock(h);
     }
 
     private static short MemError() {
         return MemoryManager.MemError();
     }
 
-    private static int NewHandleClear(int paramInt) {
-        return MemoryManager.NewHandleClear(paramInt);
+    private static int NewHandleClear(int size) {
+        return MemoryManager.NewHandleClear(size);
     }
 
-    private static int NewHandle(int paramInt) {
-        return MemoryManager.NewHandle(paramInt);
+    private static int NewHandle(int size) {
+        return MemoryManager.NewHandle(size);
     }
 
     private static void BlockMove(int handleOffset, int destOffset, int length) {
@@ -628,60 +628,60 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         QuickDrawManager.GetGWorld(destArray1, destArray2);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, byte[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, byte[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, short[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, short[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, char[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, char[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, int[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, int[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, float[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, float[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, long[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, long[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyPointerToArray(int handleOffset, int destOffset, double[] destArray, int length, int paramInt4) {
-        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, paramInt4);
+    private static void copyPointerToArray(int handleOffset, int destOffset, double[] destArray, int length, int size) {
+        MemoryManager.copyPointerToArray(handleOffset, destOffset, destArray, length, size);
     }
 
-    private static void copyArrayToPointer(byte[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(byte[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
-    private static void copyArrayToPointer(short[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(short[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
-    private static void copyArrayToPointer(char[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(char[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
-    private static void copyArrayToPointer(int[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(int[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
-    private static void copyArrayToPointer(float[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(float[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
-    private static void copyArrayToPointer(long[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(long[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
-    private static void copyArrayToPointer(double[] destArray, int handleOffset, int destOffset, int length, int paramInt4) {
-        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, paramInt4);
+    private static void copyArrayToPointer(double[] destArray, int handleOffset, int destOffset, int length, int size) {
+        MemoryManager.copyArrayToPointer(destArray, handleOffset, destOffset, length, size);
     }
 
     private static int getIntFromPointer(int handleOffset, int destOffset) {
@@ -712,27 +712,27 @@ public class QTHandleRef extends QTObject implements QuickTimeLib, PrimitivesLib
         return MemoryManager.getDoubleFromHandle(handleOffset, destOffset);
     }
 
-    private static void setByteInHandle(int handleOffset, int destOffset, byte paramByte) {
-        MemoryManager.setByteInHandle(handleOffset, destOffset, paramByte);
+    private static void setByteInHandle(int handleOffset, int destOffset, byte value) {
+        MemoryManager.setByteInHandle(handleOffset, destOffset, value);
     }
 
-    private static void setShortInHandle(int handleOffset, int destOffset, short paramShort) {
-        MemoryManager.setShortInHandle(handleOffset, destOffset, paramShort);
+    private static void setShortInHandle(int handleOffset, int destOffset, short value) {
+        MemoryManager.setShortInHandle(handleOffset, destOffset, value);
     }
 
     private static void setIntInHandle(int handleOffset, int destOffset, int length) {
         MemoryManager.setIntInHandle(handleOffset, destOffset, length);
     }
 
-    private static void setLongInHandle(int handleOffset, int destOffset, long paramLong) {
-        MemoryManager.setLongInHandle(handleOffset, destOffset, paramLong);
+    private static void setLongInHandle(int handleOffset, int destOffset, long value) {
+        MemoryManager.setLongInHandle(handleOffset, destOffset, value);
     }
 
-    private static void setFloatInHandle(int handleOffset, int destOffset, float paramFloat) {
-        MemoryManager.setFloatInHandle(handleOffset, destOffset, paramFloat);
+    private static void setFloatInHandle(int handleOffset, int destOffset, float value) {
+        MemoryManager.setFloatInHandle(handleOffset, destOffset, value);
     }
 
-    private static void setDoubleInHandle(int handleOffset, int destOffset, double paramDouble) {
-        MemoryManager.setDoubleInHandle(handleOffset, destOffset, paramDouble);
+    private static void setDoubleInHandle(int handleOffset, int destOffset, double value) {
+        MemoryManager.setDoubleInHandle(handleOffset, destOffset, value);
     }
 }

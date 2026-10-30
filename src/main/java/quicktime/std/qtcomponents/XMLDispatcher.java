@@ -29,148 +29,148 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
 
     private XMLPreprocessorProc preprocessorExecute;
 
-    XMLDispatcher(XMLStartDocProc paramXMLStartDocProc) {
+    XMLDispatcher(XMLStartDocProc startDocExecute) {
         this.methodName = "startDocProc";
         this.methodSig = "(I)I";
         this.procInfo = 240;
-        this.startDocExecute = paramXMLStartDocProc;
+        this.startDocExecute = startDocExecute;
     }
 
-    XMLDispatcher(XMLEndDocProc paramXMLEndDocProc) {
+    XMLDispatcher(XMLEndDocProc endDocExecute) {
         this.methodName = "endDocProc";
         this.methodSig = "(I)I";
         this.procInfo = 240;
-        this.endDocExecute = paramXMLEndDocProc;
+        this.endDocExecute = endDocExecute;
     }
 
-    XMLDispatcher(XMLStartElementProc paramXMLStartElementProc) {
+    XMLDispatcher(XMLStartElementProc startElementExecute) {
         this.methodName = "startElementProc";
         this.methodSig = "(III)I";
         this.procInfo = 4080;
-        this.startElementExecute = paramXMLStartElementProc;
+        this.startElementExecute = startElementExecute;
     }
 
-    XMLDispatcher(XMLEndElementProc paramXMLEndElementProc) {
+    XMLDispatcher(XMLEndElementProc endElementExecute) {
         this.methodName = "endElementProc";
         this.methodSig = "(II)I";
         this.procInfo = 1008;
-        this.endElementExecute = paramXMLEndElementProc;
+        this.endElementExecute = endElementExecute;
     }
 
-    XMLDispatcher(XMLCommentProc paramXMLCommentProc) {
+    XMLDispatcher(XMLCommentProc commentExecute) {
         this.methodName = "commentProc";
         this.methodSig = "(II)I";
         this.procInfo = 1008;
-        this.commentExecute = paramXMLCommentProc;
+        this.commentExecute = commentExecute;
     }
 
-    XMLDispatcher(XMLCharDataProc paramXMLCharDataProc) {
+    XMLDispatcher(XMLCharDataProc charDataExecute) {
         this.methodName = "charDataProc";
         this.methodSig = "(II)I";
         this.procInfo = 1008;
-        this.charDataExecute = paramXMLCharDataProc;
+        this.charDataExecute = charDataExecute;
     }
 
-    XMLDispatcher(XMLPreprocessorProc paramXMLPreprocessorProc) {
+    XMLDispatcher(XMLPreprocessorProc preprocessorExecute) {
         this.methodName = "preprocessorProc";
         this.methodSig = "(III)I";
         this.procInfo = 4080;
-        this.preprocessorExecute = paramXMLPreprocessorProc;
+        this.preprocessorExecute = preprocessorExecute;
     }
 
-    private int startDocProc(int paramInt) {
+    private int startDocProc(int refCon) {
         try {
             this.startDocExecute.execute();
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private int endDocProc(int paramInt) {
+    private int endDocProc(int refCon) {
         try {
             this.endDocExecute.execute();
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private int startElementProc(int paramInt1, int paramInt2, int paramInt3) {
+    private int startElementProc(int name, int attributes, int refCon) {
         try {
-            this.startElementExecute.execute(getStringFromPointer(paramInt1), getStringsFromArrayOfPointers(paramInt2));
+            this.startElementExecute.execute(getStringFromPointer(name), getStringsFromArrayOfPointers(attributes));
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private int endElementProc(int paramInt1, int paramInt2) {
+    private int endElementProc(int name, int refCon) {
         try {
-            this.endElementExecute.execute(getStringFromPointer(paramInt1));
+            this.endElementExecute.execute(getStringFromPointer(name));
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private int commentProc(int paramInt1, int paramInt2) {
+    private int commentProc(int comment, int refCon) {
         try {
-            this.commentExecute.execute(getStringFromPointer(paramInt1));
+            this.commentExecute.execute(getStringFromPointer(comment));
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private int charDataProc(int paramInt1, int paramInt2) {
+    private int charDataProc(int charData, int refCon) {
         try {
-            this.charDataExecute.execute(getStringFromPointer(paramInt1));
+            this.charDataExecute.execute(getStringFromPointer(charData));
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private int preprocessorProc(int paramInt1, int paramInt2, int paramInt3) {
+    private int preprocessorProc(int name, int attributes, int refCon) {
         try {
-            this.preprocessorExecute.execute(getStringFromPointer(paramInt1), getStringsFromArrayOfPointers(paramInt2));
+            this.preprocessorExecute.execute(getStringFromPointer(name), getStringsFromArrayOfPointers(attributes));
             return 0;
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
     }
 
-    private String getStringFromPointer(int paramInt) {
-        if (paramInt != 0) {
+    private String getStringFromPointer(int ptr) {
+        if (ptr != 0) {
             int i = 0;
             int j = 0;
-            while (getByteFromPointer(paramInt, j++) != 0) {
+            while (getByteFromPointer(ptr, j++) != 0) {
                 i++;
             }
             if (i > 0) {
-                byte[] arrayOfByte = new byte[i];
-                copyPointerToArray(paramInt, 0, arrayOfByte, 0, i);
-                return quicktime.util.QTUtils.CString2String(arrayOfByte, 0);
+                byte[] cString = new byte[i];
+                copyPointerToArray(ptr, 0, cString, 0, i);
+                return quicktime.util.QTUtils.CString2String(cString, 0);
             }
         }
         return "";
     }
 
-    private String[] getStringsFromArrayOfPointers(int paramInt) {
+    private String[] getStringsFromArrayOfPointers(int ptr) {
         String[] arrayOfString = null;
         int i = 0;
-        if (paramInt != 0) {
-            int j = getIntFromPointer(paramInt, 0);
+        if (ptr != 0) {
+            int j = getIntFromPointer(ptr, 0);
             while (j != 0) {
                 i++;
-                j = getIntFromPointer(paramInt, 4 * i);
+                j = getIntFromPointer(ptr, 4 * i);
             }
             if (i != 0) {
                 int k = i % 2;
                 arrayOfString = new String[i + k];
                 for (int m = 0; m < i; m++) {
-                    j = getIntFromPointer(paramInt, 4 * m);
+                    j = getIntFromPointer(ptr, 4 * m);
                     arrayOfString[m] = getStringFromPointer(j);
                 }
                 if (k == 1) {
@@ -191,13 +191,13 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
         this.mMethodClosure = null;
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 
     static class XMLMethodClosure extends quicktime.jdirect.MethodClosure {
-        XMLMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        XMLMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -205,11 +205,11 @@ final class XMLDispatcher implements quicktime.jdirect.PrimitivesLib {
         }
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 }

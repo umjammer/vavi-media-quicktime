@@ -30,8 +30,8 @@ public final class FlashMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    FlashMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    FlashMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -40,8 +40,8 @@ public final class FlashMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new FlashMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new FlashMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class FlashMedia extends Media {
      * @throws quicktime.QTException
      */
     public FlashDescription getFlashDescription(int index) throws QTException {
-        FlashDescription localFlashDescription = new FlashDescription();
-        getNativeSampleDescription(index, localFlashDescription);
-        return localFlashDescription;
+        FlashDescription flashDescription = new FlashDescription();
+        getNativeSampleDescription(index, flashDescription);
+        return flashDescription;
     }
 }

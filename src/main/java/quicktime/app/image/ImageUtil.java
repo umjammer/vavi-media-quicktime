@@ -50,8 +50,8 @@ public final class ImageUtil {
      * @deprecated
      * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor keyColor) throws QTException {
-        return makeTransparent(paramImageSpec, keyColor, new QDGraphics(16, paramImageSpec.getDescription().getBounds()), null, null);
+    public static ImageDataSequence makeTransparent(ImageSpec spec, QDColor keyColor) throws QTException {
+        return makeTransparent(spec, keyColor, new QDGraphics(16, spec.getDescription().getBounds()), null, null);
     }
 
     /**
@@ -71,8 +71,8 @@ public final class ImageUtil {
      * @deprecated
      * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor keyColor, QDGraphics gw) throws QTException {
-        return makeTransparent(paramImageSpec, keyColor, gw, null, null);
+    public static ImageDataSequence makeTransparent(ImageSpec spec, QDColor keyColor, QDGraphics gw) throws QTException {
+        return makeTransparent(spec, keyColor, gw, null, null);
     }
 
     /**
@@ -93,8 +93,8 @@ public final class ImageUtil {
      * @deprecated
      * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor keyColor, QDGraphics gw, Region r) throws QTException {
-        return makeTransparent(paramImageSpec, keyColor, gw, r, null);
+    public static ImageDataSequence makeTransparent(ImageSpec spec, QDColor keyColor, QDGraphics gw, Region r) throws QTException {
+        return makeTransparent(spec, keyColor, gw, r, null);
     }
 
     /**
@@ -117,104 +117,104 @@ public final class ImageUtil {
      * @deprecated
      * @since QTJava 6.1
      */
-    public static ImageDataSequence makeTransparent(ImageDataSequence paramImageDataSequence, QDColor keyColor, QDGraphics gw, Region[] r) throws QTException {
-        return makeTransparent(paramImageDataSequence, keyColor, gw, null, r);
+    public static ImageDataSequence makeTransparent(ImageDataSequence imageDataSequence, QDColor keyColor, QDGraphics gw, Region[] r) throws QTException {
+        return makeTransparent(imageDataSequence, keyColor, gw, null, r);
     }
 
-    private static ImageDataSequence makeTransparent(ImageSpec paramImageSpec, QDColor paramQDColor, QDGraphics paramQDGraphics, Region paramRegion, Region[] paramArrayOfRegion) throws QTException {
-        quicktime.qd.QDRect localQDRect = paramQDGraphics.getPortRect();
-        PixMap localPixMap1 = paramQDGraphics.getPixMap();
-        int i = localPixMap1.getPixelSize();
-        int j = (paramRegion != null) || (paramArrayOfRegion != null) ? 1 : 0;
-        DSequenceFromMemory localDSequenceFromMemory = new DSequenceFromMemory(paramImageSpec);
-        localDSequenceFromMemory.setGWorld(paramQDGraphics);
-        ImageDataSequence localImageDataSequence1 = new ImageDataSequence();
-        CSequenceToMemory localCSequenceToMemory = new CSequenceToMemory(2);
-        QDGraphics localQDGraphics1 = null;
-        QDGraphics localQDGraphics2 = null;
-        PixMap localPixMap2 = null;
-        ImageDescription localImageDescription = null;
-        ImageSequenceDataSource localImageSequenceDataSource = null;
+    private static ImageDataSequence makeTransparent(ImageSpec spec, QDColor color, QDGraphics src, Region region, Region[] regions) throws QTException {
+        quicktime.qd.QDRect portRect = src.getPortRect();
+        PixMap pixMap = src.getPixMap();
+        int i = pixMap.getPixelSize();
+        int j = (region != null) || (regions != null) ? 1 : 0;
+        DSequenceFromMemory dSequenceFromMemory = new DSequenceFromMemory(spec);
+        dSequenceFromMemory.setGWorld(src);
+        ImageDataSequence transparent = new ImageDataSequence();
+        CSequenceToMemory cSequenceToMemory = new CSequenceToMemory(2);
+        QDGraphics port = null;
+        QDGraphics qdGraphics2 = null;
+        PixMap pm = null;
+        ImageDescription imageDescription = null;
+        ImageSequenceDataSource imageSequenceDataSource = null;
         if (j != 0) {
-            localQDGraphics1 = new QDGraphics(localQDRect);
-            localQDGraphics2 = new QDGraphics(8, localQDRect);
-            localPixMap2 = localQDGraphics2.getPixMap();
-            localImageDescription = new ImageDescription(localPixMap2);
-            localImageDescription.lock();
+            port = new QDGraphics(portRect);
+            qdGraphics2 = new QDGraphics(8, portRect);
+            pm = qdGraphics2.getPixMap();
+            imageDescription = new ImageDescription(pm);
+            imageDescription.lock();
         }
-        if ((paramImageSpec instanceof ImageDataSequence localImageDataSequence2)) {
-            for (int k = 1; k <= localImageDataSequence2.size(); k++) {
+        if ((spec instanceof ImageDataSequence imageDataSequence2)) {
+            for (int k = 1; k <= imageDataSequence2.size(); k++) {
                 if (j != 0) {
-                    localCSequenceToMemory.begin(localQDGraphics1, localQDRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, paramImageSpec.getDescription().getCTable(), 0);
-                    localImageSequenceDataSource = new ImageSequenceDataSource(localCSequenceToMemory.getSequence(), 1768776048, 1, localImageDescription);
-                    localImageSequenceDataSource.setSourceData(RawEncodedImage.fromPixMap(localPixMap2));
-                    localQDGraphics1.setBackColor(paramQDColor);
-                    localQDGraphics1.eraseRect(null);
-                    localQDGraphics2.setBackColor(QDColor.white);
-                    localQDGraphics2.eraseRect(null);
-                    localQDGraphics2.setForeColor(QDColor.black);
-                    localQDGraphics2.paintRgn(paramRegion != null ? paramRegion : paramArrayOfRegion[(k - 1)]);
-                    localCSequenceToMemory.compressFrame(localQDGraphics1, localQDRect, 0);
-                    localCSequenceToMemory.getSequence().setPrev(localQDGraphics1, null);
-                    paramQDGraphics.setBackColor(paramQDColor);
-                    paramQDGraphics.eraseRect(null);
+                    cSequenceToMemory.begin(port, portRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, spec.getDescription().getCTable(), 0);
+                    imageSequenceDataSource = new ImageSequenceDataSource(cSequenceToMemory.getSequence(), 1768776048, 1, imageDescription);
+                    imageSequenceDataSource.setSourceData(RawEncodedImage.fromPixMap(pm));
+                    port.setBackColor(color);
+                    port.eraseRect(null);
+                    qdGraphics2.setBackColor(QDColor.white);
+                    qdGraphics2.eraseRect(null);
+                    qdGraphics2.setForeColor(QDColor.black);
+                    qdGraphics2.paintRgn(region != null ? region : regions[(k - 1)]);
+                    cSequenceToMemory.compressFrame(port, portRect, 0);
+                    cSequenceToMemory.getSequence().setPrev(port, null);
+                    src.setBackColor(color);
+                    src.eraseRect(null);
                 } else {
-                    localCSequenceToMemory.begin(paramQDGraphics, localQDRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, paramImageSpec.getDescription().getCTable(), 0);
-                    paramQDGraphics.setBackColor(paramQDColor);
-                    paramQDGraphics.eraseRect(null);
-                    localCSequenceToMemory.compressFrame(paramQDGraphics, localQDRect, 4);
+                    cSequenceToMemory.begin(src, portRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, spec.getDescription().getCTable(), 0);
+                    src.setBackColor(color);
+                    src.eraseRect(null);
+                    cSequenceToMemory.compressFrame(src, portRect, 4);
                 }
-                localDSequenceFromMemory.redraw(null);
-                localCSequenceToMemory.compressFrame(paramQDGraphics, localQDRect, j != 0 ? 0 : 4);
+                dSequenceFromMemory.redraw(null);
+                cSequenceToMemory.compressFrame(src, portRect, j != 0 ? 0 : 4);
                 if (k == 1) {
-                    localImageDataSequence1.setDescription(localCSequenceToMemory.getDescription());
-                    localImageDataSequence1.getDescription().setFrameCount(localImageDataSequence2.size());
+                    transparent.setDescription(cSequenceToMemory.getDescription());
+                    transparent.getDescription().setFrameCount(imageDataSequence2.size());
                 }
-                localImageDataSequence1.append(localCSequenceToMemory.getFrames().elementAt(1));
-                localDSequenceFromMemory.setFrameNext();
+                transparent.append(cSequenceToMemory.getFrames().elementAt(1));
+                dSequenceFromMemory.setFrameNext();
                 if (k % 3 == 0)
                     QTUtils.reclaimMemory();
             }
         }
         if (j != 0) {
-            localCSequenceToMemory.begin(localQDGraphics1, localQDRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, paramImageSpec.getDescription().getCTable(), 0);
-            localImageSequenceDataSource = new ImageSequenceDataSource(localCSequenceToMemory.getSequence(), 1768776048, 1, localImageDescription);
-            localImageSequenceDataSource.setSourceData(RawEncodedImage.fromPixMap(localPixMap2));
-            localQDGraphics1.setBackColor(paramQDColor);
-            localQDGraphics1.eraseRect(null);
-            localQDGraphics2.setBackColor(QDColor.white);
-            localQDGraphics2.eraseRect(null);
-            localQDGraphics2.setForeColor(QDColor.black);
-            localQDGraphics2.paintRgn(paramRegion != null ? paramRegion : paramArrayOfRegion[0]);
-            localCSequenceToMemory.compressFrame(localQDGraphics1, localQDRect, 0);
-            localCSequenceToMemory.getSequence().setPrev(localQDGraphics1, null);
-            paramQDGraphics.setBackColor(paramQDColor);
-            paramQDGraphics.eraseRect(null);
+            cSequenceToMemory.begin(port, portRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, spec.getDescription().getCTable(), 0);
+            imageSequenceDataSource = new ImageSequenceDataSource(cSequenceToMemory.getSequence(), 1768776048, 1, imageDescription);
+            imageSequenceDataSource.setSourceData(RawEncodedImage.fromPixMap(pm));
+            port.setBackColor(color);
+            port.eraseRect(null);
+            qdGraphics2.setBackColor(QDColor.white);
+            qdGraphics2.eraseRect(null);
+            qdGraphics2.setForeColor(QDColor.black);
+            qdGraphics2.paintRgn(region != null ? region : regions[0]);
+            cSequenceToMemory.compressFrame(port, portRect, 0);
+            cSequenceToMemory.getSequence().setPrev(port, null);
+            src.setBackColor(color);
+            src.eraseRect(null);
         } else {
-            localCSequenceToMemory.begin(paramQDGraphics, localQDRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, paramImageSpec.getDescription().getCTable(), 0);
-            paramQDGraphics.setBackColor(paramQDColor);
-            paramQDGraphics.eraseRect(null);
-            localCSequenceToMemory.compressFrame(paramQDGraphics, localQDRect, 4);
+            cSequenceToMemory.begin(src, portRect, i, 1919706400, CodecComponent.anyCodec, 1024, 1024, 2, spec.getDescription().getCTable(), 0);
+            src.setBackColor(color);
+            src.eraseRect(null);
+            cSequenceToMemory.compressFrame(src, portRect, 4);
         }
-        localDSequenceFromMemory.redraw(null);
-        localCSequenceToMemory.compressFrame(paramQDGraphics, localQDRect, j != 0 ? 0 : 4);
-        localImageDataSequence1.setDescription(localCSequenceToMemory.getDescription());
-        localImageDataSequence1.getDescription().setFrameCount(1);
-        localImageDataSequence1.append(localCSequenceToMemory.getFrames().elementAt(1));
-        localPixMap1 = null;
-        paramQDGraphics = null;
-        return localImageDataSequence1;
+        dSequenceFromMemory.redraw(null);
+        cSequenceToMemory.compressFrame(src, portRect, j != 0 ? 0 : 4);
+        transparent.setDescription(cSequenceToMemory.getDescription());
+        transparent.getDescription().setFrameCount(1);
+        transparent.append(cSequenceToMemory.getFrames().elementAt(1));
+        pixMap = null;
+        src = null;
+        return transparent;
     }
 
-    private static File checkDir(String paramString) throws IOException {
-        int i = paramString.charAt(paramString.length() - 1);
+    private static File checkDir(String dir) throws IOException {
+        int i = dir.charAt(dir.length() - 1);
         if (i != 47) {
-            paramString = paramString + "/";
+            dir = dir + "/";
         }
-        File localFile = new File(paramString);
-        if (!localFile.isDirectory())
-            throw new IOException(paramString);
-        return localFile;
+        File file = new File(dir);
+        if (!file.isDirectory())
+            throw new IOException(dir);
+        return file;
     }
 
     /**
@@ -230,22 +230,22 @@ public final class ImageUtil {
      * @throws quicktime.QTException
      */
     public static ImageDataSequence createSequence(quicktime.std.movies.Track imageTrack) throws QTException {
-        Media localMedia = Media.getTrackMedia(imageTrack);
-        int i = localMedia.getSampleCount();
+        Media trackMedia = Media.getTrackMedia(imageTrack);
+        int i = trackMedia.getSampleCount();
         int j = 0;
-        ImageDataSequence localImageDataSequence = new ImageDataSequence((ImageDescription) localMedia.getSampleDescription(1));
+        ImageDataSequence sequence = new ImageDataSequence((ImageDescription) trackMedia.getSampleDescription(1));
         for (int k = 1; k <= i; k++) {
-            MediaSample localMediaSample = localMedia.getSample(0, j, 1);
-            if (localMediaSample.descriptionIndex != 1)
+            MediaSample sample = trackMedia.getSample(0, j, 1);
+            if (sample.descriptionIndex != 1)
                 break;
-            quicktime.util.QTPointerRef localQTPointerRef = ((quicktime.util.QTHandleRef) localMediaSample.data.clone()).toQTPointer();
-            localImageDataSequence.addMember(RawEncodedImage.fromQTPointer(localQTPointerRef));
-            j += localMediaSample.duration;
+            quicktime.util.QTPointerRef qtPointerRef = ((quicktime.util.QTHandleRef) sample.data.clone()).toQTPointer();
+            sequence.addMember(RawEncodedImage.fromQTPointer(qtPointerRef));
+            j += sample.duration;
             if (k % 5 == 0)
                 QTUtils.reclaimMemory();
         }
         QTUtils.reclaimMemory();
-        return localImageDataSequence;
+        return sequence;
     }
 
     /**
@@ -291,35 +291,35 @@ public final class ImageUtil {
         if (!matchFile.exists()) {
             throw new java.io.FileNotFoundException(matchFile.getAbsolutePath());
         }
-        String str1 = matchFile.getParent();
-        if (str1.charAt(str1.length() - 1) != File.separatorChar) {
-            str1 = str1 + File.separatorChar;
+        String parent = matchFile.getParent();
+        if (parent.charAt(parent.length() - 1) != File.separatorChar) {
+            parent = parent + File.separatorChar;
         }
-        String str2 = matchFile.getName();
-        ff.extractPrefixAndSuffix(str2);
-        File localFile = new File(str1);
-        if (!localFile.isDirectory()) {
-            throw new IOException(str1);
+        String fName = matchFile.getName();
+        ff.extractPrefixAndSuffix(fName);
+        File file = new File(parent);
+        if (!file.isDirectory()) {
+            throw new IOException(parent);
         }
-        String[] arrayOfString = localFile.list(ff);
+        String[] fileNames = file.list(ff);
         if (ff != null) {
-            arrayOfString = ff.postProcess(arrayOfString);
+            fileNames = ff.postProcess(fileNames);
         }
-        ImageDataSequence localImageDataSequence = new ImageDataSequence();
+        ImageDataSequence sequence = new ImageDataSequence();
         int i = 0;
-        for (int j = 0; j < arrayOfString.length; j++) {
-            QTFile localQTFile = null;
-            localQTFile = new QTFile(str1 + arrayOfString[j]);
-            GraphicsImporterDrawer localGraphicsImporterDrawer = new GraphicsImporterDrawer(localQTFile);
-            if ((j == 0) || (localImageDataSequence.isEmpty())) {
-                localImageDataSequence.setDescription(localGraphicsImporterDrawer.getDescription());
+        for (int j = 0; j < fileNames.length; j++) {
+            QTFile qtFile = null;
+            qtFile = new QTFile(parent + fileNames[j]);
+            GraphicsImporterDrawer graphicsImporterDrawer = new GraphicsImporterDrawer(qtFile);
+            if ((j == 0) || (sequence.isEmpty())) {
+                sequence.setDescription(graphicsImporterDrawer.getDescription());
             }
-            localImageDataSequence.append(localGraphicsImporterDrawer.getImage());
+            sequence.append(graphicsImporterDrawer.getImage());
             i++;
         }
-        if (localImageDataSequence == null)
+        if (sequence == null)
             throw new java.io.FileNotFoundException(matchFile.getAbsolutePath());
-        localImageDataSequence.getDescription().setFrameCount(i);
-        return localImageDataSequence;
+        sequence.getDescription().setFrameCount(i);
+        return sequence;
     }
 }

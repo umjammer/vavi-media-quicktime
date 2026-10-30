@@ -26,11 +26,11 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
 
     private final Curve c;
 
-    private static int allocate(Curve paramCurve) throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = CurveCreateVectorStream(QTObject.ID(paramCurve), arrayOfInt);
+    private static int allocate(Curve effect) throws QTException {
+        int[] stream = { 0 };
+        int i = CurveCreateVectorStream(QTObject.ID(effect), stream);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return stream[0];
     }
 
     /**
@@ -80,11 +80,11 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
      * Used  to add an atom of type kCurveGradientRecordAtom to a vector data stream.
      * @see "QuickTime::CurveAddAtomToVectorStream"
      */
-    public void addAtom(QDColor paramQDColor) throws QTException {
-        EndianDescriptor localEndianDescriptor = QDColor.getEndianDescriptorARGBColor();
-        EndianOrder.flipNativeToBigEndian(paramQDColor, 0, localEndianDescriptor);
-        byte[] arrayOfByte = paramQDColor.getARGBColor();
-        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1634887522, arrayOfByte.length, arrayOfByte, _ID());
+    public void addAtom(QDColor color) throws QTException {
+        EndianDescriptor ed = QDColor.getEndianDescriptorARGBColor();
+        EndianOrder.flipNativeToBigEndian(color, 0, ed);
+        byte[] data = color.getARGBColor();
+        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1634887522, data.length, data, _ID());
         StdQTException.checkError(i);
     }
 
@@ -96,8 +96,8 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
      * @throws quicktime.std.StdQTException
      */
     public void addAtom(int atomType, int atomData) throws StdQTException {
-        int[] arrayOfInt = { EndianOrder.flipNativeToBigEndian32(atomData) };
-        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), atomType, 4, arrayOfInt, _ID());
+        int[] data = { EndianOrder.flipNativeToBigEndian32(atomData) };
+        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), atomType, 4, data, _ID());
         StdQTException.checkError(i);
     }
 
@@ -110,34 +110,34 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
      * @throws quicktime.std.StdQTException
      */
     public void addAtom(boolean onCurve, QDPoint[] points) throws StdQTException {
-        int[] arrayOfInt = new int[points.length * 2 + 3];
-        arrayOfInt[0] = 1;
-        arrayOfInt[1] = points.length;
-        arrayOfInt[2] = (onCurve ? 1 : 0);
+        int[] data = new int[points.length * 2 + 3];
+        data[0] = 1;
+        data[1] = points.length;
+        data[2] = (onCurve ? 1 : 0);
         for (int i = 0; i < points.length; i++) {
-            byte[] arrayOfByte = points[i].getGXPoint();
-            int j = getIntFromArray(arrayOfByte, 0);
-            int k = getIntFromArray(arrayOfByte, 4);
-            arrayOfInt[(3 + 2 * i)] = j;
-            arrayOfInt[(4 + 2 * i)] = k;
+            byte[] gxPoint = points[i].getGXPoint();
+            int j = getIntFromArray(gxPoint, 0);
+            int k = getIntFromArray(gxPoint, 4);
+            data[(3 + 2 * i)] = j;
+            data[(4 + 2 * i)] = k;
         }
-        for (int i = 0; i < arrayOfInt.length; i++) {
-            arrayOfInt[i] = EndianOrder.flipNativeToBigEndian32(arrayOfInt[i]);
+        for (int i = 0; i < data.length; i++) {
+            data[i] = EndianOrder.flipNativeToBigEndian32(data[i]);
         }
-        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1885434984, arrayOfInt.length * 4, arrayOfInt, _ID());
+        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1885434984, data.length * 4, data, _ID());
         StdQTException.checkError(i);
     }
 
-    public void addAtom(QDColor[] paramArrayOfQDColor) throws QTException {
-        byte[] arrayOfByte1 = new byte[paramArrayOfQDColor.length * 12];
-        for (int i = 0; i < paramArrayOfQDColor.length; i++) {
-            QDColor localQDColor = paramArrayOfQDColor[i];
-            EndianDescriptor localEndianDescriptor = QDColor.getEndianDescriptorGradientColor();
-            byte[] arrayOfByte2 = localQDColor.getGradientColor();
-            EndianOrder.flipNativeToBigEndian(arrayOfByte2, 0, localEndianDescriptor);
-            System.arraycopy(arrayOfByte2, 0, arrayOfByte1, 12 * i, arrayOfByte2.length);
+    public void addAtom(QDColor[] qdColors) throws QTException {
+        byte[] data = new byte[qdColors.length * 12];
+        for (int i = 0; i < qdColors.length; i++) {
+            QDColor color = qdColors[i];
+            EndianDescriptor ed = QDColor.getEndianDescriptorGradientColor();
+            byte[] gradientColor = color.getGradientColor();
+            EndianOrder.flipNativeToBigEndian(gradientColor, 0, ed);
+            System.arraycopy(gradientColor, 0, data, 12 * i, gradientColor.length);
         }
-        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1735549284, arrayOfByte1.length, arrayOfByte1, _ID());
+        int i = CurveAddAtomToVectorStream(QTObject.ID(this.c), 1735549284, data.length, data, _ID());
         StdQTException.checkError(i);
     }
 
@@ -165,35 +165,35 @@ public class VectorStream extends AtomContainer implements quicktime.jdirect.Qui
         return AtomData.fromVectorStream(this.c, this, atomType);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static int CurveCreateVectorStream(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.CurveCreateVectorStream(paramInt, paramArrayOfInt);
+    private static int CurveCreateVectorStream(int effect, int[] stream) {
+        return ImageCompressionManager.CurveCreateVectorStream(effect, stream);
     }
 
-    private static int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return ImageCompressionManager.CurveAddAtomToVectorStream(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int CurveAddAtomToVectorStream(int effect, int atomType, int dataSize, int data, int stream) {
+        return ImageCompressionManager.CurveAddAtomToVectorStream(effect, atomType, dataSize, data, stream);
     }
 
-    private static int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt, int paramInt4) {
-        return ImageCompressionManager.CurveAddAtomToVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfInt, paramInt4);
+    private static int CurveAddAtomToVectorStream(int effect, int atomType, int dataSize, int[] data, int stream) {
+        return ImageCompressionManager.CurveAddAtomToVectorStream(effect, atomType, dataSize, data, stream);
     }
 
-    private static int CurveAddAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte, int paramInt4) {
-        return ImageCompressionManager.CurveAddAtomToVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfByte, paramInt4);
+    private static int CurveAddAtomToVectorStream(int effect, int atomType, int dataSize, byte[] data, int stream) {
+        return ImageCompressionManager.CurveAddAtomToVectorStream(effect, atomType, dataSize, data, stream);
     }
 
-    private static int CurveAddPathAtomToVectorStream(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.CurveAddPathAtomToVectorStream(paramInt1, paramInt2, paramInt3);
+    private static int CurveAddPathAtomToVectorStream(int effect, int pathData, int stream) {
+        return ImageCompressionManager.CurveAddPathAtomToVectorStream(effect, pathData, stream);
     }
 
-    private static int CurveAddZeroAtomToVectorStream(int paramInt1, int paramInt2) {
-        return ImageCompressionManager.CurveAddZeroAtomToVectorStream(paramInt1, paramInt2);
+    private static int CurveAddZeroAtomToVectorStream(int effect, int stream) {
+        return ImageCompressionManager.CurveAddZeroAtomToVectorStream(effect, stream);
     }
 }

@@ -4,16 +4,16 @@ import quicktime.QTSession;
 
 public final class QTNative {
 
-    public static Object linkNativeMethods(Class<?> paramClass) {
+    public static Object linkNativeMethods(Class<?> clazz) {
         if (QTSession.isCurrentOS(2)) {
-            JDirectLinker.linkNativeMethods(paramClass);
+            JDirectLinker.linkNativeMethods(clazz);
             return null;
         }
         if (QTSession.isCurrentOS(4)) {
             if (QTSession.getJavaVersion() >= 65540) {
-                return new quicktime.internal.jdirect.Linker(paramClass);
+                return new quicktime.internal.jdirect.Linker(clazz);
             }
-            return new com.apple.mrj.jdirect.Linker(paramClass);
+            return new com.apple.mrj.jdirect.Linker(clazz);
         }
         return null;
     }

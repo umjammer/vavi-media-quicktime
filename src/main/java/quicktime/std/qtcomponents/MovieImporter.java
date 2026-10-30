@@ -40,14 +40,14 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @see "QuickTime::IsScrapMovie()"
      * @see quicktime.std.movies.Track#isScrapMovie()
      */
-    public static MovieImporter fromTrack(Track paramTrack) throws StdQTException {
-        int i = IsScrapMovie(QTObject.ID(paramTrack));
+    public static MovieImporter fromTrack(Track targetTrack) throws StdQTException {
+        int i = IsScrapMovie(QTObject.ID(targetTrack));
         StdQTException.checkError(GetMoviesError());
         return new MovieImporter(i, null);
     }
 
-    private MovieImporter(int paramInt, Object paramObject) throws StdQTException {
-        super(paramInt, paramObject);
+    private MovieImporter(int nativeRep, Object ref) throws StdQTException {
+        super(nativeRep, ref);
     }
 
     /**
@@ -97,18 +97,18 @@ public final class MovieImporter extends Component implements QuickTimeLib {
         this(allocate(dataRef, flags, fileExt), dontOpenComponent);
     }
 
-    private static int allocate(DataRef dataRef, int paramInt) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(GetMovieImporterForDataRef(dataRef.getType(), QTObject.ID(dataRef), paramInt, arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(DataRef dataRef, int flags) throws StdQTException {
+        int[] importer = { 0 };
+        StdQTException.checkError(GetMovieImporterForDataRef(dataRef.getType(), QTObject.ID(dataRef), flags, importer));
+        return importer[0];
     }
 
-    private static int allocate(DataRef dataRef, int paramInt, String paramString) throws QTException {
-        int[] arrayOfInt = { 0 };
-        StringHandle localStringHandle = new StringHandle("X." + paramString, 2);
-        dataRef.concatenate(localStringHandle);
-        StdQTException.checkError(GetMovieImporterForDataRef(dataRef.getType(), QTObject.ID(dataRef), paramInt, arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(DataRef dataRef, int flags, String extension) throws QTException {
+        int[] importer = { 0 };
+        StringHandle stringHandle = new StringHandle("X." + extension, 2);
+        dataRef.concatenate(stringHandle);
+        StdQTException.checkError(GetMovieImporterForDataRef(dataRef.getType(), QTObject.ID(dataRef), flags, importer));
+        return importer[0];
     }
 
     private static final Object dontOpenComponent = new Object();
@@ -291,26 +291,26 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public boolean doUserDialog(QTFile fileIn) throws QTException {
-        byte[] arrayOfByte1 = new byte[1];
-        byte[] arrayOfByte2 = fileIn.getFSSpec(true, 256);
+        byte[] canceled = new byte[1];
+        byte[] fsspec = fileIn.getFSSpec(true, 256);
         int i = _ID();
         int j = 0;
         if (QTSession.isCurrentOS(4)) {
             j = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
                 int i1 = 0;
                 synchronized (QTNative.globalsLock) {
-                    i1 = MovieImporter.MovieImportDoUserDialog(i1, arrayOfByte2, 0, arrayOfByte1);
+                    i1 = MovieImporter.MovieImportDoUserDialog(i1, fsspec, 0, canceled);
                 }
                 return i1;
             });
             StdQTException.checkError(j);
-            return arrayOfByte1[0] != 0;
+            return canceled[0] != 0;
         }
         synchronized (QTNative.globalsLock) {
-            j = MovieImportDoUserDialog(_ID(), fileIn.getFSSpec(true, 256), 0, arrayOfByte1);
+            j = MovieImportDoUserDialog(_ID(), fileIn.getFSSpec(true, 256), 0, canceled);
             StdQTException.checkError(j);
         }
-        return arrayOfByte1[0] != 0;
+        return canceled[0] != 0;
     }
 
     /**
@@ -321,12 +321,12 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public boolean doUserDialog(QTHandleRef theData) throws QTException {
-        byte[] arrayOfByte = new byte[1];
+        byte[] canceled = new byte[1];
         synchronized (QTNative.globalsLock) {
-            int i = MovieImportDoUserDialog(_ID(), null, QTObject.ID(theData), arrayOfByte);
+            int i = MovieImportDoUserDialog(_ID(), null, QTObject.ID(theData), canceled);
             StdQTException.checkError(i);
         }
-        return arrayOfByte[0] != 0;
+        return canceled[0] != 0;
     }
 
     /**
@@ -347,10 +347,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getAuxiliaryDataType() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = MovieImportGetAuxiliaryDataType(_ID(), arrayOfInt);
+        int[] auxType = new int[1];
+        int i = MovieImportGetAuxiliaryDataType(_ID(), auxType);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return auxType[0];
     }
 
     /**
@@ -361,10 +361,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public boolean validate(QTFile fileIn) throws QTException {
-        byte[] arrayOfByte = new byte[1];
-        int i = MovieImportValidate(_ID(), fileIn.getFSSpec(true, 256), 0, arrayOfByte);
+        byte[] valid = new byte[1];
+        int i = MovieImportValidate(_ID(), fileIn.getFSSpec(true, 256), 0, valid);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return valid[0] != 0;
     }
 
     /**
@@ -375,10 +375,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public boolean validate(QTHandleRef theData) throws QTException {
-        byte[] arrayOfByte = new byte[1];
-        int i = MovieImportValidate(_ID(), null, QTObject.ID(theData), arrayOfByte);
+        byte[] valid = new byte[1];
+        int i = MovieImportValidate(_ID(), null, QTObject.ID(theData), valid);
         StdQTException.checkError(i);
-        return arrayOfByte[0] != 0;
+        return valid[0] != 0;
     }
 
     /**
@@ -388,10 +388,10 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getFileType() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = MovieImportGetFileType(_ID(), arrayOfInt);
+        int[] fileType = new int[1];
+        int i = MovieImportGetFileType(_ID(), fileType);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return fileType[0];
     }
 
     /**
@@ -411,11 +411,11 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getMediaType() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = MovieImportGetSampleDescription(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] desc = new int[1];
+        int[] mediaType = new int[1];
+        int i = MovieImportGetSampleDescription(_ID(), desc, mediaType);
         StdQTException.checkError(i);
-        return arrayOfInt2[0];
+        return mediaType[0];
     }
 
     /**
@@ -443,8 +443,8 @@ public final class MovieImporter extends Component implements QuickTimeLib {
      * Sets the movie import componentÕs current configuration from the passed settings data.
      * @see "QuickTime::MovieImportSetSettingsFromAtomContainer"
      */
-    public void setImportSettingsFromAtomContainer(AtomContainer paramAtomContainer) throws StdQTException {
-        int i = MovieImportSetSettingsFromAtomContainer(_ID(), QTObject.ID(paramAtomContainer));
+    public void setImportSettingsFromAtomContainer(AtomContainer importSettingsFromAtomContainer) throws StdQTException {
+        int i = MovieImportSetSettingsFromAtomContainer(_ID(), QTObject.ID(importSettingsFromAtomContainer));
         StdQTException.checkError(i);
     }
 
@@ -473,90 +473,90 @@ public final class MovieImporter extends Component implements QuickTimeLib {
     protected void _dispose() throws QTException {
         try {
             MovieImportSetProgressProc(_ID(), 0, 0);
-        } catch (QTNullPointerException localQTNullPointerException) {
+        } catch (QTNullPointerException e) {
         }
         if (this.progUPP != null)
             this.progUPP.cleanupMethodClosure();
         this.progUPP = null;
     }
 
-    private static int IsScrapMovie(int paramInt) {
-        return MovieToolbox.IsScrapMovie(paramInt);
+    private static int IsScrapMovie(int targetTrack) {
+        return MovieToolbox.IsScrapMovie(targetTrack);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static short GetMovieImporterForDataRef(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return MovieToolbox.GetMovieImporterForDataRef(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short GetMovieImporterForDataRef(int dataRefType, int dataRef, int flags, int[] importer) {
+        return MovieToolbox.GetMovieImporterForDataRef(dataRefType, dataRef, flags, importer);
     }
 
-    private static int MovieImportSetSampleDuration(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.MovieImportSetSampleDuration(paramInt1, paramInt2, paramInt3);
+    private static int MovieImportSetSampleDuration(int ci, int duration, int scale) {
+        return ComponentManager.MovieImportSetSampleDuration(ci, duration, scale);
     }
 
-    private static int MovieImportSetSampleDescription(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.MovieImportSetSampleDescription(paramInt1, paramInt2, paramInt3);
+    private static int MovieImportSetSampleDescription(int ci, int desc, int mediaType) {
+        return ComponentManager.MovieImportSetSampleDescription(ci, desc, mediaType);
     }
 
-    private static int MovieImportSetMediaFile(int paramInt1, int paramInt2) {
-        return ComponentManager.MovieImportSetMediaFile(paramInt1, paramInt2);
+    private static int MovieImportSetMediaFile(int ci, int alias) {
+        return ComponentManager.MovieImportSetMediaFile(ci, alias);
     }
 
-    private static int MovieImportSetDimensions(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.MovieImportSetDimensions(paramInt1, paramInt2, paramInt3);
+    private static int MovieImportSetDimensions(int ci, int width, int height) {
+        return ComponentManager.MovieImportSetDimensions(ci, width, height);
     }
 
-    private static int MovieImportSetChunkSize(int paramInt1, int paramInt2) {
-        return ComponentManager.MovieImportSetChunkSize(paramInt1, paramInt2);
+    private static int MovieImportSetChunkSize(int ci, int chunkSize) {
+        return ComponentManager.MovieImportSetChunkSize(ci, chunkSize);
     }
 
-    private static int MovieImportSetProgressProc(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.MovieImportSetProgressProc(paramInt1, paramInt2, paramInt3);
+    private static int MovieImportSetProgressProc(int ci, int proc, int refCon) {
+        return ComponentManager.MovieImportSetProgressProc(ci, proc, refCon);
     }
 
-    private static int MovieImportSetAuxiliaryData(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.MovieImportSetAuxiliaryData(paramInt1, paramInt2, paramInt3);
+    private static int MovieImportSetAuxiliaryData(int ci, int data, int handleType) {
+        return ComponentManager.MovieImportSetAuxiliaryData(ci, data, handleType);
     }
 
-    private static int MovieImportSetFromScrap(int paramInt, byte paramByte) {
-        return ComponentManager.MovieImportSetFromScrap(paramInt, paramByte);
+    private static int MovieImportSetFromScrap(int ci, byte fromScrap) {
+        return ComponentManager.MovieImportSetFromScrap(ci, fromScrap);
     }
 
-    private static int MovieImportDoUserDialog(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2) {
-        return ComponentManager.MovieImportDoUserDialog(paramInt1, paramArrayOfByte1, paramInt2, paramArrayOfByte2);
+    private static int MovieImportDoUserDialog(int ci, byte[] fsspec, int h, byte[] canceled) {
+        return ComponentManager.MovieImportDoUserDialog(ci, fsspec, h, canceled);
     }
 
-    private static int MovieImportSetDuration(int paramInt1, int paramInt2) {
-        return ComponentManager.MovieImportSetDuration(paramInt1, paramInt2);
+    private static int MovieImportSetDuration(int ci, int duration) {
+        return ComponentManager.MovieImportSetDuration(ci, duration);
     }
 
-    private static int MovieImportGetAuxiliaryDataType(int paramInt, int[] paramArrayOfInt) {
-        return ComponentManager.MovieImportGetAuxiliaryDataType(paramInt, paramArrayOfInt);
+    private static int MovieImportGetAuxiliaryDataType(int ci, int[] auxType) {
+        return ComponentManager.MovieImportGetAuxiliaryDataType(ci, auxType);
     }
 
-    private static int MovieImportValidate(int paramInt1, byte[] paramArrayOfByte1, int paramInt2, byte[] paramArrayOfByte2) {
-        return ComponentManager.MovieImportValidate(paramInt1, paramArrayOfByte1, paramInt2, paramArrayOfByte2);
+    private static int MovieImportValidate(int ci, byte[] fsspec, int h, byte[] valid) {
+        return ComponentManager.MovieImportValidate(ci, fsspec, h, valid);
     }
 
-    private static int MovieImportGetFileType(int paramInt, int[] paramArrayOfInt) {
-        return ComponentManager.MovieImportGetFileType(paramInt, paramArrayOfInt);
+    private static int MovieImportGetFileType(int ci, int[] fileType) {
+        return ComponentManager.MovieImportGetFileType(ci, fileType);
     }
 
-    private static int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ComponentManager.MovieImportGetSampleDescription(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int MovieImportGetSampleDescription(int ci, int[] desc, int[] mediaType) {
+        return ComponentManager.MovieImportGetSampleDescription(ci, desc, mediaType);
     }
 
-    private static int MovieImportSetOffsetAndLimit(int paramInt1, int paramInt2, int paramInt3) {
-        return ComponentManager.MovieImportSetOffsetAndLimit(paramInt1, paramInt2, paramInt3);
+    private static int MovieImportSetOffsetAndLimit(int ci, int offset, int limit) {
+        return ComponentManager.MovieImportSetOffsetAndLimit(ci, offset, limit);
     }
 
-    private static int MovieImportSetSettingsFromAtomContainer(int paramInt1, int paramInt2) {
-        return ComponentManager.MovieImportSetSettingsFromAtomContainer(paramInt1, paramInt2);
+    private static int MovieImportSetSettingsFromAtomContainer(int ci, int settings) {
+        return ComponentManager.MovieImportSetSettingsFromAtomContainer(ci, settings);
     }
 
-    private static int MovieImportSetNewMovieFlags(int paramInt1, int paramInt2) {
-        return ComponentManager.MovieImportSetNewMovieFlags(paramInt1, paramInt2);
+    private static int MovieImportSetNewMovieFlags(int ci, int flags) {
+        return ComponentManager.MovieImportSetNewMovieFlags(ci, flags);
     }
 }

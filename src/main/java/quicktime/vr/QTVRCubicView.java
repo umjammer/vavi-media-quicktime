@@ -30,9 +30,9 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
      * Creates a QTVRCubicView object from a byte array
      * Used in cloning
      */
-    public QTVRCubicView(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
-        if (paramArrayOfByte.length != kNativeSize) {
+    public QTVRCubicView(byte[] bytes) throws QTException {
+        super(bytes);
+        if (bytes.length != kNativeSize) {
             throw new QTException(-50);
         }
     }
@@ -44,25 +44,25 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRCubicView localQTVRCubicView = new QTVRCubicView();
-        paramObjectInputStream.read(localQTVRCubicView.getBytes());
-        System.arraycopy(localQTVRCubicView.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRCubicView qtvrCubicView = new QTVRCubicView();
+        in.read(qtvrCubicView.getBytes());
+        System.arraycopy(qtvrCubicView.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRCubicView localQTVRCubicView = (QTVRCubicView) clone();
-        paramObjectOutputStream.write(localQTVRCubicView.getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRCubicView qtvrCubicView = (QTVRCubicView) clone();
+        out.write(qtvrCubicView.getBytes());
     }
 
     @Override
     protected Object clone() {
         try {
             return new QTVRCubicView(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
@@ -76,8 +76,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the minPan
      */
-    public void setMinPan(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setMinPan(float minPan) {
+        setFloatAt(0, minPan);
     }
 
     /**
@@ -90,8 +90,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the maxPan
      */
-    public void setMaxPan(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setMaxPan(float maxPan) {
+        setFloatAt(4, maxPan);
     }
 
     /**
@@ -104,8 +104,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the minTilt
      */
-    public void setMinTilt(float paramFloat) {
-        setFloatAt(8, paramFloat);
+    public void setMinTilt(float minTilt) {
+        setFloatAt(8, minTilt);
     }
 
     /**
@@ -118,8 +118,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the maxTilt
      */
-    public void setMaxTilt(float paramFloat) {
-        setFloatAt(12, paramFloat);
+    public void setMaxTilt(float maxTilt) {
+        setFloatAt(12, maxTilt);
     }
 
     /**
@@ -132,8 +132,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the minFieldOfView
      */
-    public void setMinFieldOfView(float paramFloat) {
-        setFloatAt(16, paramFloat);
+    public void setMinFieldOfView(float minFieldOfView) {
+        setFloatAt(16, minFieldOfView);
     }
 
     /**
@@ -146,8 +146,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the maxFieldOfView
      */
-    public void setMaxFieldOfView(float paramFloat) {
-        setFloatAt(20, paramFloat);
+    public void setMaxFieldOfView(float maxFieldOfView) {
+        setFloatAt(20, maxFieldOfView);
     }
 
     /**
@@ -160,8 +160,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the defaultPan
      */
-    public void setDefaultPan(float paramFloat) {
-        setFloatAt(24, paramFloat);
+    public void setDefaultPan(float defaultPan) {
+        setFloatAt(24, defaultPan);
     }
 
     /**
@@ -174,8 +174,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the defaultTilt
      */
-    public void setDefaultTilt(float paramFloat) {
-        setFloatAt(28, paramFloat);
+    public void setDefaultTilt(float defaultTilt) {
+        setFloatAt(28, defaultTilt);
     }
 
     /**
@@ -188,8 +188,8 @@ public final class QTVRCubicView extends QTByteObject implements Cloneable {
     /**
      * set the defaultFieldOfView
      */
-    public void setDefaultFieldOfView(float paramFloat) {
-        setFloatAt(32, paramFloat);
+    public void setDefaultFieldOfView(float defaultFieldOfView) {
+        setFloatAt(32, defaultFieldOfView);
     }
 
     /**

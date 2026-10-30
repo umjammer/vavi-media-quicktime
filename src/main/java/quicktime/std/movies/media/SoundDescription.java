@@ -26,16 +26,16 @@ public final class SoundDescription extends SampleDescription implements QuickTi
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(16, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(20, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        EndianFlipSpec localEndianFlipSpec3 = new EndianFlipSpec(20, 2, 4);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec3);
-        EndianFlipSpec localEndianFlipSpec4 = new EndianFlipSpec(32, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec4);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(20, 4, 1);
+        ed.addFlipSpec(endianFlipSpec2);
+        EndianFlipSpec endianFlipSpec3 = new EndianFlipSpec(20, 2, 4);
+        ed.addFlipSpec(endianFlipSpec3);
+        EndianFlipSpec endianFlipSpec4 = new EndianFlipSpec(32, 4, 1);
+        ed.addFlipSpec(endianFlipSpec4);
+        return ed;
     }
 
     /**
@@ -56,8 +56,8 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         super(kNativeSize, true, format);
     }
 
-    private SoundDescription(int paramInt, Object paramObject) {
-        super(paramInt, null, false);
+    private SoundDescription(int nativeRep, Object ref) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -68,72 +68,72 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         return new SoundDescription(makeAndCopyHandle(), null);
     }
 
-    public void setVersion(int paramInt) {
-        setShortAt(16, (short) paramInt);
+    public void setVersion(int version) {
+        setShortAt(16, (short) version);
     }
 
     public int getVersion() {
         return getShortAt(16);
     }
 
-    public void setRevLevel(int paramInt) {
-        setShortAt(18, (short) paramInt);
+    public void setRevLevel(int revLevel) {
+        setShortAt(18, (short) revLevel);
     }
 
     public int getRevLevel() {
         return getShortAt(18);
     }
 
-    public void setVendor(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setVendor(int vendor) {
+        setIntAt(20, vendor);
     }
 
     public int getVendor() {
         return getIntAt(20);
     }
 
-    public void setNumberOfChannels(int paramInt) {
-        setNumChannels(paramInt);
+    public void setNumberOfChannels(int numberOfChannels) {
+        setNumChannels(numberOfChannels);
     }
 
     public int getNumberOfChannels() {
         return getNumChannels();
     }
 
-    public void setNumChannels(int paramInt) {
-        setShortAt(24, (short) paramInt);
+    public void setNumChannels(int numChannels) {
+        setShortAt(24, (short) numChannels);
     }
 
     public int getNumChannels() {
         return getShortAt(24);
     }
 
-    public void setSampleSize(int paramInt) {
-        setShortAt(26, (short) paramInt);
+    public void setSampleSize(int sampleSize) {
+        setShortAt(26, (short) sampleSize);
     }
 
     public int getSampleSize() {
         return getShortAt(26);
     }
 
-    public void setCompressionID(int paramInt) {
-        setShortAt(28, (short) paramInt);
+    public void setCompressionID(int compressionID) {
+        setShortAt(28, (short) compressionID);
     }
 
     public int getCompressionID() {
         return getShortAt(28);
     }
 
-    public void setPacketSize(int paramInt) {
-        setShortAt(30, (short) paramInt);
+    public void setPacketSize(int packetSize) {
+        setShortAt(30, (short) packetSize);
     }
 
     public int getPacketSize() {
         return getShortAt(30);
     }
 
-    public void setSampleRate(float paramFloat) {
-        setIntAt(32, QTUtils.X2UFix(paramFloat));
+    public void setSampleRate(float sampleRate) {
+        setIntAt(32, QTUtils.X2UFix(sampleRate));
     }
 
     public float getSampleRate() {
@@ -186,11 +186,11 @@ public final class SoundDescription extends SampleDescription implements QuickTi
         return QTHandle.fromSoundDescription(this, idType);
     }
 
-    private static short AddSoundDescriptionExtension(int paramInt1, int paramInt2, int paramInt3) {
-        return SoundManager.AddSoundDescriptionExtension(paramInt1, paramInt2, paramInt3);
+    private static short AddSoundDescriptionExtension(int desc, int extension, int idType) {
+        return SoundManager.AddSoundDescriptionExtension(desc, extension, idType);
     }
 
-    private static short RemoveSoundDescriptionExtension(int paramInt1, int paramInt2) {
-        return SoundManager.RemoveSoundDescriptionExtension(paramInt1, paramInt2);
+    private static short RemoveSoundDescriptionExtension(int desc, int idType) {
+        return SoundManager.RemoveSoundDescriptionExtension(desc, idType);
     }
 }

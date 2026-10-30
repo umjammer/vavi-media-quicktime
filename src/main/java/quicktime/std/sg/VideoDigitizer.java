@@ -17,12 +17,12 @@ import quicktime.std.comp.Component;
  */
 public final class VideoDigitizer extends Component implements QuickTimeLib {
 
-    static VideoDigitizer makeVideoDigitizer(int paramInt, Object paramObject) {
-        return paramInt == 0 ? null : new VideoDigitizer(paramInt, paramObject);
+    static VideoDigitizer makeVideoDigitizer(int nativeRep, Object ref) {
+        return nativeRep == 0 ? null : new VideoDigitizer(nativeRep, ref);
     }
 
-    private VideoDigitizer(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    private VideoDigitizer(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -51,10 +51,10 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getNumberOfInputs() throws StdQTException {
-        short[] arrayOfShort = { 0 };
-        int i = VDGetNumberOfInputs(_ID(), arrayOfShort);
+        short[] inputs = { 0 };
+        int i = VDGetNumberOfInputs(_ID(), inputs);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return inputs[0];
     }
 
     /**
@@ -76,10 +76,10 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getInput() throws StdQTException {
-        short[] arrayOfShort = { 0 };
-        int i = VDGetInput(_ID(), arrayOfShort);
+        short[] input = { 0 };
+        int i = VDGetInput(_ID(), input);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return input[0];
     }
 
     /**
@@ -123,10 +123,10 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public boolean getClipState() throws StdQTException {
-        short[] arrayOfShort = { 0 };
-        int i = VDGetClipState(_ID(), arrayOfShort);
+        short[] state = { 0 };
+        int i = VDGetClipState(_ID(), state);
         StdQTException.checkError(i);
-        return arrayOfShort[0] != 0;
+        return state[0] != 0;
     }
 
     /**
@@ -137,10 +137,10 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public DigitizerInfo getDigitizerInfo() throws StdQTException {
-        DigitizerInfo localDigitizerInfo = new DigitizerInfo();
-        int i = VDGetDigitizerInfo(_ID(), localDigitizerInfo.getBytes());
+        DigitizerInfo digitizerInfo = new DigitizerInfo();
+        int i = VDGetDigitizerInfo(_ID(), digitizerInfo.getBytes());
         StdQTException.checkError(i);
-        return localDigitizerInfo;
+        return digitizerInfo;
     }
 
     /**
@@ -153,10 +153,10 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getInputFormat(int input) throws StdQTException {
-        short[] arrayOfShort = { 0 };
-        int i = VDGetInputFormat(_ID(), (short) input, arrayOfShort);
+        short[] format = { 0 };
+        int i = VDGetInputFormat(_ID(), (short) input, format);
         StdQTException.checkError(i);
-        return arrayOfShort[0];
+        return format[0];
     }
 
     /**
@@ -170,43 +170,43 @@ public final class VideoDigitizer extends Component implements QuickTimeLib {
         StdQTException.checkError(i);
     }
 
-    private static int VDGetNumberOfInputs(int paramInt, short[] paramArrayOfShort) {
-        return SequenceGrabberManager.VDGetNumberOfInputs(paramInt, paramArrayOfShort);
+    private static int VDGetNumberOfInputs(int vd, short[] inputs) {
+        return SequenceGrabberManager.VDGetNumberOfInputs(vd, inputs);
     }
 
-    private static int VDSetInput(int paramInt, short paramShort) {
-        return SequenceGrabberManager.VDSetInput(paramInt, paramShort);
+    private static int VDSetInput(int vd, short input) {
+        return SequenceGrabberManager.VDSetInput(vd, input);
     }
 
-    private static int VDGetInput(int paramInt, short[] paramArrayOfShort) {
-        return SequenceGrabberManager.VDGetInput(paramInt, paramArrayOfShort);
+    private static int VDGetInput(int vd, short[] input) {
+        return SequenceGrabberManager.VDGetInput(vd, input);
     }
 
-    private static int VDSetClipRgn(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.VDSetClipRgn(paramInt1, paramInt2);
+    private static int VDSetClipRgn(int vd, int rgn) {
+        return SequenceGrabberManager.VDSetClipRgn(vd, rgn);
     }
 
-    private static int VDClearClipRgn(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.VDClearClipRgn(paramInt1, paramInt2);
+    private static int VDClearClipRgn(int vd, int rgn) {
+        return SequenceGrabberManager.VDClearClipRgn(vd, rgn);
     }
 
-    private static int VDSetClipState(int paramInt, short paramShort) {
-        return SequenceGrabberManager.VDSetClipState(paramInt, paramShort);
+    private static int VDSetClipState(int vd, short state) {
+        return SequenceGrabberManager.VDSetClipState(vd, state);
     }
 
-    private static int VDGetClipState(int paramInt, short[] paramArrayOfShort) {
-        return SequenceGrabberManager.VDGetClipState(paramInt, paramArrayOfShort);
+    private static int VDGetClipState(int vd, short[] state) {
+        return SequenceGrabberManager.VDGetClipState(vd, state);
     }
 
-    private static int VDGetDigitizerInfo(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.VDGetDigitizerInfo(paramInt, paramArrayOfByte);
+    private static int VDGetDigitizerInfo(int vd, byte[] info) {
+        return SequenceGrabberManager.VDGetDigitizerInfo(vd, info);
     }
 
-    private static int VDGetInputFormat(int paramInt, short paramShort, short[] paramArrayOfShort) {
-        return SequenceGrabberManager.VDGetInputFormat(paramInt, paramShort, paramArrayOfShort);
+    private static int VDGetInputFormat(int vd, short input, short[] format) {
+        return SequenceGrabberManager.VDGetInputFormat(vd, input, format);
     }
 
-    private static int VDSetInputStandard(int paramInt, short paramShort) {
-        return SequenceGrabberManager.VDSetInputStandard(paramInt, paramShort);
+    private static int VDSetInputStandard(int vd, short standard) {
+        return SequenceGrabberManager.VDSetInputStandard(vd, standard);
     }
 }

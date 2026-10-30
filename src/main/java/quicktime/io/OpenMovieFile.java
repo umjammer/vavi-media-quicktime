@@ -33,7 +33,7 @@ public final class OpenMovieFile extends OpenedFile {
         return new OpenMovieFile(f, 512);
     }
 
-    private OpenMovieFile(QTFile paramQTFile, int paramInt) throws QTException {
-        super(paramQTFile, paramInt, 1);
+    private OpenMovieFile(QTFile f, int permissions) throws QTException {
+        super(f, permissions, 1);
     }
 }

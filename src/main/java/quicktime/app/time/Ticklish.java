@@ -26,7 +26,7 @@ public interface Ticklish {
     /**
      * Invoked by the timer when a time condition of its time base has changed.
      */
-    void timeChanged(int paramInt) throws QTException;
+    void timeChanged(int newTime) throws QTException;
 
     /**
      * The Timer invokes the tickle method when the invocation constraints of

@@ -25,14 +25,14 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         super(kNativeSize);
     }
 
-    private SCStatus(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private SCStatus(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int i = 0; i < 12; i += 4) {
             int j = getIntFromArray(this.bytes, i);
             int k = EndianOrder.flipBigEndianToNative32(j);
@@ -45,21 +45,21 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         for (int i = 0; i < 12; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipNativeToBigEndian32(j);
-            setIntInArray(arrayOfByte, i, k);
+            setIntInArray(movie, i, k);
         }
         for (int i = 12; i < 16; i++) {
-            arrayOfByte[i] = getByteFromArray(getBytes(), i);
+            movie[i] = getByteFromArray(getBytes(), i);
         }
         int i = getChannelAttributes();
-        setIntInArray(arrayOfByte, 16, EndianOrder.flipNativeToBigEndian32(i));
+        setIntInArray(movie, 16, EndianOrder.flipNativeToBigEndian32(i));
         int j = getCPULoad();
-        setIntInArray(arrayOfByte, 20, EndianOrder.flipNativeToBigEndian32(j));
-        paramObjectOutputStream.write(arrayOfByte);
+        setIntInArray(movie, 20, EndianOrder.flipNativeToBigEndian32(j));
+        out.write(movie);
     }
 
     /**
@@ -146,15 +146,15 @@ public final class SCStatus extends QTByteObject implements PrimitivesLib, Clone
         return getClass().getName() + "[startTime=" + getStartTime() + ",endTime=" + getEndTime() + ",currentTime" + getCurrentTime() + ",channelBusy" + getChannelBusy() + ",channelPaused" + getChannelPaused() + "]";
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static byte getByteFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getByteFromArray(paramArrayOfByte, paramInt);
+    private static byte getByteFromArray(byte[] array, int offset) {
+        return MemoryManager.getByteFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 }

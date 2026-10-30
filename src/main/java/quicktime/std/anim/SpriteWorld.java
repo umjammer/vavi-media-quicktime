@@ -26,13 +26,13 @@ import quicktime.std.image.Matrix;
  */
 public class SpriteWorld extends QTObject implements QuickTimeLib {
 
-    private static int allocate(QDGraphics paramQDGraphics1, QDGraphics paramQDGraphics2, QDColor paramQDColor, QDGraphics paramQDGraphics3) throws StdQTException, QDException {
-        int[] arrayOfInt = new int[1];
+    private static int allocate(QDGraphics destination, QDGraphics spriteLayer, QDColor color, QDGraphics background) throws StdQTException, QDException {
+        int[] newSpriteWorld = new int[1];
         synchronized (QTNative.globalsLock) {
-            int i = NewSpriteWorld(arrayOfInt, QTObject.ID(paramQDGraphics1), QTObject.ID(paramQDGraphics2), paramQDColor == null ? null : paramQDColor.getRGBColor(), QTObject.ID(paramQDGraphics3));
+            int i = NewSpriteWorld(newSpriteWorld, QTObject.ID(destination), QTObject.ID(spriteLayer), color == null ? null : color.getRGBColor(), QTObject.ID(background));
             StdQTException.checkError(i);
         }
-        return arrayOfInt[0];
+        return newSpriteWorld[0];
     }
 
     /**
@@ -64,11 +64,11 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
 
     private final int[] savedDevice = {0};
 
-    private void setWidthHeight(QDGraphics paramQDGraphics) {
+    private void setWidthHeight(QDGraphics widthHeight) {
         synchronized (QTNative.globalsLock) {
-            QDRect localQDRect = paramQDGraphics.getPortRect();
-            this.mWidth = localQDRect.getWidth();
-            this.mHeight = localQDRect.getHeight();
+            QDRect portRect = widthHeight.getPortRect();
+            this.mWidth = portRect.getWidth();
+            this.mHeight = portRect.getHeight();
         }
     }
 
@@ -79,12 +79,12 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final void setBounds(QDRect bounds) throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        localMatrix.setTx(bounds.getX());
-        localMatrix.setTy(bounds.getY());
-        localMatrix.setSx(bounds.getWidth() / this.mWidth);
-        localMatrix.setSy(bounds.getHeight() / this.mHeight);
-        setMatrix(localMatrix);
+        Matrix matrix = new Matrix();
+        matrix.setTx(bounds.getX());
+        matrix.setTy(bounds.getY());
+        matrix.setSx(bounds.getWidth() / this.mWidth);
+        matrix.setSy(bounds.getHeight() / this.mHeight);
+        setMatrix(matrix);
     }
 
     /**
@@ -163,12 +163,12 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SpriteWorldIdle()"
      */
     public final int idle(int flagsIn) throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] flagsOut = new int[1];
         synchronized (QTNative.globalsLock) {
-            int i = SpriteWorldIdle(_ID(), flagsIn, arrayOfInt);
+            int i = SpriteWorldIdle(_ID(), flagsIn, flagsOut);
             StdQTException.checkError(i);
         }
-        return arrayOfInt[0];
+        return flagsOut[0];
     }
 
     /**
@@ -195,11 +195,11 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      * @see "QuickTime::SpriteWorldHitTest()"
      */
     public final Sprite hitTest(int flags, QDPoint loc) throws QTException {
-        int[] arrayOfInt = new int[1];
+        int[] spriteHit = new int[1];
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SpriteWorldHitTest(_ID(), flags, loc.getPoint(), arrayOfInt));
+            StdQTException.checkError(SpriteWorldHitTest(_ID(), flags, loc.getPoint(), spriteHit));
         }
-        return arrayOfInt[0] == 0 ? null : new Sprite(arrayOfInt[0], this);
+        return spriteHit[0] == 0 ? null : new Sprite(spriteHit[0], this);
     }
 
     /**
@@ -207,46 +207,46 @@ public class SpriteWorld extends QTObject implements QuickTimeLib {
      *
      * @see "QuickTime::SetSpriteWorldFlags()"
      */
-    public final void setFlags(int paramInt1, int paramInt2) throws StdQTException {
+    public final void setFlags(int flags, int flagsMask) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(SetSpriteWorldFlags(_ID(), paramInt1, paramInt2));
+            StdQTException.checkError(SetSpriteWorldFlags(_ID(), flags, flagsMask));
         }
     }
 
-    private static short NewSpriteWorld(int[] paramArrayOfInt, int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        return SpriteManager.NewSpriteWorld(paramArrayOfInt, paramInt1, paramInt2, paramArrayOfByte, paramInt3);
+    private static short NewSpriteWorld(int[] newSpriteWorld, int destination, int spriteLayer, byte[] backgroundColor, int background) {
+        return SpriteManager.NewSpriteWorld(newSpriteWorld, destination, spriteLayer, backgroundColor, background);
     }
 
-    private static short SetSpriteWorldClip(int paramInt1, int paramInt2) {
-        return SpriteManager.SetSpriteWorldClip(paramInt1, paramInt2);
+    private static short SetSpriteWorldClip(int spriteWorld, int clipRgn) {
+        return SpriteManager.SetSpriteWorldClip(spriteWorld, clipRgn);
     }
 
-    private static short SetSpriteWorldGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SpriteManager.SetSpriteWorldGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SetSpriteWorldGraphicsMode(int spriteWorld, int mode, byte[] opColor) {
+        return SpriteManager.SetSpriteWorldGraphicsMode(spriteWorld, mode, opColor);
     }
 
-    private static short SetSpriteWorldMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MatrixManager.SetSpriteWorldMatrix(paramInt, paramArrayOfByte);
+    private static short SetSpriteWorldMatrix(int spriteWorld, byte[] matrix) {
+        return MatrixManager.SetSpriteWorldMatrix(spriteWorld, matrix);
     }
 
-    private static short SpriteWorldIdle(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteWorldIdle(paramInt1, paramInt2, paramArrayOfInt);
+    private static short SpriteWorldIdle(int spriteWorld, int flagsIn, int[] flagsOut) {
+        return SpriteManager.SpriteWorldIdle(spriteWorld, flagsIn, flagsOut);
     }
 
-    private static short InvalidateSpriteWorld(int paramInt, byte[] paramArrayOfByte) {
-        return SpriteManager.InvalidateSpriteWorld(paramInt, paramArrayOfByte);
+    private static short InvalidateSpriteWorld(int spriteWorld, byte[] invalidArea) {
+        return SpriteManager.InvalidateSpriteWorld(spriteWorld, invalidArea);
     }
 
-    private static short SpriteWorldHitTest(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return SpriteManager.SpriteWorldHitTest(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short SpriteWorldHitTest(int spriteWorld, int flags, int loc, int[] spriteHit) {
+        return SpriteManager.SpriteWorldHitTest(spriteWorld, flags, loc, spriteHit);
     }
 
-    private static short SetSpriteWorldFlags(int paramInt1, int paramInt2, int paramInt3) {
-        return SpriteManager.SetSpriteWorldFlags(paramInt1, paramInt2, paramInt3);
+    private static short SetSpriteWorldFlags(int spriteWorld, int flags, int flagsMask) {
+        return SpriteManager.SetSpriteWorldFlags(spriteWorld, flags, flagsMask);
     }
 
-    private static void DisposeAllSprites(int paramInt) {
-        SpriteManager.DisposeAllSprites(paramInt);
+    private static void DisposeAllSprites(int spriteWorld) {
+        SpriteManager.DisposeAllSprites(spriteWorld);
     }
 
     private static short GetMoviesError() {

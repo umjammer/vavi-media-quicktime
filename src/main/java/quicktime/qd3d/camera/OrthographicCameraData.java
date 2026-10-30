@@ -52,8 +52,8 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
         setBottom(bottom);
     }
 
-    private OrthographicCameraData(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private OrthographicCameraData(byte[] bytes) {
+        super(bytes);
     }
 
     /**
@@ -87,29 +87,29 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
     /**
      * sets the left position
      */
-    public void setLeft(float paramFloat) {
-        setFloatAt(60, paramFloat);
+    public void setLeft(float left) {
+        setFloatAt(60, left);
     }
 
     /**
      * sets the top position
      */
-    public void setTop(float paramFloat) {
-        setFloatAt(64, paramFloat);
+    public void setTop(float top) {
+        setFloatAt(64, top);
     }
 
     /**
      * sets the right position
      */
-    public void setRight(float paramFloat) {
-        setFloatAt(68, paramFloat);
+    public void setRight(float right) {
+        setFloatAt(68, right);
     }
 
     /**
      * sets the bottom position
      */
-    public void setBottom(float paramFloat) {
-        setFloatAt(72, paramFloat);
+    public void setBottom(float bottom) {
+        setFloatAt(72, bottom);
     }
 
     /**
@@ -120,11 +120,11 @@ public final class OrthographicCameraData extends CameraData implements Primitiv
         return new OrthographicCameraData(this.bytes);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

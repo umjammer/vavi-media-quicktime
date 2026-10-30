@@ -182,31 +182,31 @@ public final class MultiMovieController extends MovieController implements Quick
         super.removeMovie();
     }
 
-    private static int MCMovieChanged(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCMovieChanged(paramInt1, paramInt2);
+    private static int MCMovieChanged(int mc, int movie) {
+        return MovieControllerManager.MCMovieChanged(mc, movie);
     }
 
-    private static int MCRemoveMovie(int paramInt) {
-        return MovieControllerManager.MCRemoveMovie(paramInt);
+    private static int MCRemoveMovie(int mc) {
+        return MovieControllerManager.MCRemoveMovie(mc);
     }
 
-    private static int MCSetMovie(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieControllerManager.MCSetMovie(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int MCSetMovie(int mc, int movie, int window, int where) {
+        return MovieControllerManager.MCSetMovie(mc, movie, window, where);
     }
 
-    private static int MCGetIndMovie(int paramInt, short paramShort) {
-        return MovieControllerManager.MCGetIndMovie(paramInt, paramShort);
+    private static int MCGetIndMovie(int mc, short index) {
+        return MovieControllerManager.MCGetIndMovie(mc, index);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int MCRemoveAllMovies(int paramInt) {
-        return MovieControllerManager.MCRemoveAllMovies(paramInt);
+    private static int MCRemoveAllMovies(int mc) {
+        return MovieControllerManager.MCRemoveAllMovies(mc);
     }
 
-    private static int MCRemoveAMovie(int paramInt1, int paramInt2) {
-        return MovieControllerManager.MCRemoveAMovie(paramInt1, paramInt2);
+    private static int MCRemoveAMovie(int mc, int movie) {
+        return MovieControllerManager.MCRemoveAMovie(mc, movie);
     }
 }

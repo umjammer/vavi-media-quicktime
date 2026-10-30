@@ -11,9 +11,9 @@ public final class CompressedFrameInfo {
 
     final int mSimilarity;
 
-    CompressedFrameInfo(int paramInt, byte paramByte) {
-        this.mDataSize = paramInt;
-        this.mSimilarity = QTUtils.UByte2Int(paramByte);
+    CompressedFrameInfo(int dataSize, byte similarity) {
+        this.mDataSize = dataSize;
+        this.mSimilarity = QTUtils.UByte2Int(similarity);
     }
 
     /**

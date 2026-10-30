@@ -12,8 +12,8 @@ public final class Atom {
     /**
      * Construct an Atom out of the constant value that defines this data type.
      */
-    public Atom(int paramInt) {
-        this.atom = paramInt;
+    public Atom(int atom) {
+        this.atom = atom;
     }
 
     /**

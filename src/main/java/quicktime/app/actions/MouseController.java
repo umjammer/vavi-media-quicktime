@@ -470,28 +470,28 @@ public abstract class MouseController implements ListenerController, Collection,
         e.translatePoint(-this.xLocationOffset, -this.yLocationOffset);
         if (this.responder.isInterested(64, e.getModifiers())) {
             try {
-                Object localObject = getSelected(e);
-                if (localObject == null) {
+                Object mouseMoveCurrentTarget = getSelected(e);
+                if (mouseMoveCurrentTarget == null) {
                     if (this.mouseMoveCurrentTarget != null) {
                         this.responder.mouseExitedTarget(e);
                         deactivateResponder();
                         this.mouseMoveCurrentTarget = null;
                     }
-                } else if (this.responder.isAppropriate(localObject)) {
+                } else if (this.responder.isAppropriate(mouseMoveCurrentTarget)) {
                     if (this.mouseMoveCurrentTarget == null) {
-                        this.responder.setTarget(localObject);
+                        this.responder.setTarget(mouseMoveCurrentTarget);
                         this.responder.activate(64);
                         responderActivated();
                         this.responder.mouseEnteredTarget(e);
-                        this.mouseMoveCurrentTarget = localObject;
-                    } else if (this.mouseMoveCurrentTarget != localObject) {
+                        this.mouseMoveCurrentTarget = mouseMoveCurrentTarget;
+                    } else if (this.mouseMoveCurrentTarget != mouseMoveCurrentTarget) {
                         this.responder.mouseExitedTarget(e);
                         deactivateResponder();
-                        this.responder.setTarget(localObject);
+                        this.responder.setTarget(mouseMoveCurrentTarget);
                         this.responder.activate(64);
                         responderActivated();
                         this.responder.mouseEnteredTarget(e);
-                        this.mouseMoveCurrentTarget = localObject;
+                        this.mouseMoveCurrentTarget = mouseMoveCurrentTarget;
                     } else {
                         this.responder.mouseMoved(e);
                         e.translatePoint(this.xLocationOffset, this.yLocationOffset);
@@ -501,8 +501,8 @@ public abstract class MouseController implements ListenerController, Collection,
                     deactivateResponder();
                     this.mouseMoveCurrentTarget = null;
                 }
-            } catch (QTException localQTException) {
-                QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "getSelected");
+            } catch (QTException ex) {
+                QTRuntimeException.handleOrThrow(new QTRuntimeException(ex), this, "getSelected");
             }
         }
         if (this.responder.isInterested(8, e.getModifiers())) {
@@ -543,28 +543,28 @@ public abstract class MouseController implements ListenerController, Collection,
     protected void doDragTarget(MouseEvent event) {
         if (this.responder.isInterested(64, event.getModifiers())) {
             try {
-                Object localObject = getSelected(event);
-                if ((localObject == null) && (this.currentTargetInDrag != null)) {
+                Object currentTargetInDrag = getSelected(event);
+                if ((currentTargetInDrag == null) && (this.currentTargetInDrag != null)) {
                     this.responder.mouseExitedTarget(event);
                     this.currentTargetInDrag = null;
-                } else if ((localObject != null) && (this.currentTargetInDrag == null) && (localObject == this.originalDragTarget)) {
+                } else if ((currentTargetInDrag != null) && (this.currentTargetInDrag == null) && (currentTargetInDrag == this.originalDragTarget)) {
                     this.responder.mouseEnteredTarget(event);
-                    this.currentTargetInDrag = localObject;
+                    this.currentTargetInDrag = currentTargetInDrag;
                 }
-            } catch (QTException localQTException) {
-                QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "getSelected");
+            } catch (QTException e) {
+                QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "getSelected");
             }
         }
     }
 
-    private boolean _activateResponder(MouseEvent event, int paramInt) {
+    private boolean _activateResponder(MouseEvent event, int activationEvent) {
         try {
-            Object localObject = getSelected(event);
-            if ((localObject != null) && (this.responder.isAppropriate(localObject))) {
-                this.responder.activate(paramInt);
-                this.responder.setTarget(localObject);
-                this.originalDragTarget = localObject;
-                this.currentTargetInDrag = localObject;
+            Object originalDragTarget = getSelected(event);
+            if ((originalDragTarget != null) && (this.responder.isAppropriate(originalDragTarget))) {
+                this.responder.activate(activationEvent);
+                this.responder.setTarget(originalDragTarget);
+                this.originalDragTarget = originalDragTarget;
+                this.currentTargetInDrag = originalDragTarget;
                 responderActivated();
                 return true;
             }

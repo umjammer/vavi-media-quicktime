@@ -5,8 +5,8 @@ import quicktime.std.movies.AtomContainer;
 
 public class ThreeDMediaHandler extends VisualMediaHandler {
 
-    ThreeDMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    ThreeDMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**

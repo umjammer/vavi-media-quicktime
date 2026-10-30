@@ -16,8 +16,8 @@ public final class ResolvedQTEventSpec extends QTPointerRef {
      */
     public static final int kNativeSize = 16;
 
-    ResolvedQTEventSpec(int paramInt, Object paramObject) {
-        super(paramInt, kNativeSize, paramObject);
+    ResolvedQTEventSpec(int nativeRep, Object ref) {
+        super(nativeRep, kNativeSize, ref);
     }
 
     /**

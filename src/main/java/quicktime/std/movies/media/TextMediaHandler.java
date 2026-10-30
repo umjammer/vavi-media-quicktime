@@ -16,8 +16,8 @@ import quicktime.util.QTPointerRef;
 
 public final class TextMediaHandler extends VisualMediaHandler implements QuickTimeLib {
 
-    TextMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    TextMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -42,25 +42,25 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
     public int addTextSample(QTPointerRef text, int fontNumber, int fontSize, int textFace, QDColor textColor, QDColor backColor, int textJustification, QDRect textBox, int displayFlags, int scrollDelay, int hiliteStart, int hiliteEnd, QDColor rgbHiliteColor, int duration) throws StdQTException {
         int[] sampleTime = new int[1];
         int i = 0;
-        int[] arrayOfInt2 = { 0 };
-        int[] arrayOfInt3 = { 0 };
+        int[] port = { 0 };
+        int[] gdh = { 0 };
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(arrayOfInt2, arrayOfInt3);
+                GetGWorld(port, gdh);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
             i = TextMediaAddTextSample(_ID(), QTObject.ID(text), text.getSize(), (short) fontNumber, (short) fontSize, (short) textFace, textColor != null ? textColor.getRGBColor() : null, backColor != null ? backColor.getRGBColor() : null, (short) textJustification, textBox.getRect(), displayFlags, scrollDelay, (short) hiliteStart, (short) hiliteEnd, rgbHiliteColor != null ? rgbHiliteColor.getRGBColor() : null, duration, sampleTime);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                SetGWorld(arrayOfInt2[0], arrayOfInt3[0]);
+                SetGWorld(port[0], gdh[0]);
         }
         StdQTException.checkError(i);
         return sampleTime[0];
     }
 
-    private int addHiliteSample(int paramInt1, int paramInt2, QDColor paramQDColor, int paramInt3) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = TextMediaAddHiliteSample(_ID(), (short) paramInt1, (short) paramInt2, paramQDColor != null ? paramQDColor.getRGBColor() : null, paramInt3, arrayOfInt);
+    private int addHiliteSample(int hiliteStart, int hiliteEnd, QDColor color, int duration) throws StdQTException {
+        int[] sampleTime = new int[1];
+        int i = TextMediaAddHiliteSample(_ID(), (short) hiliteStart, (short) hiliteEnd, color != null ? color.getRGBColor() : null, duration, sampleTime);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return sampleTime[0];
     }
 
     /**
@@ -73,12 +73,12 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @throws quicktime.std.StdQTException
      */
     public FoundTextInfo findNextText(QTPointerRef text, int findFlags, int startTime) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int i = TextMediaFindNextText(_ID(), QTObject.ID(text), text.getSize(), (short) findFlags, startTime, arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int[] foundTime = new int[1];
+        int[] foundDuration = new int[1];
+        int[] offset = new int[1];
+        int i = TextMediaFindNextText(_ID(), QTObject.ID(text), text.getSize(), (short) findFlags, startTime, foundTime, foundDuration, offset);
         StdQTException.checkError(i);
-        return new FoundTextInfo(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0]);
+        return new FoundTextInfo(foundTime[0], foundDuration[0], offset[0]);
     }
 
     /**
@@ -102,9 +102,9 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @throws quicktime.std.StdQTException
      */
     public void setDropShadowOffset(QDPoint offset) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        arrayOfInt[0] = offset.getPoint();
-        StdQTException.checkError(TextMediaSetTextSampleData(_ID(), arrayOfInt, 1685221487));
+        int[] data = new int[1];
+        data[0] = offset.getPoint();
+        StdQTException.checkError(TextMediaSetTextSampleData(_ID(), data, 1685221487));
     }
 
     /**
@@ -114,37 +114,37 @@ public final class TextMediaHandler extends VisualMediaHandler implements QuickT
      * @throws quicktime.std.StdQTException
      */
     public void setDropShadowTranslucency(int translucency) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        arrayOfInt[0] = translucency;
-        int i = TextMediaSetTextSampleData(_ID(), arrayOfInt, 1685221492);
+        int[] data = new int[1];
+        data[0] = translucency;
+        int i = TextMediaSetTextSampleData(_ID(), data, 1685221492);
         StdQTException.checkError(i);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
     private static int TextMediaAddTextSample(int mh, int text, int size, short fontNumber, short fontSIze, short fontFace, byte[] textColor, byte[] backColor, short textJustification, byte[] textBox, int displayFlags, int scrollDelay, short hiliteStart, short hiliteEnd, byte[] hilieColor, int duration, int[] sampleTime) {
         return MediaHandlerManager.TextMediaAddTextSample(mh, text, size, fontNumber, fontSIze, fontFace, textColor, backColor, textJustification, textBox, displayFlags, scrollDelay, hiliteStart, hiliteEnd, hilieColor, duration, sampleTime);
     }
 
-    private static int TextMediaAddHiliteSample(int paramInt1, short paramShort1, short paramShort2, byte[] paramArrayOfByte, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.TextMediaAddHiliteSample(paramInt1, paramShort1, paramShort2, paramArrayOfByte, paramInt2, paramArrayOfInt);
+    private static int TextMediaAddHiliteSample(int mh, short hiliteStart, short hiliteEnd, byte[] hiliteColor, int duration, int[] sampleTime) {
+        return MediaHandlerManager.TextMediaAddHiliteSample(mh, hiliteStart, hiliteEnd, hiliteColor, duration, sampleTime);
     }
 
-    private static int TextMediaFindNextText(int paramInt1, int paramInt2, int paramInt3, short paramShort, int paramInt4, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return MediaHandlerManager.TextMediaFindNextText(paramInt1, paramInt2, paramInt3, paramShort, paramInt4, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static int TextMediaFindNextText(int mh, int text, int size, short findFlags, int startTime, int[] foundTime, int[] foundDuration, int[] offset) {
+        return MediaHandlerManager.TextMediaFindNextText(mh, text, size, findFlags, startTime, foundTime, foundDuration, offset);
     }
 
-    private static int TextMediaHiliteTextSample(int paramInt1, int paramInt2, short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.TextMediaHiliteTextSample(paramInt1, paramInt2, paramShort1, paramShort2, paramArrayOfByte);
+    private static int TextMediaHiliteTextSample(int mh, int sampleTime, short hiliteStart, short hiliteEnd, byte[] hiliteColor) {
+        return MediaHandlerManager.TextMediaHiliteTextSample(mh, sampleTime, hiliteStart, hiliteEnd, hiliteColor);
     }
 
-    private static int TextMediaSetTextSampleData(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
-        return MediaHandlerManager.TextMediaSetTextSampleData(paramInt1, paramArrayOfInt, paramInt2);
+    private static int TextMediaSetTextSampleData(int mh, int[] data, int dataType) {
+        return MediaHandlerManager.TextMediaSetTextSampleData(mh, data, dataType);
     }
 }

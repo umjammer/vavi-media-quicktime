@@ -16,8 +16,8 @@ public final class CodecName extends QTPointerRef {
      */
     public static final int kNativeSize = 44;
 
-    CodecName(int paramInt, Object paramObject) {
-        super(paramInt, 44, paramObject);
+    CodecName(int nativeRep, Object ref) {
+        super(nativeRep, 44, ref);
     }
 
     /**

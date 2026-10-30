@@ -117,9 +117,9 @@ public final class PresParams extends QTPointerRef {
     /**
      * Sets the edit list
      */
-    public void setEditList(EditList paramEditList) {
-        setIntAt(4, QTObject.ID(paramEditList));
-        this.editList = paramEditList;
+    public void setEditList(EditList editList) {
+        setIntAt(4, QTObject.ID(editList));
+        this.editList = editList;
     }
 
     /**

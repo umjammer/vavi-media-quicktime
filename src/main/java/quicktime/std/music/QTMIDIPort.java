@@ -16,8 +16,8 @@ public final class QTMIDIPort extends SynthesizerConnections {
         super(kNativeSize);
     }
 
-    private QTMIDIPort(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private QTMIDIPort(byte[] bytes) {
+        super(bytes);
     }
 
     /**
@@ -30,8 +30,8 @@ public final class QTMIDIPort extends SynthesizerConnections {
     /**
      * Set the name of the output port.
      */
-    public void setPortName(String paramString) throws UtilException {
-        setPStringAt(32, 63, paramString);
+    public void setPortName(String portName) throws UtilException {
+        setPStringAt(32, 63, portName);
     }
 
     /**

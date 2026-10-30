@@ -50,11 +50,11 @@ public class DataCodecCompressor extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public DataCodecInfo compress(QTPointerRef srcData, QTPointerRef dstData) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int i = DataCodecCompress(_ID(), QTObject.ID(srcData), srcData.getSize(), QTObject.ID(dstData), dstData.getSize(), arrayOfInt1, arrayOfInt2);
+        int[] actualDstSize = { 0 };
+        int[] decompressSlop = { 0 };
+        int i = DataCodecCompress(_ID(), QTObject.ID(srcData), srcData.getSize(), QTObject.ID(dstData), dstData.getSize(), actualDstSize, decompressSlop);
         StdQTException.checkError(i);
-        return new DataCodecInfo(arrayOfInt1[0], arrayOfInt2[0]);
+        return new DataCodecInfo(actualDstSize[0], decompressSlop[0]);
     }
 
     /**
@@ -66,16 +66,16 @@ public class DataCodecCompressor extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getCompressBufferSize(int srcSize) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(DataCodecGetCompressBufferSize(_ID(), srcSize, arrayOfInt));
-        return arrayOfInt[0];
+        int[] dstSize = { 0 };
+        StdQTException.checkError(DataCodecGetCompressBufferSize(_ID(), srcSize, dstSize));
+        return dstSize[0];
     }
 
-    private static int DataCodecCompress(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.DataCodecCompress(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt1, paramArrayOfInt2);
+    private static int DataCodecCompress(int dc, int srcData, int srcSize, int dstData, int dstBufferSize, int[] actualDstSize, int[] decompressSlop) {
+        return ImageCompressionManager.DataCodecCompress(dc, srcData, srcSize, dstData, dstBufferSize, actualDstSize, decompressSlop);
     }
 
-    private static int DataCodecGetCompressBufferSize(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ImageCompressionManager.DataCodecGetCompressBufferSize(paramInt1, paramInt2, paramArrayOfInt);
+    private static int DataCodecGetCompressBufferSize(int dc, int srcSize, int[] dstSize) {
+        return ImageCompressionManager.DataCodecGetCompressBufferSize(dc, srcSize, dstSize);
     }
 }

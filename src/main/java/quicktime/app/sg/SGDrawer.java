@@ -112,9 +112,9 @@ public class SGDrawer extends Tasking implements QTDrawable {
      * @since QTJava 4.0
      */
     public Dimension getInitialSize() throws QTException {
-        QDRect localQDRect = this.chan.getBounds();
-        Matrix localMatrix = this.chan.getMatrix();
-        return new Dimension((int) (localQDRect.getWidth() / localMatrix.getSx()), (int) (localQDRect.getHeight() / localMatrix.getSy()));
+        QDRect bounds = this.chan.getBounds();
+        Matrix matrix = this.chan.getMatrix();
+        return new Dimension((int) (bounds.getWidth() / matrix.getSx()), (int) (bounds.getHeight() / matrix.getSy()));
     }
 
     /**
@@ -127,9 +127,9 @@ public class SGDrawer extends Tasking implements QTDrawable {
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
-        QDRect localQDRect = this.chan.getBounds();
-        Matrix localMatrix = this.chan.getMatrix();
-        return new QDDimension(localQDRect.getWidth() / localMatrix.getSx(), localQDRect.getHeight() / localMatrix.getSy());
+        QDRect bounds = this.chan.getBounds();
+        Matrix matrix = this.chan.getMatrix();
+        return new QDDimension(bounds.getWidth() / matrix.getSx(), bounds.getHeight() / matrix.getSy());
     }
 
     /**
@@ -184,10 +184,10 @@ public class SGDrawer extends Tasking implements QTDrawable {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**

@@ -63,8 +63,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @see "QuickTime::SGInitialize"
      * @param subType The movie export component sub type
      */
-    public SequenceGrabber(int paramInt1, int subType) throws QTException {
-        super(paramInt1, subType);
+    public SequenceGrabber(int type, int subType) throws QTException {
+        super(type, subType);
         initialize();
     }
 
@@ -73,16 +73,16 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
             throw new SecurityException("Only able to capture media with security settings when class is signed");
         }
         int i = 0;
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] port = { 0 };
+        int[] gdh = { 0 };
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(arrayOfInt1, arrayOfInt2);
+                GetGWorld(port, gdh);
             SetGWorld(QTObject.ID(QDGraphics.scratch), 0);
             setGWorld(QDGraphics.scratch, null);
             i = SGInitialize(_ID());
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
+                SetGWorld(port[0], gdh[0]);
             this.hasStarted = false;
         }
         if (i < 0) {
@@ -166,8 +166,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * Disposes of an output associated with a sequence grabber.
      * @see "QuickTime::SGDisposeOutput"
      */
-    public void disposeOutput(SGOutput paramSGOutput) throws QTException {
-        paramSGOutput.disposeQTObject();
+    public void disposeOutput(SGOutput sgOutput) throws QTException {
+        sgOutput.disposeQTObject();
     }
 
     boolean isValid() {
@@ -185,10 +185,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      *  associated with the sequence grabber output.
      * @throws quicktime.std.StdQTException
      */
-    public void writeExtendedMovieData(SGChannel paramSGChannel, int p, int len, long offset, SGOutput sgOut) throws StdQTException {
+    public void writeExtendedMovieData(SGChannel ref, int p, int len, long offset, SGOutput sgOut) throws StdQTException {
         byte[] arrayOfByte = new byte[8];
         setLongInArray(arrayOfByte, 0, offset);
-        int i = SGWriteExtendedMovieData(_ID(), QTObject.ID(paramSGChannel), p, len, arrayOfByte, QTObject.ID(sgOut));
+        int i = SGWriteExtendedMovieData(_ID(), QTObject.ID(ref), p, len, arrayOfByte, QTObject.ID(sgOut));
         StdQTException.checkError(i);
     }
 
@@ -225,15 +225,15 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      */
     public void idle() throws StdQTException {
         int i = 0;
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] port = { 0 };
+        int[] gdh = { 0 };
         if (this.hasStarted) {
             synchronized (QTNative.globalsLock) {
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                    GetGWorld(arrayOfInt1, arrayOfInt2);
+                    GetGWorld(port, gdh);
                 i = SGIdle(_ID());
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                    SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
+                    SetGWorld(port[0], gdh[0]);
                 }
             }
         }
@@ -254,15 +254,15 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      */
     public boolean idleMore() throws StdQTException {
         int i = 0;
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] port = { 0 };
+        int[] gdh = { 0 };
         if (this.hasStarted) {
             synchronized (QTNative.globalsLock) {
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                    GetGWorld(arrayOfInt1, arrayOfInt2);
+                    GetGWorld(port, gdh);
                 i = SGIdle(_ID());
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                    SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
+                    SetGWorld(port[0], gdh[0]);
                 }
             }
         }
@@ -281,14 +281,14 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      */
     public void update(Region updateRgn) throws StdQTException {
         int i = 0;
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+        int[] port = { 0 };
+        int[] gdh = { 0 };
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(arrayOfInt1, arrayOfInt2);
+                GetGWorld(port, gdh);
             i = SGUpdate(_ID(), QTObject.ID(updateRgn));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
-                SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
+                SetGWorld(port[0], gdh[0]);
             }
         }
         StdQTException.checkError(i);
@@ -302,7 +302,7 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
         int i = 0;
         int[] arrayOfInt1 = { 0 };
         int[] arrayOfInt2 = { 0 };
-        QDGraphics localQDGraphics = getGWorld();
+        QDGraphics gWorld = getGWorld();
         this.hasStarted = false;
         synchronized (QTNative.globalsLock) {
             i = SGStop(_ID());
@@ -331,10 +331,10 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetPause"
      */
     public int getPause() throws StdQTException {
-        byte[] arrayOfByte = new byte[1];
-        int i = SGGetPause(_ID(), arrayOfByte);
+        byte[] paused = new byte[1];
+        int i = SGGetPause(_ID(), paused);
         StdQTException.checkError(i);
-        return arrayOfByte[0];
+        return paused[0];
     }
 
     /**
@@ -468,11 +468,11 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public int getDataOutputFlags() throws QTException {
-        byte[] arrayOfByte = new byte[(QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 'F' : 256];
-        int[] arrayOfInt = { 0 };
-        int i = SGGetDataOutput(_ID(), arrayOfByte, arrayOfInt);
+        byte[] fsspec = new byte[(QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 'F' : 256];
+        int[] flags = { 0 };
+        int i = SGGetDataOutput(_ID(), fsspec, flags);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return flags[0];
     }
 
     /**
@@ -481,15 +481,15 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @param dataRef information that identifies the destination container
      * @throws quicktime.std.StdQTException
      */
-    public void setDataRef(DataRef dataRef, int paramInt) throws StdQTException {
+    public void setDataRef(DataRef dataRef, int flags) throws StdQTException {
         int i = 0;
         if (dataRef != null) {
             synchronized (QTNative.globalsLock) {
-                i = SGSetDataRef(_ID(), QTObject.ID(dataRef), dataRef.getType(), paramInt);
+                i = SGSetDataRef(_ID(), QTObject.ID(dataRef), dataRef.getType(), flags);
             }
         }
         synchronized (QTNative.globalsLock) {
-            i = SGSetDataRef(_ID(), 0, 0, paramInt);
+            i = SGSetDataRef(_ID(), 0, 0, flags);
         }
         StdQTException.checkError(i);
     }
@@ -511,12 +511,12 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getDataRefFlags() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int i = SGGetDataRef(_ID(), arrayOfInt1, arrayOfInt2, arrayOfInt3);
+        int[] dataRef = new int[1];
+        int[] dataRefType = new int[1];
+        int[] flags = new int[1];
+        int i = SGGetDataRef(_ID(), dataRef, dataRefType, flags);
         StdQTException.checkError(i);
-        return arrayOfInt3[0];
+        return flags[0];
     }
 
     /**
@@ -525,8 +525,8 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @return the ticks of recording time. If 0 then no limit has been set
      * @throws quicktime.std.StdQTException
      */
-    public void setMaximumRecordTime(int paramInt) throws StdQTException {
-        StdQTException.checkError(SGSetMaximumRecordTime(_ID(), paramInt));
+    public void setMaximumRecordTime(int maximumRecordTime) throws StdQTException {
+        StdQTException.checkError(SGSetMaximumRecordTime(_ID(), maximumRecordTime));
     }
 
     /**
@@ -536,9 +536,9 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getMaximumRecordTime() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SGGetMaximumRecordTime(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] ticks = { 0 };
+        StdQTException.checkError(SGGetMaximumRecordTime(_ID(), ticks));
+        return ticks[0];
     }
 
     /**
@@ -548,9 +548,9 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getStorageSpaceRemaining() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SGGetStorageSpaceRemaining(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] bytes = { 0 };
+        StdQTException.checkError(SGGetStorageSpaceRemaining(_ID(), bytes));
+        return bytes[0];
     }
 
     /**
@@ -561,9 +561,9 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getTimeRemaining() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SGGetTimeRemaining(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] ticks = { 0 };
+        StdQTException.checkError(SGGetTimeRemaining(_ID(), ticks));
+        return ticks[0];
     }
 
     /**
@@ -572,11 +572,11 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetMode"
      */
     public boolean isPreviewMode() throws StdQTException {
-        byte[] arrayOfByte1 = new byte[1];
-        byte[] arrayOfByte2 = new byte[1];
-        int i = SGGetMode(_ID(), arrayOfByte1, arrayOfByte2);
+        byte[] previewMode = new byte[1];
+        byte[] recordMode = new byte[1];
+        int i = SGGetMode(_ID(), previewMode, recordMode);
         StdQTException.checkError(i);
-        return arrayOfByte1[0] != 0;
+        return previewMode[0] != 0;
     }
 
     /**
@@ -585,11 +585,11 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @see "QuickTime::SGGetMode"
      */
     public boolean isRecordMode() throws StdQTException {
-        byte[] arrayOfByte1 = new byte[1];
-        byte[] arrayOfByte2 = new byte[1];
-        int i = SGGetMode(_ID(), arrayOfByte1, arrayOfByte2);
+        byte[] previewMode = new byte[1];
+        byte[] recordMode = new byte[1];
+        int i = SGGetMode(_ID(), previewMode, recordMode);
         StdQTException.checkError(i);
-        return arrayOfByte2[0] != 0;
+        return recordMode[0] != 0;
     }
 
     /**
@@ -611,9 +611,9 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int getIndChannelType(int index) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(SGGetIndChannel(_ID(), (short) index, 0, arrayOfInt));
-        return arrayOfInt[0];
+        int[] type = { 0 };
+        StdQTException.checkError(SGGetIndChannel(_ID(), (short) index, 0, type));
+        return type[0];
     }
 
     /**
@@ -625,14 +625,14 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public SGChannel getIndChannel(int index) throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        StdQTException.checkError(SGGetIndChannel(_ID(), (short) index, arrayOfInt1, arrayOfInt2));
-        return switch (arrayOfInt2[0]) {
-            case 1936684398 -> new SGSoundChannel(arrayOfInt1[0], this);
-            case 1952807028 -> new SGTextChannel(arrayOfInt1[0], this);
-            case 1986618469 -> new SGVideoChannel(arrayOfInt1[0], this);
-            case 1836413801 -> new SGMusicChannel(arrayOfInt1[0], this);
+        int[] ref = { 0 };
+        int[] type = { 0 };
+        StdQTException.checkError(SGGetIndChannel(_ID(), (short) index, ref, type));
+        return switch (type[0]) {
+            case 1936684398 -> new SGSoundChannel(ref[0], this);
+            case 1952807028 -> new SGTextChannel(ref[0], this);
+            case 1986618469 -> new SGVideoChannel(ref[0], this);
+            case 1836413801 -> new SGMusicChannel(ref[0], this);
             default -> throw new QTException("Unknown SGChannel - please report bug");
         };
     }
@@ -678,123 +678,123 @@ public final class SequenceGrabber extends Component implements QuickTimeLib {
         }
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static int SGInitialize(int paramInt) {
-        return SequenceGrabberManager.SGInitialize(paramInt);
+    private static int SGInitialize(int sg) {
+        return SequenceGrabberManager.SGInitialize(sg);
     }
 
-    private static int SGSetGWorld(int paramInt1, int paramInt2, int paramInt3) {
-        return SequenceGrabberManager.SGSetGWorld(paramInt1, paramInt2, paramInt3);
+    private static int SGSetGWorld(int sg, int port, int gdh) {
+        return SequenceGrabberManager.SGSetGWorld(sg, port, gdh);
     }
 
-    private static int SGWriteExtendedMovieData(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte, int paramInt5) {
-        return SequenceGrabberManager.SGWriteExtendedMovieData(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte, paramInt5);
+    private static int SGWriteExtendedMovieData(int sg, int ref, int p, int len, byte[] offset, int output) {
+        return SequenceGrabberManager.SGWriteExtendedMovieData(sg, ref, p, len, offset, output);
     }
 
-    private static int SGStartPreview(int paramInt) {
-        return SequenceGrabberManager.SGStartPreview(paramInt);
+    private static int SGStartPreview(int sg) {
+        return SequenceGrabberManager.SGStartPreview(sg);
     }
 
-    private static int SGStartRecord(int paramInt) {
-        return SequenceGrabberManager.SGStartRecord(paramInt);
+    private static int SGStartRecord(int sg) {
+        return SequenceGrabberManager.SGStartRecord(sg);
     }
 
-    private static int SGIdle(int paramInt) {
-        return SequenceGrabberManager.SGIdle(paramInt);
+    private static int SGIdle(int sg) {
+        return SequenceGrabberManager.SGIdle(sg);
     }
 
-    private static int SGUpdate(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGUpdate(paramInt1, paramInt2);
+    private static int SGUpdate(int sg, int updateRgn) {
+        return SequenceGrabberManager.SGUpdate(sg, updateRgn);
     }
 
-    private static int SGStop(int paramInt) {
-        return SequenceGrabberManager.SGStop(paramInt);
+    private static int SGStop(int sg) {
+        return SequenceGrabberManager.SGStop(sg);
     }
 
-    private static int SGPause(int paramInt, byte paramByte) {
-        return SequenceGrabberManager.SGPause(paramInt, paramByte);
+    private static int SGPause(int sg, byte pause) {
+        return SequenceGrabberManager.SGPause(sg, pause);
     }
 
-    private static int SGGetPause(int paramInt, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetPause(paramInt, paramArrayOfByte);
+    private static int SGGetPause(int sg, byte[] paused) {
+        return SequenceGrabberManager.SGGetPause(sg, paused);
     }
 
-    private static int SGPrepare(int paramInt, byte paramByte1, byte paramByte2) {
-        return SequenceGrabberManager.SGPrepare(paramInt, paramByte1, paramByte2);
+    private static int SGPrepare(int sg, byte prepareForPreview, byte prepareForRecord) {
+        return SequenceGrabberManager.SGPrepare(sg, prepareForPreview, prepareForRecord);
     }
 
-    private static int SGRelease(int paramInt) {
-        return SequenceGrabberManager.SGRelease(paramInt);
+    private static int SGRelease(int sg) {
+        return SequenceGrabberManager.SGRelease(sg);
     }
 
-    private static int SGSetSettings(int paramInt1, int paramInt2, int paramInt3) {
-        return SequenceGrabberManager.SGSetSettings(paramInt1, paramInt2, paramInt3);
+    private static int SGSetSettings(int sg, int userData, int flags) {
+        return SequenceGrabberManager.SGSetSettings(sg, userData, flags);
     }
 
-    private static int SGSetDataOutput(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return SequenceGrabberManager.SGSetDataOutput(paramInt1, paramArrayOfByte, paramInt2);
+    private static int SGSetDataOutput(int sg, byte[] fsspec, int flags) {
+        return SequenceGrabberManager.SGSetDataOutput(sg, fsspec, flags);
     }
 
-    private static int SGGetDataOutput(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetDataOutput(paramInt, paramArrayOfByte, paramArrayOfInt);
+    private static int SGGetDataOutput(int sg, byte[] fsspec, int[] flags) {
+        return SequenceGrabberManager.SGGetDataOutput(sg, fsspec, flags);
     }
 
-    private static int SGSetDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return SequenceGrabberManager.SGSetDataRef(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int SGSetDataRef(int sg, int dataRef, int dataRefType, int flags) {
+        return SequenceGrabberManager.SGSetDataRef(sg, dataRef, dataRefType, flags);
     }
 
-    private static int SGGetDataRef(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3) {
-        return SequenceGrabberManager.SGGetDataRef(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3);
+    private static int SGGetDataRef(int sg, int[] dataRef, int[] dataRefType, int[] flags) {
+        return SequenceGrabberManager.SGGetDataRef(sg, dataRef, dataRefType, flags);
     }
 
-    private static int SGSetMaximumRecordTime(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGSetMaximumRecordTime(paramInt1, paramInt2);
+    private static int SGSetMaximumRecordTime(int sg, int ticks) {
+        return SequenceGrabberManager.SGSetMaximumRecordTime(sg, ticks);
     }
 
-    private static int SGGetMaximumRecordTime(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetMaximumRecordTime(paramInt, paramArrayOfInt);
+    private static int SGGetMaximumRecordTime(int sg, int[] ticks) {
+        return SequenceGrabberManager.SGGetMaximumRecordTime(sg, ticks);
     }
 
-    private static int SGGetStorageSpaceRemaining(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetStorageSpaceRemaining(paramInt, paramArrayOfInt);
+    private static int SGGetStorageSpaceRemaining(int sg, int[] bytes) {
+        return SequenceGrabberManager.SGGetStorageSpaceRemaining(sg, bytes);
     }
 
-    private static int SGGetTimeRemaining(int paramInt, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetTimeRemaining(paramInt, paramArrayOfInt);
+    private static int SGGetTimeRemaining(int sg, int[] ticks) {
+        return SequenceGrabberManager.SGGetTimeRemaining(sg, ticks);
     }
 
-    private static int SGGetMode(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return SequenceGrabberManager.SGGetMode(paramInt, paramArrayOfByte1, paramArrayOfByte2);
+    private static int SGGetMode(int sg, byte[] previewMode, byte[] recordMode) {
+        return SequenceGrabberManager.SGGetMode(sg, previewMode, recordMode);
     }
 
-    private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SequenceGrabberManager.SGGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int SGGetGWorld(int sg, int[] port, int[] gdh) {
+        return SequenceGrabberManager.SGGetGWorld(sg, port, gdh);
     }
 
-    private static int SGGrabPict(int paramInt1, int[] paramArrayOfInt, byte[] paramArrayOfByte, short paramShort, int paramInt2) {
-        return SequenceGrabberManager.SGGrabPict(paramInt1, paramArrayOfInt, paramArrayOfByte, paramShort, paramInt2);
+    private static int SGGrabPict(int sg, int[] pict, byte[] bounds, short offscreenDepth, int grabPictFlags) {
+        return SequenceGrabberManager.SGGrabPict(sg, pict, bounds, offscreenDepth, grabPictFlags);
     }
 
-    private static int SGGetIndChannel(int paramInt1, short paramShort, int paramInt2, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetIndChannel(paramInt1, paramShort, paramInt2, paramArrayOfInt);
+    private static int SGGetIndChannel(int sg, short index, int ref, int[] type) {
+        return SequenceGrabberManager.SGGetIndChannel(sg, index, ref, type);
     }
 
-    private static int SGGetIndChannel(int paramInt, short paramShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SequenceGrabberManager.SGGetIndChannel(paramInt, paramShort, paramArrayOfInt1, paramArrayOfInt2);
+    private static int SGGetIndChannel(int sg, short index, int[] ref, int[] type) {
+        return SequenceGrabberManager.SGGetIndChannel(sg, index, ref, type);
     }
 
-    private static int SGSetDataProc(int paramInt1, int paramInt2, int paramInt3) {
-        return SequenceGrabberManager.SGSetDataProc(paramInt1, paramInt2, paramInt3);
+    private static int SGSetDataProc(int sg, int proc, int refCon) {
+        return SequenceGrabberManager.SGSetDataProc(sg, proc, refCon);
     }
 
-    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    private static void setLongInArray(byte[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 }

@@ -67,8 +67,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
 
     class MPInvalidator extends Invalidator {
 
-        MPInvalidator(TwoDSprite paramTwoDSprite) {
-            super(paramTwoDSprite);
+        MPInvalidator(TwoDSprite s) {
+            super(s);
         }
 
         @Override
@@ -82,9 +82,9 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
         }
     }
 
-    private static QDRect moveToZero(QDRect paramQDRect) {
-        paramQDRect.move(0, 0);
-        return paramQDRect;
+    private static QDRect moveToZero(QDRect rect) {
+        rect.move(0, 0);
+        return rect;
     }
 
     /**
@@ -117,8 +117,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
         this.m = m;
         this.g = g;
         m.setGWorld(g, null);
-        PixMap localPixMap = g.getPixMap();
-        setImageData(localPixMap.getPixelData(), new ImageDescription(localPixMap));
+        PixMap pixmap = g.getPixMap();
+        setImageData(pixmap.getPixelData(), new ImageDescription(pixmap));
         this.gModeOpaque = true;
         m.task(0);
     }
@@ -201,8 +201,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
                         this.listenerList.elementAt(i).drawingComplete(this);
                 }
             }
-        } catch (QTException localQTException) {
-            return localQTException.errorCode();
+        } catch (QTException e) {
+            return e.errorCode();
         }
         return 0;
     }
@@ -295,27 +295,27 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
 
     class PrerollCallback implements MoviePrePreroll {
 
-        PrerollCallback(float paramFloat) {
-            this.r = paramFloat;
+        PrerollCallback(float rate) {
+            this.r = rate;
         }
 
         private final float r;
 
         @Override
-        public void execute(Movie paramMovie, int paramInt) {
+        public void execute(Movie m, int err) {
             synchronized (MoviePresenter.this) {
                 if (MoviePresenter.this.lastRate == 0.0F) {
                     return;
                 }
-                if (paramInt == 0) {
+                if (err == 0) {
                     try {
-                        paramMovie.preroll(paramMovie.getTime(), this.r);
-                        paramMovie.setRate(this.r);
-                    } catch (QTException localQTException) {
-                        QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), paramMovie, "preroll");
+                        m.preroll(m.getTime(), this.r);
+                        m.setRate(this.r);
+                    } catch (QTException e) {
+                        QTRuntimeException.handleOrThrow(new QTRuntimeException(e), m, "preroll");
                     }
                 } else {
-                    QTRuntimeException.handleOrThrow(new QTRuntimeException(paramInt), paramMovie, "prePreroll");
+                    QTRuntimeException.handleOrThrow(new QTRuntimeException(err), m, "prePreroll");
                 }
             }
         }
@@ -542,14 +542,14 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @deprecated
      */
     @Override
-    public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
+    public synchronized void addDrawingListener(DrawingListener drawingListener) {
         if (this.listenerList == null) {
             this.listenerList = new Vector<>();
         }
-        if (this.listenerList.contains(paramDrawingListener)) {
+        if (this.listenerList.contains(drawingListener)) {
             return;
         }
-        this.listenerList.addElement(paramDrawingListener);
+        this.listenerList.addElement(drawingListener);
         if (!this.drawCompleteListening) {
             try {
                 this.m.setDrawingCompleteProc(0, this);
@@ -566,8 +566,8 @@ public class MoviePresenter extends ImagePresenter implements AudioSpec, Playabl
      * @deprecated
      */
     @Override
-    public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
-        this.listenerList.removeElement(paramDrawingListener);
+    public synchronized void removeDrawingListener(DrawingListener drawingListener) {
+        this.listenerList.removeElement(drawingListener);
         if (this.listenerList.isEmpty()) {
             if (this.spritePresenter == null) {
                 try {

@@ -39,27 +39,27 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
         setOwner(owner);
     }
 
-    SGOutput(SequenceGrabber paramSequenceGrabber, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        super(allocate(paramSequenceGrabber, paramInt1, paramInt2, paramInt3), paramSequenceGrabber);
-        setOwner(paramSequenceGrabber);
+    SGOutput(SequenceGrabber owner, int dataRef, int dataRefType, int flags) throws StdQTException {
+        super(allocate(owner, dataRef, dataRefType, flags), owner);
+        setOwner(owner);
     }
 
-    SGOutput(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
-        setOwner(paramSequenceGrabber);
+    SGOutput(int nativeRep, SequenceGrabber owner) throws StdQTException {
+        super(nativeRep, owner);
+        setOwner(owner);
     }
 
-    private static int allocate(SequenceGrabber paramSequenceGrabber, int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = SGNewOutput(QTObject.ID(paramSequenceGrabber), paramInt1, paramInt2, paramInt3, arrayOfInt);
+    private static int allocate(SequenceGrabber sg, int dataRef, int dataRefType, int flags) throws StdQTException {
+        int[] output = {0};
+        int i = SGNewOutput(QTObject.ID(sg), dataRef, dataRefType, flags, output);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return output[0];
     }
 
-    private void setOwner(SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        if (paramSequenceGrabber == null)
+    private void setOwner(SequenceGrabber owner) throws StdQTException {
+        if (owner == null)
             throw new StdQTException(-50);
-        this.owner = paramSequenceGrabber;
+        this.owner = owner;
     }
 
     /**
@@ -92,10 +92,10 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @see "QuickTime::SGGetOutputMaximumOffset"
      */
     public long getMaximumOffset() throws StdQTException {
-        byte[] arrayOfByte = new byte[8];
-        int i = SGGetOutputMaximumOffset(QTObject.ID(this.owner), _ID(), arrayOfByte);
+        byte[] maxOffset = new byte[8];
+        int i = SGGetOutputMaximumOffset(QTObject.ID(this.owner), _ID(), maxOffset);
         StdQTException.checkError(i);
-        return getLongFromArray(arrayOfByte, 0);
+        return getLongFromArray(maxOffset, 0);
     }
 
     /**
@@ -122,20 +122,20 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
      * @see "QuickTime::SGGetDataOutputStorageSpaceRemaining"
      */
     public long getDataStorageSpaceRemaining() throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = SGGetDataOutputStorageSpaceRemaining(QTObject.ID(this.owner), _ID(), arrayOfInt);
+        int[] space = {0};
+        int i = SGGetDataOutputStorageSpaceRemaining(QTObject.ID(this.owner), _ID(), space);
         StdQTException.checkError(i);
-        return QTUtils.UInt2Long(arrayOfInt[0]);
+        return QTUtils.UInt2Long(space[0]);
     }
 
     /**
      * @see "QuickTime::SGGetOutputNextOutput("
      */
     public SGOutput getNextOutput() throws StdQTException {
-        int[] arrayOfInt = {0};
-        int i = SGGetOutputNextOutput(QTObject.ID(this.owner), _ID(), arrayOfInt);
+        int[] next = {0};
+        int i = SGGetOutputNextOutput(QTObject.ID(this.owner), _ID(), next);
         StdQTException.checkError(i);
-        return new SGOutput(arrayOfInt[0], this.owner);
+        return new SGOutput(next[0], this.owner);
     }
 
     /**
@@ -155,47 +155,47 @@ public final class SGOutput extends QTObject implements QuickTimeLib, Primitives
         return DataRef.fromSGOutput(this.owner, this);
     }
 
-    private static int SGNewOutput(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGNewOutput(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt);
+    private static int SGNewOutput(int sg, int dataRef, int dataRefType, int flags, int[] output) {
+        return SequenceGrabberManager.SGNewOutput(sg, dataRef, dataRefType, flags, output);
     }
 
-    private static int SGDisposeOutput(int paramInt1, int paramInt2) {
-        return SequenceGrabberManager.SGDisposeOutput(paramInt1, paramInt2);
+    private static int SGDisposeOutput(int sg, int output) {
+        return SequenceGrabberManager.SGDisposeOutput(sg, output);
     }
 
-    private static int SGSetOutputMaximumOffset(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGSetOutputMaximumOffset(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SGSetOutputMaximumOffset(int sg, int output, byte[] maxOffset) {
+        return SequenceGrabberManager.SGSetOutputMaximumOffset(sg, output, maxOffset);
     }
 
-    private static int SGGetOutputMaximumOffset(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SequenceGrabberManager.SGGetOutputMaximumOffset(paramInt1, paramInt2, paramArrayOfByte);
+    private static int SGGetOutputMaximumOffset(int sg, int output, byte[] maxOffset) {
+        return SequenceGrabberManager.SGGetOutputMaximumOffset(sg, output, maxOffset);
     }
 
-    private static int SGSetOutputFlags(int paramInt1, int paramInt2, int paramInt3) {
-        return SequenceGrabberManager.SGSetOutputFlags(paramInt1, paramInt2, paramInt3);
+    private static int SGSetOutputFlags(int sg, int output, int flags) {
+        return SequenceGrabberManager.SGSetOutputFlags(sg, output, flags);
     }
 
-    private static int SGSetChannelOutput(int paramInt1, int paramInt2, int paramInt3) {
-        return SequenceGrabberManager.SGSetChannelOutput(paramInt1, paramInt2, paramInt3);
+    private static int SGSetChannelOutput(int sg, int ref, int output) {
+        return SequenceGrabberManager.SGSetChannelOutput(sg, ref, output);
     }
 
-    private static int SGGetDataOutputStorageSpaceRemaining(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetDataOutputStorageSpaceRemaining(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SGGetDataOutputStorageSpaceRemaining(int sg, int output, int[] space) {
+        return SequenceGrabberManager.SGGetDataOutputStorageSpaceRemaining(sg, output, space);
     }
 
-    private static int SGGetOutputNextOutput(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SequenceGrabberManager.SGGetOutputNextOutput(paramInt1, paramInt2, paramArrayOfInt);
+    private static int SGGetOutputNextOutput(int sg, int output, int[] next) {
+        return SequenceGrabberManager.SGGetOutputNextOutput(sg, output, next);
     }
 
-    private static int SGSetOutputNextOutput(int paramInt1, int paramInt2, int paramInt3) {
-        return SequenceGrabberManager.SGSetOutputNextOutput(paramInt1, paramInt2, paramInt3);
+    private static int SGSetOutputNextOutput(int sg, int output, int next) {
+        return SequenceGrabberManager.SGSetOutputNextOutput(sg, output, next);
     }
 
-    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    private static void setLongInArray(byte[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 
-    private static long getLongFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
+    private static long getLongFromArray(byte[] array, int offset) {
+        return MemoryManager.getLongFromArray(array, offset);
     }
 }

@@ -31,7 +31,7 @@ public interface AudioSpec {
      * @deprecated
      * Sets the volume. * @deprecated since QTJava 6.1
      */
-    void setVolume(float paramFloat) throws QTException;
+    void setVolume(float vol) throws QTException;
 
     /**
      * @deprecated

@@ -8,8 +8,8 @@ import quicktime.util.QTHandleRef;
  */
 public final class QTMIDIPortList extends QTHandleRef implements Cloneable {
 
-    QTMIDIPortList(int paramInt) {
-        super(paramInt, null, false);
+    QTMIDIPortList(int nativeRep) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -29,13 +29,13 @@ public final class QTMIDIPortList extends QTHandleRef implements Cloneable {
         if (index > getShortAt(0))
             StdQTException.checkError(63461);
         index--;
-        QTMIDIPort localQTMIDIPort = new QTMIDIPort();
-        byte[] arrayOfByte = localQTMIDIPort.getBytes();
+        QTMIDIPort port = new QTMIDIPort();
+        byte[] bytes = port.getBytes();
         int i = 2 + index * 96;
         for (int j = 0; j < 96; j++) {
-            arrayOfByte[j] = getByteAt(j + i);
+            bytes[j] = getByteAt(j + i);
         }
-        return localQTMIDIPort;
+        return port;
     }
 
     /**

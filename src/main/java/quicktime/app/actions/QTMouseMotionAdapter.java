@@ -17,14 +17,14 @@ public abstract class QTMouseMotionAdapter implements QTMouseMotionListener {
      * @deprecated
      */
     @Override
-    public void mouseDragged(MouseEvent paramMouseEvent) {
+    public void mouseDragged(MouseEvent e) {
     }
 
     /**
      * @deprecated
      */
     @Override
-    public void mouseMoved(MouseEvent paramMouseEvent) {
+    public void mouseMoved(MouseEvent e) {
     }
 
     /**

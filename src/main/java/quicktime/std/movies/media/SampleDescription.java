@@ -26,12 +26,12 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 4, 3);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(12, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 4, 3);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(12, 2, 2);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     public static EndianDescriptor getEndianDescriptor() {
@@ -48,29 +48,29 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
      * @see "QuickTime::MovieImportGetSampleDescription"
      * @see quicktime.std.qtcomponents.MovieImporter#getSampleDescription()
      */
-    public static SampleDescription fromMovieImporter(MovieImporter paramMovieImporter) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = MovieImportGetSampleDescription(QTObject.ID(paramMovieImporter), arrayOfInt1, arrayOfInt2);
+    public static SampleDescription fromMovieImporter(MovieImporter ci) throws StdQTException {
+        int[] desc = new int[1];
+        int[] mediaType = new int[1];
+        int i = MovieImportGetSampleDescription(QTObject.ID(ci), desc, mediaType);
         StdQTException.checkError(i);
-        return new SampleDescription(arrayOfInt1[0], paramMovieImporter, false);
+        return new SampleDescription(desc[0], ci, false);
     }
 
     /**
      * This constructor creates an empty SampleDescription object.
      */
-    public SampleDescription(int paramInt) throws QTException {
-        this(kNativeSize, true, paramInt);
+    public SampleDescription(int format) throws QTException {
+        this(kNativeSize, true, format);
     }
 
-    protected SampleDescription(int paramInt, Object paramObject, boolean paramBoolean) {
-        super(paramInt, paramObject, paramBoolean);
+    protected SampleDescription(int nativeRep, Object ref, boolean locked) {
+        super(nativeRep, ref, locked);
     }
 
-    protected SampleDescription(int paramInt1, boolean paramBoolean, int paramInt2) throws QTException {
-        super(paramInt1, true);
-        setIntAt(0, paramInt1);
-        setDataFormat(paramInt2);
+    protected SampleDescription(int size, boolean clear, int format) throws QTException {
+        super(size, true);
+        setIntAt(0, size);
+        setDataFormat(format);
     }
 
     /**
@@ -154,12 +154,12 @@ public class SampleDescription extends QTHandleRef implements QuickTimeLib, Clon
         return getClass().getName() + "[format=" + QTUtils.fromOSType(getDataFormat()) + "]";
     }
 
-    private static int MovieImportGetSampleDescription(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ComponentManager.MovieImportGetSampleDescription(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int MovieImportGetSampleDescription(int ci, int[] desc, int[] mediaType) {
+        return ComponentManager.MovieImportGetSampleDescription(ci, desc, mediaType);
     }
 
-    private static void SetHandleSize(int paramInt1, int paramInt2) {
-        MemoryManager.SetHandleSize(paramInt1, paramInt2);
+    private static void SetHandleSize(int h, int size) {
+        MemoryManager.SetHandleSize(h, size);
     }
 
     private static short MemError() {

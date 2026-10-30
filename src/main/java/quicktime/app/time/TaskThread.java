@@ -35,9 +35,9 @@ public class TaskThread implements Runnable {
     public static void killAllThreads() {
         Enumeration<?> e = threads.elements();
         while (e.hasMoreElements()) {
-            TaskThread localTaskThread = (TaskThread) e.nextElement();
-            localTaskThread.stop();
-            localTaskThread.removeAll();
+            TaskThread taskThread = (TaskThread) e.nextElement();
+            taskThread.stop();
+            taskThread.removeAll();
         }
         while (!threads.isEmpty()) {
             Thread.yield();
@@ -63,9 +63,9 @@ public class TaskThread implements Runnable {
      *
      * @param sleepTime sets the sleep time that will be used when the thread starts
      */
-    public TaskThread(String paramString, int sleepTime) {
+    public TaskThread(String tName, int sleepTime) {
         this.sleepTime = sleepTime;
-        this.tName = paramString;
+        this.tName = tName;
     }
 
     private final Vector<Taskable> tasks = new Vector<>(12, 0);
@@ -89,25 +89,25 @@ public class TaskThread implements Runnable {
      * The sleepTime for the thread. If the sleepTime is set to zero, the thread will only
      * yield (but not sleep), otherwise it sleeps for the given time.
      */
-    public void setSleepTime(int paramInt) {
-        this.sleepTime = paramInt;
+    public void setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
     }
 
     /**
      * This method will add a taskable client to the list. It will not alter the state of the thread.
      */
-    public boolean addMember(Object paramObject) {
-        if (!isAppropriate(paramObject)) {
+    public boolean addMember(Object object) {
+        if (!isAppropriate(object)) {
             return false;
         }
-        if (this.tasks.contains(paramObject))
+        if (this.tasks.contains(object))
             return true;
-        Taskable localTaskable = (Taskable) paramObject;
-        if (localTaskable.getTasker() != null) {
-            localTaskable.getTasker().removeMember(paramObject);
+        Taskable taskable = (Taskable) object;
+        if (taskable.getTasker() != null) {
+            taskable.getTasker().removeMember(object);
         }
-        this.tasks.addElement(localTaskable);
-        localTaskable.addedToTasker(this);
+        this.tasks.addElement(taskable);
+        taskable.addedToTasker(this);
         return true;
     }
 
@@ -116,8 +116,8 @@ public class TaskThread implements Runnable {
      *
      * @return a boolean
      */
-    public boolean isAppropriate(Object paramObject) {
-        return paramObject instanceof Taskable;
+    public boolean isAppropriate(Object object) {
+        return object instanceof Taskable;
     }
 
     /**
@@ -144,11 +144,11 @@ public class TaskThread implements Runnable {
      * Removes the Taskable object from the collection. If this would leave
      * the collection empty then the internal thread is stopped.
      */
-    public void removeMember(Object paramObject) {
-        if (paramObject != null) {
-            this.tasks.removeElement(paramObject);
+    public void removeMember(Object member) {
+        if (member != null) {
+            this.tasks.removeElement(member);
         }
-        ((Taskable) paramObject).removedFromTasker();
+        ((Taskable) member).removedFromTasker();
     }
 
     /**
@@ -158,8 +158,8 @@ public class TaskThread implements Runnable {
         stop();
         synchronized (this) {
             for (Enumeration<Taskable> e = this.tasks.elements(); e.hasMoreElements(); ) {
-                Taskable localTaskable = e.nextElement();
-                localTaskable.removedFromTasker();
+                Taskable taskable = e.nextElement();
+                taskable.removedFromTasker();
             }
             this.tasks.removeAllElements();
         }

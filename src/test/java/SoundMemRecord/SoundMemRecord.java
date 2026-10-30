@@ -87,12 +87,12 @@ public class SoundMemRecord extends Frame {
                 final SPBDevice device = sndDevice;
 
                 @Override
-                public void execute(SPB paramBlock) {
+                public void execute(SPB block) {
                     System.out.println("FinishedRecording");
                     try {
                         // set up sndHndl after recording is finished so we cam
                         // play it
-                        soundHdl.setupHeader(device.getNumberChannels(), device.getSampleRate(), device.getSampleSize(), device.getCompressionType(), 60, paramBlock.getCount());
+                        soundHdl.setupHeader(device.getNumberChannels(), device.getSampleRate(), device.getSampleSize(), device.getCompressionType(), 60, block.getCount());
                     } catch (QTException ee) {
                         ee.printStackTrace();
                     }

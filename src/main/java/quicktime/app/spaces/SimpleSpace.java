@@ -145,8 +145,8 @@ public abstract class SimpleSpace implements Space {
      * @deprecated
      */
     @Override
-    public void timeChanged(int paramInt) throws QTException {
-        this.ticklers.timeChanged(paramInt);
+    public void timeChanged(int newTime) throws QTException {
+        this.ticklers.timeChanged(newTime);
     }
 
     /**
@@ -239,9 +239,9 @@ public abstract class SimpleSpace implements Space {
     public synchronized boolean hasMember(Object object) {
         if (!isAppropriate(object))
             return false;
-        Enumeration localEnumeration = members();
-        while (localEnumeration.hasMoreElements()) {
-            if (localEnumeration.nextElement().equals(object))
+        Enumeration enumeration = members();
+        while (enumeration.hasMoreElements()) {
+            if (enumeration.nextElement().equals(object))
                 return true;
         }
         return false;
@@ -262,22 +262,22 @@ public abstract class SimpleSpace implements Space {
             removedFrom(this.listenerSource);
         this.listenerSource = interest;
         if (this.listenerSource != null) {
-            Enumeration localEnumeration = this.containedSpaces.elements();
+            Enumeration enumeration = this.containedSpaces.elements();
             Object localObject;
-            while (localEnumeration.hasMoreElements()) {
-                localObject = localEnumeration.nextElement();
+            while (enumeration.hasMoreElements()) {
+                localObject = enumeration.nextElement();
                 ((Space) localObject).addedTo(this.listenerSource);
             }
-            localEnumeration = members();
-            while (localEnumeration.hasMoreElements()) {
-                localObject = localEnumeration.nextElement();
+            enumeration = members();
+            while (enumeration.hasMoreElements()) {
+                localObject = enumeration.nextElement();
                 if (((localObject instanceof Listener)) && (!(localObject instanceof Space))) {
                     ((Listener) localObject).addedTo(this.listenerSource);
                 }
             }
-            localEnumeration = controllers();
-            while (localEnumeration.hasMoreElements()) {
-                localObject = localEnumeration.nextElement();
+            enumeration = controllers();
+            while (enumeration.hasMoreElements()) {
+                localObject = enumeration.nextElement();
                 if ((localObject instanceof ListenerController)) {
                     ((ListenerController) localObject).addedTo(this.listenerSource);
                 }
@@ -301,22 +301,22 @@ public abstract class SimpleSpace implements Space {
                 QTRuntimeException.handleOrThrow(new QTRuntimeException(new QTRuntimeException("Remove from object Space has no interest in")), this, "removedFrom");
                 return;
             }
-            Enumeration<?> localEnumeration = controllers();
+            Enumeration<?> enumeration = controllers();
             Object localObject;
-            while (localEnumeration.hasMoreElements()) {
-                localObject = localEnumeration.nextElement();
+            while (enumeration.hasMoreElements()) {
+                localObject = enumeration.nextElement();
                 if ((localObject instanceof ListenerController)) {
                     ((ListenerController) localObject).removedFrom(this.listenerSource);
                 }
             }
-            localEnumeration = this.containedSpaces.elements();
-            while (localEnumeration.hasMoreElements()) {
-                localObject = localEnumeration.nextElement();
+            enumeration = this.containedSpaces.elements();
+            while (enumeration.hasMoreElements()) {
+                localObject = enumeration.nextElement();
                 ((Space) localObject).removedFrom(this.listenerSource);
             }
-            localEnumeration = members();
-            while (localEnumeration.hasMoreElements()) {
-                localObject = localEnumeration.nextElement();
+            enumeration = members();
+            while (enumeration.hasMoreElements()) {
+                localObject = enumeration.nextElement();
                 if (((localObject instanceof Listener)) && (!(localObject instanceof Space)))
                     ((Listener) localObject).removedFrom(this.listenerSource);
             }
@@ -341,22 +341,22 @@ public abstract class SimpleSpace implements Space {
             return;
         c.addedToSpace(this);
         this.controllersVec.addElement(c);
-        Object localObject1;
+        Object timeBase;
         Object localObject2;
         if ((c instanceof TimeableController)) {
-            localObject1 = ((Timeable) c).getTimeBase();
+            timeBase = ((Timeable) c).getTimeBase();
             localObject2 = this.timer.getTimeBase();
-            ((TimeBase) localObject1).setMasterTimeBase((TimeBase) localObject2, null);
+            ((TimeBase) timeBase).setMasterTimeBase((TimeBase) localObject2, null);
         }
         if (((c instanceof ListenerController)) && (this.listenerSource != null)) {
             ((ListenerController) c).addedTo(this.listenerSource);
         }
         if ((c instanceof CollectionController)) {
-            localObject1 = c;
-            if (((CollectionController) localObject1).isWholespace()) {
+            timeBase = c;
+            if (((CollectionController) timeBase).isWholespace()) {
                 localObject2 = members();
                 while (((Enumeration<?>) localObject2).hasMoreElements())
-                    ((CollectionController) localObject1).addMember(((Enumeration<?>) localObject2).nextElement());
+                    ((CollectionController) timeBase).addMember(((Enumeration<?>) localObject2).nextElement());
             }
         }
         if ((c instanceof TicklishController)) {
@@ -380,19 +380,19 @@ public abstract class SimpleSpace implements Space {
             return;
         this.controllersVec.removeElement(c);
         c.removedFromSpace();
-        Object localObject;
+        Object timeBase;
         if ((c instanceof TimeableController)) {
-            localObject = ((Timeable) c).getTimeBase();
-            ((TimeBase) localObject).setMasterTimeBase(null, null);
+            timeBase = ((Timeable) c).getTimeBase();
+            ((TimeBase) timeBase).setMasterTimeBase(null, null);
         }
         if (((c instanceof ListenerController)) && (this.listenerSource != null)) {
             ((ListenerController) c).removedFrom(this.listenerSource);
         }
         if ((c instanceof CollectionController)) {
-            localObject = c;
-            Enumeration localEnumeration = members();
-            while (localEnumeration.hasMoreElements())
-                ((CollectionController) localObject).removeMember(localEnumeration.nextElement());
+            timeBase = c;
+            Enumeration enumeration = members();
+            while (enumeration.hasMoreElements())
+                ((CollectionController) timeBase).removeMember(enumeration.nextElement());
         }
         if ((c instanceof TicklishController)) {
             this.ticklers.removeMember(c);
@@ -437,20 +437,20 @@ public abstract class SimpleSpace implements Space {
      * @deprecated
      */
     protected synchronized void memberAdded(Object member) throws QTException {
-        Object localObject2;
+        Object timeBase;
         Object localObject3;
         if ((member instanceof Space localObject1)) {
-            localObject2 = localObject1.getTimer().getTimeBase();
+            timeBase = localObject1.getTimer().getTimeBase();
             localObject3 = this.timer.getTimeBase();
-            ((TimeBase) localObject2).setMasterTimeBase((TimeBase) localObject3, null);
+            ((TimeBase) timeBase).setMasterTimeBase((TimeBase) localObject3, null);
             this.containedSpaces.addElement(localObject1);
             if (this.listenerSource != null)
                 localObject1.addedTo(this.listenerSource);
         } else {
             if ((member instanceof Timeable)) {
-                TimeBase localObject1 = ((Timeable) member).getTimeBase();
-                localObject2 = this.timer.getTimeBase();
-                localObject1.setMasterTimeBase((TimeBase) localObject2, null);
+                TimeBase timeBase1 = ((Timeable) member).getTimeBase();
+                timeBase = this.timer.getTimeBase();
+                timeBase1.setMasterTimeBase((TimeBase) timeBase, null);
             }
             if (((member instanceof Listener)) && (this.listenerSource != null)) {
                 ((Listener) member).addedTo(this.listenerSource);
@@ -458,9 +458,9 @@ public abstract class SimpleSpace implements Space {
         }
         Enumeration<?> localObject1 = controllers();
         while (localObject1.hasMoreElements()) {
-            localObject2 = localObject1.nextElement();
-            if ((localObject2 instanceof CollectionController)) {
-                localObject3 = localObject2;
+            timeBase = localObject1.nextElement();
+            if ((timeBase instanceof CollectionController)) {
+                localObject3 = timeBase;
                 if (((CollectionController) localObject3).isWholespace()) {
                     ((CollectionController) localObject3).addMember(member);
                 }
@@ -479,17 +479,17 @@ public abstract class SimpleSpace implements Space {
      * @deprecated
      */
     protected synchronized void memberRemoved(Object member) throws QTException {
-        Object localObject2;
+        Object timeBase;
         if ((member instanceof Space localObject1)) {
-            localObject2 = localObject1.getTimer().getTimeBase();
-            ((TimeBase) localObject2).setMasterTimeBase(null, null);
+            timeBase = localObject1.getTimer().getTimeBase();
+            ((TimeBase) timeBase).setMasterTimeBase(null, null);
             this.containedSpaces.removeElement(member);
             if (this.listenerSource != null)
                 localObject1.removedFrom(this.listenerSource);
         } else {
             if ((member instanceof Timeable)) {
-                TimeBase localObject1 = ((Timeable) member).getTimeBase();
-                localObject1.setMasterTimeBase(null, null);
+                TimeBase timeBase1 = ((Timeable) member).getTimeBase();
+                timeBase1.setMasterTimeBase(null, null);
             }
             if (((member instanceof Listener)) && (this.listenerSource != null)) {
                 ((Listener) member).removedFrom(this.listenerSource);
@@ -497,9 +497,9 @@ public abstract class SimpleSpace implements Space {
         }
         Enumeration<?> localObject1 = controllers();
         while (localObject1.hasMoreElements()) {
-            localObject2 = localObject1.nextElement();
-            if ((localObject2 instanceof CollectionController)) {
-                ((CollectionController) localObject2).removeMember(member);
+            timeBase = localObject1.nextElement();
+            if ((timeBase instanceof CollectionController)) {
+                ((CollectionController) timeBase).removeMember(member);
             }
         }
     }
@@ -512,9 +512,9 @@ public abstract class SimpleSpace implements Space {
      * @deprecated
      */
     public synchronized void removeAllControllers() throws QTException {
-        Enumeration<Controller> localEnumeration = controllers();
-        while (localEnumeration.hasMoreElements()) {
-            removeController((Controller) localEnumeration.nextElement());
+        Enumeration<Controller> enumeration = controllers();
+        while (enumeration.hasMoreElements()) {
+            removeController((Controller) enumeration.nextElement());
         }
     }
 
@@ -526,9 +526,9 @@ public abstract class SimpleSpace implements Space {
      * @deprecated
      */
     public synchronized void removeAllMembers() throws QTException {
-        Enumeration<?> localEnumeration = members();
-        while (localEnumeration.hasMoreElements()) {
-            removeMember(localEnumeration.nextElement());
+        Enumeration<?> enumeration = members();
+        while (enumeration.hasMoreElements()) {
+            removeMember(enumeration.nextElement());
         }
     }
 

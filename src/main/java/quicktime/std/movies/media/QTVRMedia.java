@@ -41,7 +41,7 @@ public final class QTVRMedia extends GenericMedia {
     }
 
     @Override
-    protected MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new QTVRMediaHandler(paramInt, paramObject);
+    protected MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new QTVRMediaHandler(nativeRep, ref);
     }
 }

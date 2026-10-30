@@ -37,15 +37,15 @@ public class CodecComponent extends ComponentIdentifier implements QuickTimeLib 
      * @return the Codec
      * @see quicktime.std.qtcomponents.SpatialSettings#getCodec()
      */
-    public static CodecComponent fromSpatialSettings(SpatialSettings paramSpatialSettings) {
-        return new CodecComponent(getIntFromArray(paramSpatialSettings.getBytes(), 4));
+    public static CodecComponent fromSpatialSettings(SpatialSettings spatialSettings) {
+        return new CodecComponent(getIntFromArray(spatialSettings.getBytes(), 4));
     }
 
-    CodecComponent(int paramInt) {
-        super(paramInt, new Object());
+    CodecComponent(int nativeRep) {
+        super(nativeRep, new Object());
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 }

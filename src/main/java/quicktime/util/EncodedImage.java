@@ -50,19 +50,19 @@ public interface EncodedImage {
      * Returns the byte at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
-    byte getByte(int paramInt);
+    byte getByte(int offset);
 
     /**
      * Returns the short at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
-    short getShort(int paramInt);
+    short getShort(int offset);
 
     /**
      * Returns the int at the specified offset.
      * The offset is specified in bytes into the encoded image object.
      */
-    int getInt(int paramInt);
+    int getInt(int offset);
 
     /**
      * Returns either kRowBytesUnknown or the number of bytes per row

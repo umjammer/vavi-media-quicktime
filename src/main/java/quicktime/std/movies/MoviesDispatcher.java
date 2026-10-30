@@ -37,80 +37,80 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
 
     private ExecutingWiredAction wa;
 
-    MoviesDispatcher(Movie paramMovie, MovieProgress paramMovieProgress) {
+    MoviesDispatcher(Movie mov, MovieProgress mp) {
         this.methodName = "movieProgress";
         this.methodSig = "(ISSII)S";
         this.procInfo = 64224;
-        this.mp = paramMovieProgress;
-        this.mov = paramMovie;
+        this.mp = mp;
+        this.mov = mov;
     }
 
-    MoviesDispatcher(Movie paramMovie, MoviePrePreroll paramMoviePrePreroll) {
+    MoviesDispatcher(Movie mov, MoviePrePreroll mppr) {
         this.methodName = "moviePrePrerollCompleteProc";
         this.methodSig = "(ISI)V";
         this.procInfo = 3776;
-        this.mov = paramMovie;
-        this.mppr = paramMoviePrePreroll;
+        this.mov = mov;
+        this.mppr = mppr;
     }
 
-    MoviesDispatcher(Movie paramMovie, MovieDrawingComplete paramMovieDrawingComplete) {
+    MoviesDispatcher(Movie mov, MovieDrawingComplete mdc) {
         this.methodName = "movieDrawingCompleteProc";
         this.methodSig = "(II)S";
         this.procInfo = 992;
-        this.mov = paramMovie;
-        this.mdc = paramMovieDrawingComplete;
+        this.mov = mov;
+        this.mdc = mdc;
     }
 
-    MoviesDispatcher(MovieController paramMovieController, ActionFilter paramActionFilter, boolean paramBoolean) {
+    MoviesDispatcher(MovieController movCont, ActionFilter filter, boolean doIdle) {
         this.methodName = "mcFilterProc";
         this.methodSig = "(ISII)I";
         this.procInfo = 16080;
-        this.movCont = paramMovieController;
-        this.filter = paramActionFilter;
-        this.dontDoIdle = (!paramBoolean);
+        this.movCont = movCont;
+        this.filter = filter;
+        this.dontDoIdle = (!doIdle);
     }
 
-    MoviesDispatcher(Movie paramMovie, ExecutingWiredAction paramExecutingWiredAction) {
+    MoviesDispatcher(Movie mov, ExecutingWiredAction wa) {
         this.methodName = "executeWiredActions";
         this.methodSig = "(IIII)S";
         this.procInfo = 16352;
-        this.mov = paramMovie;
-        this.wa = paramExecutingWiredAction;
+        this.mov = mov;
+        this.wa = wa;
     }
 
-    private short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
-        int i = this.mp.execute(this.mov, paramShort1, paramShort2, QTUtils.Fix2X(paramInt2));
+    private short movieProgress(int movie, short message, short whatOperation, int percentDone, int refcon) {
+        int i = this.mp.execute(this.mov, message, whatOperation, QTUtils.Fix2X(percentDone));
         if (i != 0)
             return (short) i;
         return 0;
     }
 
-    private void moviePrePrerollCompleteProc(int paramInt1, short paramShort, int paramInt2) {
-        this.mppr.execute(this.mov, paramShort);
+    private void moviePrePrerollCompleteProc(int movie, short err, int refcon) {
+        this.mppr.execute(this.mov, err);
         this.mMethodClosure = null;
     }
 
-    private short movieDrawingCompleteProc(int paramInt1, int paramInt2) {
+    private short movieDrawingCompleteProc(int movie, int refCon) {
         return (short) this.mdc.execute(this.mov);
     }
 
-    public short executeWiredActions(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        short s = this.wa.execute(this.mov, paramInt3, new AtomContainer(paramInt4, this, false));
+    public short executeWiredActions(int movie, int refcon, int flags, int actions) {
+        short s = this.wa.execute(this.mov, flags, new AtomContainer(actions, this, false));
 
         return s;
     }
 
-    private int mcFilterProc(int paramInt1, short paramShort, int paramInt2, int paramInt3) {
-        if ((paramShort == 1) && (this.dontDoIdle)) {
+    private int mcFilterProc(int mc, short action, int params, int refCon) {
+        if ((action == 1) && (this.dontDoIdle)) {
             return 0;
         }
         boolean bool1 = false;
         Object localObject;
-        AFStringHandle localAFStringHandle1;
-        int[] arrayOfInt;
+        AFStringHandle afStringHandle1;
+        int[] dstHandle;
         int j;
         int i;
-        switch (paramShort) {
+        switch (action) {
         case 1:
         case 2:
         case 3:
@@ -121,36 +121,36 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         case 61:
         case 77:
         case 86:
-            bool1 = this.filter.execute(this.movCont, paramShort);
+            bool1 = this.filter.execute(this.movCont, action);
             break;
         case 8:
         case 55:
         case 83:
         case 84:
-            bool1 = this.filter.execute(this.movCont, paramShort, QTUtils.Fix2X(paramInt2));
+            bool1 = this.filter.execute(this.movCont, action, QTUtils.Fix2X(params));
             break;
         case 14:
         case 82:
-            bool1 = this.filter.execute(this.movCont, paramShort, QTUtils.ShortFix2X((short) paramInt2));
+            bool1 = this.filter.execute(this.movCont, action, QTUtils.ShortFix2X((short) params));
             break;
         case 15:
-            if (paramInt2 != 0) {
+            if (params != 0) {
                 localObject = new float[] {
-                    QTUtils.ShortFix2X(getShortFromPointer(paramInt2, 0))
+                    QTUtils.ShortFix2X(getShortFromPointer(params, 0))
                 };
-                bool1 = this.filter.execute(this.movCont, paramShort, (float[]) localObject);
+                bool1 = this.filter.execute(this.movCont, action, (float[]) localObject);
                 if (bool1)
-                    setShortInPointer(paramInt2, 0, QTUtils.X2ShortFix(((float[]) localObject)[0]));
+                    setShortInPointer(params, 0, QTUtils.X2ShortFix(((float[]) localObject)[0]));
             }
             break;
         case 42:
-            if (paramInt2 != 0) {
+            if (params != 0) {
                 localObject = new float[] {
-                    QTUtils.Fix2X(getIntFromPointer(paramInt2, 0))
+                    QTUtils.Fix2X(getIntFromPointer(params, 0))
                 };
-                bool1 = this.filter.execute(this.movCont, paramShort, (float[]) localObject);
+                bool1 = this.filter.execute(this.movCont, action, (float[]) localObject);
                 if (bool1) {
-                    setIntInPointer(paramInt2, 0, QTUtils.X2Fix(((float[]) localObject)[0]));
+                    setIntInPointer(params, 0, QTUtils.X2Fix(((float[]) localObject)[0]));
                 }
             }
             break;
@@ -163,7 +163,7 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         case 48:
         case 52:
         case 57:
-            bool1 = this.filter.execute(this.movCont, paramShort, paramInt2 != 0);
+            bool1 = this.filter.execute(this.movCont, action, params != 0);
             break;
 
         case 22:
@@ -177,38 +177,38 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         case 51:
         case 56:
         case 92:
-            if (paramInt2 != 0) {
+            if (params != 0) {
                 localObject = new boolean[] {
-                    getByteFromPointer(paramInt2, 0) != 0 ? true : false
+                    getByteFromPointer(params, 0) != 0 ? true : false
                 };
-                bool1 = this.filter.execute(this.movCont, paramShort, (boolean[]) localObject);
+                bool1 = this.filter.execute(this.movCont, action, (boolean[]) localObject);
                 if (bool1) {
-                    setByteInPointer(paramInt2, 0, (byte) (((boolean[]) localObject)[0] != false ? 1 : 0));
+                    setByteInPointer(params, 0, (byte) (((boolean[]) localObject)[0] != false ? 1 : 0));
                 }
             }
             break;
         case 25:
         case 49:
-            if (paramInt2 != 0) {
+            if (params != 0) {
                 localObject = new QDRect();
-                copyPointerToArray(paramInt2, 0, ((QDRect) localObject).getRect(), 0, ((QDRect) localObject).getRect().length);
+                copyPointerToArray(params, 0, ((QDRect) localObject).getRect(), 0, ((QDRect) localObject).getRect().length);
                 bool1 = this.filter.execute(this.movCont, (QDRect) localObject);
             }
             break;
         case 18:
         case 38:
         case 85:
-            bool1 = this.filter.execute(this.movCont, paramShort, paramInt2);
+            bool1 = this.filter.execute(this.movCont, action, params);
             break;
         case 39:
         case 91:
-            if (paramInt2 != 0) {
+            if (params != 0) {
                 localObject = new int[] {
-                    getIntFromPointer(paramInt2, 0)
+                    getIntFromPointer(params, 0)
                 };
-                bool1 = this.filter.execute(this.movCont, paramShort, (int[]) localObject);
+                bool1 = this.filter.execute(this.movCont, action, (int[]) localObject);
                 if (bool1) {
-                    setIntInPointer(paramInt2, 0, ((int[]) localObject)[0]);
+                    setIntInPointer(params, 0, ((int[]) localObject)[0]);
                 }
             }
             break;
@@ -217,85 +217,85 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         case 30:
         case 53:
         case 54:
-            if (paramInt2 != 0) {
-                bool1 = this.filter.execute(this.movCont, paramShort, new AFTimeRecord(paramInt2, this));
+            if (params != 0) {
+                bool1 = this.filter.execute(this.movCont, action, new AFTimeRecord(params, this));
             }
             break;
         case 63:
         case 64:
-            if (paramInt2 != 0) {
-                bool1 = this.filter.execute(this.movCont, paramShort, new ResolvedQTEventSpec(paramInt2, this));
+            if (params != 0) {
+                bool1 = this.filter.execute(this.movCont, action, new ResolvedQTEventSpec(params, this));
             }
             break;
         case 59:
         case 76:
-            if (paramInt2 != 0) {
-                boolean bool2 = false;
-                localAFStringHandle1 = new AFStringHandle(paramInt2, this, bool2, null);
-                bool1 = this.filter.execute(this.movCont, paramShort, localAFStringHandle1);
+            if (params != 0) {
+                boolean locked = false;
+                afStringHandle1 = new AFStringHandle(params, this, locked, null);
+                bool1 = this.filter.execute(this.movCont, action, afStringHandle1);
             }
             break;
         case 68:
-            if (paramInt2 != 0) {
-                arrayOfInt = new int[] {
+            if (params != 0) {
+                dstHandle = new int[] {
                     0
                 };
-                PtrToHand(paramInt2, arrayOfInt, getByteFromPointer(paramInt2, 0) + 1);
-                localAFStringHandle1 = new AFStringHandle(arrayOfInt[0], null, true, null);
-                bool1 = this.filter.execute(this.movCont, paramShort, localAFStringHandle1);
+                PtrToHand(params, dstHandle, getByteFromPointer(params, 0) + 1);
+                afStringHandle1 = new AFStringHandle(dstHandle[0], null, true, null);
+                bool1 = this.filter.execute(this.movCont, action, afStringHandle1);
             }
             break;
         case 69:
-            if (paramInt2 != 0) {
-                arrayOfInt = new int[] {
+            if (params != 0) {
+                dstHandle = new int[] {
                     0
                 };
                 j = 0;
-                int k = getIntFromPointer(paramInt2, 4);
+                int k = getIntFromPointer(params, 4);
 
                 if (k != 0) {
                     while (getByteFromPointer(k, j++) != 0) {
                     }
 
-                    PtrToHand(k, arrayOfInt, j);
-                    AFStringHandle localAFStringHandle2 = new AFStringHandle(arrayOfInt[0], null, false, null);
+                    PtrToHand(k, dstHandle, j);
+                    AFStringHandle afStringHandle2 = new AFStringHandle(dstHandle[0], null, false, null);
                     bool1 = this.filter.execute(this.movCont,
-                                                paramShort,
-                                                getIntFromPointer(paramInt2, 0),
-                                                localAFStringHandle2);
+                                                action,
+                                                getIntFromPointer(params, 0),
+                                                afStringHandle2);
                 }
             }
             break;
 
         case 67:
             bool1 = this.filter.execute(this.movCont,
-                                        paramShort,
-                                        new quicktime.qd.QDPoint(paramInt2 & 0xFFFF, paramInt2 >>> 16));
+                                        action,
+                                        new quicktime.qd.QDPoint(params & 0xFFFF, params >>> 16));
             break;
         case 72:
-            if (paramInt2 != 0) {
-                i = getIntFromPointer(paramInt2, 4);
+            if (params != 0) {
+                i = getIntFromPointer(params, 4);
                 bool1 = this.filter.execute(this.movCont,
-                                            paramShort,
-                                            new AtomContainer(getIntFromPointer(paramInt2, 0), this, false),
+                                            action,
+                                            new AtomContainer(getIntFromPointer(params, 0), this, false),
                                             i == 0 ? null : new Atom(i));
             }
             break;
         case 70:
-            if (paramInt2 != 0) {
-                bool1 = this.filter.execute(this.movCont, paramShort, new QTGetExternalMovieRecord(paramInt2, this));
+            if (params != 0) {
+                bool1 = this.filter.execute(this.movCont, action, new QTGetExternalMovieRecord(params, this));
             }
             break;
         case 71:
-            if (paramInt2 != 0) {
-                i = getIntFromPointer(paramInt2, 0);
+            if (params != 0) {
+                i = getIntFromPointer(params, 0);
                 j = getByteFromPointer(i, 0);
 
                 byte[] arrayOfByte = new byte[j];
                 copyPointerToArray(i, 1, arrayOfByte, 0, j);
                 bool1 = this.filter.execute(this.movCont,
-                                            paramShort,
-                                            new AFTimeRecord(paramInt2 + 4, this),
+                                            action,
+                                            new AFTimeRecord(params + 4, this),
                                             new String(arrayOfByte));
             }
             break;
@@ -313,17 +313,17 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         this.mMethodClosure = null;
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static void setShortInPointer(int paramInt1, int paramInt2, short paramShort) {
-        MemoryManager.setShortInPointer(paramInt1, paramInt2, paramShort);
+    private static void setShortInPointer(int ptr, int offset, short value) {
+        MemoryManager.setShortInPointer(ptr, offset, value);
     }
 
     static class MoviesMethodClosure extends MethodClosure {
-        MoviesMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        MoviesMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -331,43 +331,43 @@ final class MoviesDispatcher implements PrimitivesLib, InterfaceLib {
         }
     }
 
-    private static void setIntInPointer(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.setIntInPointer(paramInt1, paramInt2, paramInt3);
+    private static void setIntInPointer(int ptr, int offset, int value) {
+        MemoryManager.setIntInPointer(ptr, offset, value);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
     static class AFTimeRecord extends TimeRecord {
-        AFTimeRecord(int paramInt, Object paramObject) {
-            super(paramInt, paramObject);
+        AFTimeRecord(int nativeRep, Object ref) {
+            super(nativeRep, ref);
         }
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 
     static class AFStringHandle extends StringHandle {
-        AFStringHandle(int paramInt, Object paramObject, boolean paramBoolean, MoviesDispatcher param1) {
-            this(paramInt, paramObject, paramBoolean);
+        AFStringHandle(int nativeRep, Object ref, boolean locked, MoviesDispatcher outer) {
+            this(nativeRep, ref, locked);
         }
 
-        private AFStringHandle(int paramInt, Object paramObject, boolean paramBoolean) {
-            super(paramInt, paramObject, paramBoolean ? 2 : 1);
+        private AFStringHandle(int nativeRep, Object ref, boolean locked) {
+            super(nativeRep, ref, locked ? 2 : 1);
         }
     }
 
-    private static void setByteInPointer(int paramInt1, int paramInt2, byte paramByte) {
-        MemoryManager.setByteInPointer(paramInt1, paramInt2, paramByte);
+    private static void setByteInPointer(int ptr, int offset, byte value) {
+        MemoryManager.setByteInPointer(ptr, offset, value);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static short PtrToHand(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
-        return MemoryManager.PtrToHand(paramInt1, paramArrayOfInt, paramInt2);
+    private static short PtrToHand(int src, int[] dstHandle, int size) {
+        return MemoryManager.PtrToHand(src, dstHandle, size);
     }
 }

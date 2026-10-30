@@ -49,8 +49,8 @@ public class TickleNode {
      * @since QTJava 6.1
      * Set the Ticklish that is held by this node
      */
-    public void setTicklish(Ticklish paramTicklish) {
-        this.action = paramTicklish;
+    public void setTicklish(Ticklish ticklish) {
+        this.action = ticklish;
     }
 
     /**

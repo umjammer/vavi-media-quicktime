@@ -118,8 +118,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * specified in the returned matrix are applied.
      */
     public Dimension getInitialSize() throws QTException {
-        QDRect localQDRect = this.mMovie.getNaturalBoundsRect();
-        return new Dimension(localQDRect.getWidth(), localQDRect.getHeight());
+        QDRect naturalBoundsRect = this.mMovie.getNaturalBoundsRect();
+        return new Dimension(naturalBoundsRect.getWidth(), naturalBoundsRect.getHeight());
     }
 
     /**
@@ -131,8 +131,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
-        QDRect localQDRect = this.mMovie.getNaturalBoundsRect();
-        return new QDDimension(localQDRect.getWidth(), localQDRect.getHeight());
+        QDRect naturalBoundsRect = this.mMovie.getNaturalBoundsRect();
+        return new QDDimension(naturalBoundsRect.getWidth(), naturalBoundsRect.getHeight());
     }
 
     /**
@@ -151,8 +151,8 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * the new matrix.
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
-        this.mMovie.setMatrix(paramMatrix);
+    public void setMatrix(Matrix matrix) throws QTException {
+        this.mMovie.setMatrix(matrix);
         this.mMovie.task(0);
     }
 
@@ -196,10 +196,10 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**
@@ -307,25 +307,25 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
 
         private final float r;
 
-        PrerollCallback(float paramFloat) {
-            this.r = paramFloat;
+        PrerollCallback(float rate) {
+            this.r = rate;
         }
 
         @Override
-        public void execute(Movie paramMovie, int paramInt) {
+        public void execute(Movie m, int err) {
             synchronized (MoviePlayer.this) {
                 if (MoviePlayer.this.lastRate == 0.0F) {
                     return;
                 }
-                if (paramInt == 0) {
+                if (err == 0) {
                     try {
-                        paramMovie.preroll(paramMovie.getTime(), this.r);
-                        paramMovie.setRate(this.r);
-                    } catch (QTException localQTException) {
-                        QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), paramMovie, "preroll");
+                        m.preroll(m.getTime(), this.r);
+                        m.setRate(this.r);
+                    } catch (QTException e) {
+                        QTRuntimeException.handleOrThrow(new QTRuntimeException(e), m, "preroll");
                     }
                 } else
-                    QTRuntimeException.handleOrThrow(new QTRuntimeException(paramInt), paramMovie, "prePreroll");
+                    QTRuntimeException.handleOrThrow(new QTRuntimeException(err), m, "prePreroll");
             }
         }
     }
@@ -333,7 +333,7 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
     class MovieComplete implements MovieDrawingComplete {
 
         @Override
-        public int execute(Movie paramMovie) {
+        public int execute(Movie m) {
             synchronized (MoviePlayer.this) {
                 for (int i = 0; i < MoviePlayer.this.listenerList.size(); i++)
                     MoviePlayer.this.listenerList.elementAt(i).drawingComplete(MoviePlayer.this);
@@ -346,19 +346,19 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * Registers an object as a listener of the MoviePlayer. The object will receive notification when the MoviePlayer draws a frame
      */
     @Override
-    public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
+    public synchronized void addDrawingListener(DrawingListener drawingListener) {
         if (this.listenerList == null) {
             this.listenerList = new Vector<>();
         }
-        if (this.listenerList.contains(paramDrawingListener)) {
+        if (this.listenerList.contains(drawingListener)) {
             return;
         }
-        this.listenerList.addElement(paramDrawingListener);
+        this.listenerList.addElement(drawingListener);
         if (this.mComplete == null) {
             try {
                 this.mComplete = new MovieComplete();
                 this.mMovie.setDrawingCompleteProc(0, this.mComplete);
-            } catch (StdQTException localStdQTException) {
+            } catch (StdQTException e) {
                 this.mComplete = null;
             }
         }
@@ -368,9 +368,9 @@ public class MoviePlayer implements Presentable, Timeable, DrawingNotifier {
      * Removes an object that is a listener of the MoviePlayer. The object will no longer receive notification when the MoviePlayer draws a frame
      */
     @Override
-    public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
+    public synchronized void removeDrawingListener(DrawingListener drawingListener) {
         if (this.listenerList != null) {
-            this.listenerList.removeElement(paramDrawingListener);
+            this.listenerList.removeElement(drawingListener);
             if (this.listenerList.isEmpty()) {
                 try {
                     this.mMovie.removeDrawingCompleteProc();

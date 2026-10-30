@@ -216,21 +216,21 @@ public abstract class MouseResponder {
     /**
      * @deprecated
      */
-    private boolean doModifiersTest(int paramInt) {
-        paramInt &= 0xF;
+    private boolean doModifiersTest(int modifiers) {
+        modifiers &= 0xF;
         return switch (this.modifierTestConditions) {
-            case -6 -> (paramInt == 0) || (paramInt == this.modifierKeyMask);
-            case -3 -> (paramInt & this.modifierKeyMask) != 0;
+            case -6 -> (modifiers == 0) || (modifiers == this.modifierKeyMask);
+            case -3 -> (modifiers & this.modifierKeyMask) != 0;
             case -4 -> true;
-            case -2 -> paramInt != 0;
-            case -1 -> paramInt == 0;
-            case -5 -> paramInt == this.modifierKeyMask;
+            case -2 -> modifiers != 0;
+            case -1 -> modifiers == 0;
+            case -5 -> modifiers == this.modifierKeyMask;
             default -> false;
         };
     }
 
-    void activate(int paramInt) {
-        this.activationEvent = paramInt;
+    void activate(int activationEvent) {
+        this.activationEvent = activationEvent;
     }
 
     /**

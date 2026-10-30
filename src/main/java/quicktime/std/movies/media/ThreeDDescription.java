@@ -15,12 +15,12 @@ public final class ThreeDDescription extends SampleDescription {
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(16, 2, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(18, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 2, 1);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(18, 4, 1);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     /**
@@ -41,8 +41,8 @@ public final class ThreeDDescription extends SampleDescription {
         super(kThreeDDescriptionSize, true, format);
     }
 
-    private ThreeDDescription(int paramInt, Object paramObject) {
-        super(paramInt, null, false);
+    private ThreeDDescription(int nativeRep, Object ref) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -53,16 +53,16 @@ public final class ThreeDDescription extends SampleDescription {
         return new ThreeDDescription(makeAndCopyHandle(), null);
     }
 
-    public void setVersion(int paramInt) {
-        setShortAt(16, (short) paramInt);
+    public void setVersion(int version) {
+        setShortAt(16, (short) version);
     }
 
     public int getVersion() {
         return getShortAt(16);
     }
 
-    public void setRendererType(int paramInt) {
-        setIntAt(18, paramInt);
+    public void setRendererType(int rendererType) {
+        setIntAt(18, rendererType);
     }
 
     public int getRendererType() {

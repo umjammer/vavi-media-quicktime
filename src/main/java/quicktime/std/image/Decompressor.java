@@ -12,8 +12,8 @@ import quicktime.std.StdQTException;
  */
 public final class Decompressor extends CodecComponent implements QuickTimeLib {
 
-    Decompressor(int paramInt) {
-        super(paramInt);
+    Decompressor(int nativeRep) {
+        super(nativeRep);
     }
 
     /**
@@ -25,13 +25,13 @@ public final class Decompressor extends CodecComponent implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public static Decompressor findCodec(int cType, CodecComponent specCodec) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = FindCodec(cType, QTObject.ID(specCodec), 0, arrayOfInt);
+        int[] decompressor = new int[1];
+        int i = FindCodec(cType, QTObject.ID(specCodec), 0, decompressor);
         StdQTException.checkError(i);
-        return arrayOfInt[0] == 0 ? null : new Decompressor(arrayOfInt[0]);
+        return decompressor[0] == 0 ? null : new Decompressor(decompressor[0]);
     }
 
-    private static short FindCodec(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return ImageCompressionManager.FindCodec(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short FindCodec(int cType, int specCodec, int compressor, int[] decompressor) {
+        return ImageCompressionManager.FindCodec(cType, specCodec, compressor, decompressor);
     }
 }

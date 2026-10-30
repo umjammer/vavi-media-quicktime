@@ -31,8 +31,8 @@ public final class VideoMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    VideoMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    VideoMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -41,8 +41,8 @@ public final class VideoMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new VideoMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new VideoMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -65,8 +65,8 @@ public final class VideoMedia extends Media {
      * @throws quicktime.QTException
      */
     public ImageDescription getImageDescription(int index) throws QTException {
-        ImageDescription localImageDescription = new ImageDescription(0);
-        getNativeSampleDescription(index, localImageDescription);
-        return localImageDescription;
+        ImageDescription imageDescription = new ImageDescription(0);
+        getNativeSampleDescription(index, imageDescription);
+        return imageDescription;
     }
 }

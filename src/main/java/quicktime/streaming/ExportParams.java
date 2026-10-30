@@ -30,7 +30,7 @@ public final class ExportParams extends QTByteObject {
      * @param flagsIn input flags
      * @param flagsOut output flags
      */
-    public ExportParams(int vers, int expType, QTPointer paramQTPointer1, int targetType, QTPointer targData, QTPointer extraData, int flagsIn, int flagsOut) {
+    public ExportParams(int vers, int expType, QTPointer qtPointer1, int targetType, QTPointer targData, QTPointer extraData, int flagsIn, int flagsOut) {
         super(kNativeSize);
         setVersion(vers);
         setExportType(expType);

@@ -5,10 +5,10 @@ package quicktime.std.movies;
  */
 public final class SearchResult {
 
-    SearchResult(Track paramTrack, int paramInt1, int paramInt2) {
-        this.foundTrack = paramTrack;
-        this.time = paramInt1;
-        this.offset = paramInt2;
+    SearchResult(Track foundTrack, int time, int offset) {
+        this.foundTrack = foundTrack;
+        this.time = time;
+        this.offset = offset;
     }
 
     /**

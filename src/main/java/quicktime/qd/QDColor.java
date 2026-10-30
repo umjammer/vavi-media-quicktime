@@ -108,10 +108,10 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     public static EndianDescriptor getEndianDescriptorGradientColor() {
         if (ed == null) {
             ed = new EndianDescriptor(0);
-            EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 4);
-            ed.addFlipSpec(localEndianFlipSpec1);
-            EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(8, 4, 1);
-            ed.addFlipSpec(localEndianFlipSpec2);
+            EndianFlipSpec spec = new EndianFlipSpec(0, 2, 4);
+            ed.addFlipSpec(spec);
+            EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(8, 4, 1);
+            ed.addFlipSpec(endianFlipSpec2);
         }
         return ed;
     }
@@ -135,15 +135,15 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     /**
      * Takes an 8bit color value and converts it into a 16bit value.
      */
-    public static int convert8to16(int paramInt) {
-        return (0xFF & paramInt) << 8 | 0xFF & paramInt;
+    public static int convert8to16(int value) {
+        return (0xFF & value) << 8 | 0xFF & value;
     }
 
     /**
      * Takes a 16bit color value and converts it into an 8bit value.
      */
-    public static int convert16to8(int paramInt) {
-        return (0xFF00 & paramInt) >> 8;
+    public static int convert16to8(int value) {
+        return (0xFF00 & value) >> 8;
     }
 
     /**
@@ -164,26 +164,26 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     public static QDColor fromArray(byte[] colorBytes, int flag) {
         if (flag > colorBytes.length)
             throw new IllegalArgumentException("Mismatch between flag and supplied colorBytes");
-        QDColor localQDColor;
+        QDColor color;
         float f1;
         float f2;
         float f3;
         switch(flag) {
             case 6:
-                localQDColor = new QDColor();
-                System.arraycopy(colorBytes, 0, localQDColor.bytes, 0, 6);
-                return localQDColor;
+                color = new QDColor();
+                System.arraycopy(colorBytes, 0, color.bytes, 0, 6);
+                return color;
             case 8:
-                localQDColor = new QDColor();
-                System.arraycopy(colorBytes, 2, localQDColor.bytes, 0, 6);
-                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(colorBytes, 0)));
-                return localQDColor;
+                color = new QDColor();
+                System.arraycopy(colorBytes, 2, color.bytes, 0, 6);
+                color.setAlpha(QTUtils.UShort2Int(getShortFromArray(colorBytes, 0)));
+                return color;
             case 14:
-                localQDColor = new QDColor();
-                System.arraycopy(colorBytes, 2, localQDColor.bytes, 0, 6);
-                localQDColor.setAlpha(QTUtils.UShort2Int(getShortFromArray(colorBytes, 0)));
-                localQDColor.endPercent = getIntFromArray(colorBytes, 8);
-                return localQDColor;
+                color = new QDColor();
+                System.arraycopy(colorBytes, 2, color.bytes, 0, 6);
+                color.setAlpha(QTUtils.UShort2Int(getShortFromArray(colorBytes, 0)));
+                color.endPercent = getIntFromArray(colorBytes, 8);
+                return color;
             case 12:
                 f1 = getFloatFromArray(colorBytes, 0);
                 f2 = getFloatFromArray(colorBytes, 4);
@@ -207,8 +207,8 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * component is in bits 0-7. The value zero indicates no
      * contribution from the primary color component.
      */
-    public static QDColor fromARGBColor(int paramInt) {
-        return new QDColor(convert8to16(paramInt & 0xFF0000), convert8to16(paramInt & 0xFF00), convert8to16(paramInt & 0xFF), convert8to16(paramInt & 0xFF000000));
+    public static QDColor fromARGBColor(int argb) {
+        return new QDColor(convert8to16(argb & 0xFF0000), convert8to16(argb & 0xFF00), convert8to16(argb & 0xFF), convert8to16(argb & 0xFF000000));
     }
 
     /**
@@ -297,29 +297,29 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         this(convert8to16(color.getRed()), convert8to16(color.getGreen()), convert8to16(color.getBlue()));
     }
 
-    private QDColor(byte[] paramArrayOfByte, int paramInt) {
-        super(paramArrayOfByte);
-        this.alpha = paramInt;
+    private QDColor(byte[] bytes, int alpha) {
+        super(bytes);
+        this.alpha = alpha;
     }
 
-    private static float checkRange(float paramFloat) {
-        if (paramFloat < 0.0F)
+    private static float checkRange(float value) {
+        if (value < 0.0F)
             return 0.0F;
-        return Math.min(paramFloat, 1.0F);
+        return Math.min(value, 1.0F);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[10];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         for (int i = 0; i < 6; i += 2) {
             setShortInArray(getBytes(), i, EndianOrder.flipBigEndianToNative16(getShortFromArray(arrayOfByte, i)));
         }
         this.alpha = EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 6));
         if (this.alpha == -1) {
             arrayOfByte = new byte[8];
-            paramObjectInputStream.read(arrayOfByte);
+            in.read(arrayOfByte);
             this.alpha = EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 0));
             this.endPercent = EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 4));
         } else {
@@ -328,15 +328,15 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[18];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[18];
         for (int i = 0; i < kNativeSize; i += 2) {
-            setShortInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
+            setShortInArray(movie, i, EndianOrder.flipNativeToBigEndian16(getShortFromArray(getBytes(), i)));
         }
-        setIntInArray(arrayOfByte, 6, -1);
-        setIntInArray(arrayOfByte, 10, EndianOrder.flipNativeToBigEndian32(this.alpha));
-        setIntInArray(arrayOfByte, 14, EndianOrder.flipNativeToBigEndian32(this.endPercent));
-        paramObjectOutputStream.write(arrayOfByte);
+        setIntInArray(movie, 6, -1);
+        setIntInArray(movie, 10, EndianOrder.flipNativeToBigEndian32(this.alpha));
+        setIntInArray(movie, 14, EndianOrder.flipNativeToBigEndian32(this.endPercent));
+        out.write(movie);
     }
 
     /**
@@ -350,44 +350,44 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
      * Returns the color as an ARGBColor value
      */
     public byte[] getARGBColor() {
-        byte[] arrayOfByte = new byte[8];
-        setShortInArray(arrayOfByte, 0, (short) this.alpha);
-        System.arraycopy(this.bytes, 0, arrayOfByte, 2, 6);
-        return arrayOfByte;
+        byte[] argbColor = new byte[8];
+        setShortInArray(argbColor, 0, (short) this.alpha);
+        System.arraycopy(this.bytes, 0, argbColor, 2, 6);
+        return argbColor;
     }
 
     /**
      * Returns the color as an GradientColor value
      */
     public byte[] getGradientColor() {
-        byte[] arrayOfByte = new byte[12];
-        setShortInArray(arrayOfByte, 0, (short) this.alpha);
-        System.arraycopy(this.bytes, 0, arrayOfByte, 2, 6);
-        setIntInArray(arrayOfByte, 8, this.endPercent);
-        return arrayOfByte;
+        byte[] gradientColor = new byte[12];
+        setShortInArray(gradientColor, 0, (short) this.alpha);
+        System.arraycopy(this.bytes, 0, gradientColor, 2, 6);
+        setIntInArray(gradientColor, 8, this.endPercent);
+        return gradientColor;
     }
 
     /**
      * Returns the color as a TQ3ColorRGB value
      */
     public byte[] getTQ3ColorRGB() {
-        byte[] arrayOfByte = new byte[12];
-        setFloatInArray(arrayOfByte, 0, getRed() / 65535.0F);
-        setFloatInArray(arrayOfByte, 4, getGreen() / 65535.0F);
-        setFloatInArray(arrayOfByte, 8, getBlue() / 65535.0F);
-        return arrayOfByte;
+        byte[] tQ3ColorRGB = new byte[12];
+        setFloatInArray(tQ3ColorRGB, 0, getRed() / 65535.0F);
+        setFloatInArray(tQ3ColorRGB, 4, getGreen() / 65535.0F);
+        setFloatInArray(tQ3ColorRGB, 8, getBlue() / 65535.0F);
+        return tQ3ColorRGB;
     }
 
     /**
      * Returns the color as a TQ3ColorARGB value
      */
     public byte[] getTQ3ColorARGB() {
-        byte[] arrayOfByte = new byte[16];
-        setFloatInArray(arrayOfByte, 0, getAlpha() / 65535.0F);
-        setFloatInArray(arrayOfByte, 4, getRed() / 65535.0F);
-        setFloatInArray(arrayOfByte, 8, getGreen() / 65535.0F);
-        setFloatInArray(arrayOfByte, 12, getBlue() / 65535.0F);
-        return arrayOfByte;
+        byte[] tQ3ColorARGB = new byte[16];
+        setFloatInArray(tQ3ColorARGB, 0, getAlpha() / 65535.0F);
+        setFloatInArray(tQ3ColorARGB, 4, getRed() / 65535.0F);
+        setFloatInArray(tQ3ColorARGB, 8, getGreen() / 65535.0F);
+        setFloatInArray(tQ3ColorARGB, 12, getBlue() / 65535.0F);
+        return tQ3ColorARGB;
     }
 
     /**
@@ -485,43 +485,43 @@ public final class QDColor extends QTByteObject implements QuickTimeLib, Cloneab
         return super.toString() + "[red=0x" + Integer.toHexString(getRed()) + ",green=0x" + Integer.toHexString(getGreen()) + ",blue=0x" + Integer.toHexString(getBlue()) + ",alpha=0x" + Integer.toHexString(getAlpha()) + "]";
     }
 
-    private void setRed(int paramInt) {
-        setShortAt(0, (short) paramInt);
+    private void setRed(int red) {
+        setShortAt(0, (short) red);
     }
 
-    private void setGreen(int paramInt) {
-        setShortAt(2, (short) paramInt);
+    private void setGreen(int green) {
+        setShortAt(2, (short) green);
     }
 
-    private void setBlue(int paramInt) {
-        setShortAt(4, (short) paramInt);
+    private void setBlue(int blue) {
+        setShortAt(4, (short) blue);
     }
 
-    private void setAlpha(int paramInt) {
-        this.alpha = (0xFFFF & paramInt);
+    private void setAlpha(int alpha) {
+        this.alpha = (0xFFFF & alpha);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static float getFloatFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getFloatFromArray(paramArrayOfByte, paramInt);
+    private static float getFloatFromArray(byte[] array, int offset) {
+        return MemoryManager.getFloatFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setFloatInArray(byte[] paramArrayOfByte, int paramInt, float paramFloat) {
-        MemoryManager.setFloatInArray(paramArrayOfByte, paramInt, paramFloat);
+    private static void setFloatInArray(byte[] array, int offset, float value) {
+        MemoryManager.setFloatInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

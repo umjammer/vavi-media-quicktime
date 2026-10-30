@@ -17,5 +17,5 @@ public interface QTVRImagingComplete {
      * @return an error code or zero if no error.
      * @see quicktime.std.clocks.QTCallBack
      */
-    int execute(QTVRInstance paramQTVRInstance, QDGraphics qd);
+    int execute(QTVRInstance qtvrInstance, QDGraphics qd);
 }

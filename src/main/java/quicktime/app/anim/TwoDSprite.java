@@ -193,8 +193,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
     /**
      * @deprecated
      */
-    TwoDSprite(Sprite paramSprite) throws QTException {
-        this.sprite = paramSprite;
+    TwoDSprite(Sprite sprite) throws QTException {
+        this.sprite = sprite;
         this.info = new TwoDSpriteInfo(this.sprite.getImageData(), this.sprite.getImageDescription(), this.sprite.getMatrix(), this.sprite.getVisible(), this.sprite.getLayer());
     }
 
@@ -262,8 +262,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
             synchronized (this.is) {
                 setImageData(this.is.getImage(), this.is.getDescription());
             }
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "setImageData");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "setImageData");
         }
     }
 
@@ -314,8 +314,8 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
         this.info.image = im;
     }
 
-    private void doParentRedraw(boolean paramBoolean) throws QTException {
-        if ((paramBoolean) && (this.parentsTimer != null) && (!this.parentsTimer.isTicking()) && (this.parentCompositor != null) && (this.parentCompositor.isAutoRedrawing())) {
+    private void doParentRedraw(boolean redraw) throws QTException {
+        if ((redraw) && (this.parentsTimer != null) && (!this.parentsTimer.isTicking()) && (this.parentCompositor != null) && (this.parentCompositor.isAutoRedrawing())) {
             this.parentCompositor.idle();
         }
     }
@@ -332,10 +332,10 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
         return this.parentCompositor;
     }
 
-    void setParent(SWCompositor paramSWCompositor) {
-        this.parentCompositor = paramSWCompositor;
-        if (paramSWCompositor != null) {
-            this.parentsTimer = paramSWCompositor.getTimer();
+    void setParent(SWCompositor parent) {
+        this.parentCompositor = parent;
+        if (parent != null) {
+            this.parentsTimer = parent.getTimer();
         } else {
             this.parentsTimer = null;
         }
@@ -369,9 +369,9 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      */
     public void remove() throws QTException {
         if (this.sprite != null) {
-            boolean bool = getVisible();
+            boolean redraw = getVisible();
             this.sprite.remove();
-            doParentRedraw(bool);
+            doParentRedraw(redraw);
             this.sprite = null;
         }
     }
@@ -448,12 +448,12 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @since QTJava 6.1
      */
     @Override
-    public void setMatrix(Matrix paramMatrix) throws QTException {
+    public void setMatrix(Matrix matrix) throws QTException {
         if (this.sprite != null)
-            this.sprite.setMatrix(paramMatrix);
-        this.info.matrix = paramMatrix;
+            this.sprite.setMatrix(matrix);
+        this.info.matrix = matrix;
         if (this.spriteIsCompositor != null)
-            this.spriteIsCompositor.setMatrix(paramMatrix);
+            this.spriteIsCompositor.setMatrix(matrix);
         if (this.sprite != null) {
             doParentRedraw(getVisible());
         }
@@ -654,14 +654,14 @@ public class TwoDSprite implements NotifyListener, Transformable, Layerable, Ima
      * @since QTJava 6.1
      * @deprecated
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ((paramObject instanceof TwoDSprite localTwoDSprite)) {
-            if (localTwoDSprite.sprite == null) {
+        if ((obj instanceof TwoDSprite twoDSprite)) {
+            if (twoDSprite.sprite == null) {
                 return false;
             }
-            return localTwoDSprite.sprite.equals(this.sprite);
+            return twoDSprite.sprite.equals(this.sprite);
         }
         return false;
     }

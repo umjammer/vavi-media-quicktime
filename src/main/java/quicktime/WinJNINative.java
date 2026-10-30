@@ -14,8 +14,8 @@ final class WinJNINative {
         PlatformManager.DestroyPortAssociations();
     }
 
-    static void DestroyHWnd(int paramInt) {
-        PlatformManager.DestroyHWnd(paramInt);
+    static void DestroyHWnd(int hWnd) {
+        PlatformManager.DestroyHWnd(hWnd);
     }
 
     static int GetHWND() {

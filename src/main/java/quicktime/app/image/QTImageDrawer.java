@@ -198,8 +198,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      * @since QTJava 6.1
      */
     public int export(GraphicsExporter exporter) throws QTException {
-        QDGraphics localQDGraphics = new QDGraphics(getDescription(), 0);
-        return export(exporter, localQDGraphics);
+        QDGraphics offscreenGWorld = new QDGraphics(getDescription(), 0);
+        return export(exporter, offscreenGWorld);
     }
 
     /**
@@ -221,10 +221,10 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
         if (!offscreenGWorld.isOffscreen()) {
             throw new QTAppException("QTImageDrawer.export must be supplied an offscreen QDGraphics");
         }
-        QDGraphics localQDGraphics = getGWorld();
+        QDGraphics cgp = getGWorld();
         setGWorld(offscreenGWorld);
         redraw(null);
-        setGWorld(localQDGraphics);
+        setGWorld(cgp);
         exporter.setInputGWorld(offscreenGWorld);
         int i = exporter.doExport();
         offscreenGWorld = null;
@@ -234,8 +234,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     /**
      * @deprecated
      */
-    private synchronized void setSize(Dimension paramDimension) {
-        this.mSize = paramDimension;
+    private synchronized void setSize(Dimension size) {
+        this.mSize = size;
         if (this.canv == null) {
             return;
         }
@@ -248,10 +248,10 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
             this.offscreenGraphics = this.offscreenImage.getGraphics();
         }
         try {
-            ImageDescription localImageDescription = ImageDescription.getJavaDefaultPixelDescription(this.mSize.width, this.mSize.height);
+            ImageDescription javaDefaultPixelDescription = ImageDescription.getJavaDefaultPixelDescription(this.mSize.width, this.mSize.height);
             this.iData = new IntEncodedImage(this.mSize.width * this.mSize.height);
-            localImageDescription.setDataSize(this.iData.getSize());
-            this.image.setImageData(this.iData, localImageDescription);
+            javaDefaultPixelDescription.setDataSize(this.iData.getSize());
+            this.image.setImageData(this.iData, javaDefaultPixelDescription);
             this.painter.newSizeNotified(this, this.mSize);
             if ((this.painter instanceof JImagePainter))
                 ((JImagePainter) this.painter).prepareImage(this.canv);
@@ -259,8 +259,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
             if ((!this.interruptedGrab) && (isSingleFrame())) {
                 doSingleFrame();
             }
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this, "addedTo");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this, "addedTo");
         }
     }
 
@@ -462,10 +462,10 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**
@@ -501,18 +501,18 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
     public synchronized void redraw(Region invalidRgn) throws QTException {
         if ((this.iData == null) && (this.rei == null))
             return;
-        Region localRegion;
+        Region region;
         if (this.interruptedGrab) {
-            localRegion = prepaint();
-            if ((localRegion != null) && (invalidRgn != null))
-                invalidRgn = localRegion.union(invalidRgn);
+            region = prepaint();
+            if ((region != null) && (invalidRgn != null))
+                invalidRgn = region.union(invalidRgn);
             if ((!this.interruptedGrab) && (isSingleFrame())) {
                 doSingleFrame();
             }
         } else if ((!isSingleFrame()) && (isRedrawing())) {
-            localRegion = prepaint();
-            if ((localRegion != null) && (invalidRgn != null))
-                invalidRgn = localRegion.union(invalidRgn);
+            region = prepaint();
+            if ((region != null) && (invalidRgn != null))
+                invalidRgn = region.union(invalidRgn);
         }
         this.image.redraw(invalidRgn);
     }
@@ -570,29 +570,29 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
         if (this.offscreenImage == null) {
             return null;
         }
-        Region localRegion = null;
+        Region region = null;
         try {
             if (this.offscreenGraphics == null) {
                 this.offscreenGraphics = this.offscreenImage.getGraphics();
             }
-            Rectangle[] arrayOfRectangle = this.painter.paint(this.offscreenGraphics);
-            if (arrayOfRectangle != null) {
-                for (Rectangle rectangle : arrayOfRectangle) {
+            Rectangle[] rectangles = this.painter.paint(this.offscreenGraphics);
+            if (rectangles != null) {
+                for (Rectangle rectangle : rectangles) {
                     if (rectangle == null)
                         break;
                     int j = rectangle.x;
                     int k = rectangle.y;
                     int m = Math.min(rectangle.width, this.mSize.width);
                     int n = Math.min(rectangle.height, this.mSize.height);
-                    PixelGrabber localPixelGrabber = new PixelGrabber(this.offscreenImage, j, k, m, n, this.iData.getInts(), k * this.mSize.width + j, this.mSize.width);
-                    localPixelGrabber.grabPixels();
-                    if (localRegion == null) {
-                        localRegion = new Region(new QDRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+                    PixelGrabber pixelGrabber = new PixelGrabber(this.offscreenImage, j, k, m, n, this.iData.getInts(), k * this.mSize.width + j, this.mSize.width);
+                    pixelGrabber.grabPixels();
+                    if (region == null) {
+                        region = new Region(new QDRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                     } else
-                        localRegion = localRegion.union(new QDRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
+                        region = region.union(new QDRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height));
                 }
             }
-        } catch (InterruptedException localInterruptedException) {
+        } catch (InterruptedException e) {
             this.interruptedGrab = true;
             if (this.singleFrameFlag == 2)
                 this.offscreenGraphics = null;
@@ -603,7 +603,7 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
             this.sprite.invalidate();
         if (this.singleFrameFlag == 2)
             this.offscreenGraphics = null;
-        return localRegion;
+        return region;
     }
 
     /**
@@ -632,8 +632,8 @@ public class QTImageDrawer implements Notifier, QTDrawable, DynamicImage, Redraw
 
     class RedrawInvalidator extends Invalidator {
 
-        RedrawInvalidator(TwoDSprite paramTwoDSprite) {
-            super(paramTwoDSprite);
+        RedrawInvalidator(TwoDSprite s) {
+            super(s);
         }
 
         @Override

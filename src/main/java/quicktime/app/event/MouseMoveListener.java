@@ -17,7 +17,7 @@ public interface MouseMoveListener extends QTMouseListener {
      * released (regardless of whether the mouse position is within the
      * bounds of the space).
      */
-    void mouseDragged(QTMouseEvent paramQTMouseEvent);
+    void mouseDragged(QTMouseEvent event);
 
     /**
      * @deprecated
@@ -25,5 +25,5 @@ public interface MouseMoveListener extends QTMouseListener {
      * Invoked when the mouse button has been moved in a space
      * (with no buttons no down).
      */
-    void mouseMoved(QTMouseEvent paramQTMouseEvent);
+    void mouseMoved(QTMouseEvent qtMouseEvent);
 }

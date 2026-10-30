@@ -24,20 +24,20 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
     /**
      * Construct temporal settings to set the dialog display.
      */
-    public DataRateSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    public DataRateSettings(int dataRate, int frameDuration, int minSpatialQuality, int minTemporalQuality) {
         this();
-        setDataRate(paramInt1);
-        setFrameDuration(paramInt2);
-        setMinSpatialQuality(paramInt3);
-        setMinTemporalQuality(paramInt4);
+        setDataRate(dataRate);
+        setFrameDuration(frameDuration);
+        setMinSpatialQuality(minSpatialQuality);
+        setMinTemporalQuality(minTemporalQuality);
     }
 
     /**
      * Constructor for building a data rate settings object from a byte array
      * (such as the one you can get from an atom container)
      */
-    public DataRateSettings(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    public DataRateSettings(byte[] bytes) {
+        super(bytes);
     }
 
     DataRateSettings() {
@@ -45,22 +45,22 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[16];
         byte[] arrayOfByte = new byte[kNativeSize];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         for (int i = 0; i < kNativeSize; i += 4) {
             setIntInArray(getBytes(), i, EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, i)));
         }
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         for (int i = 0; i < kNativeSize; i += 4) {
-            setIntInArray(arrayOfByte, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
+            setIntInArray(movie, i, EndianOrder.flipNativeToBigEndian32(getIntFromArray(getBytes(), i)));
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -127,11 +127,11 @@ public final class DataRateSettings extends QTByteObject implements PrimitivesLi
         setIntAt(12, minTemporalQuality);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

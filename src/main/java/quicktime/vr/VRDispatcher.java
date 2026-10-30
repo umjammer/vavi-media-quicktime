@@ -36,74 +36,74 @@ final class VRDispatcher implements PrimitivesLib {
         this.vr = vr;
     }
 
-    VRDispatcher(QTVRInstance paramQTVRInstance, QTVRLeavingNode paramQTVRLeavingNode) {
+    VRDispatcher(QTVRInstance vr, QTVRLeavingNode ln) {
         this.methodName = "leavingProc";
         this.methodSig = "(IIIII)S";
         this.procInfo = 65504;
-        this.ln = paramQTVRLeavingNode;
-        this.vr = paramQTVRInstance;
+        this.ln = ln;
+        this.vr = vr;
     }
 
-    VRDispatcher(QTVRInstance paramQTVRInstance, QTVRMouseOverHotSpot paramQTVRMouseOverHotSpot) {
+    VRDispatcher(QTVRInstance vr, QTVRMouseOverHotSpot hs) {
         this.methodName = "hotSpotProc";
         this.methodSig = "(IIII)S";
         this.procInfo = 16352;
-        this.hs = paramQTVRMouseOverHotSpot;
-        this.vr = paramQTVRInstance;
+        this.hs = hs;
+        this.vr = vr;
     }
 
-    VRDispatcher(QTVRInstance paramQTVRInstance, QTVRInterceptor paramQTVRInterceptor) {
+    VRDispatcher(QTVRInstance vr, QTVRInterceptor ip) {
         this.methodName = "interceptProc";
         this.methodSig = "(IIII)V";
         this.procInfo = 16320;
-        this.ip = paramQTVRInterceptor;
-        this.vr = paramQTVRInstance;
+        this.ip = ip;
+        this.vr = vr;
     }
 
-    VRDispatcher(QTVRInstance paramQTVRInstance, QTVRImagingComplete paramQTVRImagingComplete) {
+    VRDispatcher(QTVRInstance vr, QTVRImagingComplete ic) {
         this.methodName = "imagingComplete";
         this.methodSig = "(II)S";
         this.procInfo = 992;
-        this.ic = paramQTVRImagingComplete;
-        this.vr = paramQTVRInstance;
+        this.ic = ic;
+        this.vr = vr;
     }
 
-    private short enteringProc(int paramInt1, int paramInt2, int paramInt3) {
-        return (short) this.en.execute(this.vr, paramInt2);
+    private short enteringProc(int qtvr, int nodeID, int refCon) {
+        return (short) this.en.execute(this.vr, nodeID);
     }
 
-    private short leavingProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
+    private short leavingProc(int qtvr, int fromNodeID, int toNodeID, int cancel, int refCon) {
         boolean[] arrayOfBoolean = new boolean[1];
-        short s = (short) this.ln.execute(this.vr, paramInt2, paramInt3, arrayOfBoolean);
+        short s = (short) this.ln.execute(this.vr, fromNodeID, toNodeID, arrayOfBoolean);
         if (arrayOfBoolean[0] != false) {
-            setByteInPointer(paramInt4, 0, (byte) 1);
+            setByteInPointer(cancel, 0, (byte) 1);
         } else {
-            setByteInPointer(paramInt4, 0, (byte) 0);
+            setByteInPointer(cancel, 0, (byte) 0);
         }
         return s;
     }
 
-    private short hotSpotProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return (short) this.hs.execute(this.vr, paramInt2, paramInt3);
+    private short hotSpotProc(int qtvr, int hotSpotID, int flags, int refCon) {
+        return (short) this.hs.execute(this.vr, hotSpotID, flags);
     }
 
-    private short imagingComplete(int paramInt1, int paramInt2) {
+    private short imagingComplete(int qtvr, int refCon) {
         return (short) this.ic.execute(this.vr, quicktime.qd.QDGraphics.getPort());
     }
 
-    private void interceptProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
+    private void interceptProc(int qtvr, int qtvrMsg, int refCon, int cancel) {
         boolean bool = false;
-        int i = getIntFromPointer(paramInt2, 4);
+        int i = getIntFromPointer(qtvrMsg, 4);
         bool = switch (i) {
             case 8192, 8193, 8194, 8195, 8202, 8203 ->
-                    this.ip.execute(this.vr, new DVRInterceptRecord(paramInt2, this));
+                    this.ip.execute(this.vr, new DVRInterceptRecord(qtvrMsg, this));
             default -> bool;
         };
 
         if (bool) {
-            setByteInPointer(paramInt4, 0, (byte) 1);
+            setByteInPointer(cancel, 0, (byte) 1);
         } else {
-            setByteInPointer(paramInt4, 0, (byte) 0);
+            setByteInPointer(cancel, 0, (byte) 0);
         }
     }
 
@@ -117,17 +117,17 @@ final class VRDispatcher implements PrimitivesLib {
         this.mMethodClosure = null;
     }
 
-    private static void setByteInPointer(int paramInt1, int paramInt2, byte paramByte) {
-        MemoryManager.setByteInPointer(paramInt1, paramInt2, paramByte);
+    private static void setByteInPointer(int ptr, int offset, byte value) {
+        MemoryManager.setByteInPointer(ptr, offset, value);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
     static class VRMethodClosure extends MethodClosure {
-        VRMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        VRMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -136,8 +136,8 @@ final class VRDispatcher implements PrimitivesLib {
     }
 
     static class DVRInterceptRecord extends QTVRInterceptRecord {
-        DVRInterceptRecord(int paramInt, Object paramObject) {
-            super(paramInt, paramObject);
+        DVRInterceptRecord(int nativeRep, Object ref) {
+            super(nativeRep, ref);
         }
     }
 }

@@ -258,7 +258,7 @@ public final class FileManager {
         return noErr;
     }
 
-    public static short PBGetCatInfoSync(byte[] paramBlock) {
+    public static short PBGetCatInfoSync(byte[] block) {
         throw new UnsupportedToolboxException("PBGetCatInfoSync", "classic Mac OS only");
     }
 

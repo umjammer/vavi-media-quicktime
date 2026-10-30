@@ -48,29 +48,29 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
         setPolyphony(poly);
     }
 
-    NoteRequestInfo(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    NoteRequestInfo(byte[] bytes) {
+        super(bytes);
     }
 
-    NoteRequestInfo(int paramInt, Object paramObject) {
-        super(paramInt);
+    NoteRequestInfo(int size, Object unused) {
+        super(size);
         setPolyphony(1);
         setTypicalPolyphony(1.0F);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        int i = paramObjectInputStream.readInt();
+    private void readObject(ObjectInputStream in) throws IOException {
+        int i = in.readInt();
         this.bytes = new byte[i];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = getBytes();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = getBytes();
         int i = getSize();
-        paramObjectOutputStream.writeInt(i);
-        paramObjectOutputStream.write(arrayOfByte);
+        out.writeInt(i);
+        out.write(movie);
     }
 
     /**
@@ -171,19 +171,19 @@ public class NoteRequestInfo extends QTByteObject implements PrimitivesLib, Clon
         return new NoteRequestInfo(getBytes());
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

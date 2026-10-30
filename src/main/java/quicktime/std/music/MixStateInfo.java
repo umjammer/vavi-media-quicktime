@@ -25,11 +25,11 @@ public class MixStateInfo {
      */
     public final int flags;
 
-    MixStateInfo(int paramInt1, float paramFloat1, float paramFloat2, int paramInt2) {
-        this.partNumber = paramInt1;
-        this.volume = paramFloat1;
-        this.balance = paramFloat2;
-        this.flags = paramInt2;
+    MixStateInfo(int partNumber, float volume, float balance, int flags) {
+        this.partNumber = partNumber;
+        this.volume = volume;
+        this.balance = balance;
+        this.flags = flags;
     }
 
     /**

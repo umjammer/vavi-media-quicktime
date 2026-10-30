@@ -62,9 +62,9 @@ public class ImageDataSequence implements ImageSpec, Collection {
         this(desc, new Vector<>());
     }
 
-    ImageDataSequence(ImageDescription paramImageDescription, Vector<EncodedImage> paramVector) {
-        setDescription(paramImageDescription);
-        this.imageDataVector = paramVector;
+    ImageDataSequence(ImageDescription desc, Vector<EncodedImage> imageDataVector) {
+        setDescription(desc);
+        this.imageDataVector = imageDataVector;
     }
 
     /**
@@ -338,34 +338,34 @@ public class ImageDataSequence implements ImageSpec, Collection {
     public void addToMovie(Movie theMovie, float framesPerSecond) throws QTException {
         int i = 0;
         int j = 600;
-        Track localTrack = theMovie.addTrack(this.imageDescription.getWidth(), this.imageDescription.getHeight(), i);
-        VideoMedia localVideoMedia = new VideoMedia(localTrack, j);
-        localVideoMedia.beginEdits();
+        Track itsTrack = theMovie.addTrack(this.imageDescription.getWidth(), this.imageDescription.getHeight(), i);
+        VideoMedia videoMedia = new VideoMedia(itsTrack, j);
+        videoMedia.beginEdits();
         for (int k = 0; k < size(); k++) {
-            EncodedImage localEncodedImage = getNth(k + 1);
-            QTHandle localQTHandle = null;
-            if ((localEncodedImage instanceof RawEncodedImage)) {
-                localQTHandle = new QTHandle((RawEncodedImage) localEncodedImage, 0, localEncodedImage.getSize());
+            EncodedImage nth = getNth(k + 1);
+            QTHandle qtHandle = null;
+            if ((nth instanceof RawEncodedImage)) {
+                qtHandle = new QTHandle((RawEncodedImage) nth, 0, nth.getSize());
             } else {
-                if ((localEncodedImage instanceof IntEncodedImage)) {
-                    localQTHandle = new QTHandle(localEncodedImage.getSize(), false);
-                    int[] localObject = ((IntEncodedImage) localEncodedImage).getInts();
-                    localQTHandle.copyFromArray(0, localObject, 0, localObject.length);
+                if ((nth instanceof IntEncodedImage)) {
+                    qtHandle = new QTHandle(nth.getSize(), false);
+                    int[] srcArray = ((IntEncodedImage) nth).getInts();
+                    qtHandle.copyFromArray(0, srcArray, 0, srcArray.length);
                 } else {
-                    localQTHandle = new QTHandle(localEncodedImage.getSize(), false);
-                    byte[] localObject = ((ByteEncodedImage) localEncodedImage).getBytes();
-                    localQTHandle.copyFromArray(0, localObject, 0, localObject.length);
+                    qtHandle = new QTHandle(nth.getSize(), false);
+                    byte[] srcArray = ((ByteEncodedImage) nth).getBytes();
+                    qtHandle.copyFromArray(0, srcArray, 0, srcArray.length);
                 }
             }
-            localVideoMedia.addSample(localQTHandle, 0, localQTHandle.getSize(), (int) (600.0F / framesPerSecond), this.imageDescription, 1, 0);
+            videoMedia.addSample(qtHandle, 0, qtHandle.getSize(), (int) (600.0F / framesPerSecond), this.imageDescription, 1, 0);
             if (k % 5 == 0)
                 QTUtils.reclaimMemory();
         }
-        localVideoMedia.endEdits();
+        videoMedia.endEdits();
         int k = 0;
         int m = 0;
         int n = 1;
-        localTrack.insertMedia(k, m, localVideoMedia.getDuration(), n);
+        itsTrack.insertMedia(k, m, videoMedia.getDuration(), n);
         QTUtils.reclaimMemory();
     }
 

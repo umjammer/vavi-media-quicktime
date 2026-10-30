@@ -48,10 +48,10 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.movies.media.Media#getTrack()
      */
-    public static Track fromMedia(Media paramMedia) throws QTException {
-        int i = GetMediaTrack(QTObject.ID(paramMedia));
+    public static Track fromMedia(Media media) throws QTException {
+        int i = GetMediaTrack(QTObject.ID(media));
         StdQTException.checkError(GetMoviesError());
-        return new Track(i, paramMedia);
+        return new Track(i, media);
     }
 
     /**
@@ -66,20 +66,20 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.MovieImporter#fromFile(quicktime.io.QTFile, quicktime.std.movies.Movie, quicktime.std.movies.Track, int, int)
      */
-    public static MovieImportInfo fromMovieImporterFile(MovieImporter paramMovieImporter, QTFile fileIn, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
-        int[] arrayOfInt1 = targetTrack == null ? null : new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int i = MovieImportFile(QTObject.ID(paramMovieImporter), fileIn.getFSSpec(true, 256), QTObject.ID(theMovie), QTObject.ID(targetTrack), arrayOfInt1, atTime, arrayOfInt2, inFlags, arrayOfInt3);
+    public static MovieImportInfo fromMovieImporterFile(MovieImporter ci, QTFile fileIn, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
+        int[] usedTrack = targetTrack == null ? null : new int[1];
+        int[] addedDuration = new int[1];
+        int[] outFlags = new int[1];
+        int i = MovieImportFile(QTObject.ID(ci), fileIn.getFSSpec(true, 256), QTObject.ID(theMovie), QTObject.ID(targetTrack), usedTrack, atTime, addedDuration, inFlags, outFlags);
         StdQTException.checkError(i);
         int j = 0;
         if ((inFlags & 0x4) != 0)
             if (targetTrack != null) {
                 j = QTObject.ID(targetTrack);
             } else
-                j = arrayOfInt1[0];
-        Track localTrack = j == 0 ? null : new Track(j, theMovie);
-        return new MovieImportInfo(localTrack, arrayOfInt2[0], arrayOfInt3[0]);
+                j = usedTrack[0];
+        Track t = j == 0 ? null : new Track(j, theMovie);
+        return new MovieImportInfo(t, addedDuration[0], outFlags[0]);
     }
 
     /**
@@ -94,20 +94,20 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.MovieImporter#fromHandle(quicktime.util.QTHandleRef, quicktime.std.movies.Movie, quicktime.std.movies.Track, int, int)
      */
-    public static MovieImportInfo fromMovieImporterHandle(MovieImporter paramMovieImporter, QTHandleRef dataRef, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
-        int[] arrayOfInt1 = targetTrack == null ? null : new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int i = MovieImportHandle(QTObject.ID(paramMovieImporter), QTObject.ID(dataRef), QTObject.ID(theMovie), QTObject.ID(targetTrack), arrayOfInt1, atTime, arrayOfInt2, inFlags, arrayOfInt3);
+    public static MovieImportInfo fromMovieImporterHandle(MovieImporter ci, QTHandleRef dataRef, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
+        int[] usedTrack = targetTrack == null ? null : new int[1];
+        int[] addedDuration = new int[1];
+        int[] outFlags = new int[1];
+        int i = MovieImportHandle(QTObject.ID(ci), QTObject.ID(dataRef), QTObject.ID(theMovie), QTObject.ID(targetTrack), usedTrack, atTime, addedDuration, inFlags, outFlags);
         StdQTException.checkError(i);
         int j = 0;
         if ((inFlags & 0x4) != 0)
             if (targetTrack != null) {
                 j = QTObject.ID(targetTrack);
             } else
-                j = arrayOfInt1[0];
-        Track localTrack = j == 0 ? null : new Track(j, theMovie);
-        return new MovieImportInfo(localTrack, arrayOfInt2[0], arrayOfInt3[0]);
+                j = usedTrack[0];
+        Track t = j == 0 ? null : new Track(j, theMovie);
+        return new MovieImportInfo(t, addedDuration[0], outFlags[0]);
     }
 
     /**
@@ -123,36 +123,36 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      * @see quicktime.std.qtcomponents.MovieImporter#fromDataRef(quicktime.std.movies.media.DataRef, quicktime.std.movies.Movie, quicktime.std.movies.Track, int, int)
      */
-    public static MovieImportInfo fromMovieImporterDataRef(MovieImporter paramMovieImporter, DataRef dataRef, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
-        int[] arrayOfInt1 = targetTrack == null ? null : new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int i = MovieImportDataRef(QTObject.ID(paramMovieImporter), QTObject.ID(dataRef), dataRef.getType(), QTObject.ID(theMovie), QTObject.ID(targetTrack), arrayOfInt1, atTime, arrayOfInt2, inFlags, arrayOfInt3);
+    public static MovieImportInfo fromMovieImporterDataRef(MovieImporter ci, DataRef dataRef, Movie theMovie, Track targetTrack, int atTime, int inFlags) throws QTException {
+        int[] usedTrack = targetTrack == null ? null : new int[1];
+        int[] addedDuration = new int[1];
+        int[] outFlags = new int[1];
+        int i = MovieImportDataRef(QTObject.ID(ci), QTObject.ID(dataRef), dataRef.getType(), QTObject.ID(theMovie), QTObject.ID(targetTrack), usedTrack, atTime, addedDuration, inFlags, outFlags);
         StdQTException.checkError(i);
         int j = 0;
         if ((inFlags & 0x4) != 0)
             if (targetTrack != null) {
                 j = QTObject.ID(targetTrack);
             } else
-                j = arrayOfInt1[0];
-        Track localTrack = j == 0 ? null : new Track(j, theMovie);
-        return new MovieImportInfo(localTrack, arrayOfInt2[0], arrayOfInt3[0]);
+                j = usedTrack[0];
+        Track t = j == 0 ? null : new Track(j, theMovie);
+        return new MovieImportInfo(t, addedDuration[0], outFlags[0]);
     }
 
-    Track(Movie paramMovie, float paramFloat1, float paramFloat2, float paramFloat3) throws QTException {
-        this(NewMovieTrack(QTObject.ID(paramMovie), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(paramFloat2), QTUtils.X2ShortFix(paramFloat3)), paramMovie);
+    Track(Movie movie, float width, float height, float volume) throws QTException {
+        this(NewMovieTrack(QTObject.ID(movie), QTUtils.X2Fix(width), QTUtils.X2Fix(height), QTUtils.X2ShortFix(volume)), movie);
         StdQTException.checkError(GetMoviesError());
     }
 
-    Track(int paramInt, Object paramObject) throws QTException {
-        super(paramInt, paramObject);
-        if (paramInt == 0)
+    Track(int nativeRep, Object owner) throws QTException {
+        super(nativeRep, owner);
+        if (nativeRep == 0)
             throw new StdQTException(63527);
-        this.owner = paramObject;
+        this.owner = owner;
     }
 
-    void _setNR(int paramInt) {
-        setNR(paramInt);
+    void _setNR(int nr) {
+        setNR(nr);
     }
 
     /**
@@ -451,10 +451,10 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Matrix getMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        GetTrackMatrix(_ID(), localMatrix.getBytes());
+        Matrix matrix = new Matrix();
+        GetTrackMatrix(_ID(), matrix.getBytes());
         StdQTException.checkError(GetMoviesError());
-        return localMatrix;
+        return matrix;
     }
 
     /**
@@ -477,11 +477,11 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Dimension getDimensions() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        GetTrackDimensions(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] width = new int[1];
+        int[] height = new int[1];
+        GetTrackDimensions(_ID(), width, height);
         StdQTException.checkError(GetMoviesError());
-        return new Dimension((int) QTUtils.Fix2X(arrayOfInt1[0]), (int) QTUtils.Fix2X(arrayOfInt2[0]));
+        return new Dimension((int) QTUtils.Fix2X(width[0]), (int) QTUtils.Fix2X(height[0]));
     }
 
     /**
@@ -504,11 +504,11 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public QDDimension getSize() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        GetTrackDimensions(_ID(), arrayOfInt1, arrayOfInt2);
+        int[] width = new int[1];
+        int[] height = new int[1];
+        GetTrackDimensions(_ID(), width, height);
         StdQTException.checkError(GetMoviesError());
-        return new QDDimension(QTUtils.Fix2X(arrayOfInt1[0]), QTUtils.Fix2X(arrayOfInt2[0]));
+        return new QDDimension(QTUtils.Fix2X(width[0]), QTUtils.Fix2X(height[0]));
     }
 
     /**
@@ -539,15 +539,15 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public String getName() throws StdQTException {
-        UserData localUserData = UserData.fromTrack(this);
+        UserData userData = UserData.fromTrack(this);
         try {
-            QTHandle localQTHandle = localUserData.getData(1851878757, 1);
-            int i = localQTHandle.getSize();
-            byte[] arrayOfByte = new byte[i];
-            localQTHandle.copyToArray(0, arrayOfByte, 0, i);
-            return new String(arrayOfByte);
-        } catch (QTException localQTException) {
-            int i = localQTException.errorCode();
+            QTHandle data = userData.getData(1851878757, 1);
+            int i = data.getSize();
+            byte[] destArray = new byte[i];
+            data.copyToArray(0, destArray, 0, i);
+            return new String(destArray);
+        } catch (QTException e) {
+            int i = e.errorCode();
             if (i != 63510)
                 throw new StdQTException(i);
         }
@@ -561,24 +561,24 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public void setName(String name) throws QTException {
-        UserData localUserData = UserData.fromTrack(this);
+        UserData userData = UserData.fromTrack(this);
         int i = 0;
         if (name != null) {
             i = name.length();
         }
         if (i == 0) {
             try {
-                localUserData.removeData(1851878757, 1);
-            } catch (StdQTException localStdQTException) {
-                int j = localStdQTException.errorCode();
+                userData.removeData(1851878757, 1);
+            } catch (StdQTException e) {
+                int j = e.errorCode();
                 if (j != 63510) {
                     throw new StdQTException(j);
                 }
             }
         } else {
-            QTHandle localQTHandle = new QTHandle(i, false);
-            localQTHandle.copyFromArray(0, name.getBytes(), 0, i);
-            localUserData.setDataItem(localQTHandle.toQTPointer(), 1851878757, 1);
+            QTHandle qtHandle = new QTHandle(i, false);
+            qtHandle.copyFromArray(0, name.getBytes(), 0, i);
+            userData.setDataItem(qtHandle.toQTPointer(), 1851878757, 1);
         }
     }
 
@@ -589,10 +589,10 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Matrix getDisplayMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        int i = GetTrackDisplayMatrix(_ID(), localMatrix.getBytes());
+        Matrix displayMatrix = new Matrix();
+        int i = GetTrackDisplayMatrix(_ID(), displayMatrix.getBytes());
         StdQTException.checkError(i);
-        return localMatrix;
+        return displayMatrix;
     }
 
     /**
@@ -639,11 +639,11 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public TimeInfo getNextInterestingTime(int interestingTimeFlags, int time, float rate) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        GetTrackNextInterestingTime(_ID(), (short) interestingTimeFlags, time, QTUtils.X2Fix(rate), arrayOfInt1, arrayOfInt2);
+        int[] interestingTime = new int[1];
+        int[] interestingDuration = new int[1];
+        GetTrackNextInterestingTime(_ID(), (short) interestingTimeFlags, time, QTUtils.X2Fix(rate), interestingTime, interestingDuration);
         StdQTException.checkError(GetMoviesError());
-        return new TimeInfo(arrayOfInt1[0], arrayOfInt2[0]);
+        return new TimeInfo(interestingTime[0], interestingDuration[0]);
     }
 
     /**
@@ -729,10 +729,10 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public int addReference(Track refTrack, int refType) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = AddTrackReference(_ID(), QTObject.ID(refTrack), refType, arrayOfInt);
+        int[] addedIndex = new int[1];
+        int i = AddTrackReference(_ID(), QTObject.ID(refTrack), refType, addedIndex);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return addedIndex[0];
     }
 
     /**
@@ -893,13 +893,13 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public LoadSettings getLoadSettings() throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int[] arrayOfInt4 = new int[1];
-        GetTrackLoadSettings(_ID(), arrayOfInt1, arrayOfInt2, arrayOfInt3, arrayOfInt4);
+        int[] preloadTime = new int[1];
+        int[] preloadDuration = new int[1];
+        int[] preloadFlags = new int[1];
+        int[] defaultHints = new int[1];
+        GetTrackLoadSettings(_ID(), preloadTime, preloadDuration, preloadFlags, defaultHints);
         StdQTException.checkError(GetMoviesError());
-        return new LoadSettings(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0], arrayOfInt4[0]);
+        return new LoadSettings(preloadTime[0], preloadDuration[0], preloadFlags[0], defaultHints[0]);
     }
 
     /**
@@ -965,9 +965,9 @@ public final class Track extends QTObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.movies.Track#getMatte()
      */
-    public void setMatte(PixMap paramPixMap) throws StdQTException {
+    public void setMatte(PixMap matte) throws StdQTException {
         synchronized (QTNative.globalsLock) {
-            SetTrackMatte(_ID(), QTObject.ID(paramPixMap));
+            SetTrackMatte(_ID(), QTObject.ID(matte));
             StdQTException.checkError(GetMoviesError());
         }
     }
@@ -1018,235 +1018,235 @@ public final class Track extends QTObject implements QuickTimeLib {
         return super.toString() + "[ID=unable to obtain track ID]";
     }
 
-    private static int GetMediaTrack(int paramInt) {
-        return MovieToolbox.GetMediaTrack(paramInt);
+    private static int GetMediaTrack(int media) {
+        return MovieToolbox.GetMediaTrack(media);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int MovieImportFile(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int paramInt4, int[] paramArrayOfInt2, int paramInt5, int[] paramArrayOfInt3) {
-        return ComponentManager.MovieImportFile(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramArrayOfInt1, paramInt4, paramArrayOfInt2, paramInt5, paramArrayOfInt3);
+    private static int MovieImportFile(int ci, byte[] fsspec, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        return ComponentManager.MovieImportFile(ci, fsspec, theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
     }
 
-    private static int MovieImportHandle(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int[] paramArrayOfInt1, int paramInt5, int[] paramArrayOfInt2, int paramInt6, int[] paramArrayOfInt3) {
-        return ComponentManager.MovieImportHandle(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfInt1, paramInt5, paramArrayOfInt2, paramInt6, paramArrayOfInt3);
+    private static int MovieImportHandle(int ci, int h, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        return ComponentManager.MovieImportHandle(ci, h, theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
     }
 
-    private static int MovieImportDataRef(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int[] paramArrayOfInt1, int paramInt6, int[] paramArrayOfInt2, int paramInt7, int[] paramArrayOfInt3) {
-        return ComponentManager.MovieImportDataRef(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5, paramArrayOfInt1, paramInt6, paramArrayOfInt2, paramInt7, paramArrayOfInt3);
+    private static int MovieImportDataRef(int ci, int dataRef, int dataRefType, int theMovie, int targetTrack, int[] usedTrack, int atTime, int[] addedDuration, int inFlags, int[] outFlags) {
+        return ComponentManager.MovieImportDataRef(ci, dataRef, dataRefType, theMovie, targetTrack, usedTrack, atTime, addedDuration, inFlags, outFlags);
     }
 
-    private static int NewMovieTrack(int paramInt1, int paramInt2, int paramInt3, short paramShort) {
-        return MovieToolbox.NewMovieTrack(paramInt1, paramInt2, paramInt3, paramShort);
+    private static int NewMovieTrack(int movie, int width, int height, short volume) {
+        return MovieToolbox.NewMovieTrack(movie, width, height, volume);
     }
 
-    private static int GetTrackMedia(int paramInt) {
-        return MovieToolbox.GetTrackMedia(paramInt);
+    private static int GetTrackMedia(int track) {
+        return MovieToolbox.GetTrackMedia(track);
     }
 
-    private static void DisposeTrackMedia(int paramInt) {
-        MovieToolbox.DisposeTrackMedia(paramInt);
+    private static void DisposeTrackMedia(int media) {
+        MovieToolbox.DisposeTrackMedia(media);
     }
 
-    private static void SetTrackGWorld(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        MovieToolbox.SetTrackGWorld(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static void SetTrackGWorld(int track, int port, int gdh, int proc, int refCon) {
+        MovieToolbox.SetTrackGWorld(track, port, gdh, proc, refCon);
     }
 
-    private static void SetTrackClipRgn(int paramInt1, int paramInt2) {
-        MovieToolbox.SetTrackClipRgn(paramInt1, paramInt2);
+    private static void SetTrackClipRgn(int track, int rgn) {
+        MovieToolbox.SetTrackClipRgn(track, rgn);
     }
 
-    private static int GetTrackID(int paramInt) {
-        return MovieToolbox.GetTrackID(paramInt);
+    private static int GetTrackID(int track) {
+        return MovieToolbox.GetTrackID(track);
     }
 
-    private static int GetTrackCreationTime(int paramInt) {
-        return MovieToolbox.GetTrackCreationTime(paramInt);
+    private static int GetTrackCreationTime(int track) {
+        return MovieToolbox.GetTrackCreationTime(track);
     }
 
-    private static int GetTrackModificationTime(int paramInt) {
-        return MovieToolbox.GetTrackModificationTime(paramInt);
+    private static int GetTrackModificationTime(int track) {
+        return MovieToolbox.GetTrackModificationTime(track);
     }
 
-    private static byte GetTrackEnabled(int paramInt) {
-        return MovieToolbox.GetTrackEnabled(paramInt);
+    private static byte GetTrackEnabled(int track) {
+        return MovieToolbox.GetTrackEnabled(track);
     }
 
-    private static void SetTrackEnabled(int paramInt, byte paramByte) {
-        MovieToolbox.SetTrackEnabled(paramInt, paramByte);
+    private static void SetTrackEnabled(int track, byte enabled) {
+        MovieToolbox.SetTrackEnabled(track, enabled);
     }
 
-    private static int GetTrackUsage(int paramInt) {
-        return MovieToolbox.GetTrackUsage(paramInt);
+    private static int GetTrackUsage(int track) {
+        return MovieToolbox.GetTrackUsage(track);
     }
 
-    private static void SetTrackUsage(int paramInt1, int paramInt2) {
-        MovieToolbox.SetTrackUsage(paramInt1, paramInt2);
+    private static void SetTrackUsage(int track, int usage) {
+        MovieToolbox.SetTrackUsage(track, usage);
     }
 
-    private static int GetTrackDuration(int paramInt) {
-        return MovieToolbox.GetTrackDuration(paramInt);
+    private static int GetTrackDuration(int track) {
+        return MovieToolbox.GetTrackDuration(track);
     }
 
-    private static int GetTrackOffset(int paramInt) {
-        return MovieToolbox.GetTrackOffset(paramInt);
+    private static int GetTrackOffset(int track) {
+        return MovieToolbox.GetTrackOffset(track);
     }
 
-    private static void SetTrackOffset(int paramInt1, int paramInt2) {
-        MovieToolbox.SetTrackOffset(paramInt1, paramInt2);
+    private static void SetTrackOffset(int track, int offset) {
+        MovieToolbox.SetTrackOffset(track, offset);
     }
 
-    private static short GetTrackLayer(int paramInt) {
-        return MovieToolbox.GetTrackLayer(paramInt);
+    private static short GetTrackLayer(int track) {
+        return MovieToolbox.GetTrackLayer(track);
     }
 
-    private static void SetTrackLayer(int paramInt, short paramShort) {
-        MovieToolbox.SetTrackLayer(paramInt, paramShort);
+    private static void SetTrackLayer(int track, short layer) {
+        MovieToolbox.SetTrackLayer(track, layer);
     }
 
-    private static int GetTrackAlternate(int paramInt) {
-        return MovieToolbox.GetTrackAlternate(paramInt);
+    private static int GetTrackAlternate(int track) {
+        return MovieToolbox.GetTrackAlternate(track);
     }
 
-    private static void SetTrackAlternate(int paramInt1, int paramInt2) {
-        MovieToolbox.SetTrackAlternate(paramInt1, paramInt2);
+    private static void SetTrackAlternate(int track, int alternate) {
+        MovieToolbox.SetTrackAlternate(track, alternate);
     }
 
-    private static short GetTrackVolume(int paramInt) {
-        return MovieToolbox.GetTrackVolume(paramInt);
+    private static short GetTrackVolume(int track) {
+        return MovieToolbox.GetTrackVolume(track);
     }
 
-    private static void SetTrackVolume(int paramInt, short paramShort) {
-        MovieToolbox.SetTrackVolume(paramInt, paramShort);
+    private static void SetTrackVolume(int track, short volume) {
+        MovieToolbox.SetTrackVolume(track, volume);
     }
 
-    private static void GetTrackMatrix(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.GetTrackMatrix(paramInt, paramArrayOfByte);
+    private static void GetTrackMatrix(int track, byte[] matrix) {
+        MovieToolbox.GetTrackMatrix(track, matrix);
     }
 
-    private static void SetTrackMatrix(int paramInt, byte[] paramArrayOfByte) {
-        MovieToolbox.SetTrackMatrix(paramInt, paramArrayOfByte);
+    private static void SetTrackMatrix(int track, byte[] matrix) {
+        MovieToolbox.SetTrackMatrix(track, matrix);
     }
 
-    private static void GetTrackDimensions(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetTrackDimensions(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetTrackDimensions(int track, int[] width, int[] height) {
+        MovieToolbox.GetTrackDimensions(track, width, height);
     }
 
-    private static void SetTrackDimensions(int paramInt1, int paramInt2, int paramInt3) {
-        MovieToolbox.SetTrackDimensions(paramInt1, paramInt2, paramInt3);
+    private static void SetTrackDimensions(int track, int width, int height) {
+        MovieToolbox.SetTrackDimensions(track, width, height);
     }
 
-    private static short GetTrackDisplayMatrix(int paramInt, byte[] paramArrayOfByte) {
-        return MovieToolbox.GetTrackDisplayMatrix(paramInt, paramArrayOfByte);
+    private static short GetTrackDisplayMatrix(int track, byte[] matrix) {
+        return MovieToolbox.GetTrackDisplayMatrix(track, matrix);
     }
 
-    private static short SetTrackSoundLocalizationSettings(int paramInt1, int paramInt2) {
-        return MovieToolbox.SetTrackSoundLocalizationSettings(paramInt1, paramInt2);
+    private static short SetTrackSoundLocalizationSettings(int track, int settings) {
+        return MovieToolbox.SetTrackSoundLocalizationSettings(track, settings);
     }
 
-    private static int GetTrackMovie(int paramInt) {
-        return MovieToolbox.GetTrackMovie(paramInt);
+    private static int GetTrackMovie(int track) {
+        return MovieToolbox.GetTrackMovie(track);
     }
 
-    private static void GetTrackNextInterestingTime(int paramInt1, short paramShort, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetTrackNextInterestingTime(paramInt1, paramShort, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetTrackNextInterestingTime(int track, short flags, int time, int rate, int[] interestingTime, int[] interestingDuration) {
+        MovieToolbox.GetTrackNextInterestingTime(track, flags, time, rate, interestingTime, interestingDuration);
     }
 
-    private static short InsertMediaIntoTrack(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.InsertMediaIntoTrack(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short InsertMediaIntoTrack(int track, int trackStart, int mediaTime, int mediaDuration, int mediaRate) {
+        return MovieToolbox.InsertMediaIntoTrack(track, trackStart, mediaTime, mediaDuration, mediaRate);
     }
 
-    private static short InsertEmptyTrackSegment(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.InsertEmptyTrackSegment(paramInt1, paramInt2, paramInt3);
+    private static short InsertEmptyTrackSegment(int track, int dstIn, int duration) {
+        return MovieToolbox.InsertEmptyTrackSegment(track, dstIn, duration);
     }
 
-    private static short DeleteTrackSegment(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.DeleteTrackSegment(paramInt1, paramInt2, paramInt3);
+    private static short DeleteTrackSegment(int track, int start, int duration) {
+        return MovieToolbox.DeleteTrackSegment(track, start, duration);
     }
 
-    private static short ScaleTrackSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.ScaleTrackSegment(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short ScaleTrackSegment(int track, int start, int oldDuration, int newDuration) {
+        return MovieToolbox.ScaleTrackSegment(track, start, oldDuration, newDuration);
     }
 
-    private static int NewTrackEditState(int paramInt) {
-        return MovieToolbox.NewTrackEditState(paramInt);
+    private static int NewTrackEditState(int track) {
+        return MovieToolbox.NewTrackEditState(track);
     }
 
-    private static short UseTrackEditState(int paramInt1, int paramInt2) {
-        return MovieToolbox.UseTrackEditState(paramInt1, paramInt2);
+    private static short UseTrackEditState(int track, int state) {
+        return MovieToolbox.UseTrackEditState(track, state);
     }
 
-    private static short AddTrackReference(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return MovieToolbox.AddTrackReference(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short AddTrackReference(int track, int refTrack, int refType, int[] addedIndex) {
+        return MovieToolbox.AddTrackReference(track, refTrack, refType, addedIndex);
     }
 
-    private static short DeleteTrackReference(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.DeleteTrackReference(paramInt1, paramInt2, paramInt3);
+    private static short DeleteTrackReference(int track, int refType, int index) {
+        return MovieToolbox.DeleteTrackReference(track, refType, index);
     }
 
-    private static short SetTrackReference(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.SetTrackReference(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short SetTrackReference(int track, int refTrack, int refType, int index) {
+        return MovieToolbox.SetTrackReference(track, refTrack, refType, index);
     }
 
-    private static int GetTrackReference(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.GetTrackReference(paramInt1, paramInt2, paramInt3);
+    private static int GetTrackReference(int track, int refType, int index) {
+        return MovieToolbox.GetTrackReference(track, refType, index);
     }
 
-    private static int GetNextTrackReferenceType(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetNextTrackReferenceType(paramInt1, paramInt2);
+    private static int GetNextTrackReferenceType(int track, int refType) {
+        return MovieToolbox.GetNextTrackReferenceType(track, refType);
     }
 
-    private static int GetTrackReferenceCount(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetTrackReferenceCount(paramInt1, paramInt2);
+    private static int GetTrackReferenceCount(int track, int refType) {
+        return MovieToolbox.GetTrackReferenceCount(track, refType);
     }
 
-    private static int TrackTimeToMediaTime(int paramInt1, int paramInt2) {
-        return MovieToolbox.TrackTimeToMediaTime(paramInt1, paramInt2);
+    private static int TrackTimeToMediaTime(int value, int track) {
+        return MovieToolbox.TrackTimeToMediaTime(value, track);
     }
 
-    private static int GetTrackEditRate(int paramInt1, int paramInt2) {
-        return MovieToolbox.GetTrackEditRate(paramInt1, paramInt2);
+    private static int GetTrackEditRate(int track, int time) {
+        return MovieToolbox.GetTrackEditRate(track, time);
     }
 
-    private static int GetTrackDataSize(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.GetTrackDataSize(paramInt1, paramInt2, paramInt3);
+    private static int GetTrackDataSize(int track, int time, int duration) {
+        return MovieToolbox.GetTrackDataSize(track, time, duration);
     }
 
-    private static byte PtInTrack(int paramInt1, int paramInt2) {
-        return MovieToolbox.PtInTrack(paramInt1, paramInt2);
+    private static byte PtInTrack(int track, int pt) {
+        return MovieToolbox.PtInTrack(track, pt);
     }
 
-    private static int GetTrackStatus(int paramInt) {
-        return MovieToolbox.GetTrackStatus(paramInt);
+    private static int GetTrackStatus(int track) {
+        return MovieToolbox.GetTrackStatus(track);
     }
 
-    private static void SetTrackLoadSettings(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        MovieToolbox.SetTrackLoadSettings(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static void SetTrackLoadSettings(int track, int preloadTime, int preloadDuration, int preloadFlags, int defaultHints) {
+        MovieToolbox.SetTrackLoadSettings(track, preloadTime, preloadDuration, preloadFlags, defaultHints);
     }
 
-    private static void GetTrackLoadSettings(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
-        MovieToolbox.GetTrackLoadSettings(paramInt, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    private static void GetTrackLoadSettings(int track, int[] preloadTime, int[] preloadDuration, int[] preloadFlags, int[] defaultHints) {
+        MovieToolbox.GetTrackLoadSettings(track, preloadTime, preloadDuration, preloadFlags, defaultHints);
     }
 
-    private static short InsertTrackSegment(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MovieToolbox.InsertTrackSegment(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short InsertTrackSegment(int srcTrack, int dstTrack, int srcIn, int srcDuration, int dstIn) {
+        return MovieToolbox.InsertTrackSegment(srcTrack, dstTrack, srcIn, srcDuration, dstIn);
     }
 
-    private static short CopyTrackSettings(int paramInt1, int paramInt2) {
-        return MovieToolbox.CopyTrackSettings(paramInt1, paramInt2);
+    private static short CopyTrackSettings(int src, int dst) {
+        return MovieToolbox.CopyTrackSettings(src, dst);
     }
 
-    private static short LoadTrackIntoRam(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MovieToolbox.LoadTrackIntoRam(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short LoadTrackIntoRam(int track, int time, int duration, int flags) {
+        return MovieToolbox.LoadTrackIntoRam(track, time, duration, flags);
     }
 
-    private static void SetTrackMatte(int paramInt1, int paramInt2) {
-        MovieToolbox.SetTrackMatte(paramInt1, paramInt2);
+    private static void SetTrackMatte(int track, int matte) {
+        MovieToolbox.SetTrackMatte(track, matte);
     }
 
-    private static short CopyTrackUserData(int paramInt1, int paramInt2, int paramInt3) {
-        return MovieToolbox.CopyTrackUserData(paramInt1, paramInt2, paramInt3);
+    private static short CopyTrackUserData(int src, int dst, int copyRule) {
+        return MovieToolbox.CopyTrackUserData(src, dst, copyRule);
     }
 }

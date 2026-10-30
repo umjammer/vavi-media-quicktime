@@ -22,28 +22,28 @@ public class EditList extends QTVector {
      * {@link quicktime.QTException}
      * java.lang.ArrayIndexOutOfBoundsException
      */
-    public void insert(EditEntry paramEditEntry, int paramInt) throws QTException, ArrayIndexOutOfBoundsException {
-        insertElement(paramEditEntry, paramInt);
+    public void insert(EditEntry editEntry, int index) throws QTException, ArrayIndexOutOfBoundsException {
+        insertElement(editEntry, index);
     }
 
     /**
      * Get a EditEntry at specified position.
      * java.lang.ArrayIndexOutOfBoundsException
      */
-    public EditEntry get(int paramInt) throws ArrayIndexOutOfBoundsException, QTException {
-        EditEntry localEditEntry = new EditEntry();
-        getElement(localEditEntry, paramInt);
-        return localEditEntry;
+    public EditEntry get(int index) throws ArrayIndexOutOfBoundsException, QTException {
+        EditEntry editEntry = new EditEntry();
+        getElement(editEntry, index);
+        return editEntry;
     }
 
     @Override
     protected QTPointerRef makeElement() {
-        EditEntry localEditEntry = null;
+        EditEntry element = null;
         try {
-            localEditEntry = new EditEntry();
-        } catch (QTException localQTException) {
-            localEditEntry = null;
+            element = new EditEntry();
+        } catch (QTException e) {
+            element = null;
         }
-        return localEditEntry;
+        return element;
     }
 }

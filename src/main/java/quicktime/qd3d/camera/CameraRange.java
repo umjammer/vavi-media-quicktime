@@ -53,38 +53,38 @@ public final class CameraRange extends QTByteObject implements Cloneable {
     /**
      * Creates a CameraRange object containing given data.
      */
-    public CameraRange(float paramFloat1, float paramFloat2) {
+    public CameraRange(float hither, float yon) {
         this();
-        setHither(paramFloat1);
-        setYon(paramFloat2);
+        setHither(hither);
+        setYon(yon);
     }
 
-    private CameraRange(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private CameraRange(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[8];
-        CameraRange localCameraRange = new CameraRange();
-        paramObjectInputStream.read(localCameraRange.getBytes());
+        CameraRange cameraRange = new CameraRange();
+        in.read(cameraRange.getBytes());
         try {
-            EndianOrder.flipBigEndianToNative(localCameraRange, 0, getEndianDescriptor());
+            EndianOrder.flipBigEndianToNative(cameraRange, 0, getEndianDescriptor());
         } catch (UtilException e) {
             e.printStackTrace();
         }
-        System.arraycopy(localCameraRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        System.arraycopy(cameraRange.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        CameraRange localCameraRange = (CameraRange) clone();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        CameraRange cameraRange = (CameraRange) clone();
         try {
-            EndianOrder.flipNativeToBigEndian(localCameraRange, 0, getEndianDescriptor());
+            EndianOrder.flipNativeToBigEndian(cameraRange, 0, getEndianDescriptor());
         } catch (UtilException e) {
             e.printStackTrace();
         }
-        paramObjectOutputStream.write(localCameraRange.getBytes());
+        out.write(cameraRange.getBytes());
     }
 
     /**
@@ -104,15 +104,15 @@ public final class CameraRange extends QTByteObject implements Cloneable {
     /**
      * sets the camera range's distance away from the hither plane.
      */
-    public void setHither(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setHither(float hither) {
+        setFloatAt(0, hither);
     }
 
     /**
      * sets the camera range's distance away from the yon plane.
      */
-    public void setYon(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setYon(float yon) {
+        setFloatAt(4, yon);
     }
 
     /**

@@ -40,9 +40,9 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
 
     private final QDGraphics g;
 
-    private static QDRect moveToZero(QDRect paramQDRect) {
-        paramQDRect.move(0, 0);
-        return paramQDRect;
+    private static QDRect moveToZero(QDRect rect) {
+        rect.move(0, 0);
+        return rect;
     }
 
     /**
@@ -76,8 +76,8 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
         this.g = g;
         ef.setGWorld(g);
         ef.redraw(null);
-        PixMap localPixMap = g.getPixMap();
-        setImageData(localPixMap.getPixelData(), new ImageDescription(localPixMap));
+        PixMap pixmap = g.getPixMap();
+        setImageData(pixmap.getPixelData(), new ImageDescription(pixmap));
         if ((ef instanceof QTTransition)) {
             ((QTTransition) ef).thePresenter = this;
         }
@@ -106,9 +106,9 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
 
         final QTEffectPresenter pres;
 
-        EFInvalidator(TwoDSprite paramTwoDSprite, QTEffectPresenter paramQTEffectPresenter) {
-            super(paramTwoDSprite);
-            this.pres = paramQTEffectPresenter;
+        EFInvalidator(TwoDSprite s, QTEffectPresenter pres) {
+            super(s);
+            this.pres = pres;
         }
 
         @Override
@@ -201,10 +201,10 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @deprecated
      */
     @Override
-    public synchronized void addDrawingListener(DrawingListener paramDrawingListener) {
-        if (this.listenerList.contains(paramDrawingListener))
+    public synchronized void addDrawingListener(DrawingListener drawingListener) {
+        if (this.listenerList.contains(drawingListener))
             return;
-        this.listenerList.addElement(paramDrawingListener);
+        this.listenerList.addElement(drawingListener);
     }
 
     /**
@@ -213,9 +213,9 @@ public class QTEffectPresenter extends ImagePresenter implements DynamicImage, D
      * @deprecated
      */
     @Override
-    public synchronized void removeDrawingListener(DrawingListener paramDrawingListener) {
-        if (this.listenerList.contains(paramDrawingListener)) {
-            this.listenerList.removeElement(paramDrawingListener);
+    public synchronized void removeDrawingListener(DrawingListener drawingListener) {
+        if (this.listenerList.contains(drawingListener)) {
+            this.listenerList.removeElement(drawingListener);
         }
     }
 }

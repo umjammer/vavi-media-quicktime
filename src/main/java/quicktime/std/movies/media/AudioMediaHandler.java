@@ -55,7 +55,7 @@ public interface AudioMediaHandler {
      * @return MediaEQSpectrumBandsRecord object
      * @throws quicktime.QTException
      */
-    MediaEQSpectrumBands getSoundEqualizerBands(int paramInt) throws QTException;
+    MediaEQSpectrumBands getSoundEqualizerBands(int count) throws QTException;
 
     /**
      * Pass in the count of bands you expect to get back, it would return the the actual value of bands available
@@ -64,7 +64,7 @@ public interface AudioMediaHandler {
      * @return MediaEQSpectrumBandsRecord object
      * @throws quicktime.QTException
      */
-    void setSoundEqualizerBands(MediaEQSpectrumBands paramMediaEQSpectrumBands) throws QTException;
+    void setSoundEqualizerBands(MediaEQSpectrumBands soundEqualizerBands) throws QTException;
 
     /**
      * Sets  Sound Bass and Treble (Not Documented).
@@ -93,5 +93,5 @@ public interface AudioMediaHandler {
      * @return bandLevels
      * @throws quicktime.QTException
      */
-    int[] getSoundEqualizerBandLevels(int paramInt) throws QTException;
+    int[] getSoundEqualizerBandLevels(int numBands) throws QTException;
 }

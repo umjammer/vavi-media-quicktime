@@ -38,9 +38,9 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     /**
      * Specify the type of the ComponentDescription.
      */
-    public ComponentDescription(int paramInt) {
+    public ComponentDescription(int type) {
         this();
-        setType(paramInt);
+        setType(type);
     }
 
     /**
@@ -60,15 +60,15 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
         setMask(mask);
     }
 
-    private ComponentDescription(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private ComponentDescription(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[20];
         byte[] arrayOfByte = new byte[20];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         for (int i = 0; i < 20; i += 4) {
             int j = getIntFromArray(arrayOfByte, i);
             int k = EndianOrder.flipBigEndianToNative32(j);
@@ -77,14 +77,14 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[20];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[20];
         for (int i = 0; i < 20; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipNativeToBigEndian32(j);
-            setIntInArray(arrayOfByte, i, k);
+            setIntInArray(movie, i, k);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -97,8 +97,8 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     /**
      * Sets the type.
      */
-    public void setType(int paramInt) {
-        setIntAt(0, paramInt);
+    public void setType(int type) {
+        setIntAt(0, type);
     }
 
     /**
@@ -111,8 +111,8 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     /**
      * Sets the type.
      */
-    public void setSubType(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setSubType(int subType) {
+        setIntAt(4, subType);
     }
 
     /**
@@ -125,8 +125,8 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     /**
      * Sets the manufacturer.
      */
-    public void setManufacturer(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setManufacturer(int manufacturer) {
+        setIntAt(8, manufacturer);
     }
 
     /**
@@ -139,8 +139,8 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     /**
      * Sets the flag.
      */
-    public void setFlags(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setFlags(int flags) {
+        setIntAt(12, flags);
     }
 
     /**
@@ -153,8 +153,8 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
     /**
      * Sets the mask.
      */
-    public void setMask(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setMask(int mask) {
+        setIntAt(16, mask);
     }
 
     /**
@@ -203,15 +203,15 @@ public class ComponentDescription extends QTByteObject implements QuickTimeLib {
         return new ComponentDescription(getBytes());
     }
 
-    private static int CountComponents(byte[] paramArrayOfByte) {
-        return ComponentManager.CountComponents(paramArrayOfByte);
+    private static int CountComponents(byte[] desc) {
+        return ComponentManager.CountComponents(desc);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

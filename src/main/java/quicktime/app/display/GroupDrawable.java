@@ -195,8 +195,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @deprecated
      * @since QTJava 6.1
      */
-    public void setBackgroundColor(QDColor paramQDColor) throws QTException {
-        this.bgColor = Objects.requireNonNullElseGet(paramQDColor, () -> this.port.getBackColor());
+    public void setBackgroundColor(QDColor backgroundColor) throws QTException {
+        this.bgColor = Objects.requireNonNullElseGet(backgroundColor, () -> this.port.getBackColor());
         if (this.visible) {
             redraw(null);
         }
@@ -212,10 +212,10 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     @Override
     public synchronized void removeMember(Object member) throws QTException {
         for (int i = 0; i < this.vec.size(); i++) {
-            GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
-            QTDrawable localQTDrawable = localGroupMember.drawer;
-            if (localQTDrawable.equals(member)) {
-                localQTDrawable.setGWorld(QDGraphics.scratch);
+            GroupMember groupMember = (GroupMember) this.vec.elementAt(i);
+            QTDrawable qtDrawable = groupMember.drawer;
+            if (qtDrawable.equals(member)) {
+                qtDrawable.setGWorld(QDGraphics.scratch);
                 this.vec.removeElementAt(i);
                 memberRemoved(member);
                 if (!this.visible) {
@@ -237,13 +237,13 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      */
     @Override
     public synchronized Enumeration members() {
-        Vector<Object> localVector = new Vector<>();
-        Enumeration<?> localEnumeration = this.vec.elements();
-        while (localEnumeration.hasMoreElements()) {
-            GroupMember localGroupMember = (GroupMember) localEnumeration.nextElement();
-            localVector.addElement(localGroupMember.drawer);
+        Vector<Object> vector = new Vector<>();
+        Enumeration<?> enumeration = this.vec.elements();
+        while (enumeration.hasMoreElements()) {
+            GroupMember groupMember = (GroupMember) enumeration.nextElement();
+            vector.addElement(groupMember.drawer);
         }
-        return localVector.elements();
+        return vector.elements();
     }
 
     /**
@@ -264,12 +264,12 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @deprecated
      * @since QTJava 6.1
      */
-    public GroupMember getGroupMember(Object paramObject) {
-        Enumeration<?> localEnumeration = this.vec.elements();
-        while (localEnumeration.hasMoreElements()) {
-            GroupMember localGroupMember = (GroupMember) localEnumeration.nextElement();
-            if (localGroupMember.drawer.equals(paramObject))
-                return localGroupMember;
+    public GroupMember getGroupMember(Object drawable) {
+        Enumeration<?> enumeration = this.vec.elements();
+        while (enumeration.hasMoreElements()) {
+            GroupMember groupMember = (GroupMember) enumeration.nextElement();
+            if (groupMember.drawer.equals(drawable))
+                return groupMember;
         }
         return null;
     }
@@ -300,11 +300,11 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @since QTJava 6.1
      */
     public boolean setMemberAlignment(QTDrawable d, float xAlign, float yAlign) throws QTException {
-        GroupMember localGroupMember = getGroupMember(d);
-        if (localGroupMember != null) {
-            setAlignedMemberLocation(localGroupMember.drawer, xAlign, yAlign);
+        GroupMember groupMember = getGroupMember(d);
+        if (groupMember != null) {
+            setAlignedMemberLocation(groupMember.drawer, xAlign, yAlign);
         }
-        return localGroupMember != null;
+        return groupMember != null;
     }
 
     /**
@@ -317,36 +317,36 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      * @deprecated
      * @since QTJava 6.1
      */
-    public boolean setMemberLayer(QTDrawable paramQTDrawable, int layer) throws QTException {
-        if (!isAppropriate(paramQTDrawable))
+    public boolean setMemberLayer(QTDrawable qtDrawable, int layer) throws QTException {
+        if (!isAppropriate(qtDrawable))
             return false;
-        if (!hasMember(paramQTDrawable))
+        if (!hasMember(qtDrawable))
             return false;
-        GroupMember localGroupMember1 = null;
+        GroupMember groupMember1 = null;
         for (int i = 0; i < this.vec.size(); i++) {
-            localGroupMember1 = (GroupMember) this.vec.elementAt(i);
-            if (localGroupMember1.drawer.equals(paramQTDrawable)) {
+            groupMember1 = (GroupMember) this.vec.elementAt(i);
+            if (groupMember1.drawer.equals(qtDrawable)) {
                 this.vec.removeElementAt(i);
                 break;
             }
-            localGroupMember1 = null;
+            groupMember1 = null;
         }
-        if (localGroupMember1 != null) {
+        if (groupMember1 != null) {
             int i = 0;
-            localGroupMember1.layer = layer;
+            groupMember1.layer = layer;
             for (int j = 0; j < this.vec.size(); j++) {
-                GroupMember localGroupMember2 = (GroupMember) this.vec.elementAt(j);
-                if (layer <= localGroupMember2.layer) {
+                GroupMember groupMember2 = (GroupMember) this.vec.elementAt(j);
+                if (layer <= groupMember2.layer) {
                     i = 1;
-                    this.vec.insertElementAt(localGroupMember1, j);
+                    this.vec.insertElementAt(groupMember1, j);
                     break;
                 }
             }
             if (i == 0) {
-                this.vec.addElement(localGroupMember1);
+                this.vec.addElement(groupMember1);
             }
         }
-        return localGroupMember1 != null;
+        return groupMember1 != null;
     }
 
     /**
@@ -359,8 +359,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     public int getBackLayer() {
         if (this.vec.isEmpty())
             return -1;
-        GroupMember localGroupMember = (GroupMember) this.vec.elementAt(this.vec.size() - 1);
-        return localGroupMember.getLayer();
+        GroupMember groupMember = (GroupMember) this.vec.elementAt(this.vec.size() - 1);
+        return groupMember.getLayer();
     }
 
     /**
@@ -373,8 +373,8 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
     public int getFrontLayer() {
         if (this.vec.isEmpty())
             return -1;
-        GroupMember localGroupMember = (GroupMember) this.vec.elementAt(0);
-        return localGroupMember.getLayer();
+        GroupMember groupMember = (GroupMember) this.vec.elementAt(0);
+        return groupMember.getLayer();
     }
 
     /**
@@ -474,9 +474,9 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
             if (!this.displayBounds.inside(x, y))
                 return null;
             for (int i = 0; i < this.vec.size(); i++) {
-                GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
-                if (localGroupMember.drawer.getDisplayBounds().inside(x, y))
-                    return localGroupMember.drawer;
+                GroupMember groupMember = (GroupMember) this.vec.elementAt(i);
+                if (groupMember.drawer.getDisplayBounds().inside(x, y))
+                    return groupMember.drawer;
             }
         }
         return null;
@@ -494,10 +494,10 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
      */
     @Override
     public Matrix getMatrix() throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        localMatrix.setTx(this.displayBounds.getX());
-        localMatrix.setTy(this.displayBounds.getY());
-        return localMatrix;
+        Matrix matrix = new Matrix();
+        matrix.setTx(this.displayBounds.getX());
+        matrix.setTy(this.displayBounds.getY());
+        return matrix;
     }
 
     /**
@@ -542,28 +542,28 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
         return this.eraseRegion;
     }
 
-    final synchronized void _addQTDrawable(GroupMember paramGroupMember) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
+    final synchronized void _addQTDrawable(GroupMember groupMember) throws QTException {
+        QDRect displayBounds = getDisplayBounds();
         int i = 0;
         synchronized (this.vec) {
             for (int j = 0; j < this.vec.size(); j++) {
-                GroupMember localGroupMember = (GroupMember) this.vec.elementAt(j);
-                if (paramGroupMember.drawer.equals(localGroupMember.drawer))
+                GroupMember groupMember2 = (GroupMember) this.vec.elementAt(j);
+                if (groupMember.drawer.equals(groupMember2.drawer))
                     return;
-                if (paramGroupMember.layer <= localGroupMember.layer) {
-                    this.vec.insertElementAt(paramGroupMember, j);
+                if (groupMember.layer <= groupMember2.layer) {
+                    this.vec.insertElementAt(groupMember, j);
                     i = 1;
                     break;
                 }
             }
             if (i == 0) {
-                this.vec.addElement(paramGroupMember);
+                this.vec.addElement(groupMember);
             }
         }
-        memberAdded(paramGroupMember.drawer);
+        memberAdded(groupMember.drawer);
         if (this.visible)
             setClip(null);
-        paramGroupMember.drawer.setGWorld(getGWorld());
+        groupMember.drawer.setGWorld(getGWorld());
         if (this.visible) {
             redraw(null);
         }
@@ -590,14 +590,14 @@ public abstract class GroupDrawable extends SimpleSpace implements QTDisplaySpac
         } else if (yAlign > 1.0F) {
             yAlign = 1.0F;
         }
-        QDRect localQDRect1 = getDisplayBounds();
-        int i = localQDRect1.getX();
-        int j = localQDRect1.getY();
-        int k = localQDRect1.getWidth();
-        int m = localQDRect1.getHeight();
-        QDRect localQDRect2 = drawer.getDisplayBounds();
-        int n = k - localQDRect2.getWidth();
-        int i1 = m - localQDRect2.getHeight();
+        QDRect displayBounds = getDisplayBounds();
+        int i = displayBounds.getX();
+        int j = displayBounds.getY();
+        int k = displayBounds.getWidth();
+        int m = displayBounds.getHeight();
+        QDRect rect2 = drawer.getDisplayBounds();
+        int n = k - rect2.getWidth();
+        int i1 = m - rect2.getHeight();
         if (n < 0)
             n = 0;
         if (i1 < 0) {

@@ -48,8 +48,8 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Adds action-listener-a with action-listener-b and
      * returns the resulting multicast listener.
      */
-    public static MouseButtonListener add(MouseButtonListener paramMouseButtonListener1, MouseButtonListener paramMouseButtonListener2) {
-        return (MouseButtonListener) addListener(paramMouseButtonListener1, paramMouseButtonListener2);
+    public static MouseButtonListener add(MouseButtonListener mouseButtonListener1, MouseButtonListener mouseButtonListener2) {
+        return (MouseButtonListener) addListener(mouseButtonListener1, mouseButtonListener2);
     }
 
     /**
@@ -70,15 +70,15 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Invoked when the mouse has been clicked.
      */
     @Override
-    public void mouseClicked(QTMouseEvent paramQTMouseEvent) {
-        MouseButtonListener localMouseButtonListener = (MouseButtonListener) this.a;
-        if (localMouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseButtonListener.mouseClicked(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mouseClicked(QTMouseEvent qtMouseEvent) {
+        MouseButtonListener mouseButtonListener = (MouseButtonListener) this.a;
+        if (mouseButtonListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseButtonListener.mouseClicked(qtMouseEvent);
+        if (qtMouseEvent.isConsumed())
             return;
-        localMouseButtonListener = (MouseButtonListener) this.b;
-        if (localMouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) {
-            localMouseButtonListener.mouseClicked(paramQTMouseEvent);
+        mouseButtonListener = (MouseButtonListener) this.b;
+        if (mouseButtonListener.matchModifierFilter(qtMouseEvent.getModifiers())) {
+            mouseButtonListener.mouseClicked(qtMouseEvent);
         }
     }
 
@@ -88,15 +88,15 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Invoked when a mouse button has been pressed.
      */
     @Override
-    public void mousePressed(QTMouseEvent paramQTMouseEvent) {
-        MouseButtonListener localMouseButtonListener = (MouseButtonListener) this.a;
-        if (localMouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseButtonListener.mousePressed(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mousePressed(QTMouseEvent event) {
+        MouseButtonListener mouseButtonListener = (MouseButtonListener) this.a;
+        if (mouseButtonListener.matchModifierFilter(event.getModifiers()))
+            mouseButtonListener.mousePressed(event);
+        if (event.isConsumed())
             return;
-        localMouseButtonListener = (MouseButtonListener) this.b;
-        if (localMouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseButtonListener.mousePressed(paramQTMouseEvent);
+        mouseButtonListener = (MouseButtonListener) this.b;
+        if (mouseButtonListener.matchModifierFilter(event.getModifiers()))
+            mouseButtonListener.mousePressed(event);
     }
 
     /**
@@ -116,22 +116,22 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Invoked when a mouse button has been released.
      */
     @Override
-    public void mouseReleased(QTMouseEvent paramQTMouseEvent) {
-        MouseButtonListener localMouseButtonListener = (MouseButtonListener) this.a;
-        if (localMouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseButtonListener.mouseReleased(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mouseReleased(QTMouseEvent qtMouseEvent) {
+        MouseButtonListener mouseButtonListener = (MouseButtonListener) this.a;
+        if (mouseButtonListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseButtonListener.mouseReleased(qtMouseEvent);
+        if (qtMouseEvent.isConsumed())
             return;
-        localMouseButtonListener = (MouseButtonListener) this.b;
-        if (localMouseButtonListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseButtonListener.mouseReleased(paramQTMouseEvent);
+        mouseButtonListener = (MouseButtonListener) this.b;
+        if (mouseButtonListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseButtonListener.mouseReleased(qtMouseEvent);
     }
 
     /**
      * @deprecated
      */
-    public static MouseMoveListener add(MouseMoveListener paramMouseMoveListener1, MouseMoveListener paramMouseMoveListener2) {
-        return (MouseMoveListener) addListener(paramMouseMoveListener1, paramMouseMoveListener2);
+    public static MouseMoveListener add(MouseMoveListener mouseMoveListener1, MouseMoveListener mouseMoveListener2) {
+        return (MouseMoveListener) addListener(mouseMoveListener1, mouseMoveListener2);
     }
 
     /**
@@ -156,15 +156,15 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * bounds of the component).
      */
     @Override
-    public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
-        MouseMoveListener localMouseMoveListener = (MouseMoveListener) this.a;
-        if (localMouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseMoveListener.mouseDragged(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mouseDragged(QTMouseEvent event) {
+        MouseMoveListener mouseMoveListener = (MouseMoveListener) this.a;
+        if (mouseMoveListener.matchModifierFilter(event.getModifiers()))
+            mouseMoveListener.mouseDragged(event);
+        if (event.isConsumed())
             return;
-        localMouseMoveListener = (MouseMoveListener) this.b;
-        if (localMouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) {
-            localMouseMoveListener.mouseDragged(paramQTMouseEvent);
+        mouseMoveListener = (MouseMoveListener) this.b;
+        if (mouseMoveListener.matchModifierFilter(event.getModifiers())) {
+            mouseMoveListener.mouseDragged(event);
         }
     }
 
@@ -175,22 +175,22 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * (with no buttons no down).
      */
     @Override
-    public void mouseMoved(QTMouseEvent paramQTMouseEvent) {
-        MouseMoveListener localMouseMoveListener = (MouseMoveListener) this.a;
-        if (localMouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseMoveListener.mouseMoved(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mouseMoved(QTMouseEvent qtMouseEvent) {
+        MouseMoveListener mouseMoveListener = (MouseMoveListener) this.a;
+        if (mouseMoveListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseMoveListener.mouseMoved(qtMouseEvent);
+        if (qtMouseEvent.isConsumed())
             return;
-        localMouseMoveListener = (MouseMoveListener) this.b;
-        if (localMouseMoveListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseMoveListener.mouseMoved(paramQTMouseEvent);
+        mouseMoveListener = (MouseMoveListener) this.b;
+        if (mouseMoveListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseMoveListener.mouseMoved(qtMouseEvent);
     }
 
     /**
      * @deprecated
      */
-    public static MouseEnterExitListener add(MouseEnterExitListener paramMouseEnterExitListener1, MouseEnterExitListener paramMouseEnterExitListener2) {
-        return (MouseEnterExitListener) addListener(paramMouseEnterExitListener1, paramMouseEnterExitListener2);
+    public static MouseEnterExitListener add(MouseEnterExitListener mouseEnterExitListener1, MouseEnterExitListener mouseEnterExitListener2) {
+        return (MouseEnterExitListener) addListener(mouseEnterExitListener1, mouseEnterExitListener2);
     }
 
     /**
@@ -211,15 +211,15 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Invoked when the mouse enters a component.
      */
     @Override
-    public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
-        MouseEnterExitListener localMouseEnterExitListener = (MouseEnterExitListener) this.a;
-        if (localMouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseEnterExitListener.mouseEntered(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mouseEntered(QTMouseEvent qtMouseEvent) {
+        MouseEnterExitListener mouseEnterExitListener = (MouseEnterExitListener) this.a;
+        if (mouseEnterExitListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseEnterExitListener.mouseEntered(qtMouseEvent);
+        if (qtMouseEvent.isConsumed())
             return;
-        localMouseEnterExitListener = (MouseEnterExitListener) this.b;
-        if (localMouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers())) {
-            localMouseEnterExitListener.mouseEntered(paramQTMouseEvent);
+        mouseEnterExitListener = (MouseEnterExitListener) this.b;
+        if (mouseEnterExitListener.matchModifierFilter(qtMouseEvent.getModifiers())) {
+            mouseEnterExitListener.mouseEntered(qtMouseEvent);
         }
     }
 
@@ -229,29 +229,29 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Invoked when the mouse exits a component.
      */
     @Override
-    public void mouseExited(QTMouseEvent paramQTMouseEvent) {
-        MouseEnterExitListener localMouseEnterExitListener = (MouseEnterExitListener) this.a;
-        if (localMouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseEnterExitListener.mouseExited(paramQTMouseEvent);
-        if (paramQTMouseEvent.isConsumed())
+    public void mouseExited(QTMouseEvent qtMouseEvent) {
+        MouseEnterExitListener mouseEnterExitListener = (MouseEnterExitListener) this.a;
+        if (mouseEnterExitListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseEnterExitListener.mouseExited(qtMouseEvent);
+        if (qtMouseEvent.isConsumed())
             return;
-        localMouseEnterExitListener = (MouseEnterExitListener) this.b;
-        if (localMouseEnterExitListener.matchModifierFilter(paramQTMouseEvent.getModifiers()))
-            localMouseEnterExitListener.mouseExited(paramQTMouseEvent);
+        mouseEnterExitListener = (MouseEnterExitListener) this.b;
+        if (mouseEnterExitListener.matchModifierFilter(qtMouseEvent.getModifiers()))
+            mouseEnterExitListener.mouseExited(qtMouseEvent);
     }
 
     /**
      * @deprecated
      */
-    public static MouseTargetListener add(MouseTargetListener paramMouseTargetListener1, MouseTargetListener paramMouseTargetListener2) {
-        return (MouseTargetListener) addListener(paramMouseTargetListener1, paramMouseTargetListener2);
+    public static MouseTargetListener add(MouseTargetListener mouseTargetListener1, MouseTargetListener mouseTargetListener2) {
+        return (MouseTargetListener) addListener(mouseTargetListener1, mouseTargetListener2);
     }
 
     /**
      * @deprecated
      */
-    public static MouseTargetListener remove(MouseTargetListener paramMouseTargetListener1, MouseTargetListener paramMouseTargetListener2) {
-        return (MouseTargetListener) removeListener(paramMouseTargetListener1, paramMouseTargetListener2);
+    public static MouseTargetListener remove(MouseTargetListener mouseTargetListener1, MouseTargetListener mouseTargetListener2) {
+        return (MouseTargetListener) removeListener(mouseTargetListener1, mouseTargetListener2);
     }
 
     /**
@@ -262,14 +262,14 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      */
     @Override
     public void mouseTargetEntered(QTMouseEvent e) {
-        MouseTargetListener localMouseTargetListener = (MouseTargetListener) this.a;
-        if (localMouseTargetListener.matchModifierFilter(e.getModifiers()))
-            localMouseTargetListener.mouseTargetEntered(e);
+        MouseTargetListener mouseTargetListener = (MouseTargetListener) this.a;
+        if (mouseTargetListener.matchModifierFilter(e.getModifiers()))
+            mouseTargetListener.mouseTargetEntered(e);
         if (e.isConsumed())
             return;
-        localMouseTargetListener = (MouseTargetListener) this.b;
-        if (localMouseTargetListener.matchModifierFilter(e.getModifiers())) {
-            localMouseTargetListener.mouseTargetEntered(e);
+        mouseTargetListener = (MouseTargetListener) this.b;
+        if (mouseTargetListener.matchModifierFilter(e.getModifiers())) {
+            mouseTargetListener.mouseTargetEntered(e);
         }
     }
 
@@ -281,14 +281,14 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      */
     @Override
     public void mouseTargetExited(QTMouseEvent e) {
-        MouseTargetListener localMouseTargetListener = (MouseTargetListener) this.a;
-        if (localMouseTargetListener.matchModifierFilter(e.getModifiers()))
-            localMouseTargetListener.mouseTargetExited(e);
+        MouseTargetListener mouseTargetListener = (MouseTargetListener) this.a;
+        if (mouseTargetListener.matchModifierFilter(e.getModifiers()))
+            mouseTargetListener.mouseTargetExited(e);
         if (e.isConsumed())
             return;
-        localMouseTargetListener = (MouseTargetListener) this.b;
-        if (localMouseTargetListener.matchModifierFilter(e.getModifiers())) {
-            localMouseTargetListener.mouseTargetExited(e);
+        mouseTargetListener = (MouseTargetListener) this.b;
+        if (mouseTargetListener.matchModifierFilter(e.getModifiers())) {
+            mouseTargetListener.mouseTargetExited(e);
         }
     }
 
@@ -298,8 +298,8 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * Adds action-listener-a with action-listener-b and
      * returns the resulting multicast listener.
      */
-    public static QTActionListener add(QTActionListener paramQTActionListener1, QTActionListener paramQTActionListener2) {
-        return (QTActionListener) addListener(paramQTActionListener1, paramQTActionListener2);
+    public static QTActionListener add(QTActionListener qtActionListener1, QTActionListener qtActionListener2) {
+        return (QTActionListener) addListener(qtActionListener1, qtActionListener2);
     }
 
     /**
@@ -322,11 +322,11 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
      * listeners.
      */
     @Override
-    public void actionPerformed(QTActionEvent paramQTActionEvent) {
-        ((QTActionListener) this.a).actionPerformed(paramQTActionEvent);
-        if (paramQTActionEvent.isConsumed())
+    public void actionPerformed(QTActionEvent qtActionEvent) {
+        ((QTActionListener) this.a).actionPerformed(qtActionEvent);
+        if (qtActionEvent.isConsumed())
             return;
-        ((QTActionListener) this.b).actionPerformed(paramQTActionEvent);
+        ((QTActionListener) this.b).actionPerformed(qtActionEvent);
     }
 
     /**
@@ -371,16 +371,16 @@ public class QTEventCaster implements EventListener, QTActionListener, MouseButt
         return l;
     }
 
-    EventListener _remove(EventListener paramEventListener) {
-        if (paramEventListener == this.a)
+    EventListener _remove(EventListener oldl) {
+        if (oldl == this.a)
             return this.b;
-        if (paramEventListener == this.b)
+        if (oldl == this.b)
             return this.a;
-        EventListener localEventListener1 = removeListener(this.a, paramEventListener);
-        EventListener localEventListener2 = removeListener(this.b, paramEventListener);
-        if ((localEventListener1 == this.a) && (localEventListener2 == this.b)) {
+        EventListener eventListener1 = removeListener(this.a, oldl);
+        EventListener eventListener2 = removeListener(this.b, oldl);
+        if ((eventListener1 == this.a) && (eventListener2 == this.b)) {
             return this;
         }
-        return addListener(localEventListener1, localEventListener2);
+        return addListener(eventListener1, eventListener2);
     }
 }

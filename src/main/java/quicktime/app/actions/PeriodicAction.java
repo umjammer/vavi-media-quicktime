@@ -85,8 +85,8 @@ public abstract class PeriodicAction implements Ticklish {
      * @since QTJava 6.1
      */
     @Override
-    public void timeChanged(int paramInt) throws QTException {
-        this.lastTime = paramInt;
+    public void timeChanged(int lastTime) throws QTException {
+        this.lastTime = lastTime;
     }
 
     /**
@@ -128,8 +128,8 @@ public abstract class PeriodicAction implements Ticklish {
      * @deprecated
      * @since QTJava 6.1
      */
-    public void setActionable(Actionable paramActionable) {
-        this.actor = paramActionable;
+    public void setActionable(Actionable actionable) {
+        this.actor = actionable;
     }
 
     /**
@@ -237,8 +237,8 @@ public abstract class PeriodicAction implements Ticklish {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if ((obj instanceof PeriodicAction localPeriodicAction)) {
-            if ((this.reschedule != localPeriodicAction.reschedule) || (this.lastTime != localPeriodicAction.lastTime) || (this.scale != localPeriodicAction.scale) || (this.period != localPeriodicAction.period) || (this.triggerCondition != localPeriodicAction.triggerCondition)) {
+        if ((obj instanceof PeriodicAction periodicAction)) {
+            if ((this.reschedule != periodicAction.reschedule) || (this.lastTime != periodicAction.lastTime) || (this.scale != periodicAction.scale) || (this.period != periodicAction.period) || (this.triggerCondition != periodicAction.triggerCondition)) {
                 return false;
             }
             if (this != obj)

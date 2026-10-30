@@ -30,8 +30,8 @@ public final class PushDataParams extends QTPointer {
         super(40, true);
     }
 
-    PushDataParams(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte);
+    PushDataParams(byte[] byteArray) throws QTException {
+        super(byteArray);
     }
 
     /**
@@ -39,14 +39,14 @@ public final class PushDataParams extends QTPointer {
      *
      * @param vers version of the params structure
      */
-    public PushDataParams(int vers, SampleDescription paramSampleDescription, int paramInt2, long paramLong1, long paramLong2, QTPointer paramQTPointer) throws QTException {
+    public PushDataParams(int vers, SampleDescription sampleDesc, int seed, long time, long duration, QTPointer data) throws QTException {
         super(40, true);
         setVersion(vers);
-        setSampleDescription(paramSampleDescription);
-        setSampleDescSeed(paramInt2);
-        setSampleTime(paramLong1);
-        setDuration(paramLong2);
-        setDataPtr(paramQTPointer);
+        setSampleDescription(sampleDesc);
+        setSampleDescSeed(seed);
+        setSampleTime(time);
+        setDuration(duration);
+        setDataPtr(data);
     }
 
     /**
@@ -54,8 +54,8 @@ public final class PushDataParams extends QTPointer {
      *
      * @param vers version of the params structure
      */
-    public PushDataParams(int vers, SampleDescription paramSampleDescription, int paramInt2, QTPointer paramQTPointer) throws QTException {
-        this(vers, paramSampleDescription, paramInt2, 0L, 0L, paramQTPointer);
+    public PushDataParams(int vers, SampleDescription sampleDesc, int seed, QTPointer data) throws QTException {
+        this(vers, sampleDesc, seed, 0L, 0L, data);
         setFlags(0);
     }
 

@@ -2,5 +2,5 @@ package quicktime.sound;
 
 public interface SICompletion {
 
-    void execute(SPB paramSPB);
+    void execute(SPB spb);
 }

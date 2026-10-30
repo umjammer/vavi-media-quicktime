@@ -19,14 +19,14 @@ final class StreamDispatcher implements PrimitivesLib {
 
     private final StreamNotifyProc notifyExecute;
 
-    StreamDispatcher(StreamNotifyProc paramStreamNotifyProc) {
+    StreamDispatcher(StreamNotifyProc notifyExecute) {
         this.methodName = "notifyProc";
         this.methodSig = "(IIII)I";
         this.procInfo = 16368;
-        this.notifyExecute = paramStreamNotifyProc;
+        this.notifyExecute = notifyExecute;
     }
 
-    private int notifyProc(int paramInt1, int type, int paramInt3, int paramInt4) {
+    private int notifyProc(int err, int type, int params, int refCon) {
         int i;
 
         int j;
@@ -48,60 +48,60 @@ final class StreamDispatcher implements PrimitivesLib {
         case 1937007458:
         case 1937007460:
         case 2019648363:
-            return this.notifyExecute.execute(type, new Stream(paramInt3, this));
+            return this.notifyExecute.execute(type, new Stream(params, this));
         case 1852863091:
         case 2020635251:
-            return this.notifyExecute.execute(type, new Presentation(paramInt3, this));
+            return this.notifyExecute.execute(type, new Presentation(params, this));
 
         case 1701999136:
-            i = getIntFromPointer(paramInt3, 0);
-            j = getIntFromPointer(paramInt3, 4);
-            return this.notifyExecute.execute(paramInt1, type, getStringFromPointer(i), j);
+            i = getIntFromPointer(params, 0);
+            j = getIntFromPointer(params, 4);
+            return this.notifyExecute.execute(err, type, getStringFromPointer(i), j);
 
         case 1937008494:
         case 1937010295:
-            return this.notifyExecute.execute(type, new Stream(paramInt3, this));
+            return this.notifyExecute.execute(type, new Stream(params, this));
         case 1937007464:
-            i = getIntFromPointer(paramInt3, 0);
+            i = getIntFromPointer(params, 0);
 
             return this.notifyExecute.execute(type, new Stream(i, this), null);
         case 1937006964:
-            return this.notifyExecute.execute(type, new StatusParams(paramInt3, this));
+            return this.notifyExecute.execute(type, new StatusParams(params, this));
 
         case 1852143472:
             return this.notifyExecute.execute(type);
         case 1970433056:
-            j = getIntFromPointer(paramInt3, 0);
-            int k = getIntFromPointer(paramInt3, 4);
-            byte[] arrayOfByte = new byte[j];
-            copyPointerToArray(k, 0, arrayOfByte, 0, j);
-            return this.notifyExecute.execute(type, QTUtils.CString2String(arrayOfByte, 0));
+            j = getIntFromPointer(params, 0);
+            int k = getIntFromPointer(params, 4);
+            byte[] cString = new byte[j];
+            copyPointerToArray(k, 0, cString, 0, j);
+            return this.notifyExecute.execute(type, QTUtils.CString2String(cString, 0));
 
         case 1685418593:
-            m = getIntFromPointer(paramInt3, 0);
-            n = getIntFromPointer(paramInt3, 4);
-            long l = getLongFromPointer(paramInt3, 8);
+            m = getIntFromPointer(params, 0);
+            n = getIntFromPointer(params, 4);
+            long l = getLongFromPointer(params, 8);
             return this.notifyExecute.execute(type, m, n, l);
 
         case 1651990892:
-            m = getIntFromPointer(paramInt3, 0);
-            n = getIntFromPointer(paramInt3, 4);
+            m = getIntFromPointer(params, 0);
+            n = getIntFromPointer(params, 4);
             return this.notifyExecute.execute(type, m, n);
         }
 
         return 0;
     }
 
-    private String getStringFromPointer(int paramInt) {
-        if (paramInt != 0) {
+    private String getStringFromPointer(int ptr) {
+        if (ptr != 0) {
             int i = 0;
             int j = 0;
-            while (getByteFromPointer(paramInt, j++) != 0) {
+            while (getByteFromPointer(ptr, j++) != 0) {
                 i++;
             }
-            byte[] arrayOfByte = new byte[i];
-            copyPointerToArray(paramInt, 0, arrayOfByte, 0, i);
-            return QTUtils.CString2String(arrayOfByte, 0);
+            byte[] cString = new byte[i];
+            copyPointerToArray(ptr, 0, cString, 0, i);
+            return QTUtils.CString2String(cString, 0);
         }
         return "";
     }
@@ -116,13 +116,13 @@ final class StreamDispatcher implements PrimitivesLib {
         this.mMethodClosure = null;
     }
 
-    private static byte getIntFromPointer(int paramInt1, int paramInt2) {
-        return (byte) MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static byte getIntFromPointer(int ptr, int offset) {
+        return (byte) MemoryManager.getIntFromPointer(ptr, offset);
     }
 
     static class StreamNotifyClosure extends MethodClosure {
-        StreamNotifyClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        StreamNotifyClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {
@@ -130,15 +130,15 @@ final class StreamDispatcher implements PrimitivesLib {
         }
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 
-    private static long getLongFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getLongFromPointer(paramInt1, paramInt2);
+    private static long getLongFromPointer(int ptr, int offset) {
+        return MemoryManager.getLongFromPointer(ptr, offset);
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 }

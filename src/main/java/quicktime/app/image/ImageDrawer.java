@@ -40,19 +40,19 @@ public class ImageDrawer implements Drawable {
     public static ImageDrawer getQTLogo() {
         if (logo == null) {
             try {
-                Class<?> localClass = Class.forName("quicktime.app.image.ImageDrawer");
-                Object localObject = null;
+                Class<?> clazz = Class.forName("quicktime.app.image.ImageDrawer");
+                Object imageProducer = null;
                 if (QTSession.getJavaVersion() == 65537) {
-                    localObject = localClass.getResource("/qt3logo.jpg").getContent();
+                    imageProducer = clazz.getResource("/qt3logo.jpg").getContent();
                 } else {
                     try {
-                        URL localURL = ImageDrawer.class.getResource("/qt3logo.jpg");
-                        localObject = localURL.getContent();
+                        URL resource = ImageDrawer.class.getResource("/qt3logo.jpg");
+                        imageProducer = resource.getContent();
                     } catch (Exception _) {
                     }
                 }
-                Image localImage = Toolkit.getDefaultToolkit().createImage((ImageProducer) localObject);
-                logo = new ImageDrawer(new Dimension(162, 162), localImage);
+                Image im = Toolkit.getDefaultToolkit().createImage((ImageProducer) imageProducer);
+                logo = new ImageDrawer(new Dimension(162, 162), im);
             } catch (Exception _) {
             }
         }
@@ -70,8 +70,8 @@ public class ImageDrawer implements Drawable {
     /**
      * @deprecated
      */
-    public ImageDrawer(Dimension paramDimension, Image im) {
-        this.bounds = new QDRect(paramDimension);
+    public ImageDrawer(Dimension size, Image im) {
+        this.bounds = new QDRect(size);
         this.im = im;
     }
 
@@ -176,11 +176,11 @@ public class ImageDrawer implements Drawable {
     @Override
     public void redraw(Region invalidRgn) throws QTException {
         if ((this.canv != null) && (this.im != null)) {
-            Graphics localGraphics = this.canv.getGraphics();
-            QDRect localQDRect = this.bounds;
-            if (localQDRect == null)
-                localQDRect = new QDRect(this.canv.getSize());
-            localGraphics.drawImage(this.im, 0, 0, localQDRect.getWidth(), localQDRect.getHeight(), this.canv);
+            Graphics graphics = this.canv.getGraphics();
+            QDRect rect = this.bounds;
+            if (rect == null)
+                rect = new QDRect(this.canv.getSize());
+            graphics.drawImage(this.im, 0, 0, rect.getWidth(), rect.getHeight(), this.canv);
         }
     }
 

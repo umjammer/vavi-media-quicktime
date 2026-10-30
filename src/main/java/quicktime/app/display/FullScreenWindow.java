@@ -119,11 +119,11 @@ public class FullScreenWindow extends Window {
     public Dimension getPreferredSize() {
         try {
             if ((this.w == 0) || (this.h == 0)) {
-                Dimension localDimension = this.fs.preflightSize(this.gd, this.w, this.h);
-                this.w = localDimension.width;
-                this.h = localDimension.height;
+                Dimension dimension = this.fs.preflightSize(this.gd, this.w, this.h);
+                this.w = dimension.width;
+                this.h = dimension.height;
             }
-        } catch (QTException localQTException) {
+        } catch (QTException e) {
         }
         return new Dimension(this.w, this.h);
     }
@@ -212,22 +212,22 @@ public class FullScreenWindow extends Window {
             pack();
             try {
                 Thread.sleep(100L);
-            } catch (InterruptedException localInterruptedException) {
+            } catch (InterruptedException e) {
             }
         }
         try {
-            Dimension localDimension = this.fs.begin(this.gd, this.w, this.h, this.f);
-            setSize(localDimension);
-            this.w = localDimension.width;
-            this.h = localDimension.height;
-            QDRect localQDRect;
+            Dimension dimension = this.fs.begin(this.gd, this.w, this.h, this.f);
+            setSize(dimension);
+            this.w = dimension.width;
+            this.h = dimension.height;
+            QDRect bounds;
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 if ((this.gd != null) && (!this.gd.equals(GDevice.getMain()))) {
-                    localQDRect = this.gd.getBounds();
+                    bounds = this.gd.getBounds();
                     if (QTSession.isCurrentOS(4)) {
-                        setLocation(localQDRect.getX(), localQDRect.getY() + -22);
+                        setLocation(bounds.getX(), bounds.getY() + -22);
                     } else {
-                        setLocation(localQDRect.getX() + -5, localQDRect.getY() + -20);
+                        setLocation(bounds.getX() + -5, bounds.getY() + -20);
                     }
                 } else if (QTSession.isCurrentOS(4)) {
                     setLocation(0, -44);
@@ -236,8 +236,8 @@ public class FullScreenWindow extends Window {
                 }
             } else {
                 if (this.gd != null) {
-                    localQDRect = this.gd.getBounds();
-                    setLocation(localQDRect.getX(), localQDRect.getY());
+                    bounds = this.gd.getBounds();
+                    setLocation(bounds.getX(), bounds.getY());
                 } else {
                     setLocation(0, 0);
                 }
@@ -248,8 +248,8 @@ public class FullScreenWindow extends Window {
             if (QTSession.isCurrentOS(4))
                 requestFocus();
             toFront();
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this.fs, "begin");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this.fs, "begin");
         }
     }
 
@@ -264,14 +264,14 @@ public class FullScreenWindow extends Window {
         this.doNotify = false;
         try {
             this.fs.end();
-        } catch (QTException localQTException) {
-            QTRuntimeException.handleOrThrow(new QTRuntimeException(localQTException), this.fs, "end");
+        } catch (QTException e) {
+            QTRuntimeException.handleOrThrow(new QTRuntimeException(e), this.fs, "end");
         } finally {
             super.hide();
             if (QTSession.isCurrentOS(1)) {
                 try {
                     Thread.sleep(100L);
-                } catch (InterruptedException localInterruptedException) {
+                } catch (InterruptedException e) {
                 }
                 QTM.DrawMenuBar();
             }

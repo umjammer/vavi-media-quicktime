@@ -98,10 +98,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.image.GraphicsExporter#getInputGWorld()
      */
     public static QDGraphics fromGraphicsExporter(GraphicsExporter ge) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = GraphicsExportGetInputGWorld(QTObject.ID(ge), arrayOfInt);
+        int[] gworld = new int[1];
+        int i = GraphicsExportGetInputGWorld(QTObject.ID(ge), gworld);
         StdQTException.checkError(i);
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], ge);
+        return gworld[0] == 0 ? scratch : new QDGraphics(gworld[0], ge);
     }
 
     /**
@@ -111,11 +111,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickTime::GetPort"
      */
     public static QDGraphics getPort() {
-        int[] arrayOfInt = {0};
+        int[] port = {0};
         synchronized (QTNative.globalsLock) {
-            GetPort(arrayOfInt);
+            GetPort(port);
         }
-        return new QDGraphics(arrayOfInt[0], new Object());
+        return new QDGraphics(port[0], new Object());
     }
 
     /**
@@ -125,8 +125,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.std.StdQTException
      * @see "QuickTime::QTGetPixelSize"
      */
-    public static int getPixelSize(int paramInt) throws StdQTException {
-        return QTGetPixelSize(paramInt);
+    public static int getPixelSize(int pixelFormat) throws StdQTException {
+        return QTGetPixelSize(pixelFormat);
     }
 
     /**
@@ -139,11 +139,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.image.GraphicsImporter#getGWorld()
      */
     public static QDGraphics fromGraphicsImporter(GraphicsImporter gi) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = GraphicsImportGetGWorld(QTObject.ID(gi), arrayOfInt1, arrayOfInt2);
+        int[] port = new int[1];
+        int[] gdh = new int[1];
+        int i = GraphicsImportGetGWorld(QTObject.ID(gi), port, gdh);
         StdQTException.checkError(i);
-        return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], gi);
+        return port[0] == 0 ? scratch : new QDGraphics(port[0], gi);
     }
 
     /**
@@ -156,11 +156,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.movies.Movie#getGWorld()
      */
     public static QDGraphics fromMovie(Movie m) throws StdQTException {
-        int[] arrayOfInt = new int[1];
+        int[] port = new int[1];
         synchronized (QTNative.globalsLock) {
-            GetMovieGWorld(QTObject.ID(m), arrayOfInt, null);
+            GetMovieGWorld(QTObject.ID(m), port, null);
             StdQTException.checkError(GetMoviesError());
-            return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], m);
+            return port[0] == 0 ? scratch : new QDGraphics(port[0], m);
         }
     }
 
@@ -175,11 +175,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.streaming.Presentation#getGWorld()
      */
     public static QDGraphics fromPresentation(Presentation p, Stream s) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
+        int[] gWorld = new int[1];
+        int[] gdHandle = new int[1];
         synchronized (QTNative.globalsLock) {
-            StdQTException.checkError(QTSPresGetGWorld(QTObject.ID(p), QTObject.ID(s), arrayOfInt1, arrayOfInt2));
-            return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], p);
+            StdQTException.checkError(QTSPresGetGWorld(QTObject.ID(p), QTObject.ID(s), gWorld, gdHandle));
+            return gWorld[0] == 0 ? scratch : new QDGraphics(gWorld[0], p);
         }
     }
 
@@ -210,11 +210,11 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.sg.SequenceGrabber#getGWorld()
      */
     public static QDGraphics fromSequenceGrabber(SequenceGrabber sg) throws StdQTException {
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int i = SGGetGWorld(QTObject.ID(sg), arrayOfInt1, arrayOfInt2);
+        int[] port = new int[1];
+        int[] gdh = new int[1];
+        int i = SGGetGWorld(QTObject.ID(sg), port, gdh);
         StdQTException.checkError(i);
-        return arrayOfInt1[0] == 0 ? scratch : new QDGraphics(arrayOfInt1[0], sg);
+        return port[0] == 0 ? scratch : new QDGraphics(port[0], sg);
     }
 
     /**
@@ -228,9 +228,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.image.CSequence#prevBuffer()
      */
     public static QDGraphics fromCSequence(CSequence c) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetCSequencePrevBuffer(QTObject.ID(c), arrayOfInt));
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], c);
+        int[] gworld = new int[1];
+        StdQTException.checkError(GetCSequencePrevBuffer(QTObject.ID(c), gworld));
+        return gworld[0] == 0 ? scratch : new QDGraphics(gworld[0], c);
     }
 
     /**
@@ -244,9 +244,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.image.DSequence#getImageBuffer()
      */
     public static QDGraphics fromDSequenceImage(DSequence d) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetDSequenceImageBuffer(QTObject.ID(d), arrayOfInt));
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], d);
+        int[] gworld = new int[1];
+        StdQTException.checkError(GetDSequenceImageBuffer(QTObject.ID(d), gworld));
+        return gworld[0] == 0 ? scratch : new QDGraphics(gworld[0], d);
     }
 
     /**
@@ -260,9 +260,9 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see quicktime.std.image.DSequence#getScreenBuffer()
      */
     public static QDGraphics fromDSequenceScreen(DSequence d) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(GetDSequenceScreenBuffer(QTObject.ID(d), arrayOfInt));
-        return arrayOfInt[0] == 0 ? scratch : new QDGraphics(arrayOfInt[0], d);
+        int[] gworld = new int[1];
+        StdQTException.checkError(GetDSequenceScreenBuffer(QTObject.ID(d), gworld));
+        return gworld[0] == 0 ? scratch : new QDGraphics(gworld[0], d);
     }
 
     /**
@@ -270,47 +270,47 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *
      * @see "QuickTime::GetNativeWindowPort"
      */
-    public static QDGraphics fromNativeGraphics(WinNativeGraphics paramWinNativeGraphics) throws NativeGraphicsException {
-        if (paramWinNativeGraphics.hWnd == 0)
+    public static QDGraphics fromNativeGraphics(WinNativeGraphics winNativeGraphics) throws NativeGraphicsException {
+        if (winNativeGraphics.hWnd == 0)
             throw new NativeGraphicsException("invalid HWnd");
-        int i = GetNativeWindowPort(paramWinNativeGraphics.hWnd);
+        int i = GetNativeWindowPort(winNativeGraphics.hWnd);
         if (i == 0)
             throw new NativeGraphicsException("invalid Port");
-        return new QDGraphics(i, paramWinNativeGraphics);
+        return new QDGraphics(i, winNativeGraphics);
     }
 
     /**
      * This will return a QDGraphics object from a native graphics object
      */
-    public static QDGraphics fromNativeGraphics(MacNativeGraphics paramMacNativeGraphics) throws NativeGraphicsException {
+    public static QDGraphics fromNativeGraphics(MacNativeGraphics macNativeGraphics) throws NativeGraphicsException {
         synchronized (QTNative.globalsLock) {
             try {
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                     GetGWorld(savedPort, savedDevice);
-                paramMacNativeGraphics.dsi.lock();
-                int i = paramMacNativeGraphics.nd.getPort();
+                macNativeGraphics.dsi.lock();
+                int i = macNativeGraphics.nd.getPort();
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                     SetGWorld(savedPort[0], savedDevice[0]);
                 if (i == 0)
                     throw new NativeGraphicsException("invalid Port");
-                QDGraphics localQDGraphics = new QDGraphics(i, paramMacNativeGraphics);
-                paramMacNativeGraphics.dsi.unlock();
-                return localQDGraphics;
+                QDGraphics qdGraphics = new QDGraphics(i, macNativeGraphics);
+                macNativeGraphics.dsi.unlock();
+                return qdGraphics;
             } finally {
-                paramMacNativeGraphics.dsi.unlock();
+                macNativeGraphics.dsi.unlock();
             }
         }
     }
 
-    private QDGraphics(int paramInt) throws QTException {
-        super(paramInt, 108, null);
+    private QDGraphics(int nativeRep) throws QTException {
+        super(nativeRep, 108, null);
         if (isOffscreen()) {
             LockPixels(GetGWorldPixMap(_ID()));
         }
     }
 
-    private QDGraphics(int paramInt, Object paramObject) {
-        super(paramInt, 108, paramObject);
+    private QDGraphics(int nativeRep, Object ref) {
+        super(nativeRep, 108, ref);
         if (isOffscreen()) {
             LockPixels(GetGWorldPixMap(_ID()));
         }
@@ -336,8 +336,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      *              quicktime.std.image.ImageDescription#newGWorld()
      * @see "QuickTime::NewImageGWorld"
      */
-    public QDGraphics(ImageDescription paramImageDescription, int flags) throws QTException {
-        this(allocate(paramImageDescription, flags));
+    public QDGraphics(ImageDescription imageDescription, int flags) throws QTException {
+        this(allocate(imageDescription, flags));
     }
 
     /**
@@ -401,25 +401,25 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         this(allocate(pixelFormat, bounds, cTable, aGDevice, flags));
     }
 
-    private static int allocate(int startAngle, QDRect area, ColorTable paramColorTable, GDevice paramGDevice, int arcAngle) throws QDException {
-        int[] arrayOfInt = {0};
-        int i = QTNewGWorld(arrayOfInt, startAngle, area.getRect(), QTObject.ID(paramColorTable), QTObject.ID(paramGDevice), arcAngle);
+    private static int allocate(int startAngle, QDRect area, ColorTable colorTable, GDevice gd, int arcAngle) throws QDException {
+        int[] gworld = {0};
+        int i = QTNewGWorld(gworld, startAngle, area.getRect(), QTObject.ID(colorTable), QTObject.ID(gd), arcAngle);
         QDException.checkError(i);
-        return arrayOfInt[0];
+        return gworld[0];
     }
 
-    private static int allocate(ImageCompressionDialog paramImageCompressionDialog, QDRect area, int paramInt) throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(SCNewGWorld(QTObject.ID(paramImageCompressionDialog), arrayOfInt, area != null ? area.getRect() : null, paramInt));
-        if (arrayOfInt[0] == 0)
+    private static int allocate(ImageCompressionDialog imageCompressionDialog, QDRect area, int flags) throws QTException {
+        int[] gworld = new int[1];
+        StdQTException.checkError(SCNewGWorld(QTObject.ID(imageCompressionDialog), gworld, area != null ? area.getRect() : null, flags));
+        if (gworld[0] == 0)
             throw new StdQTException(-50);
-        return arrayOfInt[0];
+        return gworld[0];
     }
 
-    private static int allocate(ImageDescription paramImageDescription, int paramInt) throws QTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(NewImageGWorld(arrayOfInt, QTObject.ID(paramImageDescription), paramInt));
-        return arrayOfInt[0];
+    private static int allocate(ImageDescription imageDescription, int flags) throws QTException {
+        int[] gworld = new int[1];
+        StdQTException.checkError(NewImageGWorld(gworld, QTObject.ID(imageDescription), flags));
+        return gworld[0];
     }
 
     /**
@@ -474,13 +474,13 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      */
     public QDRect getPortRect() {
         if (QTSession.isCurrentOS(4)) {
-            QDRect localObject = new QDRect();
-            GetPortBounds(_ID(), localObject.getBytes());
-            return localObject;
+            QDRect portRect = new QDRect();
+            GetPortBounds(_ID(), portRect.getBytes());
+            return portRect;
         }
-        Object localObject = new byte[8];
-        getBytesAt(16, 8, (byte[]) localObject, 0);
-        return QDRect.fromArray((byte[]) localObject, 8);
+        Object rectBytes = new byte[8];
+        getBytesAt(16, 8, (byte[]) rectBytes, 0);
+        return QDRect.fromArray((byte[]) rectBytes, 8);
     }
 
     /**
@@ -503,10 +503,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @return aRect object which defines the boundaries of the port rectangle
      */
     public QDRect getBounds() {
-        QDRect localQDRect = new QDRect();
+        QDRect bounds = new QDRect();
         if (QTSession.isCurrentOS(4)) {
-            GetPortBounds(_ID(), localQDRect.getBytes());
-            return localQDRect;
+            GetPortBounds(_ID(), bounds.getBytes());
+            return bounds;
         }
         return getPortRect();
     }
@@ -520,19 +520,19 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @throws quicktime.QTException
      */
     public Region getVisClipRgn() throws QTException {
-        Region localRegion1 = new Region();
+        Region dst = new Region();
         if (QTSession.isCurrentOS(4)) {
-            Region localRegion2 = new Region();
-            Region localRegion3 = new Region();
-            GetPortClipRegion(_ID(), QTObject.ID(localRegion2));
-            GetPortVisibleRegion(_ID(), QTObject.ID(localRegion3));
-            SectRgn(QTObject.ID(localRegion2), QTObject.ID(localRegion3), QTObject.ID(localRegion1));
+            Region arcAngle = new Region();
+            Region region3 = new Region();
+            GetPortClipRegion(_ID(), QTObject.ID(arcAngle));
+            GetPortVisibleRegion(_ID(), QTObject.ID(region3));
+            SectRgn(QTObject.ID(arcAngle), QTObject.ID(region3), QTObject.ID(dst));
         } else {
             int i = getIntFromPointer(_ID(), 28);
             int j = getIntFromPointer(_ID(), 24);
-            SectRgn(i, j, QTObject.ID(localRegion1));
+            SectRgn(i, j, QTObject.ID(dst));
         }
-        return localRegion1;
+        return dst;
     }
 
     /**
@@ -543,17 +543,17 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::GetClip()"
      */
     public Region getClip() throws QTException {
-        Region localRegion = new Region();
+        Region rgn = new Region();
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4))) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            GetClip(QTObject.ID(localRegion));
+            GetClip(QTObject.ID(rgn));
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
-        return localRegion;
+        return rgn;
     }
 
     /**
@@ -617,16 +617,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::GetBackColor()"
      */
     public QDColor getBackColor() {
-        byte[] arrayOfByte = new byte[6];
+        byte[] rgb = new byte[6];
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            GetBackColor(arrayOfByte);
+            GetBackColor(rgb);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
-        return QDColor.fromArray(arrayOfByte, 6);
+        return QDColor.fromArray(rgb, 6);
     }
 
     /**
@@ -1152,16 +1152,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::GetCPixel()"
      */
     public QDColor getCPixel(int h, int v) throws QDException {
-        byte[] arrayOfByte = new byte[6];
+        byte[] rgb = new byte[6];
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            GetCPixel((short) h, (short) v, arrayOfByte);
+            GetCPixel((short) h, (short) v, rgb);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
-        return QDColor.fromArray(arrayOfByte, 6);
+        return QDColor.fromArray(rgb, 6);
     }
 
     /**
@@ -1242,16 +1242,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::GetForeColor()"
      */
     public QDColor getForeColor() {
-        byte[] arrayOfByte = new byte[6];
+        byte[] rgb = new byte[6];
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 GetGWorld(savedPort, savedDevice);
             SetGWorld(_ID(), 0);
-            GetForeColor(arrayOfByte);
+            GetForeColor(rgb);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                 SetGWorld(savedPort[0], savedDevice[0]);
         }
-        return QDColor.fromArray(arrayOfByte, 6);
+        return QDColor.fromArray(rgb, 6);
     }
 
     /**
@@ -1591,7 +1591,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::DrawText()"
      */
     public void drawText(String text, int firstByte, int byteCount) {
-        byte[] arrayOfByte = text.getBytes();
+        byte[] bytes = text.getBytes();
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
@@ -1599,10 +1599,10 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
             }
             SetGWorld(_ID(), 0);
             if (i != 0) {
-                DrawText(arrayOfByte, (short) firstByte, (short) byteCount);
+                DrawText(bytes, (short) firstByte, (short) byteCount);
                 SetGWorld(savedPort[0], savedDevice[0]);
             } else {
-                MacDrawText(arrayOfByte, (short) firstByte, (short) byteCount);
+                MacDrawText(bytes, (short) firstByte, (short) byteCount);
             }
         }
     }
@@ -1641,14 +1641,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      */
     public int textWidth(String text, int firstByte, int byteCount) {
         int j = 0;
-        byte[] arrayOfByte = text.getBytes();
+        byte[] bytes = text.getBytes();
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            j = TextWidth(arrayOfByte, (short) firstByte, (short) byteCount);
+            j = TextWidth(bytes, (short) firstByte, (short) byteCount);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1666,16 +1666,16 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::StdText()"
      */
     public void drawTextScaled(int count, String text, float xScale, float yScale) {
-        QDPoint localQDPoint1 = new QDPoint((int) (xScale * 100.0F), (int) (yScale * 100.0F));
-        QDPoint localQDPoint2 = new QDPoint(100, 100);
-        byte[] arrayOfByte = text.getBytes();
+        QDPoint point1 = new QDPoint((int) (xScale * 100.0F), (int) (yScale * 100.0F));
+        QDPoint point2 = new QDPoint(100, 100);
+        byte[] bytes = text.getBytes();
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
             if (i != 0) {
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            StdText((short) count, arrayOfByte, localQDPoint1.getPoint(), localQDPoint2.getPoint());
+            StdText((short) count, bytes, point1.getPoint(), point2.getPoint());
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1693,14 +1693,14 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
      * @see "QuickDraw::StdTxMeas()"
      */
     public int measureScaledText(int byteCount, String text, float xScale, float yScale) {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        QDPoint localQDPoint1 = new QDPoint((int) (xScale * 100.0F), (int) (yScale * 100.0F));
-        arrayOfInt1[0] = localQDPoint1.getPoint();
-        QDPoint localQDPoint2 = new QDPoint(100, 100);
-        arrayOfInt2[0] = localQDPoint2.getPoint();
-        byte[] arrayOfByte = text.getBytes();
-        short[] arrayOfShort = new short[4];
+        int[] numer = {0};
+        int[] denom = {0};
+        QDPoint point1 = new QDPoint((int) (xScale * 100.0F), (int) (yScale * 100.0F));
+        numer[0] = point1.getPoint();
+        QDPoint point2 = new QDPoint(100, 100);
+        denom[0] = point2.getPoint();
+        byte[] bytes = text.getBytes();
+        short[] info = new short[4];
         int j = 0;
         int i = (QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)) ? 1 : 0;
         synchronized (QTNative.globalsLock) {
@@ -1708,8 +1708,8 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
                 GetGWorld(savedPort, savedDevice);
             }
             SetGWorld(_ID(), 0);
-            GetFontInfo(arrayOfShort);
-            j = StdTxMeas((short) byteCount, arrayOfByte, arrayOfInt1, arrayOfInt2, arrayOfShort);
+            GetFontInfo(info);
+            j = StdTxMeas((short) byteCount, bytes, numer, denom, info);
             if (i != 0) {
                 SetGWorld(savedPort[0], savedDevice[0]);
             }
@@ -1726,348 +1726,348 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return super.toString() + "[PortRect=" + getPortRect() + ",isOffscreen=" + isOffscreen() + "]";
     }
 
-    private static int GraphicsExportGetInputGWorld(int paramInt, int[] paramArrayOfInt) {
-        return GraphicsExportManager.GraphicsExportGetInputGWorld(paramInt, paramArrayOfInt);
+    private static int GraphicsExportGetInputGWorld(int ge, int[] gworld) {
+        return GraphicsExportManager.GraphicsExportGetInputGWorld(ge, gworld);
     }
 
-    private static short QTGetPixelSize(int paramInt) {
-        return ImageCompressionManager.QTGetPixelSize(paramInt);
+    private static short QTGetPixelSize(int pixelFormat) {
+        return ImageCompressionManager.QTGetPixelSize(pixelFormat);
     }
 
-    private static int GraphicsImportGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsImportManager.GraphicsImportGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsImportGetGWorld(int gi, int[] port, int[] gdh) {
+        return GraphicsImportManager.GraphicsImportGetGWorld(gi, port, gdh);
     }
 
-    private static void GetMovieGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        MovieToolbox.GetMovieGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetMovieGWorld(int movie, int[] port, int[] gdh) {
+        MovieToolbox.GetMovieGWorld(movie, port, gdh);
     }
 
     private static short GetMoviesError() {
         return MovieToolbox.GetMoviesError();
     }
 
-    private static int MCGetControllerPort(int paramInt) {
-        return MovieControllerManager.MCGetControllerPort(paramInt);
+    private static int MCGetControllerPort(int mc) {
+        return MovieControllerManager.MCGetControllerPort(mc);
     }
 
-    private static int SGGetGWorld(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SequenceGrabberManager.SGGetGWorld(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int SGGetGWorld(int sg, int[] port, int[] gdh) {
+        return SequenceGrabberManager.SGGetGWorld(sg, port, gdh);
     }
 
-    private static short GetCSequencePrevBuffer(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetCSequencePrevBuffer(paramInt, paramArrayOfInt);
+    private static short GetCSequencePrevBuffer(int seqID, int[] gworld) {
+        return ImageCompressionManager.GetCSequencePrevBuffer(seqID, gworld);
     }
 
-    private static short GetDSequenceImageBuffer(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetDSequenceImageBuffer(paramInt, paramArrayOfInt);
+    private static short GetDSequenceImageBuffer(int seqID, int[] gworld) {
+        return ImageCompressionManager.GetDSequenceImageBuffer(seqID, gworld);
     }
 
-    private static short GetDSequenceScreenBuffer(int paramInt, int[] paramArrayOfInt) {
-        return ImageCompressionManager.GetDSequenceScreenBuffer(paramInt, paramArrayOfInt);
+    private static short GetDSequenceScreenBuffer(int seqID, int[] gworld) {
+        return ImageCompressionManager.GetDSequenceScreenBuffer(seqID, gworld);
     }
 
-    private static int GetNativeWindowPort(int paramInt) {
-        return PlatformManager.GetNativeWindowPort(paramInt);
+    private static int GetNativeWindowPort(int nativeWindow) {
+        return PlatformManager.GetNativeWindowPort(nativeWindow);
     }
 
-    private static int GetGWorldPixMap(int paramInt) {
-        return QuickDrawManager.GetGWorldPixMap(paramInt);
+    private static int GetGWorldPixMap(int gworld) {
+        return QuickDrawManager.GetGWorldPixMap(gworld);
     }
 
-    private static byte LockPixels(int paramInt) {
-        return QuickDrawManager.LockPixels(paramInt);
+    private static byte LockPixels(int pixMap) {
+        return QuickDrawManager.LockPixels(pixMap);
     }
 
-    private static short QTNewGWorld(int[] paramArrayOfInt, int startAngle, byte[] paramArrayOfByte, int arcAngle, int paramInt3, int paramInt4) {
-        return QuickDrawManager.QTNewGWorld(paramArrayOfInt, startAngle, paramArrayOfByte, arcAngle, paramInt3, paramInt4);
+    private static short QTNewGWorld(int[] gworld, int startAngle, byte[] rect, int arcAngle, int gd, int flags) {
+        return QuickDrawManager.QTNewGWorld(gworld, startAngle, rect, arcAngle, gd, flags);
     }
 
-    private static int SCNewGWorld(int startAngle, int[] paramArrayOfInt, byte[] paramArrayOfByte, int arcAngle) {
-        return ImageCompressionManager.SCNewGWorld(startAngle, paramArrayOfInt, paramArrayOfByte, arcAngle);
+    private static int SCNewGWorld(int startAngle, int[] gworld, byte[] rect, int arcAngle) {
+        return ImageCompressionManager.SCNewGWorld(startAngle, gworld, rect, arcAngle);
     }
 
-    private static short NewImageGWorld(int[] paramArrayOfInt, int startAngle, int arcAngle) {
-        return QuickDrawManager.NewImageGWorld(paramArrayOfInt, startAngle, arcAngle);
+    private static short NewImageGWorld(int[] gworld, int startAngle, int arcAngle) {
+        return QuickDrawManager.NewImageGWorld(gworld, startAngle, arcAngle);
     }
 
-    private static void GetBackColor(byte[] paramArrayOfByte) {
-        QuickDrawManager.GetBackColor(paramArrayOfByte);
+    private static void GetBackColor(byte[] rgb) {
+        QuickDrawManager.GetBackColor(rgb);
     }
 
-    private static void RGBBackColor(byte[] paramArrayOfByte) {
-        QuickDrawManager.RGBBackColor(paramArrayOfByte);
+    private static void RGBBackColor(byte[] rgb) {
+        QuickDrawManager.RGBBackColor(rgb);
     }
 
-    private static void EraseRect(byte[] paramArrayOfByte) {
-        QuickDrawManager.EraseRect(paramArrayOfByte);
+    private static void EraseRect(byte[] r) {
+        QuickDrawManager.EraseRect(r);
     }
 
-    private static void FrameRect(byte[] paramArrayOfByte) {
-        QuickDrawManager.FrameRect(paramArrayOfByte);
+    private static void FrameRect(byte[] r) {
+        QuickDrawManager.FrameRect(r);
     }
 
-    private static void MacFrameRect(byte[] paramArrayOfByte) {
-        QuickDrawManager.MacFrameRect(paramArrayOfByte);
+    private static void MacFrameRect(byte[] r) {
+        QuickDrawManager.MacFrameRect(r);
     }
 
-    private static void EraseRgn(int paramInt) {
-        QuickDrawManager.EraseRgn(paramInt);
+    private static void EraseRgn(int rgn) {
+        QuickDrawManager.EraseRgn(rgn);
     }
 
-    private static void GetForeColor(byte[] paramArrayOfByte) {
-        QuickDrawManager.GetForeColor(paramArrayOfByte);
+    private static void GetForeColor(byte[] rgb) {
+        QuickDrawManager.GetForeColor(rgb);
     }
 
-    private static void RGBForeColor(byte[] paramArrayOfByte) {
-        QuickDrawManager.RGBForeColor(paramArrayOfByte);
+    private static void RGBForeColor(byte[] rgb) {
+        QuickDrawManager.RGBForeColor(rgb);
     }
 
-    private static void PaintRect(byte[] paramArrayOfByte) {
-        QuickDrawManager.PaintRect(paramArrayOfByte);
+    private static void PaintRect(byte[] r) {
+        QuickDrawManager.PaintRect(r);
     }
 
-    private static void MacPaintRgn(int paramInt) {
-        QuickDrawManager.MacPaintRgn(paramInt);
+    private static void MacPaintRgn(int rgn) {
+        QuickDrawManager.MacPaintRgn(rgn);
     }
 
-    private static void MacFrameRgn(int paramInt) {
-        QuickDrawManager.MacFrameRgn(paramInt);
+    private static void MacFrameRgn(int rgn) {
+        QuickDrawManager.MacFrameRgn(rgn);
     }
 
-    private static void GetPort(int[] paramArrayOfInt) {
-        QuickDrawManager.GetPort(paramArrayOfInt);
+    private static void GetPort(int[] port) {
+        QuickDrawManager.GetPort(port);
     }
 
     private static void SetGWorld(int startAngle, int arcAngle) {
         QuickDrawManager.SetGWorld(startAngle, arcAngle);
     }
 
-    private static void PaintRgn(int paramInt) {
-        QuickDrawManager.PaintRgn(paramInt);
+    private static void PaintRgn(int rgn) {
+        QuickDrawManager.PaintRgn(rgn);
     }
 
-    private static void FrameRgn(int paramInt) {
-        QuickDrawManager.FrameRgn(paramInt);
+    private static void FrameRgn(int rgn) {
+        QuickDrawManager.FrameRgn(rgn);
     }
 
     private static void CopyRgn(int startAngle, int arcAngle) {
         QuickDrawManager.CopyRgn(startAngle, arcAngle);
     }
 
-    private static void SetRectRgn(int paramInt, short paramShort1, short paramShort2, short paramShort3, short paramShort4) {
-        QuickDrawManager.SetRectRgn(paramInt, paramShort1, paramShort2, paramShort3, paramShort4);
+    private static void SetRectRgn(int rgn, short left, short top, short right, short bottom) {
+        QuickDrawManager.SetRectRgn(rgn, left, top, right, bottom);
     }
 
-    private static void OffsetRgn(int paramInt, short paramShort1, short paramShort2) {
-        QuickDrawManager.OffsetRgn(paramInt, paramShort1, paramShort2);
+    private static void OffsetRgn(int rgn, short dh, short dv) {
+        QuickDrawManager.OffsetRgn(rgn, dh, dv);
     }
 
-    private static void UnionRgn(int startAngle, int arcAngle, int paramInt3) {
-        QuickDrawManager.UnionRgn(startAngle, arcAngle, paramInt3);
+    private static void UnionRgn(int startAngle, int arcAngle, int dst) {
+        QuickDrawManager.UnionRgn(startAngle, arcAngle, dst);
     }
 
-    private static void XorRgn(int startAngle, int arcAngle, int paramInt3) {
-        QuickDrawManager.XorRgn(startAngle, arcAngle, paramInt3);
+    private static void XorRgn(int startAngle, int arcAngle, int dst) {
+        QuickDrawManager.XorRgn(startAngle, arcAngle, dst);
     }
 
     private static byte EqualRgn(int startAngle, int arcAngle) {
         return QuickDrawManager.EqualRgn(startAngle, arcAngle);
     }
 
-    private static void SectRgn(int startAngle, int arcAngle, int paramInt3) {
-        QuickDrawManager.SectRgn(startAngle, arcAngle, paramInt3);
+    private static void SectRgn(int startAngle, int arcAngle, int dst) {
+        QuickDrawManager.SectRgn(startAngle, arcAngle, dst);
     }
 
-    private static void GetClip(int paramInt) {
-        QuickDrawManager.GetClip(paramInt);
+    private static void GetClip(int rgn) {
+        QuickDrawManager.GetClip(rgn);
     }
 
-    private static void SetClip(int paramInt) {
-        QuickDrawManager.SetClip(paramInt);
+    private static void SetClip(int rgn) {
+        QuickDrawManager.SetClip(rgn);
     }
 
-    private static void ClipRect(byte[] paramArrayOfByte) {
-        QuickDrawManager.ClipRect(paramArrayOfByte);
+    private static void ClipRect(byte[] r) {
+        QuickDrawManager.ClipRect(r);
     }
 
-    private static void ClipRect(int paramInt) {
-        QuickDrawManager.ClipRect(paramInt);
+    private static void ClipRect(int rectPtr) {
+        QuickDrawManager.ClipRect(rectPtr);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 
-    private static void Move(short paramShort1, short paramShort2) {
-        QuickDrawManager.Move(paramShort1, paramShort2);
+    private static void Move(short dh, short dv) {
+        QuickDrawManager.Move(dh, dv);
     }
 
-    private static void MoveTo(short paramShort1, short paramShort2) {
-        QuickDrawManager.MoveTo(paramShort1, paramShort2);
+    private static void MoveTo(short h, short v) {
+        QuickDrawManager.MoveTo(h, v);
     }
 
-    private static void MacLineTo(short paramShort1, short paramShort2) {
-        QuickDrawManager.MacLineTo(paramShort1, paramShort2);
+    private static void MacLineTo(short h, short v) {
+        QuickDrawManager.MacLineTo(h, v);
     }
 
-    private static void LineTo(short paramShort1, short paramShort2) {
-        QuickDrawManager.LineTo(paramShort1, paramShort2);
+    private static void LineTo(short h, short v) {
+        QuickDrawManager.LineTo(h, v);
     }
 
-    private static void Line(short paramShort1, short paramShort2) {
-        QuickDrawManager.Line(paramShort1, paramShort2);
+    private static void Line(short dh, short dv) {
+        QuickDrawManager.Line(dh, dv);
     }
 
-    private static void SetCPixel(short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
-        QuickDrawManager.SetCPixel(paramShort1, paramShort2, paramArrayOfByte);
+    private static void SetCPixel(short h, short v, byte[] rgb) {
+        QuickDrawManager.SetCPixel(h, v, rgb);
     }
 
-    private static void GetCPixel(short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
-        QuickDrawManager.GetCPixel(paramShort1, paramShort2, paramArrayOfByte);
+    private static void GetCPixel(short h, short v, byte[] rgb) {
+        QuickDrawManager.GetCPixel(h, v, rgb);
     }
 
-    private static void PenSize(short paramShort1, short paramShort2) {
-        QuickDrawManager.PenSize(paramShort1, paramShort2);
+    private static void PenSize(short width, short height) {
+        QuickDrawManager.PenSize(width, height);
     }
 
     private static void PenNormal() {
         QuickDrawManager.PenNormal();
     }
 
-    private static void FrameArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.FrameArc(paramArrayOfByte, paramShort1, paramShort2);
+    private static void FrameArc(byte[] r, short start, short angle) {
+        QuickDrawManager.FrameArc(r, start, angle);
     }
 
-    private static void PaintArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.PaintArc(paramArrayOfByte, paramShort1, paramShort2);
+    private static void PaintArc(byte[] r, short start, short angle) {
+        QuickDrawManager.PaintArc(r, start, angle);
     }
 
-    private static void EraseArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.EraseArc(paramArrayOfByte, paramShort1, paramShort2);
+    private static void EraseArc(byte[] r, short start, short angle) {
+        QuickDrawManager.EraseArc(r, start, angle);
     }
 
-    private static void InvertArc(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.InvertArc(paramArrayOfByte, paramShort1, paramShort2);
+    private static void InvertArc(byte[] r, short start, short angle) {
+        QuickDrawManager.InvertArc(r, start, angle);
     }
 
-    private static void FrameRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.FrameRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    private static void FrameRoundRect(byte[] r, short ow, short oh) {
+        QuickDrawManager.FrameRoundRect(r, ow, oh);
     }
 
-    private static void PaintRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.PaintRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    private static void PaintRoundRect(byte[] r, short ow, short oh) {
+        QuickDrawManager.PaintRoundRect(r, ow, oh);
     }
 
-    private static void EraseRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.EraseRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    private static void EraseRoundRect(byte[] r, short ow, short oh) {
+        QuickDrawManager.EraseRoundRect(r, ow, oh);
     }
 
-    private static void InvertRoundRect(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.InvertRoundRect(paramArrayOfByte, paramShort1, paramShort2);
+    private static void InvertRoundRect(byte[] r, short ow, short oh) {
+        QuickDrawManager.InvertRoundRect(r, ow, oh);
     }
 
-    private static void FrameOval(byte[] paramArrayOfByte) {
-        QuickDrawManager.FrameOval(paramArrayOfByte);
+    private static void FrameOval(byte[] r) {
+        QuickDrawManager.FrameOval(r);
     }
 
-    private static void PaintOval(byte[] paramArrayOfByte) {
-        QuickDrawManager.PaintOval(paramArrayOfByte);
+    private static void PaintOval(byte[] r) {
+        QuickDrawManager.PaintOval(r);
     }
 
-    private static void EraseOval(byte[] paramArrayOfByte) {
-        QuickDrawManager.EraseOval(paramArrayOfByte);
+    private static void EraseOval(byte[] r) {
+        QuickDrawManager.EraseOval(r);
     }
 
-    private static void InvertOval(byte[] paramArrayOfByte) {
-        QuickDrawManager.InvertOval(paramArrayOfByte);
+    private static void InvertOval(byte[] r) {
+        QuickDrawManager.InvertOval(r);
     }
 
-    private static void FramePoly(int paramInt) {
-        QuickDrawManager.FramePoly(paramInt);
+    private static void FramePoly(int poly) {
+        QuickDrawManager.FramePoly(poly);
     }
 
-    private static void PaintPoly(int paramInt) {
-        QuickDrawManager.PaintPoly(paramInt);
+    private static void PaintPoly(int poly) {
+        QuickDrawManager.PaintPoly(poly);
     }
 
-    private static void ErasePoly(int paramInt) {
-        QuickDrawManager.ErasePoly(paramInt);
+    private static void ErasePoly(int poly) {
+        QuickDrawManager.ErasePoly(poly);
     }
 
-    private static void InvertPoly(int paramInt) {
-        QuickDrawManager.InvertPoly(paramInt);
+    private static void InvertPoly(int poly) {
+        QuickDrawManager.InvertPoly(poly);
     }
 
     private static short getShortFromPointer(int startAngle, int arcAngle) {
         return MemoryManager.getShortFromPointer(startAngle, arcAngle);
     }
 
-    private static void setIntInPointer(int startAngle, int arcAngle, int paramInt3) {
-        MemoryManager.setIntInPointer(startAngle, arcAngle, paramInt3);
+    private static void setIntInPointer(int startAngle, int arcAngle, int value) {
+        MemoryManager.setIntInPointer(startAngle, arcAngle, value);
     }
 
     private static int getIntFromPointer(int startAngle, int arcAngle) {
         return MemoryManager.getIntFromPointer(startAngle, arcAngle);
     }
 
-    private static void TextFont(short paramShort) {
-        QuickDrawManager.TextFont(paramShort);
+    private static void TextFont(short font) {
+        QuickDrawManager.TextFont(font);
     }
 
-    private static void TextFace(short paramShort) {
-        QuickDrawManager.TextFace(paramShort);
+    private static void TextFace(short face) {
+        QuickDrawManager.TextFace(face);
     }
 
-    private static void TextMode(short paramShort) {
-        QuickDrawManager.TextMode(paramShort);
+    private static void TextMode(short mode) {
+        QuickDrawManager.TextMode(mode);
     }
 
-    private static void TextSize(short paramShort) {
-        QuickDrawManager.TextSize(paramShort);
+    private static void TextSize(short size) {
+        QuickDrawManager.TextSize(size);
     }
 
-    private static void DrawChar(short paramShort) {
-        QuickDrawManager.DrawChar(paramShort);
+    private static void DrawChar(short ch) {
+        QuickDrawManager.DrawChar(ch);
     }
 
-    private static void MacDrawText(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.MacDrawText(paramArrayOfByte, paramShort1, paramShort2);
+    private static void MacDrawText(byte[] text, short firstByte, short byteCount) {
+        QuickDrawManager.MacDrawText(text, firstByte, byteCount);
     }
 
-    private static void DrawText(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        QuickDrawManager.DrawText(paramArrayOfByte, paramShort1, paramShort2);
+    private static void DrawText(byte[] text, short firstByte, short byteCount) {
+        QuickDrawManager.DrawText(text, firstByte, byteCount);
     }
 
-    private static short CharWidth(short paramShort) {
-        return QuickDrawManager.CharWidth(paramShort);
+    private static short CharWidth(short ch) {
+        return QuickDrawManager.CharWidth(ch);
     }
 
-    private static short TextWidth(byte[] paramArrayOfByte, short paramShort1, short paramShort2) {
-        return QuickDrawManager.TextWidth(paramArrayOfByte, paramShort1, paramShort2);
+    private static short TextWidth(byte[] text, short firstByte, short byteCount) {
+        return QuickDrawManager.TextWidth(text, firstByte, byteCount);
     }
 
-    private static void MeasureText(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        QuickDrawManager.MeasureText(paramShort, paramArrayOfByte, paramArrayOfInt);
+    private static void MeasureText(short count, byte[] text, int[] locs) {
+        QuickDrawManager.MeasureText(count, text, locs);
     }
 
-    private static void StdText(short paramShort, byte[] paramArrayOfByte, int startAngle, int arcAngle) {
-        QuickDrawManager.StdText(paramShort, paramArrayOfByte, startAngle, arcAngle);
+    private static void StdText(short count, byte[] text, int startAngle, int arcAngle) {
+        QuickDrawManager.StdText(count, text, startAngle, arcAngle);
     }
 
-    private static short StdTxMeas(short paramShort, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2, short[] paramArrayOfShort) {
-        return QuickDrawManager.StdTxMeas(paramShort, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfShort);
+    private static short StdTxMeas(short count, byte[] text, int[] numer, int[] denom, short[] info) {
+        return QuickDrawManager.StdTxMeas(count, text, numer, denom, info);
     }
 
-    private static void GetFontInfo(short[] paramArrayOfShort) {
-        QuickDrawManager.GetFontInfo(paramArrayOfShort);
+    private static void GetFontInfo(short[] info) {
+        QuickDrawManager.GetFontInfo(info);
     }
 
-    private static byte IsPortOffscreen(int paramInt) {
-        return QuickDrawManager.IsPortOffscreen(paramInt);
+    private static byte IsPortOffscreen(int port) {
+        return QuickDrawManager.IsPortOffscreen(port);
     }
 
-    private static int GetPortBounds(int paramInt, byte[] paramArrayOfByte) {
-        return QuickDrawManager.GetPortBounds(paramInt, paramArrayOfByte);
+    private static int GetPortBounds(int port, byte[] rect) {
+        return QuickDrawManager.GetPortBounds(port, rect);
     }
 
     private static int GetPortClipRegion(int startAngle, int arcAngle) {
@@ -2078,7 +2078,7 @@ public final class QDGraphics extends QTPointerRef implements QuickTimeLib, QTSt
         return QuickDrawManager.GetPortVisibleRegion(startAngle, arcAngle);
     }
 
-    private static short QTSPresGetGWorld(int startAngle, int arcAngle, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return StreamingManager.QTSPresGetGWorld(startAngle, arcAngle, paramArrayOfInt1, paramArrayOfInt2);
+    private static short QTSPresGetGWorld(int startAngle, int arcAngle, int[] gWorld, int[] gdHandle) {
+        return StreamingManager.QTSPresGetGWorld(startAngle, arcAngle, gWorld, gdHandle);
     }
 }

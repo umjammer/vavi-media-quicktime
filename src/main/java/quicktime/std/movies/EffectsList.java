@@ -22,13 +22,13 @@ public final class EffectsList extends AtomContainer implements QuickTimeLib {
         super(allocate(minSources, maxSources, getOptions), null, false);
     }
 
-    private static int allocate(int paramInt1, int paramInt2, int paramInt3) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(QTGetEffectsList(arrayOfInt, paramInt1, paramInt2, paramInt3));
-        return arrayOfInt[0];
+    private static int allocate(int minSources, int maxSources, int getOptions) throws StdQTException {
+        int[] returnedList = { 0 };
+        StdQTException.checkError(QTGetEffectsList(returnedList, minSources, maxSources, getOptions));
+        return returnedList[0];
     }
 
-    private static short QTGetEffectsList(int[] paramArrayOfInt, int paramInt1, int paramInt2, int paramInt3) {
-        return EffectsManager.QTGetEffectsList(paramArrayOfInt, paramInt1, paramInt2, paramInt3);
+    private static short QTGetEffectsList(int[] returnedList, int minSources, int maxSources, int getOptions) {
+        return EffectsManager.QTGetEffectsList(returnedList, minSources, maxSources, getOptions);
     }
 }

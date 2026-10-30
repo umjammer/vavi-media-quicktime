@@ -41,21 +41,21 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         setIdentity();
     }
 
-    private Matrix(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private Matrix(byte[] bytes) {
+        super(bytes);
     }
 
-    public Matrix(float[][] paramArrayOfFloat) {
+    public Matrix(float[][] values) {
         super(36);
-        setSx(paramArrayOfFloat[0][0]);
-        setB(paramArrayOfFloat[0][1]);
-        setU(paramArrayOfFloat[0][2]);
-        setC(paramArrayOfFloat[1][0]);
-        setSy(paramArrayOfFloat[1][1]);
-        setV(paramArrayOfFloat[1][2]);
-        setTx(paramArrayOfFloat[2][0]);
-        setTy(paramArrayOfFloat[2][1]);
-        setW(paramArrayOfFloat[2][2]);
+        setSx(values[0][0]);
+        setB(values[0][1]);
+        setU(values[0][2]);
+        setC(values[1][0]);
+        setSy(values[1][1]);
+        setV(values[1][2]);
+        setTx(values[2][0]);
+        setTy(values[2][1]);
+        setW(values[2][2]);
     }
 
     /**
@@ -78,49 +78,49 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         StdQTException.checkError(i);
     }
 
-    private static int[] DoublePts2FixedPts(QDPoint[] paramArrayOfQDPoint) throws QTException {
-        if (paramArrayOfQDPoint == null) {
+    private static int[] DoublePts2FixedPts(QDPoint[] qdPoints) throws QTException {
+        if (qdPoints == null) {
             return null;
         }
-        int[] arrayOfInt = new int[paramArrayOfQDPoint.length * 2];
-        for (int i = 0; i < paramArrayOfQDPoint.length; i++) {
-            arrayOfInt[(i * 2)] = QTUtils.X2Fix(paramArrayOfQDPoint[i].getXF());
-            arrayOfInt[(i * 2 + 1)] = QTUtils.X2Fix(paramArrayOfQDPoint[i].getYF());
+        int[] arrayOfInt = new int[qdPoints.length * 2];
+        for (int i = 0; i < qdPoints.length; i++) {
+            arrayOfInt[(i * 2)] = QTUtils.X2Fix(qdPoints[i].getXF());
+            arrayOfInt[(i * 2 + 1)] = QTUtils.X2Fix(qdPoints[i].getYF());
         }
         return arrayOfInt;
     }
 
-    private static void FixedPts2DoublePts(int[] paramArrayOfInt, QDPoint[] paramArrayOfQDPoint) throws QTException {
-        if ((paramArrayOfInt == null) || (paramArrayOfQDPoint == null)) {
+    private static void FixedPts2DoublePts(int[] fixedPts, QDPoint[] qdPoints) throws QTException {
+        if ((fixedPts == null) || (qdPoints == null)) {
             return;
         }
-        for (int i = 0; i < paramArrayOfQDPoint.length; i++) {
-            paramArrayOfQDPoint[i].setX(QTUtils.Fix2X(paramArrayOfInt[(i * 2)]));
-            paramArrayOfQDPoint[i].setY(QTUtils.Fix2X(paramArrayOfInt[(i * 2 + 1)]));
+        for (int i = 0; i < qdPoints.length; i++) {
+            qdPoints[i].setX(QTUtils.Fix2X(fixedPts[(i * 2)]));
+            qdPoints[i].setY(QTUtils.Fix2X(fixedPts[(i * 2 + 1)]));
         }
     }
 
-    private static int[] DoublePt2FixedPt(QDPoint paramQDPoint) throws QTException {
-        if (paramQDPoint == null)
+    private static int[] DoublePt2FixedPt(QDPoint point) throws QTException {
+        if (point == null)
             return null;
         int[] arrayOfInt = new int[2];
-        arrayOfInt[0] = QTUtils.X2Fix(paramQDPoint.getXF());
-        arrayOfInt[1] = QTUtils.X2Fix(paramQDPoint.getYF());
+        arrayOfInt[0] = QTUtils.X2Fix(point.getXF());
+        arrayOfInt[1] = QTUtils.X2Fix(point.getYF());
         return arrayOfInt;
     }
 
-    private static void FixedPt2DoublePt(int[] paramArrayOfInt, QDPoint paramQDPoint) throws QTException {
-        if ((paramArrayOfInt == null) || (paramQDPoint == null)) {
+    private static void FixedPt2DoublePt(int[] fixedPt, QDPoint point) throws QTException {
+        if ((fixedPt == null) || (point == null)) {
             return;
         }
-        paramQDPoint.setX(QTUtils.Fix2X(paramArrayOfInt[0]));
-        paramQDPoint.setY(QTUtils.Fix2X(paramArrayOfInt[1]));
+        point.setX(QTUtils.Fix2X(fixedPt[0]));
+        point.setY(QTUtils.Fix2X(fixedPt[1]));
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[36];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int i = 0; i < 36; i += 4) {
             int j = getIntFromArray(this.bytes, i);
             int k = EndianOrder.flipBigEndianToNative32(j);
@@ -129,14 +129,14 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[36];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[36];
         for (int i = 0; i < getBytes().length; i += 4) {
             int j = getIntFromArray(getBytes(), i);
             int k = EndianOrder.flipNativeToBigEndian32(j);
-            setIntInArray(arrayOfByte, i, k);
+            setIntInArray(movie, i, k);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -310,10 +310,10 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
     /**
      * add a translation value to a specified matrix.
      * @see "QuickTime::TranslateMatrix"
-     * @param deltaH specifies the value to be added to the x coordinate translation value.
+     * @param deltaV specifies the value to be added to the x coordinate translation value.
      */
-    public void translate(float paramFloat1, float deltaH) {
-        TranslateMatrix(getBytes(), QTUtils.X2Fix(paramFloat1), QTUtils.X2Fix(deltaH));
+    public void translate(float deltaH, float deltaV) {
+        TranslateMatrix(getBytes(), QTUtils.X2Fix(deltaH), QTUtils.X2Fix(deltaV));
     }
 
     /**
@@ -366,8 +366,8 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * matrices into a single matrix.
      * @see "QuickTime::ConcatMatrix"
      */
-    public void concat(Matrix paramMatrix) {
-        ConcatMatrix(getBytes(), paramMatrix.getBytes());
+    public void concat(Matrix matrix) {
+        ConcatMatrix(getBytes(), matrix.getBytes());
     }
 
     /**
@@ -377,17 +377,17 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @throws quicktime.QTException
      */
     public void transformDPoints(QDPoint dpts) throws QTException {
-        int[] arrayOfInt = DoublePt2FixedPt(dpts);
-        int i = TransformFixedPoints(getBytes(), arrayOfInt, 1);
+        int[] points = DoublePt2FixedPt(dpts);
+        int i = TransformFixedPoints(getBytes(), points, 1);
         StdQTException.checkError(i);
-        FixedPt2DoublePt(arrayOfInt, dpts);
+        FixedPt2DoublePt(points, dpts);
     }
 
-    public void transformDPoints(QDPoint[] paramArrayOfQDPoint) throws QTException {
-        int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
-        int i = TransformFixedPoints(getBytes(), arrayOfInt, paramArrayOfQDPoint.length);
+    public void transformDPoints(QDPoint[] qdPoints) throws QTException {
+        int[] points = DoublePts2FixedPts(qdPoints);
+        int i = TransformFixedPoints(getBytes(), points, qdPoints.length);
         StdQTException.checkError(i);
-        FixedPts2DoublePts(arrayOfInt, paramArrayOfQDPoint);
+        FixedPts2DoublePts(points, qdPoints);
     }
 
     /**
@@ -397,22 +397,22 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @throws quicktime.std.StdQTException
      */
     public void transformPoints(QDPoint pts) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        arrayOfInt[0] = ((pts.getY() << 16) + pts.getX());
-        StdQTException.checkError(TransformPoints(getBytes(), arrayOfInt, 1));
-        pts.setY(arrayOfInt[0] >> 16);
-        pts.setX(arrayOfInt[0] & 0xFFFF);
+        int[] points = new int[1];
+        points[0] = ((pts.getY() << 16) + pts.getX());
+        StdQTException.checkError(TransformPoints(getBytes(), points, 1));
+        pts.setY(points[0] >> 16);
+        pts.setX(points[0] & 0xFFFF);
     }
 
-    public void transformPoints(QDPoint[] paramArrayOfQDPoint) throws StdQTException {
-        int[] arrayOfInt = new int[paramArrayOfQDPoint.length];
-        for (int i = 0; i < paramArrayOfQDPoint.length; i++) {
-            arrayOfInt[i] = ((paramArrayOfQDPoint[i].getY() << 16) + paramArrayOfQDPoint[i].getX());
+    public void transformPoints(QDPoint[] qdPoints) throws StdQTException {
+        int[] points = new int[qdPoints.length];
+        for (int i = 0; i < qdPoints.length; i++) {
+            points[i] = ((qdPoints[i].getY() << 16) + qdPoints[i].getX());
         }
-        StdQTException.checkError(TransformPoints(getBytes(), arrayOfInt, paramArrayOfQDPoint.length));
-        for (int i = 0; i < paramArrayOfQDPoint.length; i++) {
-            paramArrayOfQDPoint[i].setY(arrayOfInt[i] >> 16);
-            paramArrayOfQDPoint[i].setX(arrayOfInt[i] & 0xFFFF);
+        StdQTException.checkError(TransformPoints(getBytes(), points, qdPoints.length));
+        for (int i = 0; i < qdPoints.length; i++) {
+            qdPoints[i].setY(points[i] >> 16);
+            qdPoints[i].setX(points[i] & 0xFFFF);
         }
     }
 
@@ -438,13 +438,13 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @return false if the transformation is other than scaling and translation.
      * @throws quicktime.QTException
      */
-    public boolean transformDRect(QDRect r, QDPoint[] paramArrayOfQDPoint) throws QTException {
-        int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
+    public boolean transformDRect(QDRect r, QDPoint[] qdPoints) throws QTException {
+        int[] points = DoublePts2FixedPts(qdPoints);
         if (r.getFixedRect() == null)
             throw new QTException(-50);
-        int i = TransformFixedRect(getBytes(), r.getFixedRect(), arrayOfInt);
+        int i = TransformFixedRect(getBytes(), r.getFixedRect(), points);
         if (i == 0) {
-            FixedPts2DoublePts(arrayOfInt, paramArrayOfQDPoint);
+            FixedPts2DoublePts(points, qdPoints);
         }
         return i != 0;
     }
@@ -467,11 +467,11 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
      * @return false if the transformation is other than scaling and translation.
      * @throws quicktime.QTException
      */
-    public boolean transformRect(QDRect r, QDPoint[] paramArrayOfQDPoint) throws QTException {
-        int[] arrayOfInt = DoublePts2FixedPts(paramArrayOfQDPoint);
-        int i = TransformRect(getBytes(), r.getRect(), arrayOfInt);
+    public boolean transformRect(QDRect r, QDPoint[] qdPoints) throws QTException {
+        int[] points = DoublePts2FixedPts(qdPoints);
+        int i = TransformRect(getBytes(), r.getRect(), points);
         if (i == 0) {
-            FixedPts2DoublePts(arrayOfInt, paramArrayOfQDPoint);
+            FixedPts2DoublePts(points, qdPoints);
         }
         return i != 0;
     }
@@ -544,91 +544,91 @@ public final class Matrix extends QTByteObject implements QuickTimeLib, Cloneabl
         return EqualMatrix(getBytes(), m.getBytes()) != 0;
     }
 
-    private static short QuadToQuadMatrix(int[] paramArrayOfInt1, int[] paramArrayOfInt2, byte[] paramArrayOfByte) {
-        return MatrixManager.QuadToQuadMatrix(paramArrayOfInt1, paramArrayOfInt2, paramArrayOfByte);
+    private static short QuadToQuadMatrix(int[] source, int[] dest, byte[] m) {
+        return MatrixManager.QuadToQuadMatrix(source, dest, m);
     }
 
-    private static short GetMatrixType(byte[] paramArrayOfByte) {
-        return MatrixManager.GetMatrixType(paramArrayOfByte);
+    private static short GetMatrixType(byte[] m) {
+        return MatrixManager.GetMatrixType(m);
     }
 
-    private static void SetIdentityMatrix(byte[] paramArrayOfByte) {
-        MatrixManager.SetIdentityMatrix(paramArrayOfByte);
+    private static void SetIdentityMatrix(byte[] m) {
+        MatrixManager.SetIdentityMatrix(m);
     }
 
     private static void TranslateMatrix(byte[] m, int dx, int dy) {
         MatrixManager.TranslateMatrix(m, dx, dy);
     }
 
-    private static void RotateMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3) {
-        MatrixManager.RotateMatrix(paramArrayOfByte, paramInt1, paramInt2, paramInt3);
+    private static void RotateMatrix(byte[] m, int degrees, int aboutX, int aboutY) {
+        MatrixManager.RotateMatrix(m, degrees, aboutX, aboutY);
     }
 
-    private static void ScaleMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MatrixManager.ScaleMatrix(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void ScaleMatrix(byte[] m, int scaleX, int scaleY, int aboutX, int aboutY) {
+        MatrixManager.ScaleMatrix(m, scaleX, scaleY, aboutX, aboutY);
     }
 
-    private static void SkewMatrix(byte[] paramArrayOfByte, int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        MatrixManager.SkewMatrix(paramArrayOfByte, paramInt1, paramInt2, paramInt3, paramInt4);
+    private static void SkewMatrix(byte[] m, int skewX, int skewY, int aboutX, int aboutY) {
+        MatrixManager.SkewMatrix(m, skewX, skewY, aboutX, aboutY);
     }
 
-    private static byte InverseMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return MatrixManager.InverseMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    private static byte InverseMatrix(byte[] m, byte[] im) {
+        return MatrixManager.InverseMatrix(m, im);
     }
 
-    private static void ConcatMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        MatrixManager.ConcatMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    private static void ConcatMatrix(byte[] a, byte[] b) {
+        MatrixManager.ConcatMatrix(a, b);
     }
 
-    private static short TransformFixedPoints(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
-        return MatrixManager.TransformFixedPoints(paramArrayOfByte, paramArrayOfInt, paramInt);
+    private static short TransformFixedPoints(byte[] m, int[] points, int count) {
+        return MatrixManager.TransformFixedPoints(m, points, count);
     }
 
-    private static short TransformPoints(byte[] paramArrayOfByte, int[] paramArrayOfInt, int paramInt) {
-        return MatrixManager.TransformPoints(paramArrayOfByte, paramArrayOfInt, paramInt);
+    private static short TransformPoints(byte[] m, int[] points, int count) {
+        return MatrixManager.TransformPoints(m, points, count);
     }
 
-    private static byte TransformFixedRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return MatrixManager.TransformFixedRect(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    private static byte TransformFixedRect(byte[] m, byte[] rect, int[] points) {
+        return MatrixManager.TransformFixedRect(m, rect, points);
     }
 
-    private static byte TransformFixedRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt) {
-        return MatrixManager.TransformFixedRect(paramArrayOfByte1, paramArrayOfByte2, paramInt);
+    private static byte TransformFixedRect(byte[] m, byte[] rect, int points) {
+        return MatrixManager.TransformFixedRect(m, rect, points);
     }
 
-    private static byte TransformRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return MatrixManager.TransformRect(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    private static byte TransformRect(byte[] m, byte[] rect, int[] points) {
+        return MatrixManager.TransformRect(m, rect, points);
     }
 
-    private static byte TransformRect(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int paramInt) {
-        return MatrixManager.TransformRect(paramArrayOfByte1, paramArrayOfByte2, paramInt);
+    private static byte TransformRect(byte[] m, byte[] rect, int points) {
+        return MatrixManager.TransformRect(m, rect, points);
     }
 
-    private static short TransformRgn(byte[] paramArrayOfByte, int paramInt) {
-        return MatrixManager.TransformRgn(paramArrayOfByte, paramInt);
+    private static short TransformRgn(byte[] m, int rgn) {
+        return MatrixManager.TransformRgn(m, rgn);
     }
 
-    private static void RectMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        MatrixManager.RectMatrix(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static void RectMatrix(byte[] m, byte[] src, byte[] dst) {
+        MatrixManager.RectMatrix(m, src, dst);
     }
 
-    private static void MapMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        MatrixManager.MapMatrix(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static void MapMatrix(byte[] m, byte[] from, byte[] to) {
+        MatrixManager.MapMatrix(m, from, to);
     }
 
-    private static void CopyMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        MatrixManager.CopyMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    private static void CopyMatrix(byte[] src, byte[] dst) {
+        MatrixManager.CopyMatrix(src, dst);
     }
 
-    private static byte EqualMatrix(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return MatrixManager.EqualMatrix(paramArrayOfByte1, paramArrayOfByte2);
+    private static byte EqualMatrix(byte[] a, byte[] b) {
+        return MatrixManager.EqualMatrix(a, b);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

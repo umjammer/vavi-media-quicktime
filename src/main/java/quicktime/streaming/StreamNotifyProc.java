@@ -119,7 +119,7 @@ public abstract class StreamNotifyProc {
      * @param duration the duration
      * @return 0 if no error occurred processing the notification
      */
-    public int execute(int type, int flags, int paramInt3, long duration) {
+    public int execute(int type, int flags, int value, long duration) {
         return 0;
     }
 

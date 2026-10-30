@@ -187,8 +187,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * Invoked when the mouse has been clicked on a component.
      */
     @Override
-    public void mouseClicked(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(500, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mouseClicked(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(500, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mouseClicked(this.theEvent);
     }
 
@@ -198,8 +198,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * Invoked when a mouse button has been pressed on a component.
      */
     @Override
-    public void mousePressed(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(501, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mousePressed(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(501, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mousePressed(this.theEvent);
     }
 
@@ -209,8 +209,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * Invoked when a mouse button has been released on a component.
      */
     @Override
-    public void mouseReleased(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(502, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mouseReleased(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(502, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mouseReleased(this.theEvent);
     }
 
@@ -220,8 +220,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * Invoked when the mouse enters a component.
      */
     @Override
-    public void mouseEntered(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(504, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mouseEntered(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(504, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mouseEntered(this.theEvent);
     }
 
@@ -231,8 +231,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * Invoked when the mouse exits a component.
      */
     @Override
-    public void mouseExited(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(505, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mouseExited(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(505, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mouseExited(this.theEvent);
     }
 
@@ -246,8 +246,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * bounds of the component).
      */
     @Override
-    public void mouseDragged(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(506, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mouseDragged(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(506, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mouseDragged(this.theEvent);
     }
 
@@ -258,8 +258,8 @@ public class AWTMouseEventDispatcher extends EventDispatcher implements MouseLis
      * (with no buttons no down).
      */
     @Override
-    public void mouseMoved(MouseEvent paramMouseEvent) {
-        this.theEvent.initialiseEventProfile(503, paramMouseEvent.getX(), paramMouseEvent.getY(), paramMouseEvent.getWhen(), paramMouseEvent.getModifiers(), paramMouseEvent.getClickCount());
+    public void mouseMoved(MouseEvent e) {
+        this.theEvent.initialiseEventProfile(503, e.getX(), e.getY(), e.getWhen(), e.getModifiers(), e.getClickCount());
         this.cont.mouseMoved(this.theEvent);
     }
 }

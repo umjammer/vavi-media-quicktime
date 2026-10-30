@@ -45,8 +45,8 @@ public final class FullScreen implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Dimension getMainScreenSize() throws StdQTException {
-        QDDimension localQDDimension = getSizeOfMainScreen();
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+        QDDimension dimension = getSizeOfMainScreen();
+        return new Dimension(dimension.getWidth(), dimension.getHeight());
     }
 
     /**
@@ -58,14 +58,14 @@ public final class FullScreen implements QuickTimeLib {
      */
     public QDDimension getSizeOfMainScreen() throws StdQTException {
         end();
-        int[] arrayOfInt = new int[1];
-        short[] arrayOfShort1 = new short[1];
-        short[] arrayOfShort2 = new short[1];
-        arrayOfShort1[0] = 0;
-        arrayOfShort2[0] = 0;
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, 0, arrayOfShort1, arrayOfShort2, 0, 0, 8));
-        this.restoreState = arrayOfInt[0];
-        return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
+        int[] restoreState = new int[1];
+        short[] desiredWidth = new short[1];
+        short[] desiredHeight = new short[1];
+        desiredWidth[0] = 0;
+        desiredHeight[0] = 0;
+        StdQTException.checkError(BeginFullScreen(restoreState, 0, desiredWidth, desiredHeight, 0, 0, 8));
+        this.restoreState = restoreState[0];
+        return new QDDimension(desiredWidth[0], desiredHeight[0]);
     }
 
     /**
@@ -77,9 +77,9 @@ public final class FullScreen implements QuickTimeLib {
      * @return the size of the specified screen
      * @throws quicktime.std.StdQTException
      */
-    public Dimension getScreenSize(GDevice paramGDevice) throws StdQTException {
-        QDDimension localQDDimension = getSizeOfScreen(paramGDevice);
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+    public Dimension getScreenSize(GDevice whichGD) throws StdQTException {
+        QDDimension dimension = getSizeOfScreen(whichGD);
+        return new Dimension(dimension.getWidth(), dimension.getHeight());
     }
 
     /**
@@ -89,16 +89,16 @@ public final class FullScreen implements QuickTimeLib {
      * @return the size of the specified screen
      * @throws quicktime.std.StdQTException
      */
-    public QDDimension getSizeOfScreen(GDevice paramGDevice) throws StdQTException {
+    public QDDimension getSizeOfScreen(GDevice whichGD) throws StdQTException {
         end();
-        int[] arrayOfInt = new int[1];
-        short[] arrayOfShort1 = new short[1];
-        short[] arrayOfShort2 = new short[1];
-        arrayOfShort1[0] = 0;
-        arrayOfShort2[0] = 0;
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(paramGDevice), arrayOfShort1, arrayOfShort2, 0, 0, 8));
-        this.restoreState = arrayOfInt[0];
-        return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
+        int[] restoreState = new int[1];
+        short[] desiredWidth = new short[1];
+        short[] desiredHeight = new short[1];
+        desiredWidth[0] = 0;
+        desiredHeight[0] = 0;
+        StdQTException.checkError(BeginFullScreen(restoreState, QTObject.ID(whichGD), desiredWidth, desiredHeight, 0, 0, 8));
+        this.restoreState = restoreState[0];
+        return new QDDimension(desiredWidth[0], desiredHeight[0]);
     }
 
     /**
@@ -114,8 +114,8 @@ public final class FullScreen implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Dimension preflightSize(GDevice gd, int width, int height) throws StdQTException {
-        QDDimension localQDDimension = getPreflightSize(gd, width, height);
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+        QDDimension preflightSize = getPreflightSize(gd, width, height);
+        return new Dimension(preflightSize.getWidth(), preflightSize.getHeight());
     }
 
     /**
@@ -130,14 +130,14 @@ public final class FullScreen implements QuickTimeLib {
      */
     public QDDimension getPreflightSize(GDevice gd, int width, int height) throws StdQTException {
         end();
-        int[] arrayOfInt = new int[1];
-        short[] arrayOfShort1 = new short[1];
-        short[] arrayOfShort2 = new short[1];
-        arrayOfShort1[0] = ((short) width);
-        arrayOfShort2[0] = ((short) height);
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(gd), arrayOfShort1, arrayOfShort2, 0, 0, 8));
-        this.restoreState = arrayOfInt[0];
-        return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
+        int[] restoreState = new int[1];
+        short[] desiredWidth = new short[1];
+        short[] desiredHeight = new short[1];
+        desiredWidth[0] = ((short) width);
+        desiredHeight[0] = ((short) height);
+        StdQTException.checkError(BeginFullScreen(restoreState, QTObject.ID(gd), desiredWidth, desiredHeight, 0, 0, 8));
+        this.restoreState = restoreState[0];
+        return new QDDimension(desiredWidth[0], desiredHeight[0]);
     }
 
     /**
@@ -149,8 +149,8 @@ public final class FullScreen implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public Dimension begin(int flags) throws StdQTException {
-        QDDimension localQDDimension = beginFullScreen(flags);
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+        QDDimension dimension = beginFullScreen(flags);
+        return new Dimension(dimension.getWidth(), dimension.getHeight());
     }
 
     /**
@@ -161,14 +161,14 @@ public final class FullScreen implements QuickTimeLib {
      */
     public QDDimension beginFullScreen(int flags) throws StdQTException {
         end();
-        int[] arrayOfInt = new int[1];
-        short[] arrayOfShort1 = new short[1];
-        short[] arrayOfShort2 = new short[1];
-        arrayOfShort1[0] = 0;
-        arrayOfShort2[0] = 0;
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, 0, arrayOfShort1, arrayOfShort2, 0, 0, flags));
-        this.restoreState = arrayOfInt[0];
-        return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
+        int[] restoreState = new int[1];
+        short[] desiredWidth = new short[1];
+        short[] desiredHeight = new short[1];
+        desiredWidth[0] = 0;
+        desiredHeight[0] = 0;
+        StdQTException.checkError(BeginFullScreen(restoreState, 0, desiredWidth, desiredHeight, 0, 0, flags));
+        this.restoreState = restoreState[0];
+        return new QDDimension(desiredWidth[0], desiredHeight[0]);
     }
 
     /**
@@ -181,9 +181,9 @@ public final class FullScreen implements QuickTimeLib {
      * @param flags Controls the operation of this method.
      * @throws quicktime.std.StdQTException
      */
-    public Dimension begin(GDevice paramGDevice, int desiredWidth, int desiredHeight, int flags) throws StdQTException {
-        QDDimension localQDDimension = beginFullScreen(paramGDevice, desiredWidth, desiredHeight, flags);
-        return new Dimension(localQDDimension.getWidth(), localQDDimension.getHeight());
+    public Dimension begin(GDevice whichGD, int desiredWidth, int desiredHeight, int flags) throws StdQTException {
+        QDDimension dimension = beginFullScreen(whichGD, desiredWidth, desiredHeight, flags);
+        return new Dimension(dimension.getWidth(), dimension.getHeight());
     }
 
     /**
@@ -194,15 +194,15 @@ public final class FullScreen implements QuickTimeLib {
      * @param flags Controls the operation of this method.
      * @throws quicktime.std.StdQTException
      */
-    public QDDimension beginFullScreen(GDevice paramGDevice, int desiredWidth, int desiredHeight, int flags) throws StdQTException {
+    public QDDimension beginFullScreen(GDevice whichGD, int desiredWidth, int desiredHeight, int flags) throws StdQTException {
         end();
-        int[] arrayOfInt = new int[1];
+        int[] restoreState = new int[1];
         short[] arrayOfShort1 = new short[1];
         short[] arrayOfShort2 = new short[1];
         arrayOfShort1[0] = ((short) desiredWidth);
         arrayOfShort2[0] = ((short) desiredHeight);
-        StdQTException.checkError(BeginFullScreen(arrayOfInt, QTObject.ID(paramGDevice), arrayOfShort1, arrayOfShort2, 0, 0, flags));
-        this.restoreState = arrayOfInt[0];
+        StdQTException.checkError(BeginFullScreen(restoreState, QTObject.ID(whichGD), arrayOfShort1, arrayOfShort2, 0, 0, flags));
+        this.restoreState = restoreState[0];
         return new QDDimension(arrayOfShort1[0], arrayOfShort2[0]);
     }
 
@@ -230,11 +230,11 @@ public final class FullScreen implements QuickTimeLib {
         end();
     }
 
-    private static short BeginFullScreen(int[] paramArrayOfInt, int paramInt1, short[] paramArrayOfShort1, short[] paramArrayOfShort2, int paramInt2, int paramInt3, int paramInt4) {
-        return PlatformManager.BeginFullScreen(paramArrayOfInt, paramInt1, paramArrayOfShort1, paramArrayOfShort2, paramInt2, paramInt3, paramInt4);
+    private static short BeginFullScreen(int[] restoreState, int whichGD, short[] desiredWidth, short[] desiredHeight, int newWindow, int eraseColor, int flags) {
+        return PlatformManager.BeginFullScreen(restoreState, whichGD, desiredWidth, desiredHeight, newWindow, eraseColor, flags);
     }
 
-    private static short EndFullScreen(int paramInt1, int paramInt2) {
-        return PlatformManager.EndFullScreen(paramInt1, paramInt2);
+    private static short EndFullScreen(int fullState, int flags) {
+        return PlatformManager.EndFullScreen(fullState, flags);
     }
 }

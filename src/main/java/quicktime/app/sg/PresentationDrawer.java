@@ -83,9 +83,9 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      * @since QTJava 4.0
      */
     public Dimension getInitialSize() throws QTException {
-        QDDimension localQDDimension = this.pres.getDimensions(null);
-        Matrix localMatrix = this.pres.getMatrix(null);
-        return new Dimension((int) (localQDDimension.getWidth() / localMatrix.getSx()), (int) (localQDDimension.getHeight() / localMatrix.getSy()));
+        QDDimension dimensions = this.pres.getDimensions(null);
+        Matrix matrix = this.pres.getMatrix(null);
+        return new Dimension((int) (dimensions.getWidth() / matrix.getSx()), (int) (dimensions.getHeight() / matrix.getSy()));
     }
 
     /**
@@ -98,9 +98,9 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      */
     @Override
     public QDDimension getOriginalSize() throws QTException {
-        QDDimension localQDDimension = this.pres.getDimensions(null);
-        Matrix localMatrix = this.pres.getMatrix(null);
-        return new QDDimension(localQDDimension.getWidth() / localMatrix.getSx(), localQDDimension.getHeight() / localMatrix.getSy());
+        QDDimension dimensions = this.pres.getDimensions(null);
+        Matrix matrix = this.pres.getMatrix(null);
+        return new QDDimension(dimensions.getWidth() / matrix.getSx(), dimensions.getHeight() / matrix.getSy());
     }
 
     /**
@@ -138,13 +138,13 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      */
     @Override
     public synchronized void setDisplayBounds(QDRect bounds) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        Matrix localMatrix = new Matrix();
-        localMatrix.setTx(bounds.getX());
-        localMatrix.setTy(bounds.getY());
-        localMatrix.setSx(bounds.getWidth() / localQDRect.getWidth());
-        localMatrix.setSy(bounds.getHeight() / localQDRect.getHeight());
-        setMatrix(localMatrix);
+        QDRect displayBounds = getDisplayBounds();
+        Matrix matrix = new Matrix();
+        matrix.setTx(bounds.getX());
+        matrix.setTy(bounds.getY());
+        matrix.setSx(bounds.getWidth() / displayBounds.getWidth());
+        matrix.setSy(bounds.getHeight() / displayBounds.getHeight());
+        setMatrix(matrix);
         this.pres.setDimensions(null, bounds.getWidth(), bounds.getHeight());
     }
 
@@ -158,10 +158,10 @@ public class PresentationDrawer extends Tasking implements QTDrawable {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**

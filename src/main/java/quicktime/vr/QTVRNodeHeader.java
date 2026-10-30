@@ -31,8 +31,8 @@ public final class QTVRNodeHeader extends QTVRAtom {
      * Creates a QTVRNodeHeader object from a byte array
      * Used in cloning
      */
-    public QTVRNodeHeader(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte, kNativeSize);
+    public QTVRNodeHeader(byte[] bytes) throws QTException {
+        super(bytes, kNativeSize);
     }
 
     @Override
@@ -41,17 +41,17 @@ public final class QTVRNodeHeader extends QTVRAtom {
     }
 
     @Override
-    protected void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    protected void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        QTVRNodeHeader localQTVRNodeHeader = new QTVRNodeHeader();
-        paramObjectInputStream.read(localQTVRNodeHeader.getBytes());
-        System.arraycopy(localQTVRNodeHeader.getBytes(), 0, getBytes(), 0, this.bytes.length);
+        QTVRNodeHeader qtvrNodeHeader = new QTVRNodeHeader();
+        in.read(qtvrNodeHeader.getBytes());
+        System.arraycopy(qtvrNodeHeader.getBytes(), 0, getBytes(), 0, this.bytes.length);
     }
 
     @Override
-    protected void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        QTVRNodeHeader localQTVRNodeHeader = (QTVRNodeHeader) clone();
-        paramObjectOutputStream.write(localQTVRNodeHeader.getBytes());
+    protected void writeObject(ObjectOutputStream out) throws IOException {
+        QTVRNodeHeader qtvrNodeHeader = (QTVRNodeHeader) clone();
+        out.write(qtvrNodeHeader.getBytes());
     }
 
     /**
@@ -61,18 +61,18 @@ public final class QTVRNodeHeader extends QTVRAtom {
     public Object clone() {
         try {
             return new QTVRNodeHeader(this.bytes);
-        } catch (QTException localQTException) {
-            throw new QTRuntimeException(localQTException);
+        } catch (QTException e) {
+            throw new QTRuntimeException(e);
         }
     }
 
     private static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = new EndianDescriptor(0);
-        EndianFlipSpec localEndianFlipSpec1 = new EndianFlipSpec(0, 2, 2);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec1);
-        EndianFlipSpec localEndianFlipSpec2 = new EndianFlipSpec(4, 4, 6);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec2);
-        return localEndianDescriptor;
+        EndianDescriptor ed = new EndianDescriptor(0);
+        EndianFlipSpec spec = new EndianFlipSpec(0, 2, 2);
+        ed.addFlipSpec(spec);
+        EndianFlipSpec endianFlipSpec2 = new EndianFlipSpec(4, 4, 6);
+        ed.addFlipSpec(endianFlipSpec2);
+        return ed;
     }
 
     public static EndianDescriptor getEndianDescriptor() {
@@ -91,15 +91,15 @@ public final class QTVRNodeHeader extends QTVRAtom {
     /**
      * set the nodeType
      */
-    public void setNodeType(int paramInt) {
-        setIntAt(4, paramInt);
+    public void setNodeType(int nodeType) {
+        setIntAt(4, nodeType);
     }
 
     /**
      * set the nodeType from a string
      */
-    public void setNodeType(String paramString) {
-        setIntAt(4, QTUtils.toOSType(paramString));
+    public void setNodeType(String nodeType) {
+        setIntAt(4, QTUtils.toOSType(nodeType));
     }
 
     /**
@@ -112,8 +112,8 @@ public final class QTVRNodeHeader extends QTVRAtom {
     /**
      * set the nodeID
      */
-    public void setNodeID(int paramInt) {
-        setIntAt(8, paramInt);
+    public void setNodeID(int nodeID) {
+        setIntAt(8, nodeID);
     }
 
     /**
@@ -126,8 +126,8 @@ public final class QTVRNodeHeader extends QTVRAtom {
     /**
      * set the nameAtomID
      */
-    public void setNameAtomID(int paramInt) {
-        setIntAt(12, paramInt);
+    public void setNameAtomID(int nameAtomID) {
+        setIntAt(12, nameAtomID);
     }
 
     /**
@@ -140,15 +140,15 @@ public final class QTVRNodeHeader extends QTVRAtom {
     /**
      * set the commentAtomID
      */
-    public void setCommentAtomID(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setCommentAtomID(int commentAtomID) {
+        setIntAt(16, commentAtomID);
     }
 
     /**
      * set the reserved1
      */
-    public void setReserved1(int paramInt) {
-        setIntAt(20, paramInt);
+    public void setReserved1(int reserved1) {
+        setIntAt(20, reserved1);
     }
 
     /**
@@ -161,8 +161,8 @@ public final class QTVRNodeHeader extends QTVRAtom {
     /**
      * set the reserved2
      */
-    public void setReserved2(int paramInt) {
-        setIntAt(24, paramInt);
+    public void setReserved2(int reserved2) {
+        setIntAt(24, reserved2);
     }
 
     /**

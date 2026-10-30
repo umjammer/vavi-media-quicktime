@@ -68,8 +68,8 @@ public class DirectGroup extends GroupDrawable {
     private static Protocol makeP() {
         try {
             return new Protocol(Class.forName("quicktime.app.display.QTDrawable"));
-        } catch (Exception localException) {
-            throw new QTRuntimeException(localException.getMessage());
+        } catch (Exception e) {
+            throw new QTRuntimeException(e.getMessage());
         }
     }
 
@@ -142,11 +142,11 @@ public class DirectGroup extends GroupDrawable {
      * @deprecated
      * @since QTJava 6.1
      */
-    public boolean addMember(Object paramObject, int layer, float xAlign, float yAlign) throws QTException {
-        if (!isAppropriate(paramObject))
+    public boolean addMember(Object object, int layer, float xAlign, float yAlign) throws QTException {
+        if (!isAppropriate(object))
             return false;
-        setAlignedMemberLocation((QTDrawable) paramObject, xAlign, yAlign);
-        _addQTDrawable(new GroupMember(this, (QTDrawable) paramObject, layer));
+        setAlignedMemberLocation((QTDrawable) object, xAlign, yAlign);
+        _addQTDrawable(new GroupMember(this, (QTDrawable) object, layer));
         return true;
     }
 
@@ -164,8 +164,8 @@ public class DirectGroup extends GroupDrawable {
     public boolean addMember(Object layer, int member) throws QTException {
         if (!isAppropriate(layer))
             return false;
-        QTDrawable localQTDrawable = (QTDrawable) layer;
-        _addQTDrawable(new GroupMember(this, localQTDrawable, member));
+        QTDrawable d = (QTDrawable) layer;
+        _addQTDrawable(new GroupMember(this, d, member));
         return true;
     }
 
@@ -201,10 +201,10 @@ public class DirectGroup extends GroupDrawable {
     @Override
     public void setGWorld(QDGraphics cgp) throws QTException {
         super.setGWorld(cgp);
-        Enumeration<?> localEnumeration = this.vec.elements();
-        while (localEnumeration.hasMoreElements()) {
-            GroupMember localGroupMember = (GroupMember) localEnumeration.nextElement();
-            localGroupMember.drawer.setGWorld(this.port);
+        Enumeration<?> enumeration = this.vec.elements();
+        while (enumeration.hasMoreElements()) {
+            GroupMember groupMember = (GroupMember) enumeration.nextElement();
+            groupMember.drawer.setGWorld(this.port);
         }
         if (this.visible) {
             setClip(null);
@@ -243,16 +243,16 @@ public class DirectGroup extends GroupDrawable {
     @Override
     public synchronized void redrawMember(QTDrawable d, Region invalidRgn) throws QTException {
         if (d != null) {
-            GroupMember localGroupMember1 = null;
+            GroupMember groupMember1 = null;
             try {
-                localGroupMember1 = memberChanged(d);
-            } catch (QTException localQTException) {
-                if ((localQTException.errorCode() == 65036) || (localQTException.errorCode() == -108)) {
+                groupMember1 = memberChanged(d);
+            } catch (QTException e) {
+                if ((e.errorCode() == 65036) || (e.errorCode() == -108)) {
                     QTUtils.reclaimMemory();
                 }
-                throw localQTException;
+                throw e;
             }
-            if (localGroupMember1 == null) {
+            if (groupMember1 == null) {
                 redraw(null);
                 return;
             }
@@ -260,26 +260,26 @@ public class DirectGroup extends GroupDrawable {
                 int i = 0;
                 int j = 0;
                 for (int k = 0; k < this.vec.size(); k++) {
-                    GroupMember localGroupMember2 = (GroupMember) this.vec.elementAt(k);
+                    GroupMember groupMember2 = (GroupMember) this.vec.elementAt(k);
                     if (i != 0) {
-                        Region localRegion2 = localGroupMember2.drawer.getClip().sect(invalidRgn);
-                        if (!localRegion2.empty()) {
-                            localGroupMember2.drawer.redraw(localRegion2);
+                        Region region2 = groupMember2.drawer.getClip().sect(invalidRgn);
+                        if (!region2.empty()) {
+                            groupMember2.drawer.redraw(region2);
                         }
                     }
-                    if ((i == 0) && (localGroupMember2.drawer.equals(d))) {
-                        localGroupMember2.drawer.redraw(null);
+                    if ((i == 0) && (groupMember2.drawer.equals(d))) {
+                        groupMember2.drawer.redraw(null);
                         i = 1;
                         if (invalidRgn != null) {
-                            invalidRgn = invalidRgn.union(localGroupMember1.clipRegion);
+                            invalidRgn = invalidRgn.union(groupMember1.clipRegion);
                         } else
-                            invalidRgn = localGroupMember1.clipRegion;
+                            invalidRgn = groupMember1.clipRegion;
                     }
                 }
-                Region localRegion1 = invalidRgn.sect(this.eraseRegion);
-                if (!localRegion1.empty()) {
+                Region area = invalidRgn.sect(this.eraseRegion);
+                if (!area.empty()) {
                     this.port.setBackColor(this.bgColor);
-                    this.port.eraseRgn(localRegion1);
+                    this.port.eraseRgn(area);
                 }
             }
         }
@@ -296,28 +296,28 @@ public class DirectGroup extends GroupDrawable {
     @Override
     public void setClip(Region theClip) throws QTException {
         this.clip = (theClip == null ? new Region(getDisplayBounds()) : theClip.sect(getDisplayBounds()));
-        Region localRegion = this.clip;
-        GroupMember localObject = null;
+        Region eraseRegion = this.clip;
+        GroupMember groupMember = null;
         this.doMemCleanup = true;
         for (int i = 0; i < this.vec.size(); i++) {
-            GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
-            if (localObject != null)
-                localRegion = localRegion.diff(drawersRegion(localObject));
-            localGroupMember.drawer.setClip(localRegion);
-            localObject = localGroupMember;
+            GroupMember groupMember2 = (GroupMember) this.vec.elementAt(i);
+            if (groupMember != null)
+                eraseRegion = eraseRegion.diff(drawersRegion(groupMember));
+            groupMember2.drawer.setClip(eraseRegion);
+            groupMember = groupMember2;
         }
-        if (localObject != null) {
-            this.eraseRegion = localRegion.diff(drawersRegion(localObject));
+        if (groupMember != null) {
+            this.eraseRegion = eraseRegion.diff(drawersRegion(groupMember));
         } else {
-            this.eraseRegion = localRegion;
+            this.eraseRegion = eraseRegion;
         }
         if (!this.doMemCleanup)
             QTUtils.reclaimMemory();
     }
 
-    private Region drawersRegion(GroupMember paramGroupMember) throws QTException {
-        QTDrawable localQTDrawable = paramGroupMember.drawer;
-        int i = localQTDrawable.getMatrix().getType();
+    private Region drawersRegion(GroupMember groupMember) throws QTException {
+        QTDrawable qtDrawable = groupMember.drawer;
+        int i = qtDrawable.getMatrix().getType();
         int j = 0;
         switch(i) {
             case 4:
@@ -327,47 +327,47 @@ public class DirectGroup extends GroupDrawable {
                 break;
             case 2:
             case 3:
-                Matrix localMatrix = localQTDrawable.getMatrix();
-                if ((localMatrix.getSx() < 0.0F) || (localMatrix.getSy() < 0.0F)) {
+                Matrix matrix = qtDrawable.getMatrix();
+                if ((matrix.getSx() < 0.0F) || (matrix.getSy() < 0.0F)) {
                     j = 1;
                 }
                 break;
         }
-        if ((paramGroupMember.clipRegion == null) || (this.redoCachedMembersClip))
-            paramGroupMember.clipRegion = (j != 0 ? createRotatedRegion(localQTDrawable) : new Region(localQTDrawable.getDisplayBounds()));
-        return paramGroupMember.clipRegion;
+        if ((groupMember.clipRegion == null) || (this.redoCachedMembersClip))
+            groupMember.clipRegion = (j != 0 ? createRotatedRegion(qtDrawable) : new Region(qtDrawable.getDisplayBounds()));
+        return groupMember.clipRegion;
     }
 
-    private Region createRotatedRegion(QTDrawable paramQTDrawable) throws QTException {
+    private Region createRotatedRegion(QTDrawable qtDrawable) throws QTException {
         if (this.doMemCleanup) {
             QTUtils.reclaimMemory();
             QTUtils.checkFreeMemory();
             this.doMemCleanup = false;
         }
-        Matrix localMatrix = paramQTDrawable.getMatrix().copy();
-        QDRect localQDRect = new QDRect(paramQTDrawable.getOriginalSize());
-        localMatrix.transformRect(localQDRect);
-        QDGraphics localQDGraphics = new QDGraphics(1, localQDRect);
-        localQDGraphics.setBackColor(QDColor.white);
-        localQDGraphics.eraseRect(localQDRect);
-        paramQTDrawable.setGWorld(localQDGraphics);
-        paramQTDrawable.redraw(null);
-        paramQTDrawable.setGWorld(getGWorld());
+        Matrix matrix = qtDrawable.getMatrix().copy();
+        QDRect bounds = new QDRect(qtDrawable.getOriginalSize());
+        matrix.transformRect(bounds);
+        QDGraphics qdGraphics = new QDGraphics(1, bounds);
+        qdGraphics.setBackColor(QDColor.white);
+        qdGraphics.eraseRect(bounds);
+        qtDrawable.setGWorld(qdGraphics);
+        qtDrawable.redraw(null);
+        qtDrawable.setGWorld(getGWorld());
         try {
-            return new Region(localQDGraphics.getPixMap());
-        } catch (QTException localQTException1) {
-            if ((localQTException1.errorCode() == -108) || (localQTException1.errorCode() == 65036)) {
+            return new Region(qdGraphics.getPixMap());
+        } catch (QTException e) {
+            if ((e.errorCode() == -108) || (e.errorCode() == 65036)) {
                 QTUtils.reclaimMemory();
                 try {
-                    return new Region(localQDGraphics.getPixMap());
-                } catch (QTException localQTException2) {
-                    if (localQTException2.errorCode() == 65036) {
+                    return new Region(qdGraphics.getPixMap());
+                } catch (QTException ex) {
+                    if (ex.errorCode() == 65036) {
                         new QTHandle(512000, false);
-                        return new Region(localQDGraphics.getPixMap());
+                        return new Region(qdGraphics.getPixMap());
                     }
                 }
             }
-            throw localQTException1;
+            throw e;
         }
     }
 
@@ -386,11 +386,11 @@ public class DirectGroup extends GroupDrawable {
      */
     @Override
     public GroupMember memberChanged(QTDrawable d) throws QTException {
-        GroupMember localGroupMember = getGroupMember(d);
-        if (localGroupMember != null) {
+        GroupMember groupMember = getGroupMember(d);
+        if (groupMember != null) {
             setClips(d);
         }
-        return localGroupMember;
+        return groupMember;
     }
 
     /**
@@ -424,8 +424,8 @@ public class DirectGroup extends GroupDrawable {
      * @since QTJava 6.1
      */
     @Override
-    public boolean setMemberLayer(QTDrawable paramQTDrawable, int layer) throws QTException {
-        boolean bool = super.setMemberLayer(paramQTDrawable, layer);
+    public boolean setMemberLayer(QTDrawable qtDrawable, int layer) throws QTException {
+        boolean bool = super.setMemberLayer(qtDrawable, layer);
         if (bool) {
             this.redoCachedMembersClip = true;
             setClip(null);
@@ -437,30 +437,30 @@ public class DirectGroup extends GroupDrawable {
 
     private boolean redoCachedMembersClip = false;
 
-    private boolean setClips(QTDrawable paramQTDrawable) throws QTException {
+    private boolean setClips(QTDrawable clips) throws QTException {
         boolean bool = false;
-        Region localRegion = this.clip;
-        GroupMember localObject = null;
+        Region region = this.clip;
+        GroupMember groupMember = null;
         for (int i = 0; i < this.vec.size(); i++) {
-            GroupMember localGroupMember = (GroupMember) this.vec.elementAt(i);
-            if (localObject != null)
-                localRegion = localRegion.diff(localObject.clipRegion);
-            localObject = localGroupMember;
-            if (localObject.drawer.equals(paramQTDrawable)) {
+            GroupMember groupMember2 = (GroupMember) this.vec.elementAt(i);
+            if (groupMember != null)
+                region = region.diff(groupMember.clipRegion);
+            groupMember = groupMember2;
+            if (groupMember.drawer.equals(clips)) {
                 bool = true;
                 this.doMemCleanup = true;
-                localObject.clipRegion = null;
+                groupMember.clipRegion = null;
                 this.redoCachedMembersClip = true;
                 for (i++; i < this.vec.size(); i++) {
-                    localGroupMember = (GroupMember) this.vec.elementAt(i);
-                    localRegion = localRegion.diff(drawersRegion(localObject));
-                    localGroupMember.drawer.setClip(localRegion);
-                    localObject = localGroupMember;
+                    groupMember2 = (GroupMember) this.vec.elementAt(i);
+                    region = region.diff(drawersRegion(groupMember));
+                    groupMember2.drawer.setClip(region);
+                    groupMember = groupMember2;
                 }
             }
         }
-        if (localObject != null) {
-            this.eraseRegion = localRegion.diff(drawersRegion(localObject));
+        if (groupMember != null) {
+            this.eraseRegion = region.diff(drawersRegion(groupMember));
         }
         this.redoCachedMembersClip = false;
         if (!this.doMemCleanup) {

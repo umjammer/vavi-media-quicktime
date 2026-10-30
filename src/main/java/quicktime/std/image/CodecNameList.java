@@ -29,11 +29,11 @@ public final class CodecNameList extends QTPointerRef implements QuickTimeLib {
         super(allocate((short) show), kNativeSize, null);
     }
 
-    private static int allocate(short paramShort) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = GetCodecNameList(arrayOfInt, paramShort);
+    private static int allocate(short showAll) throws StdQTException {
+        int[] list = { 0 };
+        int i = GetCodecNameList(list, showAll);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return list[0];
     }
 
     /**
@@ -56,7 +56,7 @@ public final class CodecNameList extends QTPointerRef implements QuickTimeLib {
         return getShortAt(0);
     }
 
-    private static short GetCodecNameList(int[] paramArrayOfInt, short paramShort) {
-        return ImageCompressionManager.GetCodecNameList(paramArrayOfInt, paramShort);
+    private static short GetCodecNameList(int[] list, short showAll) {
+        return ImageCompressionManager.GetCodecNameList(list, showAll);
     }
 }

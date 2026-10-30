@@ -24,16 +24,16 @@ import quicktime.util.RawEncodedImage;
  */
 public final class ImageSequenceDataSource extends QTObject implements QuickTimeLib {
 
-    private static int allocate(CDSequence paramCDSequence, int sourceType, int sourceInputNumber, QTHandleRef paramQTHandleRef) throws StdQTException {
+    private static int allocate(CDSequence seqID, int sourceType, int sourceInputNumber, QTHandleRef dataDescription) throws StdQTException {
         int[] source = { 0 };
-        StdQTException.checkError(CDSequenceNewDataSource(QTObject.ID(paramCDSequence), source, sourceType, sourceInputNumber, QTObject.ID(paramQTHandleRef), 0, 0));
+        StdQTException.checkError(CDSequenceNewDataSource(QTObject.ID(seqID), source, sourceType, sourceInputNumber, QTObject.ID(dataDescription), 0, 0));
         return source[0];
     }
 
-    private static int allocate(CDSequence paramCDSequence, int paramInt1, int paramInt2) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(CDSequenceGetDataSource(QTObject.ID(paramCDSequence), arrayOfInt, paramInt1, paramInt2));
-        return arrayOfInt[0];
+    private static int allocate(CDSequence seqID, int sourceType, int sourceInputNumber) throws StdQTException {
+        int[] source = { 0 };
+        StdQTException.checkError(CDSequenceGetDataSource(QTObject.ID(seqID), source, sourceType, sourceInputNumber));
+        return source[0];
     }
 
     /**
@@ -43,8 +43,8 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
      * @param sourceInputNumber More than one instance of a given source type may exist. The first occurrence should have a source input number of 1, and so on.
      * @param dataDescription A handle to a data structure describing the input data. For compressed image data, this is just an ImageDescriptionHandle.
      */
-    public ImageSequenceDataSource(CDSequence paramCDSequence, int sourceType, int sourceInputNumber, QTHandleRef dataDescription) throws QTException {
-        super(allocate(paramCDSequence, sourceType, sourceInputNumber, dataDescription));
+    public ImageSequenceDataSource(CDSequence seqID, int sourceType, int sourceInputNumber, QTHandleRef dataDescription) throws QTException {
+        super(allocate(seqID, sourceType, sourceInputNumber, dataDescription));
     }
 
     /**
@@ -53,8 +53,8 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
      * @param sourceType A four-character code describing how the input will be used. This code is usually derived from the information returned by the codec. For example, if a mask plane was passed, this field might contain ÔmaskÕ.
      * @param sourceInputNumber More than one instance of a given source type may exist. The first occurrence should have a source input number of 1, and so on.
      */
-    public ImageSequenceDataSource(CDSequence paramCDSequence, int sourceType, int sourceInputNumber) throws QTException {
-        super(allocate(paramCDSequence, sourceType, sourceInputNumber));
+    public ImageSequenceDataSource(CDSequence seqID, int sourceType, int sourceInputNumber) throws QTException {
+        super(allocate(seqID, sourceType, sourceInputNumber));
     }
 
     private boolean isValid = true;
@@ -109,27 +109,27 @@ public final class ImageSequenceDataSource extends QTObject implements QuickTime
         return ImageCompressionManager.CDSequenceNewDataSource(seqID, source, sourceType, sourceInputNumber, dataDescription, transferProc, refCon);
     }
 
-    private static short CDSequenceGetDataSource(int paramInt1, int[] paramArrayOfInt, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.CDSequenceGetDataSource(paramInt1, paramArrayOfInt, paramInt2, paramInt3);
+    private static short CDSequenceGetDataSource(int seqID, int[] source, int sourceType, int sourceInputNumber) {
+        return ImageCompressionManager.CDSequenceGetDataSource(seqID, source, sourceType, sourceInputNumber);
     }
 
-    private static short CDSequenceChangedSourceData(int paramInt) {
-        return ImageCompressionManager.CDSequenceChangedSourceData(paramInt);
+    private static short CDSequenceChangedSourceData(int source) {
+        return ImageCompressionManager.CDSequenceChangedSourceData(source);
     }
 
-    private static short CDSequenceSetSourceData(int paramInt1, byte[] paramArrayOfByte, int paramInt2) {
-        return ImageCompressionManager.CDSequenceSetSourceData(paramInt1, paramArrayOfByte, paramInt2);
+    private static short CDSequenceSetSourceData(int source, byte[] data, int dataSize) {
+        return ImageCompressionManager.CDSequenceSetSourceData(source, data, dataSize);
     }
 
-    private static short CDSequenceSetSourceData(int paramInt1, int[] paramArrayOfInt, int paramInt2) {
-        return ImageCompressionManager.CDSequenceSetSourceData(paramInt1, paramArrayOfInt, paramInt2);
+    private static short CDSequenceSetSourceData(int source, int[] data, int dataSize) {
+        return ImageCompressionManager.CDSequenceSetSourceData(source, data, dataSize);
     }
 
-    private static short CDSequenceSetSourceData(int paramInt1, int paramInt2, int paramInt3) {
-        return ImageCompressionManager.CDSequenceSetSourceData(paramInt1, paramInt2, paramInt3);
+    private static short CDSequenceSetSourceData(int source, int data, int dataSize) {
+        return ImageCompressionManager.CDSequenceSetSourceData(source, data, dataSize);
     }
 
-    private static short CDSequenceDisposeDataSource(int paramInt) {
-        return ImageCompressionManager.CDSequenceDisposeDataSource(paramInt);
+    private static short CDSequenceDisposeDataSource(int source) {
+        return ImageCompressionManager.CDSequenceDisposeDataSource(source);
     }
 }

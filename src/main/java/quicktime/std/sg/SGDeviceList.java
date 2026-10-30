@@ -11,9 +11,9 @@ public class SGDeviceList extends QTHandleRef {
 
     private final SequenceGrabber sg;
 
-    SGDeviceList(int paramInt, Object paramObject, SequenceGrabber paramSequenceGrabber) {
-        super(paramInt, paramObject, false, QTObject.ID(paramSequenceGrabber));
-        this.sg = paramSequenceGrabber;
+    SGDeviceList(int nativeRep, Object ref, SequenceGrabber sg) {
+        super(nativeRep, ref, false, QTObject.ID(sg));
+        this.sg = sg;
     }
 
     /**
@@ -39,9 +39,9 @@ public class SGDeviceList extends QTHandleRef {
     public SGDeviceName getDeviceName(int whichOne) throws StdQTException {
         if ((whichOne < 0) || (whichOne >= getShortAt(0)))
             throw new StdQTException(-50);
-        SGDeviceName localSGDeviceName = new SGDeviceName();
-        copyToArray(8 + 80 * whichOne, localSGDeviceName.getBytes(), 0, 80);
-        return localSGDeviceName;
+        SGDeviceName deviceName = new SGDeviceName();
+        copyToArray(8 + 80 * whichOne, deviceName.getBytes(), 0, 80);
+        return deviceName;
     }
 
     /**

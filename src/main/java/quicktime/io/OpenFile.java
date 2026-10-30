@@ -34,7 +34,7 @@ public final class OpenFile extends OpenedFile {
         return new OpenFile(f, 512);
     }
 
-    private OpenFile(QTFile paramQTFile, int paramInt) throws QTException {
-        super(paramQTFile, paramInt, 2);
+    private OpenFile(QTFile f, int permissions) throws QTException {
+        super(f, permissions, 2);
     }
 }

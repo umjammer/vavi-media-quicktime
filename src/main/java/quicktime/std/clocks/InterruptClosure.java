@@ -5,8 +5,8 @@ import com.apple.mrj.jdirect.CompletionRoutineNotifier;
 
 
 class InterruptClosure extends CompletionRoutineNotifier {
-    InterruptClosure(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    InterruptClosure(int routine, Object target) {
+        super(routine, target);
     }
 
     int fetchPointer() {

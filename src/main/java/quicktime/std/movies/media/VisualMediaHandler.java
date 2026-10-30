@@ -13,8 +13,8 @@ import quicktime.util.QTPointer;
 
 public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
 
-    protected VisualMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    protected VisualMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -35,10 +35,10 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final GraphicsMode getGraphicsMode() throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        byte[] arrayOfByte = new byte[6];
-        StdQTException.checkError(MediaGetGraphicsMode(_ID(), arrayOfInt, arrayOfByte));
-        return new GraphicsMode(arrayOfInt[0], QDColor.fromArray(arrayOfByte, 6));
+        int[] mode = new int[1];
+        byte[] opColor = new byte[6];
+        StdQTException.checkError(MediaGetGraphicsMode(_ID(), mode, opColor));
+        return new GraphicsMode(mode[0], QDColor.fromArray(opColor, 6));
     }
 
     /**
@@ -48,9 +48,9 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public final boolean getTrackOpaque() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        StdQTException.checkError(MediaGetTrackOpaque(_ID(), arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] opaque = { 0 };
+        StdQTException.checkError(MediaGetTrackOpaque(_ID(), opaque));
+        return opaque[0] != 0;
     }
 
     /**
@@ -59,10 +59,10 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
      * @return the target RefCon at the specified point
      * @throws quicktime.std.StdQTException
      */
-    public final int hitTestForTargetRefCon(int paramInt, QDPoint paramQDPoint) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(MediaHitTestForTargetRefCon(_ID(), paramInt, paramQDPoint.getPoint(), arrayOfInt));
-        return arrayOfInt[0];
+    public final int hitTestForTargetRefCon(int flags, QDPoint point) throws StdQTException {
+        int[] targetRefCon = { 0 };
+        StdQTException.checkError(MediaHitTestForTargetRefCon(_ID(), flags, point.getPoint(), targetRefCon));
+        return targetRefCon[0];
     }
 
     /**
@@ -71,56 +71,56 @@ public class VisualMediaHandler extends MediaHandler implements QuickTimeLib {
      * @return true if some part of the target RefCon is hit.
      * @throws quicktime.std.StdQTException
      */
-    public final boolean hitTestTargetRefCon(int paramInt1, int paramInt2, QDPoint paramQDPoint) throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        StdQTException.checkError(MediaHitTestTargetRefCon(_ID(), paramInt1, paramInt2, paramQDPoint.getPoint(), arrayOfByte));
-        return arrayOfByte[0] != 0;
+    public final boolean hitTestTargetRefCon(int targetRefCon, int flags, QDPoint point) throws StdQTException {
+        byte[] wasHit = { 0 };
+        StdQTException.checkError(MediaHitTestTargetRefCon(_ID(), targetRefCon, flags, point.getPoint(), wasHit));
+        return wasHit[0] != 0;
     }
 
     /**
      * This routine is an accessor for the media handler's public info
      * QuickTime:MediaSetPublicInfo
      */
-    public void setPublicInfo(int paramInt, QTPointer paramQTPointer) throws StdQTException {
-        StdQTException.checkError(MediaSetPublicInfo(_ID(), paramInt, QTObject.ID(paramQTPointer), paramQTPointer.getSize()));
+    public void setPublicInfo(int infoSelector, QTPointer info) throws StdQTException {
+        StdQTException.checkError(MediaSetPublicInfo(_ID(), infoSelector, QTObject.ID(info), info.getSize()));
     }
 
     /**
      * This routine is an accessor for the media handler's public info
      * QuickTime:MediaGetPublicInfo
      */
-    public QTPointer getPublicInfo(int paramInt) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(MediaGetPublicInfo(_ID(), paramInt, arrayOfByte, arrayOfInt));
-        return new QTPointer(arrayOfByte);
+    public QTPointer getPublicInfo(int infoSelector) throws QTException {
+        byte[] info = { 0 };
+        int[] size = { 0 };
+        StdQTException.checkError(MediaGetPublicInfo(_ID(), infoSelector, info, size));
+        return new QTPointer(info);
     }
 
-    private static int MediaHitTestForTargetRefCon(int paramInt1, long paramLong, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.MediaHitTestForTargetRefCon(paramInt1, paramLong, paramInt2, paramArrayOfInt);
+    private static int MediaHitTestForTargetRefCon(int mh, long flags, int loc, int[] targetRefCon) {
+        return MediaHandlerManager.MediaHitTestForTargetRefCon(mh, flags, loc, targetRefCon);
     }
 
-    private static int MediaHitTestTargetRefCon(int paramInt1, int paramInt2, int paramInt3, int paramInt4, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaHitTestTargetRefCon(paramInt1, paramInt2, paramInt3, paramInt4, paramArrayOfByte);
+    private static int MediaHitTestTargetRefCon(int mh, int targetRefCon, int flags, int loc, byte[] wasHit) {
+        return MediaHandlerManager.MediaHitTestTargetRefCon(mh, targetRefCon, flags, loc, wasHit);
     }
 
-    private static int MediaSetGraphicsMode(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaSetGraphicsMode(paramInt1, paramInt2, paramArrayOfByte);
+    private static int MediaSetGraphicsMode(int mh, int mode, byte[] opColor) {
+        return MediaHandlerManager.MediaSetGraphicsMode(mh, mode, opColor);
     }
 
-    private static int MediaGetGraphicsMode(int paramInt, int[] paramArrayOfInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetGraphicsMode(paramInt, paramArrayOfInt, paramArrayOfByte);
+    private static int MediaGetGraphicsMode(int mh, int[] mode, byte[] opColor) {
+        return MediaHandlerManager.MediaGetGraphicsMode(mh, mode, opColor);
     }
 
-    private static int MediaGetTrackOpaque(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetTrackOpaque(paramInt, paramArrayOfByte);
+    private static int MediaGetTrackOpaque(int mh, byte[] opaque) {
+        return MediaHandlerManager.MediaGetTrackOpaque(mh, opaque);
     }
 
-    private static int MediaSetPublicInfo(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return MediaHandlerManager.MediaSetPublicInfo(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static int MediaSetPublicInfo(int mh, int infoSelector, int info, int size) {
+        return MediaHandlerManager.MediaSetPublicInfo(mh, infoSelector, info, size);
     }
 
-    private static int MediaGetPublicInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return MediaHandlerManager.MediaGetPublicInfo(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
+    private static int MediaGetPublicInfo(int mh, int infoSelector, byte[] info, int[] size) {
+        return MediaHandlerManager.MediaGetPublicInfo(mh, infoSelector, info, size);
     }
 }

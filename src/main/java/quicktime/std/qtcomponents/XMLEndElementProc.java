@@ -12,5 +12,5 @@ public interface XMLEndElementProc {
      * If any error occurs that should be provided back to quicktime this method should
      * throw an exception with the appropriate error number.
      */
-    void execute(String paramString) throws QTException;
+    void execute(String name) throws QTException;
 }

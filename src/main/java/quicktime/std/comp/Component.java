@@ -22,8 +22,8 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         this(allocate(QTObject.ID(comp)), null);
     }
 
-    protected Component(ComponentIdentifier paramComponentIdentifier, int paramInt) throws QTException {
-        this(allocate(paramComponentIdentifier, paramInt), null);
+    protected Component(ComponentIdentifier componentIdentifier, int type) throws QTException {
+        this(allocate(componentIdentifier, type), null);
     }
 
     /**
@@ -37,30 +37,30 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         this(allocate(type, subType), null);
     }
 
-    protected Component(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    protected Component(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
-    protected Component(int paramInt) throws StdQTException {
-        super(allocate(paramInt), null);
+    protected Component(int component) throws StdQTException {
+        super(allocate(component), null);
     }
 
-    private static int allocate(ComponentIdentifier paramComponentIdentifier, int paramInt) throws StdQTException {
-        if (paramComponentIdentifier.getInfo().getType() != paramInt)
+    private static int allocate(ComponentIdentifier componentIdentifier, int type) throws StdQTException {
+        if (componentIdentifier.getInfo().getType() != type)
             throw new StdQTException(62536);
-        return allocate(QTObject.ID(paramComponentIdentifier));
+        return allocate(QTObject.ID(componentIdentifier));
     }
 
-    private static int allocate(int paramInt1, int paramInt2) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(OpenADefaultComponent(paramInt1, paramInt2, arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(int componentType, int componentSubType) throws StdQTException {
+        int[] ci = new int[1];
+        StdQTException.checkError(OpenADefaultComponent(componentType, componentSubType, ci));
+        return ci[0];
     }
 
-    private static int allocate(int paramInt) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        StdQTException.checkError(OpenAComponent(paramInt, arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(int component) throws StdQTException {
+        int[] ci = new int[1];
+        StdQTException.checkError(OpenAComponent(component, ci));
+        return ci[0];
     }
 
     /**
@@ -72,15 +72,15 @@ public class Component extends ComponentIdentifier implements QuickTimeLib {
         return CountComponentInstances(_ID());
     }
 
-    private static short OpenADefaultComponent(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return ComponentManager.OpenADefaultComponent(paramInt1, paramInt2, paramArrayOfInt);
+    private static short OpenADefaultComponent(int componentType, int componentSubType, int[] ci) {
+        return ComponentManager.OpenADefaultComponent(componentType, componentSubType, ci);
     }
 
-    private static short OpenAComponent(int paramInt, int[] paramArrayOfInt) {
-        return ComponentManager.OpenAComponent(paramInt, paramArrayOfInt);
+    private static short OpenAComponent(int component, int[] ci) {
+        return ComponentManager.OpenAComponent(component, ci);
     }
 
-    private static int CountComponentInstances(int paramInt) {
-        return ComponentManager.CountComponentInstances(paramInt);
+    private static int CountComponentInstances(int component) {
+        return ComponentManager.CountComponentInstances(component);
     }
 }

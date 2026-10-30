@@ -47,8 +47,8 @@ public class CompositableEffect extends QTEffect implements DynamicImage, Redraw
 
     class CEInvalidator extends Invalidator {
 
-        CEInvalidator(TwoDSprite paramTwoDSprite) {
-            super(paramTwoDSprite);
+        CEInvalidator(TwoDSprite s) {
+            super(s);
         }
 
         @Override

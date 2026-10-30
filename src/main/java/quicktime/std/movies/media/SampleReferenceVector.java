@@ -17,8 +17,8 @@ public class SampleReferenceVector extends QTVector {
         super(18, numberOfElements > 0 ? numberOfElements : 1);
     }
 
-    void _setNumSamples(int paramInt) {
-        this.mNumElements = paramInt;
+    void _setNumSamples(int numElements) {
+        this.mNumElements = numElements;
     }
 
     /**
@@ -26,28 +26,28 @@ public class SampleReferenceVector extends QTVector {
      * {@link quicktime.QTException}
      * java.lang.ArrayIndexOutOfBoundsException
      */
-    public void insert(SampleReference paramSampleReference, int paramInt) throws QTException, ArrayIndexOutOfBoundsException {
-        insertElement(paramSampleReference, paramInt);
+    public void insert(SampleReference sampleReference, int index) throws QTException, ArrayIndexOutOfBoundsException {
+        insertElement(sampleReference, index);
     }
 
     /**
      * Get a SampleReference at specified position.
      * java.lang.ArrayIndexOutOfBoundsException
      */
-    public SampleReference get(int paramInt) throws ArrayIndexOutOfBoundsException, QTException {
-        SampleReference localSampleReference = new SampleReference();
-        getElement(localSampleReference, paramInt);
-        return localSampleReference;
+    public SampleReference get(int index) throws ArrayIndexOutOfBoundsException, QTException {
+        SampleReference sampleReference = new SampleReference();
+        getElement(sampleReference, index);
+        return sampleReference;
     }
 
     @Override
     protected QTPointerRef makeElement() {
-        SampleReference localSampleReference = null;
+        SampleReference element = null;
         try {
-            localSampleReference = new SampleReference();
-        } catch (Throwable localThrowable) {
-            localSampleReference = null;
+            element = new SampleReference();
+        } catch (Throwable e) {
+            element = null;
         }
-        return localSampleReference;
+        return element;
     }
 }

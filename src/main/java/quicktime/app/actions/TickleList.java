@@ -61,12 +61,12 @@ public class TickleList implements TicklishController, CollectionController {
      * Invoked by the timer when a time condition of its time base has changed.
      */
     @Override
-    public synchronized void timeChanged(int paramInt) throws QTException {
-        TickleNode localTickleNode = this.list;
-        while (localTickleNode != null) {
-            if (localTickleNode.active)
-                localTickleNode.action.timeChanged(paramInt);
-            localTickleNode = localTickleNode.next;
+    public synchronized void timeChanged(int newTime) throws QTException {
+        TickleNode tickleNode = this.list;
+        while (tickleNode != null) {
+            if (tickleNode.active)
+                tickleNode.action.timeChanged(newTime);
+            tickleNode = tickleNode.next;
         }
     }
 
@@ -83,11 +83,11 @@ public class TickleList implements TicklishController, CollectionController {
      */
     @Override
     public synchronized boolean tickle(float effectiveRate, int currentTime) throws QTException {
-        TickleNode localTickleNode = this.list;
-        while (localTickleNode != null) {
-            if ((localTickleNode.active) && (!localTickleNode.action.tickle(effectiveRate, currentTime)))
-                localTickleNode.active = false;
-            localTickleNode = localTickleNode.next;
+        TickleNode tickleNode = this.list;
+        while (tickleNode != null) {
+            if ((tickleNode.active) && (!tickleNode.action.tickle(effectiveRate, currentTime)))
+                tickleNode.active = false;
+            tickleNode = tickleNode.next;
         }
         return this.list != null;
     }
@@ -126,10 +126,10 @@ public class TickleList implements TicklishController, CollectionController {
     @Override
     public int size() {
         int i = 0;
-        TickleNode localTickleNode = this.list;
-        while (localTickleNode != null) {
+        TickleNode tickleNode = this.list;
+        while (tickleNode != null) {
             i++;
-            localTickleNode = localTickleNode.next;
+            tickleNode = tickleNode.next;
         }
         return i;
     }
@@ -150,17 +150,17 @@ public class TickleList implements TicklishController, CollectionController {
             return false;
         if (hasMember(member))
             return true;
-        Ticklish localTicklish = (Ticklish) member;
+        Ticklish ticklish = (Ticklish) member;
         if (this.list == null) {
-            this.list = makeTickleNode(localTicklish);
+            this.list = makeTickleNode(ticklish);
         } else {
-            TickleNode localObject = this.list;
-            TickleNode localTickleNode = localObject.next;
-            while (localTickleNode != null) {
-                localObject = localTickleNode;
-                localTickleNode = localTickleNode.next;
+            TickleNode tickleNode = this.list;
+            TickleNode tickleNode2 = tickleNode.next;
+            while (tickleNode2 != null) {
+                tickleNode = tickleNode2;
+                tickleNode2 = tickleNode2.next;
             }
-            localObject.next = makeTickleNode(localTicklish);
+            tickleNode.next = makeTickleNode(ticklish);
         }
         return true;
     }
@@ -189,9 +189,9 @@ public class TickleList implements TicklishController, CollectionController {
      *  it is inactive and it won't be tickled when the list is tickled.
      */
     public void setMemberActive(Ticklish member, boolean flag) {
-        TickleNode localTickleNode = _findNode(member);
-        if (localTickleNode != null) {
-            localTickleNode.active = flag;
+        TickleNode tickleNode = _findNode(member);
+        if (tickleNode != null) {
+            tickleNode.active = flag;
         }
     }
 
@@ -204,9 +204,9 @@ public class TickleList implements TicklishController, CollectionController {
      * @return a boolean indicative the active state of the member
      */
     public boolean isMemberActive(Ticklish member) {
-        TickleNode localTickleNode = _findNode(member);
-        if (localTickleNode != null) {
-            return localTickleNode.active;
+        TickleNode tickleNode = _findNode(member);
+        if (tickleNode != null) {
+            return tickleNode.active;
         }
         return false;
     }
@@ -230,8 +230,8 @@ public class TickleList implements TicklishController, CollectionController {
      * If the object is not a member this returns null.
      * @return a TickleNode
      */
-    public TickleNode findNode(Object paramObject) {
-        return _findNode(paramObject);
+    public TickleNode findNode(Object action) {
+        return _findNode(action);
     }
 
     /**
@@ -245,13 +245,13 @@ public class TickleList implements TicklishController, CollectionController {
         return new NodeEnumerator(this.list, null);
     }
 
-    private synchronized TickleNode _findNode(Object paramObject) {
-        TickleNode localTickleNode = this.list;
-        while (localTickleNode != null) {
-            if (localTickleNode.action.equals(paramObject)) {
-                return localTickleNode;
+    private synchronized TickleNode _findNode(Object action) {
+        TickleNode tickleNode = this.list;
+        while (tickleNode != null) {
+            if (tickleNode.action.equals(action)) {
+                return tickleNode;
             }
-            localTickleNode = localTickleNode.next;
+            tickleNode = tickleNode.next;
         }
         return null;
     }
@@ -270,15 +270,15 @@ public class TickleList implements TicklishController, CollectionController {
             this.list = this.list.next;
             return;
         }
-        TickleNode localTickleNode1 = this.list;
-        TickleNode localTickleNode2 = localTickleNode1.next;
-        while (localTickleNode2 != null) {
-            if (localTickleNode2.action.equals(member)) {
-                localTickleNode1.next = localTickleNode2.next;
+        TickleNode tickleNode1 = this.list;
+        TickleNode tickleNode2 = tickleNode1.next;
+        while (tickleNode2 != null) {
+            if (tickleNode2.action.equals(member)) {
+                tickleNode1.next = tickleNode2.next;
                 break;
             }
-            localTickleNode2 = localTickleNode2.next;
-            localTickleNode1 = localTickleNode1.next;
+            tickleNode2 = tickleNode2.next;
+            tickleNode1 = tickleNode1.next;
         }
     }
 
@@ -328,12 +328,12 @@ public class TickleList implements TicklishController, CollectionController {
 
     static class ListEnumerator implements Enumeration {
 
-        ListEnumerator(TickleNode paramTickleNode, TickleList param1) {
-            this(paramTickleNode);
+        ListEnumerator(TickleNode current, TickleList list) {
+            this(current);
         }
 
-        private ListEnumerator(TickleNode paramTickleNode) {
-            this.current = paramTickleNode;
+        private ListEnumerator(TickleNode current) {
+            this.current = current;
         }
 
         private TickleNode current;
@@ -347,9 +347,9 @@ public class TickleList implements TicklishController, CollectionController {
         public Object nextElement() {
             if (this.current == null)
                 throw new NoSuchElementException("TickleList");
-            TickleNode localTickleNode = this.current;
+            TickleNode tickleNode = this.current;
             this.current = this.current.next;
-            return localTickleNode.action;
+            return tickleNode.action;
         }
     }
 
@@ -357,12 +357,12 @@ public class TickleList implements TicklishController, CollectionController {
 
         private TickleNode current;
 
-        NodeEnumerator(TickleNode paramTickleNode, TickleList param1) {
-            this(paramTickleNode);
+        NodeEnumerator(TickleNode current, TickleList list) {
+            this(current);
         }
 
-        private NodeEnumerator(TickleNode paramTickleNode) {
-            this.current = paramTickleNode;
+        private NodeEnumerator(TickleNode current) {
+            this.current = current;
         }
 
         @Override
@@ -374,9 +374,9 @@ public class TickleList implements TicklishController, CollectionController {
         public Object nextElement() {
             if (this.current == null)
                 throw new NoSuchElementException("TickleList");
-            TickleNode localTickleNode = this.current;
+            TickleNode tickleNode = this.current;
             this.current = this.current.next;
-            return localTickleNode;
+            return tickleNode;
         }
     }
 
@@ -388,8 +388,8 @@ public class TickleList implements TicklishController, CollectionController {
      */
     public String toString() {
         StringBuilder str = new StringBuilder(getClass().getName() + "[");
-        Enumeration localEnumeration = members();
-        while (localEnumeration.hasMoreElements()) str.append(localEnumeration.nextElement()).append(",");
+        Enumeration enumeration = members();
+        while (enumeration.hasMoreElements()) str.append(enumeration.nextElement()).append(",");
         str.append("]");
         return str.toString();
     }

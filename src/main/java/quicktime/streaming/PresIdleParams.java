@@ -29,11 +29,11 @@ public final class PresIdleParams extends QTPointerRef {
      *
      * @param s the stream of the presentation
      */
-    public PresIdleParams(Stream s, long paramLong, int paramInt) throws QTException {
+    public PresIdleParams(Stream s, long time, int flags) throws QTException {
         this();
         setStream(s);
-        setMovieTimeToDisplay(paramLong);
-        setFlagsIn(paramInt);
+        setMovieTimeToDisplay(time);
+        setFlagsIn(flags);
     }
 
     /**

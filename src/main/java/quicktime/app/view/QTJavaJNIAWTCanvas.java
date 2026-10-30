@@ -12,8 +12,8 @@ final class QTJavaJNIAWTCanvas {
 
     private static final Logger logger = System.getLogger(QTJavaJNIAWTCanvas.class.getName());
 
-    static void RemoveNewContext(Object paramObject) {
-        PlatformManager.RemoveNewContext(paramObject);
+    static void RemoveNewContext(Object context) {
+        PlatformManager.RemoveNewContext(context);
     }
 
     static {

@@ -80,9 +80,9 @@ public final class QTBuild {
         if ("g".equals("g")) {
             return;
         }
-        Calendar localCalendar = Calendar.getInstance();
-        localCalendar.set(2005, Calendar.OCTOBER, 15);
-        if ((!QTSession.isCurrentOS(4)) && (Calendar.getInstance().after(localCalendar))) {
+        Calendar instance = Calendar.getInstance();
+        instance.set(2005, Calendar.OCTOBER, 15);
+        if ((!QTSession.isCurrentOS(4)) && (Calendar.getInstance().after(instance))) {
             logger.log(Level.DEBUG, "This version of QTJava has expired");
             throw new SecurityException("QTJava has expired.");
         }

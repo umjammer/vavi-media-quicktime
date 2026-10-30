@@ -8,7 +8,7 @@ public interface DrawingNotifier {
      * This method is called by some kind of container object when the Listener
      * is added to the object that is the source of the interest.
      */
-    void addDrawingListener(DrawingListener paramDrawingListener);
+    void addDrawingListener(DrawingListener drawingListener);
 
     /**
      * @deprecated
@@ -16,5 +16,5 @@ public interface DrawingNotifier {
      * This method is called by the specified object when the Listener object
      * is removed from the object that is the source of the interest.
      */
-    void removeDrawingListener(DrawingListener paramDrawingListener);
+    void removeDrawingListener(DrawingListener drawingListener);
 }

@@ -19,8 +19,8 @@ public final class TrackEditState extends QTObject {
 
     private final Track t;
 
-    TrackEditState(Track paramTrack, int paramInt) throws QTException {
-        super(paramInt);
-        this.t = paramTrack;
+    TrackEditState(Track t, int nativeRep) throws QTException {
+        super(nativeRep);
+        this.t = t;
     }
 }

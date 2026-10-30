@@ -45,14 +45,14 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
         setColor(opColor);
     }
 
-    private GraphicsMode(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private GraphicsMode(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[10];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         int i = getIntFromArray(this.bytes, 0);
         setGraphicsMode(EndianOrder.flipBigEndianToNative32(i));
         for (int j = 4; j < 10; j += 2) {
@@ -63,16 +63,16 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
         int i = getGraphicsMode();
-        byte[] arrayOfByte = new byte[10];
-        setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(i));
+        byte[] movie = new byte[10];
+        setIntInArray(movie, 0, EndianOrder.flipNativeToBigEndian32(i));
         for (int j = 4; j < 10; j += 2) {
             short s1 = getShortFromArray(getBytes(), j);
             short s2 = EndianOrder.flipNativeToBigEndian16(s1);
-            setShortInArray(arrayOfByte, j, s2);
+            setShortInArray(movie, j, s2);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
@@ -116,9 +116,9 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
      * @return the color.
      */
     public QDColor getColor() {
-        byte[] arrayOfByte = new byte[6];
-        System.arraycopy(getBytes(), 4, arrayOfByte, 0, 6);
-        return QDColor.fromArray(arrayOfByte, 6);
+        byte[] colorBytes = new byte[6];
+        System.arraycopy(getBytes(), 4, colorBytes, 0, 6);
+        return QDColor.fromArray(colorBytes, 6);
     }
 
     /**
@@ -136,19 +136,19 @@ public final class GraphicsMode extends QTByteObject implements QuickTimeLib, Cl
         return new GraphicsMode(getBytes());
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 }

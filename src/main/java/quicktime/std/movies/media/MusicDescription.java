@@ -22,10 +22,10 @@ public final class MusicDescription extends SampleDescription implements Interfa
     private static EndianDescriptor ed;
 
     protected static EndianDescriptor makeED() {
-        EndianDescriptor localEndianDescriptor = SampleDescription.makeED();
-        EndianFlipSpec localEndianFlipSpec = new EndianFlipSpec(16, 4, 1);
-        localEndianDescriptor.addFlipSpec(localEndianFlipSpec);
-        return localEndianDescriptor;
+        EndianDescriptor ed = SampleDescription.makeED();
+        EndianFlipSpec spec = new EndianFlipSpec(16, 4, 1);
+        ed.addFlipSpec(spec);
+        return ed;
     }
 
     /**
@@ -46,8 +46,8 @@ public final class MusicDescription extends SampleDescription implements Interfa
         super(kNativeSize, true, 1836413801);
     }
 
-    private MusicDescription(int paramInt) {
-        super(paramInt, null, false);
+    private MusicDescription(int nativeRep) {
+        super(nativeRep, null, false);
     }
 
     /**
@@ -58,8 +58,8 @@ public final class MusicDescription extends SampleDescription implements Interfa
         return new MusicDescription(makeAndCopyHandle());
     }
 
-    public void setMusicFlags(int paramInt) {
-        setIntAt(16, paramInt);
+    public void setMusicFlags(int musicFlags) {
+        setIntAt(16, musicFlags);
     }
 
     public int getMusicFlags() {
@@ -74,36 +74,36 @@ public final class MusicDescription extends SampleDescription implements Interfa
             return null;
         }
         int i = getSize() - 20;
-        MusicData localMusicData = new MusicData(i);
-        localMusicData.lock();
-        int j = getIntFromPointer(QTObject.ID(localMusicData), 0);
+        MusicData tuneHeader = new MusicData(i);
+        tuneHeader.lock();
+        int j = getIntFromPointer(QTObject.ID(tuneHeader), 0);
         BlockMove(lockAndDeref(20), j, i);
         if (!isLocked())
             unlock();
-        localMusicData.unlock();
-        return localMusicData;
+        tuneHeader.unlock();
+        return tuneHeader;
     }
 
     /**
      * Sets the MusicHeader for the TunePlayer or MusicMedia insertion.
      * This will overwrite any preceeding tune header that the description contained.
      */
-    public void setTuneHeader(MusicData paramMusicData) throws StdQTException {
-        int i = paramMusicData.getSize();
+    public void setTuneHeader(MusicData tuneHeader) throws StdQTException {
+        int i = tuneHeader.getSize();
         setSize(20 + i);
-        paramMusicData.lock();
-        int j = getIntFromPointer(QTObject.ID(paramMusicData), 0);
+        tuneHeader.lock();
+        int j = getIntFromPointer(QTObject.ID(tuneHeader), 0);
         BlockMove(j, lockAndDeref(20), i);
         if (!isLocked())
             unlock();
-        paramMusicData.unlock();
+        tuneHeader.unlock();
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int length) {
+        MemoryManager.BlockMove(src, dst, length);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 }

@@ -15,23 +15,23 @@ import quicktime.std.sg.SGVideoCompressorInfo;
  */
 public final class Compressor extends CodecComponent implements QuickTimeLib {
 
-    Compressor(int paramInt) {
-        super(paramInt);
+    Compressor(int nativeRep) {
+        super(nativeRep);
     }
 
     /**
      * Get a channelÕs current image-compression parameters.
      * @see "QuickTime::SGGetVideoCompressor"
      */
-    public static SGVideoCompressorInfo fromSGVideoChannel(SGVideoChannel paramSGVideoChannel) throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        int[] arrayOfInt1 = new int[1];
-        int[] arrayOfInt2 = new int[1];
-        int[] arrayOfInt3 = new int[1];
-        int[] arrayOfInt4 = new int[1];
-        int i = SGGetVideoCompressor(QTObject.ID(paramSGVideoChannel), arrayOfShort, arrayOfInt1, arrayOfInt2, arrayOfInt3, arrayOfInt4);
+    public static SGVideoCompressorInfo fromSGVideoChannel(SGVideoChannel ref) throws StdQTException {
+        short[] depth = new short[1];
+        int[] compressor = new int[1];
+        int[] spatialQuality = new int[1];
+        int[] temporalQuality = new int[1];
+        int[] keyFrameRate = new int[1];
+        int i = SGGetVideoCompressor(QTObject.ID(ref), depth, compressor, spatialQuality, temporalQuality, keyFrameRate);
         StdQTException.checkError(i);
-        return new SGVideoCompressorInfo(arrayOfShort[0], new Compressor(arrayOfInt1[0]), arrayOfInt2[0], arrayOfInt3[0], arrayOfInt4[0]);
+        return new SGVideoCompressorInfo(depth[0], new Compressor(compressor[0]), spatialQuality[0], temporalQuality[0], keyFrameRate[0]);
     }
 
     /**
@@ -43,18 +43,18 @@ public final class Compressor extends CodecComponent implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public static Compressor findCodec(int cType, CodecComponent specCodec) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int codec = FindCodec(cType, QTObject.ID(specCodec), arrayOfInt, 0);
+        int[] compressor = new int[1];
+        int codec = FindCodec(cType, QTObject.ID(specCodec), compressor, 0);
         StdQTException.checkError(codec);
-        Compressor localCompressor = new Compressor(arrayOfInt[0]);
-        return localCompressor;
+        Compressor compressor2 = new Compressor(compressor[0]);
+        return compressor2;
     }
 
-    private static short FindCodec(int paramInt1, int paramInt2, int[] paramArrayOfInt, int paramInt3) {
-        return ImageCompressionManager.FindCodec(paramInt1, paramInt2, paramArrayOfInt, paramInt3);
+    private static short FindCodec(int cType, int specCodec, int[] compressor, int decompressor) {
+        return ImageCompressionManager.FindCodec(cType, specCodec, compressor, decompressor);
     }
 
-    private static int SGGetVideoCompressor(int paramInt, short[] paramArrayOfShort, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
-        return SequenceGrabberManager.SGGetVideoCompressor(paramInt, paramArrayOfShort, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    private static int SGGetVideoCompressor(int ref, short[] depth, int[] compressor, int[] spatialQuality, int[] temporalQuality, int[] keyFrameRate) {
+        return SequenceGrabberManager.SGGetVideoCompressor(ref, depth, compressor, spatialQuality, temporalQuality, keyFrameRate);
     }
 }

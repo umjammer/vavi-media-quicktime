@@ -19,8 +19,8 @@ import quicktime.std.movies.Movie;
  */
 public final class RestrictionSet extends QTObject implements QuickTimeLib {
 
-    private RestrictionSet(int paramInt) {
-        super(paramInt, null);
+    private RestrictionSet(int nativeRep) {
+        super(nativeRep, null);
     }
 
     /**
@@ -32,10 +32,10 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @see "QuickTime::QTGetMovieRestrictions"
      */
     public static RestrictionSet fromMovie(Movie theMovie) throws StdQTException {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        int i = QTGetMovieRestrictions(QTObject.ID(theMovie), arrayOfInt1, arrayOfInt2);
-        return new RestrictionSet(arrayOfInt1[0]);
+        int[] outRestrictionSet = {0};
+        int[] outSeed = {0};
+        int i = QTGetMovieRestrictions(QTObject.ID(theMovie), outRestrictionSet, outSeed);
+        return new RestrictionSet(outRestrictionSet[0]);
     }
 
     /**
@@ -45,10 +45,10 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @return restrictions in force for the class passed.
      * @see "QuickTime::QTGetSupportedRestrictions"
      */
-    public static int getSupportedRestrictions(int paramInt) {
-        int[] arrayOfInt = {0};
-        QTGetSupportedRestrictions(paramInt, arrayOfInt);
-        return arrayOfInt[0];
+    public static int getSupportedRestrictions(int inRestrictionClass) {
+        int[] outRestrictionIDs = {0};
+        QTGetSupportedRestrictions(inRestrictionClass, outRestrictionIDs);
+        return outRestrictionIDs[0];
     }
 
     /**
@@ -58,10 +58,10 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @see "QuickTime::QTRestrictionsGetInfo"
      */
     public int getClassCount() {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        QTRestrictionsGetInfo(_ID(), arrayOfInt1, arrayOfInt2);
-        return arrayOfInt1[0];
+        int[] outRestrictionClassCount = {0};
+        int[] outSeed = {0};
+        QTRestrictionsGetInfo(_ID(), outRestrictionClassCount, outSeed);
+        return outRestrictionClassCount[0];
     }
 
     /**
@@ -72,10 +72,10 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @see "QuickTime::QTRestrictionsGetInfo"
      */
     public int getSeed() {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        QTRestrictionsGetInfo(_ID(), arrayOfInt1, arrayOfInt2);
-        return arrayOfInt2[0];
+        int[] outRestrictionClassCount = {0};
+        int[] outSeed = {0};
+        QTRestrictionsGetInfo(_ID(), outRestrictionClassCount, outSeed);
+        return outSeed[0];
     }
 
     /**
@@ -86,24 +86,24 @@ public final class RestrictionSet extends QTObject implements QuickTimeLib {
      * @see "QuickTime::QTRestrictionsGetItem"
      */
     public int getItem(int restrictionClass) {
-        int[] arrayOfInt = {0};
-        QTRestrictionsGetItem(_ID(), restrictionClass, arrayOfInt);
-        return arrayOfInt[0];
+        int[] outRestrictions = {0};
+        QTRestrictionsGetItem(_ID(), restrictionClass, outRestrictions);
+        return outRestrictions[0];
     }
 
-    private static short QTGetMovieRestrictions(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return PlatformManager.QTGetMovieRestrictions(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static short QTGetMovieRestrictions(int movie, int[] outRestrictionSet, int[] outSeed) {
+        return PlatformManager.QTGetMovieRestrictions(movie, outRestrictionSet, outSeed);
     }
 
-    private static short QTGetSupportedRestrictions(int paramInt, int[] paramArrayOfInt) {
-        return PlatformManager.QTGetSupportedRestrictions(paramInt, paramArrayOfInt);
+    private static short QTGetSupportedRestrictions(int inRestrictionClass, int[] outRestrictionIDs) {
+        return PlatformManager.QTGetSupportedRestrictions(inRestrictionClass, outRestrictionIDs);
     }
 
-    private static short QTRestrictionsGetInfo(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return PlatformManager.QTRestrictionsGetInfo(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static short QTRestrictionsGetInfo(int inRestrictionSet, int[] outRestrictionClassCount, int[] outSeed) {
+        return PlatformManager.QTRestrictionsGetInfo(inRestrictionSet, outRestrictionClassCount, outSeed);
     }
 
-    private static short QTRestrictionsGetItem(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return PlatformManager.QTRestrictionsGetItem(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTRestrictionsGetItem(int inRestrictionSet, int inRestrictionClass, int[] outRestrictions) {
+        return PlatformManager.QTRestrictionsGetItem(inRestrictionSet, inRestrictionClass, outRestrictions);
     }
 }

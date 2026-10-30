@@ -57,22 +57,22 @@ public final class QTFactory {
 
     private static void buildClassPathsVector() throws IOException {
         classPaths = new Vector<>(8);
-        String str1 = System.getProperty("java.class.path");
-        while (str1 != null) {
-            int i = str1.indexOf(File.pathSeparatorChar);
-            String str3 = null;
+        String property = System.getProperty("java.class.path");
+        while (property != null) {
+            int i = property.indexOf(File.pathSeparatorChar);
+            String path = null;
             if (i == -1) {
-                str3 = str1;
-                str1 = null;
+                path = property;
+                property = null;
             } else {
-                str3 = str1.substring(0, i);
-                str1 = str1.substring(i + 1);
+                path = property.substring(0, i);
+                property = property.substring(i + 1);
             }
-            str3 = returnExistingFile(str3);
-            if (str3 != null) {
-                str3 = str3.substring(0, str3.lastIndexOf(File.separatorChar) + 1);
-                if ((!classPaths.contains(str3)) && (!str3.isEmpty())) {
-                    classPaths.addElement(str3);
+            path = returnExistingFile(path);
+            if (path != null) {
+                path = path.substring(0, path.lastIndexOf(File.separatorChar) + 1);
+                if ((!classPaths.contains(path)) && (!path.isEmpty())) {
+                    classPaths.addElement(path);
                 }
             }
         }
@@ -82,14 +82,14 @@ public final class QTFactory {
             classPaths.addElement(str2);
     }
 
-    private static String returnExistingFile(String paramString) throws IOException {
-        File localFile = new File(paramString);
-        if (!localFile.exists())
+    private static String returnExistingFile(String path) throws IOException {
+        File file = new File(path);
+        if (!file.exists())
             return null;
-        if ((localFile.isDirectory()) && (paramString.charAt(paramString.length() - 1) != File.separatorChar)) {
-            return paramString + File.separatorChar;
+        if ((file.isDirectory()) && (path.charAt(path.length() - 1) != File.separatorChar)) {
+            return path + File.separatorChar;
         }
-        return localFile.getCanonicalPath();
+        return file.getCanonicalPath();
     }
 
     /**
@@ -104,14 +104,14 @@ public final class QTFactory {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static File findInSystemPaths(String paramString) throws IOException {
+    public static File findInSystemPaths(String fileName) throws IOException {
         if (classPaths == null)
             buildClassPathsVector();
-        return _doFISP(paramString, false);
+        return _doFISP(fileName, false);
     }
 
-    private static File _doFISP(String paramString, boolean paramBoolean) throws IOException {
-        String str1 = paramString;
+    private static File _doFISP(String fileName, boolean searchSubDirs) throws IOException {
+        String str1 = fileName;
         int i = str1.length();
         while (i > 0) {
             i = str1.substring(0, i).lastIndexOf('/');
@@ -124,7 +124,7 @@ public final class QTFactory {
                 }
             }
         }
-        throw new FileNotFoundException(paramString);
+        throw new FileNotFoundException(fileName);
     }
 
     /**
@@ -147,15 +147,15 @@ public final class QTFactory {
         if (classPaths == null) {
             buildClassPathsVector();
         }
-        String str = dir.getCanonicalPath();
-        str = str.replace('/', File.separatorChar);
-        if (str.charAt(str.length() - 1) != '/') {
-            str = str + "/";
+        String canonicalPath = dir.getCanonicalPath();
+        canonicalPath = canonicalPath.replace('/', File.separatorChar);
+        if (canonicalPath.charAt(canonicalPath.length() - 1) != '/') {
+            canonicalPath = canonicalPath + "/";
         }
-        if (classPaths.contains(str)) {
+        if (classPaths.contains(canonicalPath)) {
             return;
         }
-        classPaths.addElement(str);
+        classPaths.addElement(canonicalPath);
     }
 
     /**
@@ -176,12 +176,12 @@ public final class QTFactory {
         if (classPaths == null) {
             return;
         }
-        String str = dir.getCanonicalPath();
-        str = str.replace('/', File.separatorChar);
-        if (str.charAt(str.length() - 1) != '/') {
-            str = str + "/";
+        String canonicalPath = dir.getCanonicalPath();
+        canonicalPath = canonicalPath.replace('/', File.separatorChar);
+        if (canonicalPath.charAt(canonicalPath.length() - 1) != '/') {
+            canonicalPath = canonicalPath + "/";
         }
-        classPaths.removeElement(str);
+        classPaths.removeElement(canonicalPath);
     }
 
     /**
@@ -202,9 +202,9 @@ public final class QTFactory {
         if (classPaths == null) {
             buildClassPathsVector();
         }
-        Enumeration localEnumeration = classPaths.elements();
-        while (localEnumeration.hasMoreElements()) {
-            String str1 = (String) localEnumeration.nextElement();
+        Enumeration enumeration = classPaths.elements();
+        while (enumeration.hasMoreElements()) {
+            String str1 = (String) enumeration.nextElement();
             String str2 = returnExistingFile(str1 + fileName);
             if (str2 != null) {
                 return new File(str2);
@@ -229,8 +229,8 @@ public final class QTFactory {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static QTDrawable makeDrawable(QTFile paramQTFile) throws IOException, QTException {
-        return makeDrawable(paramQTFile, new QTDrawableMaker());
+    public static QTDrawable makeDrawable(QTFile file) throws IOException, QTException {
+        return makeDrawable(file, new QTDrawableMaker());
     }
 
     /**
@@ -251,29 +251,29 @@ public final class QTFactory {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static QTDrawable makeDrawable(QTFile paramQTFile, QTDrawableMaker maker) throws IOException, QTException {
-        if (!paramQTFile.exists())
-            throw new FileNotFoundException(paramQTFile.getName());
-        String str = getFileExtension(paramQTFile.getAbsolutePath());
-        if (("mid".equalsIgnoreCase(str)) || ("smf".equalsIgnoreCase(str)) || ("midi".equalsIgnoreCase(str)) || ("kar".equalsIgnoreCase(str))) {
-            QTHandle localObject = readBytesIntoHandle(new FileInputStream(paramQTFile));
-            Movie localMovie = importMovie(localObject, QTUtils.toOSType("Midi"));
-            if (localMovie != null) {
-                return maker.fromMovie(localMovie);
+    public static QTDrawable makeDrawable(QTFile file, QTDrawableMaker maker) throws IOException, QTException {
+        if (!file.exists())
+            throw new FileNotFoundException(file.getName());
+        String fileExtension = getFileExtension(file.getAbsolutePath());
+        if (("mid".equalsIgnoreCase(fileExtension)) || ("smf".equalsIgnoreCase(fileExtension)) || ("midi".equalsIgnoreCase(fileExtension)) || ("kar".equalsIgnoreCase(fileExtension))) {
+            QTHandle qtHandle = readBytesIntoHandle(new FileInputStream(file));
+            Movie movie = importMovie(qtHandle, QTUtils.toOSType("Midi"));
+            if (movie != null) {
+                return maker.fromMovie(movie);
             }
         }
-        GraphicsImporter localObject = openAsImage(paramQTFile);
-        Movie localMovie = null;
-        if (localObject != null) {
-            localMovie = checkIfMovie(paramQTFile);
-            if (localMovie == null) {
-                return maker.fromGraphicsImporter(localObject);
+        GraphicsImporter asImage = openAsImage(file);
+        Movie asMovie = null;
+        if (asImage != null) {
+            asMovie = checkIfMovie(file);
+            if (asMovie == null) {
+                return maker.fromGraphicsImporter(asImage);
             }
-            return maker.fromMovie(localMovie);
+            return maker.fromMovie(asMovie);
         }
-        localMovie = openAsMovie(paramQTFile);
-        if (localMovie != null) {
-            return maker.fromMovie(localMovie);
+        asMovie = openAsMovie(file);
+        if (asMovie != null) {
+            return maker.fromMovie(asMovie);
         }
         throw new QTException(63533);
     }
@@ -308,8 +308,8 @@ public final class QTFactory {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static QTDrawable makeDrawable(InputStream is, int paramInt, String hintString) throws IOException, QTException {
-        return makeDrawable(is, paramInt, hintString, new QTDrawableMaker());
+    public static QTDrawable makeDrawable(InputStream is, int hintFlag, String hintString) throws IOException, QTException {
+        return makeDrawable(is, hintFlag, hintString, new QTDrawableMaker());
     }
 
     /**
@@ -343,27 +343,27 @@ public final class QTFactory {
      * @since QTJava 6.1
      * @deprecated
      */
-    public static QTDrawable makeDrawable(InputStream paramInputStream, int paramInt, String hintString, QTDrawableMaker maker) throws IOException, QTException {
-        QTHandle localQTHandle = readBytesIntoHandle(paramInputStream);
-        DataRef localDataRef = new DataRef(localQTHandle, paramInt, hintString);
+    public static QTDrawable makeDrawable(InputStream inputStream, int hintFlag, String hintString, QTDrawableMaker maker) throws IOException, QTException {
+        QTHandle qtHandle = readBytesIntoHandle(inputStream);
+        DataRef defaultDataRef = new DataRef(qtHandle, hintFlag, hintString);
         if ((hintString != null) && (("mid".equalsIgnoreCase(hintString)) || ("smf".equalsIgnoreCase(hintString)) || ("midi".equalsIgnoreCase(hintString)) || ("kar".equalsIgnoreCase(hintString)))) {
-            Movie localObject = importMovie(localQTHandle, QTUtils.toOSType("Midi"));
-            if (localObject != null) {
-                return maker.fromMovie(localObject);
+            Movie movie = importMovie(qtHandle, QTUtils.toOSType("Midi"));
+            if (movie != null) {
+                return maker.fromMovie(movie);
             }
         }
-        GraphicsImporter localObject = importImage(localDataRef);
-        Movie localMovie = null;
-        if (localObject != null) {
-            localMovie = checkIfMovie(localDataRef);
-            if (localMovie == null) {
-                return maker.fromGraphicsImporter(localObject);
+        GraphicsImporter graphicsImporter = importImage(defaultDataRef);
+        Movie asMovie = null;
+        if (graphicsImporter != null) {
+            asMovie = checkIfMovie(defaultDataRef);
+            if (asMovie == null) {
+                return maker.fromGraphicsImporter(graphicsImporter);
             }
-            return maker.fromMovie(localMovie);
+            return maker.fromMovie(asMovie);
         }
-        localMovie = openAsMovie(localDataRef);
-        if (localMovie != null) {
-            return maker.fromMovie(localMovie);
+        asMovie = openAsMovie(defaultDataRef);
+        if (asMovie != null) {
+            return maker.fromMovie(asMovie);
         }
         throw new QTException(63533);
     }
@@ -413,120 +413,120 @@ public final class QTFactory {
             }
             try {
                 return makeDrawable(new QTFile(url), maker);
-            } catch (IOException localIOException) {
+            } catch (IOException e) {
                 throw new QTException(-43);
             }
         }
-        DataRef localDataRef = new DataRef(url);
-        GraphicsImporter localGraphicsImporter = importImage(localDataRef);
-        Movie localMovie = null;
-        if (localGraphicsImporter != null) {
-            localMovie = checkIfMovie(localDataRef);
-            if (localMovie == null) {
-                return maker.fromGraphicsImporter(localGraphicsImporter);
+        DataRef defaultDataRef = new DataRef(url);
+        GraphicsImporter graphicsImporter = importImage(defaultDataRef);
+        Movie asMovie = null;
+        if (graphicsImporter != null) {
+            asMovie = checkIfMovie(defaultDataRef);
+            if (asMovie == null) {
+                return maker.fromGraphicsImporter(graphicsImporter);
             }
-            return maker.fromMovie(localMovie);
+            return maker.fromMovie(asMovie);
         }
-        localMovie = openAsMovie(localDataRef);
-        if (localMovie != null) {
-            return maker.fromMovie(localMovie);
+        asMovie = openAsMovie(defaultDataRef);
+        if (asMovie != null) {
+            return maker.fromMovie(asMovie);
         }
         throw new QTException(63533);
     }
 
-    private static String getFileExtension(String paramString) {
-        int i = paramString.lastIndexOf('.');
-        return i == -1 ? "" : paramString.substring(i + 1);
+    private static String getFileExtension(String fileName) {
+        int i = fileName.lastIndexOf('.');
+        return i == -1 ? "" : fileName.substring(i + 1);
     }
 
-    private static QTHandle readBytesIntoHandle(InputStream paramInputStream) throws IOException, QTException {
-        byte[] arrayOfByte = new byte[paramInputStream.available()];
-        int i = paramInputStream.read(arrayOfByte);
-        if ((i < 0) || (i != arrayOfByte.length))
+    private static QTHandle readBytesIntoHandle(InputStream inputStream) throws IOException, QTException {
+        byte[] byteArray = new byte[inputStream.available()];
+        int i = inputStream.read(byteArray);
+        if ((i < 0) || (i != byteArray.length))
             throw new IOException("Problem in reading bytes from InputStream");
-        return new QTHandle(arrayOfByte);
+        return new QTHandle(byteArray);
     }
 
-    private static GraphicsImporter openAsImage(QTFile paramQTFile) throws QTException {
+    private static GraphicsImporter openAsImage(QTFile file) throws QTException {
         try {
-            return new GraphicsImporter(paramQTFile);
+            return new GraphicsImporter(file);
         } catch (StdQTException _) {
         }
         return null;
     }
 
-    private static GraphicsImporter openAsImage(DataRef paramDataRef) throws QTException {
+    private static GraphicsImporter openAsImage(DataRef dataRef) throws QTException {
         try {
-            return new GraphicsImporter(paramDataRef);
+            return new GraphicsImporter(dataRef);
         } catch (StdQTException _) {
         }
         return null;
     }
 
-    private static GraphicsImporter importImage(DataRef paramDataRef) throws QTException {
+    private static GraphicsImporter importImage(DataRef dataRef) throws QTException {
         try {
-            return new GraphicsImporter(paramDataRef);
+            return new GraphicsImporter(dataRef);
         } catch (QTException _) {
         }
         return null;
     }
 
-    private static Movie checkIfMovie(QTFile paramQTFile) throws QTException {
-        return checkMovie(Movie.fromFile(OpenMovieFile.asRead(paramQTFile), 0, null));
+    private static Movie checkIfMovie(QTFile qtFile) throws QTException {
+        return checkMovie(Movie.fromFile(OpenMovieFile.asRead(qtFile), 0, null));
     }
 
-    private static Movie checkIfMovie(DataRef paramDataRef) throws QTException {
+    private static Movie checkIfMovie(DataRef defaultDataRef) throws QTException {
         try {
-            return checkMovie(Movie.fromDataRef(paramDataRef, 0));
+            return checkMovie(Movie.fromDataRef(defaultDataRef, 0));
         } catch (QTException _) {
         }
         return null;
     }
 
-    private static Movie checkMovie(Movie paramMovie) throws QTException {
+    private static Movie checkMovie(Movie movie) throws QTException {
         try {
-            if (paramMovie.getTrackCount() > 1)
-                return paramMovie;
-            Track localTrack = paramMovie.getIndTrack(1);
-            Media localMedia = Media.getTrackMedia(localTrack);
-            if (localMedia.getSampleCount() > 1) {
-                paramMovie.setActive(true);
-                return paramMovie;
+            if (movie.getTrackCount() > 1)
+                return movie;
+            Track theTrack = movie.getIndTrack(1);
+            Media trackMedia = Media.getTrackMedia(theTrack);
+            if (trackMedia.getSampleCount() > 1) {
+                movie.setActive(true);
+                return movie;
             }
-            localMedia.disposeQTObject();
-            localTrack.disposeQTObject();
-            paramMovie.disposeQTObject();
+            trackMedia.disposeQTObject();
+            theTrack.disposeQTObject();
+            movie.disposeQTObject();
         } catch (QTException _) {
         }
         return null;
     }
 
-    private static Movie openAsMovie(QTFile paramQTFile) throws QTException {
-        OpenMovieFile localOpenMovieFile = OpenMovieFile.asRead(paramQTFile);
+    private static Movie openAsMovie(QTFile qtFile) throws QTException {
+        OpenMovieFile fileIn = OpenMovieFile.asRead(qtFile);
         try {
-            return Movie.fromFile(localOpenMovieFile);
+            return Movie.fromFile(fileIn);
         } catch (StdQTException _) {
         }
         return null;
     }
 
-    private static Movie openAsMovie(DataRef paramDataRef) throws QTException {
+    private static Movie openAsMovie(DataRef defaultDataRef) throws QTException {
         try {
-            return Movie.fromDataRef(paramDataRef, 1);
+            return Movie.fromDataRef(defaultDataRef, 1);
         } catch (QTException _) {
         }
         return null;
     }
 
-    private static Movie importMovie(QTHandle paramQTHandle, int paramInt) throws QTException {
-        if (paramInt == 0)
+    private static Movie importMovie(QTHandle qtHandle, int subType) throws QTException {
+        if (subType == 0)
             throw new QTException(63533);
         try {
-            MovieImporter localMovieImporter = new MovieImporter(paramInt);
-            Movie localMovie = new Movie(1);
-            localMovie.setDefaultDataRef(new DataRef(new QTHandle()));
-            localMovieImporter.fromHandle(paramQTHandle, localMovie, null, 0, 1);
-            return localMovie;
+            MovieImporter movieImporter = new MovieImporter(subType);
+            Movie theMovie = new Movie(1);
+            theMovie.setDefaultDataRef(new DataRef(new QTHandle()));
+            movieImporter.fromHandle(qtHandle, theMovie, null, 0, 1);
+            return theMovie;
         } catch (QTException _) {
         }
         return null;

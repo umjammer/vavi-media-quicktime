@@ -16,23 +16,23 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
 
     private boolean minimal;
 
-    static AliasHandle fromQTFile(QTFile paramQTFile, boolean paramBoolean) throws QTException {
-        int[] arrayOfInt = { 0 };
-        int i = QTNewAlias(paramQTFile.getFSSpec(true, 768), arrayOfInt, (byte) (paramBoolean ? 1 : 0));
-        QTIOException.checkError(i, paramQTFile.getPath());
-        return new AliasHandle(arrayOfInt[0], null, false, paramBoolean);
+    static AliasHandle fromQTFile(QTFile qtFile, boolean minimal) throws QTException {
+        int[] alias = { 0 };
+        int i = QTNewAlias(qtFile.getFSSpec(true, 768), alias, (byte) (minimal ? 1 : 0));
+        QTIOException.checkError(i, qtFile.getPath());
+        return new AliasHandle(alias[0], null, false, minimal);
     }
 
-    static AliasHandle fromTargetQTFile(QTFile paramQTFile1, QTFile paramQTFile2, boolean paramBoolean) throws QTException {
-        int[] arrayOfInt = { 0 };
+    static AliasHandle fromTargetQTFile(QTFile qtFile1, QTFile qtFile2, boolean minimal) throws QTException {
+        int[] alias = { 0 };
         int i = 0;
-        if (paramQTFile1 != null) {
-            i = NewAlias(paramQTFile1.getFSSpec(true, 768), paramQTFile2.getFSSpec(true, 768), arrayOfInt);
+        if (qtFile1 != null) {
+            i = NewAlias(qtFile1.getFSSpec(true, 768), qtFile2.getFSSpec(true, 768), alias);
         } else {
-            i = NewAlias(null, paramQTFile2.getFSSpec(true, 768), arrayOfInt);
+            i = NewAlias(null, qtFile2.getFSSpec(true, 768), alias);
         }
-        QTIOException.checkError(i, paramQTFile2.getPath());
-        return new AliasHandle(arrayOfInt[0], null, false, paramBoolean);
+        QTIOException.checkError(i, qtFile2.getPath());
+        return new AliasHandle(alias[0], null, false, minimal);
     }
 
     /**
@@ -42,10 +42,10 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
      * @return the AliasHandle
      * @throws quicktime.QTException
      */
-    public static AliasHandle fromDataRef(DataRef paramDataRef) throws QTException {
-        if (paramDataRef.getType() != 1634494835)
+    public static AliasHandle fromDataRef(DataRef nativeRep) throws QTException {
+        if (nativeRep.getType() != 1634494835)
             throw new QTException(-50);
-        return new AliasHandle(QTObject.ID(paramDataRef), paramDataRef, paramDataRef.isLocked(), false);
+        return new AliasHandle(QTObject.ID(nativeRep), nativeRep, nativeRep.isLocked(), false);
     }
 
     /**
@@ -55,18 +55,18 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public static AliasHandle fromArray(byte[] srcArray) throws QTException {
-        AliasHandle localAliasHandle = new AliasHandle(srcArray.length, false);
-        localAliasHandle.copyFromArray(0, srcArray, 0, srcArray.length);
-        return localAliasHandle;
+        AliasHandle aliasHandle = new AliasHandle(srcArray.length, false);
+        aliasHandle.copyFromArray(0, srcArray, 0, srcArray.length);
+        return aliasHandle;
     }
 
-    private AliasHandle(int paramInt, boolean paramBoolean) throws QTException {
-        super(paramInt, paramBoolean);
+    private AliasHandle(int size, boolean clear) throws QTException {
+        super(size, clear);
     }
 
-    private AliasHandle(int paramInt, Object paramObject, boolean paramBoolean1, boolean paramBoolean2) {
-        super(paramInt, paramObject, paramBoolean1);
-        this.minimal = paramBoolean2;
+    private AliasHandle(int nativeRep, Object ref, boolean locked, boolean minimal) {
+        super(nativeRep, ref, locked);
+        this.minimal = minimal;
     }
 
     /**
@@ -87,11 +87,11 @@ public final class AliasHandle extends QTHandleRef implements QuickTimeLib {
         return QTFile.resolveAlias(this);
     }
 
-    private static short QTNewAlias(byte[] paramArrayOfByte, int[] paramArrayOfInt, byte paramByte) {
-        return FileManager.QTNewAlias(paramArrayOfByte, paramArrayOfInt, paramByte);
+    private static short QTNewAlias(byte[] fsspec, int[] alias, byte minimal) {
+        return FileManager.QTNewAlias(fsspec, alias, minimal);
     }
 
-    private static short NewAlias(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return FileManager.NewAlias(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    private static short NewAlias(byte[] fromFile, byte[] target, int[] alias) {
+        return FileManager.NewAlias(fromFile, target, alias);
     }
 }

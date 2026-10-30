@@ -30,8 +30,8 @@ public final class SoundMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    SoundMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    SoundMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -40,8 +40,8 @@ public final class SoundMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
-        return new SoundMediaHandler(paramInt, paramObject);
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
+        return new SoundMediaHandler(nativeRep, ref);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class SoundMedia extends Media {
      * @throws quicktime.QTException
      */
     public SoundDescription getSoundDescription(int index) throws QTException {
-        SoundDescription localSoundDescription = new SoundDescription(0);
-        getNativeSampleDescription(index, localSoundDescription);
-        return localSoundDescription;
+        SoundDescription soundDescription = new SoundDescription(0);
+        getNativeSampleDescription(index, soundDescription);
+        return soundDescription;
     }
 }

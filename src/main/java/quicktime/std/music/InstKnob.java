@@ -26,14 +26,14 @@ public final class InstKnob extends QTByteObject {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(getBytes());
+        in.read(getBytes());
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        paramObjectOutputStream.write(getBytes());
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.write(getBytes());
     }
 
     /**
@@ -52,8 +52,8 @@ public final class InstKnob extends QTByteObject {
         setIntAt(0, EndianOrder.flipNativeToBigEndian32(number));
     }
 
-    void _setNumber(int paramInt) {
-        setIntAt(0, paramInt);
+    void _setNumber(int value) {
+        setIntAt(0, value);
     }
 
     /**
@@ -72,7 +72,7 @@ public final class InstKnob extends QTByteObject {
         setIntAt(4, EndianOrder.flipNativeToBigEndian32(value));
     }
 
-    void _setValue(int paramInt) {
-        setIntAt(4, paramInt);
+    void _setValue(int value) {
+        setIntAt(4, value);
     }
 }

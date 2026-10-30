@@ -61,30 +61,30 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
         setY(y);
     }
 
-    private Vector2D(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private Vector2D(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[8];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        Vector2D localVector2D = (Vector2D) clone();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        Vector2D vector2D = (Vector2D) clone();
         try {
-            EndianOrder.flipNativeToBigEndian(localVector2D, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+            EndianOrder.flipNativeToBigEndian(vector2D, 0, getEndianDescriptor());
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
-        paramObjectOutputStream.write(localVector2D.getBytes());
+        out.write(vector2D.getBytes());
     }
 
     /**
@@ -104,15 +104,15 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
     /**
      * sets the position in the x direction
      */
-    public void setX(float paramFloat) {
-        setFloatAt(0, paramFloat);
+    public void setX(float x) {
+        setFloatAt(0, x);
     }
 
     /**
      * sets the position in the y direction
      */
-    public void setY(float paramFloat) {
-        setFloatAt(4, paramFloat);
+    public void setY(float y) {
+        setFloatAt(4, y);
     }
 
     /**
@@ -124,9 +124,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @return a new scaled vector.
      */
     public Vector2D scale(float scalar) {
-        Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Scale(getBytes(), scalar, localVector2D.getBytes());
-        return localVector2D;
+        Vector2D vector2D = new Vector2D();
+        int i = Q3Vector2D_Scale(getBytes(), scalar, vector2D.getBytes());
+        return vector2D;
     }
 
     /**
@@ -144,9 +144,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @return the normalized form of the vector
      */
     public Vector2D normalize() {
-        Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Normalize(getBytes(), localVector2D.getBytes());
-        return localVector2D;
+        Vector2D vector2D = new Vector2D();
+        int i = Q3Vector2D_Normalize(getBytes(), vector2D.getBytes());
+        return vector2D;
     }
 
     /**
@@ -156,9 +156,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @return the sum of v1 and v2.
      */
     public Vector2D add(Vector2D v2) {
-        Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Add(getBytes(), v2.getBytes(), localVector2D.getBytes());
-        return localVector2D;
+        Vector2D vector2D = new Vector2D();
+        int i = Q3Vector2D_Add(getBytes(), v2.getBytes(), vector2D.getBytes());
+        return vector2D;
     }
 
     /**
@@ -168,9 +168,9 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
      * @return the result of subtracting v2 from this.
      */
     public Vector2D subtract(Vector2D v2) {
-        Vector2D localVector2D = new Vector2D();
-        int i = Q3Vector2D_Subtract(getBytes(), v2.getBytes(), localVector2D.getBytes());
-        return localVector2D;
+        Vector2D vector2D = new Vector2D();
+        int i = Q3Vector2D_Subtract(getBytes(), v2.getBytes(), vector2D.getBytes());
+        return vector2D;
     }
 
     /**
@@ -201,31 +201,31 @@ public final class Vector2D extends QTByteObject implements QuickTimeLib, QuickD
         return new Vector2D(getBytes());
     }
 
-    private static int Q3Vector2D_Scale(byte[] paramArrayOfByte1, float paramFloat, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector2D_Scale(paramArrayOfByte1, paramFloat, paramArrayOfByte2);
+    private static int Q3Vector2D_Scale(byte[] vector2D, float scalar, byte[] result) {
+        return QD3DManager.Q3Vector2D_Scale(vector2D, scalar, result);
     }
 
-    private static float Q3Vector2D_Length(byte[] paramArrayOfByte) {
-        return QD3DManager.Q3Vector2D_Length(paramArrayOfByte);
+    private static float Q3Vector2D_Length(byte[] vector2D) {
+        return QD3DManager.Q3Vector2D_Length(vector2D);
     }
 
-    private static int Q3Vector2D_Normalize(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector2D_Normalize(paramArrayOfByte1, paramArrayOfByte2);
+    private static int Q3Vector2D_Normalize(byte[] vector2D, byte[] result) {
+        return QD3DManager.Q3Vector2D_Normalize(vector2D, result);
     }
 
-    private static int Q3Vector2D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Vector2D_Add(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Vector2D_Add(byte[] v1, byte[] v2, byte[] result) {
+        return QD3DManager.Q3Vector2D_Add(v1, v2, result);
     }
 
-    private static int Q3Vector2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Vector2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Vector2D_Subtract(byte[] v1, byte[] v2, byte[] result) {
+        return QD3DManager.Q3Vector2D_Subtract(v1, v2, result);
     }
 
-    private static float Q3Vector2D_Cross(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector2D_Cross(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Vector2D_Cross(byte[] v1, byte[] v2) {
+        return QD3DManager.Q3Vector2D_Cross(v1, v2);
     }
 
-    private static float Q3Vector2D_Dot(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Vector2D_Dot(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Vector2D_Dot(byte[] v1, byte[] v2) {
+        return QD3DManager.Q3Vector2D_Dot(v1, v2);
     }
 }

@@ -24,5 +24,5 @@ public interface EventDispatcherMaker {
      * Make an EventDispathcer for the specified ListenerController, where
      * the events originate from the interest object.
      */
-    EventDispatcher make(ListenerController paramListenerController, Space paramSpace, Object paramObject);
+    EventDispatcher make(ListenerController listenerController, Space space, Object source);
 }

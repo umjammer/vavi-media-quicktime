@@ -48,12 +48,12 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         return i == 0 ? null : new ComponentIdentifier(i);
     }
 
-    private ComponentIdentifier(int paramInt) throws QTException {
-        this(paramInt, null);
+    private ComponentIdentifier(int nativeRep) throws QTException {
+        this(nativeRep, null);
     }
 
-    protected ComponentIdentifier(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    protected ComponentIdentifier(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -80,12 +80,12 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         return this.cacheInfo;
     }
 
-    private static String getPStringFrom(int paramInt) {
-        int i = getByteFromHandle(paramInt, 0);
+    private static String getPStringFrom(int h) {
+        int i = getByteFromHandle(h, 0);
         int j = 1;
         if (i > 0) {
             byte[] arrayOfByte = new byte[i];
-            for (int k = 1; k <= arrayOfByte.length; k++) arrayOfByte[(k - 1)] = getByteFromHandle(paramInt, k);
+            for (int k = 1; k <= arrayOfByte.length; k++) arrayOfByte[(k - 1)] = getByteFromHandle(h, k);
             return new String(arrayOfByte);
         }
         return null;
@@ -108,31 +108,31 @@ public class ComponentIdentifier extends QTObject implements QuickTimeLib {
         return str;
     }
 
-    private static int FindNextComponent(int paramInt, byte[] paramArrayOfByte) {
-        return ComponentManager.FindNextComponent(paramInt, paramArrayOfByte);
+    private static int FindNextComponent(int previous, byte[] desc) {
+        return ComponentManager.FindNextComponent(previous, desc);
     }
 
-    private static short GetComponentInfo(int paramInt1, byte[] paramArrayOfByte, int paramInt2, int paramInt3, int paramInt4) {
-        return ComponentManager.GetComponentInfo(paramInt1, paramArrayOfByte, paramInt2, paramInt3, paramInt4);
+    private static short GetComponentInfo(int component, byte[] desc, int nameHandle, int infoHandle, int iconHandle) {
+        return ComponentManager.GetComponentInfo(component, desc, nameHandle, infoHandle, iconHandle);
     }
 
-    private static int GetHandleSize(int paramInt) {
-        return MemoryManager.GetHandleSize(paramInt);
+    private static int GetHandleSize(int h) {
+        return MemoryManager.GetHandleSize(h);
     }
 
-    private static int NewHandle(int paramInt) {
-        return MemoryManager.NewHandle(paramInt);
+    private static int NewHandle(int size) {
+        return MemoryManager.NewHandle(size);
     }
 
     private static int NewEmptyHandle() {
         return MemoryManager.NewEmptyHandle();
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 
-    private static byte getByteFromHandle(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromHandle(paramInt1, paramInt2);
+    private static byte getByteFromHandle(int h, int offset) {
+        return MemoryManager.getByteFromHandle(h, offset);
     }
 }

@@ -58,8 +58,8 @@ public class QTTransition extends QTFilter {
      * Creates a QTTransition with default settings of a time-specified duration of 2000 msecs,
      * an effect fps of 20, a redraw setting as kMultiFrame and the specified initialSize.
      */
-    public QTTransition(Dimension paramDimension) throws QTException {
-        this(new QDDimension(paramDimension.width, paramDimension.height));
+    public QTTransition(Dimension dimension) throws QTException {
+        this(new QDDimension(dimension.width, dimension.height));
     }
 
     /**
@@ -68,8 +68,8 @@ public class QTTransition extends QTFilter {
      * Creates a QTTransition with default settings of a time-specified duration of 2000 msecs,
      * an effect fps of 20, a redraw setting as kMultiFrame and the specified initialSize.
      */
-    public QTTransition(QDDimension paramQDDimension) throws QTException {
-        super(2, paramQDDimension);
+    public QTTransition(QDDimension d) throws QTException {
+        super(2, d);
         setFramesPerSecond(20);
         this.currentFrame = 0;
     }
@@ -109,18 +109,18 @@ public class QTTransition extends QTFilter {
             return;
         }
         this.effectSample = effectParams;
-        Atom localAtom1 = Atom.kParentIsContainer;
-        int i = this.effectSample.countChildrenOfType(localAtom1, 1936876320);
+        Atom parentAtom = Atom.kParentIsContainer;
+        int i = this.effectSample.countChildrenOfType(parentAtom, 1936876320);
         for (int j = 0; j < i; j++) {
-            Atom localObject = this.effectSample.findChildByIndex_Atom(localAtom1, 1936876320, 1);
-            this.effectSample.removeAtom(localObject);
+            Atom atom = this.effectSample.findChildByIndex_Atom(parentAtom, 1936876320, 1);
+            this.effectSample.removeAtom(atom);
         }
-        this.effectSample.insertChild(localAtom1, 1936876320, 1, 0, EndianOrder.flipNativeToBigEndian32(this.srcA));
-        this.effectSample.insertChild(localAtom1, 1936876320, 2, 0, EndianOrder.flipNativeToBigEndian32(this.srcB));
-        Atom localAtom2 = this.effectSample.findChildByID_Atom(localAtom1, 2003329396, 1);
+        this.effectSample.insertChild(parentAtom, 1936876320, 1, 0, EndianOrder.flipNativeToBigEndian32(this.srcA));
+        this.effectSample.insertChild(parentAtom, 1936876320, 2, 0, EndianOrder.flipNativeToBigEndian32(this.srcB));
+        Atom atom2 = this.effectSample.findChildByID_Atom(parentAtom, 2003329396, 1);
         this.effectSample.lock();
-        AtomData localObject = this.effectSample.getAtomData(localAtom2);
-        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(localObject.getInt(0)));
+        AtomData atomData = this.effectSample.getAtomData(atom2);
+        this.effectDesc.setCType(EndianOrder.flipBigEndianToNative32(atomData.getInt(0)));
         this.effectSamplePtr = RawEncodedImage.fromQTPointer(this.effectSample.toQTPointer());
         setUpSequence();
     }
@@ -129,11 +129,11 @@ public class QTTransition extends QTFilter {
      * @deprecated
      * Sets the destination image of the Transition - the image that the transition will transition to. * @deprecated since QTJava 6.1
      */
-    public void setDestinationImage(ImageSpec paramImageSpec) throws QTException {
-        if (paramImageSpec != null) {
+    public void setDestinationImage(ImageSpec destinationImage) throws QTException {
+        if (destinationImage != null) {
             if (this.drawDestListener != null)
                 this.drawDestListener.dispose();
-            this.drawDestListener = new QTFilter.ImageContainer(paramImageSpec);
+            this.drawDestListener = new QTFilter.ImageContainer(destinationImage);
         } else {
             this.drawDestListener.dispose();
             this.drawDestListener = null;
@@ -189,9 +189,9 @@ public class QTTransition extends QTFilter {
      * This swaps the source and destination images.
      */
     public void swapImages() throws QTException {
-        QTFilter.ImageContainer localImageContainer = this.drawSourceListener;
+        QTFilter.ImageContainer drawDestListener = this.drawSourceListener;
         this.drawSourceListener = this.drawDestListener;
-        this.drawDestListener = localImageContainer;
+        this.drawDestListener = drawDestListener;
         this.drawSourceListener.prepareSequence(this.srcA);
         this.drawDestListener.prepareSequence(this.srcB);
         redraw(null);
@@ -201,8 +201,8 @@ public class QTTransition extends QTFilter {
      * @deprecated
      * Sets the maximum number of frames that an effect can run for.* @deprecated since QTJava 6.1
      */
-    public synchronized void setFrames(int paramInt) throws QTException {
-        this.mNumberOfFrames = (Math.max(paramInt, 1));
+    public synchronized void setFrames(int frames) throws QTException {
+        this.mNumberOfFrames = (Math.max(frames, 1));
         this.mEffectDuration = ((int) (this.mNumberOfFrames / getFramesPerSecond() * 1000.0F + 0.5D));
         if (this.mEffectDuration < 1)
             this.mEffectDuration = 1;
@@ -218,8 +218,8 @@ public class QTTransition extends QTFilter {
      * @since QTJava 6.1
      * Sets the maximum frames per second that the effect will attempt to render
      */
-    public void setFramesPerSecond(int paramInt) throws QTException {
-        this.mNumberOfFrames = ((int) (this.mEffectDuration / 1000.0F * paramInt + 0.5F));
+    public void setFramesPerSecond(int framesPerSecond) throws QTException {
+        this.mNumberOfFrames = ((int) (this.mEffectDuration / 1000.0F * framesPerSecond + 0.5F));
         this.ft.setScale(this.mNumberOfFrames);
         this.ft.setDuration(this.mNumberOfFrames);
         this.ft.setVirtualDuration(this.mNumberOfFrames);
@@ -227,7 +227,7 @@ public class QTTransition extends QTFilter {
             this.currentFrame = this.mNumberOfFrames;
         }
         this.ft.setFrameNumber(this.currentFrame);
-        this.fps = paramInt;
+        this.fps = framesPerSecond;
     }
 
     /**
@@ -314,9 +314,9 @@ public class QTTransition extends QTFilter {
         }
         int i = this.currentFrame;
         this.currentFrame = 1;
-        Thread localThread = Thread.currentThread();
-        int j = localThread.getPriority();
-        localThread.setPriority(10);
+        Thread thread = Thread.currentThread();
+        int j = thread.getPriority();
+        thread.setPriority(10);
         long l1 = System.currentTimeMillis();
         if (this.doProfile) {
             this.framesRendered = 0;
@@ -359,7 +359,7 @@ public class QTTransition extends QTFilter {
                         } else {
                             try {
                                 Thread.sleep((int) f4);
-                            } catch (InterruptedException localInterruptedException) {
+                            } catch (InterruptedException e) {
                             }
                         }
                     }
@@ -378,7 +378,7 @@ public class QTTransition extends QTFilter {
             }
             this.inEffect = false;
         } finally {
-            localThread.setPriority(j);
+            thread.setPriority(j);
             this.currentFrame = i;
             this.inEffect = false;
         }

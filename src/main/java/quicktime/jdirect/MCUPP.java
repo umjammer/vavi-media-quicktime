@@ -5,7 +5,7 @@ import com.apple.mrj.jdirect.MethodClosureUPP;
 
 
 class MCUPP extends MethodClosureUPP {
-    MCUPP(Object paramObject, String paramString1, String paramString2, int paramInt) {
-        super(paramObject, paramString1, paramString2, paramInt);
+    MCUPP(Object target, String methodName, String descriptor, int procInfo) {
+        super(target, methodName, descriptor, procInfo);
     }
 }

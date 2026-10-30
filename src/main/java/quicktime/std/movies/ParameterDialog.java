@@ -38,16 +38,16 @@ public final class ParameterDialog implements QuickTimeLib {
 
     private int dialog;
 
-    private ParameterDialog(EffectsList paramEffectsList, AtomContainer paramAtomContainer, int paramInt) throws QTException {
-        int[] arrayOfInt = { 0 };
-        EffectsList localEffectsList = paramEffectsList;
-        AtomContainer localAtomContainer = paramAtomContainer;
-        int i = paramInt;
+    private ParameterDialog(EffectsList effectList, AtomContainer parameters, int dialogOptions) throws QTException {
+        int[] createdDialog = { 0 };
+        EffectsList effectsList = effectList;
+        AtomContainer atomContainer = parameters;
+        int i = dialogOptions;
         if (QTSession.isCurrentOS(4)) {
             GetGWorld(savedPort, savedDevice);
             res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
                 synchronized (QTNative.globalsLock) {
-                    res = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(localEffectsList), QTObject.ID(localAtomContainer), i, arrayOfInt);
+                    res = ParameterDialog.QTCreateStandardParameterDialog(QTObject.ID(effectsList), QTObject.ID(atomContainer), i, createdDialog);
                     ParameterDialog.SetGWorld(ParameterDialog.savedPort[0], ParameterDialog.savedDevice[0]);
                 }
                 return ParameterDialog.res;
@@ -57,7 +57,7 @@ public final class ParameterDialog implements QuickTimeLib {
             synchronized (QTNative.globalsLock) {
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                     GetGWorld(savedPort, savedDevice);
-                res = QTCreateStandardParameterDialog(QTObject.ID(paramEffectsList), QTObject.ID(paramAtomContainer), paramInt, arrayOfInt);
+                res = QTCreateStandardParameterDialog(QTObject.ID(effectList), QTObject.ID(parameters), dialogOptions, createdDialog);
                 if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
                     SetGWorld(savedPort[0], savedDevice[0]);
                 if (res != 0) {
@@ -67,7 +67,7 @@ public final class ParameterDialog implements QuickTimeLib {
                 }
             }
         }
-        this.dialog = arrayOfInt[0];
+        this.dialog = createdDialog[0];
     }
 
     /**
@@ -146,14 +146,14 @@ public final class ParameterDialog implements QuickTimeLib {
      * @throws quicktime.QTException throws on userCanceledErr or if an error occurred
      */
     public static AtomContainer showParameterDialog(EffectsList effectsList, int dialogOptions, AtomContainer parameters, String title, Pict[] pictArray) throws QTException {
-        AtomContainer localAtomContainer;
+        AtomContainer atomContainer;
         if (parameters == null) {
-            localAtomContainer = new AtomContainer();
+            atomContainer = new AtomContainer();
         } else {
-            localAtomContainer = parameters.copyAtom(Atom.kParentIsContainer);
+            atomContainer = parameters.copyAtom(Atom.kParentIsContainer);
         }
         if (QTSession.isCurrentOS(4)) {
-            AtomContainer x = localAtomContainer;
+            AtomContainer x = atomContainer;
             int i = dialogOptions;
             ParameterDialog dialog = new ParameterDialog(effectsList, x, i);
             res = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
@@ -171,12 +171,12 @@ public final class ParameterDialog implements QuickTimeLib {
                 return x.copyAtom(Atom.kParentIsContainer);
         } else {
             synchronized (QTNative.globalsLock) {
-                ParameterDialog dialog = new ParameterDialog(effectsList, localAtomContainer, dialogOptions);
+                ParameterDialog dialog = new ParameterDialog(effectsList, atomContainer, dialogOptions);
                 dialog.setDialogTitle(title);
                 dialog.setPreviewPictures(pictArray);
                 res = dialog.runParameterDialog();
                 if (res == 56550) {
-                    return localAtomContainer.copyAtom(Atom.kParentIsContainer);
+                    return atomContainer.copyAtom(Atom.kParentIsContainer);
                 }
             }
         }
@@ -193,25 +193,25 @@ public final class ParameterDialog implements QuickTimeLib {
      * @throws quicktime.QTException
      */
     public static int getEffectsSpeed(AtomContainer parameters) throws QTException {
-        int[] arrayOfInt = { 0 };
-        StdQTException.checkError(QTGetEffectSpeed(QTObject.ID(parameters), arrayOfInt));
-        return arrayOfInt[0];
+        int[] pFPS = { 0 };
+        StdQTException.checkError(QTGetEffectSpeed(QTObject.ID(parameters), pFPS));
+        return pFPS[0];
     }
 
-    private void setDialogTitle(String paramString) {
-        if (paramString != null) {
-            QTStandardParameterDialogDoAction(this.dialog, 8, QTUtils.String2PString(paramString, 255));
+    private void setDialogTitle(String dialogTitle) {
+        if (dialogTitle != null) {
+            QTStandardParameterDialogDoAction(this.dialog, 8, QTUtils.String2PString(dialogTitle, 255));
         }
     }
 
-    private void setPreviewPictures(Pict[] paramArrayOfPict) {
-        if (paramArrayOfPict != null) {
-            int[] arrayOfInt = new int[2];
-            for (int i = 0; i < paramArrayOfPict.length; i++) {
-                if (paramArrayOfPict[i] != null) {
-                    arrayOfInt[0] = (i + 1);
-                    arrayOfInt[1] = QTObject.ID(paramArrayOfPict[i]);
-                    QTStandardParameterDialogDoAction(this.dialog, 6, arrayOfInt);
+    private void setPreviewPictures(Pict[] previewPictures) {
+        if (previewPictures != null) {
+            int[] params = new int[2];
+            for (int i = 0; i < previewPictures.length; i++) {
+                if (previewPictures[i] != null) {
+                    params[0] = (i + 1);
+                    params[1] = QTObject.ID(previewPictures[i]);
+                    QTStandardParameterDialogDoAction(this.dialog, 6, params);
                 }
             }
         }
@@ -219,13 +219,13 @@ public final class ParameterDialog implements QuickTimeLib {
 
     private int runParameterDialog() throws QTException {
         int i = -128;
-        byte[] arrayOfByte = new byte[16];
+        byte[] theEvent = new byte[16];
         int j = 1;
         int k = 0;
-        Vector<Integer> localVector = null;
+        Vector<Integer> vector = null;
         do {
-            GetNextEvent((short) -1, arrayOfByte);
-            i = QTIsStandardParameterDialogEvent(arrayOfByte, this.dialog);
+            GetNextEvent((short) -1, theEvent);
+            i = QTIsStandardParameterDialogEvent(theEvent, this.dialog);
             switch(i) {
                 case -8986:
                     j = 0;
@@ -236,10 +236,10 @@ public final class ParameterDialog implements QuickTimeLib {
                 case 0:
                     break;
                 case -2053:
-                    short s = (short) ((arrayOfByte[0] & 0xFF) << 8 | arrayOfByte[1] & 0xFF);
+                    short s = (short) ((theEvent[0] & 0xFF) << 8 | theEvent[1] & 0xFF);
                     s = EndianOrder.flipNativeToBigEndian16(s);
                     if (s == 6) {
-                        int m = (arrayOfByte[2] & 0xFF) << 24 | (arrayOfByte[3] & 0xFF) << 16 | (arrayOfByte[4] & 0xFF) << 8 | arrayOfByte[5] & 0xFF;
+                        int m = (theEvent[2] & 0xFF) << 24 | (theEvent[3] & 0xFF) << 16 | (theEvent[4] & 0xFF) << 8 | theEvent[5] & 0xFF;
                         m = EndianOrder.flipNativeToBigEndian32(m);
                         if (m != 0) {
                             if (k == 0)
@@ -247,14 +247,14 @@ public final class ParameterDialog implements QuickTimeLib {
                             if (k != m) {
                                 BeginUpdate(m);
                                 EndUpdate(m);
-                                if (((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(2))) && (localVector == null)) {
-                                    localVector = new Vector<>();
+                                if (((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(2))) && (vector == null)) {
+                                    vector = new Vector<>();
                                 }
-                                if (localVector != null) {
+                                if (vector != null) {
                                 }
                                 Integer localInteger = m;
-                                if (!localVector.contains(localInteger)) {
-                                    localVector.addElement(localInteger);
+                                if (!vector.contains(localInteger)) {
+                                    vector.addElement(localInteger);
                                 }
                             }
                         }
@@ -262,11 +262,11 @@ public final class ParameterDialog implements QuickTimeLib {
                     break;
             }
         } while (j != 0);
-        if (localVector != null) {
-            for (Enumeration<Integer> e = localVector.elements(); e.hasMoreElements(); ) {
+        if (vector != null) {
+            for (Enumeration<Integer> e = vector.elements(); e.hasMoreElements(); ) {
                 invalWindow(e.nextElement());
             }
-            localVector.removeAllElements();
+            vector.removeAllElements();
         }
         logger.log(Level.DEBUG, "QTDismissStandardParameterDialog " + i);
         QTDismissStandardParameterDialog(this.dialog);
@@ -276,75 +276,75 @@ public final class ParameterDialog implements QuickTimeLib {
         return i;
     }
 
-    private static void invalWindow(int paramInt) {
-        short[] arrayOfShort = new short[4];
-        arrayOfShort[0] = (arrayOfShort[1] = 0);
-        arrayOfShort[2] = (arrayOfShort[3] = 4095);
+    private static void invalWindow(int port) {
+        short[] rect = new short[4];
+        rect[0] = (rect[1] = 0);
+        rect[2] = (rect[3] = 4095);
         if (QTSession.isCurrentOS(1)) {
-            SetPort(paramInt);
-            InvalRect(arrayOfShort);
+            SetPort(port);
+            InvalRect(rect);
         } else if (QTSession.isCurrentOS(2)) {
-            MacSetPort(paramInt);
-            InvalRect(arrayOfShort);
+            MacSetPort(port);
+            InvalRect(rect);
         }
     }
 
     private ParameterDialog() {
     }
 
-    private static short QTCreateStandardParameterDialog(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return EffectsManager.QTCreateStandardParameterDialog(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short QTCreateStandardParameterDialog(int effectList, int parameters, int dialogOptions, int[] createdDialog) {
+        return EffectsManager.QTCreateStandardParameterDialog(effectList, parameters, dialogOptions, createdDialog);
     }
 
-    private static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return EffectsManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTStandardParameterDialogDoAction(int createdDialog, int action, int[] params) {
+        return EffectsManager.QTStandardParameterDialogDoAction(createdDialog, action, params);
     }
 
-    private static short QTStandardParameterDialogDoAction(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return EffectsManager.QTStandardParameterDialogDoAction(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTStandardParameterDialogDoAction(int createdDialog, int action, byte[] params) {
+        return EffectsManager.QTStandardParameterDialogDoAction(createdDialog, action, params);
     }
 
-    private static short QTIsStandardParameterDialogEvent(byte[] paramArrayOfByte, int paramInt) {
-        return EffectsManager.QTIsStandardParameterDialogEvent(paramArrayOfByte, paramInt);
+    private static short QTIsStandardParameterDialogEvent(byte[] pEvent, int createdDialog) {
+        return EffectsManager.QTIsStandardParameterDialogEvent(pEvent, createdDialog);
     }
 
-    private static short QTDismissStandardParameterDialog(int paramInt) {
-        return EffectsManager.QTDismissStandardParameterDialog(paramInt);
+    private static short QTDismissStandardParameterDialog(int createdDialog) {
+        return EffectsManager.QTDismissStandardParameterDialog(createdDialog);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 
-    private static short QTGetEffectSpeed(int paramInt, int[] paramArrayOfInt) {
-        return EffectsManager.QTGetEffectSpeed(paramInt, paramArrayOfInt);
+    private static short QTGetEffectSpeed(int parameters, int[] pFPS) {
+        return EffectsManager.QTGetEffectSpeed(parameters, pFPS);
     }
 
-    private static boolean GetNextEvent(short paramShort, byte[] paramArrayOfByte) {
-        return PlatformManager.GetNextEvent(paramShort, paramArrayOfByte);
+    private static boolean GetNextEvent(short eventMask, byte[] theEvent) {
+        return PlatformManager.GetNextEvent(eventMask, theEvent);
     }
 
-    private static void BeginUpdate(int paramInt) {
-        QuickDrawManager.BeginUpdate(paramInt);
+    private static void BeginUpdate(int window) {
+        QuickDrawManager.BeginUpdate(window);
     }
 
-    private static void EndUpdate(int paramInt) {
-        QuickDrawManager.EndUpdate(paramInt);
+    private static void EndUpdate(int window) {
+        QuickDrawManager.EndUpdate(window);
     }
 
-    private static void SetPort(int paramInt) {
-        QuickDrawManager.SetPort(paramInt);
+    private static void SetPort(int port) {
+        QuickDrawManager.SetPort(port);
     }
 
-    private static void MacSetPort(int paramInt) {
-        QuickDrawManager.MacSetPort(paramInt);
+    private static void MacSetPort(int port) {
+        QuickDrawManager.MacSetPort(port);
     }
 
-    private static void InvalRect(short[] paramArrayOfShort) {
-        QuickDrawManager.InvalRect(paramArrayOfShort);
+    private static void InvalRect(short[] rect) {
+        QuickDrawManager.InvalRect(rect);
     }
 }

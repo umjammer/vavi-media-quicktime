@@ -39,12 +39,12 @@ public final class Presentation extends QTObject implements QTStreamingLib {
         }
     }
 
-    Presentation(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    Presentation(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
-    private Presentation(int paramInt) {
-        super(paramInt, null);
+    private Presentation(int nativeRep) {
+        super(nativeRep, null);
     }
 
     /**
@@ -55,10 +55,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
         super(allocate(params));
     }
 
-    private static int allocate(NewPresentationParams paramNewPresentationParams) throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSNewPresentation(QTObject.ID(paramNewPresentationParams), arrayOfInt));
-        return arrayOfInt[0];
+    private static int allocate(NewPresentationParams newPresentationParams) throws QTException {
+        int[] outPresentation = { 0 };
+        QTException.checkError(QTSNewPresentation(QTObject.ID(newPresentationParams), outPresentation));
+        return outPresentation[0];
     }
 
     /**
@@ -69,30 +69,30 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public static Presentation fromData(int dataType, QTPointerRef data, PresParams params) throws QTException {
-        long[] arrayOfLong = { data.getSize() };
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSNewPresentationFromData(dataType, QTObject.ID(data), arrayOfLong, QTObject.ID(params), arrayOfInt));
-        return new Presentation(arrayOfInt[0]);
+        long[] dataLength = { data.getSize() };
+        int[] outPresentation = { 0 };
+        QTException.checkError(QTSNewPresentationFromData(dataType, QTObject.ID(data), dataLength, QTObject.ID(params), outPresentation));
+        return new Presentation(outPresentation[0]);
     }
 
     /**
      * (Not in carbon yet)
      * @see "QuickTime::QTSNewPresentationFromFile"
      */
-    public static Presentation fromFile(QTFile paramQTFile, PresParams paramPresParams) throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSNewPresentationFromFile(paramQTFile.getFSSpec(true, 256), QTObject.ID(paramPresParams), arrayOfInt));
-        return new Presentation(arrayOfInt[0]);
+    public static Presentation fromFile(QTFile qtFile, PresParams presParams) throws QTException {
+        int[] outPresentation = { 0 };
+        QTException.checkError(QTSNewPresentationFromFile(qtFile.getFSSpec(true, 256), QTObject.ID(presParams), outPresentation));
+        return new Presentation(outPresentation[0]);
     }
 
     /**
      * (Not in carbon yet)
      * @see "QuickTime::QTSNewPresentationFromDataRef"
      */
-    public static Presentation fromDataRef(DataRef paramDataRef, PresParams paramPresParams) throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSNewPresentationFromDataRef(QTObject.ID(paramDataRef), paramDataRef.getType(), QTObject.ID(paramPresParams), arrayOfInt));
-        return new Presentation(arrayOfInt[0]);
+    public static Presentation fromDataRef(DataRef dataRef, PresParams presParams) throws QTException {
+        int[] outPresentation = { 0 };
+        QTException.checkError(QTSNewPresentationFromDataRef(QTObject.ID(dataRef), dataRef.getType(), QTObject.ID(presParams), outPresentation));
+        return new Presentation(outPresentation[0]);
     }
 
     /**
@@ -118,8 +118,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
     /**
      * This method sets the flags associated with the presentation
      */
-    public void setFlags(int paramInt1, int paramInt2) throws QTException {
-        QTException.checkError(QTSPresSetFlags(_ID(), paramInt1, paramInt2));
+    public void setFlags(int flags, int flagsMask) throws QTException {
+        QTException.checkError(QTSPresSetFlags(_ID(), flags, flagsMask));
     }
 
     /**
@@ -129,9 +129,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int getFlags() throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetFlags(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] flags = { 0 };
+        QTException.checkError(QTSPresGetFlags(_ID(), flags));
+        return flags[0];
     }
 
     /**
@@ -150,38 +150,38 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int getTimeScale() throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetTimeScale(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] timeScale = { 0 };
+        QTException.checkError(QTSPresGetTimeScale(_ID(), timeScale));
+        return timeScale[0];
     }
 
-    private void setInfo(int paramInt, byte[] paramArrayOfByte) throws QTException {
-        QTException.checkError(QTSPresSetInfo(_ID(), 0, paramInt, paramArrayOfByte));
+    private void setInfo(int selector, byte[] param) throws QTException {
+        QTException.checkError(QTSPresSetInfo(_ID(), 0, selector, param));
     }
 
-    private void setInfo(Stream paramStream, int paramInt, byte[] paramArrayOfByte) throws QTException {
-        QTException.checkError(QTSPresSetInfo(_ID(), QTObject.ID(paramStream), paramInt, paramArrayOfByte));
+    private void setInfo(Stream stream, int selector, byte[] param) throws QTException {
+        QTException.checkError(QTSPresSetInfo(_ID(), QTObject.ID(stream), selector, param));
     }
 
-    private byte[] getInfo(int paramInt) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresGetInfo(_ID(), 0, paramInt, arrayOfByte));
-        return arrayOfByte;
+    private byte[] getInfo(int selector) throws QTException {
+        byte[] param = { 0 };
+        QTException.checkError(QTSPresGetInfo(_ID(), 0, selector, param));
+        return param;
     }
 
-    private byte[] getInfo(Stream paramStream, int paramInt) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresGetInfo(_ID(), QTObject.ID(paramStream), paramInt, arrayOfByte));
-        return arrayOfByte;
+    private byte[] getInfo(Stream stream, int selector) throws QTException {
+        byte[] param = { 0 };
+        QTException.checkError(QTSPresGetInfo(_ID(), QTObject.ID(stream), selector, param));
+        return param;
     }
 
     /**
      * This method retreives the total data rate for all streams
      */
     public int getTotalDataRate() throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetInfo(_ID(), 0, 1685222516, arrayOfInt));
-        return arrayOfInt[0];
+        int[] param = { 0 };
+        QTException.checkError(QTSPresGetInfo(_ID(), 0, 1685222516, param));
+        return param[0];
     }
 
     /**
@@ -191,10 +191,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @see " QuickTime::QTSPresGetInfo"
      * @throws quicktime.QTException
      */
-    public boolean hasCharacteristic(Stream paramStream, int characteristic) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresHasCharacteristic(_ID(), QTObject.ID(paramStream), characteristic, arrayOfByte));
-        return arrayOfByte[0] != 0;
+    public boolean hasCharacteristic(Stream stream, int characteristic) throws QTException {
+        byte[] hasIt = { 0 };
+        QTException.checkError(QTSPresHasCharacteristic(_ID(), QTObject.ID(stream), characteristic, hasIt));
+        return hasIt[0] != 0;
     }
 
     /**
@@ -270,8 +270,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public void preroll(Stream s, long timeValue, float rate, int flags) throws QTException {
-        long[] arrayOfLong = { timeValue };
-        QTException.checkError(QTSPresPreroll64(_ID(), QTObject.ID(s), arrayOfLong, QTUtils.X2Fix(rate), flags));
+        long[] preferredTime = { timeValue };
+        QTException.checkError(QTSPresPreroll64(_ID(), QTObject.ID(s), preferredTime, QTUtils.X2Fix(rate), flags));
     }
 
     /**
@@ -404,9 +404,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public float getPreferredRate() throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetPreferredRate(_ID(), arrayOfInt));
-        return QTUtils.Fix2X(arrayOfInt[0]);
+        int[] preferredRate = { 0 };
+        QTException.checkError(QTSPresGetPreferredRate(_ID(), preferredRate));
+        return QTUtils.Fix2X(preferredRate[0]);
     }
 
     /**
@@ -428,9 +428,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public boolean getEnable(Stream s) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresGetEnable(_ID(), QTObject.ID(s), arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] enableMode = { 0 };
+        QTException.checkError(QTSPresGetEnable(_ID(), QTObject.ID(s), enableMode));
+        return enableMode[0] != 0;
     }
 
     /**
@@ -452,9 +452,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public boolean getPresenting(Stream s) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        QTException.checkError(QTSPresGetPresenting(_ID(), QTObject.ID(s), arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] presenting = { 0 };
+        QTException.checkError(QTSPresGetPresenting(_ID(), QTObject.ID(s), presenting));
+        return presenting[0] != 0;
     }
 
     /**
@@ -479,10 +479,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public long getActiveSegmentStart(Stream s) throws QTException {
-        long[] arrayOfLong1 = { 0L };
-        long[] arrayOfLong2 = { 0L };
-        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(s), arrayOfLong1, arrayOfLong2));
-        return arrayOfLong1[0];
+        long[] startTime = { 0L };
+        long[] duration = { 0L };
+        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(s), startTime, duration));
+        return startTime[0];
     }
 
     /**
@@ -493,10 +493,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public long getActiveSegmentDuration(Stream s) throws QTException {
-        long[] arrayOfLong1 = { 0L };
-        long[] arrayOfLong2 = { 0L };
-        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(s), arrayOfLong1, arrayOfLong2));
-        return arrayOfLong2[0];
+        long[] startTime = { 0L };
+        long[] duration = { 0L };
+        QTException.checkError(QTSPresGetActiveSegment(_ID(), QTObject.ID(s), startTime, duration));
+        return duration[0];
     }
 
     /**
@@ -519,9 +519,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int getPlayHints(Stream s) throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetPlayHints(_ID(), QTObject.ID(s), arrayOfInt));
-        return arrayOfInt[0];
+        int[] playHints = { 0 };
+        QTException.checkError(QTSPresGetPlayHints(_ID(), QTObject.ID(s), playHints));
+        return playHints[0];
     }
 
     /**
@@ -551,8 +551,8 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * This method sets the GWorld of the presenter (uses the main device as the default GDevice)
      * @see "QuickTime::setGWorld"
      */
-    public void setGWorld(QDGraphics paramQDGraphics) throws QTException {
-        QTException.checkError(QTSPresSetGWorld(_ID(), 0, QTObject.ID(paramQDGraphics), QTObject.ID(GDevice.getMain())));
+    public void setGWorld(QDGraphics gWorld) throws QTException {
+        QTException.checkError(QTSPresSetGWorld(_ID(), 0, QTObject.ID(gWorld), QTObject.ID(GDevice.getMain())));
     }
 
     /**
@@ -615,9 +615,9 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public Matrix getMatrix(Stream s) throws QTException {
-        Matrix localMatrix = new Matrix();
-        QTException.checkError(QTSPresSetMatrix(_ID(), QTObject.ID(s), localMatrix.getBytes()));
-        return localMatrix;
+        Matrix matrix = new Matrix();
+        QTException.checkError(QTSPresSetMatrix(_ID(), QTObject.ID(s), matrix.getBytes()));
+        return matrix;
     }
 
     /**
@@ -651,10 +651,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public QDDimension getDimensions(Stream s) throws QTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        QTException.checkError(QTSPresGetDimensions(_ID(), QTObject.ID(s), arrayOfInt1, arrayOfInt2));
-        return new QDDimension(QTUtils.Fix2X(arrayOfInt1[0]), QTUtils.Fix2X(arrayOfInt2[0]));
+        int[] width = { 0 };
+        int[] height = { 0 };
+        QTException.checkError(QTSPresGetDimensions(_ID(), QTObject.ID(s), width, height));
+        return new QDDimension(QTUtils.Fix2X(width[0]), QTUtils.Fix2X(height[0]));
     }
 
     /**
@@ -677,10 +677,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public GraphicsMode getGraphicsMode(Stream s) throws QTException {
-        byte[] arrayOfByte = { 0 };
-        short[] arrayOfShort = { 0 };
-        QTException.checkError(QTSPresGetGraphicsMode(_ID(), QTObject.ID(s), arrayOfShort, arrayOfByte));
-        return new GraphicsMode(arrayOfShort[0], QDColor.fromArray(arrayOfByte, 6));
+        byte[] opColor = { 0 };
+        short[] mode = { 0 };
+        QTException.checkError(QTSPresGetGraphicsMode(_ID(), QTObject.ID(s), mode, opColor));
+        return new GraphicsMode(mode[0], QDColor.fromArray(opColor, 6));
     }
 
     /**
@@ -713,10 +713,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int getRightVolume(Stream s) throws QTException {
-        short[] arrayOfShort1 = { 0 };
-        short[] arrayOfShort2 = { 0 };
-        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(s), arrayOfShort1, arrayOfShort2));
-        return arrayOfShort2[0];
+        short[] leftVolume = { 0 };
+        short[] rightVolume = { 0 };
+        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(s), leftVolume, rightVolume));
+        return rightVolume[0];
     }
 
     /**
@@ -727,10 +727,10 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public int getLeftVolume(Stream s) throws QTException {
-        short[] arrayOfShort1 = { 0 };
-        short[] arrayOfShort2 = { 0 };
-        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(s), arrayOfShort1, arrayOfShort2));
-        return arrayOfShort1[0];
+        short[] leftVolume = { 0 };
+        short[] rightVolume = { 0 };
+        QTException.checkError(QTSPresGetVolumes(_ID(), QTObject.ID(s), leftVolume, rightVolume));
+        return leftVolume[0];
     }
 
     /**
@@ -818,212 +818,212 @@ public final class Presentation extends QTObject implements QTStreamingLib {
      * @throws quicktime.QTException
      */
     public Sourcer getIndSourcer(Stream s, int index) throws QTException {
-        int[] arrayOfInt = { 0 };
-        QTException.checkError(QTSPresGetIndSourcer(_ID(), QTObject.ID(s), index, arrayOfInt));
-        return new Sourcer(arrayOfInt[0]);
+        int[] sourcer = { 0 };
+        QTException.checkError(QTSPresGetIndSourcer(_ID(), QTObject.ID(s), index, sourcer));
+        return new Sourcer(sourcer[0]);
     }
 
-    private static short QTSNewPresentation(int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSNewPresentation(paramInt, paramArrayOfInt);
+    private static short QTSNewPresentation(int newPresentationParams, int[] outPresentation) {
+        return StreamingManager.QTSNewPresentation(newPresentationParams, outPresentation);
     }
 
-    private static short QTSNewPresentationFromData(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int[] paramArrayOfInt) {
-        return StreamingManager.QTSNewPresentationFromData(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramArrayOfInt);
+    private static short QTSNewPresentationFromData(int dataType, int data, long[] dataLength, int presParams, int[] outPresentation) {
+        return StreamingManager.QTSNewPresentationFromData(dataType, data, dataLength, presParams, outPresentation);
     }
 
-    private static short QTSNewPresentationFromFile(byte[] paramArrayOfByte, int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSNewPresentationFromFile(paramArrayOfByte, paramInt, paramArrayOfInt);
+    private static short QTSNewPresentationFromFile(byte[] fileSpec, int presParams, int[] outPresentation) {
+        return StreamingManager.QTSNewPresentationFromFile(fileSpec, presParams, outPresentation);
     }
 
-    private static short QTSNewPresentationFromDataRef(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return StreamingManager.QTSNewPresentationFromDataRef(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short QTSNewPresentationFromDataRef(int dataRef, int dataRefType, int presParams, int[] outPresentation) {
+        return StreamingManager.QTSNewPresentationFromDataRef(dataRef, dataRefType, presParams, outPresentation);
     }
 
-    private static short QTSPresExport(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresExport(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTSPresExport(int presentation, int stream, byte[] exportParams) {
+        return StreamingManager.QTSPresExport(presentation, stream, exportParams);
     }
 
-    private static short QTSPresSetFlags(int paramInt1, int paramInt2, int paramInt3) {
-        return StreamingManager.QTSPresSetFlags(paramInt1, paramInt2, paramInt3);
+    private static short QTSPresSetFlags(int presentation, int flags, int flagsMask) {
+        return StreamingManager.QTSPresSetFlags(presentation, flags, flagsMask);
     }
 
-    private static short QTSPresGetFlags(int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetFlags(paramInt, paramArrayOfInt);
+    private static short QTSPresGetFlags(int presentation, int[] flags) {
+        return StreamingManager.QTSPresGetFlags(presentation, flags);
     }
 
-    private static short QTSPresGetTimeScale(int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetTimeScale(paramInt, paramArrayOfInt);
+    private static short QTSPresGetTimeScale(int presentation, int[] timeScale) {
+        return StreamingManager.QTSPresGetTimeScale(presentation, timeScale);
     }
 
-    private static short QTSPresSetInfo(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresSetInfo(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static short QTSPresSetInfo(int presentation, int stream, int selector, byte[] param) {
+        return StreamingManager.QTSPresSetInfo(presentation, stream, selector, param);
     }
 
-    private static short QTSPresGetInfo(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresGetInfo(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static short QTSPresGetInfo(int presentation, int stream, int selector, byte[] param) {
+        return StreamingManager.QTSPresGetInfo(presentation, stream, selector, param);
     }
 
-    private static short QTSPresGetInfo(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetInfo(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short QTSPresGetInfo(int presentation, int stream, int selector, int[] param) {
+        return StreamingManager.QTSPresGetInfo(presentation, stream, selector, param);
     }
 
-    private static short QTSPresHasCharacteristic(int paramInt1, int paramInt2, int paramInt3, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresHasCharacteristic(paramInt1, paramInt2, paramInt3, paramArrayOfByte);
+    private static short QTSPresHasCharacteristic(int presentation, int stream, int characteristic, byte[] hasIt) {
+        return StreamingManager.QTSPresHasCharacteristic(presentation, stream, characteristic, hasIt);
     }
 
-    private static short QTSPresSetNotificationProc(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresSetNotificationProc(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTSPresSetNotificationProc(int presentation, int notificationProc, int[] refCon) {
+        return StreamingManager.QTSPresSetNotificationProc(presentation, notificationProc, refCon);
     }
 
-    private static short QTSPresGetNotificationProc(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetNotificationProc(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTSPresGetNotificationProc(int presentation, int notificationProc, int[] refCon) {
+        return StreamingManager.QTSPresGetNotificationProc(presentation, notificationProc, refCon);
     }
 
-    private static short QTSPresPreview(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresPreview(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    private static short QTSPresPreview(int presentation, int stream, long[] timeValue, int rate, int flags) {
+        return StreamingManager.QTSPresPreview(presentation, stream, timeValue, rate, flags);
     }
 
-    private static short QTSPresPreroll(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return StreamingManager.QTSPresPreroll(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short QTSPresPreroll(int presentation, int stream, int timeValue, int rate, int flags) {
+        return StreamingManager.QTSPresPreroll(presentation, stream, timeValue, rate, flags);
     }
 
-    private static short QTSPresPreroll64(int paramInt1, int paramInt2, long[] paramArrayOfLong, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresPreroll64(paramInt1, paramInt2, paramArrayOfLong, paramInt3, paramInt4);
+    private static short QTSPresPreroll64(int presentation, int stream, long[] preferredTime, int rate, int flags) {
+        return StreamingManager.QTSPresPreroll64(presentation, stream, preferredTime, rate, flags);
     }
 
-    private static short QTSPresStart(int paramInt1, int paramInt2, int paramInt3) {
-        return StreamingManager.QTSPresStart(paramInt1, paramInt2, paramInt3);
+    private static short QTSPresStart(int presentation, int stream, int flags) {
+        return StreamingManager.QTSPresStart(presentation, stream, flags);
     }
 
-    private static void QTSPresIdle(int paramInt1, int paramInt2) {
-        StreamingManager.QTSPresIdle(paramInt1, paramInt2);
+    private static void QTSPresIdle(int presentation, int returnedEvent) {
+        StreamingManager.QTSPresIdle(presentation, returnedEvent);
     }
 
-    private static short QTSPresInvalidateRegion(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSPresInvalidateRegion(paramInt1, paramInt2);
+    private static short QTSPresInvalidateRegion(int presentation, int region) {
+        return StreamingManager.QTSPresInvalidateRegion(presentation, region);
     }
 
-    private static short QTSPresSkipTo(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSPresSkipTo(paramInt1, paramInt2);
+    private static short QTSPresSkipTo(int presentation, int timeValue) {
+        return StreamingManager.QTSPresSkipTo(presentation, timeValue);
     }
 
-    private static short QTSPresSkipTo64(int paramInt, long[] paramArrayOfLong) {
-        return StreamingManager.QTSPresSkipTo64(paramInt, paramArrayOfLong);
+    private static short QTSPresSkipTo64(int presentation, long[] timeValue) {
+        return StreamingManager.QTSPresSkipTo64(presentation, timeValue);
     }
 
-    private static short QTSPresStop(int paramInt1, int paramInt2, int paramInt3) {
-        return StreamingManager.QTSPresStop(paramInt1, paramInt2, paramInt3);
+    private static short QTSPresStop(int presentation, int stream, int flags) {
+        return StreamingManager.QTSPresStop(presentation, stream, flags);
     }
 
-    private static int QTSPresGetNumStreams(int paramInt) {
-        return StreamingManager.QTSPresGetNumStreams(paramInt);
+    private static int QTSPresGetNumStreams(int presentation) {
+        return StreamingManager.QTSPresGetNumStreams(presentation);
     }
 
-    private static int QTSPresGetIndStream(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSPresGetIndStream(paramInt1, paramInt2);
+    private static int QTSPresGetIndStream(int presentation, int index) {
+        return StreamingManager.QTSPresGetIndStream(presentation, index);
     }
 
-    private static short QTSPresSetPreferredRate(int paramInt1, int paramInt2, int paramInt3) {
-        return StreamingManager.QTSPresSetPreferredRate(paramInt1, paramInt2, paramInt3);
+    private static short QTSPresSetPreferredRate(int presentation, int rate, int flags) {
+        return StreamingManager.QTSPresSetPreferredRate(presentation, rate, flags);
     }
 
-    private static short QTSPresGetPreferredRate(int paramInt, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetPreferredRate(paramInt, paramArrayOfInt);
+    private static short QTSPresGetPreferredRate(int presentation, int[] preferredRate) {
+        return StreamingManager.QTSPresGetPreferredRate(presentation, preferredRate);
     }
 
-    private static short QTSPresSetEnable(int paramInt1, int paramInt2, byte paramByte) {
-        return StreamingManager.QTSPresSetEnable(paramInt1, paramInt2, paramByte);
+    private static short QTSPresSetEnable(int presentation, int stream, byte enableMode) {
+        return StreamingManager.QTSPresSetEnable(presentation, stream, enableMode);
     }
 
-    private static short QTSPresGetEnable(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresGetEnable(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTSPresGetEnable(int presentation, int stream, byte[] enableMode) {
+        return StreamingManager.QTSPresGetEnable(presentation, stream, enableMode);
     }
 
-    private static short QTSPresSetPresenting(int paramInt1, int paramInt2, byte paramByte) {
-        return StreamingManager.QTSPresSetPresenting(paramInt1, paramInt2, paramByte);
+    private static short QTSPresSetPresenting(int presentation, int stream, byte presenting) {
+        return StreamingManager.QTSPresSetPresenting(presentation, stream, presenting);
     }
 
-    private static short QTSPresGetPresenting(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresGetPresenting(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTSPresGetPresenting(int presentation, int stream, byte[] presenting) {
+        return StreamingManager.QTSPresGetPresenting(presentation, stream, presenting);
     }
 
-    private static short QTSPresSetActiveSegment(int paramInt1, int paramInt2, long[] paramArrayOfLong1, long[] paramArrayOfLong2) {
-        return StreamingManager.QTSPresSetActiveSegment(paramInt1, paramInt2, paramArrayOfLong1, paramArrayOfLong2);
+    private static short QTSPresSetActiveSegment(int presentation, int stream, long[] startTime, long[] duration) {
+        return StreamingManager.QTSPresSetActiveSegment(presentation, stream, startTime, duration);
     }
 
-    private static short QTSPresGetActiveSegment(int paramInt1, int paramInt2, long[] paramArrayOfLong1, long[] paramArrayOfLong2) {
-        return StreamingManager.QTSPresGetActiveSegment(paramInt1, paramInt2, paramArrayOfLong1, paramArrayOfLong2);
+    private static short QTSPresGetActiveSegment(int presentation, int stream, long[] startTime, long[] duration) {
+        return StreamingManager.QTSPresGetActiveSegment(presentation, stream, startTime, duration);
     }
 
-    private static short QTSPresSetPlayHints(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresSetPlayHints(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTSPresSetPlayHints(int presentation, int stream, int playHints, int playHintsMask) {
+        return StreamingManager.QTSPresSetPlayHints(presentation, stream, playHints, playHintsMask);
     }
 
-    private static short QTSPresGetPlayHints(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetPlayHints(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTSPresGetPlayHints(int presentation, int stream, int[] playHints) {
+        return StreamingManager.QTSPresGetPlayHints(presentation, stream, playHints);
     }
 
-    private static short QTSPresSetGWorld(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresSetGWorld(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTSPresSetGWorld(int presentation, int stream, int gWorld, int gdHandle) {
+        return StreamingManager.QTSPresSetGWorld(presentation, stream, gWorld, gdHandle);
     }
 
-    private static short QTSPresGetGWorld(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return StreamingManager.QTSPresGetGWorld(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static short QTSPresGetGWorld(int presentation, int stream, int[] gWorld, int[] gdHandle) {
+        return StreamingManager.QTSPresGetGWorld(presentation, stream, gWorld, gdHandle);
     }
 
-    private static short QTSPresSetClip(int paramInt1, int paramInt2, int paramInt3) {
-        return StreamingManager.QTSPresSetClip(paramInt1, paramInt2, paramInt3);
+    private static short QTSPresSetClip(int presentation, int stream, int clip) {
+        return StreamingManager.QTSPresSetClip(presentation, stream, clip);
     }
 
-    private static short QTSPresGetClip(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetClip(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTSPresGetClip(int presentation, int stream, int[] clip) {
+        return StreamingManager.QTSPresGetClip(presentation, stream, clip);
     }
 
-    private static short QTSPresSetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MatrixManager.QTSPresSetMatrix(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTSPresSetMatrix(int presentation, int stream, byte[] matrix) {
+        return MatrixManager.QTSPresSetMatrix(presentation, stream, matrix);
     }
 
-    private static short QTSPresGetMatrix(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return MatrixManager.QTSPresGetMatrix(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTSPresGetMatrix(int presentation, int stream, byte[] matrix) {
+        return MatrixManager.QTSPresGetMatrix(presentation, stream, matrix);
     }
 
-    private static short QTSPresSetDimensions(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresSetDimensions(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTSPresSetDimensions(int presentation, int stream, int width, int height) {
+        return StreamingManager.QTSPresSetDimensions(presentation, stream, width, height);
     }
 
-    private static short QTSPresGetDimensions(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return StreamingManager.QTSPresGetDimensions(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2);
+    private static short QTSPresGetDimensions(int presentation, int stream, int[] width, int[] height) {
+        return StreamingManager.QTSPresGetDimensions(presentation, stream, width, height);
     }
 
-    private static short QTSPresSetGraphicsMode(int paramInt1, int paramInt2, short paramShort, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresSetGraphicsMode(paramInt1, paramInt2, paramShort, paramArrayOfByte);
+    private static short QTSPresSetGraphicsMode(int presentation, int stream, short mode, byte[] opColor) {
+        return StreamingManager.QTSPresSetGraphicsMode(presentation, stream, mode, opColor);
     }
 
-    private static short QTSPresGetGraphicsMode(int paramInt1, int paramInt2, short[] paramArrayOfShort, byte[] paramArrayOfByte) {
-        return StreamingManager.QTSPresGetGraphicsMode(paramInt1, paramInt2, paramArrayOfShort, paramArrayOfByte);
+    private static short QTSPresGetGraphicsMode(int presentation, int stream, short[] mode, byte[] opColor) {
+        return StreamingManager.QTSPresGetGraphicsMode(presentation, stream, mode, opColor);
     }
 
-    private static short QTSPresSetVolumes(int paramInt1, int paramInt2, short paramShort1, short paramShort2) {
-        return StreamingManager.QTSPresSetVolumes(paramInt1, paramInt2, paramShort1, paramShort2);
+    private static short QTSPresSetVolumes(int presentation, int stream, short leftVolume, short rightVolume) {
+        return StreamingManager.QTSPresSetVolumes(presentation, stream, leftVolume, rightVolume);
     }
 
-    private static short QTSPresGetVolumes(int paramInt1, int paramInt2, short[] paramArrayOfShort1, short[] paramArrayOfShort2) {
-        return StreamingManager.QTSPresGetVolumes(paramInt1, paramInt2, paramArrayOfShort1, paramArrayOfShort2);
+    private static short QTSPresGetVolumes(int presentation, int stream, short[] leftVolume, short[] rightVolume) {
+        return StreamingManager.QTSPresGetVolumes(presentation, stream, leftVolume, rightVolume);
     }
 
-    private static short QTSPresAddSourcer(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresAddSourcer(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTSPresAddSourcer(int presentation, int stream, int sourcer, int flags) {
+        return StreamingManager.QTSPresAddSourcer(presentation, stream, sourcer, flags);
     }
 
-    private static short QTSPresRemoveSourcer(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return StreamingManager.QTSPresRemoveSourcer(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTSPresRemoveSourcer(int presentation, int stream, int sourcer, int flags) {
+        return StreamingManager.QTSPresRemoveSourcer(presentation, stream, sourcer, flags);
     }
 
-    private static short QTSPresGetNumSourcers(int paramInt1, int paramInt2) {
-        return StreamingManager.QTSPresGetNumSourcers(paramInt1, paramInt2);
+    private static short QTSPresGetNumSourcers(int presentation, int stream) {
+        return StreamingManager.QTSPresGetNumSourcers(presentation, stream);
     }
 
-    private static short QTSPresGetIndSourcer(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return StreamingManager.QTSPresGetIndSourcer(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short QTSPresGetIndSourcer(int presentation, int stream, int index, int[] sourcer) {
+        return StreamingManager.QTSPresGetIndSourcer(presentation, stream, index, sourcer);
     }
 }

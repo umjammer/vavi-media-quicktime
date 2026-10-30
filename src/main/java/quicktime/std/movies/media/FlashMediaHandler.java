@@ -17,8 +17,8 @@ import quicktime.util.StringHandle;
  */
 public final class FlashMediaHandler extends VisualMediaHandler implements QuickTimeLib {
 
-    FlashMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    FlashMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -69,13 +69,13 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public QDRect getRefConBounds(int refCon) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int[] arrayOfInt3 = { 0 };
-        int[] arrayOfInt4 = { 0 };
-        int i = FlashMediaGetRefConBounds(_ID(), refCon, arrayOfInt1, arrayOfInt2, arrayOfInt3, arrayOfInt4);
+        int[] left = { 0 };
+        int[] top = { 0 };
+        int[] right = { 0 };
+        int[] bottom = { 0 };
+        int i = FlashMediaGetRefConBounds(_ID(), refCon, left, top, right, bottom);
         StdQTException.checkError(i);
-        return new QDRect(arrayOfInt1[0], arrayOfInt2[0], arrayOfInt3[0] - arrayOfInt1[0], arrayOfInt4[0] - arrayOfInt2[0]);
+        return new QDRect(left[0], top[0], right[0] - left[0], bottom[0] - top[0]);
     }
 
     /**
@@ -87,10 +87,10 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public int getRefConID(int refCon) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = FlashMediaGetRefConID(_ID(), refCon, arrayOfInt);
+        int[] id = { 0 };
+        int i = FlashMediaGetRefConID(_ID(), refCon, id);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return id[0];
     }
 
     /**
@@ -102,10 +102,10 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public int idToRefCon(int refConID) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = FlashMediaIDToRefCon(_ID(), refConID, arrayOfInt);
+        int[] refCon = { 0 };
+        int i = FlashMediaIDToRefCon(_ID(), refConID, refCon);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return refCon[0];
     }
 
     /**
@@ -115,10 +115,10 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public int getDisplayedFrameNumber() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = FlashMediaGetDisplayedFrameNumber(_ID(), arrayOfInt);
+        int[] frame = { 0 };
+        int i = FlashMediaGetDisplayedFrameNumber(_ID(), frame);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return frame[0];
     }
 
     /**
@@ -129,10 +129,10 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public int frameNumberToMovieTime(int flashFrameNumber) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = FlashMediaFrameNumberToMovieTime(_ID(), flashFrameNumber, arrayOfInt);
+        int[] time = { 0 };
+        int i = FlashMediaFrameNumberToMovieTime(_ID(), flashFrameNumber, time);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return time[0];
     }
 
     /**
@@ -143,10 +143,10 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public int frameLabelToMovieTime(QTPointerRef theLabel) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = FlashMediaFrameLabelToMovieTime(_ID(), QTObject.ID(theLabel), arrayOfInt);
+        int[] time = { 0 };
+        int i = FlashMediaFrameLabelToMovieTime(_ID(), QTObject.ID(theLabel), time);
         StdQTException.checkError(i);
-        return arrayOfInt[0];
+        return time[0];
     }
 
     /**
@@ -158,14 +158,14 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public String getFlashVariable(String path, String name) throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = FlashMediaGetFlashVariable(_ID(), QTUtils.String2CString(path), QTUtils.String2CString(name), arrayOfInt);
+        int[] value = { 0 };
+        int i = FlashMediaGetFlashVariable(_ID(), QTUtils.String2CString(path), QTUtils.String2CString(name), value);
         StdQTException.checkError(i);
-        myStringHandle localmyStringHandle = new myStringHandle(arrayOfInt[0], this);
+        myStringHandle localmyStringHandle = new myStringHandle(value[0], this);
         try {
             return localmyStringHandle.toJavaString();
-        } catch (Exception localException) {
-            localException.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -177,13 +177,13 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
      * @throws quicktime.std.StdQTException
      */
     public String getSupportedSwfVersion() throws StdQTException {
-        byte[] arrayOfByte = { 0 };
-        int i = FlashMediaGetSupportedSwfVersion(_ID(), arrayOfByte);
+        byte[] version = { 0 };
+        int i = FlashMediaGetSupportedSwfVersion(_ID(), version);
         StdQTException.checkError(i);
-        if (arrayOfByte.length == 1) {
-            return Byte.valueOf(arrayOfByte[0]).toString();
+        if (version.length == 1) {
+            return Byte.valueOf(version[0]).toString();
         }
-        return QTUtils.CString2String(arrayOfByte, 0);
+        return QTUtils.CString2String(version, 0);
     }
 
     /**
@@ -200,58 +200,58 @@ public final class FlashMediaHandler extends VisualMediaHandler implements Quick
         StdQTException.checkError(i);
     }
 
-    private static int FlashMediaSetPan(int paramInt, short paramShort1, short paramShort2) {
-        return MediaHandlerManager.FlashMediaSetPan(paramInt, paramShort1, paramShort2);
+    private static int FlashMediaSetPan(int mh, short x, short y) {
+        return MediaHandlerManager.FlashMediaSetPan(mh, x, y);
     }
 
     static class myStringHandle extends StringHandle {
 
-        protected myStringHandle(int paramInt, Object paramObject) {
-            super(paramInt, paramObject, 1);
+        protected myStringHandle(int nativeRep, Object ref) {
+            super(nativeRep, ref, 1);
         }
     }
 
-    private static int FlashMediaSetZoom(int paramInt, short paramShort) {
-        return MediaHandlerManager.FlashMediaSetZoom(paramInt, paramShort);
+    private static int FlashMediaSetZoom(int mh, short factor) {
+        return MediaHandlerManager.FlashMediaSetZoom(mh, factor);
     }
 
-    private static int FlashMediaSetZoomRect(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return MediaHandlerManager.FlashMediaSetZoomRect(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int FlashMediaSetZoomRect(int mh, int left, int top, int right, int bottom) {
+        return MediaHandlerManager.FlashMediaSetZoomRect(mh, left, top, right, bottom);
     }
 
-    private static int FlashMediaGetRefConBounds(int paramInt1, int paramInt2, int[] paramArrayOfInt1, int[] paramArrayOfInt2, int[] paramArrayOfInt3, int[] paramArrayOfInt4) {
-        return MediaHandlerManager.FlashMediaGetRefConBounds(paramInt1, paramInt2, paramArrayOfInt1, paramArrayOfInt2, paramArrayOfInt3, paramArrayOfInt4);
+    private static int FlashMediaGetRefConBounds(int mh, int refCon, int[] left, int[] top, int[] right, int[] bottom) {
+        return MediaHandlerManager.FlashMediaGetRefConBounds(mh, refCon, left, top, right, bottom);
     }
 
-    private static int FlashMediaGetRefConID(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.FlashMediaGetRefConID(paramInt1, paramInt2, paramArrayOfInt);
+    private static int FlashMediaGetRefConID(int mh, int refCon, int[] id) {
+        return MediaHandlerManager.FlashMediaGetRefConID(mh, refCon, id);
     }
 
-    private static int FlashMediaIDToRefCon(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.FlashMediaIDToRefCon(paramInt1, paramInt2, paramArrayOfInt);
+    private static int FlashMediaIDToRefCon(int mh, int id, int[] refCon) {
+        return MediaHandlerManager.FlashMediaIDToRefCon(mh, id, refCon);
     }
 
-    private static int FlashMediaGetDisplayedFrameNumber(int paramInt, int[] paramArrayOfInt) {
-        return MediaHandlerManager.FlashMediaGetDisplayedFrameNumber(paramInt, paramArrayOfInt);
+    private static int FlashMediaGetDisplayedFrameNumber(int mh, int[] frame) {
+        return MediaHandlerManager.FlashMediaGetDisplayedFrameNumber(mh, frame);
     }
 
-    private static int FlashMediaFrameNumberToMovieTime(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.FlashMediaFrameNumberToMovieTime(paramInt1, paramInt2, paramArrayOfInt);
+    private static int FlashMediaFrameNumberToMovieTime(int mh, int frame, int[] time) {
+        return MediaHandlerManager.FlashMediaFrameNumberToMovieTime(mh, frame, time);
     }
 
-    private static int FlashMediaFrameLabelToMovieTime(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.FlashMediaFrameLabelToMovieTime(paramInt1, paramInt2, paramArrayOfInt);
+    private static int FlashMediaFrameLabelToMovieTime(int mh, int label, int[] time) {
+        return MediaHandlerManager.FlashMediaFrameLabelToMovieTime(mh, label, time);
     }
 
-    private static int FlashMediaGetFlashVariable(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, int[] paramArrayOfInt) {
-        return MediaHandlerManager.FlashMediaGetFlashVariable(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfInt);
+    private static int FlashMediaGetFlashVariable(int mh, byte[] path, byte[] name, int[] value) {
+        return MediaHandlerManager.FlashMediaGetFlashVariable(mh, path, name, value);
     }
 
-    private static int FlashMediaSetFlashVariable(int paramInt, byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3, byte paramByte) {
-        return MediaHandlerManager.FlashMediaSetFlashVariable(paramInt, paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3, paramByte);
+    private static int FlashMediaSetFlashVariable(int mh, byte[] path, byte[] name, byte[] value, byte updateFocus) {
+        return MediaHandlerManager.FlashMediaSetFlashVariable(mh, path, name, value, updateFocus);
     }
 
-    private static int FlashMediaGetSupportedSwfVersion(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.FlashMediaGetSupportedSwfVersion(paramInt, paramArrayOfByte);
+    private static int FlashMediaGetSupportedSwfVersion(int mh, byte[] version) {
+        return MediaHandlerManager.FlashMediaGetSupportedSwfVersion(mh, version);
     }
 }

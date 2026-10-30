@@ -160,20 +160,20 @@ public abstract class Sequencer {
      */
     public void setFramePrevious() {
         if (this.looping == 2) {
-            boolean bool = this.forwards;
+            boolean forwards = this.forwards;
             int i;
             if (this.forwards) {
                 i = this.mCurrentFrame - 1;
                 if (i < 1) {
-                    bool = false;
+                    forwards = false;
                 }
             } else {
                 i = this.mCurrentFrame + 1;
                 if (i > size())
-                    bool = true;
+                    forwards = true;
             }
             setCurrentFrame(i);
-            this.forwards = bool;
+            this.forwards = forwards;
             return;
         }
         int i = this.mCurrentFrame - 1;

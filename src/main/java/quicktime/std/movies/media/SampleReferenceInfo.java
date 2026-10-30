@@ -25,10 +25,10 @@ public final class SampleReferenceInfo {
      */
     public final SampleReferenceVector sampleRefs;
 
-    SampleReferenceInfo(int paramInt1, SampleDescription paramSampleDescription, int paramInt2, SampleReferenceVector paramSampleReferenceVector) {
-        this.sampleRefs = paramSampleReferenceVector;
-        this.sampleTime = paramInt1;
-        this.descriptionIndex = paramInt2;
-        this.sampleDescription = paramSampleDescription;
+    SampleReferenceInfo(int sampleTime, SampleDescription sampleDescription, int descriptionIndex, SampleReferenceVector sampleRefs) {
+        this.sampleRefs = sampleRefs;
+        this.sampleTime = sampleTime;
+        this.descriptionIndex = descriptionIndex;
+        this.sampleDescription = sampleDescription;
     }
 }

@@ -47,14 +47,14 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
      * Constructor for building a spacial settings object from a byte array
      * (such as the one you can get from an atom container)
      */
-    public SpatialSettings(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    public SpatialSettings(byte[] bytes) {
+        super(bytes);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         int i = getShortFromArray(this.bytes, 0);
         int j = EndianOrder.flipBigEndianToNative32(i);
         setIntInArray(this.bytes, 0, j);
@@ -67,18 +67,18 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[kNativeSize];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[kNativeSize];
         int i = getShortFromArray(getBytes(), 0);
         int j = EndianOrder.flipNativeToBigEndian32(i);
-        setIntInArray(arrayOfByte, 0, j);
+        setIntInArray(movie, 0, j);
         short s1 = getShortFromArray(getBytes(), 8);
         short s2 = EndianOrder.flipNativeToBigEndian16(s1);
-        setShortInArray(arrayOfByte, 8, s2);
+        setShortInArray(movie, 8, s2);
         int k = getShortFromArray(getBytes(), 10);
         int m = EndianOrder.flipNativeToBigEndian32(k);
-        setIntInArray(arrayOfByte, 0, m);
-        paramObjectOutputStream.write(arrayOfByte);
+        setIntInArray(movie, 0, m);
+        out.write(movie);
     }
 
     /**
@@ -153,19 +153,19 @@ public final class SpatialSettings extends QTByteObject implements PrimitivesLib
         setIntAt(10, spatialQuality);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

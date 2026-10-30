@@ -23,12 +23,12 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @throws quicktime.std.StdQTException
      * @see quicktime.std.image.GraphicsExporter#getInputPtr
      */
-    public static QTPointerRef fromGraphicsExporter(GraphicsExporter paramGraphicsExporter) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = new int[1];
-        int i = GraphicsExportGetInputPtr(QTObject.ID(paramGraphicsExporter), arrayOfInt2, arrayOfInt1);
+    public static QTPointerRef fromGraphicsExporter(GraphicsExporter ge) throws StdQTException {
+        int[] size = { 0 };
+        int[] p = new int[1];
+        int i = GraphicsExportGetInputPtr(QTObject.ID(ge), p, size);
         StdQTException.checkError(i);
-        return new QTPointerRef(arrayOfInt2[0], arrayOfInt1[0], paramGraphicsExporter);
+        return new QTPointerRef(p[0], size[0], ge);
     }
 
     /**
@@ -36,10 +36,10 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * @return the QTPointer buffer
      * @see quicktime.sound.SoundComponentData#getBuffer()
      */
-    public static QTPointer fromSCData(SoundComponentData paramSoundComponentData) {
-        if (getIntFromArray(paramSoundComponentData.getBytes(), 20) == 0)
+    public static QTPointer fromSCData(SoundComponentData soundComponentData) {
+        if (getIntFromArray(soundComponentData.getBytes(), 20) == 0)
             throw new QTNullPointerException("SCD buffer is not set");
-        return new QTPointer(getIntFromArray(paramSoundComponentData.getBytes(), 20), paramSoundComponentData.getSampleSize() / 8 * paramSoundComponentData.getSampleCount(), paramSoundComponentData);
+        return new QTPointer(getIntFromArray(soundComponentData.getBytes(), 20), soundComponentData.getSampleSize() / 8 * soundComponentData.getSampleCount(), soundComponentData);
     }
 
     /**
@@ -53,10 +53,10 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
         if ((image instanceof ByteEncodedImage))
             return new QTPointer(((ByteEncodedImage) image).getBytes());
         if ((image instanceof IntEncodedImage)) {
-            QTPointer localQTPointer = new QTPointer(image.getSize(), false);
-            int[] arrayOfInt = ((IntEncodedImage) image).getInts();
-            localQTPointer.copyFromArray(0, arrayOfInt, 0, arrayOfInt.length);
-            return localQTPointer;
+            QTPointer qtPointer = new QTPointer(image.getSize(), false);
+            int[] srcArray = ((IntEncodedImage) image).getInts();
+            qtPointer.copyFromArray(0, srcArray, 0, srcArray.length);
+            return qtPointer;
         }
         if ((image instanceof RawEncodedImage)) {
             return (RawEncodedImage) image;
@@ -112,8 +112,8 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
         BlockMove(QTObject.ID(secondPtr) + 0, _ID() + firstPtr.getSize(), secondPtr.getSize());
     }
 
-    QTPointer(int paramInt1, int paramInt2, Object paramObject) {
-        super(paramInt1, paramInt2, paramObject);
+    QTPointer(int nativeRep, int size, Object ref) {
+        super(nativeRep, size, ref);
     }
 
     /**
@@ -141,33 +141,33 @@ public class QTPointer extends QTPointerRef implements QuickTimeLib, Cloneable {
      * Concatenates the supplied pointer to this pointer. This operation will fail
      * if unable to resize the pointer.
      */
-    public void concatenate(QTPointerRef paramQTPointerRef) throws UtilException {
+    public void concatenate(QTPointerRef qtPointerRef) throws UtilException {
         int i = getSize();
-        setSize(getSize() + paramQTPointerRef.getSize());
-        BlockMove(QTObject.ID(paramQTPointerRef) + 0, _ID() + i, paramQTPointerRef.getSize());
+        setSize(getSize() + qtPointerRef.getSize());
+        BlockMove(QTObject.ID(qtPointerRef) + 0, _ID() + i, qtPointerRef.getSize());
     }
 
-    private static int GraphicsExportGetInputPtr(int paramInt, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return GraphicsExportManager.GraphicsExportGetInputPtr(paramInt, paramArrayOfInt1, paramArrayOfInt2);
+    private static int GraphicsExportGetInputPtr(int ge, int[] p, int[] size) {
+        return GraphicsExportManager.GraphicsExportGetInputPtr(ge, p, size);
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int size) {
+        MemoryManager.BlockMove(src, dst, size);
     }
 
-    private static void SetPtrSize(int paramInt1, int paramInt2) {
-        MemoryManager.SetPtrSize(paramInt1, paramInt2);
+    private static void SetPtrSize(int p, int size) {
+        MemoryManager.SetPtrSize(p, size);
     }
 
     private static short MemError() {
         return MemoryManager.MemError();
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static int getIntFromArray(int[] paramArrayOfInt, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfInt, paramInt);
+    private static int getIntFromArray(int[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 }

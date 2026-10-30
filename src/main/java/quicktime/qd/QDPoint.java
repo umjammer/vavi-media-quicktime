@@ -136,16 +136,16 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * @deprecated <I>As of QTJava v 4.0</I>
      * Create a QDPoint at specified location
      */
-    public QDPoint(Point paramPoint) {
-        this(paramPoint.x, paramPoint.y);
+    public QDPoint(Point point) {
+        this(point.x, point.y);
     }
 
-    private QDPoint(short paramShort1, short paramShort2, byte[] paramArrayOfByte) {
-        this.x = paramShort1;
-        this.y = paramShort2;
-        if (paramArrayOfByte != null) {
+    private QDPoint(short x, short y, byte[] floatPt) {
+        this.x = x;
+        this.y = y;
+        if (floatPt != null) {
             this.floatPt = new byte[kNativeSize];
-            System.arraycopy(paramArrayOfByte, 0, this.floatPt, 0, kNativeSize);
+            System.arraycopy(floatPt, 0, this.floatPt, 0, kNativeSize);
         }
     }
 
@@ -169,10 +169,10 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
      * Returns a byte array that contains the packed value of a FixedPoint
      */
     public byte[] getFixedPoint() {
-        byte[] arrayOfByte = new byte[kNativeSize];
-        setIntInArray(arrayOfByte, 0, QTUtils.X2Fix(getXF()));
-        setIntInArray(arrayOfByte, 4, QTUtils.X2Fix(getYF()));
-        return arrayOfByte;
+        byte[] fixedPoint = new byte[kNativeSize];
+        setIntInArray(fixedPoint, 0, QTUtils.X2Fix(getXF()));
+        setIntInArray(fixedPoint, 4, QTUtils.X2Fix(getYF()));
+        return fixedPoint;
     }
 
     /**
@@ -283,41 +283,41 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
     /**
      * Translates the point, by deltaX and deltaY.
      */
-    public void translate(int paramInt1, int paramInt2) {
-        move(getX() + paramInt1, getY() + paramInt2);
+    public void translate(int dx, int dy) {
+        move(getX() + dx, getY() + dy);
     }
 
     /**
      * Translates the point, by deltaX and deltaY.
      */
-    public void translate(float paramFloat1, float paramFloat2) {
-        move(getXF() + paramFloat1, getYF() + paramFloat2);
+    public void translate(float dx, float dy) {
+        move(getXF() + dx, getYF() + dy);
     }
 
     /**
      * Moves the point, to coordinates x, y.
      */
-    public void move(int paramInt1, int paramInt2) {
-        setX(paramInt1);
-        setY(paramInt2);
+    public void move(int x, int y) {
+        setX(x);
+        setY(y);
     }
 
     /**
      * Moves the point, to coordinates x, y.
      */
-    public void move(float paramFloat1, float paramFloat2) {
-        setX(paramFloat1);
-        setY(paramFloat2);
+    public void move(float x, float y) {
+        setX(x);
+        setY(y);
     }
 
     /**
      * Checks whether two int points are equal.
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ((paramObject instanceof QDPoint localQDPoint)) {
-            return (localQDPoint.getXF() == getXF()) && (localQDPoint.getYF() == getYF());
+        if ((obj instanceof QDPoint point)) {
+            return (point.getXF() == getXF()) && (point.getYF() == getYF());
         }
         return false;
     }
@@ -348,19 +348,19 @@ public final class QDPoint implements PrimitivesLib, Cloneable {
         return new QDPoint(this.x, this.y, this.floatPt);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static float getFloatFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getFloatFromArray(paramArrayOfByte, paramInt);
+    private static float getFloatFromArray(byte[] array, int offset) {
+        return MemoryManager.getFloatFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setFloatInArray(byte[] paramArrayOfByte, int paramInt, float paramFloat) {
-        MemoryManager.setFloatInArray(paramArrayOfByte, paramInt, paramFloat);
+    private static void setFloatInArray(byte[] array, int offset, float value) {
+        MemoryManager.setFloatInArray(array, offset, value);
     }
 }

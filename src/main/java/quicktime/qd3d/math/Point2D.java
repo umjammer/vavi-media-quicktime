@@ -28,9 +28,9 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @return a Vector2D object
      */
     public static Vector2D subtract(QDPoint p1, QDPoint p2) {
-        Vector2D localVector2D = new Vector2D();
-        int i = Q3Point2D_Subtract(p1.getQ3Point2D(), p2.getQ3Point2D(), localVector2D.getBytes());
-        return localVector2D;
+        Vector2D vector2D = new Vector2D();
+        int i = Q3Point2D_Subtract(p1.getQ3Point2D(), p2.getQ3Point2D(), vector2D.getBytes());
+        return vector2D;
     }
 
     /**
@@ -65,10 +65,10 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @param r2 A floating-point number.
      * @return a QDPoint
      */
-    public static QDPoint rRatio(QDPoint paramQDPoint1, QDPoint p2, float r1, float r2) {
-        byte[] arrayOfByte = new byte[8];
-        int i = Q3Point2D_RRatio(paramQDPoint1.getQ3Point2D(), p2.getQ3Point2D(), r1, r2, arrayOfByte);
-        return QDPoint.fromArray(arrayOfByte, -8);
+    public static QDPoint rRatio(QDPoint point1, QDPoint p2, float r1, float r2) {
+        byte[] result = new byte[8];
+        int i = Q3Point2D_RRatio(point1.getQ3Point2D(), p2.getQ3Point2D(), r1, r2, result);
+        return QDPoint.fromArray(result, -8);
     }
 
     /**
@@ -79,9 +79,9 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @return a point that is the result of the add.
      */
     public static QDPoint add(QDPoint point2D, Vector2D v) {
-        byte[] arrayOfByte = new byte[8];
-        int i = Q3Point2D_Vector2D_Add(point2D.getQ3Point2D(), v.getBytes(), arrayOfByte);
-        return QDPoint.fromArray(arrayOfByte, -8);
+        byte[] result = new byte[8];
+        int i = Q3Point2D_Vector2D_Add(point2D.getQ3Point2D(), v.getBytes(), result);
+        return QDPoint.fromArray(result, -8);
     }
 
     /**
@@ -92,32 +92,32 @@ public final class Point2D implements QuickTimeLib, QuickDraw3DLib {
      * @return a point that is the result of the add.
      */
     public static QDPoint subtract(QDPoint point2D, Vector2D v) {
-        byte[] arrayOfByte = new byte[8];
-        int i = Q3Point2D_Vector2D_Subtract(point2D.getQ3Point2D(), v.getBytes(), arrayOfByte);
-        return QDPoint.fromArray(arrayOfByte, -8);
+        byte[] result = new byte[8];
+        int i = Q3Point2D_Vector2D_Subtract(point2D.getQ3Point2D(), v.getBytes(), result);
+        return QDPoint.fromArray(result, -8);
     }
 
-    private static int Q3Point2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point2D_Subtract(byte[] p1, byte[] p2, byte[] result) {
+        return QD3DManager.Q3Point2D_Subtract(p1, p2, result);
     }
 
-    private static float Q3Point2D_Distance(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Point2D_Distance(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Point2D_Distance(byte[] p1, byte[] p2) {
+        return QD3DManager.Q3Point2D_Distance(p1, p2);
     }
 
-    private static float Q3Point2D_DistanceSquared(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Point2D_DistanceSquared(paramArrayOfByte1, paramArrayOfByte2);
+    private static float Q3Point2D_DistanceSquared(byte[] p1, byte[] p2) {
+        return QD3DManager.Q3Point2D_DistanceSquared(p1, p2);
     }
 
-    private static int Q3Point2D_RRatio(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat1, float paramFloat2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point2D_RRatio(paramArrayOfByte1, paramArrayOfByte2, paramFloat1, paramFloat2, paramArrayOfByte3);
+    private static int Q3Point2D_RRatio(byte[] p1, byte[] p2, float r1, float r2, byte[] result) {
+        return QD3DManager.Q3Point2D_RRatio(p1, p2, r1, r2, result);
     }
 
-    private static int Q3Point2D_Vector2D_Add(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point2D_Vector2D_Add(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point2D_Vector2D_Add(byte[] point2D, byte[] vector2D, byte[] result) {
+        return QD3DManager.Q3Point2D_Vector2D_Add(point2D, vector2D, result);
     }
 
-    private static int Q3Point2D_Vector2D_Subtract(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Point2D_Vector2D_Subtract(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Point2D_Vector2D_Subtract(byte[] point2D, byte[] vector2D, byte[] result) {
+        return QD3DManager.Q3Point2D_Vector2D_Subtract(point2D, vector2D, result);
     }
 }

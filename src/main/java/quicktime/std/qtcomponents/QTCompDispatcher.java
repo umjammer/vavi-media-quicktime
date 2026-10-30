@@ -20,31 +20,31 @@ final class QTCompDispatcher {
 
     private MovieProgress mp;
 
-    QTCompDispatcher(MovieExporter paramMovieExporter) {
+    QTCompDispatcher(MovieExporter movieExporter) {
         this.methodName = "mpDefaultProc";
         this.methodSig = "(ISSII)S";
         this.procInfo = 64224;
     }
 
-    QTCompDispatcher(MovieImporter paramMovieImporter) {
+    QTCompDispatcher(MovieImporter movieImporter) {
         this.methodName = "mpDefaultProc";
         this.methodSig = "(ISSII)S";
         this.procInfo = 64224;
     }
 
-    QTCompDispatcher(MovieProgress paramMovieProgress) {
+    QTCompDispatcher(MovieProgress mp) {
         this.methodName = "movieProgress";
         this.methodSig = "(ISSII)S";
         this.procInfo = 64224;
-        this.mp = paramMovieProgress;
+        this.mp = mp;
     }
 
-    private short mpDefaultProc(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
+    private short mpDefaultProc(int movie, short message, short whatOperation, int percentDone, int refcon) {
         return 0;
     }
 
-    private short movieProgress(int paramInt1, short paramShort1, short paramShort2, int paramInt2, int paramInt3) {
-        return (short) this.mp.execute(this.theCurrentMov, paramShort1, paramShort2, QTUtils.Fix2X(paramInt2));
+    private short movieProgress(int movie, short message, short whatOperation, int percentDone, int refcon) {
+        return (short) this.mp.execute(this.theCurrentMov, message, whatOperation, QTUtils.Fix2X(percentDone));
     }
 
     int ID() {
@@ -58,8 +58,8 @@ final class QTCompDispatcher {
     }
 
     static class QTCompMethodClosure extends MethodClosure {
-        QTCompMethodClosure(Object paramObject, String paramString1, String paramString2, int paramInt) {
-            super(paramObject, paramString1, paramString2, paramInt);
+        QTCompMethodClosure(Object target, String methodName, String descriptor, int procInfo) {
+            super(target, methodName, descriptor, procInfo);
         }
 
         int getClosure() {

@@ -6,7 +6,7 @@ package quicktime.qd;
  */
 public class NativeGraphicsException extends QDException {
 
-    public NativeGraphicsException(String paramString) {
-        super(paramString);
+    public NativeGraphicsException(String str) {
+        super(str);
     }
 }

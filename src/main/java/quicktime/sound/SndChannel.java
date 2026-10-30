@@ -69,21 +69,21 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
         tempUPP = null;
     }
 
-    private static int allocate(short paramShort, int paramInt, SoundCallBack paramSoundCallBack) throws QTException {
-        int[] arrayOfInt = {0};
-        if (paramSoundCallBack != null) {
-            tempUPP = new SoundRunner(paramSoundCallBack);
-            SoundException.checkError(SndNewChannel(arrayOfInt, paramShort, paramInt, tempUPP.getClosure()));
+    private static int allocate(short synth, int init, SoundCallBack callback) throws QTException {
+        int[] chan = {0};
+        if (callback != null) {
+            tempUPP = new SoundRunner(callback);
+            SoundException.checkError(SndNewChannel(chan, synth, init, tempUPP.getClosure()));
         } else {
-            SoundException.checkError(SndNewChannel(arrayOfInt, paramShort, paramInt, 0));
+            SoundException.checkError(SndNewChannel(chan, synth, init, 0));
         }
-        return arrayOfInt[0];
+        return chan[0];
     }
 
-    private static int allocate(short paramShort, int paramInt) throws SoundException {
-        int[] arrayOfInt = {0};
-        SoundException.checkError(SndNewChannel(arrayOfInt, paramShort, paramInt, 0));
-        return arrayOfInt[0];
+    private static int allocate(short synth, int init) throws SoundException {
+        int[] chan = {0};
+        SoundException.checkError(SndNewChannel(chan, synth, init, 0));
+        return chan[0];
     }
 
     private boolean quietNow = false;
@@ -115,8 +115,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * The default setting is to allow the sound to finish playing (the flag is set to false).
      * If you wish to explicitly stop a sound when you dispose the channel then set this to true.
      */
-    public void setQuietNow(boolean paramBoolean) {
-        this.quietNow = paramBoolean;
+    public void setQuietNow(boolean quietNow) {
+        this.quietNow = quietNow;
     }
 
     /**
@@ -170,10 +170,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @see "QuickTime::SndChannelStatus"
      */
     public SCStatus status() throws SoundException {
-        SCStatus localSCStatus = new SCStatus();
-        int i = SndChannelStatus(_ID(), (short) 24, localSCStatus.getBytes());
+        SCStatus scStatus = new SCStatus();
+        int i = SndChannelStatus(_ID(), (short) 24, scStatus.getBytes());
         SoundException.checkError(i);
-        return localSCStatus;
+        return scStatus;
     }
 
     /**
@@ -218,9 +218,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @see "QuickTime::SndGetInfo"
      */
     public boolean getLevelMeterOnOff() throws SoundException {
-        byte[] arrayOfByte = {0};
-        SoundException.checkError(SndGetInfo(_ID(), 1819108724, arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] info = {0};
+        SoundException.checkError(SndGetInfo(_ID(), 1819108724, info));
+        return info[0] != 0;
     }
 
     /**
@@ -241,8 +241,8 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @throws quicktime.sound.SoundException
      * @see "QuickTime::SndSetInfo"
      */
-    public void enableClock(boolean paramBoolean) throws SoundException {
-        SoundException.checkError(SndSetInfo(_ID(), 1935895659, (byte) (paramBoolean ? 1 : 0)));
+    public void enableClock(boolean enable) throws SoundException {
+        SoundException.checkError(SndSetInfo(_ID(), 1935895659, (byte) (enable ? 1 : 0)));
     }
 
     /**
@@ -264,9 +264,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @see "QuickTime::SndGetInfo"
      */
     public LevelMeterInfo getActiveLevels() throws SoundException {
-        LevelMeterInfo localLevelMeterInfo = new LevelMeterInfo();
-        int i = SndGetInfo(_ID(), 1819107683, localLevelMeterInfo.getBytes());
-        return localLevelMeterInfo;
+        LevelMeterInfo activeLevels = new LevelMeterInfo();
+        int i = SndGetInfo(_ID(), 1819107683, activeLevels.getBytes());
+        return activeLevels;
     }
 
     /**
@@ -277,10 +277,10 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @throws quicktime.sound.SoundException
      * @see "QuickTime::SndGetInfo"
      */
-    public MediaEQSpectrumBands getEQSpectrumBands(int paramInt) throws SoundException {
-        MediaEQSpectrumBands localMediaEQSpectrumBands = new MediaEQSpectrumBands(paramInt);
-        SoundException.checkError(SndGetInfo(_ID(), 1701933922, localMediaEQSpectrumBands.getBytes()));
-        return localMediaEQSpectrumBands;
+    public MediaEQSpectrumBands getEQSpectrumBands(int count) throws SoundException {
+        MediaEQSpectrumBands eqSpectrumBands = new MediaEQSpectrumBands(count);
+        SoundException.checkError(SndGetInfo(_ID(), 1701933922, eqSpectrumBands.getBytes()));
+        return eqSpectrumBands;
     }
 
     /**
@@ -303,14 +303,14 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @throws quicktime.sound.SoundException
      * @see "QuickTime::SndGetInfo"
      */
-    public int[] getEQSpectrumLevels(int paramInt) throws SoundException {
-        byte[] arrayOfByte = new byte[paramInt];
-        SoundException.checkError(SndGetInfo(_ID(), 1701932150, arrayOfByte));
-        int[] arrayOfInt = new int[paramInt];
-        for (int i = 0; i < arrayOfInt.length; i++) {
-            arrayOfInt[i] = QTUtils.UByte2Int(arrayOfByte[i]);
+    public int[] getEQSpectrumLevels(int numBands) throws SoundException {
+        byte[] info = new byte[numBands];
+        SoundException.checkError(SndGetInfo(_ID(), 1701932150, info));
+        int[] eqSpectrumLevels = new int[numBands];
+        for (int i = 0; i < eqSpectrumLevels.length; i++) {
+            eqSpectrumLevels[i] = QTUtils.UByte2Int(info[i]);
         }
-        return arrayOfInt;
+        return eqSpectrumLevels;
     }
 
     /**
@@ -321,9 +321,9 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @see "QuickTime::SndGetInfo"
      */
     public boolean getEQToneControlOnOff() throws SoundException {
-        byte[] arrayOfByte = {0};
-        SoundException.checkError(SndGetInfo(_ID(), 1701934179, arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] info = {0};
+        SoundException.checkError(SndGetInfo(_ID(), 1701934179, info));
+        return info[0] != 0;
     }
 
     /**
@@ -363,51 +363,51 @@ public final class SndChannel extends QTObject implements InterfaceLib, SoundLib
      * @see "QuickTime::SndGetInfo"
      */
     public int[] getEQToneControlGain() throws SoundException {
-        int[] arrayOfInt = new int[2];
-        SoundException.checkError(SndGetInfo(_ID(), 1701934183, arrayOfInt));
-        int i = arrayOfInt[0];
-        arrayOfInt[0] = (i | 0xFFFF);
-        arrayOfInt[1] = (i >>> 16);
-        return arrayOfInt;
+        int[] info = new int[2];
+        SoundException.checkError(SndGetInfo(_ID(), 1701934183, info));
+        int i = info[0];
+        info[0] = (i | 0xFFFF);
+        info[1] = (i >>> 16);
+        return info;
     }
 
-    private static short SndNewChannel(int[] paramArrayOfInt, short paramShort, int paramInt1, int paramInt2) {
-        return SoundManager.SndNewChannel(paramArrayOfInt, paramShort, paramInt1, paramInt2);
+    private static short SndNewChannel(int[] chan, short synth, int init, int userRoutine) {
+        return SoundManager.SndNewChannel(chan, synth, init, userRoutine);
     }
 
-    private static short SndPlay(int paramInt1, int paramInt2, byte paramByte) {
-        return SoundManager.SndPlay(paramInt1, paramInt2, paramByte);
+    private static short SndPlay(int chan, int sndHandle, byte async) {
+        return SoundManager.SndPlay(chan, sndHandle, async);
     }
 
-    private static short SndChannelStatus(int paramInt, short paramShort, byte[] paramArrayOfByte) {
-        return SoundManager.SndChannelStatus(paramInt, paramShort, paramArrayOfByte);
+    private static short SndChannelStatus(int chan, short length, byte[] status) {
+        return SoundManager.SndChannelStatus(chan, length, status);
     }
 
-    private static short SndDoCommand(int paramInt1, int paramInt2, byte paramByte) {
-        return SoundManager.SndDoCommand(paramInt1, paramInt2, paramByte);
+    private static short SndDoCommand(int chan, int cmd, byte noWait) {
+        return SoundManager.SndDoCommand(chan, cmd, noWait);
     }
 
-    private static short SndDoImmediate(int paramInt1, int paramInt2) {
-        return SoundManager.SndDoImmediate(paramInt1, paramInt2);
+    private static short SndDoImmediate(int chan, int cmd) {
+        return SoundManager.SndDoImmediate(chan, cmd);
     }
 
-    private static short SndSetInfo(int paramInt1, int paramInt2, byte paramByte) {
-        return SoundManager.SndSetInfo(paramInt1, paramInt2, paramByte);
+    private static short SndSetInfo(int chan, int selector, byte value) {
+        return SoundManager.SndSetInfo(chan, selector, value);
     }
 
-    private static short SndSetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SoundManager.SndSetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SndSetInfo(int chan, int selector, byte[] info) {
+        return SoundManager.SndSetInfo(chan, selector, info);
     }
 
-    private static short SndSetInfo(int paramInt1, int paramInt2, int paramInt3) {
-        return SoundManager.SndSetInfo(paramInt1, paramInt2, paramInt3);
+    private static short SndSetInfo(int chan, int selector, int value) {
+        return SoundManager.SndSetInfo(chan, selector, value);
     }
 
-    private static short SndGetInfo(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfByte);
+    private static short SndGetInfo(int chan, int selector, byte[] info) {
+        return SoundManager.SndGetInfo(chan, selector, info);
     }
 
-    private static short SndGetInfo(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return SoundManager.SndGetInfo(paramInt1, paramInt2, paramArrayOfInt);
+    private static short SndGetInfo(int chan, int selector, int[] info) {
+        return SoundManager.SndGetInfo(chan, selector, info);
     }
 }

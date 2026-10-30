@@ -30,28 +30,28 @@ public class QTByteObject implements PrimitivesLib, Serializable {
      * @return a QTByteObject with the specified array as its target bytes
      */
     public static QTByteObject fromArray(byte[] ar) {
-        QTByteObject localQTByteObject = new QTByteObject();
-        localQTByteObject.bytes = ar;
-        return localQTByteObject;
+        QTByteObject qtByteObject = new QTByteObject();
+        qtByteObject.bytes = ar;
+        return qtByteObject;
     }
 
-    protected QTByteObject(int paramInt) {
-        if (paramInt > 0) {
-            this.bytes = new byte[paramInt];
+    protected QTByteObject(int size) {
+        if (size > 0) {
+            this.bytes = new byte[size];
         }
     }
 
-    protected QTByteObject(byte[] paramArrayOfByte) {
-        this(paramArrayOfByte.length);
-        System.arraycopy(paramArrayOfByte, 0, this.bytes, 0, paramArrayOfByte.length);
+    protected QTByteObject(byte[] bytes) {
+        this(bytes.length);
+        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
     }
 
-    protected final void setBytesAt(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        System.arraycopy(paramArrayOfByte, paramInt3, this.bytes, paramInt1, paramInt2);
+    protected final void setBytesAt(int offset, int length, byte[] srcArray, int srcOffset) {
+        System.arraycopy(srcArray, srcOffset, this.bytes, offset, length);
     }
 
-    protected final void getBytesAt(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3) {
-        System.arraycopy(this.bytes, paramInt1, paramArrayOfByte, paramInt3, paramInt2);
+    protected final void getBytesAt(int offset, int length, byte[] destArray, int destOffset) {
+        System.arraycopy(this.bytes, offset, destArray, destOffset, length);
     }
 
     /**
@@ -75,11 +75,11 @@ public class QTByteObject implements PrimitivesLib, Serializable {
     /**
      * Returns true if the two objects have the same value.
      */
-    public boolean equals(Object paramObject) {
-        if (this == paramObject)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ((paramObject != null) && ((paramObject instanceof QTByteObject))) {
-            byte[] arrayOfByte = ((QTByteObject) paramObject).bytes;
+        if ((obj != null) && ((obj instanceof QTByteObject))) {
+            byte[] arrayOfByte = ((QTByteObject) obj).bytes;
             if (arrayOfByte.length != this.bytes.length)
                 return false;
             for (int i = 0; i < this.bytes.length; i++)
@@ -97,140 +97,140 @@ public class QTByteObject implements PrimitivesLib, Serializable {
         return getClass().getName();
     }
 
-    protected final byte getByteAt(int paramInt) {
-        return this.bytes[paramInt];
+    protected final byte getByteAt(int offset) {
+        return this.bytes[offset];
     }
 
-    protected final short getShortAt(int paramInt) {
-        return getShortFromArray(this.bytes, paramInt);
+    protected final short getShortAt(int offset) {
+        return getShortFromArray(this.bytes, offset);
     }
 
-    protected final int getIntAt(int paramInt) {
-        return getIntFromArray(this.bytes, paramInt);
+    protected final int getIntAt(int offset) {
+        return getIntFromArray(this.bytes, offset);
     }
 
-    protected final long getLongAt(int paramInt) {
-        return getLongFromArray(this.bytes, paramInt);
+    protected final long getLongAt(int offset) {
+        return getLongFromArray(this.bytes, offset);
     }
 
-    protected final float getFloatAt(int paramInt) {
-        return getFloatFromArray(this.bytes, paramInt);
+    protected final float getFloatAt(int offset) {
+        return getFloatFromArray(this.bytes, offset);
     }
 
-    protected final double getDoubleAt(int paramInt) {
-        return getDoubleFromArray(this.bytes, paramInt);
+    protected final double getDoubleAt(int offset) {
+        return getDoubleFromArray(this.bytes, offset);
     }
 
-    protected final void setByteAt(int paramInt, byte paramByte) {
-        this.bytes[paramInt] = paramByte;
+    protected final void setByteAt(int offset, byte value) {
+        this.bytes[offset] = value;
     }
 
-    protected final void setShortAt(int paramInt, short paramShort) {
-        setShortInArray(this.bytes, paramInt, paramShort);
+    protected final void setShortAt(int offset, short value) {
+        setShortInArray(this.bytes, offset, value);
     }
 
-    protected final void setIntAt(int paramInt1, int paramInt2) {
-        setIntInArray(this.bytes, paramInt1, paramInt2);
+    protected final void setIntAt(int offset, int value) {
+        setIntInArray(this.bytes, offset, value);
     }
 
-    protected final void setLongAt(int paramInt, long paramLong) {
-        setLongInArray(this.bytes, paramInt, paramLong);
+    protected final void setLongAt(int offset, long value) {
+        setLongInArray(this.bytes, offset, value);
     }
 
-    protected final void setFloatAt(int paramInt, float paramFloat) {
-        setFloatInArray(this.bytes, paramInt, paramFloat);
+    protected final void setFloatAt(int offset, float value) {
+        setFloatInArray(this.bytes, offset, value);
     }
 
-    protected final void setDoubleAt(int paramInt, double paramDouble) {
-        setDoubleInArray(this.bytes, paramInt, paramDouble);
+    protected final void setDoubleAt(int offset, double value) {
+        setDoubleInArray(this.bytes, offset, value);
     }
 
-    protected int strlen(int paramInt) {
+    protected int strlen(int offset) {
         int i = 0;
-        while (getByteAt(paramInt++) != 0) i++;
+        while (getByteAt(offset++) != 0) i++;
         return i;
     }
 
-    protected String getCStringAt(int paramInt) throws UtilException {
-        int i = strlen(paramInt);
+    protected String getCStringAt(int offset) throws UtilException {
+        int i = strlen(offset);
         if (i > getSize()) {
             throw new UtilException(-50);
         }
-        byte[] arrayOfByte = new byte[i];
-        getBytesAt(paramInt, i, arrayOfByte, 0);
-        return new String(arrayOfByte);
+        byte[] destArray = new byte[i];
+        getBytesAt(offset, i, destArray, 0);
+        return new String(destArray);
     }
 
-    protected void setCStringAt(int paramInt1, int paramInt2, String paramString) throws UtilException {
-        paramInt2 = Math.min(paramInt2, paramString.length());
-        if (paramInt2 + paramInt1 > getSize()) {
+    protected void setCStringAt(int offset, int length, String str) throws UtilException {
+        length = Math.min(length, str.length());
+        if (length + offset > getSize()) {
             throw new UtilException(-50);
         }
-        byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
-        setByteAt(paramInt1 + paramInt2, (byte) 0);
+        byte[] srcArray = str.getBytes();
+        setBytesAt(offset, length, srcArray, 0);
+        setByteAt(offset + length, (byte) 0);
     }
 
-    protected String getPStringAt(int paramInt) throws UtilException {
-        int i = getByteAt(paramInt++);
+    protected String getPStringAt(int offset) throws UtilException {
+        int i = getByteAt(offset++);
         if (i > getSize()) {
             throw new UtilException(-50);
         }
-        byte[] arrayOfByte = new byte[i];
-        getBytesAt(paramInt, i, arrayOfByte, 0);
-        return new String(arrayOfByte);
+        byte[] destArray = new byte[i];
+        getBytesAt(offset, i, destArray, 0);
+        return new String(destArray);
     }
 
-    protected void setPStringAt(int paramInt1, int paramInt2, String paramString) throws UtilException {
-        paramInt2 = Math.min(Math.min(paramInt2, paramString.length()), 255);
-        if (paramInt2 + paramInt1 > getSize()) {
+    protected void setPStringAt(int offset, int length, String str) throws UtilException {
+        length = Math.min(Math.min(length, str.length()), 255);
+        if (length + offset > getSize()) {
             throw new UtilException(-50);
         }
-        setByteAt(paramInt1++, (byte) paramInt2);
-        byte[] arrayOfByte = paramString.getBytes();
-        setBytesAt(paramInt1, paramInt2, arrayOfByte, 0);
+        setByteAt(offset++, (byte) length);
+        byte[] srcArray = str.getBytes();
+        setBytesAt(offset, length, srcArray, 0);
     }
 
     private QTByteObject() {
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static long getLongFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getLongFromArray(paramArrayOfByte, paramInt);
+    private static long getLongFromArray(byte[] array, int offset) {
+        return MemoryManager.getLongFromArray(array, offset);
     }
 
-    private static float getFloatFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getFloatFromArray(paramArrayOfByte, paramInt);
+    private static float getFloatFromArray(byte[] array, int offset) {
+        return MemoryManager.getFloatFromArray(array, offset);
     }
 
-    private static double getDoubleFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getDoubleFromArray(paramArrayOfByte, paramInt);
+    private static double getDoubleFromArray(byte[] array, int offset) {
+        return MemoryManager.getDoubleFromArray(array, offset);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setLongInArray(byte[] paramArrayOfByte, int paramInt, long paramLong) {
-        MemoryManager.setLongInArray(paramArrayOfByte, paramInt, paramLong);
+    private static void setLongInArray(byte[] array, int offset, long value) {
+        MemoryManager.setLongInArray(array, offset, value);
     }
 
-    private static void setFloatInArray(byte[] paramArrayOfByte, int paramInt, float paramFloat) {
-        MemoryManager.setFloatInArray(paramArrayOfByte, paramInt, paramFloat);
+    private static void setFloatInArray(byte[] array, int offset, float value) {
+        MemoryManager.setFloatInArray(array, offset, value);
     }
 
-    private static void setDoubleInArray(byte[] paramArrayOfByte, int paramInt, double paramDouble) {
-        MemoryManager.setDoubleInArray(paramArrayOfByte, paramInt, paramDouble);
+    private static void setDoubleInArray(byte[] array, int offset, double value) {
+        MemoryManager.setDoubleInArray(array, offset, value);
     }
 }

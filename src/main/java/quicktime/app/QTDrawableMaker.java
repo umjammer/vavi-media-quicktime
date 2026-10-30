@@ -58,8 +58,8 @@ public class QTDrawableMaker {
      * @throws quicktime.QTException
      */
     public QTDrawable fromMovie(Movie m) throws QTException {
-        MovieController localMovieController = new MovieController(m);
-        localMovieController.setKeysEnabled(true);
-        return new QTPlayer(localMovieController);
+        MovieController mc = new MovieController(m);
+        mc.setKeysEnabled(true);
+        return new QTPlayer(mc);
     }
 }

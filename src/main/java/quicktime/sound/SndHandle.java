@@ -95,9 +95,9 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @see "QuickTime::SetupSndHeader"
      */
     public int setupHeader(int numChannels, float sampleRate, int sampleSize, int compressionType, int baseNote, int numBytes) throws SoundException {
-        short[] arrayOfShort = {0};
-        SoundException.checkError(SetupSndHeader(_ID(), (short) numChannels, QTUtils.X2UFix(sampleRate), (short) sampleSize, compressionType, (short) baseNote, numBytes, arrayOfShort));
-        return arrayOfShort[0];
+        short[] headerLen = {0};
+        SoundException.checkError(SetupSndHeader(_ID(), (short) numChannels, QTUtils.X2UFix(sampleRate), (short) sampleSize, compressionType, (short) baseNote, numBytes, headerLen));
+        return headerLen[0];
     }
 
     /**
@@ -108,9 +108,9 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @see "QuickTime::GetSoundHeaderOffset"
      */
     public int getSoundHeaderOffset() throws SoundException {
-        int[] arrayOfInt = {0};
-        SoundException.checkError(GetSoundHeaderOffset(_ID(), arrayOfInt));
-        return arrayOfInt[0];
+        int[] offset = {0};
+        SoundException.checkError(GetSoundHeaderOffset(_ID(), offset));
+        return offset[0];
     }
 
     /**
@@ -125,14 +125,14 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
         if (this.buf != null) {
             return this.buf;
         }
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        if (arrayOfInt2[0] >= getSize())
+        int[] numFrames = {0};
+        int[] dataOffset = {0};
+        SoundComponentData soundComponentData = new SoundComponentData();
+        SoundException.checkError(ParseSndHeader(_ID(), soundComponentData.getBytes(), numFrames, dataOffset));
+        if (dataOffset[0] >= getSize())
             throw new QTException("No data in SoundHandle yet");
         lock();
-        return toQTPointer(arrayOfInt2[0], getSize() - arrayOfInt2[0]);
+        return toQTPointer(dataOffset[0], getSize() - dataOffset[0]);
     }
 
     /**
@@ -145,13 +145,13 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @throws quicktime.QTException
      */
     public void appendSoundData(QTPointerRef buffer) throws QTException {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
+        int[] numFrames = {0};
+        int[] dataOffset = {0};
+        SoundComponentData soundComponentData = new SoundComponentData();
+        SoundException.checkError(ParseSndHeader(_ID(), soundComponentData.getBytes(), numFrames, dataOffset));
         if (buffer != null) {
-            setSize(arrayOfInt2[0] + buffer.getSize());
-            BlockMove(QTObject.ID(buffer), lockAndDeref(arrayOfInt2[0]), buffer.getSize());
+            setSize(dataOffset[0] + buffer.getSize());
+            BlockMove(QTObject.ID(buffer), lockAndDeref(dataOffset[0]), buffer.getSize());
         } else {
             setSize(getSoundHeaderOffset());
         }
@@ -167,11 +167,11 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @throws quicktime.QTException
      */
     public void appendSoundBuffer(int bufferSize) throws QTException {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        setSize(arrayOfInt2[0] + bufferSize);
+        int[] numFrames = {0};
+        int[] dataOffset = {0};
+        SoundComponentData soundComponentData = new SoundComponentData();
+        SoundException.checkError(ParseSndHeader(_ID(), soundComponentData.getBytes(), numFrames, dataOffset));
+        setSize(dataOffset[0] + bufferSize);
         this.buf = null;
         setIntAt(getSoundHeaderOffset(), 0);
     }
@@ -187,11 +187,11 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
         int i = getSoundHeaderOffset();
         setIntAt(i, QTObject.ID(buffer));
         this.buf = buffer;
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        setSize(arrayOfInt2[0]);
+        int[] numFrames = {0};
+        int[] dataOffset = {0};
+        SoundComponentData soundComponentData = new SoundComponentData();
+        SoundException.checkError(ParseSndHeader(_ID(), soundComponentData.getBytes(), numFrames, dataOffset));
+        setSize(dataOffset[0]);
     }
 
     /**
@@ -202,26 +202,26 @@ public final class SndHandle extends QTHandle implements QuickTimeLib, SoundLib 
      * @see "QuickTime::ParseSndHeader"
      */
     public SndInfo parseSndHeader() throws SoundException {
-        int[] arrayOfInt1 = {0};
-        int[] arrayOfInt2 = {0};
-        SoundComponentData localSoundComponentData = new SoundComponentData();
-        SoundException.checkError(ParseSndHeader(_ID(), localSoundComponentData.getBytes(), arrayOfInt1, arrayOfInt2));
-        return new SndInfo(localSoundComponentData, arrayOfInt1[0], arrayOfInt2[0]);
+        int[] numFrames = {0};
+        int[] dataOffset = {0};
+        SoundComponentData sndData = new SoundComponentData();
+        SoundException.checkError(ParseSndHeader(_ID(), sndData.getBytes(), numFrames, dataOffset));
+        return new SndInfo(sndData, numFrames[0], dataOffset[0]);
     }
 
-    private static short SetupSndHeader(int paramInt1, short paramShort1, int paramInt2, short paramShort2, int paramInt3, short paramShort3, int paramInt4, short[] paramArrayOfShort) {
-        return SoundManager.SetupSndHeader(paramInt1, paramShort1, paramInt2, paramShort2, paramInt3, paramShort3, paramInt4, paramArrayOfShort);
+    private static short SetupSndHeader(int sndHandle, short numChannels, int sampleRate, short sampleSize, int compressionType, short baseNote, int numBytes, short[] headerLen) {
+        return SoundManager.SetupSndHeader(sndHandle, numChannels, sampleRate, sampleSize, compressionType, baseNote, numBytes, headerLen);
     }
 
-    private static short GetSoundHeaderOffset(int paramInt, int[] paramArrayOfInt) {
-        return SoundManager.GetSoundHeaderOffset(paramInt, paramArrayOfInt);
+    private static short GetSoundHeaderOffset(int sndHandle, int[] offset) {
+        return SoundManager.GetSoundHeaderOffset(sndHandle, offset);
     }
 
-    private static void BlockMove(int paramInt1, int paramInt2, int paramInt3) {
-        MemoryManager.BlockMove(paramInt1, paramInt2, paramInt3);
+    private static void BlockMove(int src, int dst, int length) {
+        MemoryManager.BlockMove(src, dst, length);
     }
 
-    private static short ParseSndHeader(int paramInt, byte[] paramArrayOfByte, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return SoundManager.ParseSndHeader(paramInt, paramArrayOfByte, paramArrayOfInt1, paramArrayOfInt2);
+    private static short ParseSndHeader(int sndHandle, byte[] scd, int[] numFrames, int[] dataOffset) {
+        return SoundManager.ParseSndHeader(sndHandle, scd, numFrames, dataOffset);
     }
 }

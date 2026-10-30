@@ -11,8 +11,8 @@ import quicktime.util.QTUtils;
  */
 public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLib, AudioMediaHandler {
 
-    StreamMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    StreamMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**
@@ -24,9 +24,9 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      */
     @Override
     public final float getBalance() throws StdQTException {
-        short[] arrayOfShort = new short[1];
-        StdQTException.checkError(MediaGetSoundBalance(_ID(), arrayOfShort));
-        return QTUtils.ShortFix2X(arrayOfShort[0]);
+        short[] balance = new short[1];
+        StdQTException.checkError(MediaGetSoundBalance(_ID(), balance));
+        return QTUtils.ShortFix2X(balance[0]);
     }
 
     /**
@@ -50,9 +50,9 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      */
     @Override
     public final boolean getSoundLevelMeteringEnabled() throws StdQTException {
-        byte[] arrayOfByte = {0};
-        StdQTException.checkError(MediaGetSoundLevelMeteringEnabled(_ID(), arrayOfByte));
-        return arrayOfByte[0] != 0;
+        byte[] enabled = {0};
+        StdQTException.checkError(MediaGetSoundLevelMeteringEnabled(_ID(), enabled));
+        return enabled[0] != 0;
     }
 
     /**
@@ -76,10 +76,10 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      */
     @Override
     public final LevelMeterInfo getSoundLevelMeterInfo() throws StdQTException {
-        byte[] arrayOfByte = new byte[4];
-        int i = MediaGetSoundLevelMeterInfo(_ID(), arrayOfByte);
+        byte[] info = new byte[4];
+        int i = MediaGetSoundLevelMeterInfo(_ID(), info);
         StdQTException.checkError(i);
-        return new LevelMeterInfo(arrayOfByte);
+        return new LevelMeterInfo(info);
     }
 
     /**
@@ -91,10 +91,10 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      * @see "QuickTime::MediaGetSoundEqualizerBands"
      */
     @Override
-    public final MediaEQSpectrumBands getSoundEqualizerBands(int paramInt) throws StdQTException {
-        MediaEQSpectrumBands localMediaEQSpectrumBands = new MediaEQSpectrumBands(paramInt);
-        StdQTException.checkError(MediaGetSoundEqualizerBands(_ID(), localMediaEQSpectrumBands.getBytes()));
-        return localMediaEQSpectrumBands;
+    public final MediaEQSpectrumBands getSoundEqualizerBands(int count) throws StdQTException {
+        MediaEQSpectrumBands soundEqualizerBands = new MediaEQSpectrumBands(count);
+        StdQTException.checkError(MediaGetSoundEqualizerBands(_ID(), soundEqualizerBands.getBytes()));
+        return soundEqualizerBands;
     }
 
     /**
@@ -106,8 +106,8 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      * @see "QuickTime::MediaSetSoundEqualizerBands"
      */
     @Override
-    public final void setSoundEqualizerBands(MediaEQSpectrumBands paramMediaEQSpectrumBands) throws StdQTException {
-        StdQTException.checkError(MediaSetSoundEqualizerBands(_ID(), paramMediaEQSpectrumBands.getBytes()));
+    public final void setSoundEqualizerBands(MediaEQSpectrumBands soundEqualizerBands) throws StdQTException {
+        StdQTException.checkError(MediaSetSoundEqualizerBands(_ID(), soundEqualizerBands.getBytes()));
     }
 
     /**
@@ -120,14 +120,14 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      * @see "QuickTime::MediaGetSoundEqualizerBandLevels"
      */
     @Override
-    public final int[] getSoundEqualizerBandLevels(int paramInt) throws StdQTException {
-        byte[] arrayOfByte = new byte[paramInt];
-        StdQTException.checkError(MediaGetSoundEqualizerBandLevels(_ID(), arrayOfByte));
-        int[] arrayOfInt = new int[paramInt];
-        for (int i = 0; i < arrayOfInt.length; i++) {
-            arrayOfInt[i] = QTUtils.UByte2Int(arrayOfByte[i]);
+    public final int[] getSoundEqualizerBandLevels(int numBands) throws StdQTException {
+        byte[] levels = new byte[numBands];
+        StdQTException.checkError(MediaGetSoundEqualizerBandLevels(_ID(), levels));
+        int[] soundEqualizerBandLevels = new int[numBands];
+        for (int i = 0; i < soundEqualizerBandLevels.length; i++) {
+            soundEqualizerBandLevels[i] = QTUtils.UByte2Int(levels[i]);
         }
-        return arrayOfInt;
+        return soundEqualizerBandLevels;
     }
 
     /**
@@ -154,50 +154,50 @@ public class StreamMediaHandler extends VideoMediaHandler implements QuickTimeLi
      */
     @Override
     public final int[] getSoundBassAndTreble() throws StdQTException {
-        short[] arrayOfShort1 = {0};
-        short[] arrayOfShort2 = {0};
-        StdQTException.checkError(MediaGetSoundBassAndTreble(_ID(), arrayOfShort1, arrayOfShort2));
-        int[] arrayOfInt = {arrayOfShort1[0], arrayOfShort2[0]};
-        return arrayOfInt;
+        short[] bass = {0};
+        short[] treble = {0};
+        StdQTException.checkError(MediaGetSoundBassAndTreble(_ID(), bass, treble));
+        int[] soundBassAndTreble = {bass[0], treble[0]};
+        return soundBassAndTreble;
     }
 
-    private static int MediaGetSoundBalance(int paramInt, short[] paramArrayOfShort) {
-        return MediaHandlerManager.MediaGetSoundBalance(paramInt, paramArrayOfShort);
+    private static int MediaGetSoundBalance(int mh, short[] balance) {
+        return MediaHandlerManager.MediaGetSoundBalance(mh, balance);
     }
 
-    private static int MediaSetSoundBalance(int paramInt, short paramShort) {
-        return MediaHandlerManager.MediaSetSoundBalance(paramInt, paramShort);
+    private static int MediaSetSoundBalance(int mh, short balance) {
+        return MediaHandlerManager.MediaSetSoundBalance(mh, balance);
     }
 
-    private static int MediaGetSoundLevelMeteringEnabled(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetSoundLevelMeteringEnabled(paramInt, paramArrayOfByte);
+    private static int MediaGetSoundLevelMeteringEnabled(int mh, byte[] enabled) {
+        return MediaHandlerManager.MediaGetSoundLevelMeteringEnabled(mh, enabled);
     }
 
-    private static int MediaSetSoundLevelMeteringEnabled(int paramInt, byte paramByte) {
-        return MediaHandlerManager.MediaSetSoundLevelMeteringEnabled(paramInt, paramByte);
+    private static int MediaSetSoundLevelMeteringEnabled(int mh, byte enabled) {
+        return MediaHandlerManager.MediaSetSoundLevelMeteringEnabled(mh, enabled);
     }
 
-    private static int MediaGetSoundEqualizerBands(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetSoundEqualizerBands(paramInt, paramArrayOfByte);
+    private static int MediaGetSoundEqualizerBands(int mh, byte[] bands) {
+        return MediaHandlerManager.MediaGetSoundEqualizerBands(mh, bands);
     }
 
-    private static int MediaSetSoundEqualizerBands(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaSetSoundEqualizerBands(paramInt, paramArrayOfByte);
+    private static int MediaSetSoundEqualizerBands(int mh, byte[] bands) {
+        return MediaHandlerManager.MediaSetSoundEqualizerBands(mh, bands);
     }
 
-    private static int MediaSetSoundBassAndTreble(int paramInt, short paramShort1, short paramShort2) {
-        return MediaHandlerManager.MediaSetSoundBassAndTreble(paramInt, paramShort1, paramShort2);
+    private static int MediaSetSoundBassAndTreble(int mh, short bass, short treble) {
+        return MediaHandlerManager.MediaSetSoundBassAndTreble(mh, bass, treble);
     }
 
-    private static int MediaGetSoundBassAndTreble(int paramInt, short[] paramArrayOfShort1, short[] paramArrayOfShort2) {
-        return MediaHandlerManager.MediaGetSoundBassAndTreble(paramInt, paramArrayOfShort1, paramArrayOfShort2);
+    private static int MediaGetSoundBassAndTreble(int mh, short[] bass, short[] treble) {
+        return MediaHandlerManager.MediaGetSoundBassAndTreble(mh, bass, treble);
     }
 
-    private static int MediaGetSoundLevelMeterInfo(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetSoundLevelMeterInfo(paramInt, paramArrayOfByte);
+    private static int MediaGetSoundLevelMeterInfo(int mh, byte[] info) {
+        return MediaHandlerManager.MediaGetSoundLevelMeterInfo(mh, info);
     }
 
-    private static int MediaGetSoundEqualizerBandLevels(int paramInt, byte[] paramArrayOfByte) {
-        return MediaHandlerManager.MediaGetSoundEqualizerBandLevels(paramInt, paramArrayOfByte);
+    private static int MediaGetSoundEqualizerBandLevels(int mh, byte[] levels) {
+        return MediaHandlerManager.MediaGetSoundEqualizerBandLevels(mh, levels);
     }
 }

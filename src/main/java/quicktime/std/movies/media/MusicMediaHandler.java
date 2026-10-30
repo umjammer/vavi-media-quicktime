@@ -5,8 +5,8 @@ import quicktime.std.music.TunePlayer;
 
 public final class MusicMediaHandler extends SoundMediaHandler {
 
-    MusicMediaHandler(int paramInt, Object paramObject) {
-        super(paramInt, paramObject);
+    MusicMediaHandler(int nativeRep, Object ref) {
+        super(nativeRep, ref);
     }
 
     /**

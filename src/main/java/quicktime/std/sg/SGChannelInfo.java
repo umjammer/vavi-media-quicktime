@@ -20,9 +20,9 @@ public class SGChannelInfo {
      */
     public final int mCompressionType;
 
-    SGChannelInfo(int paramInt1, int paramInt2, int paramInt3) {
-        this.mSampleSize = paramInt1;
-        this.mNumChannels = paramInt2;
-        this.mCompressionType = paramInt3;
+    SGChannelInfo(int sampleSize, int numChannels, int compressionType) {
+        this.mSampleSize = sampleSize;
+        this.mNumChannels = numChannels;
+        this.mCompressionType = compressionType;
     }
 }

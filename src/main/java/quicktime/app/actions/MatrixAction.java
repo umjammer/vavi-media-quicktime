@@ -228,56 +228,56 @@ public class MatrixAction extends PeriodicAction implements Targetable {
         if (this.transMatrix != null) {
             this.consReached = this.transMatrix.transformTarget();
         } else {
-            Matrix localMatrix1 = this.target.getMatrix().copy();
-            transformMatrix(localMatrix1);
+            Matrix theMatrix = this.target.getMatrix().copy();
+            transformMatrix(theMatrix);
             if (this.doConstraintBoundsTesting) {
-                Matrix localMatrix2 = new Matrix();
-                this.space.getMatrix().inverse(localMatrix2);
-                QDRect localQDRect1 = this.space.getDisplayBounds().copy();
-                localMatrix2.transformRect(localQDRect1);
-                QDDimension localQDDimension = this.target.getOriginalSize();
-                float f1 = localMatrix1.getTx();
-                float f2 = localMatrix1.getTy();
-                int i = localQDRect1.getX();
-                int j = localQDRect1.getWidth() - localQDDimension.getWidth();
-                int k = localQDRect1.getY();
-                int m = localQDRect1.getHeight() - localQDDimension.getHeight();
-                switch (localMatrix1.getType()) {
+                Matrix mr = new Matrix();
+                this.space.getMatrix().inverse(mr);
+                QDRect rect1 = this.space.getDisplayBounds().copy();
+                mr.transformRect(rect1);
+                QDDimension originalSize = this.target.getOriginalSize();
+                float f1 = theMatrix.getTx();
+                float f2 = theMatrix.getTy();
+                int i = rect1.getX();
+                int j = rect1.getWidth() - originalSize.getWidth();
+                int k = rect1.getY();
+                int m = rect1.getHeight() - originalSize.getHeight();
+                switch (theMatrix.getType()) {
                     case 0:
                     case 1:
                         break;
                     default:
-                        QDRect localQDRect2 = new QDRect(0, 0, localQDDimension.getWidth(), localQDDimension.getHeight());
-                        localMatrix1.transformRect(localQDRect2);
-                        localQDDimension.setWidth(localQDRect2.getWidth());
-                        localQDDimension.setHeight(localQDRect2.getHeight());
-                        i = (int) (localMatrix1.getTx() - localQDRect2.getX() + 0.5F);
+                        QDRect rect2 = new QDRect(0, 0, originalSize.getWidth(), originalSize.getHeight());
+                        theMatrix.transformRect(rect2);
+                        originalSize.setWidth(rect2.getWidth());
+                        originalSize.setHeight(rect2.getHeight());
+                        i = (int) (theMatrix.getTx() - rect2.getX() + 0.5F);
                         f1 -= i;
-                        k = (int) (localMatrix1.getTy() - localQDRect2.getY() + 0.5F);
+                        k = (int) (theMatrix.getTy() - rect2.getY() + 0.5F);
                         f2 -= k;
-                        m = localQDRect1.getHeight() - localQDDimension.getHeight() + k;
-                        j = localQDRect1.getWidth() - localQDDimension.getWidth() + i;
+                        m = rect1.getHeight() - originalSize.getHeight() + k;
+                        j = rect1.getWidth() - originalSize.getWidth() + i;
                 }
-                if (f1 < localQDRect1.getX()) {
-                    localMatrix1.setTx(i);
+                if (f1 < rect1.getX()) {
+                    theMatrix.setTx(i);
                     boundsReached(1);
                     this.consReached = true;
-                } else if (f1 + localQDDimension.getWidth() > localQDRect1.getWidth()) {
-                    localMatrix1.setTx(j);
+                } else if (f1 + originalSize.getWidth() > rect1.getWidth()) {
+                    theMatrix.setTx(j);
                     boundsReached(16);
                     this.consReached = true;
                 }
-                if (f2 < localQDRect1.getY()) {
-                    localMatrix1.setTy(k);
+                if (f2 < rect1.getY()) {
+                    theMatrix.setTy(k);
                     boundsReached(256);
                     this.consReached = true;
-                } else if (f2 + localQDDimension.getHeight() > localQDRect1.getHeight()) {
-                    localMatrix1.setTy(m);
+                } else if (f2 + originalSize.getHeight() > rect1.getHeight()) {
+                    theMatrix.setTy(m);
                     boundsReached(4096);
                     this.consReached = true;
                 }
             }
-            setTargetMatrix(localMatrix1);
+            setTargetMatrix(theMatrix);
         }
     }
 
@@ -332,14 +332,14 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @deprecated
      */
     public boolean equals(Object obj) {
-        if ((obj instanceof MatrixAction localMatrixAction)) {
+        if ((obj instanceof MatrixAction matrixAction)) {
             if (this.transMatrix != null) {
-                if (!this.transMatrix.equals(localMatrixAction.transMatrix)) {
+                if (!this.transMatrix.equals(matrixAction.transMatrix)) {
                     return false;
                 }
                 return super.equals(obj);
             }
-            if (!this.target.equals(localMatrixAction.target)) {
+            if (!this.target.equals(matrixAction.target)) {
                 return false;
             }
             return super.equals(obj);
@@ -355,7 +355,7 @@ public class MatrixAction extends PeriodicAction implements Targetable {
      * @since QTJava 4
      * @deprecated
      */
-    protected void rateDirectionChanged(boolean paramBoolean) throws QTException {
+    protected void rateDirectionChanged(boolean forward) throws QTException {
     }
 
     /**

@@ -25,18 +25,18 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
      * @return the atom's data.
      * @throws quicktime.std.StdQTException
      */
-    public static AtomData fromVectorStream(Curve paramCurve, VectorStream vectorStream, int atomType) throws StdQTException {
-        int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
+    public static AtomData fromVectorStream(Curve effect, VectorStream vectorStream, int atomType) throws StdQTException {
+        int[] dataSize = { 0 };
+        int[] dataPtr = { 0 };
         vectorStream.lock();
-        int i = CurveGetAtomDataFromVectorStream(QTObject.ID(paramCurve), QTObject.ID(vectorStream), atomType, arrayOfInt1, arrayOfInt2);
+        int i = CurveGetAtomDataFromVectorStream(QTObject.ID(effect), QTObject.ID(vectorStream), atomType, dataSize, dataPtr);
         StdQTException.checkError(i);
         vectorStream.unlock();
-        return new AtomData(arrayOfInt2[0], arrayOfInt1[0], paramCurve);
+        return new AtomData(dataPtr[0], dataSize[0], effect);
     }
 
-    AtomData(int paramInt1, int paramInt2, Object paramObject) {
-        super(paramInt1, paramInt2, paramObject);
+    AtomData(int nativeRep, int size, Object ref) {
+        super(nativeRep, size, ref);
     }
 
     /**
@@ -141,17 +141,17 @@ public final class AtomData extends QTPointerRef implements QuickTimeLib {
         checkOffset(offset);
         int i = getSize() - offset;
         int j = i > length ? length : length == 0 ? i : i;
-        byte[] arrayOfByte = new byte[j];
-        getBytesAt(offset, j, arrayOfByte, 0);
-        return arrayOfByte;
+        byte[] bytes = new byte[j];
+        getBytesAt(offset, j, bytes, 0);
+        return bytes;
     }
 
-    private void checkOffset(int paramInt) throws IndexOutOfBoundsException {
-        if (paramInt > getSize())
+    private void checkOffset(int offset) throws IndexOutOfBoundsException {
+        if (offset > getSize())
             throw new IndexOutOfBoundsException();
     }
 
-    private static int CurveGetAtomDataFromVectorStream(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        return ImageCompressionManager.CurveGetAtomDataFromVectorStream(paramInt1, paramInt2, paramInt3, paramArrayOfInt1, paramArrayOfInt2);
+    private static int CurveGetAtomDataFromVectorStream(int effect, int stream, int atomType, int[] dataSize, int[] dataPtr) {
+        return ImageCompressionManager.CurveGetAtomDataFromVectorStream(effect, stream, atomType, dataSize, dataPtr);
     }
 }

@@ -44,10 +44,10 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
      */
     public static ICMPixelFormatInfo setPixelFormatInfo(int pixelFormat) throws StdQTException {
         if (!QTSession.isCurrentOS(4)) {
-            ICMPixelFormatInfo localICMPixelFormatInfo = new ICMPixelFormatInfo();
-            int i = ICMSetPixelFormatInfo(pixelFormat, localICMPixelFormatInfo.getBytes());
+            ICMPixelFormatInfo icmPixelFormatInfo = new ICMPixelFormatInfo();
+            int i = ICMSetPixelFormatInfo(pixelFormat, icmPixelFormatInfo.getBytes());
             StdQTException.checkError(i);
-            return localICMPixelFormatInfo;
+            return icmPixelFormatInfo;
         }
         throw new QTRuntimeException("Unsupported OS");
     }
@@ -60,10 +60,10 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public static ICMPixelFormatInfo getPixelFormatInfo(int pixelFormat) throws StdQTException {
-        ICMPixelFormatInfo localICMPixelFormatInfo = new ICMPixelFormatInfo();
-        int i = ICMGetPixelFormatInfo(pixelFormat, localICMPixelFormatInfo.getBytes());
+        ICMPixelFormatInfo pixelFormatInfo = new ICMPixelFormatInfo();
+        int i = ICMGetPixelFormatInfo(pixelFormat, pixelFormatInfo.getBytes());
         StdQTException.checkError(i);
-        return localICMPixelFormatInfo;
+        return pixelFormatInfo;
     }
 
     private ICMPixelFormatInfo() {
@@ -71,9 +71,9 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[36];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         int i = getIntFromArray(this.bytes, 0);
         int j = EndianOrder.flipBigEndianToNative32(i);
         setIntInArray(this.bytes, 0, j);
@@ -88,20 +88,20 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[36];
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[36];
         int i = getIntFromArray(getBytes(), 0);
         int j = EndianOrder.flipNativeToBigEndian32(i);
-        setIntInArray(arrayOfByte, 0, j);
+        setIntInArray(movie, 0, j);
         int k = getFormatFlags();
         int m = EndianOrder.flipNativeToBigEndian32(i);
-        setIntInArray(arrayOfByte, 4, m);
+        setIntInArray(movie, 4, m);
         for (int n = 8; n < 36; n += 2) {
-            short s1 = getShortFromArray(arrayOfByte, n);
+            short s1 = getShortFromArray(movie, n);
             short s2 = EndianOrder.flipNativeToBigEndian16(s1);
-            setShortInArray(arrayOfByte, n, s2);
+            setShortInArray(movie, n, s2);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     public int getFormatFlags() {
@@ -116,27 +116,27 @@ public class ICMPixelFormatInfo extends QTByteObject implements QuickTimeLib {
         return getClass().getName() + "[formatFlags=" + getFormatFlags() + "]";
     }
 
-    private static short ICMSetPixelFormatInfo(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.ICMSetPixelFormatInfo(paramInt, paramArrayOfByte);
+    private static short ICMSetPixelFormatInfo(int pixelFormat, byte[] info) {
+        return ImageCompressionManager.ICMSetPixelFormatInfo(pixelFormat, info);
     }
 
-    private static short ICMGetPixelFormatInfo(int paramInt, byte[] paramArrayOfByte) {
-        return ImageCompressionManager.ICMGetPixelFormatInfo(paramInt, paramArrayOfByte);
+    private static short ICMGetPixelFormatInfo(int pixelFormat, byte[] info) {
+        return ImageCompressionManager.ICMGetPixelFormatInfo(pixelFormat, info);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 
-    private static void setShortInArray(byte[] paramArrayOfByte, int paramInt, short paramShort) {
-        MemoryManager.setShortInArray(paramArrayOfByte, paramInt, paramShort);
+    private static void setShortInArray(byte[] array, int offset, short value) {
+        MemoryManager.setShortInArray(array, offset, value);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static short getShortFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getShortFromArray(paramArrayOfByte, paramInt);
+    private static short getShortFromArray(byte[] array, int offset) {
+        return MemoryManager.getShortFromArray(array, offset);
     }
 }

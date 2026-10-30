@@ -4,10 +4,10 @@ package com.apple.mrj.jdirect;
 public class CompletionRoutineNotifier {
 
     /**
-     * @param paramInt
-     * @param paramObject
+     * @param routine
+     * @param target
      */
-    public CompletionRoutineNotifier(int paramInt, Object paramObject) {
+    public CompletionRoutineNotifier(int routine, Object target) {
     }
 
     /**

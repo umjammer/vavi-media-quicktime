@@ -47,26 +47,26 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
     /**
      * Creates a CameraData object from the data.
      */
-    public CameraData(CameraPlacement paramCameraPlacement, CameraRange paramCameraRange, CameraViewPort paramCameraViewPort) {
+    public CameraData(CameraPlacement placement, CameraRange range, CameraViewPort viewPort) {
         this();
-        setPlacement(paramCameraPlacement);
-        setRange(paramCameraRange);
-        setViewPort(paramCameraViewPort);
+        setPlacement(placement);
+        setRange(range);
+        setViewPort(viewPort);
     }
 
-    CameraData(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    CameraData(byte[] bytes) {
+        super(bytes);
     }
 
-    CameraData(int paramInt) {
-        super(paramInt);
+    CameraData(int size) {
+        super(size);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
-        int i = paramObjectInputStream.readInt();
+    private void readObject(ObjectInputStream in) throws IOException {
+        int i = in.readInt();
         this.bytes = new byte[i];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         for (int j = 0; j < 60; j += 4) {
             int k = getIntFromArray(this.bytes, j);
             int m = EndianOrder.flipBigEndianToNative32(k);
@@ -75,68 +75,68 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = getBytes();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = getBytes();
         int i = getSize();
-        paramObjectOutputStream.writeInt(i);
+        out.writeInt(i);
         for (int j = 0; j < i; j += 4) {
             int k = getIntFromArray(getBytes(), j);
             int m = EndianOrder.flipNativeToBigEndian32(k);
-            setIntInArray(arrayOfByte, j, m);
+            setIntInArray(movie, j, m);
         }
-        paramObjectOutputStream.write(arrayOfByte);
+        out.write(movie);
     }
 
     /**
      * returns the camera placement
      */
     public final CameraPlacement getPlacement() {
-        CameraPlacement localCameraPlacement = new CameraPlacement();
-        System.arraycopy(getBytes(), 0, localCameraPlacement.getBytes(), 0, 36);
-        return localCameraPlacement;
+        CameraPlacement placement = new CameraPlacement();
+        System.arraycopy(getBytes(), 0, placement.getBytes(), 0, 36);
+        return placement;
     }
 
     /**
      * sets the camera placement
      */
-    public final void setPlacement(CameraPlacement paramCameraPlacement) {
-        System.arraycopy(paramCameraPlacement.getBytes(), 0, getBytes(), 0, 36);
+    public final void setPlacement(CameraPlacement placement) {
+        System.arraycopy(placement.getBytes(), 0, getBytes(), 0, 36);
     }
 
     /**
      * returns the camera range
      */
     public final CameraRange getRange() {
-        CameraRange localCameraRange = new CameraRange();
-        System.arraycopy(getBytes(), 36, localCameraRange.getBytes(), 0, 8);
-        return localCameraRange;
+        CameraRange range = new CameraRange();
+        System.arraycopy(getBytes(), 36, range.getBytes(), 0, 8);
+        return range;
     }
 
     /**
      * sets the camera range
      */
-    public final void setRange(CameraRange paramCameraRange) {
-        System.arraycopy(paramCameraRange.getBytes(), 0, getBytes(), 36, 8);
+    public final void setRange(CameraRange range) {
+        System.arraycopy(range.getBytes(), 0, getBytes(), 36, 8);
     }
 
     /**
      * returns the camera range
      */
     public final CameraViewPort getViewPort() {
-        CameraViewPort localCameraViewPort = new CameraViewPort();
-        System.arraycopy(getBytes(), 44, localCameraViewPort.getBytes(), 0, 16);
-        return localCameraViewPort;
+        CameraViewPort viewPort = new CameraViewPort();
+        System.arraycopy(getBytes(), 44, viewPort.getBytes(), 0, 16);
+        return viewPort;
     }
 
     /**
      * sets the camera range
      */
-    public final void setViewPort(CameraViewPort paramCameraViewPort) {
-        System.arraycopy(paramCameraViewPort.getBytes(), 0, getBytes(), 44, 16);
+    public final void setViewPort(CameraViewPort viewPort) {
+        System.arraycopy(viewPort.getBytes(), 0, getBytes(), 44, 16);
     }
 
-    final void setCameraBytes(CameraData paramCameraData) {
-        System.arraycopy(paramCameraData.getBytes(), 0, getBytes(), 0, 60);
+    final void setCameraBytes(CameraData cameraBytes) {
+        System.arraycopy(cameraBytes.getBytes(), 0, getBytes(), 0, 60);
     }
 
     /**
@@ -154,11 +154,11 @@ public class CameraData extends QTByteObject implements PrimitivesLib, Cloneable
         return getClass().getName();
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

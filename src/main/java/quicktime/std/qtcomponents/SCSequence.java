@@ -20,25 +20,25 @@ public final class SCSequence implements QuickTimeLib {
 
     private final ImageCompressionDialog dialog;
 
-    SCSequence(ImageCompressionDialog paramImageCompressionDialog, QDGraphics paramQDGraphics, QDRect paramQDRect) throws QTException {
-        if (paramQDGraphics == null) {
+    SCSequence(ImageCompressionDialog dialog, QDGraphics port, QDRect rect) throws QTException {
+        if (port == null) {
             throw new StdQTException(-50);
         }
         int[] arrayOfInt1 = { 0 };
-        int[] arrayOfInt2 = { 0 };
-        int[] arrayOfInt3 = { 0 };
+        int[] gdh = { 0 };
+        int[] desc = { 0 };
         int i = 0;
         synchronized (QTNative.globalsLock) {
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                GetGWorld(arrayOfInt1, arrayOfInt2);
-            SetGWorld(QTObject.ID(paramQDGraphics), 0);
-            i = SCCompressSequenceBegin(QTObject.ID(paramImageCompressionDialog), QTObject.ID(paramQDGraphics.getPixMap()), paramQDRect != null ? paramQDRect.getRect() : null, arrayOfInt3);
+                GetGWorld(arrayOfInt1, gdh);
+            SetGWorld(QTObject.ID(port), 0);
+            i = SCCompressSequenceBegin(QTObject.ID(dialog), QTObject.ID(port.getPixMap()), rect != null ? rect.getRect() : null, desc);
             if ((QTSession.isCurrentOS(1)) || (QTSession.isCurrentOS(4)))
-                SetGWorld(arrayOfInt1[0], arrayOfInt2[0]);
+                SetGWorld(arrayOfInt1[0], gdh[0]);
         }
         StdQTException.checkError(i);
-        this.dialog = paramImageCompressionDialog;
-        this.desc = new ImageDescription(arrayOfInt3[0], this) {
+        this.dialog = dialog;
+        this.desc = new ImageDescription(desc[0], this) {
         };
     }
 
@@ -76,19 +76,19 @@ public final class SCSequence implements QuickTimeLib {
         SCCompressSequenceEnd(QTObject.ID(this.dialog));
     }
 
-    private static int SCCompressSequenceBegin(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int[] paramArrayOfInt) {
-        return ImageCompressionManager.SCCompressSequenceBegin(paramInt1, paramInt2, paramArrayOfByte, paramArrayOfInt);
+    private static int SCCompressSequenceBegin(int ci, int src, byte[] srcRect, int[] desc) {
+        return ImageCompressionManager.SCCompressSequenceBegin(ci, src, srcRect, desc);
     }
 
-    private static int SCCompressSequenceEnd(int paramInt) {
-        return ImageCompressionManager.SCCompressSequenceEnd(paramInt);
+    private static int SCCompressSequenceEnd(int ci) {
+        return ImageCompressionManager.SCCompressSequenceEnd(ci);
     }
 
-    private static void SetGWorld(int paramInt1, int paramInt2) {
-        QuickDrawManager.SetGWorld(paramInt1, paramInt2);
+    private static void SetGWorld(int port, int gdh) {
+        QuickDrawManager.SetGWorld(port, gdh);
     }
 
-    private static void GetGWorld(int[] paramArrayOfInt1, int[] paramArrayOfInt2) {
-        QuickDrawManager.GetGWorld(paramArrayOfInt1, paramArrayOfInt2);
+    private static void GetGWorld(int[] port, int[] gdh) {
+        QuickDrawManager.GetGWorld(port, gdh);
     }
 }

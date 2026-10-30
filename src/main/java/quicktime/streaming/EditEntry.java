@@ -77,8 +77,8 @@ public final class EditEntry extends QTPointerRef {
     /**
      * Sets the time scale of the Broadcaster params.
      */
-    public void setStreamRate(float paramFloat) {
-        setIntAt(16, QTUtils.X2Fix(paramFloat));
+    public void setStreamRate(float streamRate) {
+        setIntAt(16, QTUtils.X2Fix(streamRate));
     }
 
     /**

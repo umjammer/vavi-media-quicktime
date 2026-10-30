@@ -48,18 +48,18 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
         super(allocate(qtvrTrack, mc));
     }
 
-    private static int allocate(Track paramTrack, MovieController paramMovieController) throws QTException {
-        int[] arrayOfInt = {0};
+    private static int allocate(Track qtvrTrack, MovieController mc) throws QTException {
+        int[] qtvr = {0};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetQTVRInstance(arrayOfInt, QTObject.ID(paramTrack), QTObject.ID(paramMovieController));
+            i = QTVRGetQTVRInstance(qtvr, QTObject.ID(qtvrTrack), QTObject.ID(mc));
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return qtvr[0];
     }
 
-    QTVRInstance(int paramInt) {
-        super(paramInt);
+    QTVRInstance(int nativeRep) {
+        super(nativeRep);
     }
 
     private final Hashtable<Integer, VRDispatcher> ipProcs = new Hashtable<>();
@@ -241,14 +241,14 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetConstraints"
      */
     public float getConstraints_min(int kind) throws QTVRException {
-        float[] arrayOfFloat1 = {0.0F};
-        float[] arrayOfFloat2 = {0.0F};
+        float[] minValue = {0.0F};
+        float[] maxValue = {0.0F};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetConstraints(_ID(), (short) kind, arrayOfFloat1, arrayOfFloat2);
+            i = QTVRGetConstraints(_ID(), (short) kind, minValue, maxValue);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat1[0];
+        return minValue[0];
     }
 
     /**
@@ -260,14 +260,14 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetConstraints"
      */
     public float getConstraints_max(int kind) throws QTVRException {
-        float[] arrayOfFloat1 = {0.0F};
-        float[] arrayOfFloat2 = {0.0F};
+        float[] minValue = {0.0F};
+        float[] maxValue = {0.0F};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetConstraints(_ID(), (short) kind, arrayOfFloat1, arrayOfFloat2);
+            i = QTVRGetConstraints(_ID(), (short) kind, minValue, maxValue);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat2[0];
+        return maxValue[0];
     }
 
     /**
@@ -316,13 +316,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetImagingProperty"
      */
     public int getImagingProperty(int imagingMode, int imagingProperty) throws QTVRException {
-        int[] arrayOfInt = {0};
+        int[] propertyValue = {0};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetImagingProperty(_ID(), imagingMode, imagingProperty, arrayOfInt);
+            i = QTVRGetImagingProperty(_ID(), imagingMode, imagingProperty, propertyValue);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return propertyValue[0];
     }
 
     /**
@@ -348,14 +348,14 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRPtToAngles"
      */
     public float ptToPanAngle(QDPoint pt) throws QTVRException {
-        float[] arrayOfFloat1 = {0.0F};
-        float[] arrayOfFloat2 = {0.0F};
+        float[] panAngle = {0.0F};
+        float[] tiltAngle = {0.0F};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRPtToAngles(_ID(), pt.getPoint(), arrayOfFloat1, arrayOfFloat2);
+            i = QTVRPtToAngles(_ID(), pt.getPoint(), panAngle, tiltAngle);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat1[0];
+        return panAngle[0];
     }
 
     /**
@@ -366,14 +366,14 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRPtToAngles"
      */
     public float ptToTiltAngle(QDPoint pt) throws QTVRException {
-        float[] arrayOfFloat1 = {0.0F};
-        float[] arrayOfFloat2 = {0.0F};
+        float[] panAngle = {0.0F};
+        float[] tiltAngle = {0.0F};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRPtToAngles(_ID(), pt.getPoint(), arrayOfFloat1, arrayOfFloat2);
+            i = QTVRPtToAngles(_ID(), pt.getPoint(), panAngle, tiltAngle);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat2[0];
+        return tiltAngle[0];
     }
 
     /**
@@ -386,13 +386,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRWrapAndConstrain"
      */
     public float wrapAndConstrain(int kind, float value) throws QTVRException {
-        float[] arrayOfFloat = {0.0F};
+        float[] result = {0.0F};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRWrapAndConstrain(_ID(), (short) kind, value, arrayOfFloat);
+            i = QTVRWrapAndConstrain(_ID(), (short) kind, value, result);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat[0];
+        return result[0];
     }
 
     /**
@@ -537,14 +537,14 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
         if (interceptProc == null) {
             return;
         }
-        VRDispatcher localVRDispatcher = new VRDispatcher(this, interceptProc);
+        VRDispatcher vrDispatcher = new VRDispatcher(this, interceptProc);
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRInstallInterceptProc(_ID(), selector, localVRDispatcher.ID(), 0, flags);
+            i = QTVRInstallInterceptProc(_ID(), selector, vrDispatcher.ID(), 0, flags);
         }
         QTVRException.checkError(i);
-        if (localVRDispatcher != null) {
-            this.ipProcs.put(selector, localVRDispatcher);
+        if (vrDispatcher != null) {
+            this.ipProcs.put(selector, vrDispatcher);
         }
     }
 
@@ -558,9 +558,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see quicktime.std.clocks.QTCallBack
      */
     public void removeInterceptProc(int selector) throws QTVRException {
-        VRDispatcher localVRDispatcher = this.ipProcs.remove(selector);
-        if (localVRDispatcher != null) {
-            localVRDispatcher.cleanupMethodClosure();
+        VRDispatcher vrDispatcher = this.ipProcs.remove(selector);
+        if (vrDispatcher != null) {
+            vrDispatcher.cleanupMethodClosure();
             int i = 0;
             synchronized (QTNative.globalsLock) {
                 i = QTVRInstallInterceptProc(_ID(), selector, 0, 0, 0);
@@ -576,10 +576,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRCallInterceptedProc"
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void callInterceptedProc(QTVRInterceptRecord paramQTVRInterceptRecord) throws QTVRException {
+    public void callInterceptedProc(QTVRInterceptRecord qtvrMessage) throws QTVRException {
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRCallInterceptedProc(_ID(), QTObject.ID(paramQTVRInterceptRecord));
+            i = QTVRCallInterceptedProc(_ID(), QTObject.ID(qtvrMessage));
         }
         QTVRException.checkError(i);
     }
@@ -620,13 +620,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetViewCenter"
      */
     public QDPoint getViewCenter() throws QTVRException {
-        byte[] arrayOfByte = new byte[8];
+        byte[] viewCenter = new byte[8];
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetViewCenter(_ID(), arrayOfByte);
+            i = QTVRGetViewCenter(_ID(), viewCenter);
         }
         QTVRException.checkError(i);
-        return QDPoint.fromArray(arrayOfByte, -16);
+        return QDPoint.fromArray(viewCenter, -16);
     }
 
     /**
@@ -638,13 +638,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetHotSpotType"
      */
     public int getHotSpotType(int hotSpotID) throws QTVRException {
-        int[] arrayOfInt = {0};
+        int[] hotSpotType = {0};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetHotSpotType(_ID(), hotSpotID, arrayOfInt);
+            i = QTVRGetHotSpotType(_ID(), hotSpotID, hotSpotType);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return hotSpotType[0];
     }
 
     /**
@@ -656,15 +656,15 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRSetPrescreenImagingCompleteProc"
      * @see quicktime.std.clocks.QTCallBack
      */
-    public void setPrescreenImagingCompleteProc(QTVRImagingComplete paramQTVRImagingComplete, int flags) throws QTVRException {
-        if (paramQTVRImagingComplete == null) {
+    public void setPrescreenImagingCompleteProc(QTVRImagingComplete ic, int flags) throws QTVRException {
+        if (ic == null) {
             removePrescreenImagingCompleteProc();
             return;
         }
         if (this.icUPP != null) {
             removePrescreenImagingCompleteProc();
         }
-        this.icUPP = new VRDispatcher(this, paramQTVRImagingComplete);
+        this.icUPP = new VRDispatcher(this, ic);
         int i = 0;
         synchronized (QTNative.globalsLock) {
             i = QTVRSetPrescreenImagingCompleteProc(_ID(), this.icUPP.ID(), 0, flags);
@@ -701,13 +701,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetHotSpotRegion"
      */
     public Region getHotSpotRegion(int hotSpotID) throws QTException {
-        Region localRegion = new Region();
+        Region hotSpotRegion = new Region();
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetHotSpotRegion(_ID(), hotSpotID, QTObject.ID(localRegion));
+            i = QTVRGetHotSpotRegion(_ID(), hotSpotID, QTObject.ID(hotSpotRegion));
         }
         QTVRException.checkError(i);
-        return localRegion;
+        return hotSpotRegion;
     }
 
     /**
@@ -742,13 +742,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRPtToHotSpotID"
      */
     public int ptToHotSpotID(QDPoint pt) throws QTVRException {
-        int[] arrayOfInt = {0};
+        int[] hotSpotID = {0};
         int i = 0;
         synchronized (QTNative.globalsLock) {
-            i = QTVRPtToHotSpotID(_ID(), pt.getPoint(), arrayOfInt);
+            i = QTVRPtToHotSpotID(_ID(), pt.getPoint(), hotSpotID);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return hotSpotID[0];
     }
 
     /**
@@ -851,13 +851,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetInteractionProperty"
      */
     public int getInteractionMouseClickHysteresis() throws QTVRException {
-        short[] arrayOfShort = {0};
+        short[] value = {0};
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 1, arrayOfShort);
+            i = QTVRGetInteractionProperty(_ID(), 1, value);
         }
         QTVRException.checkError(i);
-        return arrayOfShort[0];
+        return value[0];
     }
 
     /**
@@ -888,12 +888,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      */
     public int getInteractionMouseClickTimeout() throws QTVRException {
         int i = 0;
-        int[] arrayOfInt = {0};
+        int[] value = {0};
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 2, arrayOfInt);
+            i = QTVRGetInteractionProperty(_ID(), 2, value);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -923,12 +923,12 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      */
     public int getInteractionPanTiltSpeed() throws QTVRException {
         int i = 0;
-        int[] arrayOfInt = {0};
+        int[] value = {0};
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 3, arrayOfInt);
+            i = QTVRGetInteractionProperty(_ID(), 3, value);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -957,13 +957,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetInteractionProperty"
      */
     public int getInteractionZoomSpeed() throws QTVRException {
-        int[] arrayOfInt = {0};
+        int[] value = {0};
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 4, arrayOfInt);
+            i = QTVRGetInteractionProperty(_ID(), 4, value);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -992,13 +992,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetInteractionProperty"
      */
     public boolean getInteractionTranslateOnMouseDown() throws QTVRException {
-        byte[] arrayOfByte = {0};
+        byte[] value = {0};
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 101, arrayOfByte);
+            i = QTVRGetInteractionProperty(_ID(), 101, value);
         }
         QTVRException.checkError(i);
-        return arrayOfByte[0] == 1;
+        return value[0] == 1;
     }
 
     /**
@@ -1012,10 +1012,10 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRSetInteractionProperty"
      */
     public void setInteractionMouseMotionScale(float scale) throws QTVRException {
-        float[] arrayOfFloat = {scale};
+        float[] value = {scale};
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetInteractionProperty(_ID(), 102, arrayOfFloat);
+            i = QTVRSetInteractionProperty(_ID(), 102, value);
         }
         QTVRException.checkError(i);
     }
@@ -1028,13 +1028,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetInteractionProperty"
      */
     public float getInteractionMouseMotionScale() throws QTVRException {
-        float[] arrayOfFloat = {0.0F};
+        float[] value = {0.0F};
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 102, arrayOfFloat);
+            i = QTVRGetInteractionProperty(_ID(), 102, value);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat[0];
+        return value[0];
     }
 
     /**
@@ -1061,13 +1061,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      * @see "QuickTime::QTVRGetInteractionProperty"
      */
     public int getInteractionNudgeMode() throws QTVRException {
-        int[] arrayOfInt = {0};
+        int[] value = {0};
         int i;
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetInteractionProperty(_ID(), 103, arrayOfInt);
+            i = QTVRGetInteractionProperty(_ID(), 103, value);
         }
         QTVRException.checkError(i);
-        return arrayOfInt[0];
+        return value[0];
     }
 
     /**
@@ -1107,13 +1107,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     public float getViewAngle(int viewParameter) throws QTVRException {
         int i = 0;
         int j = 0;
-        int[] arrayOfInt = {0};
-        float[] arrayOfFloat = {0.0F};
+        int[] flagsOut = {0};
+        float[] value = {0.0F};
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetViewParameter(_ID(), viewParameter, arrayOfFloat, j, arrayOfInt);
+            i = QTVRGetViewParameter(_ID(), viewParameter, value, j, flagsOut);
         }
         QTVRException.checkError(i);
-        return arrayOfFloat[0];
+        return value[0];
     }
 
     /**
@@ -1128,9 +1128,9 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
      */
     public void setViewCentre(int flagsIn, QDPoint center) throws QTVRException {
         int i = 0;
-        float[] arrayOfFloat = {center.getXF(), center.getYF()};
+        float[] value = {center.getXF(), center.getYF()};
         synchronized (QTNative.globalsLock) {
-            i = QTVRSetViewParameter(_ID(), 260, arrayOfFloat, flagsIn);
+            i = QTVRSetViewParameter(_ID(), 260, value, flagsIn);
         }
         QTVRException.checkError(i);
     }
@@ -1146,13 +1146,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     public QDPoint getViewCentre() throws QTVRException {
         int i = 0;
         int j = 0;
-        int[] arrayOfInt = {0};
-        float[] arrayOfFloat = {0.0F, 0.0F};
+        int[] flagsOut = {0};
+        float[] value = {0.0F, 0.0F};
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetViewParameter(_ID(), 260, arrayOfFloat, j, arrayOfInt);
+            i = QTVRGetViewParameter(_ID(), 260, value, j, flagsOut);
         }
         QTVRException.checkError(i);
-        return new QDPoint(arrayOfFloat[0], arrayOfFloat[1]);
+        return new QDPoint(value[0], value[1]);
     }
 
     /**
@@ -1183,13 +1183,13 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
     public boolean getHotSpotsVisible() throws QTVRException {
         int i = 0;
         int j = 0;
-        int[] arrayOfInt = {0};
-        byte[] arrayOfByte = {0};
+        int[] flagsOut = {0};
+        byte[] value = {0};
         synchronized (QTNative.globalsLock) {
-            i = QTVRGetViewParameter(_ID(), 512, arrayOfByte, j, arrayOfInt);
+            i = QTVRGetViewParameter(_ID(), 512, value, j, flagsOut);
         }
         QTVRException.checkError(i);
-        return arrayOfByte[0] == 1;
+        return value[0] == 1;
     }
 
     /**
@@ -1336,243 +1336,243 @@ public final class QTVRInstance extends QTObject implements QuickTimeLib, QuickT
         }
     }
 
-    private static short QTVRSetViewParameter(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3) {
-        return VRManager.QTVRSetViewParameter(paramInt1, paramInt2, paramArrayOfFloat, paramInt3);
+    private static short QTVRSetViewParameter(int qtvr, int viewParameter, float[] value, int flagsIn) {
+        return VRManager.QTVRSetViewParameter(qtvr, viewParameter, value, flagsIn);
     }
 
-    private static short QTVRGetViewParameter(int paramInt1, int paramInt2, float[] paramArrayOfFloat, int paramInt3, int[] paramArrayOfInt) {
-        return VRManager.QTVRGetViewParameter(paramInt1, paramInt2, paramArrayOfFloat, paramInt3, paramArrayOfInt);
+    private static short QTVRGetViewParameter(int qtvr, int viewParameter, float[] value, int flagsIn, int[] flagsOut) {
+        return VRManager.QTVRGetViewParameter(qtvr, viewParameter, value, flagsIn, flagsOut);
     }
 
-    private static short QTVRSetViewParameter(int paramInt1, int paramInt2, byte paramByte, int paramInt3) {
-        return VRManager.QTVRSetViewParameter(paramInt1, paramInt2, paramByte, paramInt3);
+    private static short QTVRSetViewParameter(int qtvr, int viewParameter, byte value, int flagsIn) {
+        return VRManager.QTVRSetViewParameter(qtvr, viewParameter, value, flagsIn);
     }
 
-    private static short QTVRGetViewParameter(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int[] paramArrayOfInt) {
-        return VRManager.QTVRGetViewParameter(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramArrayOfInt);
+    private static short QTVRGetViewParameter(int qtvr, int viewParameter, byte[] value, int flagsIn, int[] flagsOut) {
+        return VRManager.QTVRGetViewParameter(qtvr, viewParameter, value, flagsIn, flagsOut);
     }
 
-    private static short QTVRGetQTVRInstance(int[] paramArrayOfInt, int paramInt1, int paramInt2) {
-        return VRManager.QTVRGetQTVRInstance(paramArrayOfInt, paramInt1, paramInt2);
+    private static short QTVRGetQTVRInstance(int[] qtvr, int qtvrTrack, int mc) {
+        return VRManager.QTVRGetQTVRInstance(qtvr, qtvrTrack, mc);
     }
 
-    private static int QTVRGetCurrentNodeID(int paramInt) {
-        return VRManager.QTVRGetCurrentNodeID(paramInt);
+    private static int QTVRGetCurrentNodeID(int qtvr) {
+        return VRManager.QTVRGetCurrentNodeID(qtvr);
     }
 
-    private static int QTVRGetNodeType(int paramInt1, int paramInt2) {
-        return VRManager.QTVRGetNodeType(paramInt1, paramInt2);
+    private static int QTVRGetNodeType(int qtvr, int nodeID) {
+        return VRManager.QTVRGetNodeType(qtvr, nodeID);
     }
 
-    private static short QTVRTriggerHotSpot(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return VRManager.QTVRTriggerHotSpot(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTVRTriggerHotSpot(int qtvr, int hotSpotID, int nodeInfo, int selectedAtom) {
+        return VRManager.QTVRTriggerHotSpot(qtvr, hotSpotID, nodeInfo, selectedAtom);
     }
 
-    private static short QTVREnableHotSpot(int paramInt1, int paramInt2, int paramInt3, byte paramByte) {
-        return VRManager.QTVREnableHotSpot(paramInt1, paramInt2, paramInt3, paramByte);
+    private static short QTVREnableHotSpot(int qtvr, int enableFlag, int hotSpotValue, byte enable) {
+        return VRManager.QTVREnableHotSpot(qtvr, enableFlag, hotSpotValue, enable);
     }
 
-    private static short QTVRUpdate(int paramInt1, int paramInt2) {
-        return VRManager.QTVRUpdate(paramInt1, paramInt2);
+    private static short QTVRUpdate(int qtvr, int forceBlitMode) {
+        return VRManager.QTVRUpdate(qtvr, forceBlitMode);
     }
 
-    private static short QTVRGoToNodeID(int paramInt1, int paramInt2) {
-        return VRManager.QTVRGoToNodeID(paramInt1, paramInt2);
+    private static short QTVRGoToNodeID(int qtvr, int nodeID) {
+        return VRManager.QTVRGoToNodeID(qtvr, nodeID);
     }
 
-    private static short QTVRNudge(int paramInt1, int paramInt2) {
-        return VRManager.QTVRNudge(paramInt1, paramInt2);
+    private static short QTVRNudge(int qtvr, int direction) {
+        return VRManager.QTVRNudge(qtvr, direction);
     }
 
-    private static float QTVRGetPanAngle(int paramInt) {
-        return VRManager.QTVRGetPanAngle(paramInt);
+    private static float QTVRGetPanAngle(int qtvr) {
+        return VRManager.QTVRGetPanAngle(qtvr);
     }
 
-    private static short QTVRSetPanAngle(int paramInt, float paramFloat) {
-        return VRManager.QTVRSetPanAngle(paramInt, paramFloat);
+    private static short QTVRSetPanAngle(int qtvr, float panAngle) {
+        return VRManager.QTVRSetPanAngle(qtvr, panAngle);
     }
 
-    private static float QTVRGetTiltAngle(int paramInt) {
-        return VRManager.QTVRGetTiltAngle(paramInt);
+    private static float QTVRGetTiltAngle(int qtvr) {
+        return VRManager.QTVRGetTiltAngle(qtvr);
     }
 
-    private static short QTVRSetTiltAngle(int paramInt, float paramFloat) {
-        return VRManager.QTVRSetTiltAngle(paramInt, paramFloat);
+    private static short QTVRSetTiltAngle(int qtvr, float tiltAngle) {
+        return VRManager.QTVRSetTiltAngle(qtvr, tiltAngle);
     }
 
-    private static float QTVRGetFieldOfView(int paramInt) {
-        return VRManager.QTVRGetFieldOfView(paramInt);
+    private static float QTVRGetFieldOfView(int qtvr) {
+        return VRManager.QTVRGetFieldOfView(qtvr);
     }
 
-    private static short QTVRSetFieldOfView(int paramInt, float paramFloat) {
-        return VRManager.QTVRSetFieldOfView(paramInt, paramFloat);
+    private static short QTVRSetFieldOfView(int qtvr, float fieldOfView) {
+        return VRManager.QTVRSetFieldOfView(qtvr, fieldOfView);
     }
 
-    private static short QTVRGetConstraints(int paramInt, short paramShort, float[] paramArrayOfFloat1, float[] paramArrayOfFloat2) {
-        return VRManager.QTVRGetConstraints(paramInt, paramShort, paramArrayOfFloat1, paramArrayOfFloat2);
+    private static short QTVRGetConstraints(int qtvr, short kind, float[] minValue, float[] maxValue) {
+        return VRManager.QTVRGetConstraints(qtvr, kind, minValue, maxValue);
     }
 
-    private static short QTVRSetConstraints(int paramInt, short paramShort, float paramFloat1, float paramFloat2) {
-        return VRManager.QTVRSetConstraints(paramInt, paramShort, paramFloat1, paramFloat2);
+    private static short QTVRSetConstraints(int qtvr, short kind, float minValue, float maxValue) {
+        return VRManager.QTVRSetConstraints(qtvr, kind, minValue, maxValue);
     }
 
-    private static short QTVRSetImagingProperty(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return VRManager.QTVRSetImagingProperty(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTVRSetImagingProperty(int qtvr, int imagingMode, int imagingProperty, int propertyValue) {
+        return VRManager.QTVRSetImagingProperty(qtvr, imagingMode, imagingProperty, propertyValue);
     }
 
-    private static short QTVRGetImagingProperty(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return VRManager.QTVRGetImagingProperty(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static short QTVRGetImagingProperty(int qtvr, int imagingMode, int imagingProperty, int[] propertyValue) {
+        return VRManager.QTVRGetImagingProperty(qtvr, imagingMode, imagingProperty, propertyValue);
     }
 
-    private static int QTVRGetAngularUnits(int paramInt) {
-        return VRManager.QTVRGetAngularUnits(paramInt);
+    private static int QTVRGetAngularUnits(int qtvr) {
+        return VRManager.QTVRGetAngularUnits(qtvr);
     }
 
-    private static short QTVRSetAngularUnits(int paramInt1, int paramInt2) {
-        return VRManager.QTVRSetAngularUnits(paramInt1, paramInt2);
+    private static short QTVRSetAngularUnits(int qtvr, int units) {
+        return VRManager.QTVRSetAngularUnits(qtvr, units);
     }
 
-    private static short QTVRPtToAngles(int paramInt1, int paramInt2, float[] paramArrayOfFloat1, float[] paramArrayOfFloat2) {
-        return VRManager.QTVRPtToAngles(paramInt1, paramInt2, paramArrayOfFloat1, paramArrayOfFloat2);
+    private static short QTVRPtToAngles(int qtvr, int pt, float[] panAngle, float[] tiltAngle) {
+        return VRManager.QTVRPtToAngles(qtvr, pt, panAngle, tiltAngle);
     }
 
-    private static short QTVRPanToColumn(int paramInt, float paramFloat) {
-        return VRManager.QTVRPanToColumn(paramInt, paramFloat);
+    private static short QTVRPanToColumn(int qtvr, float panAngle) {
+        return VRManager.QTVRPanToColumn(qtvr, panAngle);
     }
 
-    private static float QTVRColumnToPan(int paramInt, short paramShort) {
-        return VRManager.QTVRColumnToPan(paramInt, paramShort);
+    private static float QTVRColumnToPan(int qtvr, short column) {
+        return VRManager.QTVRColumnToPan(qtvr, column);
     }
 
-    private static short QTVRTiltToRow(int paramInt, float paramFloat) {
-        return VRManager.QTVRTiltToRow(paramInt, paramFloat);
+    private static short QTVRTiltToRow(int qtvr, float tiltAngle) {
+        return VRManager.QTVRTiltToRow(qtvr, tiltAngle);
     }
 
-    private static float QTVRRowToTilt(int paramInt, short paramShort) {
-        return VRManager.QTVRRowToTilt(paramInt, paramShort);
+    private static float QTVRRowToTilt(int qtvr, short row) {
+        return VRManager.QTVRRowToTilt(qtvr, row);
     }
 
-    private static short QTVRWrapAndConstrain(int paramInt, short paramShort, float paramFloat, float[] paramArrayOfFloat) {
-        return VRManager.QTVRWrapAndConstrain(paramInt, paramShort, paramFloat, paramArrayOfFloat);
+    private static short QTVRWrapAndConstrain(int qtvr, short kind, float value, float[] result) {
+        return VRManager.QTVRWrapAndConstrain(qtvr, kind, value, result);
     }
 
-    private static short QTVRShowDefaultView(int paramInt) {
-        return VRManager.QTVRShowDefaultView(paramInt);
+    private static short QTVRShowDefaultView(int qtvr) {
+        return VRManager.QTVRShowDefaultView(qtvr);
     }
 
-    private static short QTVRSetViewCenter(int paramInt, byte[] paramArrayOfByte) {
-        return VRManager.QTVRSetViewCenter(paramInt, paramArrayOfByte);
+    private static short QTVRSetViewCenter(int qtvr, byte[] viewCenter) {
+        return VRManager.QTVRSetViewCenter(qtvr, viewCenter);
     }
 
-    private static short QTVRGetViewCenter(int paramInt, byte[] paramArrayOfByte) {
-        return VRManager.QTVRGetViewCenter(paramInt, paramArrayOfByte);
+    private static short QTVRGetViewCenter(int qtvr, byte[] viewCenter) {
+        return VRManager.QTVRGetViewCenter(qtvr, viewCenter);
     }
 
-    private static short QTVRGetHotSpotType(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return VRManager.QTVRGetHotSpotType(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTVRGetHotSpotType(int qtvr, int hotSpotID, int[] hotSpotType) {
+        return VRManager.QTVRGetHotSpotType(qtvr, hotSpotID, hotSpotType);
     }
 
-    private static short QTVRSetEnteringNodeProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return VRManager.QTVRSetEnteringNodeProc(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTVRSetEnteringNodeProc(int qtvr, int enteringNodeProc, int refCon, int flags) {
+        return VRManager.QTVRSetEnteringNodeProc(qtvr, enteringNodeProc, refCon, flags);
     }
 
-    private static short QTVRSetLeavingNodeProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return VRManager.QTVRSetLeavingNodeProc(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTVRSetLeavingNodeProc(int qtvr, int leavingNodeProc, int refCon, int flags) {
+        return VRManager.QTVRSetLeavingNodeProc(qtvr, leavingNodeProc, refCon, flags);
     }
 
-    private static short QTVRSetMouseOverHotSpotProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return VRManager.QTVRSetMouseOverHotSpotProc(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTVRSetMouseOverHotSpotProc(int qtvr, int mouseOverHotSpotProc, int refCon, int flags) {
+        return VRManager.QTVRSetMouseOverHotSpotProc(qtvr, mouseOverHotSpotProc, refCon, flags);
     }
 
-    private static short QTVRInstallInterceptProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return VRManager.QTVRInstallInterceptProc(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static short QTVRInstallInterceptProc(int qtvr, int selector, int interceptProc, int refCon, int flags) {
+        return VRManager.QTVRInstallInterceptProc(qtvr, selector, interceptProc, refCon, flags);
     }
 
-    private static short QTVRCallInterceptedProc(int paramInt1, int paramInt2) {
-        return VRManager.QTVRCallInterceptedProc(paramInt1, paramInt2);
+    private static short QTVRCallInterceptedProc(int qtvr, int qtvrMessage) {
+        return VRManager.QTVRCallInterceptedProc(qtvr, qtvrMessage);
     }
 
-    private static short QTVRSetPrescreenImagingCompleteProc(int paramInt1, int paramInt2, int paramInt3, int paramInt4) {
-        return VRManager.QTVRSetPrescreenImagingCompleteProc(paramInt1, paramInt2, paramInt3, paramInt4);
+    private static short QTVRSetPrescreenImagingCompleteProc(int qtvr, int imagingCompleteProc, int refCon, int flags) {
+        return VRManager.QTVRSetPrescreenImagingCompleteProc(qtvr, imagingCompleteProc, refCon, flags);
     }
 
-    private static short QTVRPtToHotSpotID(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return VRManager.QTVRPtToHotSpotID(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTVRPtToHotSpotID(int qtvr, int pt, int[] hotSpotID) {
+        return VRManager.QTVRPtToHotSpotID(qtvr, pt, hotSpotID);
     }
 
-    private static int QTVRGetVisibleHotSpots(int paramInt1, int paramInt2) {
-        return VRManager.QTVRGetVisibleHotSpots(paramInt1, paramInt2);
+    private static int QTVRGetVisibleHotSpots(int qtvr, int hotSpots) {
+        return VRManager.QTVRGetVisibleHotSpots(qtvr, hotSpots);
     }
 
-    private static short QTVRGetHotSpotRegion(int paramInt1, int paramInt2, int paramInt3) {
-        return VRManager.QTVRGetHotSpotRegion(paramInt1, paramInt2, paramInt3);
+    private static short QTVRGetHotSpotRegion(int qtvr, int hotSpotID, int hotSpotRegion) {
+        return VRManager.QTVRGetHotSpotRegion(qtvr, hotSpotID, hotSpotRegion);
     }
 
-    private static short QTVRSetMouseOverTracking(int paramInt, byte paramByte) {
-        return VRManager.QTVRSetMouseOverTracking(paramInt, paramByte);
+    private static short QTVRSetMouseOverTracking(int qtvr, byte enable) {
+        return VRManager.QTVRSetMouseOverTracking(qtvr, enable);
     }
 
-    private static byte QTVRGetMouseOverTracking(int paramInt) {
-        return VRManager.QTVRGetMouseOverTracking(paramInt);
+    private static byte QTVRGetMouseOverTracking(int qtvr) {
+        return VRManager.QTVRGetMouseOverTracking(qtvr);
     }
 
-    private static short QTVRSetMouseDownTracking(int paramInt, byte paramByte) {
-        return VRManager.QTVRSetMouseDownTracking(paramInt, paramByte);
+    private static short QTVRSetMouseDownTracking(int qtvr, byte enable) {
+        return VRManager.QTVRSetMouseDownTracking(qtvr, enable);
     }
 
-    private static byte QTVRGetMouseDownTracking(int paramInt) {
-        return VRManager.QTVRGetMouseDownTracking(paramInt);
+    private static byte QTVRGetMouseDownTracking(int qtvr) {
+        return VRManager.QTVRGetMouseDownTracking(qtvr);
     }
 
-    private static short QTVRSetInteractionProperty(int paramInt1, int paramInt2, byte paramByte) {
-        return VRManager.QTVRSetInteractionProperty(paramInt1, paramInt2, paramByte);
+    private static short QTVRSetInteractionProperty(int qtvr, int property, byte value) {
+        return VRManager.QTVRSetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRSetInteractionProperty(int paramInt1, int paramInt2, short paramShort) {
-        return VRManager.QTVRSetInteractionProperty(paramInt1, paramInt2, paramShort);
+    private static short QTVRSetInteractionProperty(int qtvr, int property, short value) {
+        return VRManager.QTVRSetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRSetInteractionProperty(int paramInt1, int paramInt2, int paramInt3) {
-        return VRManager.QTVRSetInteractionProperty(paramInt1, paramInt2, paramInt3);
+    private static short QTVRSetInteractionProperty(int qtvr, int property, int value) {
+        return VRManager.QTVRSetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRSetInteractionProperty(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
-        return VRManager.QTVRSetInteractionProperty(paramInt1, paramInt2, paramArrayOfFloat);
+    private static short QTVRSetInteractionProperty(int qtvr, int property, float[] value) {
+        return VRManager.QTVRSetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRGetInteractionProperty(int paramInt1, int paramInt2, byte[] paramArrayOfByte) {
-        return VRManager.QTVRGetInteractionProperty(paramInt1, paramInt2, paramArrayOfByte);
+    private static short QTVRGetInteractionProperty(int qtvr, int property, byte[] value) {
+        return VRManager.QTVRGetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRGetInteractionProperty(int paramInt1, int paramInt2, short[] paramArrayOfShort) {
-        return VRManager.QTVRGetInteractionProperty(paramInt1, paramInt2, paramArrayOfShort);
+    private static short QTVRGetInteractionProperty(int qtvr, int property, short[] value) {
+        return VRManager.QTVRGetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRGetInteractionProperty(int paramInt1, int paramInt2, int[] paramArrayOfInt) {
-        return VRManager.QTVRGetInteractionProperty(paramInt1, paramInt2, paramArrayOfInt);
+    private static short QTVRGetInteractionProperty(int qtvr, int property, int[] value) {
+        return VRManager.QTVRGetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRGetInteractionProperty(int paramInt1, int paramInt2, float[] paramArrayOfFloat) {
-        return VRManager.QTVRGetInteractionProperty(paramInt1, paramInt2, paramArrayOfFloat);
+    private static short QTVRGetInteractionProperty(int qtvr, int property, float[] value) {
+        return VRManager.QTVRGetInteractionProperty(qtvr, property, value);
     }
 
-    private static short QTVRReplaceCursor(int paramInt, byte[] paramArrayOfByte) {
-        return VRManager.QTVRReplaceCursor(paramInt, paramArrayOfByte);
+    private static short QTVRReplaceCursor(int qtvr, byte[] cursRecord) {
+        return VRManager.QTVRReplaceCursor(qtvr, cursRecord);
     }
 
-    private static void HLock(int paramInt) {
-        MemoryManager.HLock(paramInt);
+    private static void HLock(int h) {
+        MemoryManager.HLock(h);
     }
 
-    private static int NewHandle(int paramInt) {
-        return MemoryManager.NewHandle(paramInt);
+    private static int NewHandle(int size) {
+        return MemoryManager.NewHandle(size);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void DisposeHandle(int paramInt) {
-        MemoryManager.DisposeHandle(paramInt);
+    private static void DisposeHandle(int h) {
+        MemoryManager.DisposeHandle(h);
     }
 }

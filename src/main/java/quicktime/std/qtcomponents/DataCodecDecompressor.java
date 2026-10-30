@@ -48,7 +48,7 @@ public class DataCodecDecompressor extends Component implements QuickTimeLib {
         StdQTException.checkError(DataCodecDecompress(_ID(), QTObject.ID(srcData), srcData.getSize(), QTObject.ID(dstData), dstData.getSize()));
     }
 
-    private static int DataCodecDecompress(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5) {
-        return ImageCompressionManager.DataCodecDecompress(paramInt1, paramInt2, paramInt3, paramInt4, paramInt5);
+    private static int DataCodecDecompress(int dc, int srcData, int srcSize, int dstData, int dstBufferSize) {
+        return ImageCompressionManager.DataCodecDecompress(dc, srcData, srcSize, dstData, dstBufferSize);
     }
 }

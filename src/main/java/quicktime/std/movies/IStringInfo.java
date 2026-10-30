@@ -9,8 +9,8 @@ public final class IStringInfo {
 
     public final int region;
 
-    IStringInfo(String paramString, int paramInt) {
-        this.string = paramString;
-        this.region = paramInt;
+    IStringInfo(String string, int region) {
+        this.string = string;
+        this.region = region;
     }
 }

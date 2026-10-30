@@ -25,12 +25,12 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
     private static final int kValueOffset = 12;
     private static final int kValueStrOffset = 18;
 
-    XMLAttribute(int paramInt) throws QTException {
-        super(paramInt, new Object());
+    XMLAttribute(int nativeRep) throws QTException {
+        super(nativeRep, new Object());
     }
 
-    XMLAttribute(int paramInt1, int paramInt2) throws QTException {
-        super(paramInt1 + 22 * paramInt2, owner);
+    XMLAttribute(int ptr, int index) throws QTException {
+        super(ptr + 22 * index, owner);
     }
 
     /**
@@ -54,8 +54,8 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
         throw new StdQTException(-50);
     }
 
-    int getNthIdentifier(int paramInt) {
-        int i = getIntFromPointer(_ID(), 22 * paramInt);
+    int getNthIdentifier(int index) {
+        int i = getIntFromPointer(_ID(), 22 * index);
         return i;
     }
 
@@ -169,11 +169,11 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
     public QDColor getRGBColor() throws StdQTException {
         int i = getValueKind();
         if (i == 16) {
-            byte[] arrayOfByte = new byte[12];
+            byte[] colorBytes = new byte[12];
             for (int j = 0; j < 12; j++) {
-                arrayOfByte[j] = getByteFromPointer(_ID(), 12 + j);
+                colorBytes[j] = getByteFromPointer(_ID(), 12 + j);
             }
-            return QDColor.fromArray(arrayOfByte, 6);
+            return QDColor.fromArray(colorBytes, 6);
         }
         throw new StdQTException(-50);
     }
@@ -191,31 +191,31 @@ public final class XMLAttribute extends QTObject implements PrimitivesLib, Quick
         };
     }
 
-    private String getStringFromPointer(int paramInt) {
-        if (paramInt != 0) {
+    private String getStringFromPointer(int ptr) {
+        if (ptr != 0) {
             int i = 0;
             int j = 0;
-            while (getByteFromPointer(paramInt, j++) != 0) i++;
-            byte[] arrayOfByte = new byte[i];
-            copyPointerToArray(paramInt, 0, arrayOfByte, 0, i);
-            return QTUtils.CString2String(arrayOfByte, 0);
+            while (getByteFromPointer(ptr, j++) != 0) i++;
+            byte[] cString = new byte[i];
+            copyPointerToArray(ptr, 0, cString, 0, i);
+            return QTUtils.CString2String(cString, 0);
         }
         return "";
     }
 
-    private static byte getByteFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getByteFromPointer(paramInt1, paramInt2);
+    private static byte getByteFromPointer(int ptr, int offset) {
+        return MemoryManager.getByteFromPointer(ptr, offset);
     }
 
-    private static short getShortFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getShortFromPointer(paramInt1, paramInt2);
+    private static short getShortFromPointer(int ptr, int offset) {
+        return MemoryManager.getShortFromPointer(ptr, offset);
     }
 
-    private static int getIntFromPointer(int paramInt1, int paramInt2) {
-        return MemoryManager.getIntFromPointer(paramInt1, paramInt2);
+    private static int getIntFromPointer(int ptr, int offset) {
+        return MemoryManager.getIntFromPointer(ptr, offset);
     }
 
-    private static void copyPointerToArray(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4) {
-        MemoryManager.copyPointerToArray(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4);
+    private static void copyPointerToArray(int ptr, int ptrOffset, byte[] array, int arrayOffset, int size) {
+        MemoryManager.copyPointerToArray(ptr, ptrOffset, array, arrayOffset, size);
     }
 }

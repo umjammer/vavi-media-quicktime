@@ -15,7 +15,7 @@ public class MouseEnterExitAdapter extends MouseMoveAdapter implements MouseEnte
      * Invoked when the mouse enters a space.
      */
     @Override
-    public void mouseEntered(QTMouseEvent paramQTMouseEvent) {
+    public void mouseEntered(QTMouseEvent qtMouseEvent) {
     }
 
     /**
@@ -24,7 +24,7 @@ public class MouseEnterExitAdapter extends MouseMoveAdapter implements MouseEnte
      * Invoked when the mouse exits a space.
      */
     @Override
-    public void mouseExited(QTMouseEvent paramQTMouseEvent) {
+    public void mouseExited(QTMouseEvent qtMouseEvent) {
     }
 
     static {

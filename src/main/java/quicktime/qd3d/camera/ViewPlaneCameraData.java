@@ -59,8 +59,8 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
         setCenterY(centerYOnViewPlane);
     }
 
-    private ViewPlaneCameraData(byte[] paramArrayOfByte) {
-        super(paramArrayOfByte);
+    private ViewPlaneCameraData(byte[] bytes) {
+        super(bytes);
     }
 
     /**
@@ -101,36 +101,36 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
     /**
      * sets the viewPlane
      */
-    public void setViewPlane(float paramFloat) {
-        setFloatAt(60, paramFloat);
+    public void setViewPlane(float viewPlane) {
+        setFloatAt(60, viewPlane);
     }
 
     /**
      * sets the  halfWidthAtViewPlane
      */
-    public void setHalfWidth(float paramFloat) {
-        setFloatAt(64, paramFloat);
+    public void setHalfWidth(float halfWidth) {
+        setFloatAt(64, halfWidth);
     }
 
     /**
      * sets the halfHeightAtViewPlane
      */
-    public void setHalfHeight(float paramFloat) {
-        setFloatAt(68, paramFloat);
+    public void setHalfHeight(float halfHeight) {
+        setFloatAt(68, halfHeight);
     }
 
     /**
      * sets the centerXOnViewPlane
      */
-    public void setCenterX(float paramFloat) {
-        setFloatAt(72, paramFloat);
+    public void setCenterX(float centerX) {
+        setFloatAt(72, centerX);
     }
 
     /**
      * sets the centerYOnViewPlane
      */
-    public void setCenterY(float paramFloat) {
-        setFloatAt(76, paramFloat);
+    public void setCenterY(float centerY) {
+        setFloatAt(76, centerY);
     }
 
     /**
@@ -141,11 +141,11 @@ public final class ViewPlaneCameraData extends CameraData implements PrimitivesL
         return new ViewPlaneCameraData(this.bytes);
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

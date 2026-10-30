@@ -73,13 +73,13 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
     /**
      * @deprecated
      */
-    public static ImagePresenter fromGraphicsImporterDrawer(GraphicsImporterDrawer paramGraphicsImporterDrawer) throws IOException, QTException {
-        QDRect localQDRect = new QDRect(paramGraphicsImporterDrawer.getDisplayBounds().getWidth(), paramGraphicsImporterDrawer.getDisplayBounds().getHeight());
-        QDGraphics localQDGraphics = new QDGraphics(localQDRect);
-        paramGraphicsImporterDrawer.setDisplayBounds(localQDRect);
-        paramGraphicsImporterDrawer.setGWorld(localQDGraphics);
-        paramGraphicsImporterDrawer.redraw(null);
-        return fromGWorld(localQDGraphics);
+    public static ImagePresenter fromGraphicsImporterDrawer(GraphicsImporterDrawer graphicsImporterDrawer) throws IOException, QTException {
+        QDRect bounds = new QDRect(graphicsImporterDrawer.getDisplayBounds().getWidth(), graphicsImporterDrawer.getDisplayBounds().getHeight());
+        QDGraphics grafPort = new QDGraphics(bounds);
+        graphicsImporterDrawer.setDisplayBounds(bounds);
+        graphicsImporterDrawer.setGWorld(grafPort);
+        graphicsImporterDrawer.redraw(null);
+        return fromGWorld(grafPort);
     }
 
     /**
@@ -114,8 +114,8 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      * @since QTJava 6.1
      */
     public static ImagePresenter fromGWorld(QDGraphics grafPort) throws QTException {
-        PixMap localPixMap = grafPort.getPixMap();
-        return new ImagePresenter(localPixMap.getPixelData(), new ImageDescription(localPixMap));
+        PixMap pixmap = grafPort.getPixMap();
+        return new ImagePresenter(pixmap.getPixelData(), new ImageDescription(pixmap));
     }
 
     /**
@@ -135,13 +135,13 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      */
     public static ImagePresenter fromGWorld(QDGraphics port, QDRect rect, int colorDepth, int quality, int codecType, CodecComponent codec) throws QTException {
         int i = QTImage.getMaxCompressionSize(port, rect, colorDepth, quality, codecType, codec);
-        RawEncodedImage localRawEncodedImage = new RawEncodedImage(i, true);
-        ImageDescription localImageDescription = QTImage.compress(port, rect, quality, codecType, localRawEncodedImage);
-        localRawEncodedImage.setSize(localImageDescription.getDataSize());
-        ImagePresenter localImagePresenter = new ImagePresenter(rect);
-        localImagePresenter.optimiseRedraw = false;
-        localImagePresenter.setImageData(localRawEncodedImage, localImageDescription);
-        return localImagePresenter;
+        RawEncodedImage rawEncodedImage = new RawEncodedImage(i, true);
+        ImageDescription imageDescription = QTImage.compress(port, rect, quality, codecType, rawEncodedImage);
+        rawEncodedImage.setSize(imageDescription.getDataSize());
+        ImagePresenter imagePresenter = new ImagePresenter(rect);
+        imagePresenter.optimiseRedraw = false;
+        imagePresenter.setImageData(rawEncodedImage, imageDescription);
+        return imagePresenter;
     }
 
     /**
@@ -152,20 +152,20 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      * @since QTJava 6.1
      */
     public static ImagePresenter fromPict(Pict p) throws QTException {
-        ImageDescription localImageDescription = new ImageDescription(1902408311);
-        QDRect localQDRect = p.getPictFrame();
-        localImageDescription.setVersion(-2);
-        localImageDescription.setVendor(1634758764);
-        localImageDescription.setSpatialQuality(1024);
-        localImageDescription.setWidth(localQDRect.getWidth());
-        localImageDescription.setHeight(localQDRect.getHeight());
-        localImageDescription.setHRes(72.0F);
-        localImageDescription.setVRes(72.0F);
-        localImageDescription.setDataSize(p.getSize());
-        localImageDescription.setFrameCount(1);
-        localImageDescription.setDepth(24);
-        localImageDescription.setClutID(-1);
-        return new ImagePresenter(p.toEncodedImage(), localImageDescription);
+        ImageDescription desc = new ImageDescription(1902408311);
+        QDRect pictFrame = p.getPictFrame();
+        desc.setVersion(-2);
+        desc.setVendor(1634758764);
+        desc.setSpatialQuality(1024);
+        desc.setWidth(pictFrame.getWidth());
+        desc.setHeight(pictFrame.getHeight());
+        desc.setHRes(72.0F);
+        desc.setVRes(72.0F);
+        desc.setDataSize(p.getSize());
+        desc.setFrameCount(1);
+        desc.setDepth(24);
+        desc.setClutID(-1);
+        return new ImagePresenter(p.toEncodedImage(), desc);
     }
 
     /**
@@ -186,17 +186,17 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      * @deprecated
      * @since QTJava 6.1
      */
-    public ImagePresenter(QDRect paramQDRect) {
-        this.mDisplayBounds = paramQDRect;
-        this.origWidth = paramQDRect.getWidth();
-        this.origHeight = paramQDRect.getHeight();
+    public ImagePresenter(QDRect displayBounds) {
+        this.mDisplayBounds = displayBounds;
+        this.origWidth = displayBounds.getWidth();
+        this.origHeight = displayBounds.getHeight();
     }
 
     /**
      * @deprecated
      */
-    private ImagePresenter(EncodedImage paramEncodedImage, ImageDescription paramImageDescription) throws QTException {
-        setImageData(paramEncodedImage, paramImageDescription);
+    private ImagePresenter(EncodedImage data, ImageDescription desc) throws QTException {
+        setImageData(data, desc);
     }
 
     private ImageDescription mImageDescription = null;
@@ -247,19 +247,19 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
         this.mImageDescription = desc;
         if ((data != null) && (this.optimiseRedraw))
             if (((i == 1919706400) || (i == 1918990112) || (i == 1902408311) || (i == 1885434984) || (ICMPixelFormatInfo.isValidPixelFormat(i)) ? 1 : 0) == 0) {
-                SetGWorld localObject1 = null;
+                SetGWorld setGWorld1 = null;
                 try {
-                    QDGraphics localQDGraphics = new QDGraphics(new QDRect(desc.getWidth(), desc.getHeight()));
-                    DSequence localDSequence = new DSequence(desc, localQDGraphics, null, null, null, 0, 768, CodecComponent.anyCodec);
-                    localDSequence.decompressFrameS(data, 0);
-                    PixMap localPixMap = localQDGraphics.getPixMap();
-                    this.mImageDescription = new ImageDescription(localPixMap);
-                    data = localPixMap.getPixelData();
-                } catch (QTException localQTException) {
+                    QDGraphics port = new QDGraphics(new QDRect(desc.getWidth(), desc.getHeight()));
+                    DSequence dSequence = new DSequence(desc, port, null, null, null, 0, 768, CodecComponent.anyCodec);
+                    dSequence.decompressFrameS(data, 0);
+                    PixMap pixmap = port.getPixMap();
+                    this.mImageDescription = new ImageDescription(pixmap);
+                    data = pixmap.getPixelData();
+                } catch (QTException e) {
                     this.mImageDescription = desc;
                 } finally {
-                    if (localObject1 != null) {
-                        localObject1.reset();
+                    if (setGWorld1 != null) {
+                        setGWorld1.reset();
                     }
                 }
             }
@@ -520,14 +520,14 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      */
     @Override
     public void setDisplayBounds(QDRect bounds) throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        localMatrix.setTx(bounds.getX());
-        localMatrix.setTy(bounds.getY());
-        localMatrix.setSx(bounds.getWidth() / this.origWidth);
-        localMatrix.setSy(bounds.getHeight() / this.origHeight);
+        Matrix mat = new Matrix();
+        mat.setTx(bounds.getX());
+        mat.setTy(bounds.getY());
+        mat.setSx(bounds.getWidth() / this.origWidth);
+        mat.setSy(bounds.getHeight() / this.origHeight);
         if (this.mImageSeq != null)
-            this.mImageSeq.setMatrix(localMatrix);
-        this.mat = localMatrix;
+            this.mImageSeq.setMatrix(mat);
+        this.mat = mat;
         this.mDisplayBounds = bounds;
     }
 
@@ -541,10 +541,10 @@ public class ImagePresenter implements QTDrawable, Compositable, ImageSettable {
      */
     @Override
     public void setLocation(int x, int y) throws QTException {
-        QDRect localQDRect = getDisplayBounds();
-        localQDRect.setX(x);
-        localQDRect.setY(y);
-        setDisplayBounds(localQDRect);
+        QDRect bounds = getDisplayBounds();
+        bounds.setX(x);
+        bounds.setY(y);
+        setDisplayBounds(bounds);
     }
 
     /**

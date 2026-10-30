@@ -8,11 +8,11 @@ public final class QTVRString extends QTPointerRef {
     /**
      * Creates a QTVRString object from a String
      */
-    public QTVRString(String paramString) throws QTException {
-        super(4 + paramString.length(), true);
+    public QTVRString(String str) throws QTException {
+        super(4 + str.length(), true);
         setShortAt(0, (short) 0);
-        setShortAt(2, (short) paramString.length());
-        System.arraycopy(paramString.getBytes(), 0, getBytes(), 4, paramString.length());
+        setShortAt(2, (short) str.length());
+        System.arraycopy(str.getBytes(), 0, getBytes(), 4, str.length());
     }
 
     /**
@@ -20,14 +20,14 @@ public final class QTVRString extends QTPointerRef {
      * @throws if the byte array does not conform to valid QTVRString data
      * @throws quicktime.QTException
      */
-    public QTVRString(byte[] paramArrayOfByte) throws QTException {
-        super(paramArrayOfByte.length, true);
-        if (paramArrayOfByte.length < 4)
+    public QTVRString(byte[] bytes) throws QTException {
+        super(bytes.length, true);
+        if (bytes.length < 4)
             throw new QTException(-50);
-        int i = (short) ((paramArrayOfByte[2] << 8) + paramArrayOfByte[3]);
-        if (4 + i != paramArrayOfByte.length)
+        int i = (short) ((bytes[2] << 8) + bytes[3]);
+        if (4 + i != bytes.length)
             throw new QTException(-50);
-        System.arraycopy(paramArrayOfByte, 0, getBytes(), 0, paramArrayOfByte.length);
+        System.arraycopy(bytes, 0, getBytes(), 0, bytes.length);
     }
 
     /**
@@ -40,8 +40,8 @@ public final class QTVRString extends QTPointerRef {
     /**
      * sets the string Usage
      */
-    public void setStringUsage(short paramShort) {
-        setShortAt(0, paramShort);
+    public void setStringUsage(short stringUsage) {
+        setShortAt(0, stringUsage);
     }
 
     /**

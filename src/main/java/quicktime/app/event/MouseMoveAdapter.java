@@ -37,7 +37,7 @@ public class MouseMoveAdapter implements MouseMoveListener {
      * (with no buttons no down).
      */
     @Override
-    public void mouseMoved(QTMouseEvent paramQTMouseEvent) {
+    public void mouseMoved(QTMouseEvent qtMouseEvent) {
     }
 
     /**
@@ -50,6 +50,6 @@ public class MouseMoveAdapter implements MouseMoveListener {
      * bounds of the space).
      */
     @Override
-    public void mouseDragged(QTMouseEvent paramQTMouseEvent) {
+    public void mouseDragged(QTMouseEvent event) {
     }
 }

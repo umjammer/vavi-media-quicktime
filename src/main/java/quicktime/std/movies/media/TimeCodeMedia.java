@@ -32,8 +32,8 @@ public final class TimeCodeMedia extends Media {
         this(itsTrack, timeScale, null);
     }
 
-    TimeCodeMedia(int paramInt, Track paramTrack) throws QTException {
-        super(paramTrack, paramInt);
+    TimeCodeMedia(int nativeRep, Track track) throws QTException {
+        super(track, nativeRep);
     }
 
     @Override
@@ -42,7 +42,7 @@ public final class TimeCodeMedia extends Media {
     }
 
     @Override
-    MediaHandler makeHandler(int paramInt, Object paramObject) throws StdQTException {
+    MediaHandler makeHandler(int nativeRep, Object ref) throws StdQTException {
         return TimeCoder.fromMedia(this);
     }
 
@@ -66,8 +66,8 @@ public final class TimeCodeMedia extends Media {
      * @throws quicktime.QTException
      */
     public TimeCodeDescription getTimeCodeDescription(int index) throws QTException {
-        TimeCodeDescription localTimeCodeDescription = new TimeCodeDescription();
-        getNativeSampleDescription(index, localTimeCodeDescription);
-        return localTimeCodeDescription;
+        TimeCodeDescription timeCodeDescription = new TimeCodeDescription();
+        getNativeSampleDescription(index, timeCodeDescription);
+        return timeCodeDescription;
     }
 }

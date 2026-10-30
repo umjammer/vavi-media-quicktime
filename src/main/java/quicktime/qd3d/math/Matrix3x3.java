@@ -54,43 +54,43 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         setIdentity();
     }
 
-    public Matrix3x3(float[][] paramArrayOfFloat) {
+    public Matrix3x3(float[][] values) {
         super(kNativeSize);
-        setAt00(paramArrayOfFloat[0][0]);
-        setAt01(paramArrayOfFloat[0][1]);
-        setAt02(paramArrayOfFloat[0][2]);
-        setAt10(paramArrayOfFloat[1][0]);
-        setAt11(paramArrayOfFloat[1][1]);
-        setAt12(paramArrayOfFloat[1][2]);
-        setAt20(paramArrayOfFloat[2][0]);
-        setAt21(paramArrayOfFloat[2][1]);
-        setAt22(paramArrayOfFloat[2][2]);
+        setAt00(values[0][0]);
+        setAt01(values[0][1]);
+        setAt02(values[0][2]);
+        setAt10(values[1][0]);
+        setAt11(values[1][1]);
+        setAt12(values[1][2]);
+        setAt20(values[2][0]);
+        setAt21(values[2][1]);
+        setAt22(values[2][2]);
     }
 
-    private Matrix3x3(Object paramObject) {
+    private Matrix3x3(Object noInit) {
         super(kNativeSize);
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[36];
-        paramObjectInputStream.read(this.bytes);
+        in.read(this.bytes);
         try {
             EndianOrder.flipBigEndianToNative(this, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        Matrix3x3 localMatrix3x3 = copy();
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        Matrix3x3 matrix3x33 = copy();
         try {
-            EndianOrder.flipNativeToBigEndian(localMatrix3x3, 0, getEndianDescriptor());
-        } catch (UtilException localUtilException) {
-            localUtilException.printStackTrace();
+            EndianOrder.flipNativeToBigEndian(matrix3x33, 0, getEndianDescriptor());
+        } catch (UtilException e) {
+            e.printStackTrace();
         }
-        paramObjectOutputStream.write(localMatrix3x3.getBytes());
+        out.write(matrix3x33.getBytes());
     }
 
     /**
@@ -243,9 +243,9 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @return a copy of matrix3x3.
      */
     public Matrix3x3 copy() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
-        int i = Q3Matrix3x3_Copy(getBytes(), localMatrix3x3.getBytes());
-        return localMatrix3x3;
+        Matrix3x3 matrix3x33 = new Matrix3x3(null);
+        int i = Q3Matrix3x3_Copy(getBytes(), matrix3x33.getBytes());
+        return matrix3x33;
     }
 
     /**
@@ -262,9 +262,9 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @return the transpose matrix
      */
     public Matrix3x3 transpose() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
-        int i = Q3Matrix3x3_Transpose(getBytes(), localMatrix3x3.getBytes());
-        return localMatrix3x3;
+        Matrix3x3 matrix3x33 = new Matrix3x3(null);
+        int i = Q3Matrix3x3_Transpose(getBytes(), matrix3x33.getBytes());
+        return matrix3x33;
     }
 
     /**
@@ -273,9 +273,9 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @return the invert matrix
      */
     public Matrix3x3 invert() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
-        int i = Q3Matrix3x3_Invert(getBytes(), localMatrix3x3.getBytes());
-        return localMatrix3x3;
+        Matrix3x3 matrix3x33 = new Matrix3x3(null);
+        int i = Q3Matrix3x3_Invert(getBytes(), matrix3x33.getBytes());
+        return matrix3x33;
     }
 
     /**
@@ -284,9 +284,9 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @return the adjoint matrix
      */
     public Matrix3x3 adjoint() {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
-        int i = Q3Matrix3x3_Adjoint(getBytes(), localMatrix3x3.getBytes());
-        return localMatrix3x3;
+        Matrix3x3 matrix3x33 = new Matrix3x3(null);
+        int i = Q3Matrix3x3_Adjoint(getBytes(), matrix3x33.getBytes());
+        return matrix3x33;
     }
 
     /**
@@ -296,9 +296,9 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
      * @return the product
      */
     public Matrix3x3 multiply(Matrix3x3 matrixB) {
-        Matrix3x3 localMatrix3x3 = new Matrix3x3(null);
-        int i = Q3Matrix3x3_Multiply(getBytes(), matrixB.getBytes(), localMatrix3x3.getBytes());
-        return localMatrix3x3;
+        Matrix3x3 matrix3x33 = new Matrix3x3(null);
+        int i = Q3Matrix3x3_Multiply(getBytes(), matrixB.getBytes(), matrix3x33.getBytes());
+        return matrix3x33;
     }
 
     /**
@@ -350,43 +350,43 @@ public final class Matrix3x3 extends QTByteObject implements QuickTimeLib, Quick
         return copy();
     }
 
-    private static int Q3Matrix3x3_Copy(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Matrix3x3_Copy(paramArrayOfByte1, paramArrayOfByte2);
+    private static int Q3Matrix3x3_Copy(byte[] matrix3x3, byte[] result) {
+        return QD3DManager.Q3Matrix3x3_Copy(matrix3x3, result);
     }
 
-    private static int Q3Matrix3x3_SetIdentity(byte[] paramArrayOfByte) {
-        return QD3DManager.Q3Matrix3x3_SetIdentity(paramArrayOfByte);
+    private static int Q3Matrix3x3_SetIdentity(byte[] matrix3x3) {
+        return QD3DManager.Q3Matrix3x3_SetIdentity(matrix3x3);
     }
 
-    private static int Q3Matrix3x3_Transpose(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Matrix3x3_Transpose(paramArrayOfByte1, paramArrayOfByte2);
+    private static int Q3Matrix3x3_Transpose(byte[] matrix3x3, byte[] result) {
+        return QD3DManager.Q3Matrix3x3_Transpose(matrix3x3, result);
     }
 
-    private static int Q3Matrix3x3_Invert(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Matrix3x3_Invert(paramArrayOfByte1, paramArrayOfByte2);
+    private static int Q3Matrix3x3_Invert(byte[] matrix3x3, byte[] result) {
+        return QD3DManager.Q3Matrix3x3_Invert(matrix3x3, result);
     }
 
-    private static int Q3Matrix3x3_Adjoint(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2) {
-        return QD3DManager.Q3Matrix3x3_Adjoint(paramArrayOfByte1, paramArrayOfByte2);
+    private static int Q3Matrix3x3_Adjoint(byte[] matrix3x3, byte[] result) {
+        return QD3DManager.Q3Matrix3x3_Adjoint(matrix3x3, result);
     }
 
-    private static int Q3Matrix3x3_Multiply(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, byte[] paramArrayOfByte3) {
-        return QD3DManager.Q3Matrix3x3_Multiply(paramArrayOfByte1, paramArrayOfByte2, paramArrayOfByte3);
+    private static int Q3Matrix3x3_Multiply(byte[] matrixA, byte[] matrixB, byte[] result) {
+        return QD3DManager.Q3Matrix3x3_Multiply(matrixA, matrixB, result);
     }
 
-    private static float Q3Matrix3x3_Determinant(byte[] paramArrayOfByte) {
-        return QD3DManager.Q3Matrix3x3_Determinant(paramArrayOfByte);
+    private static float Q3Matrix3x3_Determinant(byte[] matrix3x3) {
+        return QD3DManager.Q3Matrix3x3_Determinant(matrix3x3);
     }
 
-    private static int Q3Matrix3x3_SetTranslate(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2) {
-        return QD3DManager.Q3Matrix3x3_SetTranslate(paramArrayOfByte, paramFloat1, paramFloat2);
+    private static int Q3Matrix3x3_SetTranslate(byte[] matrix3x3, float xTrans, float yTrans) {
+        return QD3DManager.Q3Matrix3x3_SetTranslate(matrix3x3, xTrans, yTrans);
     }
 
-    private static int Q3Matrix3x3_SetScale(byte[] paramArrayOfByte, float paramFloat1, float paramFloat2) {
-        return QD3DManager.Q3Matrix3x3_SetScale(paramArrayOfByte, paramFloat1, paramFloat2);
+    private static int Q3Matrix3x3_SetScale(byte[] matrix3x3, float xScale, float yScale) {
+        return QD3DManager.Q3Matrix3x3_SetScale(matrix3x3, xScale, yScale);
     }
 
-    private static int Q3Matrix3x3_SetRotateAboutPoint(byte[] paramArrayOfByte1, byte[] paramArrayOfByte2, float paramFloat) {
-        return QD3DManager.Q3Matrix3x3_SetRotateAboutPoint(paramArrayOfByte1, paramArrayOfByte2, paramFloat);
+    private static int Q3Matrix3x3_SetRotateAboutPoint(byte[] matrix3x3, byte[] origin, float angle) {
+        return QD3DManager.Q3Matrix3x3_SetRotateAboutPoint(matrix3x3, origin, angle);
     }
 }

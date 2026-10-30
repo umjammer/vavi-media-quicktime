@@ -63,10 +63,10 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
     }
 
     @Serial
-    private void readObject(ObjectInputStream paramObjectInputStream) throws IOException {
+    private void readObject(ObjectInputStream in) throws IOException {
         this.bytes = new byte[kNativeSize];
         byte[] arrayOfByte = new byte[12];
-        paramObjectInputStream.read(arrayOfByte);
+        in.read(arrayOfByte);
         int i = EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 0));
         if (i == 1) {
             setIntInArray(getBytes(), 0, EndianOrder.flipBigEndianToNative32(getIntFromArray(arrayOfByte, 4)));
@@ -75,12 +75,12 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
     }
 
     @Serial
-    private void writeObject(ObjectOutputStream paramObjectOutputStream) throws IOException {
-        byte[] arrayOfByte = new byte[12];
-        setIntInArray(arrayOfByte, 0, EndianOrder.flipNativeToBigEndian32(1));
-        setIntInArray(arrayOfByte, 4, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
-        setIntInArray(arrayOfByte, 8, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 4)));
-        paramObjectOutputStream.write(arrayOfByte);
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        byte[] movie = new byte[12];
+        setIntInArray(movie, 0, EndianOrder.flipNativeToBigEndian32(1));
+        setIntInArray(movie, 4, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 0)));
+        setIntInArray(movie, 8, EndianOrder.flipNativeToBigEndian32(getIntFromArray(this.bytes, 4)));
+        out.write(movie);
     }
 
     /**
@@ -167,11 +167,11 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
     /**
      * Checks whether two dimension objects have equal values.
      */
-    public boolean equals(Object paramObject) {
-        if (paramObject == this)
+    public boolean equals(Object obj) {
+        if (obj == this)
             return true;
-        if ((paramObject instanceof QDDimension localQDDimension)) {
-            return (getWidth() == localQDDimension.getWidth()) && (getHeight() == localQDDimension.getHeight());
+        if ((obj instanceof QDDimension dimension)) {
+            return (getWidth() == dimension.getWidth()) && (getHeight() == dimension.getHeight());
         }
         return false;
     }
@@ -184,11 +184,11 @@ public class QDDimension extends QTByteObject implements PrimitivesLib, Cloneabl
         return getClass().getName() + "[width=" + getWidth() + ",height=" + getHeight() + "]";
     }
 
-    private static int getIntFromArray(byte[] paramArrayOfByte, int paramInt) {
-        return MemoryManager.getIntFromArray(paramArrayOfByte, paramInt);
+    private static int getIntFromArray(byte[] array, int offset) {
+        return MemoryManager.getIntFromArray(array, offset);
     }
 
-    private static void setIntInArray(byte[] paramArrayOfByte, int paramInt1, int paramInt2) {
-        MemoryManager.setIntInArray(paramArrayOfByte, paramInt1, paramInt2);
+    private static void setIntInArray(byte[] array, int offset, int value) {
+        MemoryManager.setIntInArray(array, offset, value);
     }
 }

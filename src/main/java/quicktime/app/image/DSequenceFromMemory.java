@@ -55,11 +55,11 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
         }
     }
 
-    private static RawEncodedImage privateGetData(GraphicsImporter paramGraphicsImporter) throws QTException {
-        int i = paramGraphicsImporter.getDataSize();
-        RawEncodedImage localRawEncodedImage = new RawEncodedImage(i, true);
-        paramGraphicsImporter.readData(localRawEncodedImage, paramGraphicsImporter.getDataOffset(), i);
-        return localRawEncodedImage;
+    private static RawEncodedImage privateGetData(GraphicsImporter graphicsImporter) throws QTException {
+        int i = graphicsImporter.getDataSize();
+        RawEncodedImage rawEncodedImage = new RawEncodedImage(i, true);
+        graphicsImporter.readData(rawEncodedImage, graphicsImporter.getDataOffset(), i);
+        return rawEncodedImage;
     }
 
     /**
@@ -70,8 +70,8 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
      * @deprecated
      */
     @Deprecated
-    public DSequenceFromMemory(GraphicsImporter paramGraphicsImporter) throws QTException {
-        this(privateGetData(paramGraphicsImporter), paramGraphicsImporter.getImageDescription());
+    public DSequenceFromMemory(GraphicsImporter graphicsImporter) throws QTException {
+        this(privateGetData(graphicsImporter), graphicsImporter.getImageDescription());
     }
 
     /**
@@ -120,13 +120,13 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
      */
     @Deprecated
     public DSequenceFromMemory(ImageSpec spec) throws QTException {
-        if ((spec instanceof ImageDataSequence localImageDataSequence)) {
-            this.initialNumElements = localImageDataSequence.size();
+        if ((spec instanceof ImageDataSequence imageDataSequence)) {
+            this.initialNumElements = imageDataSequence.size();
             this.frames = new Vector<>(this.initialNumElements, this.initialNumElements);
-            for (int i = 1; i <= localImageDataSequence.size(); i++) {
-                this.frames.addElement(localImageDataSequence.getImage(i));
+            for (int i = 1; i <= imageDataSequence.size(); i++) {
+                this.frames.addElement(imageDataSequence.getImage(i));
             }
-            this.mDesc = localImageDataSequence.getDescription();
+            this.mDesc = imageDataSequence.getDescription();
             this.bnds = new QDRect(this.mDesc.getWidth(), this.mDesc.getHeight());
         } else {
             this.initialNumElements = 1;
@@ -275,15 +275,15 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
     @Override
     @Deprecated
     public void setDisplayBounds(QDRect bounds) throws StdQTException {
-        Matrix localMatrix = new Matrix();
-        localMatrix.setTx(bounds.getX());
-        localMatrix.setTy(bounds.getY());
-        localMatrix.setSx(bounds.getWidth() / this.mDesc.getWidth());
-        localMatrix.setSy(bounds.getHeight() / this.mDesc.getHeight());
+        Matrix matrix = new Matrix();
+        matrix.setTx(bounds.getX());
+        matrix.setTy(bounds.getY());
+        matrix.setSx(bounds.getWidth() / this.mDesc.getWidth());
+        matrix.setSy(bounds.getHeight() / this.mDesc.getHeight());
         this.mWidth = bounds.getWidth();
         this.mHeight = bounds.getHeight();
         if (this.seq != null)
-            this.seq.setMatrix(localMatrix);
+            this.seq.setMatrix(matrix);
         this.bnds = bounds;
     }
 
@@ -436,8 +436,8 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
     public int drawCurrentFrame(int inFlags) throws StdQTException {
         if (this.seq == null)
             return 0;
-        EncodedImage localEncodedImage = getImage();
-        return this.seq.decompressFrameS(localEncodedImage, inFlags);
+        EncodedImage data = getImage();
+        return this.seq.decompressFrameS(data, inFlags);
     }
 
     /**
@@ -503,9 +503,9 @@ public class DSequenceFromMemory extends Sequencer implements QTDrawable, Dynami
 
         private int lastFrame;
 
-        SeqInvalidator(TwoDSprite paramTwoDSprite, int paramInt) {
-            super(paramTwoDSprite);
-            this.lastFrame = paramInt;
+        SeqInvalidator(TwoDSprite s, int lastFrame) {
+            super(s);
+            this.lastFrame = lastFrame;
         }
 
         @Override

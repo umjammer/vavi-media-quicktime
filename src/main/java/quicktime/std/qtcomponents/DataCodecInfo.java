@@ -17,8 +17,8 @@ public class DataCodecInfo {
      */
     public final int decompressSlop;
 
-    DataCodecInfo(int paramInt1, int paramInt2) {
-        this.actualDstSize = paramInt1;
-        this.decompressSlop = paramInt2;
+    DataCodecInfo(int actualDstSize, int decompressSlop) {
+        this.actualDstSize = actualDstSize;
+        this.decompressSlop = decompressSlop;
     }
 }

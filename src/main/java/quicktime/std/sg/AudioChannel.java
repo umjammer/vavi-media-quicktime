@@ -14,12 +14,12 @@ import quicktime.util.QTUtils;
  */
 public abstract class AudioChannel extends SGChannel implements QuickTimeLib {
 
-    AudioChannel(int paramInt, SequenceGrabber paramSequenceGrabber) throws StdQTException {
-        super(paramInt, paramSequenceGrabber);
+    AudioChannel(int type, SequenceGrabber owner) throws StdQTException {
+        super(type, owner);
     }
 
-    AudioChannel(SequenceGrabber paramSequenceGrabber, int paramInt) throws StdQTException {
-        super(paramSequenceGrabber, paramInt);
+    AudioChannel(SequenceGrabber owner, int channelType) throws StdQTException {
+        super(owner, channelType);
     }
 
     /**
@@ -39,16 +39,16 @@ public abstract class AudioChannel extends SGChannel implements QuickTimeLib {
      * @throws quicktime.std.StdQTException
      */
     public float getVolume() throws StdQTException {
-        short[] arrayOfShort = { 0 };
-        StdQTException.checkError(SGGetChannelVolume(_ID(), arrayOfShort));
-        return QTUtils.ShortFix2X(arrayOfShort[0]);
+        short[] volume = { 0 };
+        StdQTException.checkError(SGGetChannelVolume(_ID(), volume));
+        return QTUtils.ShortFix2X(volume[0]);
     }
 
-    private static int SGSetChannelVolume(int paramInt, short paramShort) {
-        return SequenceGrabberManager.SGSetChannelVolume(paramInt, paramShort);
+    private static int SGSetChannelVolume(int ref, short volume) {
+        return SequenceGrabberManager.SGSetChannelVolume(ref, volume);
     }
 
-    private static int SGGetChannelVolume(int paramInt, short[] paramArrayOfShort) {
-        return SequenceGrabberManager.SGGetChannelVolume(paramInt, paramArrayOfShort);
+    private static int SGGetChannelVolume(int ref, short[] volume) {
+        return SequenceGrabberManager.SGGetChannelVolume(ref, volume);
     }
 }

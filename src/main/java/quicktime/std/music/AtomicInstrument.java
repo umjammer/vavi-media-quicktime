@@ -36,16 +36,16 @@ public final class AtomicInstrument extends AtomContainer implements QuickTimeLi
         super(allocate(), null, false);
     }
 
-    AtomicInstrument(int paramInt, Object paramObject) {
-        super(paramInt, paramObject, false);
+    AtomicInstrument(int nativeRep, Object ref) {
+        super(nativeRep, ref, false);
     }
 
     private static int allocate() throws StdQTException {
-        int[] arrayOfInt = { 0 };
-        int i = QTNewAtomContainer(arrayOfInt);
+        int[] container = { 0 };
+        int i = QTNewAtomContainer(container);
         if (i != 0)
             throw new StdQTException(i);
-        return arrayOfInt[0];
+        return container[0];
     }
 
     /**
@@ -58,7 +58,7 @@ public final class AtomicInstrument extends AtomContainer implements QuickTimeLi
      */
     public void pickEditInstrument(NoteAllocator na, String prompt, int flags) throws StdQTException {
         String str = prompt;
-        NoteAllocator localNoteAllocator = na;
+        NoteAllocator noteAllocator = na;
         int i = flags;
         int j = _ID();
         int k = 0;
@@ -66,7 +66,7 @@ public final class AtomicInstrument extends AtomContainer implements QuickTimeLi
             logger.log(Level.DEBUG, "New NAPickEditInstrument");
             k = (Integer) CarbonAccess.invokeCarbonEventClient(() -> {
                 int l = 0;
-                l = AtomicInstrument.NAPickEditInstrument(QTObject.ID(localNoteAllocator), 0, QTUtils.String2PString(str, 255), 0, 0, j, i);
+                l = AtomicInstrument.NAPickEditInstrument(QTObject.ID(noteAllocator), 0, QTUtils.String2PString(str, 255), 0, 0, j, i);
                 return l;
             });
             StdQTException.checkError(k);
@@ -97,27 +97,27 @@ public final class AtomicInstrument extends AtomContainer implements QuickTimeLi
      * @throws quicktime.std.StdQTException
      */
     public NoteChannel newNoteChannel(NoteAllocator na, int flags) throws StdQTException {
-        int[] arrayOfInt = new int[1];
-        int i = NANewNoteChannelFromAtomicInstrument(QTObject.ID(na), lockAndDeref(0), flags, arrayOfInt);
+        int[] outChannel = new int[1];
+        int i = NANewNoteChannelFromAtomicInstrument(QTObject.ID(na), lockAndDeref(0), flags, outChannel);
         if (!isLocked())
             unlock();
         StdQTException.checkError(i);
-        return new NoteChannel(na, arrayOfInt[0], null);
+        return new NoteChannel(na, outChannel[0], null);
     }
 
     int getPtr() {
         return lockAndDeref(0);
     }
 
-    private static int NAPickEditInstrument(int paramInt1, int paramInt2, byte[] paramArrayOfByte, int paramInt3, int paramInt4, int paramInt5, int paramInt6) {
-        return MusicManager.NAPickEditInstrument(paramInt1, paramInt2, paramArrayOfByte, paramInt3, paramInt4, paramInt5, paramInt6);
+    private static int NAPickEditInstrument(int na, int filterProc, byte[] prompt, int refCon, int nc, int instrument, int modifiers) {
+        return MusicManager.NAPickEditInstrument(na, filterProc, prompt, refCon, nc, instrument, modifiers);
     }
 
-    private static int NANewNoteChannelFromAtomicInstrument(int paramInt1, int paramInt2, int paramInt3, int[] paramArrayOfInt) {
-        return MusicManager.NANewNoteChannelFromAtomicInstrument(paramInt1, paramInt2, paramInt3, paramArrayOfInt);
+    private static int NANewNoteChannelFromAtomicInstrument(int na, int instrument, int flags, int[] outChannel) {
+        return MusicManager.NANewNoteChannelFromAtomicInstrument(na, instrument, flags, outChannel);
     }
 
-    private static short QTNewAtomContainer(int[] paramArrayOfInt) {
-        return AtomManager.QTNewAtomContainer(paramArrayOfInt);
+    private static short QTNewAtomContainer(int[] container) {
+        return AtomManager.QTNewAtomContainer(container);
     }
 }
