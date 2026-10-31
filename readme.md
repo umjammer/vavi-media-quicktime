@@ -1,5 +1,6 @@
-[![Latest Release](https://gitlab.com/umjammer/vavi-media-quicktime/-/badges/release.svg)](https://gitlab.com/umjammer/vavi-media-quicktime/-/releases)
-[![pipeline status](https://gitlab.com/umjammer/vavi-media-quicktime/badges/gitlab/pipeline.svg)](https://gitlab.com/umjammer/vavi-media-quicktime/-/commits/gitlab)
+[![Release](https://jitpack.io/v/umjammer/vavi-media-quicktime.svg)](https://jitpack.io/#umjammer/vavi-media-quicktime)
+[![Java CI](https://github.com/umjammer/vavi-media-quicktime/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/vavi-media-quicktime/actions/workflows/maven.yml)
+[![CodeQL](https://github.com/umjammer/vavi-media-quicktime/actions/workflows/codeql.yml/badge.svg)](https://github.com/umjammer/vavi-media-quicktime/actions/workflows/codeql.yml)
 ![Java](https://img.shields.io/badge/Java-25-b07219)
 
 # vavi-media-quicktime
@@ -9,6 +10,8 @@
 quicktime clone
 
 ## Install
+
+* [maven](https://jitpack.io/#umjammer/vavi-media-quicktime)
 
 ## Usage
 
